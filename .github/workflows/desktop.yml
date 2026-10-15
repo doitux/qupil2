@@ -89,7 +89,8 @@ jobs:
 
       - name: Install with Qt runtime
         shell: bash
-        run: bash .github/scripts/run-logged.sh cmake --install build --prefix dist
+        # Qt's deploy step needs an absolute prefix
+        run: bash .github/scripts/run-logged.sh cmake --install build --prefix "${GITHUB_WORKSPACE}/dist"
 
       - name: Pack
         shell: bash

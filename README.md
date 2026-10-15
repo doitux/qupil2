@@ -31,7 +31,7 @@ ctest --test-dir build --output-on-failure
 ./build/qupil
 ```
 
-A self-contained copy with the Qt runtime: `cmake --install build --prefix dist`.
+A self-contained copy with the Qt runtime: `cmake --install build --prefix "$PWD/dist"` (the prefix must be an absolute path).
 
 For Android and iOS, configure with the `qt-cmake` of the mobile Qt kit and point `QT_HOST_PATH` to the desktop Qt of the same version. `.github/workflows/mobile.yml` shows the exact commands.
 
