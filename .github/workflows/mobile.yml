@@ -63,7 +63,7 @@ jobs:
           arch: android_arm64_v8a
           cache: true
 
-      - uses: seanmiddleditch/gha-setup-ninja@v5
+      - uses: seanmiddleditch/gha-setup-ninja@v6
 
       - name: Configure
         run: |
