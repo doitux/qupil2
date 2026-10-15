@@ -39,21 +39,6 @@ Flickable {
                 font.pixelSize: 30
                 font.weight: Font.ExtraBold
             }
-            Rectangle {
-                implicitWidth: badge.implicitWidth + 14
-                implicitHeight: badge.implicitHeight + 4
-                radius: 7
-                color: Theme.lime
-                Text {
-                    id: badge
-                    anchors.centerIn: parent
-                    text: "2"
-                    color: Theme.textOnLime
-                    font.family: Theme.fontFamily
-                    font.pixelSize: 15
-                    font.weight: Font.ExtraBold
-                }
-            }
         }
 
         ColumnLayout {

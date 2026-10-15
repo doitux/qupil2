@@ -107,21 +107,6 @@ ApplicationWindow {
                             font.pixelSize: 24
                             font.weight: Font.ExtraBold
                         }
-                        Rectangle {
-                            implicitWidth: badge.implicitWidth + 12
-                            implicitHeight: badge.implicitHeight + 4
-                            radius: 6
-                            color: Theme.lime
-                            Text {
-                                id: badge
-                                anchors.centerIn: parent
-                                text: "2"
-                                color: Theme.textOnLime
-                                font.family: Theme.fontFamily
-                                font.pixelSize: 12
-                                font.weight: Font.ExtraBold
-                            }
-                        }
                     }
 
                     Repeater {
