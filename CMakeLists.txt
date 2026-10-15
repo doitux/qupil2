@@ -17,7 +17,7 @@ if(MSVC)
     add_compile_options(/utf-8)
 endif()
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Sql Qml Quick QuickControls2 LinguistTools)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Sql Qml Quick QuickControls2 Multimedia LinguistTools)
 qt_standard_project_setup(REQUIRES 6.5)
 
 # ---------------------------------------------------------------------------- data core
@@ -45,7 +45,8 @@ qt_add_executable(qupil src/main.cpp src/app/ScreenshotTour.h src/app/Screenshot
 
 target_compile_definitions(qupil PRIVATE QUPIL_VERSION="${PROJECT_VERSION}")
 target_include_directories(qupil PRIVATE src src/core src/app)
-target_link_libraries(qupil PRIVATE qupilcore Qt6::Core Qt6::Gui Qt6::Qml Qt6::Quick Qt6::QuickControls2)
+target_link_libraries(qupil PRIVATE qupilcore Qt6::Core Qt6::Gui Qt6::Qml Qt6::Quick Qt6::QuickControls2
+    Qt6::Multimedia)
 
 if(APPLE OR WIN32)
     set_target_properties(qupil PROPERTIES OUTPUT_NAME Qupil)
@@ -76,9 +77,9 @@ if(IOS)
         set_source_files_properties(${_strings} PROPERTIES MACOSX_PACKAGE_LOCATION Resources/${_lang}.lproj)
     endforeach()
     # Files app access, languages, Wi-Fi sync keys (added to Qt's generated Info.plist)
+    # (the script takes the bundle path from Xcode's build settings)
     add_custom_command(TARGET qupil POST_BUILD
         COMMAND /bin/sh ${CMAKE_CURRENT_SOURCE_DIR}/platform/ios/patch-info-plist.sh
-                "$<TARGET_BUNDLE_DIR:qupil>/Info.plist"
         VERBATIM)
 endif()
 
@@ -133,6 +134,12 @@ qt_add_qml_module(qupil
         src/core/LanguageManager.cpp
         src/app/AppController.h
         src/app/AppController.cpp
+        src/app/DataService.h
+        src/app/DataService.cpp
+        src/app/Metronome.h
+        src/app/Metronome.cpp
+        src/app/TextFormatter.h
+        src/app/TextFormatter.cpp
 )
 
 # ---------------------------------------------------------------------------- translations

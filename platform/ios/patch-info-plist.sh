@@ -3,9 +3,11 @@
 # SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 #
 # Adds Qupil's keys to the Info.plist Qt generates (runs after the build, before signing).
-# Usage: patch-info-plist.sh <path to Qupil.app/Info.plist>
+# Usage: patch-info-plist.sh [path to Qupil.app/Info.plist]
+# Without an argument it uses Xcode's build settings (TARGET_BUILD_DIR, INFOPLIST_PATH).
 set -e
-plist="$1"
+plist="${1:-$TARGET_BUILD_DIR/$INFOPLIST_PATH}"
+echo "Adding Qupil keys to $plist"
 
 # Backups and Qupil 1.x files show up in Files › On My iPad › Qupil
 plutil -replace UIFileSharingEnabled -bool YES "$plist"

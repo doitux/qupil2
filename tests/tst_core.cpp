@@ -24,6 +24,12 @@ class TestCore : public QObject
     QTemporaryDir m_dir;
     QString file(const QString &name) const { return m_dir.filePath(name); }
 
+    static qint64 fakeWall()
+    {
+        static qint64 now = 1'800'000'000'000;
+        return now += 7;
+    }
+
 private slots:
     void ids()
     {
@@ -91,6 +97,10 @@ private slots:
         QVERIFY(a.open(file(u"a.db"_s)));
         QVERIFY(b.open(file(u"b.db"_s)));
         QVERIFY(a.deviceId() != b.deviceId());
+        // One shared, steadily advancing clock: "later" must not depend on the timer
+        // resolution of the system (about 16 ms on Windows)
+        a.clock().setWallClock(&TestCore::fakeWall);
+        b.clock().setWallClock(&TestCore::fakeWall);
         Store sa(&a), sb(&b);
 
         const QString id = sa.create(u"student"_s, { { u"surname"_s, u"Muster"_s }, { u"forename"_s, u"Lena"_s } });
@@ -102,7 +112,6 @@ private slots:
         QVERIFY(sb.update(u"student"_s, id, { { u"phone"_s, u"0123"_s } }));
         // … and the same field: the later change wins on both sides
         QVERIFY(sa.update(u"student"_s, id, { { u"forename"_s, u"Lea"_s } }));
-        QTest::qWait(5);
         QVERIFY(sb.update(u"student"_s, id, { { u"forename"_s, u"Lene"_s } }));
 
         sb.applyRemote(sa.changesSince(sb.versionVector()));

@@ -17,6 +17,7 @@
 #include <memory>
 
 #include "AppController.h"
+#include "DataService.h"
 #include "LanguageManager.h"
 #include "ScreenshotTour.h"
 
@@ -91,6 +92,15 @@ int main(int argc, char *argv[])
     if (args.isSet(langOption))
         languages.setLanguage(args.value(langOption));
     AppController controller(dataDir, nullptr);
+    DataService data(controller.store(), nullptr);
+    // Default lists (styles, locations, instruments) in the UI language for new data
+    QObject::connect(&controller, &AppController::phaseChanged, &data, [&controller, &data] {
+        if (controller.phase() == AppController::Ready)
+            data.ensureDefaults();
+    });
+    QObject::connect(&controller, &AppController::dataReplaced, &data, &DataService::ensureDefaults);
+    if (controller.phase() == AppController::Ready)
+        data.ensureDefaults();
     QQmlApplicationEngine engine;
     languages.setEngine(&engine);   // retranslate() on a language switch
 

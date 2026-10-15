@@ -64,6 +64,7 @@ jobs:
         with:
           version: ${{ env.QT_VERSION }}
           arch: ${{ matrix.qt_arch }}
+          modules: qtmultimedia
           cache: true
 
       - name: Set up MSVC (Windows)
@@ -86,6 +87,20 @@ jobs:
         env:
           QT_QPA_PLATFORM: offscreen
         run: bash .github/scripts/run-logged.sh ctest --test-dir build --output-on-failure
+
+      - name: Show failed unit tests
+        if: failure()
+        shell: bash
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          for t in build/tst_core build/tst_languagemanager; do
+            [ -f "$t" ] || [ -f "$t.exe" ] || continue
+            out=$("$t" 2>&1 | grep -E "FAIL|Loc:|Actual|Expected|QWARN|QFATAL|Totals" | head -n 40)
+            echo "$out"
+            msg=$(echo "$out" | sed -e 's/%/%25/g' -e 's/\r//g' | awk 'BEGIN { ORS = "%0A" } { print }')
+            echo "::error title=$(basename "$t")::${msg}"
+          done
 
       # Every screen with sample data, light/dark, desktop/phone size – published with the nightly build
       - name: Screenshots (Linux)

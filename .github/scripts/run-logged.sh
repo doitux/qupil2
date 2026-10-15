@@ -12,7 +12,8 @@ status=${PIPESTATUS[0]}
 if [ "$status" -ne 0 ]; then
     # Annotations are short: lines that look like errors first, then the end of the output
     {
-        grep -iE "error|fail|cannot|could not|unable|not found|undefined" "$log" | grep -v "^-- Installing" | tail -n 25
+        grep -iE "error|fail|cannot|could not|unable|not found|undefined|QFATAL|Loc: |Actual|Expected|exception" "$log" \
+            | grep -v "^-- Installing" | tail -n 30
         echo "----- last lines -----"
         tail -n 12 "$log"
     } > "$log.summary"
