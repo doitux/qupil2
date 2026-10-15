@@ -42,6 +42,11 @@ set_target_properties(qupil PROPERTIES
     MACOSX_BUNDLE_COPYRIGHT "© 2006–2026 Felix Hammer"
     XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER de.qupil.app)
 
+if(IOS)
+    # iPhone and iPad
+    set_target_properties(qupil PROPERTIES XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2")
+endif()
+
 if(WIN32)
     target_sources(qupil PRIVATE platform/windows/qupil.rc)
 elseif(APPLE AND NOT IOS)

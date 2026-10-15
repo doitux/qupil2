@@ -1,4 +1,4 @@
-# Builds Qupil for Android (installable test APK) and iOS (unsigned, proves it compiles and links).
+# Builds Qupil for Android (installable test APK) and iOS (unsigned IPA for sideloading).
 # Store builds need signing keys as repository secrets; they are added later.
 name: Mobile
 
@@ -16,7 +16,7 @@ permissions:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
   QT_VERSION: '6.8.3'
@@ -135,3 +135,22 @@ jobs:
         run: |
           bash .github/scripts/run-logged.sh cmake --build build --config Release -- \
             -sdk iphoneos CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""
+
+      # Unsigned IPA for sideloading (AltStore, Sideloadly, …): the tool signs it with your Apple ID
+      - name: Package unsigned IPA
+        run: |
+          app=$(find build -type d -name '*.app' -path '*Release-iphoneos*' | head -n 1)
+          if [ -z "$app" ]; then echo "::error::no .app found in build/"; exit 1; fi
+          echo "App bundle: $app"
+          /usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' -c 'Print :MinimumOSVersion' -c 'Print :UIDeviceFamily' "$app/Info.plist" || true
+          mkdir -p ipa/Payload package
+          cp -R "$app" ipa/Payload/
+          (cd ipa && zip -qry "../package/Qupil-${GITHUB_SHA::7}-unsigned.ipa" Payload)
+          ls -l package
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: qupil-ios-unsigned-ipa
+          path: package/*.ipa
+          if-no-files-found: error
+          retention-days: 30
