@@ -4,10 +4,14 @@
 #include <QDate>
 #include <QSignalSpy>
 #include <QSqlQuery>
+#include <QMap>
+#include <QSet>
 #include <QTemporaryDir>
 #include <QTest>
 
+#include "Crypto.h"
 #include "Database.h"
+#include "FolderSync.h"
 #include "DemoData.h"
 #include "Ids.h"
 #include "LegacyFixture.h"
@@ -16,6 +20,54 @@
 
 using namespace Qupil;
 using namespace Qt::StringLiterals;
+
+//! A sync folder in memory (instead of Nextcloud)
+class MemoryFolder : public RemoteFolder
+{
+public:
+    QMap<QString, QByteArray> files;
+    QSet<QString> folders;
+    bool offline = false;
+    bool notFound = false;
+
+    bool makeFolder(const QString &path) override
+    {
+        if (offline)
+            return false;
+        folders.insert(path);
+        return true;
+    }
+    std::optional<QStringList> list(const QString &path) override
+    {
+        if (offline)
+            return std::nullopt;
+        QStringList names;
+        const QString prefix = path + u'/';
+        for (const QString &f : folders)
+            if (f.startsWith(prefix) && !f.mid(prefix.size()).contains(u'/'))
+                names << f.mid(prefix.size()) + u'/';
+        for (auto it = files.cbegin(); it != files.cend(); ++it)
+            if (it.key().startsWith(prefix) && !it.key().mid(prefix.size()).contains(u'/'))
+                names << it.key().mid(prefix.size());
+        return names;
+    }
+    std::optional<QByteArray> read(const QString &path) override
+    {
+        notFound = !offline && !files.contains(path);
+        if (offline || notFound)
+            return std::nullopt;
+        return files.value(path);
+    }
+    bool write(const QString &path, const QByteArray &data) override
+    {
+        if (offline)
+            return false;
+        files.insert(path, data);
+        return true;
+    }
+    QString lastError() const override { return QStringLiteral("offline"); }
+    bool lastErrorWasNotFound() const override { return notFound; }
+};
 
 class TestCore : public QObject
 {
@@ -317,6 +369,89 @@ private slots:
         QString count;
         QCOMPARE(Database::detectFormat(LegacyImporter::findDatabase(en), &count), 1);
         QCOMPARE(count, u"9"_s);
+    }
+
+    void crypto()
+    {
+        const QByteArray key = Crypto::randomBytes(Crypto::KeySize);
+        const QByteArray sealed = Crypto::seal(key, "Notiz", "ad");
+        QCOMPARE(Crypto::open(key, sealed, "ad").value_or(QByteArray()), QByteArray("Notiz"));
+        QVERIFY(!Crypto::open(key, sealed, "other ad"));                     // wrong context
+        QVERIFY(!Crypto::open(Crypto::randomBytes(32), sealed, "ad"));        // wrong key
+        QByteArray tampered = sealed;
+        tampered[tampered.size() - 1] = char(tampered.at(tampered.size() - 1) ^ 1);
+        QVERIFY(!Crypto::open(key, tampered, "ad"));
+        QVERIFY(Crypto::seal(key, "x") != Crypto::seal(key, "x"));           // random nonces
+
+        const Crypto::KdfParams fast { 64, 1 };
+        const QByteArray salt = Crypto::randomBytes(Crypto::SaltSize);
+        QCOMPARE(Crypto::deriveKey(u"Geige"_s, salt, fast), Crypto::deriveKey(u"Geige"_s, salt, fast));
+        QVERIFY(Crypto::deriveKey(u"Geige"_s, salt, fast) != Crypto::deriveKey(u"geige"_s, salt, fast));
+
+        const auto a = Crypto::x25519KeyPair();
+        const auto b = Crypto::x25519KeyPair();
+        QCOMPARE(Crypto::x25519Shared(a.secretKey, b.publicKey), Crypto::x25519Shared(b.secretKey, a.publicKey));
+    }
+
+    void folderSync()
+    {
+        MemoryFolder cloud;
+        Database a, b, c;
+        QVERIFY(a.open(file(u"fs-a.db"_s)) && b.open(file(u"fs-b.db"_s)) && c.open(file(u"fs-c.db"_s)));
+        a.clock().setWallClock(&TestCore::fakeWall);
+        b.clock().setWallClock(&TestCore::fakeWall);
+        c.clock().setWallClock(&TestCore::fakeWall);
+        Store sa(&a), sb(&b), sc(&c);
+        const QString lena = sa.create(u"student"_s, { { u"surname"_s, u"Muster"_s }, { u"forename"_s, u"Lena"_s } });
+
+        // First device sets up the folder
+        FolderSync fa(&sa, &cloud);
+        QCOMPARE(fa.isSetUp().value_or(true), false);
+        FolderSync::Status status;
+        const QByteArray keyA = fa.unlock(u"Bratsche 4/4"_s, &status);
+        QCOMPARE(status, FolderSync::Status::Ok);
+        QCOMPARE(fa.run(keyA, u"Laptop"_s, nullptr), FolderSync::Status::Ok);
+        QVERIFY(cloud.files.contains(u"Qupil/key.json"_s));
+        // Nothing readable on the server
+        for (auto it = cloud.files.cbegin(); it != cloud.files.cend(); ++it)
+            QVERIFY(!it.value().contains("Muster"));
+
+        // Second device: wrong password, then the right one
+        FolderSync fb(&sb, &cloud);
+        QCOMPARE(fb.isSetUp().value_or(false), true);
+        QVERIFY(fb.unlock(u"falsch"_s, &status).isEmpty());
+        QCOMPARE(status, FolderSync::Status::WrongPassword);
+        const QByteArray keyB = fb.unlock(u"Bratsche 4/4"_s, &status);
+        QCOMPARE(keyB, keyA);
+        FolderSync::Stats stats;
+        QCOMPARE(fb.run(keyB, u"iPad"_s, &stats), FolderSync::Status::Ok);
+        QVERIFY(stats.applied > 0);
+        QCOMPARE(stats.devices, QStringList { u"Laptop"_s });
+        QCOMPARE(sb.get(u"student"_s, lena).value(u"forename"_s).toString(), u"Lena"_s);
+
+        // Changes travel both ways
+        QVERIFY(sb.update(u"student"_s, lena, { { u"phone"_s, u"0123"_s } }));
+        QCOMPARE(fb.run(keyB, u"iPad"_s, nullptr), FolderSync::Status::Ok);
+        QCOMPARE(fa.run(keyA, u"Laptop"_s, nullptr), FolderSync::Status::Ok);
+        QCOMPARE(sa.get(u"student"_s, lena).value(u"phone"_s).toString(), u"0123"_s);
+
+        // C only talks to B over Wi-Fi; B relays C's change into the folder for A
+        sc.applyRemote(sb.changesSince(sc.versionVector()));
+        QVERIFY(sc.update(u"student"_s, lena, { { u"email"_s, u"lena@example.org"_s } }));
+        sb.applyRemote(sc.changesSince(sb.versionVector()));
+        QCOMPARE(fb.run(keyB, u"iPad"_s, nullptr), FolderSync::Status::Ok);
+        QCOMPARE(fa.run(keyA, u"Laptop"_s, nullptr), FolderSync::Status::Ok);
+        QCOMPARE(sa.get(u"student"_s, lena).value(u"email"_s).toString(), u"lena@example.org"_s);
+        QCOMPARE(sa.versionVector(), sb.versionVector());
+
+        // Offline: a clear failure, nothing lost
+        cloud.offline = true;
+        QVERIFY(sa.update(u"student"_s, lena, { { u"notes"_s, u"offline"_s } }));
+        QCOMPARE(fa.run(keyA, u"Laptop"_s, nullptr), FolderSync::Status::Failed);
+        cloud.offline = false;
+        QCOMPARE(fa.run(keyA, u"Laptop"_s, nullptr), FolderSync::Status::Ok);
+        QCOMPARE(fb.run(keyB, u"iPad"_s, nullptr), FolderSync::Status::Ok);
+        QCOMPARE(sb.get(u"student"_s, lena).value(u"notes"_s).toString(), u"offline"_s);
     }
 
     void rejectsForeignFiles()

@@ -63,6 +63,8 @@ public:
     VersionVector versionVector() const;
     //! Changes the other side has not seen yet, oldest first
     QList<Change> changesSince(const VersionVector &known, int limit = 5000) const;
+    //! Changes of one device after a sequence number, in order
+    QList<Change> changesOf(const QString &origin, qint64 afterSeq, int limit = 5000) const;
     //! Merges changes from another device; returns how many changed local data
     int applyRemote(const QList<Change> &changes);
 

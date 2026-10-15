@@ -7,7 +7,7 @@ project(qupil
     VERSION 2.0.0
     DESCRIPTION "Lesson management for music teachers"
     HOMEPAGE_URL "https://qupil.de"
-    LANGUAGES CXX)
+    LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -35,8 +35,14 @@ qt_add_library(qupilcore STATIC
     src/core/LegacyImporter.h
     src/core/LegacyImporter.cpp
     src/core/DemoData.h
-    src/core/DemoData.cpp)
-target_include_directories(qupilcore PUBLIC src/core)
+    src/core/DemoData.cpp
+    src/core/Crypto.h
+    src/core/Crypto.cpp
+    src/core/FolderSync.h
+    src/core/FolderSync.cpp
+    3rdparty/monocypher/monocypher.c
+    3rdparty/monocypher/monocypher.h)
+target_include_directories(qupilcore PUBLIC src/core PRIVATE 3rdparty/monocypher)
 target_link_libraries(qupilcore PUBLIC Qt6::Core Qt6::Sql)
 
 # ---------------------------------------------------------------------------- app

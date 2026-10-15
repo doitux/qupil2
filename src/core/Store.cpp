@@ -317,6 +317,23 @@ QList<Change> Store::changesSince(const VersionVector &known, int limit) const
     return out;
 }
 
+QList<Change> Store::changesOf(const QString &origin, qint64 afterSeq, int limit) const
+{
+    QList<Change> out;
+    QSqlQuery q(m_db->connection());
+    q.prepare(u"SELECT origin, seq, hlc, entity, row_id, field, value FROM change_log "
+              u"WHERE origin = ? AND seq > ? ORDER BY seq LIMIT ?"_s);
+    q.addBindValue(origin);
+    q.addBindValue(afterSeq);
+    q.addBindValue(limit);
+    q.exec();
+    while (q.next()) {
+        out.append({ q.value(0).toString(), q.value(1).toLongLong(), q.value(2).toString(), q.value(3).toString(),
+                     q.value(4).toString(), q.value(5).toString(), decodeValue(q.value(6).toString()) });
+    }
+    return out;
+}
+
 int Store::applyRemote(const QList<Change> &changes)
 {
     QList<Change> sorted = changes;

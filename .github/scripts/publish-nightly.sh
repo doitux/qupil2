@@ -15,7 +15,8 @@ if ! gh release view "$tag" --repo "$repo" > /dev/null 2>&1; then
     gh release create "$tag" --repo "$repo" --prerelease --target "$GITHUB_SHA" \
         --title "Nightly test builds" --notes "Test builds of the latest commit on main." || true
 fi
-gh api -X PATCH "repos/$repo/git/refs/tags/$tag" -f sha="$GITHUB_SHA" -F force=true > /dev/null
+log="$(dirname "$0")/run-logged.sh"
+bash "$log" gh api -X PATCH "repos/$repo/git/refs/tags/$tag" -f sha="$GITHUB_SHA" -F force=true > /dev/null
 
 staging="$(mktemp -d)"
 for pair in "$@"; do
@@ -27,7 +28,14 @@ for pair in "$@"; do
         exit 1
     fi
     cp "$file" "$staging/$name"
-    gh release upload "$tag" "$staging/$name" --repo "$repo" --clobber
+    # Uploads fail now and then (GitHub 5xx): try again before giving up
+    for attempt in 1 2 3; do
+        if bash "$log" gh release upload "$tag" "$staging/$name" --repo "$repo" --clobber; then
+            break
+        fi
+        if [ "$attempt" -eq 3 ]; then exit 1; fi
+        sleep 10
+    done
     echo "Published $name"
 done
 
