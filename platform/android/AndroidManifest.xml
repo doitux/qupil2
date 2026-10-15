@@ -5,6 +5,7 @@
     - Wi-Fi sync: multicast lock for finding devices (mDNS), Wi-Fi state
     - lesson-end alerts (LessonAlarms.java): notifications, an exact alarm for
       the next alert, set again after a restart or an update
+    - launcher icon (res/mipmap-*: adaptive on Android 8+, themed on 13+)
     - no Android cloud backup: student data stays on the device (Qupil has its
       own backups and the end-to-end encrypted sync)
 -->
@@ -32,6 +33,7 @@
         android:name="org.qtproject.qt.android.bindings.QtApplication"
         android:hardwareAccelerated="true"
         android:label="Qupil"
+        android:icon="@mipmap/ic_launcher"
         android:localeConfig="@xml/locales_config"
         android:requestLegacyExternalStorage="true"
         android:allowBackup="false"
