@@ -42,7 +42,7 @@ jobs:
             artifact: qupil-macos-universal
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Install system packages (Linux)
         if: runner.os == 'Linux'
