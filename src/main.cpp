@@ -9,6 +9,8 @@
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
 #include <QQuickStyle>
+#include <QScreen>
+#include <QSettings>
 #include <QStandardPaths>
 #include <QTemporaryDir>
 #include <QTimer>
@@ -43,6 +45,46 @@ void smokeTestHandler(QtMsgType type, const QMessageLogContext &context, const Q
         ++s_qmlProblems;
     if (s_previousHandler)
         s_previousHandler(type, context, message);
+}
+
+//! Desktop: the window opens where and as large as it was when Qupil was quit
+void placeWindow(QQuickWindow *window)
+{
+    QSettings s;
+    s.beginGroup(u"window"_s);
+    const QRect saved = s.value(u"geometry"_s).toRect();
+    const bool maximized = s.value(u"maximized"_s).toBool();
+    s.endGroup();
+    if (saved.isValid()) {
+        // Only if a screen still shows enough of it (a monitor may be gone)
+        for (const QScreen *screen : QGuiApplication::screens()) {
+            const QRect visible = screen->availableGeometry().intersected(saved);
+            if (visible.width() >= 200 && visible.height() >= 150) {
+                window->setGeometry(saved);
+                break;
+            }
+        }
+    }
+    // The size before maximizing is what counts when Qupil is quit maximized
+    auto normal = std::make_shared<QRect>(window->geometry());
+    const auto track = [window, normal] {
+        if (window->visibility() == QWindow::Windowed)
+            *normal = window->geometry();
+    };
+    QObject::connect(window, &QWindow::xChanged, window, track);
+    QObject::connect(window, &QWindow::yChanged, window, track);
+    QObject::connect(window, &QWindow::widthChanged, window, track);
+    QObject::connect(window, &QWindow::heightChanged, window, track);
+    QObject::connect(qApp, &QCoreApplication::aboutToQuit, window, [window, normal] {
+        QSettings t;
+        t.beginGroup(u"window"_s);
+        t.setValue(u"geometry"_s, *normal);
+        t.setValue(u"maximized"_s, window->visibility() == QWindow::Maximized);
+    });
+    if (maximized)
+        window->showMaximized();
+    else
+        window->show();
 }
 
 } // namespace
@@ -136,6 +178,23 @@ int main(int argc, char *argv[])
 
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed, &app,
                      [] { QCoreApplication::exit(EXIT_FAILURE); }, Qt::QueuedConnection);
+
+    // The window is shown here (before the smoke test and screenshot tour start)
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+    const bool desktop = false;
+#else
+    const bool desktop = true;
+#endif
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app,
+                     [desktop, smokeTest, screenshots](QObject *object, const QUrl &) {
+                         auto *window = qobject_cast<QQuickWindow *>(object);
+                         if (!window)
+                             return;
+                         if (desktop && !smokeTest && !screenshots)
+                             placeWindow(window);
+                         else
+                             window->show();
+                     });
 
     if (smokeTest) {
         QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app,

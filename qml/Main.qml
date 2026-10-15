@@ -17,7 +17,7 @@ ApplicationWindow {
     height: 720
     minimumWidth: 360
     minimumHeight: 560
-    visible: true
+    // Shown from main.cpp: on desktop systems where it was last time
     color: Theme.bg
     title: qsTrId("app.window_title").arg(App.versionText)
 
@@ -340,6 +340,7 @@ ApplicationWindow {
         function onShowStudent(id, membership) { window.currentPage = 1 }
         function onShowEvent(id) { window.currentPage = 2 }
         function onShowSync() { window.currentPage = 4 }
+        function onShowMore(name) { window.currentPage = 4 }
         function onPairDevice() { pairingSheet.start() }
         function onDecideJoin(id, name) { joinDialog.ask(id, name) }
         function onToast(message) {
@@ -354,6 +355,49 @@ ApplicationWindow {
         sequence: "Space"
         enabled: window.currentPage === 3 && App.phase === App.Ready
         onActivated: Metronome.toggle()
+    }
+
+    // Keyboard shortcuts of Qupil 1.x (Ctrl = ⌘ on a Mac); both the English and
+    // the German letters of the two-key ones
+    Shortcut {
+        enabled: App.phase === App.Ready
+        sequences: ["Ctrl+N, S", "Ctrl+N, P"]
+        onActivated: Nav.newStudent()
+    }
+    Shortcut {
+        enabled: App.phase === App.Ready
+        sequences: ["Ctrl+N, U", "Ctrl+N, L"]
+        onActivated: Nav.editLesson("", (new Date().getDay() + 6) % 7)
+    }
+    Shortcut {
+        enabled: App.phase === App.Ready
+        sequence: "Ctrl+D"
+        onActivated: Nav.showMore("dayOverview")
+    }
+    Shortcut {
+        enabled: App.phase === App.Ready
+        sequence: "Ctrl+L"
+        onActivated: Nav.showMore("library")
+    }
+    Shortcut {
+        enabled: App.phase === App.Ready
+        sequence: "Ctrl+M"
+        onActivated: window.currentPage = 3
+    }
+    Shortcut {
+        enabled: App.phase === App.Ready
+        sequence: "Ctrl+B"
+        onActivated: Nav.showMore("birthdays")
+    }
+    Shortcut {
+        enabled: App.phase === App.Ready
+        sequence: StandardKey.Preferences
+        onActivated: Nav.showMore("settings")
+    }
+    Shortcut {
+        enabled: App.desktop
+        sequence: "Ctrl+Q"
+        onActivated: Qt.quit()
     }
 
     // ---------------------------------------------------------------- running metronome, everywhere else

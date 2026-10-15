@@ -1592,6 +1592,11 @@ Good job!</translation>
         <extracomment>Note name of the tuning note A.</extracomment>
         <translation>A</translation>
     </message>
+    <message id="metronome.note.b">
+        <source>B</source>
+        <extracomment>Note name of B natural (494 Hz at A = 440 Hz). German calls this note &apos;H&apos;.</extracomment>
+        <translation>B</translation>
+    </message>
     <message id="metronome.note.b_flat">
         <source>B♭</source>
         <extracomment>Note name of B-flat (466 Hz at A = 440 Hz). German calls this note &apos;B&apos;.</extracomment>

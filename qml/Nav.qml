@@ -27,6 +27,8 @@ QtObject {
     signal showEvent(string eventId)
     //! More tab with the sync page open
     signal showSync()
+    //! More tab with a page or sheet: "library", "birthdays", "settings", "dayOverview", …
+    signal showMore(string name)
     //! Pairing sheet: show this device's code and the devices nearby
     signal pairDevice()
     //! Both devices have data: ask how they go together

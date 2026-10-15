@@ -32,7 +32,7 @@ class Metronome : public QObject
     Q_PROPERTY(bool running READ running NOTIFY runningChanged FINAL)
     //! Current beat in the bar (0 = accent), -1 when stopped
     Q_PROPERTY(int beat READ beat NOTIFY beatChanged FINAL)
-    //! "A" or "Bb"
+    //! "A", "Bb" or "B" (German "H")
     Q_PROPERTY(QString toneNote READ toneNote WRITE setToneNote NOTIFY toneChanged FINAL)
     //! Concert pitch a′ in Hz
     Q_PROPERTY(int pitch READ pitch WRITE setPitch NOTIFY toneChanged FINAL)

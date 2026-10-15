@@ -831,6 +831,8 @@ E("metronome.label.tuning_note", old="Tuning tone:", en="Tuning note:", fr="Note
 E("metronome.label.pitch", old="Tuning pitch:", en="Concert pitch:", fr="Diapason :", es="Diapasón:",
   c="Frequency of A, e.g. 442 Hz.")
 E("metronome.note.a", old="A", en="A", fr="La", es="La", c="Note name of the tuning note A.")
+E("metronome.note.b", en="B", de="H", fr="Si", es="Si",
+  c="Note name of B natural (494 Hz at A = 440 Hz). German calls this note 'H'.")
 E("metronome.note.b_flat", old="B", de="B", en="B♭", fr="Si♭", es="Si♭",
   c="Note name of B-flat (466 Hz at A = 440 Hz). German calls this note 'B'.",
   note="KORREKTUR: 1.4.1 zeigte „H“, die Tondatei klingt aber mit 466 Hz = B")

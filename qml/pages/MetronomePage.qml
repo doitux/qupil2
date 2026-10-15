@@ -12,6 +12,11 @@ import Qupil
 Flickable {
     id: page
 
+    function noteName(note) {
+        return note === "Bb" ? qsTrId("metronome.note.b_flat") : note === "B" ? qsTrId("metronome.note.b")
+                                                                             : qsTrId("metronome.note.a")
+    }
+
     clip: true
     contentHeight: column.implicitHeight + 48
     boundsBehavior: Flickable.StopAtBounds
@@ -260,11 +265,11 @@ Flickable {
                 }
                 Segmented {
                     Layout.fillWidth: false
-                    implicitWidth: 120
+                    implicitWidth: 168
                     segmentHeight: 34
-                    options: ["A", "Bb"]
+                    options: ["A", "Bb", "B"]
                     value: Metronome.toneNote
-                    labelFor: (v) => v === "A" ? qsTrId("metronome.note.a") : qsTrId("metronome.note.b_flat")
+                    labelFor: (v) => page.noteName(v)
                     onActivated: (v) => Metronome.toneNote = v
                 }
             }
@@ -292,8 +297,7 @@ Flickable {
                     }
                     Text {
                         Layout.alignment: Qt.AlignHCenter
-                        text: (Metronome.toneNote === "A" ? qsTrId("metronome.note.a") : qsTrId("metronome.note.b_flat"))
-                              + " · " + Metronome.toneFrequency.toFixed(1) + " Hz"
+                        text: page.noteName(Metronome.toneNote) + " · " + Metronome.toneFrequency.toFixed(1) + " Hz"
                         color: Theme.textMuted
                         font.family: Theme.fontFamily
                         font.pixelSize: 13

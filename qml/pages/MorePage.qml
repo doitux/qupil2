@@ -39,6 +39,9 @@ StackView {
         case "ensemble": openPage(ensemblePage); break
         case "archive": openPage(studentArchivePage); break
         case "settings": openPage(settingsPage); break
+        case "birthdays": openPage(birthdaysPage); break
+        case "reminders": openPage(remindersPage); break
+        case "dayOverview": dayOverviewSheet.start(); break
         case "about": openPage(aboutPage); break
         case "license": openPage(aboutPage); stack.push(licensePage); break
         case "archiveEntry": {
@@ -59,6 +62,7 @@ StackView {
     Connections {
         target: Nav
         function onShowSync() { stack.openPage(syncPage) }
+        function onShowMore(name) { stack.showSubPage(name) }
     }
     Component.onCompleted: {
         if (Nav.openSyncOnStart) {

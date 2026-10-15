@@ -178,7 +178,8 @@ Metronome::Metronome(QObject *parent)
     m_bpm = std::clamp(settings.value(u"bpm"_s, 80).toInt(), MinBpm, MaxBpm);
     m_beatsPerBar = std::clamp(settings.value(u"beats"_s, 4).toInt(), 1, 16);
     m_pitch = std::clamp(settings.value(u"pitch"_s, 443).toInt(), MinPitch, MaxPitch);
-    m_toneNote = settings.value(u"note"_s, u"A"_s).toString() == u"Bb"_s ? u"Bb"_s : u"A"_s;
+    const QString note = settings.value(u"note"_s, u"A"_s).toString();
+    m_toneNote = (note == u"Bb"_s || note == u"B"_s) ? note : u"A"_s;
 
     m_beatTimer.setInterval(15);
     connect(&m_beatTimer, &QTimer::timeout, this, &Metronome::updateBeat);
@@ -230,7 +231,7 @@ void Metronome::setBeatsPerBar(int beats)
 
 void Metronome::setToneNote(const QString &note)
 {
-    const QString n = note == u"Bb"_s ? u"Bb"_s : u"A"_s;
+    const QString n = (note == u"Bb"_s || note == u"B"_s) ? note : u"A"_s;
     if (n == m_toneNote)
         return;
     m_toneNote = n;
@@ -254,8 +255,9 @@ void Metronome::setPitch(int pitch)
 
 double Metronome::toneFrequency() const
 {
-    // B♭ is a semitone above A
-    return m_toneNote == u"Bb"_s ? m_pitch * std::pow(2.0, 1.0 / 12.0) : double(m_pitch);
+    // B♭ is a semitone above A, B (German "H") a whole tone
+    const int semitones = m_toneNote == u"Bb"_s ? 1 : m_toneNote == u"B"_s ? 2 : 0;
+    return m_pitch * std::pow(2.0, semitones / 12.0);
 }
 
 bool Metronome::ensureAudio()
