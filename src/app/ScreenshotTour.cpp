@@ -14,6 +14,7 @@
 
 #include "AppController.h"
 #include "DataService.h"
+#include "DocumentService.h"
 
 using namespace Qt::StringLiterals;
 
@@ -61,7 +62,8 @@ ScreenshotTour::ScreenshotTour(QQuickWindow *window, QObject *theme, QObject *na
     m_steps << Step { [this] { m_app->loadDemo(); },
                       [this] { return !m_app->busy() && !m_app->lastTakeOver().isEmpty(); } }
             << snap(u"03-imported-light"_s)
-            << Step { [this] { m_app->finishSetup(); }, [this] { return m_app->phase() == AppController::Ready; } };
+            << Step { [this] { m_app->finishSetup(); }, [this] { return m_app->phase() == AppController::Ready; } }
+            << Step { [this] { writeDocuments(); }, {} };
     addPages(u"1-desktop-light"_s);
     addDetails(u"1-desktop-light"_s);
     m_steps << mode("dark");
@@ -108,6 +110,14 @@ void ScreenshotTour::addDetails(const QString &prefix)
     };
     auto snap = [this](const QString &name) { return Step { [this, name] { shot(name); }, {} }; };
     auto close = Step { [this] { QMetaObject::invokeMethod(m_window, "closeEditors"); }, {} };
+    auto more = [this](const char *subPage) {
+        return Step { [this, subPage] {
+                          m_window->setProperty("currentPage", 4);
+                          for (QObject *o : m_window->findChildren<QObject *>(u"morePage"_s))
+                              QMetaObject::invokeMethod(o, "showSubPage", Q_ARG(QVariant, QString::fromLatin1(subPage)));
+                      },
+                      {} };
+    };
 
     m_steps << Step { [this] { pickExamples(); }, {} };
     m_steps << Step { [this, nav] { nav("showStudent", m_student, m_membership).action(); }, {} }
@@ -136,12 +146,36 @@ void ScreenshotTour::addDetails(const QString &prefix)
                       },
                       {} }
             << snap(prefix + u"-11-pairing"_s) << close
+            << more("library") << snap(prefix + u"-12-library"_s)
+            << more("instruments") << snap(prefix + u"-13-instruments"_s)
+            << more("ensemble") << snap(prefix + u"-14-ensemble"_s)
+            << more("archive") << snap(prefix + u"-15-archive"_s)
+            << more("archiveEntry") << snap(prefix + u"-16-archive-entry"_s)
             << Step { [this] {
                           for (QObject *o : m_window->findChildren<QObject *>(u"morePage"_s))
                               QMetaObject::invokeMethod(o, "home");
                           m_window->setProperty("currentPage", 0);
                       },
                       {} };
+}
+
+// The PDF documents with the sample data, next to the screenshots
+void ScreenshotTour::writeDocuments()
+{
+    DocumentService *docs = DocumentService::instance();
+    DataService *data = DataService::instance();
+    if (!docs || !data)
+        return;
+    pickExamples();
+    const QString folder = m_folder + u"/documents"_s;
+    const QString today = QDate::currentDate().toString(Qt::ISODate);
+    docs->writePdf(docs->dayOverviewHtml(today, 3, 2), u"day-overview"_s, false, folder);
+    docs->writePdf(docs->timetableHtml(), u"timetable"_s, false, folder);
+    docs->writePdf(docs->rentalListHtml(), u"rental-instruments"_s, false, folder);
+    if (!m_event.isEmpty())
+        docs->writePdf(docs->programmeHtml(m_event), u"programme"_s, true, folder);
+    if (!m_student.isEmpty())
+        docs->writePdf(docs->studentArchiveHtml(m_student), u"student-archive"_s, false, folder);
 }
 
 void ScreenshotTour::pickExamples()

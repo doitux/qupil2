@@ -18,7 +18,27 @@ SubPage {
         return Data.setting(key, fallback)
     }
 
-    SectionLabel { text: qsTrId("common.lesson") }
+    SectionLabel { text: qsTrId("settings.this_device") }
+    Card {
+        Layout.fillWidth: true
+        SwitchRow {
+            text: qsTrId("settings.lesson_end.enable")
+            hint: qsTrId("settings.lesson_end.hint")
+            checked: Prefs.lessonEndAlert
+            onToggled: Prefs.lessonEndAlert = checked
+        }
+        Stepper {
+            visible: Prefs.lessonEndAlert
+            label: qsTrId("settings.lesson_end.before")
+            from: 1
+            to: 30
+            value: Prefs.lessonEndMinutes
+            suffix: qsTrId("common.unit.min")
+            onPicked: (value) => Prefs.lessonEndMinutes = value
+        }
+    }
+
+    SectionLabel { Layout.topMargin: 6; text: qsTrId("common.lesson") }
     Card {
         Layout.fillWidth: true
         SwitchRow {

@@ -269,10 +269,38 @@ Item {
             text: qsTrId("student.add_reminder")
             onTriggered: Nav.editReminder("", detail.studentId)
         }
+        MenuItem {
+            text: qsTrId("student.archive")
+            onTriggered: {
+                Docs.archiveStudent(detail.studentId)
+                Nav.toast(qsTrId("archive.saved").arg(detail.student.name || ""))
+            }
+        }
         MenuSeparator {}
+        MenuItem {
+            text: qsTrId("student.archive_delete")
+            onTriggered: archiveAndDelete.open()
+        }
         MenuItem {
             text: qsTrId("student.delete")
             onTriggered: deleteStudent.open()
+        }
+    }
+
+    AppDialog {
+        id: archiveAndDelete
+        iconName: "archive"
+        destructive: true
+        title: qsTrId("student.archive_delete")
+        text: qsTrId("student.delete.confirm").arg(detail.student.name || "")
+        rejectText: qsTrId("common.cancel")
+        acceptText: qsTrId("student.archive_delete")
+        onAccepted: {
+            const name = detail.student.name || ""
+            Docs.archiveStudent(detail.studentId)
+            Data.deleteStudent(detail.studentId)
+            Nav.toast(qsTrId("archive.saved").arg(name))
+            detail.back()
         }
     }
 

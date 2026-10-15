@@ -17,6 +17,7 @@
 #include <memory>
 
 #include "Crypto.h"
+#include "Csv.h"
 #include "Database.h"
 #include "FolderSync.h"
 #include "DemoData.h"
@@ -739,6 +740,42 @@ private slots:
         });
         QCOMPARE(clientStatus, Status::AuthFailed);
         QCOMPARE(served.status, Status::AuthFailed);
+    }
+
+    void csvAddressBook()
+    {
+        // Outlook-like: commas, quotes with commas and line breaks inside, byte order mark
+        const QByteArray outlook = "\xEF\xBB\xBF" "First Name,Last Name,Home Street,Birthday,Mobile Phone\r\n"
+                                   "Lena,Muster,\"Musterweg 7, Hinterhaus\",12/31/2012,0170 1\r\n"
+                                   "\"Tom \"\"T.\"\"\",Wagner,\"Zeile 1\nZeile 2\",31.01.2013,\r\n"
+                                   ",,,,\r\n";
+        Csv::Error error;
+        const auto table = Csv::parse(outlook, true, &error);
+        QVERIFY(table.has_value());
+        QCOMPARE(table->separator, QChar(u','));
+        QCOMPARE(table->headers.size(), 5);
+        QCOMPARE(table->headers.first(), u"First Name"_s);
+        QCOMPARE(table->rows.size(), 2);   // the empty line is left out
+        QCOMPARE(table->rows.at(0).at(2), u"Musterweg 7, Hinterhaus"_s);
+        QCOMPARE(table->rows.at(1).at(0), u"Tom \"T.\""_s);
+        QCOMPARE(table->rows.at(1).at(2), u"Zeile 1\nZeile 2"_s);
+
+        // German Excel: semicolons, Latin-1
+        const auto german = Csv::parse("Vorname;Nachname;Stra\xDF" "e\nJ\xFC" "rgen;M\xFC" "ller;Hauptstr. 1\n", false);
+        QVERIFY(german.has_value());
+        QCOMPARE(german->separator, QChar(u';'));
+        QCOMPARE(german->headers.at(2), u"Straße"_s);
+        QCOMPARE(german->rows.at(0).at(1), u"Müller"_s);
+
+        QVERIFY(!Csv::parse("just one column\nvalue\n", true, &error).has_value());
+        QCOMPARE(error, Csv::Error::NoSeparator);
+
+        QCOMPARE(Csv::isoDate(u"31.12.2012"_s), u"2012-12-31"_s);
+        QCOMPARE(Csv::isoDate(u"2012-12-31"_s), u"2012-12-31"_s);
+        QCOMPARE(Csv::isoDate(u"12/31/2012"_s), u"2012-12-31"_s);
+        QCOMPARE(Csv::isoDate(u"31/12/2012"_s), u"2012-12-31"_s);
+        QCOMPARE(Csv::isoDate(u"31.02.2012"_s), QString());
+        QCOMPARE(Csv::isoDate(u"irgendwann"_s), QString());
     }
 
     void rejectsForeignFiles()

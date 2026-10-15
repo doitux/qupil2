@@ -14,12 +14,25 @@ Item {
 
     readonly property bool wide: width >= 900
     property string eventId
+    //! Wide layout: the archive (list or one entry) instead of an event
+    property bool archive: false
+    property string archiveId
     readonly property var events: { if (Data.revision < 0) return undefined; return Data.events() }
+    readonly property int archived: { if (Data.revision < 0) return undefined; return Data.eventArchive().length }
 
     function open(id) {
         eventId = id
+        archive = false
+        archiveId = ""
         if (!wide && loader.item)
             loader.item.openEvent(id)
+    }
+    function openArchive() {
+        eventId = ""
+        archiveId = ""
+        archive = true
+        if (!wide && loader.item)
+            loader.item.openArchive()
     }
 
     Connections {
@@ -41,10 +54,32 @@ Item {
                 stack.pop(null)
                 stack.push(detailComponent, { eventId: id, backText: qsTrId("nav.events") })
             }
+            function openArchive() {
+                stack.pop(null)
+                stack.push(archiveList)
+            }
             initialItem: EventList {
                 events: page.events
+                archived: page.archived
                 onPicked: (id) => page.open(id)
                 onAddRequested: newEvent.edit("")
+                onArchiveRequested: page.openArchive()
+            }
+            Component {
+                id: archiveList
+                ArchivePage {
+                    entity: "event_archive"
+                    backText: qsTrId("nav.events")
+                    onBack: stack.pop()
+                    onOpen: (entryId) => stack.push(archiveEntry, { entryId: entryId })
+                }
+            }
+            Component {
+                id: archiveEntry
+                ArchiveEntryPage {
+                    entity: "event_archive"
+                    onBack: stack.pop()
+                }
             }
             Component {
                 id: detailComponent
@@ -67,8 +102,10 @@ Item {
                 Layout.fillHeight: true
                 events: page.events
                 selected: page.eventId
-                onPicked: (id) => page.eventId = id
+                archived: page.archived
+                onPicked: (id) => page.open(id)
                 onAddRequested: newEvent.edit("")
+                onArchiveRequested: page.openArchive()
             }
             Rectangle {
                 Layout.fillHeight: true
@@ -78,7 +115,25 @@ Item {
             Loader {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                sourceComponent: page.eventId ? wideDetail : wideEmpty
+                sourceComponent: page.archiveId ? wideArchiveEntry : page.archive ? wideArchive
+                                 : page.eventId ? wideDetail : wideEmpty
+            }
+            Component {
+                id: wideArchive
+                ArchivePage {
+                    entity: "event_archive"
+                    backText: qsTrId("nav.events")
+                    onBack: page.archive = false
+                    onOpen: (entryId) => page.archiveId = entryId
+                }
+            }
+            Component {
+                id: wideArchiveEntry
+                ArchiveEntryPage {
+                    entity: "event_archive"
+                    entryId: page.archiveId
+                    onBack: page.archiveId = ""
+                }
             }
             Component {
                 id: wideDetail
@@ -108,8 +163,10 @@ Item {
         id: list
         property var events: []
         property string selected
+        property int archived
         signal picked(string id)
         signal addRequested()
+        signal archiveRequested()
 
         Flickable {
             anchors.fill: parent
@@ -250,6 +307,16 @@ Item {
                             }
                         }
                     }
+                }
+
+                ListRow {
+                    visible: list.archived > 0
+                    Layout.topMargin: 8
+                    iconName: "archive"
+                    tile: Theme.tile.gray
+                    title: qsTrId("events.archive.title")
+                    trailing: String(list.archived)
+                    onClicked: list.archiveRequested()
                 }
             }
         }

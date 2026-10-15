@@ -18,6 +18,7 @@
 
 #include "AppController.h"
 #include "DataService.h"
+#include "DocumentService.h"
 #include "LanguageManager.h"
 #include "ScreenshotTour.h"
 #include "SyncController.h"
@@ -95,6 +96,7 @@ int main(int argc, char *argv[])
         languages.setLanguage(args.value(langOption));
     AppController controller(dataDir, nullptr);
     DataService data(controller.store(), nullptr);
+    DocumentService docs(&data, nullptr);
     // Default lists (styles, locations, instruments) in the UI language for new data
     QObject::connect(&controller, &AppController::phaseChanged, &data, [&controller, &data] {
         if (controller.phase() == AppController::Ready)

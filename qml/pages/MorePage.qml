@@ -16,6 +16,10 @@ StackView {
     readonly property var reminders: { if (Data.revision < 0) return undefined; return Data.reminders() }
     readonly property var birthdays: { if (Data.revision < 0) return undefined; return Data.birthdays(0) }
     readonly property int candidates: { if (Data.revision < 0) return undefined; return Data.recitalCandidates().length }
+    readonly property int ensembleCandidates: { if (Data.revision < 0) return undefined; return Data.ensembleCandidates().candidates.length }
+    readonly property int lent: { if (Data.revision < 0) return undefined; return Data.lentCount() }
+    readonly property int rentals: { if (Data.revision < 0) return undefined; return Data.instrumentOverview().rentalCount }
+    readonly property int archived: { if (Data.revision < 0) return undefined; return Data.studentArchive().length }
 
     property date now: new Date()
 
@@ -26,6 +30,21 @@ StackView {
     //! Back to the first level (screenshot tour)
     function home() {
         stack.pop(null)
+    }
+    //! A page of "More" by name (screenshot tour)
+    function showSubPage(name) {
+        switch (name) {
+        case "library": openPage(libraryPage); break
+        case "instruments": openPage(instrumentsPage); break
+        case "ensemble": openPage(ensemblePage); break
+        case "archive": openPage(studentArchivePage); break
+        case "archiveEntry": {
+            const first = Data.studentArchive()[0]
+            if (first)
+                showArchiveEntry(first.id)
+            break
+        }
+        }
     }
 
     Timer {
@@ -222,6 +241,22 @@ StackView {
             SectionLabel { Layout.topMargin: 6; text: qsTrId("more.manage") }
             Group {
                 MenuRow {
+                    iconName: "book"
+                    tile: Theme.tile.blue
+                    text: qsTrId("library.title")
+                    value: stack.lent > 0 ? qsTrId("more.lent_count", stack.lent) : ""
+                    onClicked: stack.push(libraryPage)
+                }
+                MenuRow {
+                    divider: true
+                    iconName: "instrument"
+                    tile: Theme.tile.green
+                    text: qsTrId("common.instruments")
+                    value: stack.rentals > 0 ? qsTrId("more.rental_count", stack.rentals) : ""
+                    onClicked: stack.push(instrumentsPage)
+                }
+                MenuRow {
+                    divider: true
                     iconName: "bell"
                     tile: Theme.tile.plum
                     text: qsTrId("reminders.title")
@@ -247,6 +282,40 @@ StackView {
                     value: stack.candidates > 0 ? String(stack.candidates) : ""
                     onClicked: stack.push(candidatesPage)
                 }
+                MenuRow {
+                    divider: true
+                    iconName: "students"
+                    tile: Theme.tile.yellow
+                    text: qsTrId("candidates.ensemble.title")
+                    value: stack.ensembleCandidates > 0 ? String(stack.ensembleCandidates) : ""
+                    onClicked: stack.push(ensemblePage)
+                }
+            }
+
+            SectionLabel { Layout.topMargin: 6; text: qsTrId("more.documents") }
+            Group {
+                MenuRow {
+                    iconName: "document"
+                    tile: Theme.tile.gray
+                    text: qsTrId("doc.dayview.title")
+                    onClicked: dayOverviewSheet.start()
+                }
+                MenuRow {
+                    divider: true
+                    iconName: "calendar"
+                    tile: Theme.tile.gray
+                    text: qsTrId("doc.timetable.title")
+                    chevron: false
+                    onClicked: Docs.timetable()
+                }
+                MenuRow {
+                    divider: true
+                    iconName: "instrument"
+                    tile: Theme.tile.gray
+                    text: qsTrId("instruments.inventory_list")
+                    chevron: false
+                    onClicked: Docs.rentalList()
+                }
             }
 
             SectionLabel { Layout.topMargin: 6; text: qsTrId("more.data") }
@@ -261,6 +330,22 @@ StackView {
                     anchors.right: parent.right
                     anchors.top: parent.top
                     anchors.margins: 16
+                }
+            }
+            Group {
+                MenuRow {
+                    iconName: "archive"
+                    tile: Theme.tile.gray
+                    text: qsTrId("nav.student_archive")
+                    value: stack.archived > 0 ? String(stack.archived) : ""
+                    onClicked: stack.push(studentArchivePage)
+                }
+                MenuRow {
+                    divider: true
+                    iconName: "import"
+                    tile: Theme.tile.gray
+                    text: qsTrId("menu.import_csv").replace(/\s*(\.\.\.|…)\s*$/, "")
+                    onClicked: csvSheet.start()
                 }
             }
 
@@ -287,6 +372,27 @@ StackView {
     Component { id: candidatesPage; CandidatesPage { onBack: stack.pop() } }
     Component { id: settingsPage; SettingsPage { onBack: stack.pop() } }
     Component { id: syncPage; SyncPage { onBack: stack.pop() } }
+    Component { id: libraryPage; LibraryPage { onBack: stack.pop() } }
+    Component { id: instrumentsPage; InstrumentsPage { onBack: stack.pop() } }
+    Component { id: ensemblePage; EnsembleCandidatesPage { onBack: stack.pop() } }
+    Component {
+        id: studentArchivePage
+        ArchivePage {
+            entity: "student_archive"
+            onBack: stack.pop()
+            onOpen: (entryId) => stack.push(archiveEntryPage, { entity: "student_archive", entryId: entryId })
+        }
+    }
+    Component { id: archiveEntryPage; ArchiveEntryPage { onBack: stack.pop() } }
+
+    DayOverviewSheet { id: dayOverviewSheet }
+    CsvImportSheet { id: csvSheet }
+
+    //! Opens an archive entry (from the student page after archiving)
+    function showArchiveEntry(entryId) {
+        openPage(studentArchivePage)
+        stack.push(archiveEntryPage, { entity: "student_archive", entryId: entryId })
+    }
 
     component Group: Rectangle {
         default property alias rows: groupColumn.data

@@ -3,6 +3,7 @@
 #include "DataService.h"
 
 #include <QCollator>
+#include <QFile>
 #include <QColor>
 #include <QHash>
 #include <QJSEngine>
@@ -27,6 +28,7 @@
 
 #include "Database.h"
 #include "Ids.h"
+#include "Csv.h"
 #include "LanguageManager.h"
 #include "Store.h"
 
@@ -303,6 +305,42 @@ QStringList DataService::listSetting(const QString &key) const
         if (!v.toString().trimmed().isEmpty())
             out << v.toString();
     return out;
+}
+
+QStringList DataService::instrumentChoices() const
+{
+    QStringList out;
+    for (const QVariant &r : rows(u"SELECT name FROM instrument WHERE deleted = 0 ORDER BY position, name"_s))
+        out << r.toMap().value(u"name"_s).toString();
+    return out;
+}
+
+bool DataService::setInstrumentChoices(const QStringList &names)
+{
+    const QVariantList existing = rows(u"SELECT id, name FROM instrument WHERE deleted = 0"_s);
+    m_store->beginBatch();
+    bool ok = true;
+    QSet<QString> kept;
+    for (int i = 0; i < names.size(); ++i) {
+        const QString name = names.at(i).trimmed();
+        if (name.isEmpty())
+            continue;
+        QString id;
+        for (const QVariant &v : existing)
+            if (v.toMap().value(u"name"_s).toString() == name && !kept.contains(v.toMap().value(u"id"_s).toString()))
+                id = v.toMap().value(u"id"_s).toString();
+        if (id.isEmpty())
+            id = m_store->create(u"instrument"_s, { { u"name"_s, name }, { u"position"_s, i } });
+        else
+            ok = ok && m_store->update(u"instrument"_s, id, { { u"position"_s, i } });
+        kept.insert(id);
+    }
+    for (const QVariant &v : existing) {
+        const QString id = v.toMap().value(u"id"_s).toString();
+        if (!kept.contains(id))
+            ok = ok && m_store->remove(u"instrument"_s, id);
+    }
+    return m_store->endBatch(ok) && ok;
 }
 
 QStringList DataService::instrumentNames() const
@@ -1236,3 +1274,285 @@ QVariantList DataService::recitalCandidates() const
         out << m;
     return out;
 }
+
+// ---------------------------------------------------------------------------- ensemble candidates
+
+QVariantMap DataService::ensembleCandidates() const
+{
+    QList<QVariantMap> list;
+    int active = 0;
+    for (const QVariant &v : rows(u"SELECT id, forename, surname FROM student WHERE deleted = 0 AND ensemble_expected = 1"_s)) {
+        QVariantMap s = v.toMap();
+        const QString id = s.value(u"id"_s).toString();
+        if (scalar(u"SELECT COUNT(*) FROM membership WHERE deleted = 0 AND student_id = ? AND (end_date = '' OR end_date > ?)"_s,
+                   { id, todayIso() }).toInt() == 0)
+            continue;
+        // The latest ensemble (continuous activity of kind 0); open end = still playing
+        const QVariantList last = rows(u"SELECT description, end_date FROM activity WHERE deleted = 0 AND continuous = 1 "
+                                       u"AND continuous_kind = 0 AND student_id = ? "
+                                       u"ORDER BY CASE WHEN end_date = '' THEN 1 ELSE 0 END DESC, end_date DESC LIMIT 1"_s, { id });
+        const QVariantMap ensemble = last.isEmpty() ? QVariantMap() : last.first().toMap();
+        const QString end = ensemble.value(u"end_date"_s).toString();
+        if (!ensemble.isEmpty() && (end.isEmpty() || end > todayIso())) {   // open or still running
+            ++active;
+            continue;
+        }
+        s.insert(u"name"_s, fullName(s.value(u"forename"_s).toString(), s.value(u"surname"_s).toString()));
+        s.insert(u"initials"_s, initials(s.value(u"forename"_s).toString(), s.value(u"surname"_s).toString()));
+        s.insert(u"lastDate"_s, ensemble.value(u"end_date"_s).toString());
+        s.insert(u"lastEnsemble"_s, ensemble.value(u"description"_s).toString());
+        list << s;
+    }
+    std::sort(list.begin(), list.end(), [](const QVariantMap &a, const QVariantMap &b) {
+        return a.value(u"lastDate"_s).toString() > b.value(u"lastDate"_s).toString();
+    });
+    QVariantList out;
+    for (const QVariantMap &m : list)
+        out << m;
+    return { { u"candidates"_s, out }, { u"active"_s, active } };
+}
+
+// ---------------------------------------------------------------------------- library
+
+QVariantList DataService::libraryItems(int mode, const QString &filter) const
+{
+    QString where = u"l.deleted = 0"_s;
+    if (mode == 1)
+        where += u" AND (l.lent_to = '' OR s.id IS NULL)"_s;
+    else if (mode == 2)
+        where += u" AND l.lent_to <> '' AND s.id IS NOT NULL"_s;
+    QVariantList out;
+    const QString needle = filter.trimmed();
+    QCollator collator(uiLocale());
+    collator.setCaseSensitivity(Qt::CaseInsensitive);
+    QList<QVariantMap> list;
+    for (const QVariant &v : rows(u"SELECT l.*, s.forename, s.surname FROM library_item l "
+                                  u"LEFT JOIN student s ON s.id = l.lent_to AND s.deleted = 0 WHERE "_s + where)) {
+        QVariantMap m = v.toMap();
+        const bool lent = !m.value(u"surname"_s).isNull() || !m.value(u"forename"_s).isNull();
+        const QString borrower = lent ? fullName(m.value(u"forename"_s).toString(), m.value(u"surname"_s).toString()) : QString();
+        m.insert(u"lent"_s, lent);
+        m.insert(u"borrower"_s, borrower);
+        if (!needle.isEmpty()) {
+            const QString haystack = m.value(u"author"_s).toString() + u' ' + m.value(u"title"_s).toString() + u' '
+                                     + m.value(u"publisher"_s).toString() + u' ' + borrower;
+            if (!haystack.contains(needle, Qt::CaseInsensitive))
+                continue;
+        }
+        list << m;
+    }
+    std::sort(list.begin(), list.end(), [&collator](const QVariantMap &a, const QVariantMap &b) {
+        const int c = collator.compare(a.value(u"author"_s).toString(), b.value(u"author"_s).toString());
+        return c != 0 ? c < 0 : collator.compare(a.value(u"title"_s).toString(), b.value(u"title"_s).toString()) < 0;
+    });
+    for (const QVariantMap &m : list)
+        out << m;
+    return out;
+}
+
+int DataService::lentCount() const
+{
+    return scalar(u"SELECT COUNT(*) FROM library_item l JOIN student s ON s.id = l.lent_to AND s.deleted = 0 "
+                  u"WHERE l.deleted = 0"_s).toInt();
+}
+
+bool DataService::lendLibraryItem(const QString &itemId, const QString &studentId)
+{
+    return m_store->update(u"library_item"_s, itemId, { { u"lent_to"_s, studentId }, { u"lent_since"_s, todayIso() } });
+}
+
+bool DataService::returnLibraryItem(const QString &itemId)
+{
+    // lent_since stays: when it was lent the last time
+    return m_store->update(u"library_item"_s, itemId, { { u"lent_to"_s, QString() } });
+}
+
+QStringList DataService::libraryAuthors() const
+{
+    QStringList out;
+    for (const QVariant &v : rows(u"SELECT DISTINCT author FROM library_item WHERE deleted = 0 AND author <> '' "
+                                  u"ORDER BY author COLLATE NOCASE"_s))
+        out << v.toMap().value(u"author"_s).toString();
+    return out;
+}
+
+QStringList DataService::libraryPublishers() const
+{
+    QStringList out;
+    for (const QVariant &v : rows(u"SELECT DISTINCT publisher FROM library_item WHERE deleted = 0 AND publisher <> '' "
+                                  u"ORDER BY publisher COLLATE NOCASE"_s))
+        out << v.toMap().value(u"publisher"_s).toString();
+    return out;
+}
+
+// ---------------------------------------------------------------------------- instruments
+
+QVariantMap DataService::instrumentOverview() const
+{
+    QVariantList students;
+    QMap<QString, int> byInstrument;
+    QMap<QString, int> bySize;
+    int rental = 0;
+    int nextSize = 0;
+    for (const QVariant &v : rows(u"SELECT id, forename, surname, birthday, instrument, instrument_size, rental, "
+                                  u"rental_desc, rental_since, next_size FROM student WHERE deleted = 0 "
+                                  u"AND (instrument <> '' OR instrument_size <> '' OR rental = 1) "
+                                  u"ORDER BY surname COLLATE NOCASE, forename COLLATE NOCASE"_s)) {
+        QVariantMap m = v.toMap();
+        m.insert(u"name"_s, listName(m.value(u"forename"_s).toString(), m.value(u"surname"_s).toString()));
+        m.insert(u"initials"_s, initials(m.value(u"forename"_s).toString(), m.value(u"surname"_s).toString()));
+        const QString instrument = m.value(u"instrument"_s).toString();
+        const QString size = m.value(u"instrument_size"_s).toString();
+        if (!instrument.isEmpty())
+            ++byInstrument[instrument];
+        if (!size.isEmpty())
+            ++bySize[size];
+        rental += m.value(u"rental"_s).toInt() == 1;
+        nextSize += m.value(u"next_size"_s).toInt() == 1;
+        students << m;
+    }
+    auto counts = [](const QMap<QString, int> &map) {
+        QVariantList out;
+        for (auto it = map.cbegin(); it != map.cend(); ++it)
+            out << QVariantMap { { u"name"_s, it.key() }, { u"count"_s, it.value() } };
+        return out;
+    };
+    return { { u"students"_s, students }, { u"byInstrument"_s, counts(byInstrument) },
+             { u"bySize"_s, counts(bySize) }, { u"rentalCount"_s, rental }, { u"nextSizeCount"_s, nextSize } };
+}
+
+// ---------------------------------------------------------------------------- archives
+
+QVariantList DataService::studentArchive() const
+{
+    QVariantList out;
+    for (const QVariant &v : rows(u"SELECT id, forename, surname, archived_on FROM student_archive WHERE deleted = 0 "
+                                  u"ORDER BY surname COLLATE NOCASE, forename COLLATE NOCASE"_s)) {
+        QVariantMap m = v.toMap();
+        m.insert(u"name"_s, listName(m.value(u"forename"_s).toString(), m.value(u"surname"_s).toString()));
+        m.insert(u"initials"_s, initials(m.value(u"forename"_s).toString(), m.value(u"surname"_s).toString()));
+        out << m;
+    }
+    return out;
+}
+
+QVariantList DataService::eventArchive() const
+{
+    // Titles start with "yyyy-MM-dd_HH:mm" (as in Qupil 1.x): newest first
+    return rows(u"SELECT id, title FROM event_archive WHERE deleted = 0 ORDER BY title DESC"_s);
+}
+
+// ---------------------------------------------------------------------------- CSV import
+
+namespace {
+
+const char *const kCsvFields[] = { "mobile", "phone", "email", "forename", "surname", "birthday", "zip", "city", "street" };
+
+//! Words that column titles of common address books contain (several languages)
+QStringList csvPatterns(const QString &field)
+{
+    if (field == u"forename"_s)
+        return { u"first name"_s, u"firstname"_s, u"given name"_s, u"vorname"_s, u"prénom"_s, u"prenom"_s, u"nombre"_s };
+    if (field == u"surname"_s)
+        return { u"last name"_s, u"lastname"_s, u"surname"_s, u"family name"_s, u"nachname"_s, u"familienname"_s,
+                 u"nom de famille"_s, u"apellido"_s, u"nom"_s };
+    if (field == u"birthday"_s)
+        return { u"birthday"_s, u"birth"_s, u"geburtstag"_s, u"geburtsdatum"_s, u"anniversaire"_s, u"naissance"_s,
+                 u"cumpleaños"_s, u"nacimiento"_s };
+    if (field == u"street"_s)
+        return { u"street"_s, u"straße"_s, u"strasse"_s, u"adresse"_s, u"address"_s, u"rue"_s, u"calle"_s, u"dirección"_s };
+    if (field == u"zip"_s)
+        return { u"zip"_s, u"postal"_s, u"postcode"_s, u"plz"_s, u"postleitzahl"_s, u"code postal"_s, u"código postal"_s };
+    if (field == u"city"_s)
+        return { u"city"_s, u"town"_s, u"ort"_s, u"stadt"_s, u"ville"_s, u"ciudad"_s };
+    if (field == u"email"_s)
+        return { u"mail"_s };
+    if (field == u"mobile"_s)
+        return { u"mobile"_s, u"cell"_s, u"handy"_s, u"mobil"_s, u"portable"_s, u"móvil"_s };
+    if (field == u"phone"_s)
+        return { u"phone"_s, u"telefon"_s, u"téléphone"_s, u"teléfono"_s, u"tel"_s };
+    return {};
+}
+
+QByteArray readFile(const QUrl &url)
+{
+    QFile f(url.isLocalFile() ? url.toLocalFile() : url.toString());   // content:// on Android
+    if (!f.open(QIODevice::ReadOnly))
+        return {};
+    return f.readAll();
+}
+
+} // namespace
+
+QVariantMap DataService::readCsv(const QUrl &file, bool utf8) const
+{
+    const QByteArray data = readFile(file);
+    if (data.isEmpty())
+        return { { u"error"_s, u"open"_s } };
+    const auto table = Qupil::Csv::parse(data, utf8);
+    if (!table)
+        return { { u"error"_s, u"separator"_s } };
+    QVariantMap suggested;
+    QSet<int> taken;
+    for (const char *f : kCsvFields) {
+        const QString field = QString::fromLatin1(f);
+        int column = -1;
+        for (const QString &pattern : csvPatterns(field)) {
+            for (int i = 0; i < table->headers.size() && column < 0; ++i) {
+                if (taken.contains(i))
+                    continue;
+                const QString header = table->headers.at(i).toLower();
+                // "nom" and "tel" only as whole words (not "Nombre", "Hotel")
+                const bool word = pattern.size() <= 3;
+                const bool match = word ? QRegularExpression(u"\\b"_s + QRegularExpression::escape(pattern) + u"\\b"_s,
+                                                             QRegularExpression::UseUnicodePropertiesOption)
+                                              .match(header).hasMatch()
+                                        : header.contains(pattern);
+                if (match)
+                    column = i;
+            }
+            if (column >= 0)
+                break;
+        }
+        if (column >= 0)
+            taken.insert(column);
+        suggested.insert(field, column);
+    }
+    return { { u"headers"_s, table->headers }, { u"count"_s, table->rows.size() }, { u"suggested"_s, suggested },
+             { u"error"_s, QString() } };
+}
+
+int DataService::importCsv(const QUrl &file, bool utf8, const QVariantMap &mapping)
+{
+    const auto table = Qupil::Csv::parse(readFile(file), utf8);
+    if (!table)
+        return 0;
+    auto value = [&mapping](const QStringList &row, const char *field) {
+        const int column = mapping.value(QString::fromLatin1(field), -1).toInt();
+        return column >= 0 && column < row.size() ? row.at(column).trimmed() : QString();
+    };
+    int count = 0;
+    m_store->beginBatch();
+    for (const QStringList &row : table->rows) {
+        const QString forename = value(row, "forename");
+        const QString surname = value(row, "surname");
+        if (forename.isEmpty() && surname.isEmpty())
+            continue;   // no name, no student
+        const QString street = value(row, "street");
+        const QString place = (value(row, "zip") + u' ' + value(row, "city")).trimmed();
+        QStringList address;
+        if (!street.isEmpty())
+            address << street;
+        if (!place.isEmpty())
+            address << place;
+        m_store->create(u"student"_s, { { u"forename"_s, forename }, { u"surname"_s, surname },
+                                        { u"birthday"_s, Qupil::Csv::isoDate(value(row, "birthday")) },
+                                        { u"address"_s, address.join(u", "_s) }, { u"email"_s, value(row, "email") },
+                                        { u"phone"_s, value(row, "phone") }, { u"mobile"_s, value(row, "mobile") },
+                                        { u"first_lesson"_s, todayIso() } });
+        ++count;
+    }
+    m_store->endBatch();
+    return count;
+}
+

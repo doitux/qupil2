@@ -326,8 +326,41 @@ Item {
     Menu {
         id: eventMenu
         MenuItem {
+            text: qsTrId("event.export_program")
+            onTriggered: Docs.programme(detail.eventId)
+        }
+        MenuItem {
+            text: qsTrId("event.archive")
+            onTriggered: {
+                Docs.archiveEvent(detail.eventId)
+                Nav.toast(qsTrId("archive.saved").arg(detail.event.title || ""))
+            }
+        }
+        MenuSeparator {}
+        MenuItem {
+            text: qsTrId("event.archive_delete")
+            onTriggered: archiveAndDelete.open()
+        }
+        MenuItem {
             text: qsTrId("event.delete.title")
             onTriggered: confirmDelete.open()
+        }
+    }
+
+    AppDialog {
+        id: archiveAndDelete
+        iconName: "archive"
+        destructive: true
+        title: qsTrId("event.archive_delete")
+        text: qsTrId("event.delete.confirm").arg(detail.event.title || "")
+        rejectText: qsTrId("common.cancel")
+        acceptText: qsTrId("event.archive_delete")
+        onAccepted: {
+            const title = detail.event.title || ""
+            Docs.archiveEvent(detail.eventId)
+            Data.deleteEvent(detail.eventId)
+            Nav.toast(qsTrId("archive.saved").arg(title))
+            detail.back()
         }
     }
 

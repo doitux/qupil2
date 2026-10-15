@@ -39,6 +39,7 @@ public:
     std::atomic<int> beatsPerBar { 4 };
     std::atomic<bool> clicking { false };
     std::atomic<double> toneFrequency { 0 };   // 0 = off
+    std::atomic<bool> chimeRequested { false };
 
     //! Clicks start with the next rendered sample
     void restartClicks()
@@ -71,6 +72,8 @@ protected:
         const double tone = toneFrequency.load();
         const int beatsInBar = std::max(1, beatsPerBar.load());
         const bool click = clicking.load();
+        if (chimeRequested.exchange(false))
+            m_chimePos = 0;
         char *out = data;
 
         for (qint64 i = 0; i < frames; ++i, ++m_sample) {
@@ -102,6 +105,23 @@ protected:
                 const double envelope = std::exp(-t * 140.0) * std::min(1.0, m_clickPos / (rate * 0.0008));
                 s += m_clickGain * envelope * std::sin(2 * kPi * m_clickFrequency * t);
                 ++m_clickPos;
+            }
+
+            // Chime: two soft bell notes (lesson end)
+            if (m_chimePos >= 0) {
+                const double t = m_chimePos / rate;
+                auto bell = [](double time, double frequency) {
+                    if (time < 0)
+                        return 0.0;
+                    const double attack = std::min(1.0, time / 0.004);
+                    const double decay = std::exp(-time * 3.2);
+                    return attack * decay
+                           * (0.7 * std::sin(2 * kPi * frequency * time) + 0.2 * std::sin(2 * kPi * 2.76 * frequency * time)
+                              + 0.1 * std::sin(2 * kPi * 5.4 * frequency * time));
+                };
+                s += 0.45 * (bell(t, 1318.5) + bell(t - 0.45, 1046.5));   // E6, then C6
+                if (++m_chimePos > int(rate * 2.2))
+                    m_chimePos = -1;
             }
 
             // Tone with short fades to avoid clicks
@@ -161,6 +181,7 @@ private:
     double m_tonePhase = 0;
     double m_toneGain = 0;
     double m_toneFrequency = 440;
+    int m_chimePos = -1;
 
     mutable QMutex m_anchorMutex;
     qint64 m_anchorSample = -1;
@@ -294,6 +315,15 @@ bool Metronome::ensureAudio()
         emit errorChanged();
     }
     return true;
+}
+
+void Metronome::chime()
+{
+    if (!ensureAudio())
+        return;
+    m_generator->chimeRequested.store(true);
+    if (!m_running && !m_tonePlaying)
+        m_idleTimer.start();   // give the device back after the sound
 }
 
 void Metronome::releaseAudioIfIdle()

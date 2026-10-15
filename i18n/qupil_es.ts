@@ -2822,6 +2822,153 @@ Póngase en contacto con el autor en %4 para resolver el problema.</translation>
         <extracomment>%1 = technical reason</extracomment>
         <translation>No se pudo conectar con el otro dispositivo (%1).</translation>
     </message>
+    <message id="library.empty">
+        <source>No sheet music in the library yet.</source>
+        <translation>Aún no hay partituras en la biblioteca.</translation>
+    </message>
+    <message id="library.search">
+        <source>Search sheet music</source>
+        <translation>Buscar partituras</translation>
+    </message>
+    <message id="library.new">
+        <source>New sheet music</source>
+        <translation>Nueva partitura</translation>
+    </message>
+    <message id="library.edit">
+        <source>Sheet music</source>
+        <translation>Partitura</translation>
+    </message>
+    <message id="library.lent_to_since">
+        <source>Lent to %1 since %2</source>
+        <extracomment>%1 = student, %2 = date</extracomment>
+        <translation>Prestada a %1 desde el %2</translation>
+    </message>
+    <message id="library.lend_to_student">
+        <source>Lend to</source>
+        <translation>Prestar a</translation>
+    </message>
+    <message id="library.lend">
+        <source>Lend</source>
+        <translation>Prestar</translation>
+    </message>
+    <message id="library.return">
+        <source>Returned</source>
+        <translation>Devuelta</translation>
+    </message>
+    <message id="library.title_required">
+        <source>Please enter a title.</source>
+        <translation>Introduzca un título.</translation>
+    </message>
+    <message id="library.delete.confirm">
+        <source>Delete “%1” from the library?</source>
+        <extracomment>%1 = title</extracomment>
+        <translation>¿Eliminar «%1» de la biblioteca?</translation>
+    </message>
+    <message id="more.rental_count" numerus="yes">
+        <source>%n rental instrument(s)</source>
+        <translation>
+            <numerusform>%n instrumento de alquiler</numerusform>
+            <numerusform>%n instrumentos de alquiler</numerusform>
+        </translation>
+    </message>
+    <message id="instruments.rentals">
+        <source>Rental instruments</source>
+        <translation>Instrumentos de alquiler</translation>
+    </message>
+    <message id="instruments.empty">
+        <source>No student has an instrument entered yet.</source>
+        <translation>Aún no se ha indicado ningún instrumento.</translation>
+    </message>
+    <message id="instruments.choices">
+        <source>Instruments to choose from</source>
+        <translation>Instrumentos para elegir</translation>
+    </message>
+    <message id="archive.empty">
+        <source>No archived students yet.</source>
+        <translation>Aún no hay alumnos archivados.</translation>
+    </message>
+    <message id="archive.archived_on">
+        <source>Archived on %1</source>
+        <extracomment>%1 = date</extracomment>
+        <translation>Archivado el %1</translation>
+    </message>
+    <message id="archive.saved">
+        <source>Archive entry for %1 saved.</source>
+        <extracomment>%1 = name</extracomment>
+        <translation>Entrada de archivo guardada para %1.</translation>
+    </message>
+    <message id="archive.hint">
+        <source>Archive entries are read-only records: personal data, lessons, notes, pieces and activities at the time of archiving.</source>
+        <translation>Las entradas de archivo son registros fijos: datos personales, clases, notas, obras y actividades en el momento de archivar.</translation>
+    </message>
+    <message id="event.archive">
+        <source>Archive</source>
+        <translation>Archivar</translation>
+    </message>
+    <message id="events.archive.title">
+        <source>Archived events</source>
+        <translation>Eventos archivados</translation>
+    </message>
+    <message id="events.archive.empty">
+        <source>No archived events yet.</source>
+        <translation>Aún no hay eventos archivados.</translation>
+    </message>
+    <message id="doc.timetable.title">
+        <source>Timetable</source>
+        <translation>Horario</translation>
+    </message>
+    <message id="doc.as_of">
+        <source>As of %1</source>
+        <extracomment>%1 = date</extracomment>
+        <translation>Actualizado el %1</translation>
+    </message>
+    <message id="doc.total_years" numerus="yes">
+        <source>%n year(s) in total</source>
+        <translation>
+            <numerusform>%n año en total</numerusform>
+            <numerusform>%n años en total</numerusform>
+        </translation>
+    </message>
+    <message id="doc.error.write">
+        <source>The document could not be created.</source>
+        <translation>No se pudo crear el documento.</translation>
+    </message>
+    <message id="doc.error.open">
+        <source>The document was saved but could not be opened: %1</source>
+        <extracomment>%1 = file path</extracomment>
+        <translation>El documento se guardó, pero no se pudo abrir: %1</translation>
+    </message>
+    <message id="doc.create">
+        <source>Create PDF</source>
+        <translation>Crear PDF</translation>
+    </message>
+    <message id="doc.dayview.lines">
+        <source>lines</source>
+        <translation>líneas</translation>
+    </message>
+    <message id="import.csv.rows" numerus="yes">
+        <source>%n entries in the file</source>
+        <translation>
+            <numerusform>%n entrada en el archivo</numerusform>
+            <numerusform>%n entradas en el archivo</numerusform>
+        </translation>
+    </message>
+    <message id="import.csv.action">
+        <source>Import</source>
+        <translation>Importar</translation>
+    </message>
+    <message id="import.csv.hint">
+        <source>Each row with a name becomes a new student. Lessons can be added afterwards.</source>
+        <translation>Cada fila con un nombre se convierte en un alumno nuevo. Las clases se pueden asignar después.</translation>
+    </message>
+    <message id="settings.this_device">
+        <source>On this device</source>
+        <translation>En este dispositivo</translation>
+    </message>
+    <message id="settings.lesson_end.hint">
+        <source>A sound and a message while Qupil is open.</source>
+        <translation>Un sonido y un mensaje mientras Qupil está abierto.</translation>
+    </message>
     <message id="setup.sync.title">
         <source>Data from another device</source>
         <translation>Datos de otro dispositivo</translation>

@@ -2822,6 +2822,153 @@ Please contact the author at %4 to fix this problem.</translation>
         <extracomment>%1 = technical reason</extracomment>
         <translation>Could not reach the other device (%1).</translation>
     </message>
+    <message id="library.empty">
+        <source>No sheet music in the library yet.</source>
+        <translation>No sheet music in the library yet.</translation>
+    </message>
+    <message id="library.search">
+        <source>Search sheet music</source>
+        <translation>Search sheet music</translation>
+    </message>
+    <message id="library.new">
+        <source>New sheet music</source>
+        <translation>New sheet music</translation>
+    </message>
+    <message id="library.edit">
+        <source>Sheet music</source>
+        <translation>Sheet music</translation>
+    </message>
+    <message id="library.lent_to_since">
+        <source>Lent to %1 since %2</source>
+        <extracomment>%1 = student, %2 = date</extracomment>
+        <translation>Lent to %1 since %2</translation>
+    </message>
+    <message id="library.lend_to_student">
+        <source>Lend to</source>
+        <translation>Lend to</translation>
+    </message>
+    <message id="library.lend">
+        <source>Lend</source>
+        <translation>Lend</translation>
+    </message>
+    <message id="library.return">
+        <source>Returned</source>
+        <translation>Returned</translation>
+    </message>
+    <message id="library.title_required">
+        <source>Please enter a title.</source>
+        <translation>Please enter a title.</translation>
+    </message>
+    <message id="library.delete.confirm">
+        <source>Delete “%1” from the library?</source>
+        <extracomment>%1 = title</extracomment>
+        <translation>Delete “%1” from the library?</translation>
+    </message>
+    <message id="more.rental_count" numerus="yes">
+        <source>%n rental instrument(s)</source>
+        <translation>
+            <numerusform>%n rental instrument</numerusform>
+            <numerusform>%n rental instruments</numerusform>
+        </translation>
+    </message>
+    <message id="instruments.rentals">
+        <source>Rental instruments</source>
+        <translation>Rental instruments</translation>
+    </message>
+    <message id="instruments.empty">
+        <source>No student has an instrument entered yet.</source>
+        <translation>No student has an instrument entered yet.</translation>
+    </message>
+    <message id="instruments.choices">
+        <source>Instruments to choose from</source>
+        <translation>Instruments to choose from</translation>
+    </message>
+    <message id="archive.empty">
+        <source>No archived students yet.</source>
+        <translation>No archived students yet.</translation>
+    </message>
+    <message id="archive.archived_on">
+        <source>Archived on %1</source>
+        <extracomment>%1 = date</extracomment>
+        <translation>Archived on %1</translation>
+    </message>
+    <message id="archive.saved">
+        <source>Archive entry for %1 saved.</source>
+        <extracomment>%1 = name</extracomment>
+        <translation>Archive entry for %1 saved.</translation>
+    </message>
+    <message id="archive.hint">
+        <source>Archive entries are read-only records: personal data, lessons, notes, pieces and activities at the time of archiving.</source>
+        <translation>Archive entries are read-only records: personal data, lessons, notes, pieces and activities at the time of archiving.</translation>
+    </message>
+    <message id="event.archive">
+        <source>Archive</source>
+        <translation>Archive</translation>
+    </message>
+    <message id="events.archive.title">
+        <source>Archived events</source>
+        <translation>Archived events</translation>
+    </message>
+    <message id="events.archive.empty">
+        <source>No archived events yet.</source>
+        <translation>No archived events yet.</translation>
+    </message>
+    <message id="doc.timetable.title">
+        <source>Timetable</source>
+        <translation>Timetable</translation>
+    </message>
+    <message id="doc.as_of">
+        <source>As of %1</source>
+        <extracomment>%1 = date</extracomment>
+        <translation>As of %1</translation>
+    </message>
+    <message id="doc.total_years" numerus="yes">
+        <source>%n year(s) in total</source>
+        <translation>
+            <numerusform>%n year in total</numerusform>
+            <numerusform>%n years in total</numerusform>
+        </translation>
+    </message>
+    <message id="doc.error.write">
+        <source>The document could not be created.</source>
+        <translation>The document could not be created.</translation>
+    </message>
+    <message id="doc.error.open">
+        <source>The document was saved but could not be opened: %1</source>
+        <extracomment>%1 = file path</extracomment>
+        <translation>The document was saved but could not be opened: %1</translation>
+    </message>
+    <message id="doc.create">
+        <source>Create PDF</source>
+        <translation>Create PDF</translation>
+    </message>
+    <message id="doc.dayview.lines">
+        <source>lines</source>
+        <translation>lines</translation>
+    </message>
+    <message id="import.csv.rows" numerus="yes">
+        <source>%n entries in the file</source>
+        <translation>
+            <numerusform>%n entry in the file</numerusform>
+            <numerusform>%n entries in the file</numerusform>
+        </translation>
+    </message>
+    <message id="import.csv.action">
+        <source>Import</source>
+        <translation>Import</translation>
+    </message>
+    <message id="import.csv.hint">
+        <source>Each row with a name becomes a new student. Lessons can be added afterwards.</source>
+        <translation>Each row with a name becomes a new student. Lessons can be added afterwards.</translation>
+    </message>
+    <message id="settings.this_device">
+        <source>On this device</source>
+        <translation>On this device</translation>
+    </message>
+    <message id="settings.lesson_end.hint">
+        <source>A sound and a message while Qupil is open.</source>
+        <translation>A sound and a message while Qupil is open.</translation>
+    </message>
     <message id="setup.sync.title">
         <source>Data from another device</source>
         <translation>Data from another device</translation>

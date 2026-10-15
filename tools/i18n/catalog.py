@@ -1584,6 +1584,76 @@ E("wifi.error.not_pairing", en="The other device no longer shows a code. Tap “
 E("wifi.error.connect", en="Could not reach the other device (%1).",
   de="Keine Verbindung zum anderen Gerät (%1).", fr="Impossible de joindre l’autre appareil (%1).",
   es="No se pudo conectar con el otro dispositivo (%1).", c="%1 = technical reason")
+# ---------------------------------------------------------------- library, instruments, archive, documents (new)
+E("library.empty", en="No sheet music in the library yet.", de="Noch keine Noten in der Bibliothek.",
+  fr="Aucune partition dans la bibliothèque pour l’instant.", es="Aún no hay partituras en la biblioteca.")
+E("library.search", en="Search sheet music", de="Noten suchen", fr="Rechercher des partitions",
+  es="Buscar partituras")
+E("library.new", en="New sheet music", de="Neue Noten", fr="Nouvelle partition", es="Nueva partitura")
+E("library.edit", en="Sheet music", de="Noten", fr="Partition", es="Partitura")
+E("library.lent_to_since", en="Lent to %1 since %2", de="Verliehen an %1 seit %2", fr="Prêtée à %1 depuis le %2",
+  es="Prestada a %1 desde el %2", c="%1 = student, %2 = date")
+E("library.lend_to_student", en="Lend to", de="Verleihen an", fr="Prêter à", es="Prestar a")
+E("library.lend", en="Lend", de="Verleihen", fr="Prêter", es="Prestar")
+E("library.return", en="Returned", de="Zurückgegeben", fr="Rendue", es="Devuelta")
+E("library.title_required", en="Please enter a title.", de="Bitte geben Sie einen Titel ein.",
+  fr="Veuillez saisir un titre.", es="Introduzca un título.")
+E("library.delete.confirm", en="Delete “%1” from the library?", de="„%1“ aus der Bibliothek löschen?",
+  fr="Supprimer « %1 » de la bibliothèque ?", es="¿Eliminar «%1» de la biblioteca?", c="%1 = title")
+E("more.rental_count", src="%n rental instrument(s)", en=["%n rental instrument", "%n rental instruments"],
+  de=["%n Leihinstrument", "%n Leihinstrumente"], fr=["%n instrument de location", "%n instruments de location"],
+  es=["%n instrumento de alquiler", "%n instrumentos de alquiler"])
+E("instruments.rentals", en="Rental instruments", de="Leihinstrumente", fr="Instruments de location",
+  es="Instrumentos de alquiler")
+E("instruments.empty", en="No student has an instrument entered yet.",
+  de="Bei noch keinem Schüler ist ein Instrument eingetragen.",
+  fr="Aucun instrument n’est encore indiqué pour les élèves.", es="Aún no se ha indicado ningún instrumento.")
+E("instruments.choices", en="Instruments to choose from", de="Instrumente zur Auswahl",
+  fr="Instruments proposés", es="Instrumentos para elegir")
+E("archive.empty", en="No archived students yet.", de="Noch keine archivierten Schüler.",
+  fr="Aucun élève archivé pour l’instant.", es="Aún no hay alumnos archivados.")
+E("archive.archived_on", en="Archived on %1", de="Archiviert am %1", fr="Archivé le %1", es="Archivado el %1",
+  c="%1 = date")
+E("archive.saved", en="Archive entry for %1 saved.", de="Archiveintrag für %1 gespeichert.",
+  fr="Entrée d’archive enregistrée pour %1.", es="Entrada de archivo guardada para %1.", c="%1 = name")
+E("archive.hint", en="Archive entries are read-only records: personal data, lessons, notes, pieces and activities "
+     "at the time of archiving.",
+  de="Archiveinträge sind feste Aufzeichnungen: persönliche Daten, Unterricht, Notizen, Werke und Aktivitäten zum "
+     "Zeitpunkt der Archivierung.",
+  fr="Les entrées d’archive sont des relevés figés : données personnelles, cours, notes, œuvres et activités au "
+     "moment de l’archivage.",
+  es="Las entradas de archivo son registros fijos: datos personales, clases, notas, obras y actividades en el "
+     "momento de archivar.")
+E("event.archive", en="Archive", de="Archivieren", fr="Archiver", es="Archivar")
+E("events.archive.title", en="Archived events", de="Archivierte Veranstaltungen", fr="Événements archivés",
+  es="Eventos archivados")
+E("events.archive.empty", en="No archived events yet.", de="Noch keine archivierten Veranstaltungen.",
+  fr="Aucun événement archivé pour l’instant.", es="Aún no hay eventos archivados.")
+E("doc.timetable.title", en="Timetable", de="Stundenplan", fr="Emploi du temps", es="Horario")
+E("doc.as_of", en="As of %1", de="Stand: %1", fr="État au %1", es="Actualizado el %1", c="%1 = date")
+E("doc.total_years", src="%n year(s) in total", en=["%n year in total", "%n years in total"],
+  de=["insgesamt %n Jahr", "insgesamt %n Jahre"], fr=["%n an au total", "%n ans au total"],
+  es=["%n año en total", "%n años en total"])
+E("doc.error.write", en="The document could not be created.", de="Das Dokument konnte nicht erstellt werden.",
+  fr="Le document n’a pas pu être créé.", es="No se pudo crear el documento.")
+E("doc.error.open", en="The document was saved but could not be opened: %1",
+  de="Das Dokument wurde gespeichert, konnte aber nicht geöffnet werden: %1",
+  fr="Le document a été enregistré mais n’a pas pu être ouvert : %1",
+  es="El documento se guardó, pero no se pudo abrir: %1", c="%1 = file path")
+E("doc.create", en="Create PDF", de="PDF erstellen", fr="Créer le PDF", es="Crear PDF")
+E("doc.dayview.lines", en="lines", de="Zeilen", fr="lignes", es="líneas")
+E("import.csv.rows", src="%n entries in the file", en=["%n entry in the file", "%n entries in the file"],
+  de=["%n Eintrag in der Datei", "%n Einträge in der Datei"], fr=["%n entrée dans le fichier", "%n entrées dans le fichier"],
+  es=["%n entrada en el archivo", "%n entradas en el archivo"])
+E("import.csv.action", en="Import", de="Importieren", fr="Importer", es="Importar")
+E("import.csv.hint", en="Each row with a name becomes a new student. Lessons can be added afterwards.",
+  de="Jede Zeile mit einem Namen wird ein neuer Schüler. Den Unterricht können Sie danach zuordnen.",
+  fr="Chaque ligne avec un nom devient un nouvel élève. Les cours peuvent être ajoutés ensuite.",
+  es="Cada fila con un nombre se convierte en un alumno nuevo. Las clases se pueden asignar después.")
+E("settings.this_device", en="On this device", de="Auf diesem Gerät", fr="Sur cet appareil", es="En este dispositivo")
+E("settings.lesson_end.hint", en="A sound and a message while Qupil is open.",
+  de="Ein Klang und eine Meldung, solange Qupil geöffnet ist.",
+  fr="Un son et un message tant que Qupil est ouvert.", es="Un sonido y un mensaje mientras Qupil está abierto.")
 E("setup.sync.title", en="Data from another device", de="Daten von einem anderen Gerät",
   fr="Données d’un autre appareil", es="Datos de otro dispositivo")
 E("setup.sync.text",

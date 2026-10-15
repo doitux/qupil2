@@ -40,6 +40,8 @@ qt_add_library(qupilcore STATIC
     src/core/WifiSession.cpp
     src/core/Mdns.h
     src/core/Mdns.cpp
+    src/core/Csv.h
+    src/core/Csv.cpp
     src/core/Crypto.h
     src/core/Crypto.cpp
     src/core/FolderSync.h
@@ -134,6 +136,7 @@ set(QUPIL_QML_FILES
     qml/Theme.qml
     qml/Nav.qml
     qml/Labels.qml
+    qml/Prefs.qml
     qml/Icon.qml
     qml/NavButton.qml
     qml/ActionButton.qml
@@ -152,6 +155,7 @@ set(QUPIL_QML_FILES
     qml/components/Fab.qml
     qml/components/FieldLabel.qml
     qml/components/IconButton.qml
+    qml/components/ListRow.qml
     qml/components/InputField.qml
     qml/components/ListEditor.qml
     qml/components/MenuRow.qml
@@ -166,6 +170,9 @@ set(QUPIL_QML_FILES
     qml/components/TimeField.qml
     qml/editors/ActivityEditor.qml
     qml/editors/PairingSheet.qml
+    qml/editors/LibraryItemEditor.qml
+    qml/editors/DayOverviewSheet.qml
+    qml/editors/CsvImportSheet.qml
     qml/editors/EventEditor.qml
     qml/editors/ExternalEditor.qml
     qml/editors/LessonEditor.qml
@@ -190,6 +197,11 @@ set(QUPIL_QML_FILES
     qml/pages/CandidatesPage.qml
     qml/pages/SettingsPage.qml
     qml/pages/SyncPage.qml
+    qml/pages/LibraryPage.qml
+    qml/pages/InstrumentsPage.qml
+    qml/pages/EnsembleCandidatesPage.qml
+    qml/pages/ArchivePage.qml
+    qml/pages/ArchiveEntryPage.qml
     qml/pages/PlaceholderPage.qml)
 
 # All QML files sit next to the module's qmldir in the resources, so every file
@@ -200,7 +212,7 @@ foreach(_qml IN LISTS QUPIL_QML_FILES)
 endforeach()
 
 # Theme.qml is a singleton – must be set before qt_add_qml_module()
-set_source_files_properties(qml/Theme.qml qml/Nav.qml qml/Labels.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
+set_source_files_properties(qml/Theme.qml qml/Nav.qml qml/Labels.qml qml/Prefs.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 
 qt_add_qml_module(qupil
     URI Qupil
@@ -231,6 +243,8 @@ qt_add_qml_module(qupil
         src/app/WifiController.cpp
         src/app/SocketChannel.h
         src/app/Discovery.h
+        src/app/DocumentService.h
+        src/app/DocumentService.cpp
 )
 
 # ---------------------------------------------------------------------------- translations

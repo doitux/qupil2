@@ -5,6 +5,7 @@
 #include <QDate>
 #include <QDateTime>
 #include <QObject>
+#include <QUrl>
 #include <QStringList>
 #include <QVariantList>
 #include <QVariantMap>
@@ -118,6 +119,41 @@ public:
     //! mode 0: shown on the start page; 1: every lesson; 2: lessons of one student
     Q_INVOKABLE QVariantList reminders() const;
     Q_INVOKABLE QVariantList recitalCandidates() const;
+    /*!
+        Students who should play in an ensemble (ensemble_expected) but have no
+        ongoing ensemble activity: { candidates: [...], active: n }
+    */
+    Q_INVOKABLE QVariantMap ensembleCandidates() const;
+
+    // ------------------------------------------------------------ sheet music library
+    //! mode 0 all, 1 available, 2 lent; filter matches author, title, publisher, borrower
+    Q_INVOKABLE QVariantList libraryItems(int mode = 0, const QString &filter = {}) const;
+    Q_INVOKABLE int lentCount() const;
+    Q_INVOKABLE bool lendLibraryItem(const QString &itemId, const QString &studentId);
+    Q_INVOKABLE bool returnLibraryItem(const QString &itemId);
+    Q_INVOKABLE QStringList libraryAuthors() const;
+    Q_INVOKABLE QStringList libraryPublishers() const;
+
+    // ------------------------------------------------------------ instruments
+    /*!
+        Students with their instruments: { students: [...], byInstrument: [...],
+        bySize: [...], rentalCount, nextSizeCount }
+    */
+    Q_INVOKABLE QVariantMap instrumentOverview() const;
+
+    // ------------------------------------------------------------ address book import (CSV)
+    /*!
+        Reads a CSV file: { headers, count, error, suggested: { field: column } } with the
+        fields forename, surname, birthday, street, zip, city, email, phone, mobile.
+        error: "open" or "separator".
+    */
+    Q_INVOKABLE QVariantMap readCsv(const QUrl &file, bool utf8) const;
+    //! One new student per row; mapping: field → column (-1 = not imported). Returns how many.
+    Q_INVOKABLE int importCsv(const QUrl &file, bool utf8, const QVariantMap &mapping);
+
+    // ------------------------------------------------------------ archives (read-only records)
+    Q_INVOKABLE QVariantList studentArchive() const;
+    Q_INVOKABLE QVariantList eventArchive() const;
 
     // ------------------------------------------------------------ settings and lists
     Q_INVOKABLE QVariant setting(const QString &key, const QVariant &fallback = {}) const;
@@ -125,6 +161,9 @@ public:
     //! JSON list settings: genres, locations, instrument_sizes
     Q_INVOKABLE QStringList listSetting(const QString &key) const;
     Q_INVOKABLE QStringList instrumentNames() const;
+    //! The instruments offered for students (the list in this order)
+    Q_INVOKABLE QStringList instrumentChoices() const;
+    Q_INVOKABLE bool setInstrumentChoices(const QStringList &names);
     //! Default lists in the UI language if this database has none yet
     Q_INVOKABLE void ensureDefaults();
 
@@ -151,6 +190,8 @@ signals:
     void changed();
 
 private:
+    friend class DocumentService;   // documents read the same data
+
     QVariantList rows(const QString &sql, const QVariantList &binds = {}) const;
     QVariant scalar(const QString &sql, const QVariantList &binds = {}) const;
     QVariantList activeMembers(const QString &lessonId) const;

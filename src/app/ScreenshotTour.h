@@ -39,6 +39,7 @@ private:
     void addPages(const QString &prefix);
     void addDetails(const QString &prefix);
     void pickExamples();
+    void writeDocuments();
 
     QPointer<QQuickWindow> m_window;
     QPointer<QObject> m_theme;
