@@ -85,9 +85,9 @@ QList<EntityDef> buildEntities()
         text("date"), text("end_date"), integer("single_kind"), integer("continuous_kind"),
     }, { QStringLiteral("student_id") } };
 
-    // Sheet music library
+    // Sheet music library. number: the index written on the music (1.x: smlid, shown as 0007), 0 = none
     list << EntityDef{ QStringLiteral("library_item"), {
-        text("author"), text("title"), text("publisher"), text("lent_to"), text("lent_since"),
+        text("author"), text("title"), text("publisher"), text("lent_to"), text("lent_since"), integer("number"),
     }, {} };
 
     // Events (1.x: recital). state: 0 planned, 1 finished.

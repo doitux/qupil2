@@ -33,7 +33,8 @@ struct EntityDef
 namespace Schema {
 
 //! Current version of the Qupil 2 database layout
-constexpr int Version = 1;
+//! 2: library_item.number
+constexpr int Version = 2;
 
 const QList<EntityDef> &entities();
 const EntityDef *entity(const QString &name);

@@ -148,9 +148,20 @@ bool Database::createSchema(QString *error)
 
 bool Database::migrate(int from, QString *error)
 {
-    // Schema version 1 is the first; later versions add their steps here.
-    Q_UNUSED(from)
-    Q_UNUSED(error)
+    // One step per version (1 is the first)
+    const QList<QPair<int, QString>> steps = {
+        { 2, u"ALTER TABLE library_item ADD COLUMN number INTEGER NOT NULL DEFAULT 0"_s },
+    };
+    for (const auto &[version, sql] : steps) {
+        if (from >= version)
+            continue;
+        QSqlQuery q(connection());
+        if (!q.exec(sql)) {
+            if (error)
+                *error = q.lastError().text();
+            return false;
+        }
+    }
     return setMeta(u"schema_version"_s, QString::number(Schema::Version));
 }
 

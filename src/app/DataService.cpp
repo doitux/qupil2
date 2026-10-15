@@ -1314,6 +1314,11 @@ QVariantMap DataService::ensembleCandidates() const
 
 // ---------------------------------------------------------------------------- library
 
+int DataService::nextLibraryNumber() const
+{
+    return scalar(u"SELECT COALESCE(MAX(number), 0) FROM library_item WHERE deleted = 0"_s).toInt() + 1;
+}
+
 QVariantList DataService::libraryItems(int mode, const QString &filter) const
 {
     QString where = u"l.deleted = 0"_s;
@@ -1334,8 +1339,10 @@ QVariantList DataService::libraryItems(int mode, const QString &filter) const
         m.insert(u"lent"_s, lent);
         m.insert(u"borrower"_s, borrower);
         if (!needle.isEmpty()) {
+            const int number = m.value(u"number"_s).toInt();
             const QString haystack = m.value(u"author"_s).toString() + u' ' + m.value(u"title"_s).toString() + u' '
-                                     + m.value(u"publisher"_s).toString() + u' ' + borrower;
+                                     + m.value(u"publisher"_s).toString() + u' ' + borrower
+                                     + (number > 0 ? u' ' + QString::number(number).rightJustified(4, u'0') : QString());
             if (!haystack.contains(needle, Qt::CaseInsensitive))
                 continue;
         }

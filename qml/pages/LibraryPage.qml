@@ -47,7 +47,8 @@ SubPage {
         delegate: ListRow {
             required property var modelData
             title: modelData.title || "–"
-            subtitle: [modelData.author, modelData.publisher].filter(x => x).join(" · ")
+            subtitle: [modelData.number > 0 ? String(modelData.number).padStart(4, "0") : "",
+                       modelData.author, modelData.publisher].filter(x => x).join(" · ")
                       + (modelData.lent ? "\n" + qsTrId("library.lent_to_since").arg(modelData.borrower)
                                                          .arg(Data.formatDate(modelData.lent_since)) : "")
             subtitleColor: modelData.lent ? Theme.accentText : Theme.textMuted

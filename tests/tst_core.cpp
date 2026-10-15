@@ -24,6 +24,7 @@
 #include "Ids.h"
 #include "LegacyFixture.h"
 #include "LegacyImporter.h"
+#include "Schema.h"
 #include "LessonAlerts.h"
 #include "Mdns.h"
 #include "Store.h"
@@ -372,6 +373,7 @@ private slots:
         const auto lent = store.select(u"library_item"_s, u"lent_to <> ''"_s);
         QCOMPARE(lent.size(), 1);
         QCOMPARE(lent.first().value(u"lent_to"_s).toString(), lenaId);
+        QCOMPARE(lent.first().value(u"number"_s).toInt(), 1);   // index on the music (1.x smlid)
 
         // Settings from config.xml
         QCOMPARE(store.get(u"setting"_s, u"locations"_s).value(u"value"_s).toString(), u"[\"Raum 20\",\"Aula\"]"_s);
@@ -884,6 +886,34 @@ private slots:
         QCOMPARE(next.at(0).at, kMinutesPerWeek - 2);
         QCOMPARE(next.at(1).at, 9 * 60 + 42);
         QCOMPARE(next.at(2).names.first(), u"Anna"_s);
+    }
+
+    void migratesSchema()
+    {
+        // A database of schema version 1 (before the library number) gets the new column
+        const QString path = file(u"v1.db"_s);
+        {
+            Database db;
+            QString error;
+            QVERIFY2(db.open(path, &error), qPrintable(error));
+            QSqlQuery q(db.connection());
+            QVERIFY(q.exec(u"CREATE TABLE library_v1 AS SELECT id, author, title, publisher, lent_to, lent_since, deleted "
+                           u"FROM library_item"_s));
+            QVERIFY(q.exec(u"DROP TABLE library_item"_s));
+            QVERIFY(q.exec(u"ALTER TABLE library_v1 RENAME TO library_item"_s));
+            QVERIFY(q.exec(u"INSERT INTO library_item (id, author, title, publisher, lent_to, lent_since, deleted) "
+                           u"VALUES ('x', 'Bach', 'Suiten', '', '', '', 0)"_s));
+            QVERIFY(db.setMeta(u"schema_version"_s, u"1"_s));
+            db.close();
+        }
+        Database db;
+        QString error;
+        QVERIFY2(db.open(path, &error), qPrintable(error));
+        QCOMPARE(db.meta(u"schema_version"_s), QString::number(Schema::Version));
+        QSqlQuery q(db.connection());
+        QVERIFY(q.exec(u"SELECT number, title FROM library_item WHERE id = 'x'"_s) && q.next());
+        QCOMPARE(q.value(0).toInt(), 0);
+        QCOMPARE(q.value(1).toString(), u"Suiten"_s);
     }
 
     void rejectsForeignFiles()

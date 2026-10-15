@@ -20,6 +20,7 @@ StackView {
     readonly property int lent: { if (Data.revision < 0) return undefined; return Data.lentCount() }
     readonly property int rentals: { if (Data.revision < 0) return undefined; return Data.instrumentOverview().rentalCount }
     readonly property int archived: { if (Data.revision < 0) return undefined; return Data.studentArchive().length }
+    readonly property int readyPieces: { if (Data.revision < 0) return undefined; return Data.readyPieces("").length }
 
     property date now: new Date()
 
@@ -40,6 +41,7 @@ StackView {
         case "archive": openPage(studentArchivePage); break
         case "settings": openPage(settingsPage); break
         case "birthdays": openPage(birthdaysPage); break
+        case "ready": openPage(readyPage); break
         case "reminders": openPage(remindersPage); break
         case "dayOverview": dayOverviewSheet.start(); break
         case "about": openPage(aboutPage); break
@@ -302,6 +304,14 @@ StackView {
                     value: stack.ensembleCandidates > 0 ? String(stack.ensembleCandidates) : ""
                     onClicked: stack.push(ensemblePage)
                 }
+                MenuRow {
+                    divider: true
+                    iconName: "events"
+                    tile: Theme.tile.green
+                    text: qsTrId("event.tab.ready")
+                    value: stack.readyPieces > 0 ? String(stack.readyPieces) : ""
+                    onClicked: stack.push(readyPage)
+                }
             }
 
             SectionLabel { Layout.topMargin: 6; text: qsTrId("more.documents") }
@@ -381,6 +391,7 @@ StackView {
 
     Component { id: remindersPage; RemindersPage { onBack: stack.pop() } }
     Component { id: birthdaysPage; BirthdaysPage { onBack: stack.pop() } }
+    Component { id: readyPage; ReadyPiecesPage { onBack: stack.pop() } }
     Component { id: candidatesPage; CandidatesPage { onBack: stack.pop() } }
     Component { id: settingsPage; SettingsPage { onBack: stack.pop() } }
     Component { id: aboutPage; AboutPage { onBack: stack.pop(); onShowLicense: stack.push(licensePage) } }

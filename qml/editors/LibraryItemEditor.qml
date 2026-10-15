@@ -21,7 +21,7 @@ Sheet {
 
     function edit(id) {
         itemId = id
-        draft = id ? Data.get("library_item", id) : { author: "", title: "", publisher: "" }
+        draft = id ? Data.get("library_item", id) : { author: "", title: "", publisher: "", number: Data.nextLibraryNumber() }
         lendTo = ""
         open()
     }
@@ -41,13 +41,20 @@ Sheet {
     canAccept: (draft.title || "").trim() !== ""
     onAccepted: {
         const fields = { author: (draft.author || "").trim(), title: draft.title.trim(),
-                         publisher: (draft.publisher || "").trim() }
+                         publisher: (draft.publisher || "").trim(), number: Math.max(0, parseInt(draft.number) || 0) }
         if (itemId)
             Data.update("library_item", itemId, fields)
         else
             Data.create("library_item", fields)
     }
 
+    InputField {
+        // The index written on the music (Qupil 1.x: four digits)
+        label: qsTrId("library.col.index")
+        text: editor.draft.number ? String(editor.draft.number) : ""
+        inputMethodHints: Qt.ImhDigitsOnly
+        onEdited: (value) => editor.set("number", value.replace(/[^0-9]/g, ""))
+    }
     InputField {
         label: qsTrId("library.label.author")
         text: editor.draft.author || ""

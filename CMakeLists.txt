@@ -237,7 +237,8 @@ set(QUPIL_QML_FILES
     qml/pages/ArchivePage.qml
     qml/pages/LicensePage.qml
     qml/pages/ArchiveEntryPage.qml
-    qml/pages/PlaceholderPage.qml)
+    qml/pages/PlaceholderPage.qml
+    qml/pages/ReadyPiecesPage.qml)
 
 # All QML files sit next to the module's qmldir in the resources, so every file
 # sees all types of the module (and the Theme singleton) without an import.

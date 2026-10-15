@@ -128,6 +128,8 @@ public:
     // ------------------------------------------------------------ sheet music library
     //! mode 0 all, 1 available, 2 lent; filter matches author, title, publisher, borrower
     Q_INVOKABLE QVariantList libraryItems(int mode = 0, const QString &filter = {}) const;
+    //! Index for new sheet music: one more than the highest
+    Q_INVOKABLE int nextLibraryNumber() const;
     Q_INVOKABLE int lentCount() const;
     Q_INVOKABLE bool lendLibraryItem(const QString &itemId, const QString &studentId);
     Q_INVOKABLE bool returnLibraryItem(const QString &itemId);

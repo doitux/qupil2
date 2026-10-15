@@ -447,6 +447,7 @@ LegacyImporter::Result LegacyImporter::run(const QString &legacyDatabase, Store 
             { u"publisher"_s, publishers.value(key(row, "publisher")) },
             { u"lent_to"_s, renter > 0 ? students.value(renter) : QString() },
             { u"lent_since"_s, renter > 0 ? d(str(row, "lastrentdate")) : QString() },
+            { u"number"_s, key(row, "smlid") },   // the index written on the music
         });
         ++r.libraryItems;
     }
