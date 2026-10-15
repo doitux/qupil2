@@ -15,6 +15,7 @@ Popup {
 
     property string title
     property string acceptText: qsTrId("common.save")
+    property string rejectText: qsTrId("common.cancel")
     property bool canAccept: true
     property bool showAccept: true
     //! Big button at the bottom instead of the text button in the header (phones)
@@ -103,7 +104,7 @@ Popup {
             ActionButton {
                 id: cancelButton
                 kind: "quiet"
-                text: qsTrId("common.cancel")
+                text: sheet.rejectText
                 onClicked: sheet.reject()
             }
             Text {

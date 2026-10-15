@@ -5,11 +5,16 @@
 #include <QSignalSpy>
 #include <QSqlQuery>
 #include <QMap>
+#include <QMutex>
+#include <QQueue>
+#include <QThread>
+#include <QWaitCondition>
 #include <QSet>
 #include <QTemporaryDir>
 #include <QTest>
 
 #include <algorithm>
+#include <memory>
 
 #include "Crypto.h"
 #include "Database.h"
@@ -18,7 +23,9 @@
 #include "Ids.h"
 #include "LegacyFixture.h"
 #include "LegacyImporter.h"
+#include "Mdns.h"
 #include "Store.h"
+#include "WifiSession.h"
 
 using namespace Qupil;
 using namespace Qt::StringLiterals;
@@ -85,6 +92,55 @@ public:
     }
     QString lastError() const override { return QStringLiteral("offline"); }
     bool lastErrorWasNotFound() const override { return notFound; }
+};
+
+// Two connected ends of an in-memory connection (Wi-Fi tests)
+struct PipeQueue
+{
+    QMutex mutex;
+    QWaitCondition ready;
+    QQueue<QByteArray> frames;
+    bool closed = false;
+};
+
+class PipeEnd : public FrameChannel
+{
+public:
+    PipeEnd(std::shared_ptr<PipeQueue> in, std::shared_ptr<PipeQueue> out)
+        : m_in(std::move(in))
+        , m_out(std::move(out))
+    {
+    }
+    ~PipeEnd() override
+    {
+        QMutexLocker lock(&m_out->mutex);
+        m_out->closed = true;
+        m_out->ready.wakeAll();
+    }
+    bool send(const QByteArray &frame) override
+    {
+        QMutexLocker lock(&m_out->mutex);
+        if (m_out->closed)
+            return false;
+        m_out->frames.enqueue(frame);
+        m_out->ready.wakeAll();
+        return true;
+    }
+    std::optional<QByteArray> receive() override
+    {
+        QMutexLocker lock(&m_in->mutex);
+        while (m_in->frames.isEmpty() && !m_in->closed) {
+            if (!m_in->ready.wait(&m_in->mutex, 10000))
+                return std::nullopt;
+        }
+        if (m_in->frames.isEmpty())
+            return std::nullopt;
+        return m_in->frames.dequeue();
+    }
+
+private:
+    std::shared_ptr<PipeQueue> m_in;
+    std::shared_ptr<PipeQueue> m_out;
 };
 
 class TestCore : public QObject
@@ -496,6 +552,193 @@ private slots:
             if (f.startsWith(u"Qupil/"_s))
                 cloud.files.remove(f);
         QCOMPARE(fb.run(keyB2, u"iPad"_s, nullptr), FolderSync::Status::NoPassword);
+    }
+
+    void mdnsMessages()
+    {
+        Mdns::Message m;
+        m.response = true;
+        Mdns::Record ptr;
+        ptr.name = u"_qupil-sync._tcp.local"_s;
+        ptr.type = Mdns::PTR;
+        ptr.target = u"Qupil-1a2b3c4d._qupil-sync._tcp.local"_s;
+        ptr.ttl = 4500;
+        Mdns::Record srv;
+        srv.name = ptr.target;
+        srv.type = Mdns::SRV;
+        srv.cacheFlush = true;
+        srv.port = 47123;
+        srv.target = u"qupil-1a2b3c4d.local"_s;
+        Mdns::Record txt;
+        txt.name = ptr.target;
+        txt.type = Mdns::TXT;
+        txt.txt = { "id=1a2b3c4d", "n=Geigen-iPad", "pair=1" };
+        Mdns::Record a;
+        a.name = srv.target;
+        a.type = Mdns::A;
+        a.address = QByteArray("\xC0\xA8\x01\x17", 4);
+        m.answers << ptr;
+        m.additional << srv << txt << a;
+
+        const auto back = Mdns::decode(Mdns::encode(m));
+        QVERIFY(back.has_value());
+        QVERIFY(back->response);
+        QCOMPARE(back->answers.size(), 1);
+        QCOMPARE(back->additional.size(), 3);
+        QCOMPARE(back->answers.at(0).target, ptr.target);
+        QCOMPARE(back->additional.at(0).port, quint16(47123));
+        QVERIFY(back->additional.at(0).cacheFlush);
+        QCOMPARE(Mdns::txtValue(back->additional.at(1).txt, "n"), u"Geigen-iPad"_s);
+        QCOMPARE(back->additional.at(2).address, a.address);
+        QVERIFY(Mdns::sameName(u"_QUPIL-sync._tcp.local."_s, ptr.name));
+
+        // A query with a compressed name, as other responders send them
+        QByteArray q("\x00\x00\x00\x00\x00\x02\x00\x00\x00\x00\x00\x00", 12);
+        q += QByteArray("\x0b_qupil-sync\x04_tcp\x05local\x00\x00\x0c\x80\x01", 28);
+        q += QByteArray("\x05other\xc0\x0c\x00\x21\x00\x01", 12);   // other._qupil-sync._tcp.local SRV
+        const auto query = Mdns::decode(q);
+        QVERIFY(query.has_value());
+        QCOMPARE(query->questions.size(), 2);
+        QVERIFY(query->questions.at(0).unicastResponse);
+        QCOMPARE(query->questions.at(1).name, u"other._qupil-sync._tcp.local"_s);
+        QCOMPARE(query->questions.at(1).type, quint16(Mdns::SRV));
+
+        // Garbage and loops are rejected, not crashed on
+        QVERIFY(!Mdns::decode("abc").has_value());
+        QByteArray loop("\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\xc0\x0c\x00\x0c\x00\x01", 18);
+        QVERIFY(!Mdns::decode(loop).has_value());
+    }
+
+    void wifiPairAndSync()
+    {
+        using namespace WifiSync;
+        auto identity = [](const QString &id, const QString &name) {
+            const Crypto::KeyPair keys = Crypto::x25519KeyPair();
+            return Identity { id, name, keys.secretKey, keys.publicKey };
+        };
+        const Identity laptop = identity(u"laptop-id"_s, u"Laptop"_s);
+        const Identity ipad = identity(u"ipad-id"_s, u"iPad"_s);
+        QCOMPARE(normalizeCode(u"482 913"_s), u"482913"_s);
+        QCOMPARE(newCode().size(), 6);
+
+        // Runs the server end in its own thread with its own connection to the file
+        auto run = [this](const QString &serverDb, const Identity &server, const ServerState &state,
+                          const std::function<void(FrameChannel *)> &client) {
+            auto toServer = std::make_shared<PipeQueue>();
+            auto toClient = std::make_shared<PipeQueue>();
+            ServeResult result;
+            QThread *thread = QThread::create([&, toServer, toClient] {
+                PipeEnd end(toServer, toClient);
+                Database db;
+                db.open(file(serverDb));
+                Store store(&db);
+                result = serve(&end, &store, server, state);
+            });
+            thread->start();
+            {
+                PipeEnd end(toClient, toServer);
+                client(&end);
+            }
+            thread->wait();
+            delete thread;
+            return result;
+        };
+
+        // The iPad shows a code, the laptop enters it
+        ServerState pairing;
+        pairing.pairingCode = u"482913"_s;
+        pairing.hasData = true;
+        Peer seenByLaptop;
+        Status clientStatus = Status::Failed;
+        ServeResult served = run(u"w-ipad.db"_s, ipad, pairing, [&](FrameChannel *ch) {
+            clientStatus = pair(ch, laptop, u"000 000"_s, false, &seenByLaptop);
+        });
+        QCOMPARE(clientStatus, Status::WrongCode);
+        QCOMPARE(served.status, Status::WrongCode);
+
+        served = run(u"w-ipad.db"_s, ipad, pairing, [&](FrameChannel *ch) {
+            clientStatus = pair(ch, laptop, u"482-913"_s, false, &seenByLaptop);
+        });
+        QCOMPARE(clientStatus, Status::Ok);
+        QCOMPARE(served.status, Status::Ok);
+        QCOMPARE(served.kind, ServeResult::Paired);
+        QCOMPARE(seenByLaptop.id, ipad.id);
+        QCOMPARE(seenByLaptop.publicKey, ipad.publicKey);
+        QVERIFY(seenByLaptop.hasData);
+        QCOMPARE(served.peer.id, laptop.id);
+        QCOMPARE(served.peer.publicKey, laptop.publicKey);
+        QVERIFY(!served.peer.hasData);
+        const Peer laptopOnIpad = served.peer;
+
+        ServerState notPairing;
+        served = run(u"w-ipad.db"_s, ipad, notPairing, [&](FrameChannel *ch) {
+            clientStatus = pair(ch, laptop, u"482913"_s, false, &seenByLaptop);
+        });
+        QCOMPARE(clientStatus, Status::NotPairing);
+
+        // Data on both devices, then a sync in both directions
+        QString laptopLena;
+        {
+            Database db;
+            QVERIFY(db.open(file(u"w-laptop.db"_s)));
+            Store s(&db);
+            laptopLena = s.create(u"student"_s, { { u"surname"_s, u"Muster"_s }, { u"forename"_s, u"Lena"_s } });
+        }
+        {
+            Database db;
+            QVERIFY(db.open(file(u"w-ipad.db"_s)));
+            Store s(&db);
+            s.create(u"lesson"_s, { { u"name"_s, u"Streicherensemble"_s } });
+        }
+        ServerState paired;
+        paired.peers << laptopOnIpad;
+        Database laptopDb;
+        QVERIFY(laptopDb.open(file(u"w-laptop.db"_s)));
+        Store laptopStore(&laptopDb);
+        Stats stats;
+        served = run(u"w-ipad.db"_s, ipad, paired, [&](FrameChannel *ch) {
+            clientStatus = sync(ch, &laptopStore, laptop, seenByLaptop, &stats);
+        });
+        QCOMPARE(clientStatus, Status::Ok);
+        QCOMPARE(served.status, Status::Ok);
+        QCOMPARE(served.kind, ServeResult::Synced);
+        QVERIFY(stats.sent > 0 && stats.received > 0 && stats.applied > 0);
+        QVERIFY(served.stats.applied > 0);
+        QCOMPARE(laptopStore.select(u"lesson"_s).size(), 1);
+        {
+            Database db;
+            QVERIFY(db.open(file(u"w-ipad.db"_s)));
+            Store s(&db);
+            QCOMPARE(s.get(u"student"_s, laptopLena).value(u"forename"_s).toString(), u"Lena"_s);
+            QCOMPARE(s.versionVector(), laptopStore.versionVector());
+        }
+
+        // Nothing new: only the version vectors travel
+        served = run(u"w-ipad.db"_s, ipad, paired, [&](FrameChannel *ch) {
+            stats = {};
+            clientStatus = sync(ch, &laptopStore, laptop, seenByLaptop, &stats);
+        });
+        QCOMPARE(clientStatus, Status::Ok);
+        QCOMPARE(stats.sent + stats.received, 0);
+
+        // Paused, unknown, or a key that does not fit
+        ServerState paused = paired;
+        paused.paused << laptop.id;
+        run(u"w-ipad.db"_s, ipad, paused, [&](FrameChannel *ch) {
+            clientStatus = sync(ch, &laptopStore, laptop, seenByLaptop, nullptr);
+        });
+        QCOMPARE(clientStatus, Status::Refused);
+        run(u"w-ipad.db"_s, ipad, ServerState(), [&](FrameChannel *ch) {
+            clientStatus = sync(ch, &laptopStore, laptop, seenByLaptop, nullptr);
+        });
+        QCOMPARE(clientStatus, Status::UnknownDevice);
+        Peer impostor = seenByLaptop;
+        impostor.publicKey = Crypto::x25519KeyPair().publicKey;
+        served = run(u"w-ipad.db"_s, ipad, paired, [&](FrameChannel *ch) {
+            clientStatus = sync(ch, &laptopStore, laptop, impostor, nullptr);
+        });
+        QCOMPARE(clientStatus, Status::AuthFailed);
+        QCOMPARE(served.status, Status::AuthFailed);
     }
 
     void rejectsForeignFiles()

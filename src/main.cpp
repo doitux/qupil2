@@ -21,6 +21,7 @@
 #include "LanguageManager.h"
 #include "ScreenshotTour.h"
 #include "SyncController.h"
+#include "WifiController.h"
 
 using namespace Qt::StringLiterals;
 
@@ -104,6 +105,8 @@ int main(int argc, char *argv[])
         data.ensureDefaults();
     SyncController sync(&controller, nullptr);
     QObject::connect(&sync, &SyncController::firstSyncDone, &data, &DataService::ensureDefaults);
+    WifiController wifi(&controller, &sync, nullptr);
+    QObject::connect(&wifi, &WifiController::firstSyncDone, &data, &DataService::ensureDefaults);
     QQmlApplicationEngine engine;
     languages.setEngine(&engine);   // retranslate() on a language switch
 

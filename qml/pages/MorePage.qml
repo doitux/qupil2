@@ -46,22 +46,32 @@ StackView {
     }
 
     // Title and detail line of the sync card
-    readonly property bool syncSetUp: Sync.connected && !Sync.needsPassword
+    readonly property bool wifiUsed: Wifi.peers.length > 0
+    readonly property bool syncUsed: Sync.connected || wifiUsed
+    readonly property bool syncSetUp: (Sync.connected && !Sync.needsPassword) || wifiUsed
+    readonly property bool wifiPaused: Wifi.peers.some(p => p.paused || p.problem !== "")
+    readonly property bool syncWarn: (Sync.connected && (Sync.needsPassword || Sync.error !== "")) || wifiPaused
     readonly property string syncTitle: {
-        if (Sync.loggingIn) return qsTrId("sync.title")
-        if (!Sync.connected) return qsTrId("sync.title")
-        if (Sync.needsPassword) return Sync.folderExists ? qsTrId("sync.password.enter_title") : qsTrId("sync.password.choose_title")
-        if (Sync.busy) return qsTrId("sync.in_progress")
-        if (Sync.error !== "") return qsTrId("sync.status.problem")
-        if (Sync.lastSync === "") return qsTrId("sync.never")
+        if (Sync.loggingIn || !syncUsed) return qsTrId("sync.title")
+        if (Sync.connected && Sync.needsPassword) return Sync.folderExists ? qsTrId("sync.password.enter_title") : qsTrId("sync.password.choose_title")
+        if (Sync.busy || Wifi.busy) return qsTrId("sync.in_progress")
+        if ((Sync.connected && Sync.error !== "") || wifiPaused) return qsTrId("sync.status.problem")
+        if (Sync.lastSync === "" && Wifi.lastSync === "") return qsTrId("sync.never")
         return qsTrId("sync.all_synced")
     }
     readonly property string syncDetail: {
         if (Sync.loggingIn) return qsTrId("sync.nextcloud.waiting")
-        if (!Sync.connected) return qsTrId("sync.status.off")
-        if (Sync.needsPassword) return qsTrId("sync.nextcloud.connected_as").arg(Sync.user).arg(Sync.server.replace(/^https?:\/\//, ""))
-        if (Sync.error !== "") return Sync.error
-        return qsTrId("sync.nextcloud.when").arg(Labels.syncWhen(Sync.lastSync, stack.now))
+        if (!syncUsed) return qsTrId("sync.status.off")
+        if (Sync.connected && Sync.needsPassword) return qsTrId("sync.nextcloud.connected_as").arg(Sync.user).arg(Sync.server.replace(/^https?:\/\//, ""))
+        if (Sync.connected && Sync.error !== "") return Sync.error
+        const parts = []
+        if (Sync.connected)
+            parts.push(qsTrId("sync.nextcloud.when").arg(Labels.syncWhen(Sync.lastSync, stack.now)))
+        if (wifiPaused)
+            parts.push(qsTrId("wifi.paused"))
+        else if (Wifi.lastPeer !== "")
+            parts.push(qsTrId("sync.wifi.when").arg(Wifi.lastPeer).arg(Labels.syncWhen(Wifi.lastSync, stack.now)))
+        return parts.join(" · ")
     }
 
     initialItem: Flickable {
@@ -92,8 +102,8 @@ StackView {
                 implicitHeight: syncColumn.implicitHeight + 28
                 radius: Theme.radiusLarge - 2
                 color: Theme.surface
-                readonly property bool warn: Sync.connected && (Sync.needsPassword || Sync.error !== "")
-                readonly property var tile: !Sync.connected ? Theme.tile.gray
+                readonly property bool warn: stack.syncWarn
+                readonly property var tile: !stack.syncUsed ? Theme.tile.gray
                                           : warn ? Theme.tile.orange
                                           : Theme.tile.green
 
@@ -131,7 +141,7 @@ StackView {
                                     anchors.centerIn: parent
                                     width: 24
                                     height: 24
-                                    name: !Sync.connected ? "cloud" : syncCard.warn ? "cloudOff" : "sync"
+                                    name: !stack.syncUsed ? "cloud" : syncCard.warn ? "cloudOff" : "sync"
                                     color: syncCard.tile.fg
                                 }
                             }
@@ -175,14 +185,21 @@ StackView {
                             Layout.preferredWidth: 1
                             kind: "primary"
                             text: stack.syncSetUp ? qsTrId("sync.now") : qsTrId("sync.setup_short")
-                            enabled: !stack.syncSetUp || !Sync.busy
-                            onClicked: stack.syncSetUp ? Sync.syncNow() : stack.openPage(syncPage)
+                            enabled: !stack.syncSetUp || !(Sync.busy || Wifi.busy)
+                            onClicked: {
+                                if (!stack.syncSetUp) {
+                                    stack.openPage(syncPage)
+                                    return
+                                }
+                                Sync.syncNow()
+                                Wifi.syncNow()
+                            }
                         }
                         ActionButton {
                             Layout.fillWidth: true
                             Layout.preferredWidth: 1
                             text: qsTrId("sync.pair")
-                            onClicked: stack.openPage(syncPage)
+                            onClicked: Nav.pairDevice()
                         }
                     }
                 }

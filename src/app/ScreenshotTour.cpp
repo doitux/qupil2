@@ -131,6 +131,12 @@ void ScreenshotTour::addDetails(const QString &prefix)
                       {} }
             << snap(prefix + u"-10-sync"_s)
             << Step { [this] {
+                          if (m_nav)
+                              QMetaObject::invokeMethod(m_nav, "pairDevice");
+                      },
+                      {} }
+            << snap(prefix + u"-11-pairing"_s) << close
+            << Step { [this] {
                           for (QObject *o : m_window->findChildren<QObject *>(u"morePage"_s))
                               QMetaObject::invokeMethod(o, "home");
                           m_window->setProperty("currentPage", 0);

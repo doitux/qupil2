@@ -42,8 +42,13 @@ struct KeyPair
     QByteArray publicKey;
 };
 KeyPair x25519KeyPair();
-//! Shared key from our secret and their public key (hashed, ready to use)
+QByteArray x25519PublicKey(const QByteArray &secretKey);
+//! Shared key from our secret and their public key (hashed, ready to use); empty for a bad key
 QByteArray x25519Shared(const QByteArray &secretKey, const QByteArray &theirPublicKey);
+//! Raw X25519: the secret (scalar) times a curve point; empty if the result is the neutral point
+QByteArray x25519(const QByteArray &secretKey, const QByteArray &point);
+//! A curve point derived from data (BLAKE2b, then Elligator 2): nobody knows its discrete logarithm
+QByteArray hashToPoint(const QByteArray &data);
 
 //! Overwrites a secret in memory
 void wipe(QByteArray &secret);

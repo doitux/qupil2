@@ -114,9 +114,10 @@ public:
     Q_INVOKABLE void refreshLegacyFolders();
 
     // ------------------------------------------------------------ for the sync
-    //! The sync writes from its own connection: the data is not replaced meanwhile
-    void setSyncRunning(bool running);
-    bool syncRunning() const { return m_syncRunning; }
+    //! A sync writes from its own connection: the data is not replaced meanwhile (counted)
+    void beginSync();
+    void endSync();
+    bool syncRunning() const { return m_syncRunning > 0; }
     /*!
         Replaces the data on this device with an empty database that waits for
         the first sync. The old data is kept as a backup.
@@ -162,6 +163,6 @@ private:
     QVariantList m_legacyFolders;
     QVariantMap m_lastTakeOver;
     bool m_demoPending = false;
-    bool m_syncRunning = false;
+    int m_syncRunning = 0;
     std::function<void()> m_afterSync;   // a take-over that waits for the sync to finish
 };

@@ -1,3 +1,2 @@
 /* Qupil – permission texts shown by iOS (de) */
 "NSLocalNetworkUsageDescription" = "Qupil nutzt das lokale Netzwerk, um sich per WLAN mit Ihren anderen Geräten zu synchronisieren.";
-"NSCameraUsageDescription" = "Qupil nutzt die Kamera, um den Kopplungscode eines anderen Geräts zu scannen.";

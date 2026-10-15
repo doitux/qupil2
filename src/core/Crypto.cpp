@@ -106,15 +106,48 @@ KeyPair x25519KeyPair()
     return pair;
 }
 
+QByteArray x25519PublicKey(const QByteArray &secretKey)
+{
+    if (secretKey.size() != 32)
+        return {};
+    QByteArray publicKey(32, Qt::Uninitialized);
+    crypto_x25519_public_key(bytes(publicKey), bytes(secretKey));
+    return publicKey;
+}
+
 QByteArray x25519Shared(const QByteArray &secretKey, const QByteArray &theirPublicKey)
 {
     if (secretKey.size() != 32 || theirPublicKey.size() != 32)
         return {};
-    QByteArray raw(32, Qt::Uninitialized);
-    crypto_x25519(bytes(raw), bytes(secretKey), bytes(theirPublicKey));
+    QByteArray raw = x25519(secretKey, theirPublicKey);
+    if (raw.isEmpty())
+        return {};
     QByteArray key = hash(raw, KeySize);
     wipe(raw);
     return key;
+}
+
+QByteArray x25519(const QByteArray &secretKey, const QByteArray &point)
+{
+    if (secretKey.size() != 32 || point.size() != 32)
+        return {};
+    QByteArray raw(32, Qt::Uninitialized);
+    crypto_x25519(bytes(raw), bytes(secretKey), bytes(point));
+    // A point of small order gives zero: never use that as a key
+    static const uint8_t zero[32] = {};
+    if (crypto_verify32(reinterpret_cast<const uint8_t *>(raw.constData()), zero) == 0) {
+        wipe(raw);
+        return {};
+    }
+    return raw;
+}
+
+QByteArray hashToPoint(const QByteArray &data)
+{
+    const QByteArray hidden = hash(data, 32);
+    QByteArray point(32, Qt::Uninitialized);
+    crypto_elligator_map(bytes(point), reinterpret_cast<const uint8_t *>(hidden.constData()));
+    return point;
 }
 
 void wipe(QByteArray &secret)

@@ -27,6 +27,10 @@ QtObject {
     signal showEvent(string eventId)
     //! More tab with the sync page open
     signal showSync()
+    //! Pairing sheet: show this device's code and the devices nearby
+    signal pairDevice()
+    //! Both devices have data: ask how they go together
+    signal decideJoin(string peerId, string peerName)
     //! Set on the setup screen ("data from another device"): open the sync page once the app is ready
     property bool openSyncOnStart: false
 }

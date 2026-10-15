@@ -293,7 +293,8 @@ ApplicationWindow {
 
     //! Closes all editor sheets (used by the screenshot tour)
     function closeEditors() {
-        for (const sheet of [noteEditor, pieceEditor, newStudent, lessonEditor, activityEditor, reminderEditor])
+        for (const sheet of [noteEditor, pieceEditor, newStudent, lessonEditor, activityEditor, reminderEditor,
+                             pairingSheet])
             sheet.close()
     }
 
@@ -304,6 +305,42 @@ ApplicationWindow {
     LessonEditor { id: lessonEditor }
     ActivityEditor { id: activityEditor }
     ReminderEditor { id: reminderEditor }
+    PairingSheet { id: pairingSheet }
+
+    // Both devices had data when they were paired (or the data here was replaced)
+    AppDialog {
+        id: joinDialog
+        property string peerId
+        property string peerName
+        property int mode: Sync.ReplaceLocal
+
+        function ask(id, name) {
+            peerId = id
+            peerName = name
+            mode = Sync.ReplaceLocal
+            open()
+        }
+
+        iconName: "wifi"
+        title: qsTrId("wifi.join.title")
+        text: qsTrId("wifi.join.text").arg(peerName)
+        rejectText: qsTrId("common.cancel")
+        acceptText: qsTrId("wifi.join.action")
+        onAccepted: Wifi.resolveJoin(peerId, mode)
+
+        ChoiceOption {
+            text: qsTrId("wifi.join.replace").arg(joinDialog.peerName)
+            hint: qsTrId("sync.join.replace.hint")
+            selected: joinDialog.mode === Sync.ReplaceLocal
+            onClicked: joinDialog.mode = Sync.ReplaceLocal
+        }
+        ChoiceOption {
+            text: qsTrId("wifi.join.merge")
+            hint: qsTrId("sync.join.merge.hint")
+            selected: joinDialog.mode === Sync.Merge
+            onClicked: joinDialog.mode = Sync.Merge
+        }
+    }
 
     Connections {
         target: Nav
@@ -317,6 +354,8 @@ ApplicationWindow {
         function onShowStudent(id, membership) { window.currentPage = 1 }
         function onShowEvent(id) { window.currentPage = 2 }
         function onShowSync() { window.currentPage = 4 }
+        function onPairDevice() { pairingSheet.start() }
+        function onDecideJoin(id, name) { joinDialog.ask(id, name) }
         function onToast(message) {
             toast.text = message
             toast.show = true
@@ -421,6 +460,11 @@ ApplicationWindow {
     Connections {
         target: Sync
         function onMessage(text) { Nav.toast(text) }
+    }
+    Connections {
+        target: Wifi
+        function onMessage(text) { Nav.toast(text) }
+        function onJoinChoiceNeeded(id, name) { joinDialog.ask(id, name) }
     }
 
     Connections {

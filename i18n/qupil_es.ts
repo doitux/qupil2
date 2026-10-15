@@ -2453,15 +2453,6 @@ Póngase en contacto con el autor en %4 para resolver el problema.</translation>
         <source>Pair device</source>
         <translation>Vincular dispositivo</translation>
     </message>
-    <message id="sync.pair.scan">
-        <source>Scan this code with the other device.</source>
-        <translation>Escanee este código con el otro dispositivo.</translation>
-    </message>
-    <message id="sync.pair.code">
-        <source>Pairing code: %1</source>
-        <extracomment>%1 = short code</extracomment>
-        <translation>Código de vinculación: %1</translation>
-    </message>
     <message id="sync.devices">
         <source>Devices</source>
         <translation>Dispositivos</translation>
@@ -2469,10 +2460,6 @@ Póngase en contacto con el autor en %4 para resolver el problema.</translation>
     <message id="sync.device.this">
         <source>This device</source>
         <translation>Este dispositivo</translation>
-    </message>
-    <message id="sync.device.remove">
-        <source>Remove device</source>
-        <translation>Quitar dispositivo</translation>
     </message>
     <message id="sync.nextcloud.connect">
         <source>Connect to Nextcloud</source>
@@ -2489,11 +2476,6 @@ Póngase en contacto con el autor en %4 para resolver el problema.</translation>
     <message id="sync.wifi">
         <source>Wi-Fi sync</source>
         <translation>Sincronización por Wi-Fi</translation>
-    </message>
-    <message id="sync.wifi.last">
-        <source>Wi-Fi: %1 at %2</source>
-        <extracomment>%1 = device name, %2 = time</extracomment>
-        <translation>Wi-Fi: %1 a las %2</translation>
     </message>
     <message id="sync.e2e">
         <source>End-to-end encrypted</source>
@@ -2691,6 +2673,154 @@ Póngase en contacto con el autor en %4 para resolver el problema.</translation>
     <message id="sync.waiting_for_data">
         <source>This device is still empty and gets its data with the first sync.</source>
         <translation>Este dispositivo aún está vacío y recibirá sus datos en la primera sincronización.</translation>
+    </message>
+    <message id="sync.wifi.when">
+        <source>Wi-Fi: %1 %2</source>
+        <extracomment>%1 = device name, %2 = when, e.g. &apos;today 13:05&apos;</extracomment>
+        <translation>Wi-Fi: %1 %2</translation>
+    </message>
+    <message id="wifi.intro">
+        <source>Devices on the same Wi-Fi sync directly with each other – no server needed. Pair each device once.</source>
+        <translation>Los dispositivos en la misma Wi-Fi se sincronizan directamente entre sí, sin servidor. Vincule cada dispositivo una vez.</translation>
+    </message>
+    <message id="wifi.enabled.hint">
+        <source>This device can be reached by your paired devices on the Wi-Fi.</source>
+        <translation>Sus dispositivos vinculados pueden acceder a este dispositivo en la Wi-Fi.</translation>
+    </message>
+    <message id="wifi.code.title">
+        <source>Code of this device</source>
+        <translation>Código de este dispositivo</translation>
+    </message>
+    <message id="wifi.code.hint">
+        <source>Enter this code on the other device. Both devices need to be on the same Wi-Fi.</source>
+        <translation>Introduzca este código en el otro dispositivo. Ambos deben estar en la misma Wi-Fi.</translation>
+    </message>
+    <message id="wifi.nearby">
+        <source>Devices nearby</source>
+        <translation>Dispositivos cercanos</translation>
+    </message>
+    <message id="wifi.nearby.searching">
+        <source>Looking for devices … Tap “Pair device” on the other device too.</source>
+        <translation>Buscando dispositivos… Toque también «Vincular dispositivo» en el otro dispositivo.</translation>
+    </message>
+    <message id="wifi.enter_code">
+        <source>Enter the code shown on %1</source>
+        <extracomment>%1 = device name</extracomment>
+        <translation>Introducir el código que muestra %1</translation>
+    </message>
+    <message id="wifi.code">
+        <source>Code</source>
+        <translation>Código</translation>
+    </message>
+    <message id="wifi.pair">
+        <source>Pair</source>
+        <translation>Vincular</translation>
+    </message>
+    <message id="wifi.connecting">
+        <source>Connecting …</source>
+        <translation>Conectando…</translation>
+    </message>
+    <message id="wifi.by_address">
+        <source>Device not found? Pair by address</source>
+        <translation>¿No aparece el dispositivo? Vincular por dirección</translation>
+    </message>
+    <message id="wifi.address">
+        <source>Address of the other device</source>
+        <translation>Dirección del otro dispositivo</translation>
+    </message>
+    <message id="wifi.own_address">
+        <source>Address of this device: %1</source>
+        <extracomment>%1 = IP address(es)</extracomment>
+        <translation>Dirección de este dispositivo: %1</translation>
+    </message>
+    <message id="wifi.paired_devices">
+        <source>Paired devices</source>
+        <translation>Dispositivos vinculados</translation>
+    </message>
+    <message id="wifi.none">
+        <source>No device paired yet.</source>
+        <translation>Aún no hay ningún dispositivo vinculado.</translation>
+    </message>
+    <message id="wifi.online">
+        <source>nearby</source>
+        <translation>cerca</translation>
+    </message>
+    <message id="wifi.offline">
+        <source>not nearby</source>
+        <translation>no está cerca</translation>
+    </message>
+    <message id="wifi.paused">
+        <source>Paused – please decide</source>
+        <translation>En pausa: decida</translation>
+    </message>
+    <message id="wifi.decide">
+        <source>Decide</source>
+        <translation>Decidir</translation>
+    </message>
+    <message id="wifi.problem.unknown">
+        <source>No longer knows this device – please pair again</source>
+        <translation>Ya no reconoce este dispositivo: vuelva a vincularlo</translation>
+    </message>
+    <message id="wifi.forget">
+        <source>Unpair</source>
+        <translation>Desvincular</translation>
+    </message>
+    <message id="wifi.forget.confirm">
+        <source>Unpair %1? The data on both devices stays.</source>
+        <extracomment>%1 = device name</extracomment>
+        <translation>¿Desvincular %1? Los datos de ambos dispositivos se conservan.</translation>
+    </message>
+    <message id="wifi.join.title">
+        <source>Data on both devices</source>
+        <translation>Datos en ambos dispositivos</translation>
+    </message>
+    <message id="wifi.join.text">
+        <source>%1 and this device both have data. How should they go together?</source>
+        <extracomment>%1 = device name</extracomment>
+        <translation>%1 y este dispositivo tienen datos. ¿Cómo deben combinarse?</translation>
+    </message>
+    <message id="wifi.join.replace">
+        <source>Replace the data on this device with that of %1</source>
+        <extracomment>%1 = device name</extracomment>
+        <translation>Reemplazar los datos de este dispositivo por los de %1</translation>
+    </message>
+    <message id="wifi.join.merge">
+        <source>Merge</source>
+        <translation>Combinar</translation>
+    </message>
+    <message id="wifi.join.action">
+        <source>Sync</source>
+        <translation>Sincronizar</translation>
+    </message>
+    <message id="wifi.paired">
+        <source>Paired with %1</source>
+        <extracomment>%1 = device name</extracomment>
+        <translation>Vinculado con %1</translation>
+    </message>
+    <message id="wifi.error.gone">
+        <source>The device can no longer be seen. Are both on the same Wi-Fi?</source>
+        <translation>El dispositivo ya no está visible. ¿Están ambos en la misma Wi-Fi?</translation>
+    </message>
+    <message id="wifi.error.address">
+        <source>Please enter an address like 192.168.1.23.</source>
+        <translation>Introduzca una dirección como 192.168.1.23.</translation>
+    </message>
+    <message id="wifi.error.wrong_code">
+        <source>The code is not right. The other device now shows a new code.</source>
+        <translation>El código no es correcto. El otro dispositivo muestra ahora un código nuevo.</translation>
+    </message>
+    <message id="wifi.error.wrong_code_here">
+        <source>A wrong code was entered on another device. This device shows a new code now.</source>
+        <translation>Se introdujo un código erróneo en otro dispositivo. Este dispositivo muestra ahora un código nuevo.</translation>
+    </message>
+    <message id="wifi.error.not_pairing">
+        <source>The other device no longer shows a code. Tap “Pair device” there.</source>
+        <translation>El otro dispositivo ya no muestra ningún código. Toque «Vincular dispositivo» en él.</translation>
+    </message>
+    <message id="wifi.error.connect">
+        <source>Could not reach the other device (%1).</source>
+        <extracomment>%1 = technical reason</extracomment>
+        <translation>No se pudo conectar con el otro dispositivo (%1).</translation>
     </message>
     <message id="setup.sync.title">
         <source>Data from another device</source>

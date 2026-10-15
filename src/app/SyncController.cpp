@@ -10,6 +10,7 @@
 #include <QJsonObject>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QPointer>
 #include <QQmlEngine>
 #include <QSettings>
 #include <QSysInfo>
@@ -47,9 +48,11 @@ struct Account
 template<typename Result, typename Work, typename Done>
 void inWorker(QObject *context, Work work, Done done)
 {
-    QThread *thread = QThread::create([context, work, done] {
+    QPointer<QObject> guard(context);   // the app may be closing while the worker runs
+    QThread *thread = QThread::create([guard, work, done] {
         Result result = work();
-        QMetaObject::invokeMethod(context, [result, done] { done(result); }, Qt::QueuedConnection);
+        if (guard)
+            QMetaObject::invokeMethod(guard.data(), [result, done] { done(result); }, Qt::QueuedConnection);
     });
     QObject::connect(thread, &QThread::finished, thread, &QObject::deleteLater);
     thread->start();
@@ -441,7 +444,7 @@ void SyncController::syncNow()
     const QString deviceName = m_deviceName;
     struct Result { FolderSync::Status status = FolderSync::Status::Failed; FolderSync::Stats stats; QString error; int http = 0; };
     setBusy(true);
-    m_app->setSyncRunning(true);
+    m_app->beginSync();
     inWorker<Result>(this, [account, key, databasePath, deviceName] {
         Result r;
         // Own connection: the GUI keeps working while the sync runs
@@ -495,6 +498,6 @@ void SyncController::syncNow()
             m_syncAgain = false;
             QTimer::singleShot(500, this, &SyncController::syncNow);
         }
-        m_app->setSyncRunning(false);   // last: may finish an import that waited
+        m_app->endSync();   // last: may finish an import that waited
     });
 }

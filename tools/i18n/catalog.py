@@ -1310,15 +1310,8 @@ E("sync.minutes_ago", src="%n minute(s) ago",
   en=["%n minute ago", "%n minutes ago"], de=["vor %n Minute", "vor %n Minuten"],
   fr=["il y a %n minute", "il y a %n minutes"], es=["hace %n minuto", "hace %n minutos"])
 E("sync.pair", en="Pair device", de="Gerät koppeln", fr="Associer un appareil", es="Vincular dispositivo")
-E("sync.pair.scan", en="Scan this code with the other device.",
-  de="Scannen Sie diesen Code mit dem anderen Gerät.", fr="Scannez ce code avec l’autre appareil.",
-  es="Escanee este código con el otro dispositivo.")
-E("sync.pair.code", en="Pairing code: %1", de="Kopplungscode: %1", fr="Code d’association : %1",
-  es="Código de vinculación: %1", c="%1 = short code")
 E("sync.devices", en="Devices", de="Geräte", fr="Appareils", es="Dispositivos")
 E("sync.device.this", en="This device", de="Dieses Gerät", fr="Cet appareil", es="Este dispositivo")
-E("sync.device.remove", en="Remove device", de="Gerät entfernen", fr="Retirer l’appareil",
-  es="Quitar dispositivo")
 E("sync.nextcloud.connect", en="Connect to Nextcloud", de="Mit Nextcloud verbinden",
   fr="Se connecter à Nextcloud", es="Conectar con Nextcloud")
 E("sync.nextcloud.server", en="Server address", de="Serveradresse", fr="Adresse du serveur",
@@ -1328,8 +1321,6 @@ E("sync.nextcloud.login_browser", en="Sign in in the browser to give Qupil acces
   fr="Connectez-vous dans le navigateur pour autoriser Qupil à accéder à votre compte.",
   es="Inicie sesión en el navegador para dar acceso a Qupil.")
 E("sync.wifi", en="Wi-Fi sync", de="WLAN-Sync", fr="Synchronisation Wi-Fi", es="Sincronización por Wi-Fi")
-E("sync.wifi.last", en="Wi-Fi: %1 at %2", de="WLAN: %1 um %2", fr="Wi-Fi : %1 à %2",
-  es="Wi-Fi: %1 a las %2", c="%1 = device name, %2 = time")
 E("sync.e2e", en="End-to-end encrypted", de="Ende-zu-Ende-verschlüsselt", fr="Chiffré de bout en bout",
   es="Cifrado de extremo a extremo")
 E("sync.local_network_permission",
@@ -1503,6 +1494,96 @@ E("sync.waiting_for_data", en="This device is still empty and gets its data with
   de="Dieses Gerät ist noch leer und erhält seine Daten bei der ersten Synchronisation.",
   fr="Cet appareil est encore vide et recevra ses données lors de la première synchronisation.",
   es="Este dispositivo aún está vacío y recibirá sus datos en la primera sincronización.")
+E("sync.wifi.when", en="Wi-Fi: %1 %2", de="WLAN: %1 %2", fr="Wi-Fi : %1 %2", es="Wi-Fi: %1 %2",
+  c="%1 = device name, %2 = when, e.g. 'today 13:05'")
+E("wifi.intro",
+  en="Devices on the same Wi-Fi sync directly with each other – no server needed. Pair each device once.",
+  de="Geräte im selben WLAN gleichen sich direkt miteinander ab – ganz ohne Server. Koppeln Sie jedes Gerät einmal.",
+  fr="Les appareils sur le même Wi-Fi se synchronisent directement entre eux – sans serveur. Associez chaque "
+     "appareil une fois.",
+  es="Los dispositivos en la misma Wi-Fi se sincronizan directamente entre sí, sin servidor. Vincule cada "
+     "dispositivo una vez.")
+E("wifi.enabled.hint", en="This device can be reached by your paired devices on the Wi-Fi.",
+  de="Ihre gekoppelten Geräte erreichen dieses Gerät im WLAN.",
+  fr="Vos appareils associés peuvent joindre cet appareil sur le Wi-Fi.",
+  es="Sus dispositivos vinculados pueden acceder a este dispositivo en la Wi-Fi.")
+E("wifi.code.title", en="Code of this device", de="Code dieses Geräts", fr="Code de cet appareil",
+  es="Código de este dispositivo")
+E("wifi.code.hint", en="Enter this code on the other device. Both devices need to be on the same Wi-Fi.",
+  de="Geben Sie diesen Code auf dem anderen Gerät ein. Beide Geräte müssen im selben WLAN sein.",
+  fr="Saisissez ce code sur l’autre appareil. Les deux appareils doivent être sur le même Wi-Fi.",
+  es="Introduzca este código en el otro dispositivo. Ambos deben estar en la misma Wi-Fi.")
+E("wifi.nearby", en="Devices nearby", de="Geräte in der Nähe", fr="Appareils à proximité",
+  es="Dispositivos cercanos")
+E("wifi.nearby.searching", en="Looking for devices … Tap “Pair device” on the other device too.",
+  de="Suche nach Geräten ... Tippen Sie auch auf dem anderen Gerät auf „Gerät koppeln“.",
+  fr="Recherche d’appareils… Touchez aussi « Associer un appareil » sur l’autre appareil.",
+  es="Buscando dispositivos… Toque también «Vincular dispositivo» en el otro dispositivo.")
+E("wifi.enter_code", en="Enter the code shown on %1", de="Code von %1 eingeben",
+  fr="Saisir le code affiché sur %1", es="Introducir el código que muestra %1", c="%1 = device name")
+E("wifi.code", en="Code", de="Code", fr="Code", es="Código")
+E("wifi.pair", en="Pair", de="Koppeln", fr="Associer", es="Vincular")
+E("wifi.connecting", en="Connecting …", de="Verbinde ...", fr="Connexion…", es="Conectando…")
+E("wifi.by_address", en="Device not found? Pair by address", de="Gerät nicht gefunden? Per Adresse koppeln",
+  fr="Appareil introuvable ? Associer par adresse", es="¿No aparece el dispositivo? Vincular por dirección")
+E("wifi.address", en="Address of the other device", de="Adresse des anderen Geräts",
+  fr="Adresse de l’autre appareil", es="Dirección del otro dispositivo")
+E("wifi.own_address", en="Address of this device: %1", de="Adresse dieses Geräts: %1",
+  fr="Adresse de cet appareil : %1", es="Dirección de este dispositivo: %1", c="%1 = IP address(es)")
+E("wifi.paired_devices", en="Paired devices", de="Gekoppelte Geräte", fr="Appareils associés",
+  es="Dispositivos vinculados")
+E("wifi.none", en="No device paired yet.", de="Noch kein Gerät gekoppelt.",
+  fr="Aucun appareil associé pour l’instant.", es="Aún no hay ningún dispositivo vinculado.")
+E("wifi.online", en="nearby", de="in der Nähe", fr="à proximité", es="cerca")
+E("wifi.offline", en="not nearby", de="nicht in der Nähe", fr="pas à proximité", es="no está cerca")
+E("wifi.paused", en="Paused – please decide", de="Pausiert – bitte entscheiden", fr="En pause – à vous de choisir",
+  es="En pausa: decida")
+E("wifi.decide", en="Decide", de="Entscheiden", fr="Choisir", es="Decidir")
+E("wifi.problem.unknown", en="No longer knows this device – please pair again",
+  de="Kennt dieses Gerät nicht mehr – bitte neu koppeln",
+  fr="Ne reconnaît plus cet appareil – veuillez l’associer à nouveau",
+  es="Ya no reconoce este dispositivo: vuelva a vincularlo")
+E("wifi.forget", en="Unpair", de="Kopplung aufheben", fr="Dissocier", es="Desvincular")
+E("wifi.forget.confirm", en="Unpair %1? The data on both devices stays.",
+  de="Kopplung mit %1 aufheben? Die Daten auf beiden Geräten bleiben erhalten.",
+  fr="Dissocier %1 ? Les données des deux appareils sont conservées.",
+  es="¿Desvincular %1? Los datos de ambos dispositivos se conservan.", c="%1 = device name")
+E("wifi.join.title", en="Data on both devices", de="Daten auf beiden Geräten", fr="Données sur les deux appareils",
+  es="Datos en ambos dispositivos")
+E("wifi.join.text", en="%1 and this device both have data. How should they go together?",
+  de="Auf %1 und auf diesem Gerät sind Daten. Wie sollen sie zusammenkommen?",
+  fr="%1 et cet appareil contiennent tous deux des données. Comment les réunir ?",
+  es="%1 y este dispositivo tienen datos. ¿Cómo deben combinarse?", c="%1 = device name")
+E("wifi.join.replace", en="Replace the data on this device with that of %1",
+  de="Daten auf diesem Gerät durch die von %1 ersetzen",
+  fr="Remplacer les données de cet appareil par celles de %1",
+  es="Reemplazar los datos de este dispositivo por los de %1", c="%1 = device name")
+E("wifi.join.merge", en="Merge", de="Zusammenführen", fr="Fusionner", es="Combinar")
+E("wifi.join.action", en="Sync", de="Synchronisieren", fr="Synchroniser", es="Sincronizar")
+E("wifi.paired", en="Paired with %1", de="Gekoppelt mit %1", fr="Associé à %1", es="Vinculado con %1",
+  c="%1 = device name")
+E("wifi.error.gone", en="The device can no longer be seen. Are both on the same Wi-Fi?",
+  de="Das Gerät ist nicht mehr zu sehen. Sind beide im selben WLAN?",
+  fr="L’appareil n’est plus visible. Les deux sont-ils sur le même Wi-Fi ?",
+  es="El dispositivo ya no está visible. ¿Están ambos en la misma Wi-Fi?")
+E("wifi.error.address", en="Please enter an address like 192.168.1.23.",
+  de="Bitte geben Sie eine Adresse wie 192.168.1.23 ein.", fr="Veuillez saisir une adresse comme 192.168.1.23.",
+  es="Introduzca una dirección como 192.168.1.23.")
+E("wifi.error.wrong_code", en="The code is not right. The other device now shows a new code.",
+  de="Der Code stimmt nicht. Das andere Gerät zeigt jetzt einen neuen Code.",
+  fr="Le code n’est pas correct. L’autre appareil affiche maintenant un nouveau code.",
+  es="El código no es correcto. El otro dispositivo muestra ahora un código nuevo.")
+E("wifi.error.wrong_code_here", en="A wrong code was entered on another device. This device shows a new code now.",
+  de="Auf einem anderen Gerät wurde ein falscher Code eingegeben. Dieses Gerät zeigt jetzt einen neuen Code.",
+  fr="Un code erroné a été saisi sur un autre appareil. Cet appareil affiche maintenant un nouveau code.",
+  es="Se introdujo un código erróneo en otro dispositivo. Este dispositivo muestra ahora un código nuevo.")
+E("wifi.error.not_pairing", en="The other device no longer shows a code. Tap “Pair device” there.",
+  de="Das andere Gerät zeigt keinen Code mehr. Tippen Sie dort auf „Gerät koppeln“.",
+  fr="L’autre appareil n’affiche plus de code. Touchez « Associer un appareil » sur celui-ci.",
+  es="El otro dispositivo ya no muestra ningún código. Toque «Vincular dispositivo» en él.")
+E("wifi.error.connect", en="Could not reach the other device (%1).",
+  de="Keine Verbindung zum anderen Gerät (%1).", fr="Impossible de joindre l’autre appareil (%1).",
+  es="No se pudo conectar con el otro dispositivo (%1).", c="%1 = technical reason")
 E("setup.sync.title", en="Data from another device", de="Daten von einem anderen Gerät",
   fr="Données d’un autre appareil", es="Datos de otro dispositivo")
 E("setup.sync.text",

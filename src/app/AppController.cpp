@@ -424,7 +424,7 @@ AppController::Outcome AppController::runTakeOver(AppController *self, const QSt
 
 void AppController::finishTakeOver(const Outcome &o)
 {
-    if (o.ok && m_syncRunning) {
+    if (o.ok && m_syncRunning > 0) {
         // Swap the files only when the sync no longer writes to them
         m_afterSync = [this, o] { finishTakeOver(o); };
         return;
@@ -547,10 +547,15 @@ void AppController::dismissTakeOver()
 
 // ---------------------------------------------------------------------------- sync
 
-void AppController::setSyncRunning(bool running)
+void AppController::beginSync()
 {
-    m_syncRunning = running;
-    if (!running && m_afterSync) {
+    ++m_syncRunning;
+}
+
+void AppController::endSync()
+{
+    m_syncRunning = std::max(0, m_syncRunning - 1);
+    if (m_syncRunning == 0 && m_afterSync) {
         const auto pending = std::move(m_afterSync);
         m_afterSync = nullptr;
         pending();
@@ -559,7 +564,7 @@ void AppController::setSyncRunning(bool running)
 
 bool AppController::replaceWithEmpty()
 {
-    if (m_busy || m_syncRunning)
+    if (m_busy || m_syncRunning > 0)
         return false;
     if (m_db->isOpen() && !m_db->isEmpty())
         safetyBackup(u"before-sync"_s);

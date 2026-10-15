@@ -179,6 +179,13 @@ SubPage {
                 }
             }
         }
+        ActionButton {
+            visible: Sync.connected
+            Layout.leftMargin: -8
+            kind: "quiet"
+            text: qsTrId("sync.nextcloud.disconnect")
+            onClicked: disconnectDialog.open()
+        }
     }
 
     // ---------------------------------------------------------------- sync password
@@ -219,19 +226,19 @@ SubPage {
                     font.pixelSize: 16
                     font.weight: Font.ExtraBold
                 }
-                JoinOption {
+                ChoiceOption {
                     selected: page.joinMode === Sync.ReplaceLocal
                     onClicked: page.joinMode = Sync.ReplaceLocal
                     text: qsTrId("sync.join.replace")
                     hint: qsTrId("sync.join.replace.hint")
                 }
-                JoinOption {
+                ChoiceOption {
                     selected: page.joinMode === Sync.Merge
                     onClicked: page.joinMode = Sync.Merge
                     text: qsTrId("sync.join.merge")
                     hint: qsTrId("sync.join.merge.hint")
                 }
-                JoinOption {
+                ChoiceOption {
                     selected: page.joinMode === Sync.StartOver
                     onClicked: page.joinMode = Sync.StartOver
                     text: qsTrId("sync.join.start_over")
@@ -389,14 +396,95 @@ SubPage {
         }
     }
 
-    // ---------------------------------------------------------------- devices
+    // ---------------------------------------------------------------- Wi-Fi
     SectionLabel {
-        visible: Sync.connected
+        Layout.topMargin: 6
+        text: qsTrId("sync.wifi")
+    }
+    Card {
+        Layout.fillWidth: true
+
+        Text {
+            Layout.fillWidth: true
+            wrapMode: Text.WordWrap
+            text: qsTrId("wifi.intro")
+            color: Theme.textMuted
+            font.family: Theme.fontFamily
+            font.pixelSize: 14
+        }
+        Repeater {
+            model: Wifi.peers
+            delegate: PeerRow {
+                required property var modelData
+                name: modelData.name
+                syncing: modelData.syncing
+                warn: modelData.problem !== "" || modelData.paused
+                status: modelData.problem !== "" ? qsTrId("wifi.problem.unknown")
+                      : modelData.paused ? qsTrId("wifi.paused")
+                      : (modelData.online ? qsTrId("wifi.online") : qsTrId("wifi.offline"))
+                        + (modelData.lastSync ? " · " + Labels.syncWhen(modelData.lastSync, page.now) : "")
+                canDecide: modelData.paused && modelData.problem === ""
+                onDecide: Nav.decideJoin(modelData.id, modelData.name)
+                onForget: {
+                    forgetDialog.peerId = modelData.id
+                    forgetDialog.peerName = modelData.name
+                    forgetDialog.open()
+                }
+            }
+        }
+        Flow {
+            Layout.fillWidth: true
+            spacing: 10
+            ActionButton {
+                kind: Wifi.peers.length === 0 ? "primary" : "secondary"
+                iconName: "wifi"
+                text: qsTrId("sync.pair")
+                onClicked: Nav.pairDevice()
+            }
+            ActionButton {
+                visible: Wifi.peers.length > 0
+                iconName: "sync"
+                text: qsTrId("sync.now")
+                enabled: !Wifi.busy && Wifi.enabled
+                onClicked: Wifi.syncNow()
+            }
+            BusyIndicator {
+                visible: Wifi.busy
+                running: Wifi.busy
+                implicitWidth: 28
+                implicitHeight: 28
+            }
+        }
+        SwitchRow {
+            visible: Wifi.peers.length > 0
+            text: qsTrId("sync.wifi")
+            hint: qsTrId("wifi.enabled.hint")
+            checked: Wifi.enabled
+            onToggled: Wifi.enabled = checked
+        }
+    }
+
+    AppDialog {
+        id: forgetDialog
+        property string peerId
+        property string peerName
+        iconName: "wifi"
+        destructive: true
+        title: qsTrId("wifi.forget")
+        text: qsTrId("wifi.forget.confirm").arg(peerName)
+        rejectText: qsTrId("common.cancel")
+        acceptText: qsTrId("wifi.forget")
+        onAccepted: Wifi.forget(peerId)
+    }
+
+    // ---------------------------------------------------------------- this device
+    SectionLabel {
+        visible: Sync.connected || Wifi.peers.length > 0
         Layout.topMargin: 6
         text: qsTrId("sync.devices")
     }
     Card {
-        visible: Sync.connected
+        visible: Sync.connected || Wifi.peers.length > 0
         Layout.fillWidth: true
         spacing: 10
 
@@ -404,21 +492,14 @@ SubPage {
             name: page.deviceNameDraft
             detail: qsTrId("sync.device.this")
         }
+        // Devices that sync through the Nextcloud
         Repeater {
-            model: Sync.devices
+            model: Sync.connected ? Sync.devices : []
             delegate: DeviceRow {
                 required property string modelData
                 name: modelData
+                detail: "Nextcloud"
             }
-        }
-        Text {
-            visible: Sync.devices.length === 0
-            Layout.fillWidth: true
-            wrapMode: Text.WordWrap
-            text: qsTrId("sync.devices.none")
-            color: Theme.textMuted
-            font.family: Theme.fontFamily
-            font.pixelSize: 14
         }
         InputField {
             Layout.topMargin: 4
@@ -432,14 +513,6 @@ SubPage {
             interval: 1200
             onTriggered: Sync.deviceName = page.deviceNameDraft
         }
-    }
-
-    ActionButton {
-        visible: Sync.connected
-        Layout.topMargin: 4
-        kind: "quiet"
-        text: qsTrId("sync.nextcloud.disconnect")
-        onClicked: disconnectDialog.open()
     }
 
     AppDialog {
@@ -535,66 +608,61 @@ SubPage {
         }
     }
 
-    component JoinOption: AbstractButton {
-        id: option
-        property string hint
-        property bool selected
+    component PeerRow: RowLayout {
+        id: peerRow
+        property string name
+        property string status
+        property bool warn
+        property bool syncing
+        property bool canDecide
+        signal decide()
+        signal forget()
         Layout.fillWidth: true
-        implicitHeight: optionRow.implicitHeight + 24
-        focusPolicy: Qt.StrongFocus
-        Accessible.role: Accessible.RadioButton
-        Accessible.checked: selected
-        Accessible.name: text
-        background: Rectangle {
-            radius: 14
-            color: option.selected ? Theme.accentSoft : Theme.surfaceAlt
-            border.width: option.visualFocus ? 2 : option.selected ? 1.5 : 0
-            border.color: option.visualFocus ? Theme.accentText : Theme.accent
+        spacing: 12
+        Icon {
+            Layout.preferredWidth: 22
+            Layout.preferredHeight: 22
+            name: "device"
+            color: peerRow.warn ? Theme.tile.orange.fg : Theme.icon
         }
-        contentItem: RowLayout {
-            id: optionRow
-            spacing: 12
-            Rectangle {
-                Layout.alignment: Qt.AlignTop
-                Layout.topMargin: 1
-                implicitWidth: 20
-                implicitHeight: 20
-                radius: 10
-                color: "transparent"
-                border.width: 2
-                border.color: option.selected ? Theme.accent : Theme.icon
-                Rectangle {
-                    anchors.centerIn: parent
-                    width: 10
-                    height: 10
-                    radius: 5
-                    visible: option.selected
-                    color: Theme.accent
-                }
-            }
-            ColumnLayout {
+        ColumnLayout {
+            Layout.fillWidth: true
+            spacing: 1
+            Text {
                 Layout.fillWidth: true
-                spacing: 2
-                Text {
-                    Layout.fillWidth: true
-                    wrapMode: Text.WordWrap
-                    text: option.text
-                    color: Theme.text
-                    font.family: Theme.fontFamily
-                    font.pixelSize: 15
-                    font.weight: Font.Bold
-                }
-                Text {
-                    Layout.fillWidth: true
-                    wrapMode: Text.WordWrap
-                    text: option.hint
-                    color: Theme.textMuted
-                    font.family: Theme.fontFamily
-                    font.pixelSize: 13
-                }
+                elide: Text.ElideRight
+                text: peerRow.name
+                color: Theme.text
+                font.family: Theme.fontFamily
+                font.pixelSize: 15
+                font.weight: Font.DemiBold
+            }
+            Text {
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+                text: peerRow.status
+                color: peerRow.warn ? Theme.tile.orange.fg : Theme.textMuted
+                font.family: Theme.fontFamily
+                font.pixelSize: 13
             }
         }
-        leftPadding: 14
-        rightPadding: 14
+        BusyIndicator {
+            visible: peerRow.syncing
+            running: peerRow.syncing
+            implicitWidth: 24
+            implicitHeight: 24
+        }
+        ActionButton {
+            visible: peerRow.canDecide
+            text: qsTrId("wifi.decide")
+            onClicked: peerRow.decide()
+        }
+        IconButton {
+            iconName: "trash"
+            text: qsTrId("wifi.forget")
+            size: 36
+            tint: Theme.icon
+            onClicked: peerRow.forget()
+        }
     }
 }

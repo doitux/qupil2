@@ -36,6 +36,10 @@ qt_add_library(qupilcore STATIC
     src/core/LegacyImporter.cpp
     src/core/DemoData.h
     src/core/DemoData.cpp
+    src/core/WifiSession.h
+    src/core/WifiSession.cpp
+    src/core/Mdns.h
+    src/core/Mdns.cpp
     src/core/Crypto.h
     src/core/Crypto.cpp
     src/core/FolderSync.h
@@ -51,6 +55,12 @@ qt_add_executable(qupil src/main.cpp src/app/ScreenshotTour.h src/app/Screenshot
 
 target_compile_definitions(qupil PRIVATE QUPIL_VERSION="${PROJECT_VERSION}")
 target_include_directories(qupil PRIVATE src src/core src/app)
+# Finding devices in the network: Bonjour on Apple systems, our own mDNS elsewhere
+if(APPLE)
+    target_sources(qupil PRIVATE src/app/BonjourDiscovery.h src/app/BonjourDiscovery.cpp)
+else()
+    target_sources(qupil PRIVATE src/app/MdnsDiscovery.h src/app/MdnsDiscovery.cpp)
+endif()
 target_link_libraries(qupil PRIVATE qupilcore Qt6::Core Qt6::Gui Qt6::Qml Qt6::Quick Qt6::QuickControls2
     Qt6::Multimedia Qt6::Network)
 
@@ -92,6 +102,24 @@ if(IOS)
         VERBATIM)
 endif()
 
+if(APPLE AND NOT IOS)
+    # macOS asks before an app may use the local network (Wi-Fi sync)
+    set(_plist "$<TARGET_BUNDLE_CONTENT_DIR:qupil>/Info.plist")
+    add_custom_command(TARGET qupil POST_BUILD
+        COMMAND plutil -replace NSLocalNetworkUsageDescription -string
+                "Qupil uses your local network to sync with your other devices over Wi-Fi." ${_plist}
+        COMMAND plutil -replace NSBonjourServices -json "[\"_qupil-sync._tcp\"]" ${_plist}
+        VERBATIM)
+endif()
+
+if(ANDROID)
+    # Own manifest (Qt's template + Wi-Fi sync permissions, per-app language)
+    set_target_properties(qupil PROPERTIES
+        QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/platform/android
+        QT_ANDROID_PACKAGE_NAME de.qupil.app
+        QT_ANDROID_VERSION_NAME ${PROJECT_VERSION})
+endif()
+
 if(WIN32)
     target_sources(qupil PRIVATE platform/windows/qupil.rc)
 elseif(APPLE AND NOT IOS)
@@ -117,6 +145,7 @@ set(QUPIL_QML_FILES
     qml/TakeOverSummary.qml
     qml/components/Avatar.qml
     qml/components/Chip.qml
+    qml/components/ChoiceOption.qml
     qml/components/ChoiceField.qml
     qml/components/DateField.qml
     qml/components/EmptyHint.qml
@@ -136,6 +165,7 @@ set(QUPIL_QML_FILES
     qml/components/SwitchRow.qml
     qml/components/TimeField.qml
     qml/editors/ActivityEditor.qml
+    qml/editors/PairingSheet.qml
     qml/editors/EventEditor.qml
     qml/editors/ExternalEditor.qml
     qml/editors/LessonEditor.qml
@@ -197,6 +227,10 @@ qt_add_qml_module(qupil
         src/app/WebDavFolder.cpp
         src/app/SyncController.h
         src/app/SyncController.cpp
+        src/app/WifiController.h
+        src/app/WifiController.cpp
+        src/app/SocketChannel.h
+        src/app/Discovery.h
 )
 
 # ---------------------------------------------------------------------------- translations
