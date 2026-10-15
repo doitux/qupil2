@@ -24,8 +24,10 @@
 #include "Ids.h"
 #include "LegacyFixture.h"
 #include "LegacyImporter.h"
+#include "LessonAlerts.h"
 #include "Mdns.h"
 #include "Store.h"
+#include "Wav.h"
 #include "WifiSession.h"
 
 using namespace Qupil;
@@ -776,6 +778,112 @@ private slots:
         QCOMPARE(Csv::isoDate(u"31/12/2012"_s), u"2012-12-31"_s);
         QCOMPARE(Csv::isoDate(u"31.02.2012"_s), QString());
         QCOMPARE(Csv::isoDate(u"irgendwann"_s), QString());
+    }
+
+    void wavFiles()
+    {
+        Wav::Sound sound;
+        sound.sampleRate = 8000;
+        sound.channels = 2;
+        sound.samples = { 0, 1000, -1000, 32767, -32768, 20000, 5, -5 };
+        const QByteArray file = Wav::write(sound);
+        QCOMPARE(file.size(), 44 + 16);
+        const auto back = Wav::read(file);
+        QVERIFY(back.has_value());
+        QCOMPARE(back->sampleRate, 8000);
+        QCOMPARE(back->channels, 2);
+        QCOMPARE(back->samples, sound.samples);
+        QCOMPARE(back->peak(), 32768);
+        QCOMPARE(back->seconds(), 4.0 / 8000);
+
+        // Volume: half and clipped
+        const Wav::Sound half = Wav::scaled(sound, 0.5);
+        QCOMPARE(half.samples.at(1), qint16(500));
+        QCOMPARE(half.samples.at(4), qint16(-16384));
+        QCOMPARE(Wav::scaled(sound, 2.0).samples.at(5), qint16(32767));
+
+        // Cut after a second, fading out to silence
+        Wav::Sound tone;
+        tone.sampleRate = 1000;
+        tone.channels = 1;
+        tone.samples = QList<qint16>(3000, 10000);
+        const Wav::Sound cut = Wav::trimmed(tone, 1.0);
+        QCOMPARE(cut.samples.size(), 1000);
+        QCOMPARE(cut.samples.first(), qint16(10000));
+        QCOMPARE(cut.samples.last(), qint16(0));
+        QCOMPARE(Wav::trimmed(tone, 5.0).samples.size(), 3000);
+
+        // 24-bit mono with an extra chunk before the data, as audio editors write it
+        QByteArray wav24 = "RIFF\0\0\0\0WAVEfmt "_ba;
+        const auto le = [](QByteArray &b, quint32 v, int bytes) {
+            for (int i = 0; i < bytes; ++i)
+                b.append(char((v >> (8 * i)) & 0xff));
+        };
+        le(wav24, 16, 4);
+        le(wav24, 1, 2);      // PCM
+        le(wav24, 1, 2);      // mono
+        le(wav24, 48000, 4);
+        le(wav24, 48000 * 3, 4);
+        le(wav24, 3, 2);
+        le(wav24, 24, 2);
+        wav24 += "LIST"_ba;
+        le(wav24, 3, 4);
+        wav24 += "abc\0"_ba;  // odd size + pad byte
+        wav24 += "data"_ba;
+        le(wav24, 6, 4);
+        le(wav24, 0x123456, 3);
+        le(wav24, 0xFFFF00, 3);   // -256 → top 16 bits -1
+        const auto mono = Wav::read(wav24);
+        QVERIFY(mono.has_value());
+        QCOMPARE(mono->sampleRate, 48000);
+        QCOMPARE(mono->samples, QList<qint16>({ 0x1234, -1 }));
+
+        QVERIFY(!Wav::read("RIFF....WAVEjunk"_ba).has_value());
+        QVERIFY(!Wav::read("OggS"_ba).has_value());
+    }
+
+    void lessonAlerts()
+    {
+        using namespace LessonAlerts;
+        const QList<Lesson> lessons = {
+            { 2, u"10:00"_s, u"Anna"_s },     // Wednesday
+            { 2, u"10:00"_s, u"Ben"_s },      // same end: one alert
+            { 0, u"9:45"_s, u"Clara"_s },     // Monday, without leading zero
+            { 0, u"00:01"_s, u"Night"_s },    // alert on Sunday evening
+            { 4, u"later"_s, u"Broken"_s },   // no time: ignored
+        };
+        const QList<Alert> alerts = weekly(lessons, 3);
+        QCOMPARE(alerts.size(), 3);
+        QCOMPARE(alerts.at(0).at, 9 * 60 + 42);                      // Monday 09:42
+        QCOMPARE(alerts.at(1).at, 2 * kMinutesPerDay + 9 * 60 + 57); // Wednesday 09:57
+        QCOMPARE(alerts.at(1).names, QStringList({ u"Anna"_s, u"Ben"_s }));
+        QCOMPARE(alerts.at(2).at, kMinutesPerWeek - 2);              // Sunday 23:58
+        QCOMPARE(alerts.at(2).weekday(), 6);
+        QCOMPARE(alerts.at(2).minuteOfDay(), 23 * 60 + 58);
+
+        // 2026-10-14 is a Wednesday
+        const Alert wednesday = alerts.at(1);
+        QCOMPARE(nextTime(wednesday, QDateTime(QDate(2026, 10, 14), QTime(8, 0))),
+                 QDateTime(QDate(2026, 10, 14), QTime(9, 57)));
+        QCOMPARE(nextTime(wednesday, QDateTime(QDate(2026, 10, 14), QTime(9, 57))),
+                 QDateTime(QDate(2026, 10, 21), QTime(9, 57)));
+        QCOMPARE(nextTime(alerts.at(2), QDateTime(QDate(2026, 10, 14), QTime(12, 0))),
+                 QDateTime(QDate(2026, 10, 18), QTime(23, 58)));
+
+        // Checked every 10 seconds: exactly one tick sees it
+        const QDateTime tick(QDate(2026, 10, 14), QTime(9, 56, 55));
+        QCOMPARE(due(alerts, tick, tick.addSecs(10)).size(), 1);
+        QCOMPARE(due(alerts, tick.addSecs(10), tick.addSecs(20)).size(), 0);
+        QCOMPARE(due(alerts, tick.addSecs(-10), tick).size(), 0);
+        // Late (computer was asleep): still while the lesson runs, not after it ended
+        QCOMPARE(due(alerts, tick, tick.addSecs(120)).size(), 1);
+        QCOMPARE(due(alerts, tick, tick.addSecs(200)).size(), 0);
+
+        // Order from Wednesday noon: Sunday night, Monday, next Wednesday
+        const QList<Alert> next = upcoming(alerts, QDateTime(QDate(2026, 10, 14), QTime(12, 0)));
+        QCOMPARE(next.at(0).at, kMinutesPerWeek - 2);
+        QCOMPARE(next.at(1).at, 9 * 60 + 42);
+        QCOMPARE(next.at(2).names.first(), u"Anna"_s);
     }
 
     void rejectsForeignFiles()

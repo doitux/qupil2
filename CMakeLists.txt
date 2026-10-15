@@ -9,6 +9,11 @@ project(qupil
     HOMEPAGE_URL "https://qupil.de"
     LANGUAGES C CXX)
 
+# Objective-C++ for the system notifications on iOS
+if(IOS)
+    enable_language(OBJCXX)
+endif()
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -42,6 +47,10 @@ qt_add_library(qupilcore STATIC
     src/core/Mdns.cpp
     src/core/Csv.h
     src/core/Csv.cpp
+    src/core/Wav.h
+    src/core/Wav.cpp
+    src/core/LessonAlerts.h
+    src/core/LessonAlerts.cpp
     src/core/Crypto.h
     src/core/Crypto.cpp
     src/core/FolderSync.h
@@ -69,6 +78,17 @@ if(APPLE)
     target_sources(qupil PRIVATE src/app/BonjourDiscovery.h src/app/BonjourDiscovery.cpp)
 else()
     target_sources(qupil PRIVATE src/app/MdnsDiscovery.h src/app/MdnsDiscovery.cpp)
+endif()
+# Lesson-end alerts: system notifications on iOS and Android (also in the background),
+# Qupil plays them itself on desktop systems
+if(IOS)
+    target_sources(qupil PRIVATE src/app/SystemAlerts_ios.mm)
+    set_source_files_properties(src/app/SystemAlerts_ios.mm PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
+    target_link_libraries(qupil PRIVATE "-framework UserNotifications" "-framework UIKit")
+elseif(ANDROID)
+    target_sources(qupil PRIVATE src/app/SystemAlerts_android.cpp)
+else()
+    target_sources(qupil PRIVATE src/app/SystemAlerts_none.cpp)
 endif()
 target_link_libraries(qupil PRIVATE qupilcore Qt6::Core Qt6::Gui Qt6::Qml Qt6::Quick Qt6::QuickControls2
     Qt6::Multimedia Qt6::Network)
@@ -147,7 +167,6 @@ set(QUPIL_QML_FILES
     qml/Theme.qml
     qml/Nav.qml
     qml/Labels.qml
-    qml/Prefs.qml
     qml/Icon.qml
     qml/NavButton.qml
     qml/ActionButton.qml
@@ -155,6 +174,7 @@ set(QUPIL_QML_FILES
     qml/AppDialog.qml
     qml/AppearanceSettings.qml
     qml/DataSettings.qml
+    qml/LessonEndSettings.qml
     qml/TakeOverActions.qml
     qml/TakeOverSummary.qml
     qml/components/Avatar.qml
@@ -224,7 +244,7 @@ foreach(_qml IN LISTS QUPIL_QML_FILES)
 endforeach()
 
 # Theme.qml is a singleton – must be set before qt_add_qml_module()
-set_source_files_properties(qml/Theme.qml qml/Nav.qml qml/Labels.qml qml/Prefs.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
+set_source_files_properties(qml/Theme.qml qml/Nav.qml qml/Labels.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 
 qt_add_qml_module(qupil
     URI Qupil
@@ -236,6 +256,7 @@ qt_add_qml_module(qupil
         assets/fonts/Figtree-Bold.ttf
         assets/fonts/Figtree-ExtraBold.ttf
         assets/icons/qupil.png
+        assets/sounds/lesson-end.wav
     SOURCES
         src/core/LanguageManager.h
         src/core/LanguageManager.cpp
@@ -257,6 +278,9 @@ qt_add_qml_module(qupil
         src/app/Discovery.h
         src/app/DocumentService.h
         src/app/DocumentService.cpp
+        src/app/LessonEndAlert.h
+        src/app/LessonEndAlert.cpp
+        src/app/SystemAlerts.h
 )
 
 # ---------------------------------------------------------------------------- translations

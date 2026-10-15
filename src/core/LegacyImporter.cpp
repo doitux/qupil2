@@ -540,6 +540,7 @@ LegacyImporter::Result LegacyImporter::run(const QString &legacyDatabase, Store 
             { u"BirthdayReminder"_s, u"birthday_reminder"_s },
             { u"LessonEndMsg"_s, u"lesson_end_message"_s },
             { u"MinutesToLessonEndForMsg"_s, u"lesson_end_minutes"_s },
+            { u"LessonEndMsgSoundVolume"_s, u"lesson_end_volume"_s },
             { u"RecitalIntervalCheckerOnlySolo"_s, u"recital_check_solo_only"_s },
             { u"SaveNotesPiecesForAllPupil"_s, u"save_for_all_students"_s },
             { u"LimitLoadLessonNotes"_s, u"limit_notes"_s },

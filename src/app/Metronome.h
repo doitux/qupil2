@@ -70,8 +70,6 @@ public:
     Q_INVOKABLE void tap();
     Q_INVOKABLE void toggleTone();
     Q_INVOKABLE void stopTone();
-    //! A short bell sound (end of a lesson)
-    Q_INVOKABLE void chime();
 
 signals:
     void bpmChanged();

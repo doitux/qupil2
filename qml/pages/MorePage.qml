@@ -38,6 +38,7 @@ StackView {
         case "instruments": openPage(instrumentsPage); break
         case "ensemble": openPage(ensemblePage); break
         case "archive": openPage(studentArchivePage); break
+        case "settings": openPage(settingsPage); break
         case "archiveEntry": {
             const first = Data.studentArchive()[0]
             if (first)

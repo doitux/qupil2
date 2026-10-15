@@ -452,29 +452,15 @@ ApplicationWindow {
         function onFailed(message) { Nav.toast(message) }
     }
 
-    // A chime and a message shortly before a lesson ends (while Qupil is open)
-    Timer {
-        interval: 10000
-        repeat: true
-        running: Prefs.lessonEndAlert && App.phase === App.Ready
-        onTriggered: {
-            const now = new Date()
-            const lead = Prefs.lessonEndMinutes * 60
-            for (const lesson of Data.lessonsOn((now.getDay() + 6) % 7)) {
-                const parts = (lesson.end_time || "").split(":")
-                if (parts.length !== 2)
-                    continue
-                const end = new Date(now)
-                end.setHours(Number(parts[0]), Number(parts[1]), 0, 0)
-                const seconds = (end - now) / 1000
-                // The 10-second tick hits this 11-second window exactly once
-                if (seconds < lead && seconds > lead - 11) {
-                    Metronome.chime()
-                    Nav.toast(qsTrId("notify.lesson_end", Prefs.lessonEndMinutes) + " · " + lesson.name)
-                    break
-                }
-            }
+    // Desktop: message (the sound already plays) shortly before a lesson ends.
+    // iOS and Android show a system notification instead.
+    Connections {
+        target: LessonEnd
+        function onAlert(title, text) {
+            Nav.toast(text ? title + " · " + text : title)
+            window.alert(0)   // taskbar / dock, if Qupil is not in front
         }
+        function onMessage(text) { Nav.toast(text) }
     }
 
     Connections {

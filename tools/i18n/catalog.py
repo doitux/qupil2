@@ -1771,6 +1771,40 @@ E("notify.permission",
   fr="Autorisez les notifications pour que Qupil puisse vous prévenir même lorsque l’application est fermée.",
   es="Permita las notificaciones para que Qupil pueda avisarle aunque la app esté cerrada.")
 
+E("notify.channel.lesson_end", en="End of lesson", de="Unterrichtsende", fr="Fin du cours", es="Fin de la clase",
+  c="Name of the notification category in the system settings (Android).")
+E("notify.denied",
+  en="Notifications for Qupil are turned off, so there is no alert while Qupil is closed.",
+  de="Mitteilungen für Qupil sind ausgeschaltet. Bei geschlossener App gibt es deshalb keine Erinnerung.",
+  fr="Les notifications de Qupil sont désactivées : aucune alerte lorsque Qupil est fermé.",
+  es="Las notificaciones de Qupil están desactivadas, así que no hay aviso con Qupil cerrado.")
+E("notify.exact_alarms",
+  en="For the alert to come on time, allow Qupil to set alarms and reminders.",
+  de="Damit die Erinnerung pünktlich kommt, erlauben Sie Qupil „Wecker und Erinnerungen“.",
+  fr="Pour que l’alerte arrive à l’heure, autorisez Qupil à définir des alarmes et des rappels.",
+  es="Para que el aviso llegue puntual, permita a Qupil programar alarmas y recordatorios.",
+  c="Android 12+: the special permission 'Alarms & reminders'.")
+E("notify.allow", en="Allow", de="Erlauben", fr="Autoriser", es="Permitir")
+E("notify.open_settings", en="Open settings", de="Einstellungen öffnen", fr="Ouvrir les réglages",
+  es="Abrir ajustes")
+E("settings.lesson_end.hint_mobile", en="A notification with sound, also when Qupil is closed.",
+  de="Eine Mitteilung mit Klang, auch wenn Qupil geschlossen ist.",
+  fr="Une notification avec un son, même lorsque Qupil est fermé.",
+  es="Una notificación con sonido, también con Qupil cerrado.")
+E("settings.sound.default_name", en="Ahem (default)", de="Ähem (Standard)", fr="Hum (par défaut)",
+  es="Ejem (predeterminado)", c="The sound of Qupil 1.x: someone clearing their throat.")
+E("settings.sound.use_default", en="Default sound", de="Standardklang", fr="Son par défaut",
+  es="Sonido predeterminado", c="Button: go back to the sound that comes with Qupil.")
+E("settings.sound.test", en="Listen", de="Anhören", fr="Écouter", es="Escuchar")
+E("settings.sound.hint", en="Your own sound: WAV, MP3 or M4A. Longer sounds stop after 10 seconds.",
+  de="Eigener Klang: WAV, MP3 oder M4A. Längere Klänge enden nach 10 Sekunden.",
+  fr="Votre propre son : WAV, MP3 ou M4A. Les sons plus longs s’arrêtent après 10 secondes.",
+  es="Sonido propio: WAV, MP3 o M4A. Los sonidos más largos se cortan a los 10 segundos.")
+E("settings.sound.error", en="This file cannot be played. Please choose a WAV, MP3 or M4A file.",
+  de="Diese Datei lässt sich nicht abspielen. Bitte wählen Sie eine WAV-, MP3- oder M4A-Datei.",
+  fr="Impossible de lire ce fichier. Veuillez choisir un fichier WAV, MP3 ou M4A.",
+  es="No se puede reproducir este archivo. Elija un archivo WAV, MP3 o M4A.")
+
 # ---------------------------------------------------------------- default list entries
 E("defaults.genre.song", old="Tune", pick="Lied", en="Song", fr="Chanson", es="Canción",
   c="Default music style created on first start; users can rename it.")

@@ -3,6 +3,8 @@
     Qupil's Android manifest: Qt 6.8's template plus
     - the per-app language list (Android 13+)
     - Wi-Fi sync: multicast lock for finding devices (mDNS), Wi-Fi state
+    - lesson-end alerts (LessonAlarms.java): notifications, an exact alarm for
+      the next alert, set again after a restart or an update
     - no Android cloud backup: student data stays on the device (Qupil has its
       own backups and the end-to-end encrypted sync)
 -->
@@ -17,6 +19,10 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <supports-screens
         android:anyDensity="true"
         android:largeScreens="true"
@@ -50,6 +56,18 @@
                 android:name="android.app.arguments"
                 android:value="-- %%INSERT_APP_ARGUMENTS%% --" />
         </activity>
+
+        <receiver
+            android:name="de.qupil.app.LessonAlarms"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
 
         <provider
             android:name="androidx.core.content.FileProvider"

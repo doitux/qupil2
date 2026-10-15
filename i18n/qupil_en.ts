@@ -3190,6 +3190,54 @@ Please contact the author at %4 to fix this problem.</translation>
         <source>Allow notifications so that Qupil can remind you even when the app is closed.</source>
         <translation>Allow notifications so that Qupil can remind you even when the app is closed.</translation>
     </message>
+    <message id="notify.channel.lesson_end">
+        <source>End of lesson</source>
+        <extracomment>Name of the notification category in the system settings (Android).</extracomment>
+        <translation>End of lesson</translation>
+    </message>
+    <message id="notify.denied">
+        <source>Notifications for Qupil are turned off, so there is no alert while Qupil is closed.</source>
+        <translation>Notifications for Qupil are turned off, so there is no alert while Qupil is closed.</translation>
+    </message>
+    <message id="notify.exact_alarms">
+        <source>For the alert to come on time, allow Qupil to set alarms and reminders.</source>
+        <extracomment>Android 12+: the special permission &apos;Alarms &amp; reminders&apos;.</extracomment>
+        <translation>For the alert to come on time, allow Qupil to set alarms and reminders.</translation>
+    </message>
+    <message id="notify.allow">
+        <source>Allow</source>
+        <translation>Allow</translation>
+    </message>
+    <message id="notify.open_settings">
+        <source>Open settings</source>
+        <translation>Open settings</translation>
+    </message>
+    <message id="settings.lesson_end.hint_mobile">
+        <source>A notification with sound, also when Qupil is closed.</source>
+        <translation>A notification with sound, also when Qupil is closed.</translation>
+    </message>
+    <message id="settings.sound.default_name">
+        <source>Ahem (default)</source>
+        <extracomment>The sound of Qupil 1.x: someone clearing their throat.</extracomment>
+        <translation>Ahem (default)</translation>
+    </message>
+    <message id="settings.sound.use_default">
+        <source>Default sound</source>
+        <extracomment>Button: go back to the sound that comes with Qupil.</extracomment>
+        <translation>Default sound</translation>
+    </message>
+    <message id="settings.sound.test">
+        <source>Listen</source>
+        <translation>Listen</translation>
+    </message>
+    <message id="settings.sound.hint">
+        <source>Your own sound: WAV, MP3 or M4A. Longer sounds stop after 10 seconds.</source>
+        <translation>Your own sound: WAV, MP3 or M4A. Longer sounds stop after 10 seconds.</translation>
+    </message>
+    <message id="settings.sound.error">
+        <source>This file cannot be played. Please choose a WAV, MP3 or M4A file.</source>
+        <translation>This file cannot be played. Please choose a WAV, MP3 or M4A file.</translation>
+    </message>
     <message id="defaults.genre.song">
         <source>Song</source>
         <extracomment>Default music style created on first start; users can rename it.</extracomment>

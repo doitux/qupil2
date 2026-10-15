@@ -20,6 +20,7 @@
 #include "DataService.h"
 #include "DocumentService.h"
 #include "LanguageManager.h"
+#include "LessonEndAlert.h"
 #include "ScreenshotTour.h"
 #include "SyncController.h"
 #include "WifiController.h"
@@ -109,6 +110,11 @@ int main(int argc, char *argv[])
     QObject::connect(&sync, &SyncController::firstSyncDone, &data, &DataService::ensureDefaults);
     WifiController wifi(&controller, &sync, nullptr);
     QObject::connect(&wifi, &WifiController::firstSyncDone, &data, &DataService::ensureDefaults);
+    // Sound and message shortly before a lesson ends (texts in the UI language)
+    LessonEndAlert lessonEnd(&data, nullptr);
+    QObject::connect(&languages, &LanguageManager::languageChanged, &lessonEnd, &LessonEndAlert::reschedule);
+    QObject::connect(&controller, &AppController::phaseChanged, &lessonEnd, &LessonEndAlert::reschedule);
+    QObject::connect(&controller, &AppController::dataReplaced, &lessonEnd, &LessonEndAlert::reschedule);
     QQmlApplicationEngine engine;
     languages.setEngine(&engine);   // retranslate() on a language switch
 
