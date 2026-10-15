@@ -1859,6 +1859,304 @@ Póngase en contacto con el autor en %4 para resolver el problema.</translation>
         <source>Changes made after the backup are undone on all devices.</source>
         <translation>Los cambios posteriores a la copia se deshacen en todos los dispositivos.</translation>
     </message>
+    <message id="setup.welcome">
+        <source>Welcome to Qupil 2</source>
+        <translation>Bienvenido a Qupil 2</translation>
+    </message>
+    <message id="setup.question">
+        <source>How would you like to start?</source>
+        <translation>¿Cómo desea empezar?</translation>
+    </message>
+    <message id="setup.legacy.title">
+        <source>Take over data from Qupil 1.x</source>
+        <translation>Importar los datos de Qupil 1.x</translation>
+    </message>
+    <message id="setup.legacy.text">
+        <source>Students, lessons, notes, pieces, events and the sheet music library are taken over. Your Qupil 1.x data stays unchanged.</source>
+        <translation>Se importan alumnos, clases, notas, obras, eventos y la biblioteca de partituras. Sus datos de Qupil 1.x no se modifican.</translation>
+    </message>
+    <message id="setup.legacy.found">
+        <source>Found: %1</source>
+        <extracomment>%1 = folder with Qupil 1.x data, e.g. ~/.qupil</extracomment>
+        <translation>Encontrado: %1</translation>
+    </message>
+    <message id="setup.legacy.action">
+        <source>Take over</source>
+        <extracomment>Button: import the data of Qupil 1.x</extracomment>
+        <translation>Importar</translation>
+    </message>
+    <message id="setup.legacy.choose_folder">
+        <source>Choose folder…</source>
+        <translation>Elegir carpeta…</translation>
+    </message>
+    <message id="setup.legacy.choose_file">
+        <source>Choose file…</source>
+        <translation>Elegir archivo…</translation>
+    </message>
+    <message id="setup.legacy.where">
+        <source>Qupil 1.x keeps its data in the folder %1.</source>
+        <extracomment>%1 = folder, e.g. ~/.qupil or %APPDATA%\qupil</extracomment>
+        <translation>Qupil 1.x guarda sus datos en la carpeta %1.</translation>
+    </message>
+    <message id="setup.legacy.mobile_hint">
+        <source>First copy the file “qupil.db” from the “db” folder of your Qupil 1.x data to this device, e.g. via cloud storage or the Files app.</source>
+        <translation>Copie primero el archivo “qupil.db” de la carpeta “db” de sus datos de Qupil 1.x a este dispositivo, por ejemplo mediante un almacenamiento en la nube o la app Archivos.</translation>
+    </message>
+    <message id="setup.legacy.hint_title">
+        <source>About taking over your data</source>
+        <translation>Acerca de la importación de datos</translation>
+    </message>
+    <message id="setup.legacy.hint">
+        <source>Qupil 2 keeps its data in a database of its own. Your Qupil 1.x data is only read, never changed. Changes you make in Qupil 1.x afterwards are not taken over automatically – you can repeat the take-over at any time under More › Data.</source>
+        <translation>Qupil 2 guarda sus datos en una base de datos propia. Sus datos de Qupil 1.x solo se leen, nunca se modifican. Los cambios que haga después en Qupil 1.x no se importan automáticamente; puede repetir la importación en cualquier momento en Más › Datos.</translation>
+    </message>
+    <message id="setup.backup.text">
+        <source>A backup file (.db) from Qupil 1.x or Qupil 2.</source>
+        <translation>Un archivo de copia de seguridad (.db) de Qupil 1.x o de Qupil 2.</translation>
+    </message>
+    <message id="setup.backup.action">
+        <source>Choose backup…</source>
+        <translation>Elegir copia de seguridad…</translation>
+    </message>
+    <message id="setup.fresh.title">
+        <source>Start from scratch</source>
+        <translation>Empezar desde cero</translation>
+    </message>
+    <message id="setup.fresh.text">
+        <source>Start with empty data. You can take over data later at any time under More › Data.</source>
+        <translation>Empezar sin datos. Podrá importar datos más adelante en Más › Datos.</translation>
+    </message>
+    <message id="setup.fresh.action">
+        <source>Start</source>
+        <translation>Empezar</translation>
+    </message>
+    <message id="setup.continue">
+        <source>Continue</source>
+        <translation>Continuar</translation>
+    </message>
+    <message id="setup.error.open">
+        <source>Your data could not be opened: %1</source>
+        <extracomment>%1 = technical error message</extracomment>
+        <translation>No se han podido abrir sus datos: %1</translation>
+    </message>
+    <message id="setup.error.kept">
+        <source>The existing file is kept in the backup folder when you restore a backup or start from scratch.</source>
+        <translation>El archivo existente se conserva en la carpeta de copias si restaura una copia de seguridad o empieza desde cero.</translation>
+    </message>
+    <message id="setup.error.no_data">
+        <source>No Qupil 1.x data was found in “%1”.</source>
+        <extracomment>%1 = folder</extracomment>
+        <translation>No se han encontrado datos de Qupil 1.x en “%1”.</translation>
+    </message>
+    <message id="setup.error.read">
+        <source>“%1” could not be read. %2</source>
+        <extracomment>%1 = file, %2 = technical reason (may be empty)</extracomment>
+        <translation>No se ha podido leer “%1”. %2</translation>
+    </message>
+    <message id="setup.error.unknown">
+        <source>“%1” contains neither Qupil 1.x data nor a Qupil backup.</source>
+        <extracomment>%1 = file</extracomment>
+        <translation>“%1” no contiene datos de Qupil 1.x ni una copia de seguridad de Qupil.</translation>
+    </message>
+    <message id="setup.error.failed">
+        <source>The data could not be taken over: %1</source>
+        <extracomment>%1 = technical error message</extracomment>
+        <translation>No se han podido importar los datos: %1</translation>
+    </message>
+    <message id="takeover.failed">
+        <source>Take-over failed</source>
+        <translation>Error en la importación</translation>
+    </message>
+    <message id="summary.title.legacy">
+        <source>Take-over complete</source>
+        <translation>Importación completada</translation>
+    </message>
+    <message id="summary.title.backup">
+        <source>Backup restored</source>
+        <translation>Copia de seguridad restaurada</translation>
+    </message>
+    <message id="summary.check_hint">
+        <source>Please check your data briefly – then off you go.</source>
+        <translation>Revise brevemente sus datos y listo para empezar.</translation>
+    </message>
+    <message id="summary.source">
+        <source>From: %1</source>
+        <extracomment>%1 = folder or file</extracomment>
+        <translation>Origen: %1</translation>
+    </message>
+    <message id="summary.settings">
+        <source>Lists and settings (styles, locations, instruments) were taken over as well.</source>
+        <translation>También se han importado las listas y los ajustes (estilos, lugares, instrumentos).</translation>
+    </message>
+    <message id="summary.step.lessons">
+        <source>Lessons</source>
+        <extracomment>Progress step while importing</extracomment>
+        <translation>Clases</translation>
+    </message>
+    <message id="summary.students" numerus="yes">
+        <source>%n student(s)</source>
+        <translation>
+            <numerusform>%n alumno</numerusform>
+            <numerusform>%n alumnos</numerusform>
+        </translation>
+    </message>
+    <message id="summary.archived_students" numerus="yes">
+        <source>%n archived student(s)</source>
+        <translation>
+            <numerusform>%n alumno archivado</numerusform>
+            <numerusform>%n alumnos archivados</numerusform>
+        </translation>
+    </message>
+    <message id="summary.lessons" numerus="yes">
+        <source>%n lesson(s)</source>
+        <translation>
+            <numerusform>%n clase</numerusform>
+            <numerusform>%n clases</numerusform>
+        </translation>
+    </message>
+    <message id="summary.notes" numerus="yes">
+        <source>%n note(s)</source>
+        <translation>
+            <numerusform>%n nota</numerusform>
+            <numerusform>%n notas</numerusform>
+        </translation>
+    </message>
+    <message id="summary.pieces" numerus="yes">
+        <source>%n piece(s)</source>
+        <translation>
+            <numerusform>%n obra</numerusform>
+            <numerusform>%n obras</numerusform>
+        </translation>
+    </message>
+    <message id="summary.activities" numerus="yes">
+        <source>%n activity/activities</source>
+        <translation>
+            <numerusform>%n actividad</numerusform>
+            <numerusform>%n actividades</numerusform>
+        </translation>
+    </message>
+    <message id="summary.events" numerus="yes">
+        <source>%n event(s)</source>
+        <translation>
+            <numerusform>%n evento</numerusform>
+            <numerusform>%n eventos</numerusform>
+        </translation>
+    </message>
+    <message id="summary.archived_events" numerus="yes">
+        <source>%n archived event(s)</source>
+        <translation>
+            <numerusform>%n evento archivado</numerusform>
+            <numerusform>%n eventos archivados</numerusform>
+        </translation>
+    </message>
+    <message id="summary.library" numerus="yes">
+        <source>%n item(s) in the sheet music library</source>
+        <translation>
+            <numerusform>%n partitura en la biblioteca</numerusform>
+            <numerusform>%n partituras en la biblioteca</numerusform>
+        </translation>
+    </message>
+    <message id="summary.reminders" numerus="yes">
+        <source>%n reminder(s)</source>
+        <translation>
+            <numerusform>%n recordatorio</numerusform>
+            <numerusform>%n recordatorios</numerusform>
+        </translation>
+    </message>
+    <message id="summary.instruments" numerus="yes">
+        <source>%n instrument(s)</source>
+        <translation>
+            <numerusform>%n instrumento</numerusform>
+            <numerusform>%n instrumentos</numerusform>
+        </translation>
+    </message>
+    <message id="summary.skipped" numerus="yes">
+        <source>%n entry/entries without student or lesson skipped</source>
+        <translation>
+            <numerusform>Se ha omitido %n entrada cuyo alumno o clase ya no existía.</numerusform>
+            <numerusform>Se han omitido %n entradas cuyo alumno o clase ya no existía.</numerusform>
+        </translation>
+    </message>
+    <message id="summary.unparsed_dates" numerus="yes">
+        <source>%n date(s) in an unknown format kept as text</source>
+        <translation>
+            <numerusform>%n fecha tenía un formato desconocido y se ha conservado como texto.</numerusform>
+            <numerusform>%n fechas tenían un formato desconocido y se han conservado como texto.</numerusform>
+        </translation>
+    </message>
+    <message id="data.replace_warning">
+        <source>The data currently in Qupil 2 will be replaced by the data taken over.</source>
+        <translation>Los datos actuales de Qupil 2 se sustituirán por los datos importados.</translation>
+    </message>
+    <message id="data.safety_backup">
+        <source>Your current data is backed up automatically beforehand.</source>
+        <translation>Antes se hace automáticamente una copia de seguridad de sus datos actuales.</translation>
+    </message>
+    <message id="data.imported_at">
+        <source>Taken over from Qupil 1.x on %1</source>
+        <extracomment>%1 = date and time</extracomment>
+        <translation>Importado de Qupil 1.x el %1</translation>
+    </message>
+    <message id="data.restored_at">
+        <source>Restored from a backup on %1</source>
+        <extracomment>%1 = date and time</extracomment>
+        <translation>Restaurado desde una copia de seguridad el %1</translation>
+    </message>
+    <message id="data.last_auto_backup">
+        <source>Last automatic backup: %1</source>
+        <extracomment>%1 = date and time</extracomment>
+        <translation>Última copia automática: %1</translation>
+    </message>
+    <message id="data.auto_backup_info">
+        <source>Qupil makes an automatic backup once a day and keeps the last 14.</source>
+        <translation>Qupil hace una copia automática al día y conserva las 14 últimas.</translation>
+    </message>
+    <message id="data.location">
+        <source>Stored in %1</source>
+        <extracomment>%1 = path of the database file</extracomment>
+        <translation>Guardado en %1</translation>
+    </message>
+    <message id="data.backup_now">
+        <source>Create backup…</source>
+        <translation>Crear copia de seguridad…</translation>
+    </message>
+    <message id="data.restore">
+        <source>Restore backup…</source>
+        <translation>Restaurar copia de seguridad…</translation>
+    </message>
+    <message id="data.take_over">
+        <source>Take over from Qupil 1.x…</source>
+        <translation>Importar de Qupil 1.x…</translation>
+    </message>
+    <message id="data.open_backup_folder">
+        <source>Open backup folder</source>
+        <translation>Abrir carpeta de copias</translation>
+    </message>
+    <message id="setup.demo.action">
+        <source>Try it out with sample data</source>
+        <translation>Probar con datos de ejemplo</translation>
+    </message>
+    <message id="summary.title.demo">
+        <source>Sample data loaded</source>
+        <translation>Datos de ejemplo cargados</translation>
+    </message>
+    <message id="summary.demo_done">
+        <source>Invented students, lessons and events to try everything out.</source>
+        <translation>Alumnos, clases y eventos inventados para probarlo todo.</translation>
+    </message>
+    <message id="data.demo">
+        <source>You are working with sample data. Take over your own data whenever you like – it replaces the sample data.</source>
+        <translation>Está trabajando con datos de ejemplo. Importe sus propios datos cuando quiera: sustituyen a los datos de ejemplo.</translation>
+    </message>
+    <message id="backup.restore.action">
+        <source>Restore</source>
+        <translation>Restaurar</translation>
+    </message>
+    <message id="common.filter_all">
+        <source>All files (*)</source>
+        <extracomment>File dialog filter. Keep the pattern in parentheses unchanged.</extracomment>
+        <translation>Todos los archivos (*)</translation>
+    </message>
     <message id="sync.title">
         <source>Sync</source>
         <translation>Sincronización</translation>

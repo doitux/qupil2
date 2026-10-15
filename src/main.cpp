@@ -1,17 +1,24 @@
 // SPDX-FileCopyrightText: 2006-2026 Felix Hammer
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 
+#include <QCommandLineParser>
 #include <QDirIterator>
 #include <QFontDatabase>
 #include <QGuiApplication>
 #include <QIcon>
 #include <QQmlApplicationEngine>
+#include <QQuickWindow>
 #include <QQuickStyle>
+#include <QStandardPaths>
+#include <QTemporaryDir>
 #include <QTimer>
 
 #include <cstdio>
+#include <memory>
 
+#include "AppController.h"
 #include "LanguageManager.h"
+#include "ScreenshotTour.h"
 
 using namespace Qt::StringLiterals;
 
@@ -43,12 +50,32 @@ int main(int argc, char *argv[])
     QGuiApplication::setApplicationVersion(QStringLiteral(QUPIL_VERSION));
     QGuiApplication::setWindowIcon(QIcon(u":/qt/qml/Qupil/assets/icons/qupil.png"_s));
 
-    const bool smokeTest = QCoreApplication::arguments().contains(u"--smoke-test"_s);
-    if (smokeTest) {
-        // Keep the user's real settings untouched
-        QGuiApplication::setOrganizationName(u"QupilSmokeTest"_s);
-        s_previousHandler = qInstallMessageHandler(smokeTestHandler);
+    QCommandLineParser args;
+    args.addHelpOption();
+    args.addVersionOption();
+    const QCommandLineOption dataDirOption(u"data-dir"_s, u"Folder for the database and backups."_s, u"folder"_s);
+    const QCommandLineOption langOption(u"lang"_s, u"User interface language (en, de, fr, es, system)."_s, u"code"_s);
+    const QCommandLineOption smokeOption(u"smoke-test"_s, u"Load the UI once and fail on QML warnings (CI)."_s);
+    const QCommandLineOption screenshotsOption(
+        u"screenshots"_s, u"Save screenshots of all screens with sample data into a folder."_s, u"folder"_s);
+    args.addOption(dataDirOption);
+    args.addOption(langOption);
+    args.addOption(smokeOption);
+    args.addOption(screenshotsOption);
+    args.process(app);
+
+    const bool smokeTest = args.isSet(smokeOption);
+    const bool screenshots = args.isSet(screenshotsOption);
+    QTemporaryDir scratchDir;
+    if (smokeTest || screenshots) {
+        // Keep the user's real settings and data untouched
+        QGuiApplication::setOrganizationName(smokeTest ? u"QupilSmokeTest"_s : u"QupilScreenshots"_s);
     }
+    if (smokeTest)
+        s_previousHandler = qInstallMessageHandler(smokeTestHandler);
+    const QString dataDir = args.isSet(dataDirOption) ? args.value(dataDirOption)
+                            : (smokeTest || screenshots) ? scratchDir.path()
+                                                         : QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 
     // Figtree in four weights, bundled so the app looks the same everywhere
     QDirIterator fonts(u":/qt/qml/Qupil/assets/fonts"_s, { u"*.ttf"_s });
@@ -61,6 +88,9 @@ int main(int argc, char *argv[])
     QQuickStyle::setStyle(u"Basic"_s);
 
     LanguageManager languages(nullptr);  // translators are installed before any UI exists
+    if (args.isSet(langOption))
+        languages.setLanguage(args.value(langOption));
+    AppController controller(dataDir, nullptr);
     QQmlApplicationEngine engine;
     languages.setEngine(&engine);   // retranslate() on a language switch
 
@@ -69,30 +99,55 @@ int main(int argc, char *argv[])
 
     if (smokeTest) {
         QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app,
-                         [&engine, &languages](QObject *object, const QUrl &) {
+                         [&engine, &languages, &controller](QObject *object, const QUrl &) {
                              if (!object)
                                  return;
                              // Exercise live language and colour scheme switching, then quit
-                             QTimer::singleShot(200, qApp, [&engine, &languages] {
-                                 for (const QString &lang : LanguageManager::supportedLanguages()) {
-                                     languages.setLanguage(lang);
-                                     QCoreApplication::processEvents();
-                                 }
-                                 languages.setLanguage(u"system"_s);
-                                 if (QObject *theme = engine.singletonInstance<QObject *>("Qupil", "Theme")) {
-                                     for (const char *mode : { "dark", "light", "system" }) {
-                                         theme->setProperty("mode", QString::fromLatin1(mode));
+                             // Setup screen first (empty data folder), then the main UI
+                             QTimer::singleShot(200, qApp, [&engine, &languages, &controller] {
+                                 const auto exercise = [&engine, &languages] {
+                                     for (const QString &lang : LanguageManager::supportedLanguages()) {
+                                         languages.setLanguage(lang);
                                          QCoreApplication::processEvents();
                                      }
-                                 } else {
-                                     std::fprintf(stderr, "smoke test: Theme singleton not found\n");
+                                     languages.setLanguage(u"system"_s);
+                                     if (QObject *theme = engine.singletonInstance<QObject *>("Qupil", "Theme")) {
+                                         for (const char *mode : { "dark", "light", "system" }) {
+                                             theme->setProperty("mode", QString::fromLatin1(mode));
+                                             QCoreApplication::processEvents();
+                                         }
+                                     } else {
+                                         std::fprintf(stderr, "smoke test: Theme singleton not found\n");
+                                         ++s_qmlProblems;
+                                     }
+                                 };
+                                 exercise();
+                                 if (!controller.startFresh()) {
+                                     std::fprintf(stderr, "smoke test: could not create a database\n");
                                      ++s_qmlProblems;
                                  }
-                                 QTimer::singleShot(200, qApp, [] {
-                                     std::fprintf(stderr, "smoke test: %d QML problem(s)\n", s_qmlProblems);
-                                     QCoreApplication::exit(s_qmlProblems == 0 ? EXIT_SUCCESS : 2);
+                                 QTimer::singleShot(300, qApp, [exercise] {
+                                     exercise();
+                                     QTimer::singleShot(200, qApp, [] {
+                                         std::fprintf(stderr, "smoke test: %d QML problem(s)\n", s_qmlProblems);
+                                         QCoreApplication::exit(s_qmlProblems == 0 ? EXIT_SUCCESS : 2);
+                                     });
                                  });
                              });
+                         });
+    }
+
+    std::unique_ptr<ScreenshotTour> tour;
+    if (screenshots) {
+        QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app,
+                         [&engine, &controller, &tour, &args, &screenshotsOption](QObject *object, const QUrl &) {
+                             auto *window = qobject_cast<QQuickWindow *>(object);
+                             if (!window)
+                                 return;
+                             QObject *theme = engine.singletonInstance<QObject *>("Qupil", "Theme");
+                             tour = std::make_unique<ScreenshotTour>(window, theme, &controller,
+                                                                     args.value(screenshotsOption));
+                             tour->start();
                          });
     }
 

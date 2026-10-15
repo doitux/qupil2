@@ -143,6 +143,11 @@ jobs:
           if [ -z "$app" ]; then echo "::error::no .app found in build/"; exit 1; fi
           echo "App bundle: $app"
           /usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' -c 'Print :MinimumOSVersion' -c 'Print :UIDeviceFamily' "$app/Info.plist" || true
+          # Files app access must be there, otherwise backups are not reachable on iPad
+          if [ "$(/usr/libexec/PlistBuddy -c 'Print :UIFileSharingEnabled' "$app/Info.plist")" != "true" ]; then
+            echo "::error::UIFileSharingEnabled missing in Info.plist"; exit 1
+          fi
+          ls "$app" | grep lproj || true
           mkdir -p ipa/Payload package
           cp -R "$app" ipa/Payload/
           (cd ipa && zip -qry "../package/Qupil-${GITHUB_SHA::7}-unsigned.ipa" Payload)

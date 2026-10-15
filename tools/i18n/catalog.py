@@ -1014,6 +1014,190 @@ E("backup.restore.all_hint", en="Changes made after the backup are undone on all
   fr="Les modifications postérieures à la sauvegarde sont annulées sur tous les appareils.",
   es="Los cambios posteriores a la copia se deshacen en todos los dispositivos.")
 
+# ---------------------------------------------------------------- first start, take-over, data (new)
+E("setup.welcome", en="Welcome to Qupil 2", de="Willkommen bei Qupil 2", fr="Bienvenue dans Qupil 2",
+  es="Bienvenido a Qupil 2")
+E("setup.question", en="How would you like to start?", de="Wie möchten Sie beginnen?",
+  fr="Comment souhaitez-vous commencer ?", es="¿Cómo desea empezar?")
+E("setup.legacy.title", en="Take over data from Qupil 1.x", de="Daten aus Qupil 1.x übernehmen",
+  fr="Reprendre les données de Qupil 1.x", es="Importar los datos de Qupil 1.x")
+E("setup.legacy.text",
+  en="Students, lessons, notes, pieces, events and the sheet music library are taken over. Your Qupil 1.x data stays unchanged.",
+  de="Schüler, Unterrichte, Notizen, Werke, Veranstaltungen und die Noten-Bibliothek werden übernommen. Ihre Daten in Qupil 1.x bleiben dabei unverändert.",
+  fr="Les élèves, cours, notes, morceaux, événements et la bibliothèque de partitions sont repris. Vos données de Qupil 1.x restent inchangées.",
+  es="Se importan alumnos, clases, notas, obras, eventos y la biblioteca de partituras. Sus datos de Qupil 1.x no se modifican.")
+E("setup.legacy.found", en="Found: %1", de="Gefunden: %1", fr="Trouvé : %1", es="Encontrado: %1",
+  c="%1 = folder with Qupil 1.x data, e.g. ~/.qupil")
+E("setup.legacy.action", en="Take over", de="Übernehmen", fr="Reprendre", es="Importar",
+  c="Button: import the data of Qupil 1.x")
+E("setup.legacy.choose_folder", en="Choose folder…", de="Ordner wählen ...", fr="Choisir un dossier…",
+  es="Elegir carpeta…")
+E("setup.legacy.choose_file", en="Choose file…", de="Datei wählen ...", fr="Choisir un fichier…",
+  es="Elegir archivo…")
+E("setup.legacy.where", en="Qupil 1.x keeps its data in the folder %1.",
+  de="Qupil 1.x speichert seine Daten im Ordner %1.", fr="Qupil 1.x enregistre ses données dans le dossier %1.",
+  es="Qupil 1.x guarda sus datos en la carpeta %1.", c="%1 = folder, e.g. ~/.qupil or %APPDATA%\\qupil")
+E("setup.legacy.mobile_hint",
+  en="First copy the file “qupil.db” from the “db” folder of your Qupil 1.x data to this device, e.g. via cloud storage or the Files app.",
+  de="Kopieren Sie zuerst die Datei „qupil.db“ aus dem Ordner „db“ Ihrer Qupil-1.x-Daten auf dieses Gerät, z. B. über einen Cloud-Speicher oder die Dateien-App.",
+  fr="Copiez d’abord le fichier « qupil.db » du dossier « db » de vos données Qupil 1.x sur cet appareil, par exemple via un stockage en ligne ou l’app Fichiers.",
+  es="Copie primero el archivo “qupil.db” de la carpeta “db” de sus datos de Qupil 1.x a este dispositivo, por ejemplo mediante un almacenamiento en la nube o la app Archivos.")
+E("setup.legacy.hint_title", en="About taking over your data", de="Hinweis zur Datenübernahme",
+  fr="À propos de la reprise des données", es="Acerca de la importación de datos")
+E("setup.legacy.hint",
+  en="Qupil 2 keeps its data in a database of its own. Your Qupil 1.x data is only read, never changed. Changes you make in Qupil 1.x afterwards are not taken over automatically – you can repeat the take-over at any time under More › Data.",
+  de="Qupil 2 speichert seine Daten in einer eigenen Datenbank. Ihre Qupil-1.x-Daten werden dabei nur gelesen und nicht verändert. Änderungen, die Sie danach noch in Qupil 1.x vornehmen, werden nicht automatisch übernommen – Sie können die Übernahme jederzeit unter Mehr › Daten wiederholen.",
+  fr="Qupil 2 enregistre ses données dans sa propre base de données. Vos données Qupil 1.x sont seulement lues, jamais modifiées. Les modifications faites ensuite dans Qupil 1.x ne sont pas reprises automatiquement – vous pouvez relancer la reprise à tout moment dans Plus › Données.",
+  es="Qupil 2 guarda sus datos en una base de datos propia. Sus datos de Qupil 1.x solo se leen, nunca se modifican. Los cambios que haga después en Qupil 1.x no se importan automáticamente; puede repetir la importación en cualquier momento en Más › Datos.")
+E("setup.backup.text", en="A backup file (.db) from Qupil 1.x or Qupil 2.",
+  de="Eine Sicherungsdatei (.db) aus Qupil 1.x oder Qupil 2.",
+  fr="Un fichier de sauvegarde (.db) de Qupil 1.x ou de Qupil 2.",
+  es="Un archivo de copia de seguridad (.db) de Qupil 1.x o de Qupil 2.")
+E("setup.backup.action", en="Choose backup…", de="Backup wählen ...", fr="Choisir une sauvegarde…",
+  es="Elegir copia de seguridad…")
+E("setup.fresh.title", en="Start from scratch", de="Neu beginnen", fr="Commencer à zéro",
+  es="Empezar desde cero")
+E("setup.fresh.text", en="Start with empty data. You can take over data later at any time under More › Data.",
+  de="Mit leeren Daten starten. Eine Übernahme ist später jederzeit unter Mehr › Daten möglich.",
+  fr="Commencer avec des données vides. Vous pourrez reprendre des données plus tard dans Plus › Données.",
+  es="Empezar sin datos. Podrá importar datos más adelante en Más › Datos.")
+E("setup.fresh.action", en="Start", de="Starten", fr="Commencer", es="Empezar")
+E("setup.continue", en="Continue", de="Weiter", fr="Continuer", es="Continuar")
+E("setup.error.open", en="Your data could not be opened: %1", de="Ihre Daten konnten nicht geöffnet werden: %1",
+  fr="Vos données n’ont pas pu être ouvertes : %1", es="No se han podido abrir sus datos: %1",
+  c="%1 = technical error message")
+E("setup.error.kept",
+  en="The existing file is kept in the backup folder when you restore a backup or start from scratch.",
+  de="Die vorhandene Datei bleibt im Backup-Ordner erhalten, wenn Sie ein Backup zurückspielen oder neu beginnen.",
+  fr="Le fichier existant est conservé dans le dossier des sauvegardes si vous restaurez une sauvegarde ou commencez à zéro.",
+  es="El archivo existente se conserva en la carpeta de copias si restaura una copia de seguridad o empieza desde cero.")
+E("setup.error.no_data", en="No Qupil 1.x data was found in “%1”.",
+  de="In „%1“ wurden keine Qupil-1.x-Daten gefunden.", fr="Aucune donnée Qupil 1.x n’a été trouvée dans « %1 ».",
+  es="No se han encontrado datos de Qupil 1.x en “%1”.", c="%1 = folder")
+E("setup.error.read", en="“%1” could not be read. %2", de="„%1“ konnte nicht gelesen werden. %2",
+  fr="Impossible de lire « %1 ». %2", es="No se ha podido leer “%1”. %2",
+  c="%1 = file, %2 = technical reason (may be empty)")
+E("setup.error.unknown", en="“%1” contains neither Qupil 1.x data nor a Qupil backup.",
+  de="„%1“ enthält weder Qupil-1.x-Daten noch ein Qupil-Backup.",
+  fr="« %1 » ne contient ni des données Qupil 1.x ni une sauvegarde Qupil.",
+  es="“%1” no contiene datos de Qupil 1.x ni una copia de seguridad de Qupil.", c="%1 = file")
+E("setup.error.failed", en="The data could not be taken over: %1",
+  de="Die Daten konnten nicht übernommen werden: %1", fr="Les données n’ont pas pu être reprises : %1",
+  es="No se han podido importar los datos: %1", c="%1 = technical error message")
+E("takeover.failed", en="Take-over failed", de="Übernahme fehlgeschlagen", fr="Échec de la reprise",
+  es="Error en la importación")
+E("summary.title.legacy", en="Take-over complete", de="Übernahme abgeschlossen", fr="Reprise terminée",
+  es="Importación completada")
+E("summary.title.backup", en="Backup restored", de="Backup zurückgespielt", fr="Sauvegarde restaurée",
+  es="Copia de seguridad restaurada")
+E("summary.check_hint", en="Please check your data briefly – then off you go.",
+  de="Bitte werfen Sie einen kurzen Blick auf Ihre Daten – dann kann es losgehen.",
+  fr="Jetez un rapide coup d’œil à vos données – et c’est parti.",
+  es="Revise brevemente sus datos y listo para empezar.")
+E("summary.source", en="From: %1", de="Aus: %1", fr="Source : %1", es="Origen: %1", c="%1 = folder or file")
+E("summary.settings", en="Lists and settings (styles, locations, instruments) were taken over as well.",
+  de="Listen und Einstellungen (Stilrichtungen, Unterrichtsorte, Instrumente) wurden ebenfalls übernommen.",
+  fr="Les listes et paramètres (styles, lieux, instruments) ont également été repris.",
+  es="También se han importado las listas y los ajustes (estilos, lugares, instrumentos).")
+E("summary.step.lessons", en="Lessons", de="Unterrichte", fr="Cours", es="Clases",
+  c="Progress step while importing")
+E("summary.students", src="%n student(s)", en=["%n student", "%n students"],
+  de=["%n Schüler", "%n Schüler"], fr=["%n élève", "%n élèves"], es=["%n alumno", "%n alumnos"])
+E("summary.archived_students", src="%n archived student(s)",
+  en=["%n archived student", "%n archived students"],
+  de=["%n archivierter Schüler", "%n archivierte Schüler"],
+  fr=["%n élève archivé", "%n élèves archivés"], es=["%n alumno archivado", "%n alumnos archivados"])
+E("summary.lessons", src="%n lesson(s)", en=["%n lesson", "%n lessons"],
+  de=["%n Unterricht", "%n Unterrichte"], fr=["%n cours", "%n cours"], es=["%n clase", "%n clases"])
+E("summary.notes", src="%n note(s)", en=["%n note", "%n notes"], de=["%n Notiz", "%n Notizen"],
+  fr=["%n note", "%n notes"], es=["%n nota", "%n notas"])
+E("summary.pieces", src="%n piece(s)", en=["%n piece", "%n pieces"], de=["%n Werk", "%n Werke"],
+  fr=["%n morceau", "%n morceaux"], es=["%n obra", "%n obras"])
+E("summary.activities", src="%n activity/activities", en=["%n activity", "%n activities"],
+  de=["%n Aktivität", "%n Aktivitäten"], fr=["%n activité", "%n activités"],
+  es=["%n actividad", "%n actividades"])
+E("summary.events", src="%n event(s)", en=["%n event", "%n events"],
+  de=["%n Veranstaltung", "%n Veranstaltungen"], fr=["%n événement", "%n événements"],
+  es=["%n evento", "%n eventos"])
+E("summary.archived_events", src="%n archived event(s)", en=["%n archived event", "%n archived events"],
+  de=["%n archivierte Veranstaltung", "%n archivierte Veranstaltungen"],
+  fr=["%n événement archivé", "%n événements archivés"], es=["%n evento archivado", "%n eventos archivados"])
+E("summary.library", src="%n item(s) in the sheet music library",
+  en=["%n item in the sheet music library", "%n items in the sheet music library"],
+  de=["%n Eintrag in der Noten-Bibliothek", "%n Einträge in der Noten-Bibliothek"],
+  fr=["%n partition dans la bibliothèque", "%n partitions dans la bibliothèque"],
+  es=["%n partitura en la biblioteca", "%n partituras en la biblioteca"])
+E("summary.reminders", src="%n reminder(s)", en=["%n reminder", "%n reminders"],
+  de=["%n Erinnerung", "%n Erinnerungen"], fr=["%n rappel", "%n rappels"],
+  es=["%n recordatorio", "%n recordatorios"])
+E("summary.instruments", src="%n instrument(s)", en=["%n instrument", "%n instruments"],
+  de=["%n Instrument", "%n Instrumente"], fr=["%n instrument", "%n instruments"],
+  es=["%n instrumento", "%n instrumentos"])
+E("summary.skipped", src="%n entry/entries without student or lesson skipped",
+  en=["%n entry whose student or lesson no longer existed was skipped.",
+      "%n entries whose student or lesson no longer existed were skipped."],
+  de=["%n Eintrag ohne vorhandenen Schüler oder Unterricht wurde übersprungen.",
+      "%n Einträge ohne vorhandenen Schüler oder Unterricht wurden übersprungen."],
+  fr=["%n entrée dont l’élève ou le cours n’existait plus a été ignorée.",
+      "%n entrées dont l’élève ou le cours n’existait plus ont été ignorées."],
+  es=["Se ha omitido %n entrada cuyo alumno o clase ya no existía.",
+      "Se han omitido %n entradas cuyo alumno o clase ya no existía."])
+E("summary.unparsed_dates", src="%n date(s) in an unknown format kept as text",
+  en=["%n date had an unknown format and was kept as text.",
+      "%n dates had an unknown format and were kept as text."],
+  de=["%n Datum hatte ein unbekanntes Format und wurde als Text übernommen.",
+      "%n Datumsangaben hatten ein unbekanntes Format und wurden als Text übernommen."],
+  fr=["%n date avait un format inconnu et a été conservée comme texte.",
+      "%n dates avaient un format inconnu et ont été conservées comme texte."],
+  es=["%n fecha tenía un formato desconocido y se ha conservado como texto.",
+      "%n fechas tenían un formato desconocido y se han conservado como texto."])
+E("data.replace_warning",
+  en="The data currently in Qupil 2 will be replaced by the data taken over.",
+  de="Die aktuellen Daten in Qupil 2 werden durch die übernommenen Daten ersetzt.",
+  fr="Les données actuelles de Qupil 2 seront remplacées par les données reprises.",
+  es="Los datos actuales de Qupil 2 se sustituirán por los datos importados.")
+E("data.safety_backup", en="Your current data is backed up automatically beforehand.",
+  de="Ihre aktuellen Daten werden vorher automatisch gesichert.",
+  fr="Vos données actuelles sont sauvegardées automatiquement au préalable.",
+  es="Antes se hace automáticamente una copia de seguridad de sus datos actuales.")
+E("data.imported_at", en="Taken over from Qupil 1.x on %1", de="Aus Qupil 1.x übernommen am %1",
+  fr="Repris de Qupil 1.x le %1", es="Importado de Qupil 1.x el %1", c="%1 = date and time")
+E("data.restored_at", en="Restored from a backup on %1", de="Aus einem Backup zurückgespielt am %1",
+  fr="Restauré à partir d’une sauvegarde le %1", es="Restaurado desde una copia de seguridad el %1",
+  c="%1 = date and time")
+E("data.last_auto_backup", en="Last automatic backup: %1", de="Letztes automatisches Backup: %1",
+  fr="Dernière sauvegarde automatique : %1", es="Última copia automática: %1", c="%1 = date and time")
+E("data.auto_backup_info", en="Qupil makes an automatic backup once a day and keeps the last 14.",
+  de="Qupil erstellt einmal täglich ein automatisches Backup und behält die letzten 14.",
+  fr="Qupil effectue une sauvegarde automatique par jour et conserve les 14 dernières.",
+  es="Qupil hace una copia automática al día y conserva las 14 últimas.")
+E("data.location", en="Stored in %1", de="Gespeichert in %1", fr="Enregistré dans %1", es="Guardado en %1",
+  c="%1 = path of the database file")
+E("data.backup_now", en="Create backup…", de="Backup erstellen ...", fr="Créer une sauvegarde…",
+  es="Crear copia de seguridad…")
+E("data.restore", en="Restore backup…", de="Backup zurückspielen ...", fr="Restaurer une sauvegarde…",
+  es="Restaurar copia de seguridad…")
+E("data.take_over", en="Take over from Qupil 1.x…", de="Aus Qupil 1.x übernehmen ...",
+  fr="Reprendre de Qupil 1.x…", es="Importar de Qupil 1.x…")
+E("data.open_backup_folder", en="Open backup folder", de="Backup-Ordner öffnen",
+  fr="Ouvrir le dossier des sauvegardes", es="Abrir carpeta de copias")
+E("setup.demo.action", en="Try it out with sample data", de="Mit Beispieldaten ausprobieren",
+  fr="Essayer avec des données d’exemple", es="Probar con datos de ejemplo")
+E("summary.title.demo", en="Sample data loaded", de="Beispieldaten geladen", fr="Données d’exemple chargées",
+  es="Datos de ejemplo cargados")
+E("summary.demo_done", en="Invented students, lessons and events to try everything out.",
+  de="Erfundene Schüler, Unterrichte und Veranstaltungen zum Ausprobieren.",
+  fr="Des élèves, cours et événements fictifs pour tout essayer.",
+  es="Alumnos, clases y eventos inventados para probarlo todo.")
+E("data.demo",
+  en="You are working with sample data. Take over your own data whenever you like – it replaces the sample data.",
+  de="Sie arbeiten mit Beispieldaten. Übernehmen Sie Ihre eigenen Daten, wann immer Sie möchten – sie ersetzen die Beispieldaten.",
+  fr="Vous travaillez avec des données d’exemple. Reprenez vos propres données quand vous le souhaitez – elles remplacent les données d’exemple.",
+  es="Está trabajando con datos de ejemplo. Importe sus propios datos cuando quiera: sustituyen a los datos de ejemplo.")
+E("backup.restore.action", en="Restore", de="Zurückspielen", fr="Restaurer", es="Restaurar")
+E("common.filter_all", en="All files (*)", de="Alle Dateien (*)", fr="Tous les fichiers (*)",
+  es="Todos los archivos (*)", c="File dialog filter. Keep the pattern in parentheses unchanged.")
+
 # ---------------------------------------------------------------- sync (new)
 E("sync.title", en="Sync", de="Synchronisation", fr="Synchronisation", es="Sincronización")
 E("sync.all_synced", en="Everything is in sync", de="Alles synchron", fr="Tout est synchronisé",

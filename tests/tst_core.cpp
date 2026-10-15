@@ -1,12 +1,14 @@
 // SPDX-FileCopyrightText: 2006-2026 Felix Hammer
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 
+#include <QDate>
 #include <QSignalSpy>
 #include <QSqlQuery>
 #include <QTemporaryDir>
 #include <QTest>
 
 #include "Database.h"
+#include "DemoData.h"
 #include "Ids.h"
 #include "LegacyFixture.h"
 #include "LegacyImporter.h"
@@ -263,6 +265,49 @@ private slots:
         Store s(&db);
         QCOMPARE(s.select(u"student"_s).size(), 1);
         QVERIFY(!s.create(u"student"_s, { { u"surname"_s, u"Neu"_s } }).isEmpty());
+    }
+
+    void demoDataImports()
+    {
+        const QString folder = file(u"demo"_s);
+        QString error;
+        QVERIFY2(DemoData::writeLegacyFolder(folder, u"de"_s, &error), qPrintable(error));
+        const QString legacy = LegacyImporter::findDatabase(folder);
+        QVERIFY(!legacy.isEmpty());
+        QVERIFY(!LegacyImporter::findConfig(legacy).isEmpty());
+
+        Database db;
+        QVERIFY(db.open(file(u"demo-target.db"_s)));
+        Store store(&db);
+        LegacyImporter importer;
+        const LegacyImporter::Result r = importer.run(legacy, &store, LegacyImporter::findConfig(legacy));
+        QVERIFY2(r.ok, qPrintable(r.error));
+        QCOMPARE(r.students, 9);
+        QCOMPARE(r.lessons, 10);
+        QVERIFY(r.notes > 20);
+        QVERIFY(r.pieces > 15);
+        QCOMPARE(r.events, 2);
+        QCOMPARE(r.libraryItems, 6);
+        QCOMPARE(r.skipped, 0);
+        QCOMPARE(r.unparsedDates, 0);
+        QVERIFY2(r.warnings.isEmpty(), qPrintable(r.warnings.join(u'\n')));
+
+        // Today always has lessons, and the next event has a programme incl. the external piece
+        const int today = QDate::currentDate().dayOfWeek() - 1;
+        QVERIFY(store.select(u"lesson"_s, u"active = 1 AND irregular = 0 AND weekday = ?"_s, { today }).size() >= 4);
+        const auto upcoming = store.select(u"event"_s, u"state = 0"_s);
+        QCOMPARE(upcoming.size(), 1);
+        const auto programme = store.select(u"event_item"_s, u"event_id = ?"_s, { upcoming.first().value(u"id"_s) });
+        QVERIFY(programme.size() >= 3);
+        QCOMPARE(std::count_if(programme.cbegin(), programme.cend(),
+                               [](const QVariantMap &m) { return !m.value(u"external_id"_s).toString().isEmpty(); }), 1);
+
+        // English variant has English names
+        const QString en = file(u"demo-en"_s);
+        QVERIFY(DemoData::writeLegacyFolder(en, u"en"_s));
+        QString count;
+        QCOMPARE(Database::detectFormat(LegacyImporter::findDatabase(en), &count), 1);
+        QCOMPARE(count, u"9"_s);
     }
 
     void rejectsForeignFiles()

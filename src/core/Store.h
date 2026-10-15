@@ -71,6 +71,9 @@ public:
 
     QString lastError() const { return m_lastError; }
 
+    //! Tells all views to reload, e.g. after the database file was replaced
+    void notifyReset();
+
 signals:
     //! Data of these entities changed (local or remote); views reload
     void dataChanged(const QStringList &entities);

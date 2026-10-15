@@ -38,6 +38,8 @@ public:
         int libraryItems = 0;
         int reminders = 0;
         int instruments = 0;
+        int skipped = 0;          //!< records whose student or lesson no longer exists
+        int unparsedDates = 0;    //!< dates in an unknown format, kept as text
         QStringList warnings;
     };
 

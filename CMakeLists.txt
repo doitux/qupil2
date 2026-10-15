@@ -33,16 +33,18 @@ qt_add_library(qupilcore STATIC
     src/core/Store.h
     src/core/Store.cpp
     src/core/LegacyImporter.h
-    src/core/LegacyImporter.cpp)
+    src/core/LegacyImporter.cpp
+    src/core/DemoData.h
+    src/core/DemoData.cpp)
 target_include_directories(qupilcore PUBLIC src/core)
 target_link_libraries(qupilcore PUBLIC Qt6::Core Qt6::Sql)
 
 # ---------------------------------------------------------------------------- app
 
-qt_add_executable(qupil src/main.cpp)
+qt_add_executable(qupil src/main.cpp src/app/ScreenshotTour.h src/app/ScreenshotTour.cpp)
 
 target_compile_definitions(qupil PRIVATE QUPIL_VERSION="${PROJECT_VERSION}")
-target_include_directories(qupil PRIVATE src src/core)
+target_include_directories(qupil PRIVATE src src/core src/app)
 target_link_libraries(qupil PRIVATE qupilcore Qt6::Core Qt6::Gui Qt6::Qml Qt6::Quick Qt6::QuickControls2)
 
 if(APPLE OR WIN32)
@@ -67,6 +69,17 @@ if(IOS)
     target_sources(qupil PRIVATE ${QUPIL_ASSET_CATALOG})
     set_source_files_properties(${QUPIL_ASSET_CATALOG} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
     set_target_properties(qupil PROPERTIES XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME AppIcon)
+    # Translated permission texts
+    foreach(_lang en de fr es)
+        set(_strings ${CMAKE_CURRENT_SOURCE_DIR}/platform/ios/${_lang}.lproj/InfoPlist.strings)
+        target_sources(qupil PRIVATE ${_strings})
+        set_source_files_properties(${_strings} PROPERTIES MACOSX_PACKAGE_LOCATION Resources/${_lang}.lproj)
+    endforeach()
+    # Files app access, languages, Wi-Fi sync keys (added to Qt's generated Info.plist)
+    add_custom_command(TARGET qupil POST_BUILD
+        COMMAND /bin/sh ${CMAKE_CURRENT_SOURCE_DIR}/platform/ios/patch-info-plist.sh
+                "$<TARGET_BUNDLE_DIR:qupil>/Info.plist"
+        VERBATIM)
 endif()
 
 if(WIN32)
@@ -83,7 +96,14 @@ set(QUPIL_QML_FILES
     qml/Theme.qml
     qml/Icon.qml
     qml/NavButton.qml
+    qml/ActionButton.qml
+    qml/Card.qml
+    qml/AppDialog.qml
     qml/AppearanceSettings.qml
+    qml/DataSettings.qml
+    qml/TakeOverActions.qml
+    qml/TakeOverSummary.qml
+    qml/pages/SetupPage.qml
     qml/pages/TodayPage.qml
     qml/pages/PlaceholderPage.qml
     qml/pages/MorePage.qml)
@@ -111,6 +131,8 @@ qt_add_qml_module(qupil
     SOURCES
         src/core/LanguageManager.h
         src/core/LanguageManager.cpp
+        src/app/AppController.h
+        src/app/AppController.cpp
 )
 
 # ---------------------------------------------------------------------------- translations

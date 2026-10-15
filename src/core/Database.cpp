@@ -277,4 +277,25 @@ int Database::detectFormat(const QString &file, QString *description)
     return format;
 }
 
+int Database::schemaVersionOf(const QString &file)
+{
+    if (!QFileInfo(file).isFile())
+        return 0;
+    const QString name = u"qupil-version-"_s + QUuid::createUuid().toString(QUuid::WithoutBraces);
+    int version = 0;
+    {
+        QSqlDatabase db = QSqlDatabase::addDatabase(u"QSQLITE"_s, name);
+        db.setDatabaseName(file);
+        db.setConnectOptions(u"QSQLITE_OPEN_READONLY"_s);
+        if (db.open()) {
+            QSqlQuery q(db);
+            if (q.exec(u"SELECT value FROM meta WHERE key = 'schema_version'"_s) && q.next())
+                version = q.value(0).toInt();
+            db.close();
+        }
+    }
+    QSqlDatabase::removeDatabase(name);
+    return version;
+}
+
 } // namespace Qupil

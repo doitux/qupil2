@@ -360,6 +360,7 @@ LegacyImporter::Result LegacyImporter::run(const QString &legacyDatabase, Store 
     // ---------------------------------------------------------------- pieces and notes
     emit progress(35, u"pieces"_s);
     QHash<qint64, QString> pieces, pieceGroups;
+    QHash<qint64, QString> pieceByCommon;   // cpieceid -> first imported copy (programmes refer to cpieceid)
     for (const Row &row : old.rows(u"piece"_s, u"pieceid"_s)) {
         const QString membership = memberships.value(key(row, "palid"));
         if (membership.isEmpty()) {
@@ -385,6 +386,8 @@ LegacyImporter::Result LegacyImporter::run(const QString &legacyDatabase, Store 
             { u"state"_s, num(row, "state", 0) },
         });
         pieces.insert(key(row, "pieceid"), id);
+        if (common > 0 && !pieceByCommon.contains(common))
+            pieceByCommon.insert(common, id);
         ++r.pieces;
     }
 
@@ -477,7 +480,10 @@ LegacyImporter::Result LegacyImporter::run(const QString &legacyDatabase, Store 
     for (const Row &row : old.rows(u"pieceatrecital"_s, u"recitalid, sorting, parid"_s)) {
         const QString event = events.value(key(row, "recitalid"));
         const bool external = num(row, "ifexternalpiece", 0) != 0;
-        const QString item = external ? externals.value(key(row, "pieceid")) : pieces.value(key(row, "pieceid"));
+        // pieceid is the common id of a (group) piece; its first copy may be gone
+        const qint64 pieceKey = key(row, "pieceid");
+        const QString item = external ? externals.value(pieceKey)
+                                      : pieces.value(pieceKey, pieceByCommon.value(pieceKey));
         if (event.isEmpty() || item.isEmpty()) {
             ++orphans;
             continue;
@@ -548,6 +554,8 @@ LegacyImporter::Result LegacyImporter::run(const QString &legacyDatabase, Store 
                 create(u"setting"_s, { { u"id"_s, to }, { u"value"_s, cfg.values.value(from) } });
     }
 
+    r.skipped = orphans;
+    r.unparsedDates = unparsedDates;
     if (orphans > 0)
         r.warnings << u"%1 records without their student or lesson were skipped"_s.arg(orphans);
     if (unparsedDates > 0)

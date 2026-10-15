@@ -8,6 +8,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Qupil
 
 ApplicationWindow {
     id: window
@@ -58,94 +59,109 @@ ApplicationWindow {
         }
     }
 
-    RowLayout {
+    // First start (or unreadable data): setup screen, otherwise the app
+    Loader {
         anchors.fill: parent
-        spacing: 0
+        sourceComponent: App.phase === App.Ready ? mainUi : setupUi
+    }
 
-        // ------------------------------------------------------------ sidebar (wide)
-        Rectangle {
-            visible: !window.compact
-            Layout.fillHeight: true
-            Layout.preferredWidth: 216
-            color: Theme.surface
+    Component {
+        id: setupUi
+        SetupPage {}
+    }
 
+    Component {
+        id: mainUi
+
+        RowLayout {
+            spacing: 0
+
+            // ------------------------------------------------------------ sidebar (wide)
             Rectangle {
-                anchors.right: parent.right
-                width: 1
-                height: parent.height
-                color: Theme.border
-            }
+                visible: !window.compact
+                Layout.fillHeight: true
+                Layout.preferredWidth: 216
+                color: Theme.surface
 
-            ColumnLayout {
-                anchors.fill: parent
-                anchors.margins: 14
-                anchors.topMargin: 28
-                spacing: 4
+                Rectangle {
+                    anchors.right: parent.right
+                    width: 1
+                    height: parent.height
+                    color: Theme.border
+                }
 
-                RowLayout {
-                    Layout.leftMargin: 10
-                    Layout.bottomMargin: 18
-                    spacing: 8
-                    Text {
-                        text: "Qupil"
-                        color: Theme.accentText
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 24
-                        font.weight: Font.ExtraBold
-                    }
-                    Rectangle {
-                        implicitWidth: badge.implicitWidth + 12
-                        implicitHeight: badge.implicitHeight + 4
-                        radius: 6
-                        color: Theme.lime
+                ColumnLayout {
+                    anchors.fill: parent
+                    anchors.margins: 14
+                    anchors.topMargin: 28
+                    spacing: 4
+
+                    RowLayout {
+                        Layout.leftMargin: 10
+                        Layout.bottomMargin: 18
+                        spacing: 8
                         Text {
-                            id: badge
-                            anchors.centerIn: parent
-                            text: "2"
-                            color: Theme.textOnLime
+                            text: "Qupil"
+                            color: Theme.accentText
                             font.family: Theme.fontFamily
-                            font.pixelSize: 12
+                            font.pixelSize: 24
                             font.weight: Font.ExtraBold
                         }
+                        Rectangle {
+                            implicitWidth: badge.implicitWidth + 12
+                            implicitHeight: badge.implicitHeight + 4
+                            radius: 6
+                            color: Theme.lime
+                            Text {
+                                id: badge
+                                anchors.centerIn: parent
+                                text: "2"
+                                color: Theme.textOnLime
+                                font.family: Theme.fontFamily
+                                font.pixelSize: 12
+                                font.weight: Font.ExtraBold
+                            }
+                        }
                     }
-                }
 
-                Repeater {
-                    model: window.navigation
-                    delegate: NavButton {
-                        required property string modelData
-                        required property int index
-                        Layout.fillWidth: true
-                        vertical: false
-                        text: window.navLabel(index)
-                        iconName: modelData
-                        selected: window.currentPage === index
-                        onClicked: window.currentPage = index
+                    Repeater {
+                        model: window.navigation
+                        delegate: NavButton {
+                            required property string modelData
+                            required property int index
+                            Layout.fillWidth: true
+                            vertical: false
+                            text: window.navLabel(index)
+                            iconName: modelData
+                            selected: window.currentPage === index
+                            onClicked: window.currentPage = index
+                        }
                     }
-                }
 
-                Item { Layout.fillHeight: true }
+                    Item { Layout.fillHeight: true }
+                }
             }
-        }
 
-        // ------------------------------------------------------------ pages
-        StackLayout {
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            currentIndex: window.currentPage
+            // ------------------------------------------------------------ pages
+            StackLayout {
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                currentIndex: window.currentPage
 
-            TodayPage {}
-            PlaceholderPage { title: qsTrId("nav.students"); iconName: "students" }
-            PlaceholderPage { title: qsTrId("nav.events"); iconName: "events" }
-            PlaceholderPage { title: qsTrId("metronome.title"); iconName: "metronome" }
-            MorePage {}
+                TodayPage {}
+                PlaceholderPage { title: qsTrId("nav.students"); iconName: "students" }
+                PlaceholderPage { title: qsTrId("nav.events"); iconName: "events" }
+                PlaceholderPage { title: qsTrId("metronome.title"); iconName: "metronome" }
+                MorePage {}
+            }
         }
     }
 
     // ---------------------------------------------------------------- tab bar (narrow)
     footer: Rectangle {
-        visible: window.compact
-        implicitHeight: window.compact ? 64 : 0
+        readonly property bool shown: window.compact && App.phase === App.Ready
+        visible: shown
+        implicitHeight: shown ? 64 : 0
         color: Theme.surface
 
         Rectangle {
@@ -175,6 +191,115 @@ ApplicationWindow {
                     onClicked: window.currentPage = index
                 }
             }
+        }
+    }
+
+    // ---------------------------------------------------------------- take-over / restore feedback
+    // Shared by the setup screen and More › Data
+
+    Popup {
+        id: progressPopup
+        parent: Overlay.overlay
+        anchors.centerIn: parent
+        width: Math.min(parent.width - 32, 400)
+        modal: true
+        closePolicy: Popup.NoAutoClose
+        visible: App.busy
+        padding: 24
+        Overlay.modal: Rectangle { color: Theme.overlay }
+        background: Rectangle {
+            radius: Theme.radiusLarge
+            color: Theme.surface
+        }
+        contentItem: ColumnLayout {
+            spacing: 14
+            Text {
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+                text: qsTrId("migration.importing")
+                color: Theme.text
+                font.family: Theme.fontFamily
+                font.pixelSize: 17
+                font.weight: Font.Bold
+            }
+            ProgressBar {
+                id: bar
+                Layout.fillWidth: true
+                from: 0
+                to: 100
+                value: App.progress
+                background: Rectangle {
+                    implicitHeight: 8
+                    radius: 4
+                    color: Theme.segment
+                }
+                contentItem: Item {
+                    implicitHeight: 8
+                    Rectangle {
+                        width: bar.visualPosition * parent.width
+                        height: parent.height
+                        radius: 4
+                        color: Theme.accent
+                    }
+                }
+            }
+            Text {
+                Layout.fillWidth: true
+                elide: Text.ElideRight
+                text: window.stepLabel(App.progressStep)
+                color: Theme.textMuted
+                font.family: Theme.fontFamily
+                font.pixelSize: 14
+            }
+        }
+    }
+
+    function stepLabel(step) {
+        switch (step) {
+        case "students": return qsTrId("nav.students")
+        case "archive": return qsTrId("common.archive")
+        case "lessons": return qsTrId("summary.step.lessons")
+        case "pieces": return qsTrId("common.pieces")
+        case "notes": return qsTrId("common.notes")
+        case "activities": return qsTrId("common.activities")
+        case "library": return qsTrId("library.title")
+        case "events": return qsTrId("nav.events")
+        case "reminders": return qsTrId("reminders.title")
+        case "settings": return qsTrId("settings.title")
+        default: return ""
+        }
+    }
+
+    AppDialog {
+        id: failedDialog
+        iconName: "warning"
+        destructive: true
+        title: qsTrId("takeover.failed")
+    }
+
+    // After a take-over from More › Data (the setup screen shows its own summary)
+    AppDialog {
+        id: summaryDialog
+        title: App.lastTakeOver.kind === "backup" ? qsTrId("summary.title.backup")
+             : App.lastTakeOver.kind === "demo" ? qsTrId("summary.title.demo")
+             : qsTrId("summary.title.legacy")
+        acceptText: qsTrId("common.done")
+        onAccepted: App.dismissTakeOver()
+        TakeOverSummary {
+            Layout.fillWidth: true
+            result: App.lastTakeOver
+        }
+    }
+
+    Connections {
+        target: App
+        function onTakeOverFailed(message) {
+            failedDialog.text = message
+            failedDialog.open()
+        }
+        function onLastTakeOverChanged() {
+            if (App.phase === App.Ready && App.lastTakeOver.kind !== undefined)
+                summaryDialog.open()
         }
     }
 }

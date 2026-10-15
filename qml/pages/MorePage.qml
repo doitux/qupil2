@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2006-2026 Felix Hammer
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 //
-// "More": tools, sync, backup and settings. Appearance and language are ready.
+// "More": tools, sync, data and settings.
 
 import QtQuick
 import QtQuick.Controls
@@ -38,6 +38,21 @@ Flickable {
 
             AppearanceSettings {
                 id: appearance
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.top: parent.top
+                anchors.margins: 16
+            }
+        }
+
+        Rectangle {
+            Layout.fillWidth: true
+            implicitHeight: dataSettings.implicitHeight + 32
+            radius: Theme.radius + 2
+            color: Theme.surface
+
+            DataSettings {
+                id: dataSettings
                 anchors.left: parent.left
                 anchors.right: parent.right
                 anchors.top: parent.top

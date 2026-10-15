@@ -5,9 +5,9 @@ name: Translations
 on:
   push:
     branches: [main]
-    paths: ['i18n/**', 'tools/i18n/**', '.github/workflows/translations.yml']
+    paths: ['i18n/**', 'tools/i18n/**', 'qml/**', 'src/**', '.github/workflows/translations.yml']
   pull_request:
-    paths: ['i18n/**', 'tools/i18n/**', '.github/workflows/translations.yml']
+    paths: ['i18n/**', 'tools/i18n/**', 'qml/**', 'src/**', '.github/workflows/translations.yml']
   workflow_dispatch:
 
 permissions:
@@ -25,6 +25,9 @@ jobs:
 
       - name: Regenerate from the catalog (fails on missing placeholders, plurals or duplicate IDs)
         run: python3 -I tools/i18n/build.py tools/i18n/raw.json i18n
+
+      - name: Every ID used in qml/ and src/ is in the catalog
+        run: python3 -I tools/i18n/check_usage.py
 
       - name: TS files must match the catalog
         run: |

@@ -15,42 +15,14 @@
 #include <QTextStream>
 #include <QUuid>
 
+#include "DemoData.h"
+
 namespace LegacyFixture {
 
+//! Exact 1.4.1 statements for revisions 1 → 2 → 3 (shared with the demo data)
 inline QStringList schemaRev3()
 {
-    return {
-        // revision 1
-        "CREATE TABLE pupil (pupilid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, surname TEXT, forename TEXT, address TEXT, email TEXT, telefon TEXT, handy TEXT, birthday TEXT, notes TEXT, fathername TEXT, fatherjob TEXT, fathertelefon TEXT, mothername TEXT, motherjob TEXT, mothertelefon TEXT, firstlessondate TEXT, instrumenttype TEXT, instrumentsize TEXT, ifinstrumentnextsize INTEGER, ifrentinstrument INTEGER, rentinstrumentdesc TEXT, rentinstrumentstartdate TEXT)",
-        "CREATE TABLE pupilarchive (pupilid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, surname TEXT, forename TEXT, data TEXT)",
-        "CREATE TABLE lesson (lessonid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, state INTEGER, type INTEGER, autolessonname INTEGER, lessonname TEXT, unsteadylesson INTEGER, lessonday INTEGER, lessonstarttime TEXT, lessonstoptime TEXT, lessonlocation TEXT)",
-        "CREATE TABLE lastlessonname ( llnid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, lessonname TEXT)",
-        "CREATE TABLE pupilatlesson (palid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, lessonid INTEGER NOT NULL, pupilid INTEGER NOT NULL, llnid INTEGER, startdate TEXT, stopdate TEXT)",
-        "CREATE TABLE piece (pieceid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, cpieceid INTEGER, palid INTEGER, title TEXT, genre Text, duration INTEGER, startdate TEXT, stopdate TEXT, state INTEGER)",
-        "CREATE TABLE note (noteid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, cnoteid INTEGER, palid INTEGER, date TEXT, content TEXT)",
-        "CREATE TABLE activity (activityid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, pupilid INTEGER, ifcontinous INTEGER, desc TEXT, continousday INTEGER, continoustime TEXT, date TEXT, continousstopdate TEXT)",
-        "CREATE TABLE sheetmusiclibrary (smlid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, author INTEGER, title TEXT, publisher INTEGER, rentpupilid INTEGER, lastrentdate TEXT)",
-        "CREATE TABLE smlauthor (smlauthorid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, author TEXT)",
-        "CREATE TABLE smlpublisher (smlpublisherid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, publisher TEXT)",
-        // revision 2
-        "CREATE TABLE dbinfos (id INTEGER PRIMARY KEY NOT NULL, data_structure_rev INTEGER NOT NULL)",
-        "REPLACE INTO dbinfos (id, data_structure_rev) VALUES ( 0,2 )",
-        "ALTER TABLE activity ADD COLUMN noncontinoustype INTEGER NOT NULL DEFAULT 0",
-        "ALTER TABLE pupil ADD COLUMN recitalinterval INTEGER NOT NULL DEFAULT 5",
-        "CREATE TABLE piececomposer (piececomposerid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, composer TEXT)",
-        "INSERT INTO piececomposer (composer) VALUES ('')",
-        "ALTER TABLE piece ADD COLUMN piececomposerid INTEGER DEFAULT 1",
-        "CREATE TABLE recital (recitalid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, desc TEXT, date TEXT, time TEXT, location TEXT, organisator TEXT, defaultaccompanist TEXT, state INTEGER DEFAULT 0)",
-        "CREATE TABLE recitalarchive (recitalid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, desc TEXT, data TEXT)",
-        "CREATE TABLE pieceatrecital (parid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, pieceid INTEGER NOT NULL, recitalid INTEGER NOT NULL, sorting INTEGER DEFAULT 0, ifexternalpiece INTEGER DEFAULT 0)",
-        "CREATE TABLE externalrecitalpiece (erpid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, composer TEXT, title TEXT, genre TEXT, duration INTEGER, musician TEXT)",
-        // revision 3
-        "CREATE TABLE reminder (reminderid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, desc TEXT, mode INTEGER DEFAULT 0, pupilid INTEGER, notificationsound INTEGER DEFAULT 0)",
-        "ALTER TABLE activity ADD COLUMN continoustype INTEGER NOT NULL DEFAULT 0",
-        "UPDATE activity SET continousstopdate = '9999-99-99' WHERE continousstopdate IS NULL",
-        "ALTER TABLE pupil ADD COLUMN ensembleactivityrequested INTEGER NOT NULL DEFAULT 1",
-        "REPLACE INTO dbinfos (id, data_structure_rev) VALUES ( 0,3 )",
-    };
+    return Qupil::DemoData::legacySchema();
 }
 
 //! Invented sample data: 4 students (2 in a group lesson, 1 in an ensemble), notes,

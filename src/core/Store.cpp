@@ -89,6 +89,14 @@ void Store::flushNotifications()
     emit dataChanged(list);
 }
 
+void Store::notifyReset()
+{
+    QStringList all;
+    for (const EntityDef &e : Schema::entities())
+        all << e.name;
+    emit dataChanged(all);
+}
+
 // ------------------------------------------------------------------ writes
 
 bool Store::ensureRow(const QString &entity, const QString &id)

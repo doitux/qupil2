@@ -41,7 +41,8 @@ They are **not signed** and only meant for testing.
 | \`Qupil-Android-arm64-test.apk\` | Android: open the file and allow installing from this source. Signed with a throwaway test key. |
 | \`Qupil-macOS-universal.zip\` | macOS 12+: unzip, then right-click Qupil → Open the first time. |
 | \`Qupil-Windows-x64.zip\` | Windows 10/11: unzip and start \`bin\\Qupil.exe\`; SmartScreen → More info → Run anyway. |
-| \`Qupil-Linux-x86_64.tar.gz\` | Linux: unpack and start \`bin/qupil\`. |
+| \`Qupil-Linux-x86_64.tar.gz\` | Linux: unpack and start \`bin/qupil\`. Needs \`libxcb-cursor0\` (\`sudo apt install libxcb-cursor0\`). |
+| \`Qupil-Screenshots.zip\` | Every screen of this build with sample data (German and English, light and dark, desktop and phone size). |
 
 Built by the [Desktop](${GITHUB_SERVER_URL}/${repo}/actions/workflows/desktop.yml) and [Mobile](${GITHUB_SERVER_URL}/${repo}/actions/workflows/mobile.yml) workflows.
 EOF

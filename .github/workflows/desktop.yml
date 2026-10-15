@@ -87,6 +87,26 @@ jobs:
           QT_QPA_PLATFORM: offscreen
         run: bash .github/scripts/run-logged.sh ctest --test-dir build --output-on-failure
 
+      # Every screen with sample data, light/dark, desktop/phone size – published with the nightly build
+      - name: Screenshots (Linux)
+        if: runner.os == 'Linux'
+        shell: bash
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          for lang in de en; do
+            bash .github/scripts/run-logged.sh ./build/qupil --screenshots "screens/$lang" --lang "$lang"
+          done
+          (cd screens && zip -qr ../qupil-screenshots.zip .)
+
+      - uses: actions/upload-artifact@v7
+        if: runner.os == 'Linux'
+        with:
+          name: qupil-screenshots
+          path: qupil-screenshots.zip
+          if-no-files-found: error
+          retention-days: 30
+
       - name: Install with Qt runtime
         shell: bash
         # Qt's deploy step needs an absolute prefix
@@ -133,4 +153,5 @@ jobs:
           bash .github/scripts/publish-nightly.sh \
             'artifacts/qupil-linux-x86_64/*.tar.gz=Qupil-Linux-x86_64.tar.gz' \
             'artifacts/qupil-windows-x64/*.zip=Qupil-Windows-x64.zip' \
-            'artifacts/qupil-macos-universal/*.zip=Qupil-macOS-universal.zip'
+            'artifacts/qupil-macos-universal/*.zip=Qupil-macOS-universal.zip' \
+            'artifacts/qupil-screenshots/*.zip=Qupil-Screenshots.zip'

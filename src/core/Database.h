@@ -59,6 +59,8 @@ public:
     //! Version info of a file without opening it as the live database:
     //! 0 = not a database, 1 = Qupil 1.x, 2 = Qupil 2
     static int detectFormat(const QString &file, QString *description = nullptr);
+    //! Schema version stored in a Qupil 2 file (0 if unknown)
+    static int schemaVersionOf(const QString &file);
 
 private:
     bool createSchema(QString *error);
