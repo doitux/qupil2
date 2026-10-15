@@ -1,0 +1,52 @@
+# The TS files are generated from tools/i18n/catalog.py.
+# This checks that they are up to date, consistent and completely translated.
+name: Translations
+
+on:
+  push:
+    branches: [main]
+    paths: ['i18n/**', 'tools/i18n/**', '.github/workflows/translations.yml']
+  pull_request:
+    paths: ['i18n/**', 'tools/i18n/**', '.github/workflows/translations.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Regenerate from the catalog (fails on missing placeholders, plurals or duplicate IDs)
+        run: python3 -I tools/i18n/build.py tools/i18n/raw.json i18n
+
+      - name: TS files must match the catalog
+        run: |
+          if ! git diff --exit-code -- i18n/; then
+            echo "::error::i18n/*.ts differ from tools/i18n/catalog.py. Run tools/i18n/build.py and commit the result."
+            exit 1
+          fi
+
+      - name: Install lrelease
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qt6-l10n-tools
+
+      - name: Every string is translated
+        run: |
+          status=0
+          for ts in i18n/qupil_*.ts; do
+            out=$(/usr/lib/qt6/bin/lrelease -idbased "$ts" -qm "$RUNNER_TEMP/$(basename "$ts" .ts).qm")
+            echo "$out"
+            if ! echo "$out" | grep -q "and 0 unfinished"; then
+              echo "::error file=$ts::untranslated strings"
+              status=1
+            fi
+          done
+          exit $status

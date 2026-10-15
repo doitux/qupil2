@@ -1,0 +1,10010 @@
+[
+ {
+  "ctx": "AboutQupilDialog",
+  "src": "Qupil - about Qupil",
+  "de": "Qupil - über Qupil",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "AboutQupilDialog",
+  "src": "About Qupil ",
+  "de": "Über Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/aboutqupil/aboutqupil.ui",
+    "15"
+   ]
+  ]
+ },
+ {
+  "ctx": "AboutQupilDialog",
+  "src": "About",
+  "de": "Über",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/aboutqupil/aboutqupil.ui",
+    "43"
+   ]
+  ]
+ },
+ {
+  "ctx": "AboutQupilDialog",
+  "src": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Management of pupils and lessons data<br />- Eventmanager</p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Metronome, Tuner </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Music library </p>\n</body></html>",
+  "de": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Verwaltung von Unterrichts- und Schülerdaten<br />- Veranstaltungsmanager</p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Metronom, Stimmgerät </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">- Notenbibliothek </p>\n</body></html>",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/aboutqupil/aboutqupil.ui",
+    "98"
+   ]
+  ]
+ },
+ {
+  "ctx": "AboutQupilDialog",
+  "src": "Project",
+  "de": "Projekt",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/aboutqupil/aboutqupil.ui",
+    "148"
+   ]
+  ]
+ },
+ {
+  "ctx": "AboutQupilDialog",
+  "src": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body>\n<table border=\"0\" style=\"-qt-table-type: root; margin-top:4px; margin-bottom:4px; margin-left:4px; margin-right:4px;\">\n<tr>\n<td style=\"border: none;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Project website: </span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">     <a href=\"http://qupil.de\"><span style=\" text-decoration: underline; color:#0000ff;\">http://qupil.de</span></a></p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Author: </span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">     Felix Hammer (<a href=\"mailto:fhammer@qupil.de\"><span style=\" text-decoration: underline; color:#0000ff;\">fhammer@qupil.de</span></a>)</p></td></tr></table></body></html>",
+  "de": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body>\n<table border=\"0\" style=\"-qt-table-type: root; margin-top:4px; margin-bottom:4px; margin-left:4px; margin-right:4px;\">\n<tr>\n<td style=\"border: none;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Projekt-Website: </span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">     <a href=\"http://qupil.de\"><span style=\" text-decoration: underline; color:#0000ff;\">http://qupil.de</span></a></p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">Autor: </span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">     Felix Hammer (<a href=\"mailto:fhammer@qupil.de\"><span style=\" text-decoration: underline; color:#0000ff;\">fhammer@qupil.de</span></a>)</p></td></tr></table></body></html>",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/aboutqupil/aboutqupil.ui",
+    "172"
+   ]
+  ]
+ },
+ {
+  "ctx": "AboutQupilDialog",
+  "src": "Translation",
+  "de": "Übersetzung",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/aboutqupil/aboutqupil.ui",
+    "194"
+   ]
+  ]
+ },
+ {
+  "ctx": "AboutQupilDialog",
+  "src": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">English - Felix Hammer </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">German - Felix Hammer </p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Please contact the Author via <a href=\"mailto:fhammer@qupil.de\"><span style=\" text-decoration: underline; color:#2980b9;\">fhammer@qupil.de</span></a> if you want to help translating Qupil!</p></body></html>",
+  "de": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Englisch - Felix Hammer </p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Deutsch - Felix Hammer </p>\n<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Wenn Sie bei der Übersetzung von Qupil helfen möchten, kontaktieren Sie bitte den Autor via <a href=\"mailto:fhammer@qupil.de\"><span style=\" text-decoration: underline; color:#2980b9;\">fhammer@qupil.de</span></a></p></body></html>",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/aboutqupil/aboutqupil.ui",
+    "200"
+   ]
+  ]
+ },
+ {
+  "ctx": "AboutQupilDialog",
+  "src": "License",
+  "de": "Lizenz",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/aboutqupil/aboutqupil.ui",
+    "221"
+   ]
+  ]
+ },
+ {
+  "ctx": "AboutQupilDialog",
+  "src": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://qupil.de\"><span style=\" text-decoration: underline; color:#0000ff;\">http://qupil.de</span></a></p></body></html>",
+  "de": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><a href=\"http://qupil.de\"><span style=\" text-decoration: underline; color:#0000ff;\">http://qupil.de</span></a></p></body></html>",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/aboutqupil/aboutqupil.ui",
+    "75"
+   ]
+  ]
+ },
+ {
+  "ctx": "AddExternalRecitalPieceDialog",
+  "src": "Add External Concert Music - Qupil",
+  "de": "Vorspielstücke hinzufügen - Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/addexternalrecitalpiecedialog.ui",
+    "14"
+   ]
+  ]
+ },
+ {
+  "ctx": "AddExternalRecitalPieceDialog",
+  "src": "Composer:",
+  "de": "Komponist:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/addexternalrecitalpiecedialog.ui",
+    "20"
+   ]
+  ]
+ },
+ {
+  "ctx": "AddExternalRecitalPieceDialog",
+  "src": "Title:",
+  "de": "Titel:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/addexternalrecitalpiecedialog.ui",
+    "30"
+   ]
+  ]
+ },
+ {
+  "ctx": "AddExternalRecitalPieceDialog",
+  "src": "Duration:",
+  "de": "Dauer:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/addexternalrecitalpiecedialog.ui",
+    "50"
+   ]
+  ]
+ },
+ {
+  "ctx": "AddExternalRecitalPieceDialog",
+  "src": "Musicians:",
+  "de": "Musiker:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/addexternalrecitalpiecedialog.ui",
+    "64"
+   ]
+  ]
+ },
+ {
+  "ctx": "AddExternalRecitalPieceDialog",
+  "src": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body style=\" font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">Format: last name, first name (age) - instrument</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">               </span><span style=\" font-style:italic;\">last name, first name (age) - instrument</span></p></body></html>",
+  "de": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body style=\" font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">Format: Name, Vorname (Alter) - Instrument</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-style:italic;\">               </span><span style=\" font-style:italic;\">Name, Vorname (Alter) - Instrument</span></p></body></html>",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/addexternalrecitalpiecedialog.ui",
+    "79"
+   ]
+  ]
+ },
+ {
+  "ctx": "AddExternalRecitalPieceDialog",
+  "src": "Genre:",
+  "de": "Genre:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/addexternalrecitalpiecedialog.ui",
+    "40"
+   ]
+  ]
+ },
+ {
+  "ctx": "AddExternalRecitalPieceDialog",
+  "src": " Min.",
+  "de": " Min.",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/addexternalrecitalpiecedialog.ui",
+    "57"
+   ]
+  ]
+ },
+ {
+  "ctx": "AddExternalRecitalPieceDialog",
+  "src": "You need to fill at least the fields \"Composer\", \"Title\" und \"Musicians\"\nto add the entry!",
+  "de": "Sie müssen mindestens die Felder \"Komponist\", \"Titel\" und \"Musiker\" ausfüllen\num den Eintrag hinzuzufügen!",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/addexternalrecitalpiecedialog.cpp",
+    "60"
+   ]
+  ]
+ },
+ {
+  "ctx": "AddRecitalDialog",
+  "src": "Add concert",
+  "de": "Vorspiel hinzufügen",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "AddRecitalDialog",
+  "src": "Add Concert - Qupil",
+  "de": "Vorspiel hinzufügen - Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/addrecitaldialog.ui",
+    "14"
+   ]
+  ]
+ },
+ {
+  "ctx": "AddRecitalDialog",
+  "src": "Description:",
+  "de": "Beschreibung:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/addrecitaldialog.ui",
+    "20"
+   ]
+  ]
+ },
+ {
+  "ctx": "AddRecitalDialog",
+  "src": "Date:",
+  "de": "Datum:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/addrecitaldialog.ui",
+    "32"
+   ]
+  ]
+ },
+ {
+  "ctx": "AddRecitalDialog",
+  "src": "Time:",
+  "de": "Uhrzeit:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/addrecitaldialog.ui",
+    "49"
+   ]
+  ]
+ },
+ {
+  "ctx": "AddRecitalDialog",
+  "src": "Location:",
+  "de": "Ort:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/addrecitaldialog.ui",
+    "68"
+   ]
+  ]
+ },
+ {
+  "ctx": "AddRecitalDialog",
+  "src": "Organiser:",
+  "de": "Organisator:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/addrecitaldialog.ui",
+    "78"
+   ]
+  ]
+ },
+ {
+  "ctx": "AddRecitalDialog",
+  "src": "Accompanist:",
+  "de": "Begleiter:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/addrecitaldialog.ui",
+    "88"
+   ]
+  ]
+ },
+ {
+  "ctx": "BirthdaysDialog",
+  "src": "Birthdays",
+  "de": "Geburtstage",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "BirthdaysDialog",
+  "src": "Birthdays - Qupil",
+  "de": "Geburtstage - Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/birthdays/birthdays.ui",
+    "14"
+   ]
+  ]
+ },
+ {
+  "ctx": "BirthdaysDialogImpl",
+  "src": "The following student has his birthday today:",
+  "de": "Folgender Schüler hat heute Geburtstag:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/birthdays/birthdaysdialogimpl.cpp",
+    "72"
+   ]
+  ]
+ },
+ {
+  "ctx": "BirthdaysDialogImpl",
+  "src": "The following students have their birthday today:",
+  "de": "Folgende Schüler haben heute Geburtstag:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/birthdays/birthdaysdialogimpl.cpp",
+    "74"
+   ]
+  ]
+ },
+ {
+  "ctx": "BirthdaysDialogImpl",
+  "src": "Jahre",
+  "de": "Years",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "BirthdaysDialogImpl",
+  "src": "Years",
+  "de": "Jahre",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/birthdays/birthdaysdialogimpl.cpp",
+    "86"
+   ],
+   [
+    "../src/gui/birthdays/birthdaysdialogimpl.cpp",
+    "107"
+   ]
+  ]
+ },
+ {
+  "ctx": "BirthdaysDialogImpl",
+  "src": "The following student had his birthday last week:",
+  "de": "Folgender Schüler hatte letzte Woche Geburtstag:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/birthdays/birthdaysdialogimpl.cpp",
+    "93"
+   ]
+  ]
+ },
+ {
+  "ctx": "BirthdaysDialogImpl",
+  "src": "The following students had their birthday last week:",
+  "de": "Folgende Schüler hatten letzte Woche Geburtstag:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/birthdays/birthdaysdialogimpl.cpp",
+    "95"
+   ]
+  ]
+ },
+ {
+  "ctx": "BirthdaysDialogImpl",
+  "src": "In the last week no student had his birthday!",
+  "de": "In der letzten Woche hatte kein Schüler Geburtstag!",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/birthdays/birthdaysdialogimpl.cpp",
+    "112"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildDayViewDialog",
+  "src": "Create Daily Schedule",
+  "de": "Tagesübersicht erstellen",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "BuildDayViewDialog",
+  "src": "Create Daily Schedule - Qupil",
+  "de": "Tagesübersicht erstellen - Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/builddayviewdoc/builddayviewdialog.ui",
+    "14"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildDayViewDialog",
+  "src": "Weekday:",
+  "de": "Wochentag:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/builddayviewdoc/builddayviewdialog.ui",
+    "20"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildDayViewDialog",
+  "src": "Monday",
+  "de": "Montag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/builddayviewdoc/builddayviewdialog.ui",
+    "34"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildDayViewDialog",
+  "src": "Tuesday",
+  "de": "Dienstag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/builddayviewdoc/builddayviewdialog.ui",
+    "39"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildDayViewDialog",
+  "src": "Wednesday",
+  "de": "Mittwoch",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/builddayviewdoc/builddayviewdialog.ui",
+    "44"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildDayViewDialog",
+  "src": "Thursday",
+  "de": "Donnerstag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/builddayviewdoc/builddayviewdialog.ui",
+    "49"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildDayViewDialog",
+  "src": "Friday",
+  "de": "Freitag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/builddayviewdoc/builddayviewdialog.ui",
+    "54"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildDayViewDialog",
+  "src": "Saturday",
+  "de": "Samstag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/builddayviewdoc/builddayviewdialog.ui",
+    "59"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildDayViewDialog",
+  "src": "Sunday",
+  "de": "Sonntag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/builddayviewdoc/builddayviewdialog.ui",
+    "64"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildDayViewDialog",
+  "src": "Irregular",
+  "de": "Unregelmäßig",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/builddayviewdoc/builddayviewdialog.ui",
+    "69"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildDayViewDialog",
+  "src": "Show the last",
+  "de": "Zeige die letzten",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/builddayviewdoc/builddayviewdialog.ui",
+    "79"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildDayViewDialog",
+  "src": "notes for every lesson",
+  "de": "Unterrichtsnotizen für jeden Unterricht",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/builddayviewdoc/builddayviewdialog.ui",
+    "99"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildDayViewDialog",
+  "src": "Add around",
+  "de": "Füge einen ca.",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/builddayviewdoc/builddayviewdialog.ui",
+    "110"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildDayViewDialog",
+  "src": "free space for handwritten notes",
+  "de": "großen Bereich für handschriftliche Notizen hinzu",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/builddayviewdoc/builddayviewdialog.ui",
+    "133"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildDayViewDialog",
+  "src": " cm",
+  "de": " cm",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/builddayviewdoc/builddayviewdialog.ui",
+    "117"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildDayViewDialog",
+  "src": "dd.MM.yyyy",
+  "de": "yyyy-MM-dd",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "BuildDayViewDialog",
+  "src": "Time",
+  "de": "Uhrzeit",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/builddayviewdoc/builddayviewdialog.cpp",
+    "63"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildDayViewDialog",
+  "src": "Lesson",
+  "de": "Unterricht",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/builddayviewdoc/builddayviewdialog.cpp",
+    "63"
+   ],
+   [
+    "../src/gui/builddayviewdoc/builddayviewdialog.cpp",
+    "67"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildDayViewDialog",
+  "src": "Pupil",
+  "de": "Schüler",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/builddayviewdoc/builddayviewdialog.cpp",
+    "63"
+   ],
+   [
+    "../src/gui/builddayviewdoc/builddayviewdialog.cpp",
+    "67"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildDayViewDialog",
+  "src": "irregular dates",
+  "de": "Unregelmäßige Termine",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/builddayviewdoc/builddayviewdialog.cpp",
+    "66"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildDayViewDialog",
+  "src": "Daily schedule",
+  "de": "Tagesübersicht",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/builddayviewdoc/builddayviewdialog.cpp",
+    "159"
+   ],
+   [
+    "../src/gui/builddayviewdoc/builddayviewdialog.cpp",
+    "163"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildTimeTableDoc",
+  "src": "Monday",
+  "de": "Montag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/buildtimetabledoc/buildtimetabledoc.cpp",
+    "15"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildTimeTableDoc",
+  "src": "Tuesday",
+  "de": "Dienstag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/buildtimetabledoc/buildtimetabledoc.cpp",
+    "15"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildTimeTableDoc",
+  "src": "Wednesday",
+  "de": "Mittwoch",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/buildtimetabledoc/buildtimetabledoc.cpp",
+    "15"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildTimeTableDoc",
+  "src": "Thursday",
+  "de": "Donnerstag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/buildtimetabledoc/buildtimetabledoc.cpp",
+    "15"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildTimeTableDoc",
+  "src": "Friday",
+  "de": "Freitag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/buildtimetabledoc/buildtimetabledoc.cpp",
+    "15"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildTimeTableDoc",
+  "src": "Saturday",
+  "de": "Samstag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/buildtimetabledoc/buildtimetabledoc.cpp",
+    "15"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildTimeTableDoc",
+  "src": "Sunday",
+  "de": "Sonntag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/buildtimetabledoc/buildtimetabledoc.cpp",
+    "15"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildTimeTableDoc",
+  "src": "irregular",
+  "de": "unregelmäßig",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/buildtimetabledoc/buildtimetabledoc.cpp",
+    "15"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildTimeTableDoc",
+  "src": "Timetable",
+  "de": "Stundenplan",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/buildtimetabledoc/buildtimetabledoc.cpp",
+    "68"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildTimeTableDoc",
+  "src": "Status: ",
+  "de": "Stand:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/buildtimetabledoc/buildtimetabledoc.cpp",
+    "71"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildTimeTableDoc",
+  "src": "Time",
+  "de": "Uhrzeit",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/buildtimetabledoc/buildtimetabledoc.cpp",
+    "75"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildTimeTableDoc",
+  "src": "Lesson",
+  "de": "Unterricht",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/buildtimetabledoc/buildtimetabledoc.cpp",
+    "75"
+   ]
+  ]
+ },
+ {
+  "ctx": "BuildTimeTableDoc",
+  "src": "Pupil",
+  "de": "Schüler",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/buildtimetabledoc/buildtimetabledoc.cpp",
+    "75"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialog",
+  "src": "Event Manager",
+  "de": "Veranstaltungsmanager",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "ConcertManagerDialog",
+  "src": "Event Manager - Qupil",
+  "de": "Veranstaltungsmanager - Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanager.ui",
+    "20"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialog",
+  "src": "&Ready for Concert",
+  "de": "&Vorspielbereite Werke",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanager.ui",
+    "30"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialog",
+  "src": "Show pupils from:",
+  "de": "Zeige Schüler aus dem Ort:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanager.ui",
+    "38"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialog",
+  "src": "Composer",
+  "de": "Komponist",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanager.ui",
+    "79"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialog",
+  "src": "Title",
+  "de": "Titel",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanager.ui",
+    "84"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialog",
+  "src": "Genre",
+  "de": "Genre",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanager.ui",
+    "89"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialog",
+  "src": "Duration",
+  "de": "Dauer",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanager.ui",
+    "94"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialog",
+  "src": "Pupil (Age) - Instrument",
+  "de": "Schüler (Alter) - Instrument",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanager.ui",
+    "99"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialog",
+  "src": "&Event Manager",
+  "de": "Veranstaltungs&manager",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanager.ui",
+    "108"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialog",
+  "src": "&Event",
+  "de": "Ver&anstaltung",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanager.ui",
+    "116"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialog",
+  "src": "&Music Piece",
+  "de": "&Werk",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanager.ui",
+    "136"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialog",
+  "src": "&Document ...",
+  "de": "&Dokument ...",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanager.ui",
+    "153"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialog",
+  "src": "&Archive",
+  "de": "&Archiv",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanager.ui",
+    "187"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialog",
+  "src": "Event",
+  "de": "Veranstaltung",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanager.ui",
+    "224"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialog",
+  "src": "&Print",
+  "de": "&Drucken",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanager.ui",
+    "237"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialog",
+  "src": "Export to &PDF",
+  "de": "Nach &PDF exportieren",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanager.ui",
+    "248"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialog",
+  "src": "&Drucken",
+  "de": "&Print",
+  "type": "obsolete",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "Add ...",
+  "de": "Hinzufügen ...",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "44"
+   ],
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "57"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "Delete",
+  "de": "Löschen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "46"
+   ],
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "61"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "Archive and Delete",
+  "de": "Archivieren und Löschen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "48"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "Add External Contribution...",
+  "de": "Externen Beitrag Hinzufügen ...",
+  "type": "obsolete",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "Add External Contribution ...",
+  "de": "Externen Beitrag Hinzufügen ...",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "59"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "Delete Archive Entry",
+  "de": "Archiveintrag Löschen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "72"
+   ],
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "533"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "All",
+  "de": "Alle",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "83"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "Min.",
+  "de": "Min.",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "139"
+   ],
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "178"
+   ],
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "448"
+   ],
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "449"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "Delete Event",
+  "de": "Veranstaltung Löschen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "274"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "Do you really want to delete the event: \"%1\" ?",
+  "de": "Möchten Sie die Veranstaltung: \"%1\" wirklich löschen?",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "275"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "Program overview for events",
+  "de": "Programmübersicht für Veranstaltungen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "423"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "Program for",
+  "de": "Programmübersicht für",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "427"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "Date",
+  "de": "Datum",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "433"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "Time",
+  "de": "Uhrzeit",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "434"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "Location",
+  "de": "Ort",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "435"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "Organiser",
+  "de": "Organisator",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "436"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "Accompanist",
+  "de": "Begleiter",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "437"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "Composer",
+  "de": "Komponist",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "444"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "Music Piece / Movements",
+  "de": "Werk / Satzbezeichnung",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "444"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "Genre",
+  "de": "Genre",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "444"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "Duration",
+  "de": "Dauer",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "444"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "Musician (Age) - Instrument",
+  "de": "Musiker (Alter) - Instrument",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "444"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "Pure playing time",
+  "de": "Reine Spielzeit",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "448"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "Estimated total duration",
+  "de": "Geschätzte Gesamtdauer",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "449"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "Do you really want to delete the archive entry \"%1\" ?",
+  "de": "Möchten Sie den Archiveintrag: \"%1\" wirklich löschen?",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "534"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "Export File",
+  "de": "Datei Exportieren",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "565"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConcertManagerDialogImpl",
+  "src": "PDF File (*.pdf)",
+  "de": "PDF Datei (*.pdf)",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/concertmanagerdialogimpl.cpp",
+    "567"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConfigFile",
+  "src": "Tune",
+  "de": "Lied",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/core/config/configfile.cpp",
+    "127"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConfigFile",
+  "src": "Baroque",
+  "de": "Barock",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/core/config/configfile.cpp",
+    "128"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConfigFile",
+  "src": "Classical",
+  "de": "Klassik",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/core/config/configfile.cpp",
+    "129"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConfigFile",
+  "src": "Romantic",
+  "de": "Romantik",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/core/config/configfile.cpp",
+    "130"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConfigFile",
+  "src": "Modernism",
+  "de": "Moderne",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/core/config/configfile.cpp",
+    "131"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConfigFile",
+  "src": "New music",
+  "de": "Neue Musik",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/core/config/configfile.cpp",
+    "132"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConfigFile",
+  "src": "Musical",
+  "de": "Musical",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/core/config/configfile.cpp",
+    "133"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConfigFile",
+  "src": "Jazz",
+  "de": "Jazz",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/core/config/configfile.cpp",
+    "134"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConfigFile",
+  "src": "Rock",
+  "de": "Rock",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/core/config/configfile.cpp",
+    "135"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConfigFile",
+  "src": "Pop",
+  "de": "Pop",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/core/config/configfile.cpp",
+    "136"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConfigFile",
+  "src": "Irish Folk",
+  "de": "Irish Folk",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/core/config/configfile.cpp",
+    "137"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConfigFile",
+  "src": "Room 20",
+  "de": "Raum 20",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/core/config/configfile.cpp",
+    "141"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConfigFile",
+  "src": "Room 16",
+  "de": "Raum 16",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/core/config/configfile.cpp",
+    "142"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConfigFile",
+  "src": "Auditorium",
+  "de": "Aula",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/core/config/configfile.cpp",
+    "143"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConfigFile",
+  "src": "Violin",
+  "de": "Violine",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/core/config/configfile.cpp",
+    "147"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConfigFile",
+  "src": "Viola",
+  "de": "Viola",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/core/config/configfile.cpp",
+    "148"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConfigFile",
+  "src": "Cello",
+  "de": "Cello",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/core/config/configfile.cpp",
+    "149"
+   ]
+  ]
+ },
+ {
+  "ctx": "ConfigFile",
+  "src": "Double Bass",
+  "de": "Kontrabass",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/core/config/configfile.cpp",
+    "150"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialog",
+  "src": "CSV Address Book Import - Qupil",
+  "de": "Adressbuch (CVS) Import - Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfields.ui",
+    "14"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialog",
+  "src": "CSV Address Book Import",
+  "de": "Adressbuch (CVS) Import",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfields.ui",
+    "29"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialog",
+  "src": "File Coding",
+  "de": "Datei-Codierung",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfields.ui",
+    "38"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialog",
+  "src": "UTF-8",
+  "de": "UTF-8",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfields.ui",
+    "52"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialog",
+  "src": "Latin-1",
+  "de": "Latin-1",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfields.ui",
+    "57"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialog",
+  "src": "Please assign the database fields to the corresponding fields from your CSV-File:",
+  "de": "Bitte ordnen Sie den einzelnen Datenbank-Feldern die entsprechenden Felder aus Ihrer CSV-Datei zu:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfields.ui",
+    "74"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialog",
+  "src": "First Name:",
+  "de": "Vorname:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfields.ui",
+    "89"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialog",
+  "src": "Last Name:",
+  "de": "Nachname:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfields.ui",
+    "106"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialog",
+  "src": "Birthday:",
+  "de": "Geburtstag:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfields.ui",
+    "116"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialog",
+  "src": "Street:",
+  "de": "Straße:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfields.ui",
+    "126"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialog",
+  "src": "Zip Code:",
+  "de": "Postleitzahl:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfields.ui",
+    "136"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialog",
+  "src": "City:",
+  "de": "City:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfields.ui",
+    "146"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialog",
+  "src": "City",
+  "de": "Ort:",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "CsvImportFieldsDialog",
+  "src": "Phone:",
+  "de": "Telefon:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfields.ui",
+    "166"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialog",
+  "src": "Mobile:",
+  "de": "Handy:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfields.ui",
+    "176"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialog",
+  "src": "E-Mail:",
+  "de": "E-Mail:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfields.ui",
+    "156"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialogImpl",
+  "src": "Separator of the CSV file (usually comma or semicolon) could not be recognized.\nCSV import is aborted!",
+  "de": "Trennzeichen der CSV-Datei (üblicherweise Komma oder Semikolon) konnte nicht erkannt werden.\nCSV-Import wird abgebrochen!",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfieldsdialogimpl.cpp",
+    "76"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialogImpl",
+  "src": "CSV file could not be opened.\nCSV import is aborted!",
+  "de": "CSV-Datei konnte nicht geöffnet werden\nCSV-Import wird abgebrochen!",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfieldsdialogimpl.cpp",
+    "82"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialogImpl",
+  "src": "CSV Address Book Import",
+  "de": "Adressbuch (CVS) Import",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfieldsdialogimpl.cpp",
+    "203"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialogImpl",
+  "src": "Importing the data from the CSV file was completed successfully! \n %1 entries added",
+  "de": "Das Importieren der Daten aus der CSV-Datei wurde erfolgreich beendet!\nEs wurden %1 Einräge hinzugefügt",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfieldsdialogimpl.cpp",
+    "204"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialogImpl",
+  "src": "First Name",
+  "de": "Vorname",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfieldsdialogimpl.cpp",
+    "218"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialogImpl",
+  "src": "Last Name",
+  "de": "Nachname",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfieldsdialogimpl.cpp",
+    "218"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialogImpl",
+  "src": "Birthday",
+  "de": "Geburtstag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfieldsdialogimpl.cpp",
+    "218"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialogImpl",
+  "src": "Street",
+  "de": "Straße",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfieldsdialogimpl.cpp",
+    "218"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialogImpl",
+  "src": "Zip Code",
+  "de": "Postleitzahl",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfieldsdialogimpl.cpp",
+    "218"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialogImpl",
+  "src": "City",
+  "de": "Ort",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfieldsdialogimpl.cpp",
+    "218"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialogImpl",
+  "src": "Phone",
+  "de": "Telefon",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfieldsdialogimpl.cpp",
+    "218"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialogImpl",
+  "src": "Mobile",
+  "de": "Handy",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfieldsdialogimpl.cpp",
+    "218"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialogImpl",
+  "src": "E-Mail",
+  "de": "E-Mail",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfieldsdialogimpl.cpp",
+    "218"
+   ]
+  ]
+ },
+ {
+  "ctx": "CsvImportFieldsDialogImpl",
+  "src": "!!!Do Not Import This Field!!!",
+  "de": "!!!Dieses Feld nicht imporieren!!!",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/csvimportfields/csvimportfieldsdialogimpl.cpp",
+    "255"
+   ]
+  ]
+ },
+ {
+  "ctx": "DocViewerDialog",
+  "src": "Document Viewer",
+  "de": "Dokumenten Ansicht",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "DocViewerDialog",
+  "src": "Document Viewer - Qupil",
+  "de": "Dokumenten Ansicht - Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/docviewer/docviewer.ui",
+    "14"
+   ]
+  ]
+ },
+ {
+  "ctx": "DocViewerDialog",
+  "src": "&Print",
+  "de": "&Drucken",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/docviewer/docviewer.ui",
+    "23"
+   ]
+  ]
+ },
+ {
+  "ctx": "DocViewerDialog",
+  "src": "Export to &PDF",
+  "de": "Nach &PDF exportieren",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/docviewer/docviewer.ui",
+    "34"
+   ]
+  ]
+ },
+ {
+  "ctx": "DocViewerDialogImpl",
+  "src": "Export File",
+  "de": "Datei Exportieren",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/docviewer/docviewerdialogimpl.cpp",
+    "67"
+   ]
+  ]
+ },
+ {
+  "ctx": "DocViewerDialogImpl",
+  "src": "PDF File (*.pdf)",
+  "de": "PDF Datei (*.pdf)",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/docviewer/docviewerdialogimpl.cpp",
+    "69"
+   ]
+  ]
+ },
+ {
+  "ctx": "FinishRecitalDialog",
+  "src": "Automatic Functions",
+  "de": "Automatische Funktionen",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "FinishRecitalDialog",
+  "src": "Automatic Functions - Qupil",
+  "de": "Automatische Funktionen - Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/finishrecitaldialog.ui",
+    "14"
+   ]
+  ]
+ },
+ {
+  "ctx": "FinishRecitalDialog",
+  "src": "Qupil can perform some automatic functions to assist you. Please select which functions should be executed:",
+  "de": "Qupil kann zu Ihrer Unterstützung einige automatische Funktionen ausführen. Bitte wählen Sie welche Funktionen ausgeführt werden sollen:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/finishrecitaldialog.ui",
+    "20"
+   ]
+  ]
+ },
+ {
+  "ctx": "FinishRecitalDialog",
+  "src": "Activities",
+  "de": "Aktivitäten",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/finishrecitaldialog.ui",
+    "39"
+   ]
+  ]
+ },
+ {
+  "ctx": "FinishRecitalDialog",
+  "src": "For each participant, the event is automatically entered as a one-time activity.  \nDo you want to use this feature?",
+  "de": "Bei jedem Teilnehmer wir die Veranstaltung automatisch als einmalige Aktivität eingetragen.\nMöchten Sie diese Funktion nutzen?",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/finishrecitaldialog.ui",
+    "54"
+   ]
+  ]
+ },
+ {
+  "ctx": "FinishRecitalDialog",
+  "src": "Yes",
+  "de": "Ja",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/finishrecitaldialog.ui",
+    "95"
+   ],
+   [
+    "../src/gui/concertmanager/finishrecitaldialog.ui",
+    "211"
+   ]
+  ]
+ },
+ {
+  "ctx": "FinishRecitalDialog",
+  "src": "No",
+  "de": "Nein",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/finishrecitaldialog.ui",
+    "105"
+   ],
+   [
+    "../src/gui/concertmanager/finishrecitaldialog.ui",
+    "221"
+   ]
+  ]
+ },
+ {
+  "ctx": "FinishRecitalDialog",
+  "src": "Music Pieces",
+  "de": "Werke",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/finishrecitaldialog.ui",
+    "149"
+   ]
+  ]
+ },
+ {
+  "ctx": "FinishRecitalDialog",
+  "src": "The status of the performed music pieces is automatically set to \"completed\" for each participant.\nDo you want to use this feature?",
+  "de": "Der Status der vorgetragenen Werke wird bei jedem Teilnehmer automatisch auf \"abgeschlossen\" gesetzt.\nMöchten Sie diese Funktion nutzen?",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/finishrecitaldialog.ui",
+    "170"
+   ]
+  ]
+ },
+ {
+  "ctx": "InstrumentManagerDialog",
+  "src": "Instrumenten Manager",
+  "de": "Instrumentenmanager",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "InstrumentManagerDialog",
+  "src": "Instrumenten Manager - Qupil",
+  "de": "Instrumentenmanager -Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/instrumentmanager/instrumentmanager.ui",
+    "14"
+   ]
+  ]
+ },
+ {
+  "ctx": "InstrumentManagerDialog",
+  "src": "Pupils - Instruments",
+  "de": "Schüler - Instrumente",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/instrumentmanager/instrumentmanager.ui",
+    "20"
+   ]
+  ]
+ },
+ {
+  "ctx": "InstrumentManagerDialog",
+  "src": "Name",
+  "de": "Name",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/instrumentmanager/instrumentmanager.ui",
+    "45"
+   ]
+  ]
+ },
+ {
+  "ctx": "InstrumentManagerDialog",
+  "src": "Instrument",
+  "de": "Instrument",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/instrumentmanager/instrumentmanager.ui",
+    "50"
+   ]
+  ]
+ },
+ {
+  "ctx": "InstrumentManagerDialog",
+  "src": "Size",
+  "de": "Größe",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/instrumentmanager/instrumentmanager.ui",
+    "55"
+   ]
+  ]
+ },
+ {
+  "ctx": "InstrumentManagerDialog",
+  "src": "Rental Instrument",
+  "de": "Leihinstrument",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/instrumentmanager/instrumentmanager.ui",
+    "60"
+   ]
+  ]
+ },
+ {
+  "ctx": "InstrumentManagerDialog",
+  "src": "Next size required",
+  "de": "Nächste Größe erforderlich",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/instrumentmanager/instrumentmanager.ui",
+    "65"
+   ]
+  ]
+ },
+ {
+  "ctx": "InstrumentManagerDialog",
+  "src": "Instruments - Number",
+  "de": "Instrumente - Anzahl",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/instrumentmanager/instrumentmanager.ui",
+    "76"
+   ]
+  ]
+ },
+ {
+  "ctx": "InstrumentManagerDialog",
+  "src": "Sizes - Number",
+  "de": "Größen - Anzahl",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/instrumentmanager/instrumentmanager.ui",
+    "101"
+   ]
+  ]
+ },
+ {
+  "ctx": "InstrumentManagerDialog",
+  "src": "Statistic",
+  "de": "Statistik",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/instrumentmanager/instrumentmanager.ui",
+    "126"
+   ]
+  ]
+ },
+ {
+  "ctx": "InstrumentManagerDialog",
+  "src": "Rental Instruments:",
+  "de": "Leihinstrumente:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/instrumentmanager/instrumentmanager.ui",
+    "132"
+   ]
+  ]
+ },
+ {
+  "ctx": "InstrumentManagerDialog",
+  "src": "Next size required:",
+  "de": "Nächste Größe erforderlich:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/instrumentmanager/instrumentmanager.ui",
+    "155"
+   ]
+  ]
+ },
+ {
+  "ctx": "InstrumentManagerDialog",
+  "src": "Rental Instruments Inventory List ...",
+  "de": "Leihinstrumente Inventarliste ...",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/instrumentmanager/instrumentmanager.ui",
+    "194"
+   ]
+  ]
+ },
+ {
+  "ctx": "InstrumentManagerDialogImpl",
+  "src": "Instrument",
+  "de": "Instrument",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/instrumentmanager/instrumentmanagerdialogimpl.cpp",
+    "72"
+   ],
+   [
+    "../src/gui/instrumentmanager/instrumentmanagerdialogimpl.cpp",
+    "139"
+   ]
+  ]
+ },
+ {
+  "ctx": "InstrumentManagerDialogImpl",
+  "src": "Number",
+  "de": "Anzahl",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/instrumentmanager/instrumentmanagerdialogimpl.cpp",
+    "73"
+   ],
+   [
+    "../src/gui/instrumentmanager/instrumentmanagerdialogimpl.cpp",
+    "82"
+   ]
+  ]
+ },
+ {
+  "ctx": "InstrumentManagerDialogImpl",
+  "src": "Size",
+  "de": "Größe",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/instrumentmanager/instrumentmanagerdialogimpl.cpp",
+    "81"
+   ],
+   [
+    "../src/gui/instrumentmanager/instrumentmanagerdialogimpl.cpp",
+    "139"
+   ]
+  ]
+ },
+ {
+  "ctx": "InstrumentManagerDialogImpl",
+  "src": "Yes",
+  "de": "Ja",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/instrumentmanager/instrumentmanagerdialogimpl.cpp",
+    "48"
+   ],
+   [
+    "../src/gui/instrumentmanager/instrumentmanagerdialogimpl.cpp",
+    "113"
+   ]
+  ]
+ },
+ {
+  "ctx": "InstrumentManagerDialogImpl",
+  "src": "No",
+  "de": "Nein",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/instrumentmanager/instrumentmanagerdialogimpl.cpp",
+    "49"
+   ],
+   [
+    "../src/gui/instrumentmanager/instrumentmanagerdialogimpl.cpp",
+    "114"
+   ]
+  ]
+ },
+ {
+  "ctx": "InstrumentManagerDialogImpl",
+  "src": "Rental instrument inventory list",
+  "de": "Leihinstrumente Inventarliste",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/instrumentmanager/instrumentmanagerdialogimpl.cpp",
+    "128"
+   ],
+   [
+    "../src/gui/instrumentmanager/instrumentmanagerdialogimpl.cpp",
+    "132"
+   ]
+  ]
+ },
+ {
+  "ctx": "InstrumentManagerDialogImpl",
+  "src": "Date",
+  "de": "Datum",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/instrumentmanager/instrumentmanagerdialogimpl.cpp",
+    "135"
+   ]
+  ]
+ },
+ {
+  "ctx": "InstrumentManagerDialogImpl",
+  "src": "Name",
+  "de": "Name",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/instrumentmanager/instrumentmanagerdialogimpl.cpp",
+    "139"
+   ]
+  ]
+ },
+ {
+  "ctx": "InstrumentManagerDialogImpl",
+  "src": "Birthday",
+  "de": "Geburtstag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/instrumentmanager/instrumentmanagerdialogimpl.cpp",
+    "139"
+   ]
+  ]
+ },
+ {
+  "ctx": "InstrumentManagerDialogImpl",
+  "src": "Description",
+  "de": "Beschreibung",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/instrumentmanager/instrumentmanagerdialogimpl.cpp",
+    "139"
+   ]
+  ]
+ },
+ {
+  "ctx": "InstrumentManagerDialogImpl",
+  "src": "Next size required",
+  "de": "Nächste Größe erforderlich",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/instrumentmanager/instrumentmanagerdialogimpl.cpp",
+    "139"
+   ]
+  ]
+ },
+ {
+  "ctx": "LessonTabWidget",
+  "src": "You can not assign more than one student to an individual lesson \nPlease change the number of students to save!",
+  "de": "Sie können einem Einzelunterricht nicht mehr als einen Schüler zuweisen.\nBitte ändern Sie die Schüleranzahl um zu speichern!",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/lessontabwidget.cpp",
+    "257"
+   ]
+  ]
+ },
+ {
+  "ctx": "LessonTabWidget",
+  "src": "IL-",
+  "de": "EU-",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/lessontabwidget.cpp",
+    "386"
+   ]
+  ]
+ },
+ {
+  "ctx": "LessonTabWidget",
+  "src": "GL-",
+  "de": "GU-",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/lessontabwidget.cpp",
+    "387"
+   ]
+  ]
+ },
+ {
+  "ctx": "LessonTabWidget",
+  "src": "EnsL-",
+  "de": "EnsU-",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/lessontabwidget.cpp",
+    "388"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Pupil List",
+  "de": "Schülerliste",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "49"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Pupil Archive",
+  "de": "Schülerarchiv",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "58"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Name",
+  "de": "Name",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "159"
+   ],
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "190"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Timetable",
+  "de": "Stundenplan",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "40"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Pupil list",
+  "de": "Schülerliste",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Pupil archive",
+  "de": "Schülerarchiv",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Time",
+  "de": "Uhrzeit",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "123"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Lesson",
+  "de": "Unterricht",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "128"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Details",
+  "de": "Details",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "240"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Lesson type:",
+  "de": "Unterrichtsart:",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Single lesson",
+  "de": "Einzelunterricht",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Group lesson",
+  "de": "Gruppenunterricht",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Ensemble lesson",
+  "de": "Ensembleunterricht",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Lesson description",
+  "de": "Unterrichtsbeschreibung",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Create automatically:",
+  "de": "Automatisch erstellen:",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Manually:",
+  "de": "Manuell:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "307"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Lesson time:",
+  "de": "Unterrichtszeit:",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Fixed time:",
+  "de": "Fester Termin:",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Irregular lesson",
+  "de": "Unregelmäßiger Unterricht",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Weekday:",
+  "de": "Wochentag:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "391"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Monday",
+  "de": "Montag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "408"
+   ],
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1922"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Tuesday",
+  "de": "Dienstag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "413"
+   ],
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1927"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Wednesday",
+  "de": "Mittwoch",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "418"
+   ],
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1932"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Thursday",
+  "de": "Donnerstag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "423"
+   ],
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1937"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Friday",
+  "de": "Freitag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "428"
+   ],
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1942"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Saturday",
+  "de": "Samstag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "433"
+   ],
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1947"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Sunday",
+  "de": "Sonntag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "438"
+   ],
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1952"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Start:",
+  "de": "Start:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "448"
+   ],
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1984"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "HH:mm",
+  "de": "HH:mm 'Uhr'",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "End:",
+  "de": "Ende:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "481"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Duration:",
+  "de": "Dauer:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "504"
+   ],
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1110"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": " Minutes",
+  "de": " Minuten",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "526"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Location:",
+  "de": "Unterrichtsort:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "546"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Pupils:",
+  "de": "Schüler:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "578"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Pupils in lesson:",
+  "de": "Schüler im Unterricht:",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&add",
+  "de": "&hinzufügen",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&remove",
+  "de": "&entfernen",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Available pupils:",
+  "de": "Verfügbare Schüler:",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&save",
+  "de": "&speichern",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Lesson notes",
+  "de": "Unterrichts&notizen",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Lesson:",
+  "de": "Unterricht:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "801"
+   ],
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1036"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Date:",
+  "de": "Datum:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "844"
+   ],
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1908"
+   ],
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2084"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Notes:",
+  "de": "Notizen:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "877"
+   ],
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1741"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Add new note",
+  "de": "Neue Notiz &Hinzufügen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1001"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Delete note",
+  "de": "Notiz &Löschen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1012"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Music pieces",
+  "de": "&Werke",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Composer:",
+  "de": "Komponist:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1069"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Title:",
+  "de": "Titel:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1079"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "State:",
+  "de": "Status:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1139"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Delete piece",
+  "de": "Werk &löschen",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Add new piece",
+  "de": "Neues Werk &hinzufügen",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Personal data",
+  "de": "Persönliche &Daten",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "First name:",
+  "de": "Vorname:",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Last name:",
+  "de": "Nachname:",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Address:",
+  "de": "Adresse:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1259"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Phone:",
+  "de": "Telefon:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1305"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Mobile:",
+  "de": "Handy:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1328"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Birthday:",
+  "de": "Geburtstag:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1351"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Age:",
+  "de": "Alter:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1377"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Parents:",
+  "de": "Eltern:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1405"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Name (Mother):",
+  "de": "Name (Mutter):",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1423"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Job (Mother):",
+  "de": "Arbeit (Mutter):",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1433"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Phone (Mother):",
+  "de": "Telefon (Mutter):",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1443"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Name (Father):",
+  "de": "Name (Vater):",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1453"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Job (Father):",
+  "de": "Arbeit (Vater):",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1463"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Phone (Father):",
+  "de": "Telefon (Vater):",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1473"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Lesson since:",
+  "de": "Unterricht seit:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1503"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Total:",
+  "de": "Gesamt:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1523"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Personal conert interval",
+  "de": "Persönliches Vorspielintervall",
+  "type": "obsolete",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Never",
+  "de": "Niemals",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1564"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "1 month",
+  "de": "1 Monat",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1569"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "2 months",
+  "de": "2 Monate",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1574"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "3 months",
+  "de": "3 Monate",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1579"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "4 months",
+  "de": "4 Monate",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1584"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "6 months",
+  "de": "6 Monate",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1589"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "9 months",
+  "de": "9 Monate",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1594"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "12 months",
+  "de": "12 Monate",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1599"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "18 months",
+  "de": "18 Monate",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1604"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "24 months",
+  "de": "24 Monate",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1609"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Participation in ensemble expected",
+  "de": "Ensembleteilnahme wird erwartet",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Size:",
+  "de": "Größe:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1670"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Next size needed",
+  "de": "Nächste Größe erforderlich",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Rental instrument",
+  "de": "Leihinstrument",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Inventory number:",
+  "de": "Inventarnummer:",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Rented since:",
+  "de": "Geliehen seit:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1718"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Save",
+  "de": "&Speichern",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "745"
+   ],
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1761"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Qupil",
+  "de": "Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "20"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Lesson Type:",
+  "de": "Unterrichtsart:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "246"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Single Lesson",
+  "de": "Einzelunterricht",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Individual Lesson",
+  "de": "Einzelunterricht",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "258"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Group Lesson",
+  "de": "Gruppenunterricht",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "268"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Ensemble Lesson",
+  "de": "Ensembleunterricht",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "275"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Lesson Description",
+  "de": "Unterrichtsbeschreibung",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "285"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Create Automatically:",
+  "de": "Automatisch erstellen:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "297"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Lesson Time:",
+  "de": "Unterrichtszeit:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "327"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Fixed Time:",
+  "de": "Fester Termin:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "344"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Irregular Lesson",
+  "de": "Unregelmäßiger Unterricht",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "354"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Pupils in Lesson:",
+  "de": "Schüler im Unterricht:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "586"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Add",
+  "de": "&Hinzufügen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "628"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Remove",
+  "de": "&Entfernen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "642"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Available Pupils:",
+  "de": "Verfügbare Schüler:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "686"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Lesson Notes",
+  "de": "Unterrichts&notizen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "793"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Music Pieces",
+  "de": "&Werke",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1028"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Delete Piece",
+  "de": "Werk &löschen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1166"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Add new Piece",
+  "de": "Neues Werk &hinzufügen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1183"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Personal Data",
+  "de": "Persönliche &Daten",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1199"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "First Name:",
+  "de": "Vorname:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1213"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Last Name:",
+  "de": "Nachname:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1236"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Personal Concert Interval:",
+  "de": "Persönliches Vorspielintervall:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1550"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Participation in Ensemble Expected",
+  "de": "Ensembleteilnahme wird erwartet",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1630"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Next Size needed",
+  "de": "Nächste Größe erforderlich",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1687"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Rental Instrument",
+  "de": "Leihinstrument",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1696"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Inventory Number:",
+  "de": "Inventarnummer:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1708"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Activities",
+  "de": "&Aktivitäten",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1777"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Selection &Returned by the Pupil",
+  "de": "Auswahl vom Schüler &zurückgegeben",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2205"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Music Library ...",
+  "de": "Noten-&Bibliothek ...",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2503"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Create Backup ...",
+  "de": "Backup &erstellen ...",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2515"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Replay Backup...",
+  "de": "Backup &zurückspielen ...",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2524"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Import (CVS) &Address Book ...",
+  "de": "Adressbuch (CVS) &importieren ...",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2533"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Timetable Document ...",
+  "de": "&Stundenplan-Dokument ...",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2542"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Concert Candidates ...",
+  "de": "&Vorspielkandidaten ...",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2551"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Concert Candidates...",
+  "de": "&Vorspielkandidaten ...",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Daily Schedule ...",
+  "de": "&Tagesübersicht ...",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2569"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Ensemble Candidates ...",
+  "de": "&Ensemblekandidaten ...",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2586"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Regular (e.g. ensembles):",
+  "de": "Regelmäig (z.B. Ensembles):",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Description:",
+  "de": "Beschreibung:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1806"
+   ],
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2048"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Type: ",
+  "de": "Typ: ",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1816"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Theory lesson",
+  "de": "Theorieunterricht",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1829"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Coaching with pianists",
+  "de": "Korrepetition",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1834"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Other",
+  "de": "Sonstiges",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1839"
+   ],
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2076"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "irregular",
+  "de": "Unregelmäßig",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1957"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Irregular (e.g. concerts, competitions):",
+  "de": "Unregelmäßig (z.B. Vorspiele, Wettbewerbe):",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Type:",
+  "de": "Typ:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2058"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Solo recital",
+  "de": "Solo-Beitrag",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Ensemble recital",
+  "de": "Ensemblemitwirkung",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Loaned music",
+  "de": "Geliehene &Noten",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Composer / Author",
+  "de": "Komponist / Autor",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2182"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Title",
+  "de": "Titel",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2187"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Publisher",
+  "de": "Verlag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2192"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Loaned at",
+  "de": "Verliehen am",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2197"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Selection &returned by the pupil",
+  "de": "Auswahl vom Schüler &zurückgegeben",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Print",
+  "de": "&Drucken",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2241"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Export to &PDF",
+  "de": "Nach &PDF exportieren",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2252"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&New ...",
+  "de": "&Neu ...",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2283"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Edit",
+  "de": "&Bearbeiten",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2319"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Document",
+  "de": "&Dokument",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2329"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Tools",
+  "de": "&Werkzeuge",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2336"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Quit",
+  "de": "&Beenden",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2356"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Configure Qupil ...",
+  "de": "Qupil &einrichten ...",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2373"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Event manager ...",
+  "de": "&Veranstaltungsmanager ...",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Instrument manager ...",
+  "de": "&Instrumentenmanager ...",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2391"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&About Qupil ...",
+  "de": "&Über Qupil ...",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2400"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Show birthdays",
+  "de": "Zeige &Geburtstage",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Pupil",
+  "de": "&Schüler",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2426"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Ctrl+N, P",
+  "de": "Ctrl+N, S",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2429"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Lesson",
+  "de": "&Unterricht",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2438"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Ctrl+N, L",
+  "de": "Ctrl+N, U",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2441"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Delete &lesson",
+  "de": "Unterricht &löschen",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Delete &pupil",
+  "de": "Schüler &löschen",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Archive pupil",
+  "de": "Schüler &archivieren",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Archive and &delete pupil",
+  "de": "Schüler archivieren und l&öschen",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Delete archive entry",
+  "de": "Archiveintrag &löschen",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Metronome / Tuner ...",
+  "de": "&Metronom / Stimmen ...",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2491"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Music library ...",
+  "de": "Noten-&Bibliothek ...",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Ctrl+L",
+  "de": "Ctrl+L",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2506"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Create backup ...",
+  "de": "Backup &erstellen ...",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Replay backup...",
+  "de": "Backup &zurückspielen ...",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Import (CVS) &address book ...",
+  "de": "Adressbuch (CVS) &importieren ...",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Timetable document ...",
+  "de": "&Stundenplan-Dokument ...",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Concert candidates...",
+  "de": "&Vorspielkandidaten ...",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Reminder ...",
+  "de": "E&rinnerungen ...",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2560"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Daily schedule ...",
+  "de": "&Tagesübersicht ...",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Ctrl+D",
+  "de": "Ctrl+D",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2572"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Ensemble candidates ...",
+  "de": "&Ensemblekandidaten ...",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "1",
+  "de": "1",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "603"
+   ],
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "703"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Ctrl+Shift+K",
+  "de": "Ctrl+Shift+K",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "932"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Ctrl+Shift+F",
+  "de": "Ctrl+Shift+F",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "952"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Ctrl+Shift+U",
+  "de": "Ctrl+Shift+U",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "972"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Genre:",
+  "de": "Genre:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1093"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": " Min.",
+  "de": " Min.",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1129"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "E-Mail:",
+  "de": "E-Mail:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1282"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Instrument:",
+  "de": "Instrument:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1653"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Regular (e.g. Ensembles):",
+  "de": "Regelmäig (z.B. Ensembles):",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1783"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Ensemble",
+  "de": "Ensemble",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "1824"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Irregular (e.g. Concerts, Competitions):",
+  "de": "Unregelmäßig (z.B. Vorspiele, Wettbewerbe):",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2027"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Solo Recital",
+  "de": "Solo-Beitrag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2066"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Ensemble Recital",
+  "de": "Ensemblemitwirkung",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2071"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Loaned Music",
+  "de": "Geliehene &Noten",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2161"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Index",
+  "de": "Index",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2177"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Drucken",
+  "de": "&Print",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Q&upil",
+  "de": "Q&upil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2279"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Settings",
+  "de": "&Einstellungen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2303"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Extras",
+  "de": "&Extras",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2309"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Ctrl+Q",
+  "de": "Ctrl+Q",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2359"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Einstellungen ...",
+  "de": "",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2364"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Event Manager ...",
+  "de": "&Veranstaltungsmanager ...",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2382"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Show Birthdays",
+  "de": "Zeige &Geburtstage",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2409"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Neuer Unterricht ...",
+  "de": "",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2417"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Delete &Lesson",
+  "de": "Unterricht &löschen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2450"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Delete &Pupil",
+  "de": "Schüler &löschen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2459"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Archive Pupil",
+  "de": "Schüler &archivieren",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2468"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Archive and &Delete Pupil",
+  "de": "Schüler archivieren und l&öschen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2473"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Delete Archive Entry",
+  "de": "Archiveintrag &löschen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2482"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Ctrl+M",
+  "de": "Ctrl+M",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2494"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Ctrl+B",
+  "de": "Ctrl+B",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2412"
+   ]
+  ]
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "Personal concert interval:",
+  "de": "Persönliches Vorspielintervall:",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MainWindow",
+  "src": "&Jo",
+  "de": "",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindow.ui",
+    "2577"
+   ]
+  ]
+ },
+ {
+  "ctx": "MetronomDialog",
+  "src": "Qupil - Metronom / Stimmen",
+  "de": "&Metronom / Stimmen ...",
+  "type": "obsolete",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MetronomDialog",
+  "src": "Metronome / Tuner",
+  "de": "Metronom / Stimmen",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "MetronomDialog",
+  "src": "Metronome",
+  "de": "Metronom",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/metronom/metronom.ui",
+    "20"
+   ]
+  ]
+ },
+ {
+  "ctx": "MetronomDialog",
+  "src": "Tempo:",
+  "de": "Tempo:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/metronom/metronom.ui",
+    "28"
+   ]
+  ]
+ },
+ {
+  "ctx": "MetronomDialog",
+  "src": " bpm",
+  "de": " bpm",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/metronom/metronom.ui",
+    "35"
+   ]
+  ]
+ },
+ {
+  "ctx": "MetronomDialog",
+  "src": "Accent every",
+  "de": "Betonung alle",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/metronom/metronom.ui",
+    "114"
+   ]
+  ]
+ },
+ {
+  "ctx": "MetronomDialog",
+  "src": "Beats",
+  "de": "Schläge",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/metronom/metronom.ui",
+    "152"
+   ]
+  ]
+ },
+ {
+  "ctx": "MetronomDialog",
+  "src": "Click rhythmically on the button to set the tempo.",
+  "de": "Klicken Sie rhythmisch auf den Knopf um das Tempo einzustellen.",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/metronom/metronom.ui",
+    "186"
+   ]
+  ]
+ },
+ {
+  "ctx": "MetronomDialog",
+  "src": "Tune",
+  "de": "Stimmen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/metronom/metronom.ui",
+    "198"
+   ]
+  ]
+ },
+ {
+  "ctx": "MetronomDialog",
+  "src": "Tuning tone:",
+  "de": "Stimmton:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/metronom/metronom.ui",
+    "204"
+   ]
+  ]
+ },
+ {
+  "ctx": "MetronomDialog",
+  "src": "Tuning pitch:",
+  "de": "Frequenz:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/metronom/metronom.ui",
+    "269"
+   ]
+  ]
+ },
+ {
+  "ctx": "MetronomDialog",
+  "src": "A",
+  "de": "A",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/metronom/metronom.ui",
+    "218"
+   ]
+  ]
+ },
+ {
+  "ctx": "MetronomDialog",
+  "src": "Metronome / Tuner - Qupil",
+  "de": "Metronom / Stimmen - Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/metronom/metronom.ui",
+    "14"
+   ]
+  ]
+ },
+ {
+  "ctx": "MetronomDialog",
+  "src": "B",
+  "de": "H",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/metronom/metronom.ui",
+    "223"
+   ]
+  ]
+ },
+ {
+  "ctx": "MetronomPlayer",
+  "src": "Could not load %1",
+  "de": "Kann %1 nicht laden.",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/core/sound/metronomplayer.cpp",
+    "22"
+   ],
+   [
+    "../src/core/sound/metronomplayer.cpp",
+    "26"
+   ],
+   [
+    "../src/core/sound/metronomplayer.cpp",
+    "30"
+   ]
+  ]
+ },
+ {
+  "ctx": "MetronomPlayer",
+  "src": "Error loading sound files: All sound files must have the same sample format.",
+  "de": "Fehler beim Laden der Sound Dateien: Alle Sound Dateien müssen dasselbe Sample Format haben.",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/core/sound/metronomplayer.cpp",
+    "41"
+   ]
+  ]
+ },
+ {
+  "ctx": "PalNotesModel",
+  "src": "Date",
+  "de": "Datum",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/palnotesmodel.cpp",
+    "76"
+   ]
+  ]
+ },
+ {
+  "ctx": "PalNotesModel",
+  "src": "Note",
+  "de": "Notiz",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/palnotesmodel.cpp",
+    "77"
+   ]
+  ]
+ },
+ {
+  "ctx": "PalPiecesModel",
+  "src": "Planned",
+  "de": "Geplant",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/palpiecesmodel.cpp",
+    "86"
+   ]
+  ]
+ },
+ {
+  "ctx": "PalPiecesModel",
+  "src": "In Progress",
+  "de": "In Arbeit",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/palpiecesmodel.cpp",
+    "86"
+   ]
+  ]
+ },
+ {
+  "ctx": "PalPiecesModel",
+  "src": "Paused",
+  "de": "Pause",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/palpiecesmodel.cpp",
+    "86"
+   ]
+  ]
+ },
+ {
+  "ctx": "PalPiecesModel",
+  "src": "Ready for Concert",
+  "de": "Vorspielreif",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/palpiecesmodel.cpp",
+    "86"
+   ]
+  ]
+ },
+ {
+  "ctx": "PalPiecesModel",
+  "src": "Finished",
+  "de": "Beendet",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/palpiecesmodel.cpp",
+    "86"
+   ]
+  ]
+ },
+ {
+  "ctx": "PalPiecesModel",
+  "src": "Composer",
+  "de": "Komponist",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/palpiecesmodel.cpp",
+    "121"
+   ]
+  ]
+ },
+ {
+  "ctx": "PalPiecesModel",
+  "src": "Title",
+  "de": "Titel",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/palpiecesmodel.cpp",
+    "122"
+   ]
+  ]
+ },
+ {
+  "ctx": "PalPiecesModel",
+  "src": "Genre               ",
+  "de": "Genre               ",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/palpiecesmodel.cpp",
+    "123"
+   ]
+  ]
+ },
+ {
+  "ctx": "PalPiecesModel",
+  "src": "Duration",
+  "de": "Dauer",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/palpiecesmodel.cpp",
+    "124"
+   ]
+  ]
+ },
+ {
+  "ctx": "PalPiecesModel",
+  "src": "Start",
+  "de": "Start",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/palpiecesmodel.cpp",
+    "125"
+   ]
+  ]
+ },
+ {
+  "ctx": "PalPiecesModel",
+  "src": "End",
+  "de": "Ende",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/palpiecesmodel.cpp",
+    "126"
+   ]
+  ]
+ },
+ {
+  "ctx": "PalPiecesModel",
+  "src": "State",
+  "de": "Status",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/palpiecesmodel.cpp",
+    "127"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilArchiveListTreeWidget",
+  "src": "Delete Archive Entry",
+  "de": "Archiveintrag Löschen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupilarchivelisttreewidget.cpp",
+    "30"
+   ],
+   [
+    "../src/gui/mainwindow/pupilarchivelisttreewidget.cpp",
+    "139"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilArchiveListTreeWidget",
+  "src": "Do you really want to delete the archive entry \"%1\" ?",
+  "de": "Möchten Sie den Archiveintrag: \"%1\" wirklich löschen?",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupilarchivelisttreewidget.cpp",
+    "140"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilArchiveTextBrowser",
+  "src": "Export File",
+  "de": "Datei Exportieren",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupilarchivetextbrowser.cpp",
+    "81"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilArchiveTextBrowser",
+  "src": "PDF File (*.pdf)",
+  "de": "PDF Datei (*.pdf)",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupilarchivetextbrowser.cpp",
+    "83"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityDelegate",
+  "src": "Ensemble",
+  "de": "Ensemble",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/delegates/pupilcontactivitydelegate.cpp",
+    "39"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityDelegate",
+  "src": "Theory lesson",
+  "de": "Theorieunterricht",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/delegates/pupilcontactivitydelegate.cpp",
+    "39"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityDelegate",
+  "src": "Coaching with pianists",
+  "de": "Korrepetition",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/delegates/pupilcontactivitydelegate.cpp",
+    "39"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityDelegate",
+  "src": "Other",
+  "de": "Sonstiges",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/delegates/pupilcontactivitydelegate.cpp",
+    "39"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityDelegate",
+  "src": "Monday",
+  "de": "Montag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/delegates/pupilcontactivitydelegate.cpp",
+    "49"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityDelegate",
+  "src": "Tuesday",
+  "de": "Dienstag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/delegates/pupilcontactivitydelegate.cpp",
+    "49"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityDelegate",
+  "src": "Wednesday",
+  "de": "Mittwoch",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/delegates/pupilcontactivitydelegate.cpp",
+    "49"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityDelegate",
+  "src": "Thursday",
+  "de": "Donnerstag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/delegates/pupilcontactivitydelegate.cpp",
+    "49"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityDelegate",
+  "src": "Friday",
+  "de": "Freitag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/delegates/pupilcontactivitydelegate.cpp",
+    "49"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityDelegate",
+  "src": "Saturday",
+  "de": "Samstag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/delegates/pupilcontactivitydelegate.cpp",
+    "49"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityDelegate",
+  "src": "Sunday",
+  "de": "Sonntag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/delegates/pupilcontactivitydelegate.cpp",
+    "49"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityDelegate",
+  "src": "irregular",
+  "de": "unregelmäßig",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/delegates/pupilcontactivitydelegate.cpp",
+    "49"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityModel",
+  "src": "Monday",
+  "de": "Montag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/pupilcontactivitymodel.cpp",
+    "81"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityModel",
+  "src": "Tuesday",
+  "de": "Dienstag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/pupilcontactivitymodel.cpp",
+    "81"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityModel",
+  "src": "Wednesday",
+  "de": "Mittwoch",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/pupilcontactivitymodel.cpp",
+    "81"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityModel",
+  "src": "Thursday",
+  "de": "Donnerstag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/pupilcontactivitymodel.cpp",
+    "81"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityModel",
+  "src": "Friday",
+  "de": "Freitag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/pupilcontactivitymodel.cpp",
+    "81"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityModel",
+  "src": "Saturday",
+  "de": "Samstag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/pupilcontactivitymodel.cpp",
+    "81"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityModel",
+  "src": "Sunday",
+  "de": "Sonntag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/pupilcontactivitymodel.cpp",
+    "81"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityModel",
+  "src": "irregular",
+  "de": "unregelmäßig",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/pupilcontactivitymodel.cpp",
+    "81"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityModel",
+  "src": "Ensemble",
+  "de": "Ensemble",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/pupilcontactivitymodel.cpp",
+    "84"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityModel",
+  "src": "Theory lesson",
+  "de": "Theorieunterricht",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/pupilcontactivitymodel.cpp",
+    "84"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityModel",
+  "src": "Coaching with pianists",
+  "de": "Korrepetition",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/pupilcontactivitymodel.cpp",
+    "84"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityModel",
+  "src": "Other",
+  "de": "Sonstiges",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/pupilcontactivitymodel.cpp",
+    "84"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityModel",
+  "src": "Description",
+  "de": "Beschreibung",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/pupilcontactivitymodel.cpp",
+    "102"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityModel",
+  "src": "Type",
+  "de": "Typ",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/pupilcontactivitymodel.cpp",
+    "103"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityModel",
+  "src": "Weekday",
+  "de": "Wochentag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/pupilcontactivitymodel.cpp",
+    "104"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityModel",
+  "src": "Time   ",
+  "de": "Uhrzeit",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/pupilcontactivitymodel.cpp",
+    "105"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityModel",
+  "src": "Start",
+  "de": "Start",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/pupilcontactivitymodel.cpp",
+    "106"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilContActivityModel",
+  "src": "End",
+  "de": "Ende",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/pupilcontactivitymodel.cpp",
+    "107"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Delete Pupil",
+  "de": "Schüler Löschen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "32"
+   ],
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "127"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Archive Pupil",
+  "de": "Schüler Archivieren",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "34"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Archive and Delete Pupil",
+  "de": "Schüler Archivieren und Löschen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "36"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Do you really want to delete the pupil \"%1\" ?",
+  "de": "Möchten Sie den Schüler \"%1\" wirklich löschen?",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "128"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Planned",
+  "de": "Geplant",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "163"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "In Progress",
+  "de": "In Arbeit",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "163"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Paused",
+  "de": "Pause",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "163"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Ready for Concert",
+  "de": "Vorspielreif",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "163"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Finished",
+  "de": "Beendet",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "163"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Lesson notes and music pieces",
+  "de": "Unterrichtsnotizen und Werke",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "169"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "from",
+  "de": "vom",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "175"
+   ],
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "181"
+   ],
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "196"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "to",
+  "de": "bis",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "175"
+   ],
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "181"
+   ],
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "196"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Lesson notes",
+  "de": "Unterrichtsnotizen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "181"
+   ],
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "218"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Date",
+  "de": "Datum",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "182"
+   ],
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "219"
+   ],
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "274"
+   ],
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "306"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Note",
+  "de": "Notiz",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "182"
+   ],
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "219"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Music pieces",
+  "de": "Werke",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "196"
+   ],
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "232"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Title",
+  "de": "Titel",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "197"
+   ],
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "233"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Genre",
+  "de": "Genre",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "197"
+   ],
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "233"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Duration",
+  "de": "Dauer",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "197"
+   ],
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "233"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Start",
+  "de": "Start",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "197"
+   ],
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "233"
+   ],
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "258"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "End",
+  "de": "Ende",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "197"
+   ],
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "233"
+   ],
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "258"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "State",
+  "de": "Status",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "197"
+   ],
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "233"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "since",
+  "de": "seit",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "212"
+   ],
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "218"
+   ],
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "232"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "The student took part in the following lessons",
+  "de": "Der Schüler hat an folgenden Unterrichtsveranstaltungen teilgenommen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "242"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Activities of the student",
+  "de": "Aktivitäten des Schülers",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "252"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Regular activities",
+  "de": "Regelmäßige Aktivitäten",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "257"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Description",
+  "de": "Beschreibung",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "258"
+   ],
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "274"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Weekday",
+  "de": "Wochentag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "258"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Time",
+  "de": "Uhrzeit",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "258"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Date (Start)",
+  "de": "Datum (Beginn)",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Date (End)",
+  "de": "Datum (Ende)",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Monday",
+  "de": "Montag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "260"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Tuesday",
+  "de": "Dienstag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "260"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Wednesday",
+  "de": "Mittwoch",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "260"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Thursday",
+  "de": "Donnerstag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "260"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Friday",
+  "de": "Freitag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "260"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Saturday",
+  "de": "Samstag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "260"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Sunday",
+  "de": "Sonntag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "260"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "irregular",
+  "de": "unregelmäßig",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "260"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Solo Recital",
+  "de": "Solo-Beitrag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "269"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Ensemble Recital",
+  "de": "Ensemblemitwirkung",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "269"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Other",
+  "de": "Sonstiges",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "269"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Irregular activities",
+  "de": "Unregelmäßige Aktivitäten",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "273"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Type",
+  "de": "Typ",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "274"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Archive Entry",
+  "de": "Archiveintrag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "298"
+   ],
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "302"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Personal data",
+  "de": "Persönliche Daten",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "308"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "First name",
+  "de": "Vorname",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "310"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Last name",
+  "de": "Nachname",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "310"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Address",
+  "de": "Adresse",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "311"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "E-Mail",
+  "de": "E-Mail",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "311"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Phone",
+  "de": "Telefon",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "312"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Mobile",
+  "de": "Handy",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "312"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Birthday",
+  "de": "Geburtstag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "313"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Name (Father)",
+  "de": "Name (Vater)",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "317"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Job (Father)",
+  "de": "Arbeit (Vater)",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "317"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Phone (Father)",
+  "de": "Telefon (Vater)",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "317"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Name (Mother)",
+  "de": "Name (Mutter)",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "318"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Job (Mother)",
+  "de": "Arbeit (Mutter)",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "318"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Phone (Mother)",
+  "de": "Telefon (Mutter)",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "318"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Lesson since",
+  "de": "Unterricht seit",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "321"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "total",
+  "de": "gesamt",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "321"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Years",
+  "de": "Jahre",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "321"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Instrument",
+  "de": "Instrument",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "323"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Size",
+  "de": "Größe",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "323"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Rental instrument description",
+  "de": "Leihinstrument Bezeichnung",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "324"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Rented since",
+  "de": "Geliehen seit",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "324"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilListTreeWidget",
+  "src": "Notes",
+  "de": "Notizen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupillisttreewidget.cpp",
+    "328"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilSingularActivityModel",
+  "src": "Description",
+  "de": "Beschreibung",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/pupilsingularactivitymodel.cpp",
+    "80"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilSingularActivityModel",
+  "src": "Date",
+  "de": "Datum",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/pupilsingularactivitymodel.cpp",
+    "81"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilSingularActivityModel",
+  "src": "Type",
+  "de": "Typ",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/models/pupilsingularactivitymodel.cpp",
+    "82"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilTabWidget",
+  "src": "Planned",
+  "de": "Geplant",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupiltabwidget.cpp",
+    "96"
+   ],
+   [
+    "../src/gui/mainwindow/pupiltabwidget.cpp",
+    "413"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilTabWidget",
+  "src": "In Progress",
+  "de": "In Arbeit",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupiltabwidget.cpp",
+    "96"
+   ],
+   [
+    "../src/gui/mainwindow/pupiltabwidget.cpp",
+    "413"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilTabWidget",
+  "src": "Paused",
+  "de": "Pause",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupiltabwidget.cpp",
+    "96"
+   ],
+   [
+    "../src/gui/mainwindow/pupiltabwidget.cpp",
+    "413"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilTabWidget",
+  "src": "Ready for Concert",
+  "de": "Vorspielreif",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupiltabwidget.cpp",
+    "96"
+   ],
+   [
+    "../src/gui/mainwindow/pupiltabwidget.cpp",
+    "413"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilTabWidget",
+  "src": "Finished",
+  "de": "Beendet",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupiltabwidget.cpp",
+    "96"
+   ],
+   [
+    "../src/gui/mainwindow/pupiltabwidget.cpp",
+    "413"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilTabWidget",
+  "src": "(inactive)",
+  "de": "(inaktiv)",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupiltabwidget.cpp",
+    "114"
+   ],
+   [
+    "../src/gui/mainwindow/pupiltabwidget.cpp",
+    "122"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilTabWidget",
+  "src": "Years",
+  "de": "Jahre",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupiltabwidget.cpp",
+    "291"
+   ],
+   [
+    "../src/gui/mainwindow/pupiltabwidget.cpp",
+    "304"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilTabWidget",
+  "src": "You have to complete at least the fields \"Composer\" and \"Title\" to add the entry!",
+  "de": "Sie müssen mindestens die Felder \"Komponist\" und \"Titel\" ausfüllen, um den Eintrag hinzuzufügen!",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupiltabwidget.cpp",
+    "451"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilTabWidget",
+  "src": "Title",
+  "de": "Titel",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupiltabwidget.cpp",
+    "631"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilTabWidget",
+  "src": "Genre               ",
+  "de": "Genre               ",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupiltabwidget.cpp",
+    "632"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilTabWidget",
+  "src": "Duration",
+  "de": "Dauer",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupiltabwidget.cpp",
+    "633"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilTabWidget",
+  "src": "Start",
+  "de": "Start",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupiltabwidget.cpp",
+    "634"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilTabWidget",
+  "src": "End",
+  "de": "Ende",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupiltabwidget.cpp",
+    "635"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilTabWidget",
+  "src": "Date (Start)",
+  "de": "Datum (Beginn)",
+  "type": "obsolete",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "PupilTabWidget",
+  "src": "Date (End)",
+  "de": "Datum (Ende)",
+  "type": "obsolete",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "PupilTabWidget",
+  "src": "State",
+  "de": "Status",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupiltabwidget.cpp",
+    "636"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilTabWidget",
+  "src": "Date",
+  "de": "Datum",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupiltabwidget.cpp",
+    "648"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilTabWidget",
+  "src": "Note",
+  "de": "Notiz",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/pupiltabwidget.cpp",
+    "649"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsLastRecitalViewDialog",
+  "src": "Concert Candidates",
+  "de": "Vorspielkandidaten",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "PupilsLastRecitalViewDialog",
+  "src": "Concert Candidates - Qupil",
+  "de": "Vorspielkandidaten - Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilslastrecital/pupilslastrecitalviewdialog.ui",
+    "14"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsLastRecitalViewDialog",
+  "src": "Sorting",
+  "de": "Sortierung",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilslastrecital/pupilslastrecitalviewdialog.ui",
+    "110"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsLastRecitalViewDialog",
+  "src": "Pupil",
+  "de": "Schüler",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilslastrecital/pupilslastrecitalviewdialog.ui",
+    "115"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsLastRecitalViewDialog",
+  "src": "Last Concert Ago",
+  "de": "Letztes Vorspiel vor",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilslastrecital/pupilslastrecitalviewdialog.ui",
+    "120"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsLastRecitalViewDialog",
+  "src": "Date",
+  "de": "Datum",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilslastrecital/pupilslastrecitalviewdialog.ui",
+    "125"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsLastRecitalViewDialog",
+  "src": "%1 months",
+  "de": "%1 Monaten",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilslastrecital/pupilslastrecitalviewdialog.cpp",
+    "108"
+   ],
+   [
+    "../src/gui/pupilslastrecital/pupilslastrecitalviewdialog.cpp",
+    "129"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsLastRecitalViewDialog",
+  "src": "%1 days",
+  "de": "%1 Tagen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilslastrecital/pupilslastrecitalviewdialog.cpp",
+    "110"
+   ],
+   [
+    "../src/gui/pupilslastrecital/pupilslastrecitalviewdialog.cpp",
+    "131"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsLastRecitalViewDialog",
+  "src": "The following overdue concert candidates were identified:",
+  "de": "Folgende überfällige Vorspielkandidaten wurden ermittelt:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilslastrecital/pupilslastrecitalviewdialog.cpp",
+    "145"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsLastRecitalViewDialog",
+  "src": "There are currently no overdue concert candidates.<br><br>Good job!",
+  "de": "Derzeit sind keine überfälligen Vorspielkandidaten vorhanden.<br><br>Gute Arbeit!",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilslastrecital/pupilslastrecitalviewdialog.cpp",
+    "147"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsLastRecitalViewDialog",
+  "src": "Total <b>%1</b> overdue Pupils",
+  "de": "Insgesamt <b>%1</b> überfällige Schüler",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilslastrecital/pupilslastrecitalviewdialog.cpp",
+    "154"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsLastRecitalViewDialog",
+  "src": "Set up reminder for concert activity",
+  "de": "Erinnerung zu Vorspielaktivität einrichten",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilslastrecital/pupilslastrecitalviewdialog.cpp",
+    "163"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsLastRecitalViewDialog",
+  "src": "Speak about concert activity!",
+  "de": "Vorspielaktivität ansprechen!",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilslastrecital/pupilslastrecitalviewdialog.cpp",
+    "207"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsLastRecitalViewDialog",
+  "src": "Reminder set up",
+  "de": "Erinnerung eingerichtet",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilslastrecital/pupilslastrecitalviewdialog.cpp",
+    "215"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsLastRecitalViewDialog",
+  "src": "Reminder concerning \"concert activity\"<br>set up for the pupil <i><b>%1</b></i>",
+  "de": "Erinnerung zum Thema \"Vorspielaktivität\"<br>für den Schüler <i><b>%1</b></i> eingerichtet.",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilslastrecital/pupilslastrecitalviewdialog.cpp",
+    "215"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsNotInEnsembleDialog",
+  "src": "Ensemble Candidates",
+  "de": "Ensemblekandidaten",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "PupilsNotInEnsembleDialog",
+  "src": "Ensemble Candidates - Qupil",
+  "de": "Ensemblekandidaten - Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilsnotinensemble/pupilsnotinensembledialog.ui",
+    "14"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsNotInEnsembleDialog",
+  "src": "Sorting",
+  "de": "Sortierung",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilsnotinensemble/pupilsnotinensembledialog.ui",
+    "97"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsNotInEnsembleDialog",
+  "src": "Pupil",
+  "de": "Schüler",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilsnotinensemble/pupilsnotinensembledialog.ui",
+    "102"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsNotInEnsembleDialog",
+  "src": "Last Ensemble Participation",
+  "de": "Letzte Ensemblemitwirkung",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilsnotinensemble/pupilsnotinensembledialog.ui",
+    "107"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsNotInEnsembleDialog",
+  "src": "none",
+  "de": "keine",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilsnotinensemble/pupilsnotinensembledialog.cpp",
+    "68"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsNotInEnsembleDialog",
+  "src": "The following students are currently not active in any ensemble:",
+  "de": "Folgender Schüler sind derzeit in keinem Ensemble aktiv:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilsnotinensemble/pupilsnotinensembledialog.cpp",
+    "82"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsNotInEnsembleDialog",
+  "src": "Currently all students are active in ensembles.<br><br>Good job!",
+  "de": "Aktuell sind alle Schüler in Ensembles aktiv.<br><br>Gute Arbeit!",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilsnotinensemble/pupilsnotinensembledialog.cpp",
+    "84"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsNotInEnsembleDialog",
+  "src": "Total <span style='color:red; font-weight:600;'>%1</span> inactive pupils | <span style='color:green; font-weight:600;'>%2</span> pupils are active in ensembles",
+  "de": "Insgesamt <span style='color:red; font-weight:600;'>%1</span> inaktive Schüler | <span style='color:green; font-weight:600;'>%2</span> Schüler sind in Ensembles aktiv",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilsnotinensemble/pupilsnotinensembledialog.cpp",
+    "90"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsNotInEnsembleDialog",
+  "src": "Set up reminder for ensemble activity",
+  "de": "Erinnerung zu Ensembleaktivität einrichten",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilsnotinensemble/pupilsnotinensembledialog.cpp",
+    "97"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsNotInEnsembleDialog",
+  "src": "Speak about ensemble activity!",
+  "de": "Ensembleaktivität ansprechen!",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilsnotinensemble/pupilsnotinensembledialog.cpp",
+    "142"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsNotInEnsembleDialog",
+  "src": "Reminder set up",
+  "de": "Erinnerung eingerichtet",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilsnotinensemble/pupilsnotinensembledialog.cpp",
+    "150"
+   ]
+  ]
+ },
+ {
+  "ctx": "PupilsNotInEnsembleDialog",
+  "src": "Reminder concerning \"ensemble activity\"<br>set up for the pupil <i><b>%1</b></i>",
+  "de": "Erinnerung zum Thema \"Ensemblemitwirkung\"<br>für den Schüler <i><b>%1</b></i> eingerichtet.",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/pupilsnotinensemble/pupilsnotinensembledialog.cpp",
+    "150"
+   ]
+  ]
+ },
+ {
+  "ctx": "QObject",
+  "src": "Index",
+  "de": "Index",
+  "type": "obsolete",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "QObject",
+  "src": "Description",
+  "de": "Beschreibung",
+  "type": "obsolete",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "QObject",
+  "src": "Type",
+  "de": "Typ",
+  "type": "obsolete",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "QObject",
+  "src": "Weekday",
+  "de": "Wochentag",
+  "type": "obsolete",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "QObject",
+  "src": "Date (Start)",
+  "de": "Datum (Beginn)",
+  "type": "obsolete",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "QObject",
+  "src": "Date (End)",
+  "de": "Datum (Ende)",
+  "type": "obsolete",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "QObject",
+  "src": "Title",
+  "de": "Titel",
+  "type": "obsolete",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "QObject",
+  "src": "Duration",
+  "de": "Dauer",
+  "type": "obsolete",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "QObject",
+  "src": "State",
+  "de": "Status",
+  "type": "obsolete",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "QObject",
+  "src": "Date",
+  "de": "Datum",
+  "type": "obsolete",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "QObject",
+  "src": "Note",
+  "de": "Notiz",
+  "type": "obsolete",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "RecitalTabs",
+  "src": "Location:",
+  "de": "Ort:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/recitaltabs.ui",
+    "19"
+   ]
+  ]
+ },
+ {
+  "ctx": "RecitalTabs",
+  "src": "Date:",
+  "de": "Datum:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/recitaltabs.ui",
+    "46"
+   ]
+  ]
+ },
+ {
+  "ctx": "RecitalTabs",
+  "src": "Time:",
+  "de": "Uhrzeit:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/recitaltabs.ui",
+    "73"
+   ]
+  ]
+ },
+ {
+  "ctx": "RecitalTabs",
+  "src": "Organiser:",
+  "de": "Organisator:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/recitaltabs.ui",
+    "100"
+   ]
+  ]
+ },
+ {
+  "ctx": "RecitalTabs",
+  "src": "State:",
+  "de": "Status:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/recitaltabs.ui",
+    "154"
+   ]
+  ]
+ },
+ {
+  "ctx": "RecitalTabs",
+  "src": "planned",
+  "de": "geplant",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/recitaltabs.ui",
+    "168"
+   ]
+  ]
+ },
+ {
+  "ctx": "RecitalTabs",
+  "src": "done",
+  "de": "erledigt",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/recitaltabs.ui",
+    "173"
+   ]
+  ]
+ },
+ {
+  "ctx": "RecitalTabs",
+  "src": "Composer",
+  "de": "Komponist",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/recitaltabs.ui",
+    "203"
+   ]
+  ]
+ },
+ {
+  "ctx": "RecitalTabs",
+  "src": "Title",
+  "de": "Titel",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/recitaltabs.ui",
+    "208"
+   ]
+  ]
+ },
+ {
+  "ctx": "RecitalTabs",
+  "src": "Duration",
+  "de": "Dauer",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/recitaltabs.ui",
+    "218"
+   ]
+  ]
+ },
+ {
+  "ctx": "RecitalTabs",
+  "src": "Musician (Age) - Instrument",
+  "de": "Musiker (Alter) - Instrument",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/recitaltabs.ui",
+    "223"
+   ]
+  ]
+ },
+ {
+  "ctx": "RecitalTabs",
+  "src": "Accompanist:",
+  "de": "Begleiter:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/recitaltabs.ui",
+    "127"
+   ]
+  ]
+ },
+ {
+  "ctx": "RecitalTabs",
+  "src": "sorting",
+  "de": "sorting",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/recitaltabs.ui",
+    "198"
+   ]
+  ]
+ },
+ {
+  "ctx": "RecitalTabs",
+  "src": "Genre",
+  "de": "Genre",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/recitaltabs.ui",
+    "213"
+   ]
+  ]
+ },
+ {
+  "ctx": "RecitalTabs",
+  "src": "Pure playing time",
+  "de": "Reine Spielzeit",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/recitaltabs.cpp",
+    "191"
+   ]
+  ]
+ },
+ {
+  "ctx": "RecitalTabs",
+  "src": "Min.",
+  "de": "Min.",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/recitaltabs.cpp",
+    "191"
+   ]
+  ]
+ },
+ {
+  "ctx": "RecitalTabs",
+  "src": "Estimated total duration",
+  "de": "Geschätzte Gesamtdauer",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/recitaltabs.cpp",
+    "191"
+   ]
+  ]
+ },
+ {
+  "ctx": "ReminderDialog",
+  "src": "Reminder - Qupil",
+  "de": "Erinnerungen - Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/reminder/reminderdialog.ui",
+    "14"
+   ]
+  ]
+ },
+ {
+  "ctx": "ReminderDialog",
+  "src": "Reminder",
+  "de": "Erinnerungen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/reminder/reminderdialog.ui",
+    "30"
+   ]
+  ]
+ },
+ {
+  "ctx": "ReminderDialog",
+  "src": "Mode",
+  "de": "Modus",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/reminder/reminderdialog.ui",
+    "35"
+   ]
+  ]
+ },
+ {
+  "ctx": "ReminderDialog",
+  "src": "Sound",
+  "de": "Klang",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/reminder/reminderdialog.ui",
+    "40"
+   ]
+  ]
+ },
+ {
+  "ctx": "ReminderDialog",
+  "src": "Add",
+  "de": "Hinzufügen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/reminder/reminderdialog.ui",
+    "48"
+   ]
+  ]
+ },
+ {
+  "ctx": "ReminderDialog",
+  "src": "Edit",
+  "de": "Bearbeiten",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/reminder/reminderdialog.ui",
+    "59"
+   ]
+  ]
+ },
+ {
+  "ctx": "ReminderDialog",
+  "src": "Delete",
+  "de": "Löschen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/reminder/reminderdialog.ui",
+    "70"
+   ]
+  ]
+ },
+ {
+  "ctx": "ReminderDialog",
+  "src": "Error",
+  "de": "Fehler",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/reminder/reminderdialog.cpp",
+    "45"
+   ],
+   [
+    "../src/gui/reminder/reminderdialog.cpp",
+    "69"
+   ],
+   [
+    "../src/gui/reminder/reminderdialog.cpp",
+    "112"
+   ]
+  ]
+ },
+ {
+  "ctx": "ReminderDialog",
+  "src": "The following error occurred while reading the reminder list",
+  "de": "Beim Laden der Daten ist folgender Fehler aufgetreten",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/reminder/reminderdialog.cpp",
+    "45"
+   ],
+   [
+    "../src/gui/reminder/reminderdialog.cpp",
+    "69"
+   ]
+  ]
+ },
+ {
+  "ctx": "ReminderDialog",
+  "src": "At program start",
+  "de": "Beim Programmstart",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/reminder/reminderdialog.cpp",
+    "56"
+   ]
+  ]
+ },
+ {
+  "ctx": "ReminderDialog",
+  "src": "At every lesson",
+  "de": "Am Anfang jedes Unterrichts",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/reminder/reminderdialog.cpp",
+    "59"
+   ]
+  ]
+ },
+ {
+  "ctx": "ReminderDialog",
+  "src": "At the pupil",
+  "de": "Bei dem Schüler",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/reminder/reminderdialog.cpp",
+    "62"
+   ]
+  ]
+ },
+ {
+  "ctx": "ReminderDialog",
+  "src": "The following error occurred while deleting the reminder",
+  "de": "Beim Löschen der Erinnerung trat folgender Fehler auf",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/reminder/reminderdialog.cpp",
+    "112"
+   ]
+  ]
+ },
+ {
+  "ctx": "ReminderEditDialog",
+  "src": "Edit Reminder - Qupil",
+  "de": "Erinnerungen einrichten - Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/reminder/remindereditdialog.ui",
+    "14"
+   ]
+  ]
+ },
+ {
+  "ctx": "ReminderEditDialog",
+  "src": "Reminder Text:",
+  "de": "Erinnerungstext:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/reminder/remindereditdialog.ui",
+    "22"
+   ]
+  ]
+ },
+ {
+  "ctx": "ReminderEditDialog",
+  "src": "Reminder Mode",
+  "de": "Erinnerungsmodus",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/reminder/remindereditdialog.ui",
+    "41"
+   ]
+  ]
+ },
+ {
+  "ctx": "ReminderEditDialog",
+  "src": "Remember at programm start",
+  "de": "Erinnerung nur bei Programmstart",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/reminder/remindereditdialog.ui",
+    "47"
+   ]
+  ]
+ },
+ {
+  "ctx": "ReminderEditDialog",
+  "src": "Remember at the beginning of each lesson",
+  "de": "Am Anfang jeder Unterrichtseinheit erinnern",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/reminder/remindereditdialog.ui",
+    "57"
+   ]
+  ]
+ },
+ {
+  "ctx": "ReminderEditDialog",
+  "src": "Remember only with the following student:",
+  "de": "Nur bei folgendem Schüler erinnern:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/reminder/remindereditdialog.ui",
+    "66"
+   ]
+  ]
+ },
+ {
+  "ctx": "ReminderEditDialog",
+  "src": "Play sound file while displaying the reminder",
+  "de": "Spiele Klangdatei beim Anzeigen der Erinnerung",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/reminder/remindereditdialog.ui",
+    "81"
+   ]
+  ]
+ },
+ {
+  "ctx": "ReminderEditDialog",
+  "src": "Error",
+  "de": "Fehler",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/reminder/remindereditdialog.cpp",
+    "33"
+   ]
+  ]
+ },
+ {
+  "ctx": "ReminderEditDialog",
+  "src": "The following error occurred while loading the data",
+  "de": "Beim Laden der Daten trat folgender Fehler auf",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/reminder/remindereditdialog.cpp",
+    "33"
+   ]
+  ]
+ },
+ {
+  "ctx": "ReminderEditDialog",
+  "src": "Please enter a reminder text to use the function!",
+  "de": "Bitte geben Sie einen Erinnerungstext ein um die Funktion zu nutzen!",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/reminder/remindereditdialog.cpp",
+    "85"
+   ]
+  ]
+ },
+ {
+  "ctx": "ReminderEditDialog",
+  "src": "The following error occurred while entering the reminder",
+  "de": "Beim Eintragen der Erinnerung ist folgender Fehler aufgetreten",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/reminder/remindereditdialog.cpp",
+    "121"
+   ]
+  ]
+ },
+ {
+  "ctx": "SelectPiecesDialog",
+  "src": "Concert Music Selection - Qupil",
+  "de": "Vorspielstücke auswählen - Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/selectpiecesdialog.ui",
+    "14"
+   ]
+  ]
+ },
+ {
+  "ctx": "SelectPiecesDialog",
+  "src": "Please select one or more pieces to add to the current concert!",
+  "de": "Bitte wählen Sie eines oder mehrere Stücke aus um sie zum aktuellen Konzert hinzuzufügen!",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/selectpiecesdialog.ui",
+    "20"
+   ]
+  ]
+ },
+ {
+  "ctx": "SelectPiecesDialog",
+  "src": "Show students from this location:",
+  "de": "Zeige Schüler aus diesem Ort:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/selectpiecesdialog.ui",
+    "29"
+   ]
+  ]
+ },
+ {
+  "ctx": "SelectPiecesDialog",
+  "src": "Composer",
+  "de": "Komponist",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/selectpiecesdialog.ui",
+    "61"
+   ]
+  ]
+ },
+ {
+  "ctx": "SelectPiecesDialog",
+  "src": "Title",
+  "de": "Titel",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/selectpiecesdialog.ui",
+    "66"
+   ]
+  ]
+ },
+ {
+  "ctx": "SelectPiecesDialog",
+  "src": "Genre",
+  "de": "Genre",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/selectpiecesdialog.ui",
+    "71"
+   ]
+  ]
+ },
+ {
+  "ctx": "SelectPiecesDialog",
+  "src": "Duration",
+  "de": "Dauer",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/selectpiecesdialog.ui",
+    "76"
+   ]
+  ]
+ },
+ {
+  "ctx": "SelectPiecesDialog",
+  "src": "Musician (Age) - Instrument",
+  "de": "Musiker (Alter) - Instrument",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/concertmanager/selectpiecesdialog.ui",
+    "81"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "1",
+  "de": "1",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "242"
+   ],
+   [
+    "../src/gui/settings/settings.ui",
+    "325"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Settings - Qupil",
+  "de": "Einstellungen - Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "14"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "General",
+  "de": "Allgemein",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "46"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Timetable",
+  "de": "Stundenplan",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "55"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Lesson",
+  "de": "Unterricht",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "64"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Instruments",
+  "de": "Instrumente",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "82"
+   ],
+   [
+    "../src/gui/settings/settings.ui",
+    "792"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Music Pieces",
+  "de": "Werke",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "73"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Events",
+  "de": "Veranstaltungen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "91"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Save notes / music pieces together for all students of the lesson",
+  "de": "Notizen / Werke für alle Schüler des Unterrichts gemeinsam speichern",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "350"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Notification at the end of lessons",
+  "de": "Meldung am Ende des Unterrichts",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "160"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "before the end of the lesson",
+  "de": "vor Unterrichtsende",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "184"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Play Sound:",
+  "de": "Spiele Klang:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "198"
+   ],
+   [
+    "../src/gui/settings/settings.ui",
+    "281"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Volume:",
+  "de": "Lautstärke:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "235"
+   ],
+   [
+    "../src/gui/settings/settings.ui",
+    "318"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Sound for the reminder tool",
+  "de": "Klang für Erinnerungen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "267"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Concert Interval Check (Concert Candidates) considered:",
+  "de": "Vorspielintervall-Prüfung (Vorspielkandidaten) berücksichtig:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "360"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Only Solo Recitals",
+  "de": "Nur Solo-Vorträge",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "366"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Solo Recitals and Ensemble Participation",
+  "de": "Solo-Vorträge und Ensemblemitwirkung",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "376"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Activate Birthday Reminder",
+  "de": "Geburtstagserinnerung aktivieren",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "150"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Language:",
+  "de": "Sprache:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "122"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Colors",
+  "de": "Farben",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "403"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Weekday:",
+  "de": "Wochentag:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "409"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "D",
+  "de": "D",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "428"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Text",
+  "de": "Text",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "444"
+   ],
+   [
+    "../src/gui/settings/settings.ui",
+    "499"
+   ],
+   [
+    "../src/gui/settings/settings.ui",
+    "548"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Background",
+  "de": "Hintergrund",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "463"
+   ],
+   [
+    "../src/gui/settings/settings.ui",
+    "512"
+   ],
+   [
+    "../src/gui/settings/settings.ui",
+    "561"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Lesson:",
+  "de": "Unterricht:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "470"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "L",
+  "de": "L",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "483"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Pupil:",
+  "de": "Schüler:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "519"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "P",
+  "de": "P",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "532"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Limit the number of displayed lesson notes    ",
+  "de": "Begrenze die Anzahl angezeigter Unterrrichtsnotizen    ",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "588"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Number of displayed lesson notes:",
+  "de": "Anzahl der angezeigten Unterrichtsnotizen:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "599"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Lesson Locations",
+  "de": "Unterrichtsorte",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "625"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Location:",
+  "de": "Ort:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "646"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Add",
+  "de": "Hinzufügen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "658"
+   ],
+   [
+    "../src/gui/settings/settings.ui",
+    "769"
+   ],
+   [
+    "../src/gui/settings/settings.ui",
+    "825"
+   ],
+   [
+    "../src/gui/settings/settings.ui",
+    "888"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Delete",
+  "de": "Löschen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "669"
+   ],
+   [
+    "../src/gui/settings/settings.ui",
+    "758"
+   ],
+   [
+    "../src/gui/settings/settings.ui",
+    "836"
+   ],
+   [
+    "../src/gui/settings/settings.ui",
+    "899"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Limit the number of displayed music pieces   ",
+  "de": "Begrenze die Anzahl angezeigter Werke    ",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "688"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Number of displayed music pieces:",
+  "de": "Anzahl der angezeigten Werke:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "699"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Sizes",
+  "de": "Größen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "848"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Size:",
+  "de": "Größe:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "869"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Music Styles",
+  "de": "Stilrichtungen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "725"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Style:",
+  "de": "Stil:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "746"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Calculate total playing time of events",
+  "de": "Gesamtspielzeit von Veranstaltungen berechnen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "918"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Total time for moderation:",
+  "de": "Gesamtdauer für An- und Abmoderation:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "924"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Break between each music piece:",
+  "de": "Auf- und Abtrittszeit zwischen den Werken:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "938"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": "Instrument:",
+  "de": "Instrument:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "813"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialog",
+  "src": " Min.",
+  "de": " Min.",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settings.ui",
+    "171"
+   ],
+   [
+    "../src/gui/settings/settings.ui",
+    "931"
+   ],
+   [
+    "../src/gui/settings/settings.ui",
+    "945"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialogImpl",
+  "src": "English",
+  "de": "Englisch",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settingsdialogimpl.cpp",
+    "41"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialogImpl",
+  "src": "German",
+  "de": "Deutsch",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settingsdialogimpl.cpp",
+    "45"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialogImpl",
+  "src": "Select Sound File",
+  "de": "Klangdatei auswählen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settingsdialogimpl.cpp",
+    "234"
+   ],
+   [
+    "../src/gui/settings/settingsdialogimpl.cpp",
+    "242"
+   ]
+  ]
+ },
+ {
+  "ctx": "SettingsDialogImpl",
+  "src": "Sound Files (*.wav *.ogg *.mp3)",
+  "de": "Klangdateien (*.wav *.ogg *.mp3)",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/settings/settingsdialogimpl.cpp",
+    "234"
+   ],
+   [
+    "../src/gui/settings/settingsdialogimpl.cpp",
+    "242"
+   ]
+  ]
+ },
+ {
+  "ctx": "SheetMusicLibraryDialog",
+  "src": "All",
+  "de": "Alle",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/sheetmusiclibrary/sheetmusiclibrary.ui",
+    "24"
+   ]
+  ]
+ },
+ {
+  "ctx": "SheetMusicLibraryDialog",
+  "src": "Composer / Author:",
+  "de": "Komponist / Autor:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/sheetmusiclibrary/sheetmusiclibrary.ui",
+    "47"
+   ]
+  ]
+ },
+ {
+  "ctx": "SheetMusicLibraryDialog",
+  "src": "Title:",
+  "de": "Titel:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/sheetmusiclibrary/sheetmusiclibrary.ui",
+    "57"
+   ]
+  ]
+ },
+ {
+  "ctx": "SheetMusicLibraryDialog",
+  "src": "Publisher:",
+  "de": "Verlag:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/sheetmusiclibrary/sheetmusiclibrary.ui",
+    "67"
+   ]
+  ]
+ },
+ {
+  "ctx": "SheetMusicLibraryDialog",
+  "src": "Available",
+  "de": "Verfügbar",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/sheetmusiclibrary/sheetmusiclibrary.ui",
+    "160"
+   ]
+  ]
+ },
+ {
+  "ctx": "SheetMusicLibraryDialog",
+  "src": "Composer / Author",
+  "de": "Komponist / Autor",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/sheetmusiclibrary/sheetmusiclibrary.ui",
+    "181"
+   ],
+   [
+    "../src/gui/sheetmusiclibrary/sheetmusiclibrary.ui",
+    "255"
+   ]
+  ]
+ },
+ {
+  "ctx": "SheetMusicLibraryDialog",
+  "src": "Title",
+  "de": "Titel",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/sheetmusiclibrary/sheetmusiclibrary.ui",
+    "186"
+   ],
+   [
+    "../src/gui/sheetmusiclibrary/sheetmusiclibrary.ui",
+    "260"
+   ]
+  ]
+ },
+ {
+  "ctx": "SheetMusicLibraryDialog",
+  "src": "Publisher",
+  "de": "Verlag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/sheetmusiclibrary/sheetmusiclibrary.ui",
+    "191"
+   ],
+   [
+    "../src/gui/sheetmusiclibrary/sheetmusiclibrary.ui",
+    "265"
+   ]
+  ]
+ },
+ {
+  "ctx": "SheetMusicLibraryDialog",
+  "src": "Give selection to",
+  "de": "Auswahl verleihen an",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/sheetmusiclibrary/sheetmusiclibrary.ui",
+    "199"
+   ]
+  ]
+ },
+ {
+  "ctx": "SheetMusicLibraryDialog",
+  "src": "Pupil:",
+  "de": "Schüler:",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/sheetmusiclibrary/sheetmusiclibrary.ui",
+    "223"
+   ]
+  ]
+ },
+ {
+  "ctx": "SheetMusicLibraryDialog",
+  "src": "Loaned",
+  "de": "Verliehen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/sheetmusiclibrary/sheetmusiclibrary.ui",
+    "234"
+   ]
+  ]
+ },
+ {
+  "ctx": "SheetMusicLibraryDialog",
+  "src": "Lent to",
+  "de": "Verliehen an",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/sheetmusiclibrary/sheetmusiclibrary.ui",
+    "270"
+   ]
+  ]
+ },
+ {
+  "ctx": "SheetMusicLibraryDialog",
+  "src": "Lent on",
+  "de": "Verliehen am",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/sheetmusiclibrary/sheetmusiclibrary.ui",
+    "275"
+   ]
+  ]
+ },
+ {
+  "ctx": "SheetMusicLibraryDialog",
+  "src": "Selection returned by the pupil",
+  "de": "Auswahl vom Schüler zurückgegeben",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/sheetmusiclibrary/sheetmusiclibrary.ui",
+    "283"
+   ]
+  ]
+ },
+ {
+  "ctx": "SheetMusicLibraryDialog",
+  "src": "Index",
+  "de": "Index",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/sheetmusiclibrary/sheetmusiclibrary.ui",
+    "176"
+   ],
+   [
+    "../src/gui/sheetmusiclibrary/sheetmusiclibrary.ui",
+    "250"
+   ]
+  ]
+ },
+ {
+  "ctx": "SheetMusicLibraryDialog",
+  "src": "Music Library - Qupil",
+  "de": "Noten-Bibliothek - Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/sheetmusiclibrary/sheetmusiclibrary.ui",
+    "14"
+   ]
+  ]
+ },
+ {
+  "ctx": "SheetMusicLibraryDialog",
+  "src": "&OK",
+  "de": "&OK",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/sheetmusiclibrary/sheetmusiclibrary.ui",
+    "324"
+   ]
+  ]
+ },
+ {
+  "ctx": "SheetMusicLibraryDialogImpl",
+  "src": "Qupil",
+  "de": "Qupil",
+  "type": "vanished",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "SheetMusicLibraryDialogImpl",
+  "src": "You must complete all fields (composer / author, title, publisher) \nto add the entry!",
+  "de": "Sie müssen alle Felder (Komponist/Author, Titel, Verlag) ausfüllen\num den Eintrag hinzuzufügen!",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/sheetmusiclibrary/sheetmusiclibrarydialogimpl.cpp",
+    "155"
+   ]
+  ]
+ },
+ {
+  "ctx": "SmlAllModel",
+  "src": "Index",
+  "de": "Index",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/sheetmusiclibrary/models/smlallmodel.cpp",
+    "112"
+   ]
+  ]
+ },
+ {
+  "ctx": "SmlAllModel",
+  "src": "Composer / Author",
+  "de": "Komponist / Autor",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/sheetmusiclibrary/models/smlallmodel.cpp",
+    "113"
+   ]
+  ]
+ },
+ {
+  "ctx": "SmlAllModel",
+  "src": "Title",
+  "de": "Titel",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/sheetmusiclibrary/models/smlallmodel.cpp",
+    "114"
+   ]
+  ]
+ },
+ {
+  "ctx": "SmlAllModel",
+  "src": "Publisher",
+  "de": "Verlag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/sheetmusiclibrary/models/smlallmodel.cpp",
+    "115"
+   ]
+  ]
+ },
+ {
+  "ctx": "TimeTableTreeWidget",
+  "src": "Delete Lesson",
+  "de": "Unterricht löschen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/timetabletreewidget.cpp",
+    "30"
+   ]
+  ]
+ },
+ {
+  "ctx": "TimeTableTreeWidget",
+  "src": "Monday",
+  "de": "Montag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/timetabletreewidget.cpp",
+    "60"
+   ]
+  ]
+ },
+ {
+  "ctx": "TimeTableTreeWidget",
+  "src": "Tuesday",
+  "de": "Dienstag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/timetabletreewidget.cpp",
+    "60"
+   ]
+  ]
+ },
+ {
+  "ctx": "TimeTableTreeWidget",
+  "src": "Wednesday",
+  "de": "Mittwoch",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/timetabletreewidget.cpp",
+    "60"
+   ]
+  ]
+ },
+ {
+  "ctx": "TimeTableTreeWidget",
+  "src": "Thursday",
+  "de": "Donnerstag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/timetabletreewidget.cpp",
+    "60"
+   ]
+  ]
+ },
+ {
+  "ctx": "TimeTableTreeWidget",
+  "src": "Friday",
+  "de": "Freitag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/timetabletreewidget.cpp",
+    "60"
+   ]
+  ]
+ },
+ {
+  "ctx": "TimeTableTreeWidget",
+  "src": "Saturday",
+  "de": "Samstag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/timetabletreewidget.cpp",
+    "60"
+   ]
+  ]
+ },
+ {
+  "ctx": "TimeTableTreeWidget",
+  "src": "Sunday",
+  "de": "Sonntag",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/timetabletreewidget.cpp",
+    "60"
+   ]
+  ]
+ },
+ {
+  "ctx": "TimeTableTreeWidget",
+  "src": "irregular",
+  "de": "unregelmäßig",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/timetabletreewidget.cpp",
+    "60"
+   ]
+  ]
+ },
+ {
+  "ctx": "TimeTableTreeWidget",
+  "src": "Delete Lesson - Qupil",
+  "de": "Unterricht löschen - Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/timetabletreewidget.cpp",
+    "295"
+   ]
+  ]
+ },
+ {
+  "ctx": "TimeTableTreeWidget",
+  "src": "Do you really want to delete the selected lesson?",
+  "de": "Möchten Sie den ausgewählten Unterricht wirklich löschen?",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/timetabletreewidget.cpp",
+    "296"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "Qupil",
+  "de": "Qupil",
+  "type": "obsolete",
+  "numerus": null,
+  "locs": []
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "Qupil %1 - Lesson Management for Instrumental Teacher - qupil.de",
+  "de": "Qupil %1 - Unterrichtsmanagement für Instrumentalpädagogen - qupil.de",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "61"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "Lessons: 0 - Pupils: 0 ",
+  "de": "Unterrichtseinheiten: 0 - Schüler: 0 ",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "65"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "Could not load Metronoms Sounds",
+  "de": "Kann Metronom Klänge nicht laden",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "107"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "This version of Qupil uses a new format to store data. Qupil will now try to convert the old data into the new format. \nThis process may take several minutes.",
+  "de": "Diese Version von Qupil verwendet ein neues Format um Daten zu speichern. \nQupil wird nun versuchen die alten Daten in das neue Format umzuwandeln.\nDieser Vorgang kann einige Minuten dauern.",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "201"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "Convert old data - Qupil",
+  "de": "Alte Daten konvertieren - Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "228"
+   ],
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "296"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "Cancel",
+  "de": "Abbrechen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "229"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "Convert old data ...",
+  "de": "Alte Daten konvertieren ...",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "236"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "Conversion of the old data into the new format successfully completed!",
+  "de": "Konvertieren der alten Daten in das neue Format erfolgreich Abgeschlossen!",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "240"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "An error occurred while converting the old data. \nPlease contact the program author: <a href=\"mailto:fhammer@qupil.de\">fhammer@qupil.de</a> to fix this issue!",
+  "de": "Beim konvertieren der alten Daten ist ein Fehler aufgetreten.\nBitte wenden Sie sich an den Programm-Author: <a href=\"mailto:fhammer@qupil.de\">fhammer@qupil.de</a> um dieses Problem zu beheben!",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "245"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "Error - Qupil",
+  "de": "Fehler - Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "271"
+   ],
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "283"
+   ],
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "621"
+   ],
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "629"
+   ],
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "637"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "An error occurred while updating the database structure. Qupil may not be able to process the data correctly. \nPlease contact the program author: <a href=\"mailto:fhammer@qupil.de\">fhammer@qupil.de</a> to fix this issue!",
+  "de": "Beim Update der Datenbankstruktur ist ein Fehler aufgetreten. Möglicherweise kann Qupil die Daten nicht korrekt verarbeiten.\nBitte wenden Sie sich an den Programm-Author: <a href=\"mailto:fhammer@qupil.de\">fhammer@qupil.de</a> um dieses Problem zu beheben!",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "273"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "When updating the database structure from revision %0 to %1, the following error occurred:<br><b>%2</b><br>Please contact the program author: <a href=\"mailto:fhammer@qupil.de\">fhammer@qupil.de</a> to fix this problem!",
+  "de": "Beim Update der Datenbankstruktur von Revision %0 auf %1 ist folgender Fehler aufgetreten:<br><b>%2</b><br>Bitte wenden Sie sich an den Programm-Author: <a href=\"mailto:fhammer@qupil.de\">fhammer@qupil.de</a> um dieses Problem zu beheben!",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "285"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "New",
+  "de": "Neuer",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "375"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "Pupil",
+  "de": "Schüler",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "375"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "Select Backup Directory",
+  "de": "Backupverzeichnis auswählen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "540"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "Create Backup - Qupil",
+  "de": "Backup erstellen - Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "556"
+   ],
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "559"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "The backup with the file name \"%1\" was successfully created!",
+  "de": "Das Backup mit dem Dateinamen \"%1\" wurde erfolgreich erstellt!",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "557"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "The backup could not be created in the selected directory \"%1\". \nPlease check if you have write permission for this directory!",
+  "de": "Das Backup konnte im ausgewählten Verzeichnis \"%1\"nicht erstellt werden.\nBitte überprüfen Sie ob Sie Schreibrechte für dieses Verzeichnis besitzen!",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "560"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "Open Backup - Qupil",
+  "de": "Backup öffnen - Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "568"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "Qupil Backup File (*.db)",
+  "de": "Qupil Backup Datei (*.db)",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "570"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "Replay Backup - Qupil",
+  "de": "Backup zurückspielen - Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "580"
+   ],
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "616"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "A backup should only be restored as data recovery after data loss. \nIf you restore a backup, changes and new entries \nthat may have been written after the backup will be deleted. \n\nWould you really like to restore the backup?",
+  "de": "Ein Backup sollte nur als Datenwiederherstellung nach Datenverlust zurückgespielt werden.\nWenn Sie ein Backup zurückspielen werden Änderungen und neue Einträge,\ndie eventuell nach dem Backup geschrieben wurden wieder gelöscht.\n\nMöchten Sie das Backup wirklich zurückspielen?",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "581"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "The backup has been successfully restored. \nPlease restart Qupil!",
+  "de": "Das Backup wurde erfolgreich zurückgespielt.\nBitte starten Sie Qupil neu!",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "617"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "The backup type could not be determined! Therefore, the backup can not be restored. \nPlease contact the program author: <a href=\"mailto:fhammer@qupil.de\">fhammer@qupil.de</a> to fix this problem!",
+  "de": "Der Backup-Typ konnte nicht ermittelt werden! Daher kann das Backup nicht zurückgespielt werden.\nBitte wenden Sie sich an den Programm-Author: <a href=\"mailto:fhammer@qupil.de\">fhammer@qupil.de</a> um dieses Problem zu beheben!",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "623"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "The backup could not be restored! \nPlease contact the program author: <a href=\"mailto:fhammer@qupil.de\">fhammer@qupil.de</a> to fix this issue!",
+  "de": "Das Backup konnte nicht zurückgespielt werden!\nBitte wenden Sie sich an den Programm-Author: <a href=\"mailto:fhammer@qupil.de\">fhammer@qupil.de</a> um dieses Problem zu beheben!",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "631"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "The selected backup file does not exist or is empty. \nThe backup will not be restored!",
+  "de": "Die ausgewählte Backupdatei existiert nicht oder ist leer.\nDas Backup wird nicht zurückgespielt!",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "638"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "Open Address File - Qupil",
+  "de": "Adressdatei öffnen - Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "645"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "Address CSV (*.csv)",
+  "de": "Adress CSV (*.csv)",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "647"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "Lessons: %1 - Pupils: %2 ",
+  "de": "Unterrichtseinheiten: %1 - Schüler: %2 ",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "674"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "Reminder for the pupil ",
+  "de": "Erinnerung für den Schüler ",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "824"
+   ]
+  ]
+ },
+ {
+  "ctx": "mainWindowImpl",
+  "src": "Done? - Reminder will be removed!",
+  "de": "Erledigt? - Erinnerung wird gelöscht!",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mainwindow/mainwindowimpl.cpp",
+    "826"
+   ]
+  ]
+ },
+ {
+  "ctx": "myMessageDialog",
+  "src": "Qupil",
+  "de": "Qupil",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mymessagedialog/mymessagedialog.ui",
+    "20"
+   ]
+  ]
+ },
+ {
+  "ctx": "myMessageDialog",
+  "src": "Do not show this message again.",
+  "de": "Diese Nachricht nicht mehr anzeigen",
+  "type": "",
+  "numerus": null,
+  "locs": [
+   [
+    "../src/gui/mymessagedialog/mymessagedialog.ui",
+    "64"
+   ]
+  ]
+ }
+]

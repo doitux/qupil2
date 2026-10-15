@@ -1,0 +1,12 @@
+Additional permission under GNU GPL version 3 section 7
+
+As a special exception, the copyright holders of Qupil give you permission
+to convey this Program, or any covered work based on it, through an
+application distribution platform (including, but not limited to, the
+Apple App Store and the Mac App Store), even if the terms of that platform
+impose usage restrictions, technical protection measures or other
+limitations on recipients that would otherwise be prohibited by this
+License, provided that you make the Corresponding Source of the conveyed
+work available to all recipients, free of charge and under the terms of
+this License, at a publicly accessible location that does not require
+use of that platform.

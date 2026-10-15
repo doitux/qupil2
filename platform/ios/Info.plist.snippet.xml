@@ -1,0 +1,23 @@
+<!-- Merge into the app's Info.plist (Qupil 2, iOS/iPadOS). -->
+<key>CFBundleDevelopmentRegion</key>
+<string>en</string>
+<key>CFBundleLocalizations</key>
+<array>
+    <string>en</string>
+    <string>de</string>
+    <string>fr</string>
+    <string>es</string>
+</array>
+<!-- Shows the per-app language in iOS Settings › Qupil › Language -->
+<key>UIPrefersShowingLanguageSettings</key>
+<true/>
+<!-- Wi-Fi sync: Bonjour service type announced by Qupil -->
+<key>NSBonjourServices</key>
+<array>
+    <string>_qupil-sync._tcp</string>
+</array>
+<!-- English fallback; translations come from <lang>.lproj/InfoPlist.strings -->
+<key>NSLocalNetworkUsageDescription</key>
+<string>Qupil uses your local network to sync with your other devices over Wi-Fi.</string>
+<key>NSCameraUsageDescription</key>
+<string>Qupil uses the camera to scan the pairing code of another device.</string>

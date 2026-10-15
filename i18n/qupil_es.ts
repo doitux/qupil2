@@ -1,0 +1,2272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="es_ES" sourcelanguage="en_US">
+<context>
+    <name></name>
+    <message id="app.window_title">
+        <source>Qupil %1 – Lesson management for music teachers</source>
+        <extracomment>%1 = version number</extracomment>
+        <translation>Qupil %1 – Gestión de clases para profesores de música</translation>
+    </message>
+    <message id="app.window_title_page">
+        <source>%1 – Qupil</source>
+        <extracomment>Desktop window title; %1 = title of the current page or dialog.</extracomment>
+        <translation>%1 – Qupil</translation>
+    </message>
+    <message id="common.ok">
+        <source>OK</source>
+        <translation>Aceptar</translation>
+    </message>
+    <message id="common.cancel">
+        <source>Cancel</source>
+        <translation>Cancelar</translation>
+    </message>
+    <message id="common.yes">
+        <source>Yes</source>
+        <translation>Sí</translation>
+    </message>
+    <message id="common.no">
+        <source>No</source>
+        <translation>No</translation>
+    </message>
+    <message id="common.save">
+        <source>Save</source>
+        <translation>Guardar</translation>
+    </message>
+    <message id="common.add">
+        <source>Add</source>
+        <translation>Añadir</translation>
+    </message>
+    <message id="common.add_ellipsis">
+        <source>Add…</source>
+        <translation>Añadir…</translation>
+    </message>
+    <message id="common.remove">
+        <source>Remove</source>
+        <translation>Quitar</translation>
+    </message>
+    <message id="common.delete">
+        <source>Delete</source>
+        <translation>Eliminar</translation>
+    </message>
+    <message id="common.edit">
+        <source>Edit</source>
+        <extracomment>Used as menu title and as button label.</extracomment>
+        <translation>Editar</translation>
+    </message>
+    <message id="common.print">
+        <source>Print</source>
+        <translation>Imprimir</translation>
+    </message>
+    <message id="common.export_pdf">
+        <source>Export as PDF</source>
+        <translation>Exportar a PDF</translation>
+    </message>
+    <message id="common.export_file">
+        <source>Export file</source>
+        <translation>Exportar archivo</translation>
+    </message>
+    <message id="common.filter_pdf">
+        <source>PDF file (*.pdf)</source>
+        <extracomment>File dialog filter. Keep the pattern in parentheses unchanged.</extracomment>
+        <translation>Archivo PDF (*.pdf)</translation>
+    </message>
+    <message id="common.all">
+        <source>All</source>
+        <extracomment>Filter option, e.g. all lesson locations.</extracomment>
+        <translation>Todos</translation>
+    </message>
+    <message id="common.never">
+        <source>Never</source>
+        <translation>Nunca</translation>
+    </message>
+    <message id="common.none">
+        <source>None</source>
+        <extracomment>Shown when a student never took part in an ensemble.</extracomment>
+        <translation>Ninguna</translation>
+    </message>
+    <message id="common.other">
+        <source>Other</source>
+        <extracomment>Activity type.</extracomment>
+        <translation>Otro</translation>
+    </message>
+    <message id="common.error">
+        <source>Error</source>
+        <translation>Error</translation>
+    </message>
+    <message id="common.dont_show_again">
+        <source>Don’t show this message again</source>
+        <translation>No volver a mostrar este mensaje</translation>
+    </message>
+    <message id="common.name">
+        <source>Name</source>
+        <translation>Nombre</translation>
+    </message>
+    <message id="common.description">
+        <source>Description</source>
+        <translation>Descripción</translation>
+    </message>
+    <message id="common.label.description">
+        <source>Description:</source>
+        <translation>Descripción:</translation>
+    </message>
+    <message id="common.date">
+        <source>Date</source>
+        <translation>Fecha</translation>
+    </message>
+    <message id="common.label.date">
+        <source>Date:</source>
+        <translation>Fecha:</translation>
+    </message>
+    <message id="common.time">
+        <source>Time</source>
+        <translation>Hora</translation>
+    </message>
+    <message id="common.label.time">
+        <source>Time:</source>
+        <translation>Hora:</translation>
+    </message>
+    <message id="common.time_oclock">
+        <source>%1</source>
+        <extracomment>Clock time; %1 = formatted time such as 15:00. Add a unit only if your language uses one.</extracomment>
+        <translation>%1 h</translation>
+    </message>
+    <message id="common.weekday">
+        <source>Weekday</source>
+        <translation>Día de la semana</translation>
+    </message>
+    <message id="common.label.weekday">
+        <source>Weekday:</source>
+        <translation>Día de la semana:</translation>
+    </message>
+    <message id="common.start">
+        <source>Start</source>
+        <translation>Inicio</translation>
+    </message>
+    <message id="common.label.start">
+        <source>Start:</source>
+        <translation>Inicio:</translation>
+    </message>
+    <message id="common.end">
+        <source>End</source>
+        <translation>Fin</translation>
+    </message>
+    <message id="common.label.end">
+        <source>End:</source>
+        <translation>Fin:</translation>
+    </message>
+    <message id="common.duration">
+        <source>Duration</source>
+        <translation>Duración</translation>
+    </message>
+    <message id="common.label.duration">
+        <source>Duration:</source>
+        <translation>Duración:</translation>
+    </message>
+    <message id="common.type">
+        <source>Type</source>
+        <translation>Tipo</translation>
+    </message>
+    <message id="common.label.type">
+        <source>Type:</source>
+        <translation>Tipo:</translation>
+    </message>
+    <message id="common.status">
+        <source>Status</source>
+        <translation>Estado</translation>
+    </message>
+    <message id="common.label.status">
+        <source>Status:</source>
+        <translation>Estado:</translation>
+    </message>
+    <message id="common.location">
+        <source>Location</source>
+        <translation>Lugar</translation>
+    </message>
+    <message id="common.composer">
+        <source>Composer</source>
+        <translation>Compositor</translation>
+    </message>
+    <message id="common.label.composer">
+        <source>Composer:</source>
+        <translation>Compositor:</translation>
+    </message>
+    <message id="common.title">
+        <source>Title</source>
+        <translation>Título</translation>
+    </message>
+    <message id="common.label.title">
+        <source>Title:</source>
+        <translation>Título:</translation>
+    </message>
+    <message id="common.genre">
+        <source>Genre</source>
+        <translation>Género</translation>
+    </message>
+    <message id="common.label.genre">
+        <source>Genre:</source>
+        <translation>Género:</translation>
+    </message>
+    <message id="common.instrument">
+        <source>Instrument</source>
+        <translation>Instrumento</translation>
+    </message>
+    <message id="common.label.instrument">
+        <source>Instrument:</source>
+        <translation>Instrumento:</translation>
+    </message>
+    <message id="common.instruments">
+        <source>Instruments</source>
+        <translation>Instrumentos</translation>
+    </message>
+    <message id="common.size">
+        <source>Size</source>
+        <extracomment>Instrument size, e.g. 3/4.</extracomment>
+        <translation>Tamaño</translation>
+    </message>
+    <message id="common.label.size">
+        <source>Size:</source>
+        <translation>Tamaño:</translation>
+    </message>
+    <message id="common.count">
+        <source>Count</source>
+        <translation>Cantidad</translation>
+    </message>
+    <message id="common.note">
+        <source>Note</source>
+        <extracomment>A lesson note (text), not a musical note.</extracomment>
+        <translation>Nota</translation>
+    </message>
+    <message id="common.notes">
+        <source>Notes</source>
+        <translation>Notas</translation>
+    </message>
+    <message id="common.label.notes">
+        <source>Notes:</source>
+        <translation>Notas:</translation>
+    </message>
+    <message id="common.student">
+        <source>Student</source>
+        <translation>Alumno</translation>
+    </message>
+    <message id="common.label.student">
+        <source>Student:</source>
+        <translation>Alumno:</translation>
+    </message>
+    <message id="common.lesson">
+        <source>Lesson</source>
+        <translation>Clase</translation>
+    </message>
+    <message id="common.label.lesson">
+        <source>Lesson:</source>
+        <translation>Clase:</translation>
+    </message>
+    <message id="common.lesson_notes">
+        <source>Lesson notes</source>
+        <translation>Notas de clase</translation>
+    </message>
+    <message id="common.pieces">
+        <source>Pieces</source>
+        <extracomment>Pieces of music a student works on.</extracomment>
+        <translation>Obras</translation>
+    </message>
+    <message id="common.piece">
+        <source>Piece</source>
+        <translation>Obra</translation>
+    </message>
+    <message id="common.activities">
+        <source>Activities</source>
+        <translation>Actividades</translation>
+    </message>
+    <message id="common.event">
+        <source>Event</source>
+        <translation>Evento</translation>
+    </message>
+    <message id="common.events">
+        <source>Events</source>
+        <translation>Eventos</translation>
+    </message>
+    <message id="common.archive">
+        <source>Archive</source>
+        <translation>Archivo</translation>
+    </message>
+    <message id="common.first_name">
+        <source>First name</source>
+        <extracomment>Also used to detect matching columns in imported CSV files.</extracomment>
+        <translation>Nombre</translation>
+    </message>
+    <message id="common.last_name">
+        <source>Last name</source>
+        <extracomment>Also used to detect matching columns in imported CSV files.</extracomment>
+        <translation>Apellidos</translation>
+    </message>
+    <message id="common.label.first_name">
+        <source>First name:</source>
+        <translation>Nombre:</translation>
+    </message>
+    <message id="common.label.last_name">
+        <source>Last name:</source>
+        <translation>Apellidos:</translation>
+    </message>
+    <message id="common.address">
+        <source>Address</source>
+        <translation>Dirección</translation>
+    </message>
+    <message id="common.label.address">
+        <source>Address:</source>
+        <translation>Dirección:</translation>
+    </message>
+    <message id="common.birthday">
+        <source>Date of birth</source>
+        <extracomment>Also used to detect matching columns in imported CSV files.</extracomment>
+        <translation>Fecha de nacimiento</translation>
+    </message>
+    <message id="common.label.birthday">
+        <source>Date of birth:</source>
+        <translation>Fecha de nacimiento:</translation>
+    </message>
+    <message id="common.street">
+        <source>Street</source>
+        <translation>Calle</translation>
+    </message>
+    <message id="common.label.street">
+        <source>Street:</source>
+        <translation>Calle:</translation>
+    </message>
+    <message id="common.zip">
+        <source>ZIP code</source>
+        <translation>Código postal</translation>
+    </message>
+    <message id="common.label.zip">
+        <source>ZIP code:</source>
+        <translation>Código postal:</translation>
+    </message>
+    <message id="common.city">
+        <source>City</source>
+        <translation>Ciudad</translation>
+    </message>
+    <message id="common.label.city">
+        <source>City:</source>
+        <translation>Ciudad:</translation>
+    </message>
+    <message id="common.phone">
+        <source>Phone</source>
+        <translation>Teléfono</translation>
+    </message>
+    <message id="common.label.phone">
+        <source>Phone:</source>
+        <translation>Teléfono:</translation>
+    </message>
+    <message id="common.mobile">
+        <source>Mobile</source>
+        <translation>Móvil</translation>
+    </message>
+    <message id="common.label.mobile">
+        <source>Mobile:</source>
+        <translation>Móvil:</translation>
+    </message>
+    <message id="common.email">
+        <source>Email</source>
+        <translation>Correo electrónico</translation>
+    </message>
+    <message id="common.label.email">
+        <source>Email:</source>
+        <translation>Correo electrónico:</translation>
+    </message>
+    <message id="common.age_years" numerus="yes">
+        <source>%n year(s)</source>
+        <extracomment>Age or duration in years.</extracomment>
+        <translation>
+            <numerusform>%n año</numerusform>
+            <numerusform>%n años</numerusform>
+        </translation>
+    </message>
+    <message id="common.duration_months" numerus="yes">
+        <source>%n month(s)</source>
+        <extracomment>Used for the personal recital interval (1, 2, 3, 4, 6, 9, 12, 18, 24 months).</extracomment>
+        <translation>
+            <numerusform>%n mes</numerusform>
+            <numerusform>%n meses</numerusform>
+        </translation>
+    </message>
+    <message id="common.unit.min">
+        <source>min</source>
+        <extracomment>Abbreviation for minutes, shown after a number.</extracomment>
+        <translation>min</translation>
+    </message>
+    <message id="common.unit.minutes">
+        <source>minutes</source>
+        <translation>minutos</translation>
+    </message>
+    <message id="common.unit.cm">
+        <source>cm</source>
+        <translation>cm</translation>
+    </message>
+    <message id="common.irregular">
+        <source>Irregular</source>
+        <extracomment>Used like a weekday for lessons without a fixed time.</extracomment>
+        <translation>Irregular</translation>
+    </message>
+    <message id="common.from_to">
+        <source>from %1 to %2</source>
+        <extracomment>%1, %2 = dates</extracomment>
+        <translation>del %1 al %2</translation>
+    </message>
+    <message id="common.since">
+        <source>since %1</source>
+        <extracomment>%1 = date</extracomment>
+        <translation>desde el %1</translation>
+    </message>
+    <message id="common.total_paren">
+        <source>(%1 in total)</source>
+        <extracomment>%1 = a duration such as &apos;7 years&apos;</extracomment>
+        <translation>(%1 en total)</translation>
+    </message>
+    <message id="weekday.monday">
+        <source>Monday</source>
+        <translation>Lunes</translation>
+    </message>
+    <message id="weekday.tuesday">
+        <source>Tuesday</source>
+        <translation>Martes</translation>
+    </message>
+    <message id="weekday.wednesday">
+        <source>Wednesday</source>
+        <translation>Miércoles</translation>
+    </message>
+    <message id="weekday.thursday">
+        <source>Thursday</source>
+        <translation>Jueves</translation>
+    </message>
+    <message id="weekday.friday">
+        <source>Friday</source>
+        <translation>Viernes</translation>
+    </message>
+    <message id="weekday.saturday">
+        <source>Saturday</source>
+        <translation>Sábado</translation>
+    </message>
+    <message id="weekday.sunday">
+        <source>Sunday</source>
+        <translation>Domingo</translation>
+    </message>
+    <message id="menu.new">
+        <source>New…</source>
+        <translation>Nuevo…</translation>
+    </message>
+    <message id="menu.document">
+        <source>Document</source>
+        <translation>Documento</translation>
+    </message>
+    <message id="menu.tools">
+        <source>Tools</source>
+        <translation>Herramientas</translation>
+    </message>
+    <message id="menu.extras">
+        <source>Extras</source>
+        <translation>Extras</translation>
+    </message>
+    <message id="menu.quit">
+        <source>Quit</source>
+        <translation>Salir</translation>
+    </message>
+    <message id="menu.configure">
+        <source>Settings…</source>
+        <translation>Ajustes…</translation>
+    </message>
+    <message id="menu.event_manager">
+        <source>Event manager…</source>
+        <translation>Gestor de eventos…</translation>
+    </message>
+    <message id="menu.instrument_manager">
+        <source>Instrument manager…</source>
+        <translation>Gestor de instrumentos…</translation>
+    </message>
+    <message id="menu.library">
+        <source>Sheet music library…</source>
+        <translation>Biblioteca de partituras…</translation>
+    </message>
+    <message id="menu.about">
+        <source>About Qupil…</source>
+        <translation>Acerca de Qupil…</translation>
+    </message>
+    <message id="menu.metronome">
+        <source>Metronome / tuning…</source>
+        <translation>Metrónomo / afinación…</translation>
+    </message>
+    <message id="menu.reminders">
+        <source>Reminders…</source>
+        <translation>Recordatorios…</translation>
+    </message>
+    <message id="menu.birthdays">
+        <source>Show birthdays</source>
+        <translation>Mostrar cumpleaños</translation>
+    </message>
+    <message id="menu.backup_create">
+        <source>Create backup…</source>
+        <translation>Crear copia de seguridad…</translation>
+    </message>
+    <message id="menu.backup_restore">
+        <source>Restore backup…</source>
+        <translation>Restaurar copia de seguridad…</translation>
+    </message>
+    <message id="menu.import_csv">
+        <source>Import address book (CSV)…</source>
+        <translation>Importar libreta de direcciones (CSV)…</translation>
+    </message>
+    <message id="menu.schedule_doc">
+        <source>Schedule document…</source>
+        <translation>Documento de horario…</translation>
+    </message>
+    <message id="menu.recital_candidates">
+        <source>Recital candidates…</source>
+        <translation>Candidatos a audición…</translation>
+    </message>
+    <message id="menu.ensemble_candidates">
+        <source>Ensemble candidates…</source>
+        <translation>Candidatos a conjunto…</translation>
+    </message>
+    <message id="menu.dayview">
+        <source>Daily overview…</source>
+        <translation>Resumen del día…</translation>
+    </message>
+    <message id="nav.schedule">
+        <source>Schedule</source>
+        <extracomment>Weekly lesson schedule (timetable).</extracomment>
+        <translation>Horario</translation>
+    </message>
+    <message id="nav.student_list">
+        <source>Student list</source>
+        <translation>Lista de alumnos</translation>
+    </message>
+    <message id="nav.student_archive">
+        <source>Student archive</source>
+        <translation>Archivo de alumnos</translation>
+    </message>
+    <message id="nav.today">
+        <source>Today</source>
+        <translation>Hoy</translation>
+    </message>
+    <message id="nav.students">
+        <source>Students</source>
+        <translation>Alumnos</translation>
+    </message>
+    <message id="nav.more">
+        <source>More</source>
+        <extracomment>Tab that lists all further tools.</extracomment>
+        <translation>Más</translation>
+    </message>
+    <message id="nav.candidates">
+        <source>Candidates</source>
+        <extracomment>Short label for recital and ensemble candidates.</extracomment>
+        <translation>Candidatos</translation>
+    </message>
+    <message id="nav.events">
+        <source>Events</source>
+        <extracomment>Tab with recitals, concerts and other events.</extracomment>
+        <translation>Eventos</translation>
+    </message>
+    <message id="app.under_construction">
+        <source>This area is being built for Qupil 2.</source>
+        <extracomment>Placeholder on pages of the rewrite that are not finished yet.</extracomment>
+        <translation>Esta sección de Qupil 2 está en desarrollo.</translation>
+    </message>
+    <message id="today.notices">
+        <source>Notices</source>
+        <translation>Avisos</translation>
+    </message>
+    <message id="today.later">
+        <source>Later today</source>
+        <translation>Más tarde hoy</translation>
+    </message>
+    <message id="today.remaining" numerus="yes">
+        <source>%n min left</source>
+        <extracomment>Remaining time of the running lesson.</extracomment>
+        <translation>
+            <numerusform>queda %n min</numerusform>
+            <numerusform>quedan %n min</numerusform>
+        </translation>
+    </message>
+    <message id="today.show_irregular">
+        <source>Show irregular lessons (%1)</source>
+        <extracomment>%1 = number of lessons</extracomment>
+        <translation>Mostrar clases irregulares (%1)</translation>
+    </message>
+    <message id="today.birthday">
+        <source>Birthday today</source>
+        <translation>Cumpleaños hoy</translation>
+    </message>
+    <message id="today.birthday_turns">
+        <source>%1 turns %2</source>
+        <extracomment>%1 = student name, %2 = new age</extracomment>
+        <translation>%1 cumple %2</translation>
+    </message>
+    <message id="today.reminder_at">
+        <source>Reminder · %1</source>
+        <extracomment>%1 = time</extracomment>
+        <translation>Recordatorio · %1</translation>
+    </message>
+    <message id="today.overdue" numerus="yes">
+        <source>%n student(s) overdue</source>
+        <extracomment>Number of overdue recital candidates.</extracomment>
+        <translation>
+            <numerusform>%n alumno pendiente</numerusform>
+            <numerusform>%n alumnos pendientes</numerusform>
+        </translation>
+    </message>
+    <message id="today.no_lessons">
+        <source>No lessons today</source>
+        <translation>Hoy no hay clases</translation>
+    </message>
+    <message id="common.new_item">
+        <source>New</source>
+        <extracomment>Button that creates a student or lesson.</extracomment>
+        <translation>Nuevo</translation>
+    </message>
+    <message id="common.more_actions">
+        <source>More actions</source>
+        <translation>Más acciones</translation>
+    </message>
+    <message id="common.done">
+        <source>Done</source>
+        <translation>Listo</translation>
+    </message>
+    <message id="common.back">
+        <source>Back</source>
+        <translation>Atrás</translation>
+    </message>
+    <message id="common.close">
+        <source>Close</source>
+        <translation>Cerrar</translation>
+    </message>
+    <message id="common.share">
+        <source>Share</source>
+        <translation>Compartir</translation>
+    </message>
+    <message id="common.undo">
+        <source>Undo</source>
+        <translation>Deshacer</translation>
+    </message>
+    <message id="common.search">
+        <source>Search</source>
+        <translation>Buscar</translation>
+    </message>
+    <message id="schedule.stats">
+        <source>Lessons: %1 – Students: %2</source>
+        <extracomment>%1, %2 = numbers</extracomment>
+        <translation>Clases: %1 – Alumnos: %2</translation>
+    </message>
+    <message id="schedule.irregular_dates">
+        <source>Irregular dates</source>
+        <translation>Fechas irregulares</translation>
+    </message>
+    <message id="schedule.as_of">
+        <source>As of:</source>
+        <extracomment>Precedes the date a document was created.</extracomment>
+        <translation>A fecha de:</translation>
+    </message>
+    <message id="lesson.tab.details">
+        <source>Details</source>
+        <translation>Detalles</translation>
+    </message>
+    <message id="lesson.label.type">
+        <source>Lesson type:</source>
+        <translation>Tipo de clase:</translation>
+    </message>
+    <message id="lesson.type.individual">
+        <source>Individual lesson</source>
+        <translation>Clase individual</translation>
+    </message>
+    <message id="lesson.type.group">
+        <source>Group lesson</source>
+        <translation>Clase grupal</translation>
+    </message>
+    <message id="lesson.type.ensemble">
+        <source>Ensemble lesson</source>
+        <translation>Clase de conjunto</translation>
+    </message>
+    <message id="lesson.name.heading">
+        <source>Lesson name</source>
+        <translation>Nombre de la clase</translation>
+    </message>
+    <message id="lesson.name.auto">
+        <source>Generate automatically:</source>
+        <translation>Generar automáticamente:</translation>
+    </message>
+    <message id="lesson.name.manual">
+        <source>Manually:</source>
+        <translation>Manualmente:</translation>
+    </message>
+    <message id="lesson.label.time">
+        <source>Lesson time:</source>
+        <translation>Horario de la clase:</translation>
+    </message>
+    <message id="lesson.time.fixed">
+        <source>Fixed time:</source>
+        <translation>Horario fijo:</translation>
+    </message>
+    <message id="lesson.time.irregular">
+        <source>Irregular lesson</source>
+        <translation>Clase irregular</translation>
+    </message>
+    <message id="lesson.label.location">
+        <source>Location:</source>
+        <translation>Lugar de la clase:</translation>
+    </message>
+    <message id="lesson.label.students">
+        <source>Students:</source>
+        <translation>Alumnos:</translation>
+    </message>
+    <message id="lesson.label.students_in">
+        <source>Students in this lesson:</source>
+        <translation>Alumnos de la clase:</translation>
+    </message>
+    <message id="lesson.label.available">
+        <source>Available students:</source>
+        <translation>Alumnos disponibles:</translation>
+    </message>
+    <message id="lesson.delete">
+        <source>Delete lesson</source>
+        <translation>Eliminar clase</translation>
+    </message>
+    <message id="lesson.delete.confirm">
+        <source>Do you really want to delete the selected lesson?</source>
+        <translation>¿Seguro que desea eliminar la clase seleccionada?</translation>
+    </message>
+    <message id="lesson.individual_one_student">
+        <source>An individual lesson can only have one student. Please change the number of students to save.</source>
+        <translation>Una clase individual solo puede tener un alumno. Cambie el número de alumnos para guardar.</translation>
+    </message>
+    <message id="lesson.prefix.individual">
+        <source>IL-</source>
+        <extracomment>Abbreviation at the start of automatically generated names of individual lessons.</extracomment>
+        <translation>CI-</translation>
+    </message>
+    <message id="lesson.prefix.group">
+        <source>GL-</source>
+        <extracomment>Abbreviation at the start of automatically generated names of group lessons.</extracomment>
+        <translation>CG-</translation>
+    </message>
+    <message id="lesson.prefix.ensemble">
+        <source>EnsL-</source>
+        <extracomment>Abbreviation at the start of automatically generated names of ensemble lessons.</extracomment>
+        <translation>CC-</translation>
+    </message>
+    <message id="lesson.new_name">
+        <source>IL – new</source>
+        <extracomment>Name of a newly created lesson before it is configured.</extracomment>
+        <translation>CI – nueva</translation>
+    </message>
+    <message id="lesson.inactive_suffix">
+        <source>(inactive)</source>
+        <extracomment>Appended to the name of a lesson the student no longer attends.</extracomment>
+        <translation>(inactiva)</translation>
+    </message>
+    <message id="lesson.choose">
+        <source>Choose lesson</source>
+        <translation>Elegir clase</translation>
+    </message>
+    <message id="student.new.first_name">
+        <source>New</source>
+        <extracomment>First name of a newly created student; the last name is the word &apos;Student&apos; (common.student), giving e.g. &apos;New Student&apos;.</extracomment>
+        <translation>Nuevo</translation>
+    </message>
+    <message id="student.delete">
+        <source>Delete student</source>
+        <translation>Eliminar alumno</translation>
+    </message>
+    <message id="student.delete.confirm">
+        <source>Do you really want to delete the student “%1”?</source>
+        <extracomment>%1 = student name</extracomment>
+        <translation>¿Seguro que desea eliminar al alumno “%1”?</translation>
+    </message>
+    <message id="student.archive">
+        <source>Archive student</source>
+        <translation>Archivar alumno</translation>
+    </message>
+    <message id="student.archive_delete">
+        <source>Archive and delete student</source>
+        <translation>Archivar y eliminar alumno</translation>
+    </message>
+    <message id="student.tab.personal">
+        <source>Personal data</source>
+        <translation>Datos personales</translation>
+    </message>
+    <message id="student.tab.loans">
+        <source>Borrowed sheet music</source>
+        <translation>Partituras prestadas</translation>
+    </message>
+    <message id="student.tab.data_short">
+        <source>Data</source>
+        <extracomment>Short tab label for personal data on phones.</extracomment>
+        <translation>Datos</translation>
+    </message>
+    <message id="student.tab.loans_short">
+        <source>Loans</source>
+        <extracomment>Short tab label for borrowed sheet music on phones.</extracomment>
+        <translation>Préstamos</translation>
+    </message>
+    <message id="student.search">
+        <source>Search students</source>
+        <translation>Buscar alumnos</translation>
+    </message>
+    <message id="student.label.age">
+        <source>Age:</source>
+        <translation>Edad:</translation>
+    </message>
+    <message id="student.label.parents">
+        <source>Parents:</source>
+        <translation>Padres:</translation>
+    </message>
+    <message id="student.label.mother_name">
+        <source>Mother’s name:</source>
+        <translation>Nombre de la madre:</translation>
+    </message>
+    <message id="student.label.mother_job">
+        <source>Mother’s occupation:</source>
+        <translation>Profesión de la madre:</translation>
+    </message>
+    <message id="student.label.mother_phone">
+        <source>Mother’s phone:</source>
+        <translation>Teléfono de la madre:</translation>
+    </message>
+    <message id="student.label.father_name">
+        <source>Father’s name:</source>
+        <translation>Nombre del padre:</translation>
+    </message>
+    <message id="student.label.father_job">
+        <source>Father’s occupation:</source>
+        <translation>Profesión del padre:</translation>
+    </message>
+    <message id="student.label.father_phone">
+        <source>Father’s phone:</source>
+        <translation>Teléfono del padre:</translation>
+    </message>
+    <message id="student.mother_name">
+        <source>Mother’s name</source>
+        <translation>Nombre de la madre</translation>
+    </message>
+    <message id="student.mother_job">
+        <source>Mother’s occupation</source>
+        <translation>Profesión de la madre</translation>
+    </message>
+    <message id="student.mother_phone">
+        <source>Mother’s phone</source>
+        <translation>Teléfono de la madre</translation>
+    </message>
+    <message id="student.father_name">
+        <source>Father’s name</source>
+        <translation>Nombre del padre</translation>
+    </message>
+    <message id="student.father_job">
+        <source>Father’s occupation</source>
+        <translation>Profesión del padre</translation>
+    </message>
+    <message id="student.father_phone">
+        <source>Father’s phone</source>
+        <translation>Teléfono del padre</translation>
+    </message>
+    <message id="student.label.lesson_since">
+        <source>Lessons since:</source>
+        <translation>Clases desde:</translation>
+    </message>
+    <message id="student.lesson_since">
+        <source>Lessons since</source>
+        <translation>Clases desde</translation>
+    </message>
+    <message id="student.label.total">
+        <source>Total:</source>
+        <extracomment>Followed by the total number of years of lessons.</extracomment>
+        <translation>Total:</translation>
+    </message>
+    <message id="student.label.recital_interval">
+        <source>Personal recital interval:</source>
+        <translation>Intervalo personal entre audiciones:</translation>
+    </message>
+    <message id="student.ensemble_expected">
+        <source>Ensemble participation expected</source>
+        <translation>Se espera participación en un conjunto</translation>
+    </message>
+    <message id="student.label.inventory_number">
+        <source>Inventory number:</source>
+        <translation>Número de inventario:</translation>
+    </message>
+    <message id="student.label.rented_since">
+        <source>Rented since:</source>
+        <translation>Alquilado desde:</translation>
+    </message>
+    <message id="student.rented_since">
+        <source>Rented since</source>
+        <translation>Alquilado desde</translation>
+    </message>
+    <message id="student.rental_description">
+        <source>Rental instrument description</source>
+        <translation>Descripción del instrumento de alquiler</translation>
+    </message>
+    <message id="archive.entry">
+        <source>Archive entry</source>
+        <translation>Ficha archivada</translation>
+    </message>
+    <message id="archive.delete_entry">
+        <source>Delete archive entry</source>
+        <translation>Eliminar ficha archivada</translation>
+    </message>
+    <message id="archive.delete.confirm">
+        <source>Do you really want to delete the archive entry “%1”?</source>
+        <extracomment>%1 = name of the entry</extracomment>
+        <translation>¿Seguro que desea eliminar la ficha archivada “%1”?</translation>
+    </message>
+    <message id="archive.doc.notes_and_pieces">
+        <source>Lesson notes and pieces</source>
+        <translation>Notas de clase y obras</translation>
+    </message>
+    <message id="archive.doc.lessons_taken">
+        <source>The student attended the following lessons</source>
+        <translation>El alumno ha asistido a las siguientes clases</translation>
+    </message>
+    <message id="archive.doc.activities">
+        <source>Student’s activities</source>
+        <translation>Actividades del alumno</translation>
+    </message>
+    <message id="note.add">
+        <source>Add new note</source>
+        <translation>Añadir nota</translation>
+    </message>
+    <message id="note.delete">
+        <source>Delete note</source>
+        <translation>Eliminar nota</translation>
+    </message>
+    <message id="note.new">
+        <source>New note</source>
+        <translation>Nueva nota</translation>
+    </message>
+    <message id="note.save">
+        <source>Save note</source>
+        <translation>Guardar nota</translation>
+    </message>
+    <message id="note.save_for_all" numerus="yes">
+        <source>Save for all %n students</source>
+        <extracomment>Switch in the note editor of group lessons.</extracomment>
+        <translation>
+            <numerusform>Guardar para %n alumno</numerusform>
+            <numerusform>Guardar para los %n alumnos</numerusform>
+        </translation>
+    </message>
+    <message id="note.save_for_all_hint">
+        <source>The default can be changed in the settings</source>
+        <translation>El valor predeterminado se puede cambiar en los ajustes</translation>
+    </message>
+    <message id="note.placeholder">
+        <source>Note for today’s lesson…</source>
+        <translation>Nota para la clase de hoy…</translation>
+    </message>
+    <message id="format.bold">
+        <source>Bold</source>
+        <translation>Negrita</translation>
+    </message>
+    <message id="format.italic">
+        <source>Italic</source>
+        <translation>Cursiva</translation>
+    </message>
+    <message id="format.underline">
+        <source>Underline</source>
+        <translation>Subrayado</translation>
+    </message>
+    <message id="format.text_color">
+        <source>Text color</source>
+        <translation>Color del texto</translation>
+    </message>
+    <message id="piece.add">
+        <source>Add new piece</source>
+        <translation>Añadir obra</translation>
+    </message>
+    <message id="piece.delete">
+        <source>Delete piece</source>
+        <translation>Eliminar obra</translation>
+    </message>
+    <message id="piece.required">
+        <source>Please fill in at least “Composer” and “Title” to add the entry.</source>
+        <translation>Rellene al menos “Compositor” y “Título” para añadir la entrada.</translation>
+    </message>
+    <message id="piece.status.planned">
+        <source>Planned</source>
+        <translation>Planificada</translation>
+    </message>
+    <message id="piece.status.in_progress">
+        <source>In progress</source>
+        <translation>En curso</translation>
+    </message>
+    <message id="piece.status.paused">
+        <source>Paused</source>
+        <translation>En pausa</translation>
+    </message>
+    <message id="piece.status.ready">
+        <source>Ready to perform</source>
+        <translation>Lista para audición</translation>
+    </message>
+    <message id="piece.status.finished">
+        <source>Finished</source>
+        <translation>Terminada</translation>
+    </message>
+    <message id="piece.change_status">
+        <source>Change status</source>
+        <translation>Cambiar estado</translation>
+    </message>
+    <message id="piece.add_to_event">
+        <source>Add to event</source>
+        <translation>Añadir a un evento</translation>
+    </message>
+    <message id="piece.delete_for_all">
+        <source>Delete (for all students)</source>
+        <translation>Eliminar (para todos los alumnos)</translation>
+    </message>
+    <message id="piece.filter_status">
+        <source>Filter by status</source>
+        <translation>Filtrar por estado</translation>
+    </message>
+    <message id="activity.regular.heading">
+        <source>Regular (e.g. ensembles):</source>
+        <translation>Regulares (p. ej., conjuntos):</translation>
+    </message>
+    <message id="activity.irregular.heading">
+        <source>One-off (e.g. recitals, competitions):</source>
+        <translation>Puntuales (p. ej., audiciones, concursos):</translation>
+    </message>
+    <message id="activity.regular">
+        <source>Regular activities</source>
+        <translation>Actividades regulares</translation>
+    </message>
+    <message id="activity.irregular">
+        <source>One-off activities</source>
+        <translation>Actividades puntuales</translation>
+    </message>
+    <message id="activity.type.ensemble">
+        <source>Ensemble</source>
+        <translation>Conjunto</translation>
+    </message>
+    <message id="activity.type.theory">
+        <source>Music theory</source>
+        <translation>Lenguaje musical</translation>
+    </message>
+    <message id="activity.type.coaching">
+        <source>Accompanist rehearsal</source>
+        <translation>Ensayo con pianista acompañante</translation>
+    </message>
+    <message id="activity.type.solo">
+        <source>Solo performance</source>
+        <translation>Actuación solista</translation>
+    </message>
+    <message id="activity.type.ensemble_participation">
+        <source>Ensemble participation</source>
+        <translation>Participación en un conjunto</translation>
+    </message>
+    <message id="instruments.title">
+        <source>Instrument manager</source>
+        <translation>Gestor de instrumentos</translation>
+    </message>
+    <message id="instruments.tab.students">
+        <source>Students – instruments</source>
+        <translation>Alumnos – instrumentos</translation>
+    </message>
+    <message id="instruments.tab.instrument_count">
+        <source>Instruments – count</source>
+        <translation>Instrumentos – cantidad</translation>
+    </message>
+    <message id="instruments.tab.size_count">
+        <source>Sizes – count</source>
+        <translation>Tamaños – cantidad</translation>
+    </message>
+    <message id="instruments.statistics">
+        <source>Statistics</source>
+        <translation>Estadísticas</translation>
+    </message>
+    <message id="instruments.label.rental_count">
+        <source>Rental instruments:</source>
+        <translation>Instrumentos de alquiler:</translation>
+    </message>
+    <message id="instruments.label.next_size_count">
+        <source>Next size needed:</source>
+        <translation>Siguiente tamaño necesario:</translation>
+    </message>
+    <message id="instruments.next_size">
+        <source>Next size needed</source>
+        <translation>Siguiente tamaño necesario</translation>
+    </message>
+    <message id="instruments.inventory_list">
+        <source>Rental instrument inventory</source>
+        <translation>Inventario de instrumentos de alquiler</translation>
+    </message>
+    <message id="instruments.inventory_list_ellipsis">
+        <source>Rental instrument inventory…</source>
+        <translation>Inventario de instrumentos de alquiler…</translation>
+    </message>
+    <message id="common.rental_instrument">
+        <source>Rental instrument</source>
+        <translation>Instrumento de alquiler</translation>
+    </message>
+    <message id="library.title">
+        <source>Sheet music library</source>
+        <translation>Biblioteca de partituras</translation>
+    </message>
+    <message id="library.col.index">
+        <source>No.</source>
+        <extracomment>Inventory number column.</extracomment>
+        <translation>N.º</translation>
+    </message>
+    <message id="library.col.author">
+        <source>Composer / author</source>
+        <translation>Compositor / autor</translation>
+    </message>
+    <message id="library.label.author">
+        <source>Composer / author:</source>
+        <translation>Compositor / autor:</translation>
+    </message>
+    <message id="library.col.publisher">
+        <source>Publisher</source>
+        <translation>Editorial</translation>
+    </message>
+    <message id="library.label.publisher">
+        <source>Publisher:</source>
+        <translation>Editorial:</translation>
+    </message>
+    <message id="library.tab.available">
+        <source>Available</source>
+        <extracomment>Sheet music that is not lent out.</extracomment>
+        <translation>Disponibles</translation>
+    </message>
+    <message id="library.tab.loaned">
+        <source>On loan</source>
+        <translation>Prestadas</translation>
+    </message>
+    <message id="library.col.lent_to">
+        <source>Lent to</source>
+        <translation>Prestada a</translation>
+    </message>
+    <message id="library.col.lent_on">
+        <source>Lent on</source>
+        <translation>Prestada el</translation>
+    </message>
+    <message id="library.lend_to">
+        <source>Lend selection to</source>
+        <translation>Prestar la selección a</translation>
+    </message>
+    <message id="library.returned">
+        <source>Selection returned by student</source>
+        <translation>Selección devuelta por el alumno</translation>
+    </message>
+    <message id="library.required">
+        <source>Please fill in all fields (composer / author, title, publisher) to add the entry.</source>
+        <translation>Rellene todos los campos (compositor / autor, título, editorial) para añadir la entrada.</translation>
+    </message>
+    <message id="event.manager.title">
+        <source>Event manager</source>
+        <translation>Gestor de eventos</translation>
+    </message>
+    <message id="event.tab.ready">
+        <source>Pieces ready to perform</source>
+        <translation>Obras listas para audición</translation>
+    </message>
+    <message id="event.filter.location">
+        <source>Show students from:</source>
+        <extracomment>Followed by a lesson location.</extracomment>
+        <translation>Mostrar alumnos de:</translation>
+    </message>
+    <message id="event.filter.location_alt">
+        <source>Show students from this location:</source>
+        <translation>Mostrar alumnos de este lugar:</translation>
+    </message>
+    <message id="event.col.student_age_instrument">
+        <source>Student (age) – instrument</source>
+        <translation>Alumno (edad) – instrumento</translation>
+    </message>
+    <message id="event.col.musician_age_instrument">
+        <source>Performer (age) – instrument</source>
+        <translation>Intérprete (edad) – instrumento</translation>
+    </message>
+    <message id="event.document">
+        <source>Document…</source>
+        <translation>Documento…</translation>
+    </message>
+    <message id="event.archive_delete">
+        <source>Archive and delete</source>
+        <translation>Archivar y eliminar</translation>
+    </message>
+    <message id="event.add_external">
+        <source>Add external contribution…</source>
+        <translation>Añadir participación externa…</translation>
+    </message>
+    <message id="event.delete.title">
+        <source>Delete event</source>
+        <translation>Eliminar evento</translation>
+    </message>
+    <message id="event.delete.confirm">
+        <source>Do you really want to delete the event “%1”?</source>
+        <extracomment>%1 = name of the event</extracomment>
+        <translation>¿Seguro que desea eliminar el evento “%1”?</translation>
+    </message>
+    <message id="event.organizer">
+        <source>Organizer</source>
+        <translation>Organizador</translation>
+    </message>
+    <message id="event.label.organizer">
+        <source>Organizer:</source>
+        <translation>Organizador:</translation>
+    </message>
+    <message id="event.accompanist">
+        <source>Accompanist</source>
+        <translation>Acompañante</translation>
+    </message>
+    <message id="event.label.accompanist">
+        <source>Accompanist:</source>
+        <translation>Acompañante:</translation>
+    </message>
+    <message id="event.label.location">
+        <source>Location:</source>
+        <translation>Lugar:</translation>
+    </message>
+    <message id="event.net_playing_time">
+        <source>Net playing time</source>
+        <translation>Tiempo neto de interpretación</translation>
+    </message>
+    <message id="event.estimated_total">
+        <source>Estimated total duration</source>
+        <translation>Duración total estimada</translation>
+    </message>
+    <message id="event.state.planned">
+        <source>Planned</source>
+        <translation>Planificado</translation>
+    </message>
+    <message id="event.state.done">
+        <source>Done</source>
+        <translation>Realizado</translation>
+    </message>
+    <message id="event.add.title">
+        <source>Add event</source>
+        <translation>Añadir evento</translation>
+    </message>
+    <message id="event.edit">
+        <source>Edit event</source>
+        <translation>Editar evento</translation>
+    </message>
+    <message id="event.external.title">
+        <source>Add external contribution</source>
+        <translation>Añadir participación externa</translation>
+    </message>
+    <message id="event.external.musicians">
+        <source>Performers:</source>
+        <translation>Intérpretes:</translation>
+    </message>
+    <message id="event.external.format_hint">
+        <source>Format: last name, first name (age) – instrument</source>
+        <translation>Formato: apellidos, nombre (edad) – instrumento</translation>
+    </message>
+    <message id="event.external.required">
+        <source>Please fill in at least “Composer”, “Title” and “Performers” to add the entry.</source>
+        <translation>Rellene al menos “Compositor”, “Título” e “Intérpretes” para añadir la entrada.</translation>
+    </message>
+    <message id="event.external_badge">
+        <source>External</source>
+        <extracomment>Badge for a contribution by performers who are not your students.</extracomment>
+        <translation>Externa</translation>
+    </message>
+    <message id="event.select_pieces.title">
+        <source>Select pieces</source>
+        <translation>Seleccionar obras</translation>
+    </message>
+    <message id="event.select_pieces.hint">
+        <source>Select one or more pieces to add to this event.</source>
+        <translation>Seleccione una o varias obras para añadirlas a este evento.</translation>
+    </message>
+    <message id="event.finish.title">
+        <source>Automatic actions</source>
+        <translation>Acciones automáticas</translation>
+    </message>
+    <message id="event.finish.intro">
+        <source>Qupil can carry out a few actions automatically for you. Please choose which ones to run:</source>
+        <translation>Qupil puede realizar algunas acciones automáticamente. Elija cuáles desea ejecutar:</translation>
+    </message>
+    <message id="event.finish.activities">
+        <source>The event is entered as a one-off activity for every participant.
+Do you want to use this feature?</source>
+        <translation>El evento se registra como actividad puntual para cada participante.
+¿Desea usar esta función?</translation>
+    </message>
+    <message id="event.finish.pieces">
+        <source>The status of the performed pieces is set to “finished” for every participant.
+Do you want to use this feature?</source>
+        <translation>El estado de las obras interpretadas pasa a “terminada” para cada participante.
+¿Desea usar esta función?</translation>
+    </message>
+    <message id="event.program.doc_title">
+        <source>Event program</source>
+        <translation>Programa del evento</translation>
+    </message>
+    <message id="event.program.heading">
+        <source>Program for “%1”</source>
+        <extracomment>%1 = name of the event</extracomment>
+        <translation>Programa de “%1”</translation>
+    </message>
+    <message id="event.program.col_piece">
+        <source>Piece / movements</source>
+        <translation>Obra / movimientos</translation>
+    </message>
+    <message id="event.reorder_hint">
+        <source>Drag the handle to reorder</source>
+        <translation>Arrastre el tirador para cambiar el orden</translation>
+    </message>
+    <message id="event.export_program">
+        <source>Program as PDF</source>
+        <translation>Programa en PDF</translation>
+    </message>
+    <message id="event.duration_breakdown">
+        <source>Includes %1 min of presentation and %2 min per contribution</source>
+        <extracomment>%1, %2 = minutes</extracomment>
+        <translation>Incluye %1 min de presentación y %2 min por participación</translation>
+    </message>
+    <message id="candidates.recital.title">
+        <source>Recital candidates</source>
+        <translation>Candidatos a audición</translation>
+    </message>
+    <message id="candidates.recital.col_last">
+        <source>Last recital</source>
+        <extracomment>Column header. The cells show e.g. &apos;3 months ago&apos; (candidates.ago.months); the German header already contains &apos;vor&apos;.</extracomment>
+        <translation>Última audición</translation>
+    </message>
+    <message id="candidates.ago.months" numerus="yes">
+        <source>%n month(s) ago</source>
+        <extracomment>Time since the last recital.</extracomment>
+        <translation>
+            <numerusform>hace %n mes</numerusform>
+            <numerusform>hace %n meses</numerusform>
+        </translation>
+    </message>
+    <message id="candidates.ago.days" numerus="yes">
+        <source>%n day(s) ago</source>
+        <extracomment>Time since the last recital.</extracomment>
+        <translation>
+            <numerusform>hace %n día</numerusform>
+            <numerusform>hace %n días</numerusform>
+        </translation>
+    </message>
+    <message id="candidates.recital.found">
+        <source>The following overdue recital candidates were found:</source>
+        <translation>Se han encontrado los siguientes candidatos a audición pendientes:</translation>
+    </message>
+    <message id="candidates.recital.none">
+        <source>There are currently no overdue recital candidates.
+
+Good job!</source>
+        <translation>Actualmente no hay candidatos a audición pendientes.
+
+¡Buen trabajo!</translation>
+    </message>
+    <message id="candidates.recital.total" numerus="yes">
+        <source>%n overdue student(s) in total</source>
+        <translation>
+            <numerusform>%n alumno pendiente en total</numerusform>
+            <numerusform>%n alumnos pendientes en total</numerusform>
+        </translation>
+    </message>
+    <message id="candidates.recital.add_reminder">
+        <source>Set up reminder about recital activity</source>
+        <translation>Crear recordatorio sobre audiciones</translation>
+    </message>
+    <message id="candidates.recital.reminder_text">
+        <source>Talk about performing in a recital!</source>
+        <extracomment>Default text of the created reminder.</extracomment>
+        <translation>¡Hablar de participar en una audición!</translation>
+    </message>
+    <message id="candidates.recital.reminder_created">
+        <source>Reminder about “recital activity” set up for %1.</source>
+        <extracomment>%1 = student name</extracomment>
+        <translation>Recordatorio sobre “audiciones” creado para %1.</translation>
+    </message>
+    <message id="candidates.ensemble.title">
+        <source>Ensemble candidates</source>
+        <translation>Candidatos a conjunto</translation>
+    </message>
+    <message id="candidates.ensemble.col_last">
+        <source>Last ensemble participation</source>
+        <translation>Última participación en un conjunto</translation>
+    </message>
+    <message id="candidates.ensemble.found">
+        <source>The following students are currently not active in any ensemble:</source>
+        <translation>Los siguientes alumnos no participan actualmente en ningún conjunto:</translation>
+    </message>
+    <message id="candidates.ensemble.none">
+        <source>All students are currently active in ensembles.
+
+Good job!</source>
+        <translation>Actualmente todos los alumnos participan en conjuntos.
+
+¡Buen trabajo!</translation>
+    </message>
+    <message id="candidates.ensemble.total">
+        <source>Total: %1 inactive students | %2 students active in ensembles</source>
+        <extracomment>%1, %2 = numbers. The UI highlights them itself.</extracomment>
+        <translation>Total: %1 alumnos inactivos | %2 alumnos activos en conjuntos</translation>
+    </message>
+    <message id="candidates.ensemble.add_reminder">
+        <source>Set up reminder about ensemble activity</source>
+        <translation>Crear recordatorio sobre conjuntos</translation>
+    </message>
+    <message id="candidates.ensemble.reminder_text">
+        <source>Talk about joining an ensemble!</source>
+        <extracomment>Default text of the created reminder.</extracomment>
+        <translation>¡Hablar de participar en un conjunto!</translation>
+    </message>
+    <message id="candidates.ensemble.reminder_created">
+        <source>Reminder about “ensemble activity” set up for %1.</source>
+        <extracomment>%1 = student name</extracomment>
+        <translation>Recordatorio sobre “conjuntos” creado para %1.</translation>
+    </message>
+    <message id="reminders.title">
+        <source>Reminders</source>
+        <translation>Recordatorios</translation>
+    </message>
+    <message id="reminders.col.text">
+        <source>Reminder</source>
+        <translation>Recordatorio</translation>
+    </message>
+    <message id="reminders.col.mode">
+        <source>When</source>
+        <translation>Cuándo</translation>
+    </message>
+    <message id="reminders.col.sound">
+        <source>Sound</source>
+        <translation>Sonido</translation>
+    </message>
+    <message id="reminder.mode.startup">
+        <source>When Qupil starts</source>
+        <translation>Al iniciar Qupil</translation>
+    </message>
+    <message id="reminder.mode.every_lesson">
+        <source>At the start of every lesson</source>
+        <translation>Al comienzo de cada clase</translation>
+    </message>
+    <message id="reminder.mode.student">
+        <source>For student “%1”</source>
+        <extracomment>%1 = student name</extracomment>
+        <translation>Para el alumno “%1”</translation>
+    </message>
+    <message id="reminder.edit.title">
+        <source>Edit reminder</source>
+        <translation>Editar recordatorio</translation>
+    </message>
+    <message id="reminder.label.text">
+        <source>Reminder text:</source>
+        <translation>Texto del recordatorio:</translation>
+    </message>
+    <message id="reminder.label.mode">
+        <source>When to remind</source>
+        <translation>Cuándo recordar</translation>
+    </message>
+    <message id="reminder.mode.startup_long">
+        <source>Remind me when Qupil starts</source>
+        <translation>Recordármelo al iniciar Qupil</translation>
+    </message>
+    <message id="reminder.mode.every_lesson_long">
+        <source>Remind me at the start of each lesson</source>
+        <translation>Recordármelo al comienzo de cada clase</translation>
+    </message>
+    <message id="reminder.mode.student_long">
+        <source>Remind me only for this student:</source>
+        <translation>Recordármelo solo para este alumno:</translation>
+    </message>
+    <message id="reminder.play_sound">
+        <source>Play a sound when the reminder appears</source>
+        <translation>Reproducir un sonido al mostrar el recordatorio</translation>
+    </message>
+    <message id="reminder.text_required">
+        <source>Please enter a reminder text.</source>
+        <translation>Introduzca el texto del recordatorio.</translation>
+    </message>
+    <message id="reminder.error.list">
+        <source>The following error occurred while loading the reminders</source>
+        <extracomment>The error text follows on the next line.</extracomment>
+        <translation>Se produjo el siguiente error al cargar los recordatorios</translation>
+    </message>
+    <message id="reminder.error.load">
+        <source>The following error occurred while loading the data</source>
+        <extracomment>The error text follows on the next line.</extracomment>
+        <translation>Se produjo el siguiente error al cargar los datos</translation>
+    </message>
+    <message id="reminder.error.delete">
+        <source>The following error occurred while deleting the reminder</source>
+        <extracomment>The error text follows on the next line.</extracomment>
+        <translation>Se produjo el siguiente error al eliminar el recordatorio</translation>
+    </message>
+    <message id="reminder.error.save">
+        <source>The following error occurred while saving the reminder</source>
+        <extracomment>The error text follows on the next line.</extracomment>
+        <translation>Se produjo el siguiente error al guardar el recordatorio</translation>
+    </message>
+    <message id="reminder.heading">
+        <source>Reminder:</source>
+        <translation>Recordatorio:</translation>
+    </message>
+    <message id="reminder.for_student">
+        <source>Reminder for student “%1”:</source>
+        <extracomment>%1 = student name</extracomment>
+        <translation>Recordatorio para el alumno “%1”:</translation>
+    </message>
+    <message id="reminder.done_remove">
+        <source>Done? The reminder will be removed.</source>
+        <extracomment>Checkbox in the reminder popup.</extracomment>
+        <translation>¿Hecho? El recordatorio se eliminará.</translation>
+    </message>
+    <message id="reminder.created">
+        <source>Reminder set up</source>
+        <translation>Recordatorio creado</translation>
+    </message>
+    <message id="birthday.title">
+        <source>Birthdays</source>
+        <translation>Cumpleaños</translation>
+    </message>
+    <message id="birthday.today_one">
+        <source>This student has a birthday today:</source>
+        <translation>Este alumno cumple años hoy:</translation>
+    </message>
+    <message id="birthday.today_many">
+        <source>These students have a birthday today:</source>
+        <translation>Estos alumnos cumplen años hoy:</translation>
+    </message>
+    <message id="birthday.last_week_one">
+        <source>This student had a birthday last week:</source>
+        <translation>Este alumno cumplió años la semana pasada:</translation>
+    </message>
+    <message id="birthday.last_week_many">
+        <source>These students had a birthday last week:</source>
+        <translation>Estos alumnos cumplieron años la semana pasada:</translation>
+    </message>
+    <message id="birthday.none">
+        <source>No student had a birthday in the last week.</source>
+        <translation>Ningún alumno cumplió años la semana pasada.</translation>
+    </message>
+    <message id="metronome.title">
+        <source>Metronome</source>
+        <translation>Metrónomo</translation>
+    </message>
+    <message id="metronome.window_title">
+        <source>Metronome / tuning</source>
+        <translation>Metrónomo / afinación</translation>
+    </message>
+    <message id="metronome.label.tempo">
+        <source>Tempo:</source>
+        <translation>Tempo:</translation>
+    </message>
+    <message id="metronome.unit.bpm">
+        <source>bpm</source>
+        <extracomment>Beats per minute, after a number.</extracomment>
+        <translation>ppm</translation>
+    </message>
+    <message id="metronome.accent_every">
+        <source>Accent every</source>
+        <extracomment>Sentence with a number field: [Accent every] [4] [beats].</extracomment>
+        <translation>Acento cada</translation>
+    </message>
+    <message id="metronome.beats">
+        <source>beats</source>
+        <extracomment>Sentence with a number field: [Accent every] [4] [beats].</extracomment>
+        <translation>tiempos</translation>
+    </message>
+    <message id="metronome.tap_hint">
+        <source>Tap the button in time to set the tempo.</source>
+        <translation>Pulse el botón al ritmo deseado para ajustar el tempo.</translation>
+    </message>
+    <message id="metronome.tab.tuning">
+        <source>Tuning</source>
+        <translation>Afinación</translation>
+    </message>
+    <message id="metronome.label.tuning_note">
+        <source>Tuning note:</source>
+        <translation>Nota de afinación:</translation>
+    </message>
+    <message id="metronome.label.pitch">
+        <source>Concert pitch:</source>
+        <extracomment>Frequency of A, e.g. 442 Hz.</extracomment>
+        <translation>Diapasón:</translation>
+    </message>
+    <message id="metronome.note.a">
+        <source>A</source>
+        <extracomment>Note name of the tuning note A.</extracomment>
+        <translation>La</translation>
+    </message>
+    <message id="metronome.note.b_flat">
+        <source>B♭</source>
+        <extracomment>Note name of B-flat (466 Hz at A = 440 Hz). German calls this note &apos;B&apos;.</extracomment>
+        <translation>Si♭</translation>
+    </message>
+    <message id="metronome.load_failed">
+        <source>Could not load %1.</source>
+        <extracomment>%1 = file name</extracomment>
+        <translation>No se pudo cargar %1.</translation>
+    </message>
+    <message id="audio.init_failed">
+        <source>Could not initialize audio output.</source>
+        <translation>No se pudo inicializar la salida de audio.</translation>
+    </message>
+    <message id="metronome.tap">
+        <source>Tap tempo</source>
+        <translation>Marcar el tempo</translation>
+    </message>
+    <message id="metronome.start">
+        <source>Start</source>
+        <translation>Iniciar</translation>
+    </message>
+    <message id="metronome.stop">
+        <source>Stop</source>
+        <translation>Detener</translation>
+    </message>
+    <message id="metronome.slower">
+        <source>Slower</source>
+        <translation>Más lento</translation>
+    </message>
+    <message id="metronome.faster">
+        <source>Faster</source>
+        <translation>Más rápido</translation>
+    </message>
+    <message id="metronome.bpm_long">
+        <source>Beats per minute</source>
+        <translation>Pulsaciones por minuto</translation>
+    </message>
+    <message id="metronome.keeps_running">
+        <source>Keeps running when you switch screens.</source>
+        <translation>Sigue sonando al cambiar de pantalla.</translation>
+    </message>
+    <message id="metronome.play_tone">
+        <source>Play tone</source>
+        <translation>Tocar la nota</translation>
+    </message>
+    <message id="doc.viewer.title">
+        <source>Document preview</source>
+        <translation>Vista previa del documento</translation>
+    </message>
+    <message id="doc.dayview.create_title">
+        <source>Create daily overview</source>
+        <translation>Crear resumen del día</translation>
+    </message>
+    <message id="doc.dayview.title">
+        <source>Daily overview</source>
+        <translation>Resumen del día</translation>
+    </message>
+    <message id="doc.dayview.show_last">
+        <source>Show the last</source>
+        <extracomment>Sentence with a number field: [Show the last] [3] [notes for each lesson].</extracomment>
+        <translation>Mostrar las últimas</translation>
+    </message>
+    <message id="doc.dayview.notes_per_lesson">
+        <source>notes for each lesson</source>
+        <extracomment>Sentence with a number field: [Show the last] [3] [notes for each lesson].</extracomment>
+        <translation>notas de cada clase</translation>
+    </message>
+    <message id="doc.dayview.add_space">
+        <source>Add about</source>
+        <extracomment>Sentence with a number field: [Add about] [5 cm] [of free space for handwritten notes].</extracomment>
+        <translation>Añadir unos</translation>
+    </message>
+    <message id="doc.dayview.space_for_notes">
+        <source>of free space for handwritten notes</source>
+        <extracomment>Sentence with a number field: [Add about] [5 cm] [of free space for handwritten notes].</extracomment>
+        <translation>de espacio libre para notas a mano</translation>
+    </message>
+    <message id="doc.share_pdf">
+        <source>Share PDF</source>
+        <translation>Compartir PDF</translation>
+    </message>
+    <message id="import.csv.title">
+        <source>Address book import (CSV)</source>
+        <translation>Importación de libreta de direcciones (CSV)</translation>
+    </message>
+    <message id="import.csv.encoding">
+        <source>File encoding</source>
+        <translation>Codificación del archivo</translation>
+    </message>
+    <message id="import.csv.assign">
+        <source>Please assign the matching column of your CSV file to each database field:</source>
+        <translation>Asigne a cada campo de la base de datos la columna correspondiente de su archivo CSV:</translation>
+    </message>
+    <message id="import.csv.skip_field">
+        <source>– Do not import this field –</source>
+        <translation>– No importar este campo –</translation>
+    </message>
+    <message id="import.csv.no_separator">
+        <source>The separator of the CSV file (usually a comma or semicolon) could not be detected.
+The CSV import has been canceled.</source>
+        <translation>No se pudo detectar el separador del archivo CSV (normalmente una coma o un punto y coma).
+Se ha cancelado la importación CSV.</translation>
+    </message>
+    <message id="import.csv.open_failed">
+        <source>The CSV file could not be opened.
+The CSV import has been canceled.</source>
+        <translation>No se pudo abrir el archivo CSV.
+Se ha cancelado la importación CSV.</translation>
+    </message>
+    <message id="import.csv.done" numerus="yes">
+        <source>The CSV import completed successfully.
+%n entry(ies) added.</source>
+        <translation>
+            <numerusform>La importación CSV ha finalizado correctamente.
+Se ha añadido %n entrada.</numerusform>
+            <numerusform>La importación CSV ha finalizado correctamente.
+Se han añadido %n entradas.</numerusform>
+        </translation>
+    </message>
+    <message id="import.open_file">
+        <source>Open address file</source>
+        <translation>Abrir archivo de direcciones</translation>
+    </message>
+    <message id="import.filter_csv">
+        <source>Address CSV (*.csv)</source>
+        <extracomment>File dialog filter. Keep the pattern in parentheses unchanged.</extracomment>
+        <translation>CSV de direcciones (*.csv)</translation>
+    </message>
+    <message id="backup.select_dir">
+        <source>Select backup folder</source>
+        <translation>Seleccionar carpeta de copias</translation>
+    </message>
+    <message id="backup.create.title">
+        <source>Create backup</source>
+        <translation>Crear copia de seguridad</translation>
+    </message>
+    <message id="backup.create.success">
+        <source>The backup “%1” was created successfully.</source>
+        <extracomment>%1 = file name</extracomment>
+        <translation>La copia de seguridad “%1” se ha creado correctamente.</translation>
+    </message>
+    <message id="backup.create.failed">
+        <source>The backup could not be created in the folder “%1”.
+Please check that you have write permission for this folder.</source>
+        <extracomment>%1 = folder</extracomment>
+        <translation>No se pudo crear la copia de seguridad en la carpeta “%1”.
+Compruebe que tiene permiso de escritura en esa carpeta.</translation>
+    </message>
+    <message id="backup.open.title">
+        <source>Open backup</source>
+        <translation>Abrir copia de seguridad</translation>
+    </message>
+    <message id="backup.filter">
+        <source>Qupil backup file (*.db)</source>
+        <extracomment>File dialog filter. Keep the pattern in parentheses unchanged.</extracomment>
+        <translation>Archivo de copia de seguridad de Qupil (*.db)</translation>
+    </message>
+    <message id="backup.restore.title">
+        <source>Restore backup</source>
+        <translation>Restaurar copia de seguridad</translation>
+    </message>
+    <message id="backup.restore.warning">
+        <source>A backup should only be restored to recover from data loss.
+If you restore a backup, any changes and new entries made after the backup will be lost.
+
+Do you really want to restore the backup?</source>
+        <translation>Una copia de seguridad solo debe restaurarse para recuperar datos perdidos.
+Si restaura una copia, se perderán los cambios y las entradas nuevas posteriores a ella.
+
+¿Seguro que desea restaurar la copia de seguridad?</translation>
+    </message>
+    <message id="backup.restore.success">
+        <source>The backup was restored successfully.
+Please restart Qupil.</source>
+        <translation>La copia de seguridad se ha restaurado correctamente.
+Reinicie Qupil.</translation>
+    </message>
+    <message id="backup.restore.unknown_type">
+        <source>The backup type could not be determined, so the backup cannot be restored.
+Please contact the author at %1 to fix this problem.</source>
+        <extracomment>%1 = contact e-mail address</extracomment>
+        <translation>No se pudo determinar el tipo de copia, por lo que no se puede restaurar.
+Póngase en contacto con el autor en %1 para resolver el problema.</translation>
+    </message>
+    <message id="backup.restore.failed">
+        <source>The backup could not be restored.
+Please contact the author at %1 to fix this problem.</source>
+        <extracomment>%1 = contact e-mail address</extracomment>
+        <translation>No se pudo restaurar la copia de seguridad.
+Póngase en contacto con el autor en %1 para resolver el problema.</translation>
+    </message>
+    <message id="backup.restore.empty">
+        <source>The selected backup file does not exist or is empty.
+The backup will not be restored.</source>
+        <translation>El archivo de copia seleccionado no existe o está vacío.
+No se restaurará la copia de seguridad.</translation>
+    </message>
+    <message id="db.update_failed">
+        <source>An error occurred while updating the database structure. Qupil may not be able to process the data correctly.
+Please contact the author at %1 to fix this problem.</source>
+        <extracomment>%1 = contact e-mail address</extracomment>
+        <translation>Se produjo un error al actualizar la estructura de la base de datos. Es posible que Qupil no procese los datos correctamente.
+Póngase en contacto con el autor en %1 para resolver el problema.</translation>
+    </message>
+    <message id="db.update_failed_detail">
+        <source>While updating the database structure from revision %1 to %2, the following error occurred:
+%3
+Please contact the author at %4 to fix this problem.</source>
+        <extracomment>%1, %2 = revision numbers, %3 = error text, %4 = contact e-mail address</extracomment>
+        <translation>Se produjo el siguiente error al actualizar la estructura de la base de datos de la revisión %1 a la %2:
+%3
+Póngase en contacto con el autor en %4 para resolver el problema.</translation>
+    </message>
+    <message id="db.newer_version">
+        <source>This data was created with a newer version of Qupil (data version %1). Please update Qupil.</source>
+        <extracomment>%1 = data version number</extracomment>
+        <translation>Estos datos se crearon con una versión más reciente de Qupil (versión de datos %1). Actualice Qupil.</translation>
+    </message>
+    <message id="migration.importing">
+        <source>Importing data from Qupil 1.x…</source>
+        <translation>Importando datos de Qupil 1.x…</translation>
+    </message>
+    <message id="migration.done">
+        <source>Your data from Qupil 1.x has been imported.</source>
+        <translation>Se han importado sus datos de Qupil 1.x.</translation>
+    </message>
+    <message id="migration.pre10">
+        <source>Data from Qupil versions before 1.0 cannot be imported directly. Please open it once with Qupil 1.4.1 first.</source>
+        <translation>Los datos de versiones de Qupil anteriores a la 1.0 no se pueden importar directamente. Ábralos primero una vez con Qupil 1.4.1.</translation>
+    </message>
+    <message id="backup.auto">
+        <source>Automatic backup</source>
+        <translation>Copia de seguridad automática</translation>
+    </message>
+    <message id="backup.keep" numerus="yes">
+        <source>Keep the last %n backup(s)</source>
+        <translation>
+            <numerusform>Conservar la última copia</numerusform>
+            <numerusform>Conservar las últimas %n copias</numerusform>
+        </translation>
+    </message>
+    <message id="backup.password">
+        <source>Backup password (optional)</source>
+        <translation>Contraseña de la copia (opcional)</translation>
+    </message>
+    <message id="backup.last">
+        <source>Last backup: %1</source>
+        <extracomment>%1 = date and time</extracomment>
+        <translation>Última copia: %1</translation>
+    </message>
+    <message id="backup.restore.device">
+        <source>Restore this device</source>
+        <translation>Restaurar este dispositivo</translation>
+    </message>
+    <message id="backup.restore.device_hint">
+        <source>This device gets the state of the backup and then fetches all changes from your other devices.</source>
+        <translation>Este dispositivo recupera el estado de la copia y después obtiene todos los cambios de sus otros dispositivos.</translation>
+    </message>
+    <message id="backup.restore.all">
+        <source>Restore for all devices</source>
+        <translation>Restaurar en todos los dispositivos</translation>
+    </message>
+    <message id="backup.restore.all_hint">
+        <source>Changes made after the backup are undone on all devices.</source>
+        <translation>Los cambios posteriores a la copia se deshacen en todos los dispositivos.</translation>
+    </message>
+    <message id="sync.title">
+        <source>Sync</source>
+        <translation>Sincronización</translation>
+    </message>
+    <message id="sync.all_synced">
+        <source>Everything is in sync</source>
+        <translation>Todo está sincronizado</translation>
+    </message>
+    <message id="sync.now">
+        <source>Sync now</source>
+        <translation>Sincronizar ahora</translation>
+    </message>
+    <message id="sync.in_progress">
+        <source>Syncing…</source>
+        <translation>Sincronizando…</translation>
+    </message>
+    <message id="sync.failed">
+        <source>Sync failed: %1</source>
+        <extracomment>%1 = error text</extracomment>
+        <translation>Error de sincronización: %1</translation>
+    </message>
+    <message id="sync.last">
+        <source>Last sync: %1</source>
+        <extracomment>%1 = relative time, e.g. &apos;3 minutes ago&apos;</extracomment>
+        <translation>Última sincronización: %1</translation>
+    </message>
+    <message id="sync.minutes_ago" numerus="yes">
+        <source>%n minute(s) ago</source>
+        <translation>
+            <numerusform>hace %n minuto</numerusform>
+            <numerusform>hace %n minutos</numerusform>
+        </translation>
+    </message>
+    <message id="sync.pair">
+        <source>Pair device</source>
+        <translation>Vincular dispositivo</translation>
+    </message>
+    <message id="sync.pair.scan">
+        <source>Scan this code with the other device.</source>
+        <translation>Escanee este código con el otro dispositivo.</translation>
+    </message>
+    <message id="sync.pair.code">
+        <source>Pairing code: %1</source>
+        <extracomment>%1 = short code</extracomment>
+        <translation>Código de vinculación: %1</translation>
+    </message>
+    <message id="sync.devices">
+        <source>Devices</source>
+        <translation>Dispositivos</translation>
+    </message>
+    <message id="sync.device.this">
+        <source>This device</source>
+        <translation>Este dispositivo</translation>
+    </message>
+    <message id="sync.device.remove">
+        <source>Remove device</source>
+        <translation>Quitar dispositivo</translation>
+    </message>
+    <message id="sync.nextcloud.connect">
+        <source>Connect to Nextcloud</source>
+        <translation>Conectar con Nextcloud</translation>
+    </message>
+    <message id="sync.nextcloud.server">
+        <source>Server address</source>
+        <translation>Dirección del servidor</translation>
+    </message>
+    <message id="sync.nextcloud.login_browser">
+        <source>Sign in in the browser to give Qupil access.</source>
+        <translation>Inicie sesión en el navegador para dar acceso a Qupil.</translation>
+    </message>
+    <message id="sync.wifi">
+        <source>Wi-Fi sync</source>
+        <translation>Sincronización por Wi-Fi</translation>
+    </message>
+    <message id="sync.wifi.last">
+        <source>Wi-Fi: %1 at %2</source>
+        <extracomment>%1 = device name, %2 = time</extracomment>
+        <translation>Wi-Fi: %1 a las %2</translation>
+    </message>
+    <message id="sync.e2e">
+        <source>End-to-end encrypted</source>
+        <translation>Cifrado de extremo a extremo</translation>
+    </message>
+    <message id="sync.local_network_permission">
+        <source>Qupil needs access to the local network to sync with your other devices over Wi-Fi.</source>
+        <extracomment>iOS permission text (NSLocalNetworkUsageDescription).</extracomment>
+        <translation>Qupil necesita acceso a la red local para sincronizarse por Wi-Fi con sus otros dispositivos.</translation>
+    </message>
+    <message id="settings.title">
+        <source>Settings</source>
+        <translation>Ajustes</translation>
+    </message>
+    <message id="settings.page.general">
+        <source>General</source>
+        <translation>General</translation>
+    </message>
+    <message id="settings.language">
+        <source>Language:</source>
+        <translation>Idioma:</translation>
+    </message>
+    <message id="settings.appearance">
+        <source>Appearance</source>
+        <translation>Apariencia</translation>
+    </message>
+    <message id="appearance.system">
+        <source>System</source>
+        <extracomment>Follow the light/dark setting of the operating system.</extracomment>
+        <translation>Sistema</translation>
+    </message>
+    <message id="appearance.light">
+        <source>Light</source>
+        <translation>Claro</translation>
+    </message>
+    <message id="appearance.dark">
+        <source>Dark</source>
+        <translation>Oscuro</translation>
+    </message>
+    <message id="settings.birthday_reminder">
+        <source>Enable birthday reminders</source>
+        <translation>Activar recordatorios de cumpleaños</translation>
+    </message>
+    <message id="settings.lesson_end.enable">
+        <source>Alert before the end of a lesson</source>
+        <translation>Aviso antes del final de la clase</translation>
+    </message>
+    <message id="settings.lesson_end.before">
+        <source>before the end of the lesson</source>
+        <extracomment>Follows a number field with minutes: [3 min] [before the end of the lesson].</extracomment>
+        <translation>antes del final de la clase</translation>
+    </message>
+    <message id="settings.play_sound">
+        <source>Play sound:</source>
+        <translation>Sonido:</translation>
+    </message>
+    <message id="settings.volume">
+        <source>Volume:</source>
+        <translation>Volumen:</translation>
+    </message>
+    <message id="settings.reminder_sound">
+        <source>Reminder sound</source>
+        <translation>Sonido de los recordatorios</translation>
+    </message>
+    <message id="settings.save_for_all">
+        <source>Save notes / pieces together for all students of a lesson</source>
+        <translation>Guardar notas / obras para todos los alumnos de la clase</translation>
+    </message>
+    <message id="settings.recital_check">
+        <source>The recital interval check (recital candidates) takes into account:</source>
+        <translation>La comprobación del intervalo entre audiciones (candidatos) tiene en cuenta:</translation>
+    </message>
+    <message id="settings.recital_check.solo">
+        <source>Solo performances only</source>
+        <translation>Únicamente actuaciones solistas</translation>
+    </message>
+    <message id="settings.recital_check.solo_ensemble">
+        <source>Solo performances and ensemble participation</source>
+        <translation>Actuaciones solistas y participación en un conjunto</translation>
+    </message>
+    <message id="settings.colors">
+        <source>Colors</source>
+        <translation>Colores</translation>
+    </message>
+    <message id="settings.colors.text">
+        <source>Text</source>
+        <translation>Texto</translation>
+    </message>
+    <message id="settings.colors.background">
+        <source>Background</source>
+        <translation>Fondo</translation>
+    </message>
+    <message id="settings.limit_notes">
+        <source>Limit the number of lesson notes shown</source>
+        <translation>Limitar el número de notas de clase mostradas</translation>
+    </message>
+    <message id="settings.limit_notes.count">
+        <source>Number of lesson notes shown:</source>
+        <translation>Número de notas de clase mostradas:</translation>
+    </message>
+    <message id="settings.limit_pieces">
+        <source>Limit the number of pieces shown</source>
+        <translation>Limitar el número de obras mostradas</translation>
+    </message>
+    <message id="settings.limit_pieces.count">
+        <source>Number of pieces shown:</source>
+        <translation>Número de obras mostradas:</translation>
+    </message>
+    <message id="settings.locations">
+        <source>Lesson locations</source>
+        <translation>Lugares de clase</translation>
+    </message>
+    <message id="settings.sizes">
+        <source>Sizes</source>
+        <translation>Tamaños</translation>
+    </message>
+    <message id="settings.genres">
+        <source>Styles</source>
+        <translation>Estilos</translation>
+    </message>
+    <message id="settings.genre_label">
+        <source>Style:</source>
+        <translation>Estilo:</translation>
+    </message>
+    <message id="settings.event_duration">
+        <source>Calculate the total duration of events</source>
+        <translation>Calcular la duración total de los eventos</translation>
+    </message>
+    <message id="settings.event.moderation">
+        <source>Total time for introduction and closing remarks:</source>
+        <translation>Tiempo total de presentación:</translation>
+    </message>
+    <message id="settings.event.changeover">
+        <source>Changeover time between pieces:</source>
+        <translation>Tiempo de cambio entre obras:</translation>
+    </message>
+    <message id="settings.select_sound">
+        <source>Select sound file</source>
+        <translation>Seleccionar archivo de sonido</translation>
+    </message>
+    <message id="settings.filter_sound">
+        <source>Sound files (*.wav *.mp3 *.m4a)</source>
+        <extracomment>File dialog filter. Keep the pattern in parentheses unchanged.</extracomment>
+        <translation>Archivos de audio (*.wav *.mp3 *.m4a)</translation>
+    </message>
+    <message id="language.system">
+        <source>System language</source>
+        <translation>Idioma del sistema</translation>
+    </message>
+    <message id="language.en">
+        <source>English</source>
+        <translation>Inglés</translation>
+    </message>
+    <message id="language.de">
+        <source>German</source>
+        <translation>Alemán</translation>
+    </message>
+    <message id="language.fr">
+        <source>French</source>
+        <translation>Francés</translation>
+    </message>
+    <message id="language.es">
+        <source>Spanish</source>
+        <translation>Español</translation>
+    </message>
+    <message id="more.manage">
+        <source>Management</source>
+        <translation>Gestión</translation>
+    </message>
+    <message id="more.reports">
+        <source>Reports</source>
+        <translation>Informes</translation>
+    </message>
+    <message id="more.documents">
+        <source>Documents (share or print as PDF)</source>
+        <translation>Documentos (compartir o imprimir en PDF)</translation>
+    </message>
+    <message id="more.data">
+        <source>Data</source>
+        <translation>Datos</translation>
+    </message>
+    <message id="more.lent_count" numerus="yes">
+        <source>%n on loan</source>
+        <extracomment>Number of sheet music items currently lent out.</extracomment>
+        <translation>
+            <numerusform>%n prestada</numerusform>
+            <numerusform>%n prestadas</numerusform>
+        </translation>
+    </message>
+    <message id="more.active_count" numerus="yes">
+        <source>%n active</source>
+        <extracomment>Number of active reminders.</extracomment>
+        <translation>
+            <numerusform>%n activo</numerusform>
+            <numerusform>%n activos</numerusform>
+        </translation>
+    </message>
+    <message id="notify.lesson_end" numerus="yes">
+        <source>Lesson ends in %n minute(s)</source>
+        <extracomment>System notification before the end of a lesson.</extracomment>
+        <translation>
+            <numerusform>La clase termina en %n minuto</numerusform>
+            <numerusform>La clase termina en %n minutos</numerusform>
+        </translation>
+    </message>
+    <message id="notify.permission">
+        <source>Allow notifications so that Qupil can remind you even when the app is closed.</source>
+        <translation>Permita las notificaciones para que Qupil pueda avisarle aunque la app esté cerrada.</translation>
+    </message>
+    <message id="defaults.genre.song">
+        <source>Song</source>
+        <extracomment>Default music style created on first start; users can rename it.</extracomment>
+        <translation>Canción</translation>
+    </message>
+    <message id="defaults.genre.baroque">
+        <source>Baroque</source>
+        <translation>Barroco</translation>
+    </message>
+    <message id="defaults.genre.classical">
+        <source>Classical</source>
+        <translation>Clásico</translation>
+    </message>
+    <message id="defaults.genre.romantic">
+        <source>Romantic</source>
+        <translation>Romántico</translation>
+    </message>
+    <message id="defaults.genre.modern">
+        <source>Modern</source>
+        <translation>Moderno</translation>
+    </message>
+    <message id="defaults.genre.new_music">
+        <source>Contemporary</source>
+        <translation>Música contemporánea</translation>
+    </message>
+    <message id="defaults.genre.musical">
+        <source>Musical</source>
+        <translation>Musical</translation>
+    </message>
+    <message id="defaults.genre.jazz">
+        <source>Jazz</source>
+        <translation>Jazz</translation>
+    </message>
+    <message id="defaults.genre.rock">
+        <source>Rock</source>
+        <translation>Rock</translation>
+    </message>
+    <message id="defaults.genre.pop">
+        <source>Pop</source>
+        <translation>Pop</translation>
+    </message>
+    <message id="defaults.genre.irish_folk">
+        <source>Irish folk</source>
+        <translation>Folk irlandés</translation>
+    </message>
+    <message id="defaults.location.room20">
+        <source>Room 20</source>
+        <extracomment>Default lesson location created on first start; users can rename it.</extracomment>
+        <translation>Aula 20</translation>
+    </message>
+    <message id="defaults.location.room16">
+        <source>Room 16</source>
+        <translation>Aula 16</translation>
+    </message>
+    <message id="defaults.location.auditorium">
+        <source>Auditorium</source>
+        <translation>Auditorio</translation>
+    </message>
+    <message id="defaults.instrument.violin">
+        <source>Violin</source>
+        <extracomment>Default instrument created on first start; users can rename it.</extracomment>
+        <translation>Violín</translation>
+    </message>
+    <message id="defaults.instrument.viola">
+        <source>Viola</source>
+        <translation>Viola</translation>
+    </message>
+    <message id="defaults.instrument.cello">
+        <source>Cello</source>
+        <translation>Violonchelo</translation>
+    </message>
+    <message id="defaults.instrument.double_bass">
+        <source>Double bass</source>
+        <translation>Contrabajo</translation>
+    </message>
+    <message id="about.title">
+        <source>About Qupil</source>
+        <translation>Acerca de Qupil</translation>
+    </message>
+    <message id="about.tab.about">
+        <source>About</source>
+        <translation>Acerca de</translation>
+    </message>
+    <message id="about.tab.project">
+        <source>Project</source>
+        <translation>Proyecto</translation>
+    </message>
+    <message id="about.tab.translation">
+        <source>Translation</source>
+        <translation>Traducción</translation>
+    </message>
+    <message id="about.tab.license">
+        <source>License</source>
+        <translation>Licencia</translation>
+    </message>
+    <message id="about.version">
+        <source>Version %1</source>
+        <extracomment>%1 = version</extracomment>
+        <translation>Versión %1</translation>
+    </message>
+    <message id="about.features">
+        <source>- Student and lesson management
+- Event manager
+- Metronome, tuner
+- Sheet music library</source>
+        <translation>- Gestión de alumnos y clases
+- Gestor de eventos
+- Metrónomo, afinador
+- Biblioteca de partituras</translation>
+    </message>
+    <message id="about.project">
+        <source>Project website: %1
+Author: %2</source>
+        <extracomment>%1 = website URL, %2 = author name and e-mail</extracomment>
+        <translation>Sitio web del proyecto: %1
+Autor: %2</translation>
+    </message>
+    <message id="about.translation_help">
+        <source>If you would like to help translate Qupil, please contact the author at %1.</source>
+        <extracomment>%1 = contact e-mail address</extracomment>
+        <translation>Si desea ayudar a traducir Qupil, póngase en contacto con el autor en %1.</translation>
+    </message>
+</context>
+</TS>

@@ -1,0 +1,101 @@
+# Builds, tests and packages Qupil for Linux, Windows and macOS.
+name: Desktop
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+    paths-ignore: ['**.md', 'docs/**', 'LICENSES/**', '.github/dependabot.yml']
+  pull_request:
+    paths-ignore: ['**.md', 'docs/**', 'LICENSES/**', '.github/dependabot.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  QT_VERSION: '6.8.3'
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux
+            os: ubuntu-24.04
+            qt_arch: linux_gcc_64
+            artifact: qupil-linux-x86_64
+          - name: Windows
+            os: windows-2022
+            qt_arch: win64_msvc2022_64
+            artifact: qupil-windows-x64
+          - name: macOS
+            os: macos-14
+            qt_arch: clang_64
+            artifact: qupil-macos-universal
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install system packages (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgl1-mesa-dev libegl1 libxkbcommon-dev libxkbcommon-x11-0 \
+            libxcb-cursor0 libxcb-icccm4 libxcb-keysyms1 libxcb-shape0 libfontconfig1 libdbus-1-3
+
+      - name: Install Qt ${{ env.QT_VERSION }}
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          arch: ${{ matrix.qt_arch }}
+          cache: true
+
+      - uses: seanmiddleditch/gha-setup-ninja@v5
+
+      - name: Set up MSVC (Windows)
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Configure
+        shell: bash
+        run: |
+          extra=()
+          if [ "$RUNNER_OS" = "macOS" ]; then extra+=("-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64"); fi
+          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release "${extra[@]}"
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Test
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: ctest --test-dir build --output-on-failure
+
+      - name: Install with Qt runtime
+        run: cmake --install build --prefix dist
+
+      - name: Pack
+        shell: bash
+        run: |
+          mkdir -p package
+          case "$RUNNER_OS" in
+            Linux)   tar -C dist -czf "package/${{ matrix.artifact }}.tar.gz" . ;;
+            macOS)   ditto -c -k --keepParent dist/Qupil.app "package/${{ matrix.artifact }}.zip" ;;
+            Windows) 7z a "package/${{ matrix.artifact }}.zip" ./dist/* > /dev/null ;;
+          esac
+          ls -l package
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: package/*
+          if-no-files-found: error
+          retention-days: 30

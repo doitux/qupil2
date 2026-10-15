@@ -1,0 +1,134 @@
+# Builds Qupil for Android (installable test APK) and iOS (unsigned, proves it compiles and links).
+# Store builds need signing keys as repository secrets; they are added later.
+name: Mobile
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+    paths-ignore: ['**.md', 'docs/**', 'LICENSES/**', '.github/dependabot.yml']
+  pull_request:
+    paths-ignore: ['**.md', 'docs/**', 'LICENSES/**', '.github/dependabot.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  QT_VERSION: '6.8.3'
+  # Versions Qt 6.8 is tested with
+  ANDROID_NDK_VERSION: '26.1.10909125'
+  ANDROID_PLATFORM: 'android-34'
+  ANDROID_BUILD_TOOLS: '34.0.0'
+
+jobs:
+  android:
+    name: Android (arm64-v8a)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install Android NDK and platform
+        run: |
+          yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+          "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --install \
+            "ndk;${ANDROID_NDK_VERSION}" "platforms;${ANDROID_PLATFORM}" "build-tools;${ANDROID_BUILD_TOOLS}" > /dev/null
+          echo "ANDROID_NDK_ROOT=$ANDROID_SDK_ROOT/ndk/${ANDROID_NDK_VERSION}" >> "$GITHUB_ENV"
+
+      - name: Install Qt for Linux (host tools)
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: linux
+          target: desktop
+          arch: linux_gcc_64
+          cache: true
+          set-env: false
+
+      - name: Install Qt for Android
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: linux
+          target: android
+          arch: android_arm64_v8a
+          cache: true
+
+      - uses: seanmiddleditch/gha-setup-ninja@v5
+
+      - name: Configure
+        run: |
+          "$QT_ROOT_DIR/bin/qt-cmake" -S . -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DQT_HOST_PATH="$RUNNER_WORKSPACE/Qt/$QT_VERSION/gcc_64" \
+            -DANDROID_SDK_ROOT="$ANDROID_SDK_ROOT" \
+            -DANDROID_NDK_ROOT="$ANDROID_NDK_ROOT"
+
+      - name: Build APK
+        run: cmake --build build --target apk --parallel
+
+      - name: Sign with a throwaway test key
+        run: |
+          apk=$(find build -name '*.apk' -path '*release*' | head -n 1)
+          if [ -z "$apk" ]; then apk=$(find build -name '*.apk' | head -n 1); fi
+          echo "Built: $apk"
+          bt="$ANDROID_SDK_ROOT/build-tools/${ANDROID_BUILD_TOOLS}"
+          keytool -genkeypair -keystore ci.keystore -storepass android -keypass android -alias ci \
+            -keyalg RSA -keysize 2048 -validity 3650 -dname "CN=Qupil CI test build" > /dev/null
+          mkdir -p package
+          "$bt/zipalign" -p -f 4 "$apk" aligned.apk
+          "$bt/apksigner" sign --ks ci.keystore --ks-pass pass:android --key-pass pass:android \
+            --out package/qupil-android-arm64-test.apk aligned.apk
+          "$bt/apksigner" verify package/qupil-android-arm64-test.apk
+          ls -l package
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: qupil-android-arm64-test
+          path: package/*.apk
+          if-no-files-found: error
+          retention-days: 30
+
+  ios:
+    name: iOS (unsigned)
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Qt for macOS (host tools)
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: mac
+          target: desktop
+          arch: clang_64
+          cache: true
+          set-env: false
+
+      - name: Install Qt for iOS
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: mac
+          target: ios
+          arch: ios
+          cache: true
+
+      - name: Configure
+        run: |
+          "$QT_ROOT_DIR/bin/qt-cmake" -S . -B build -G Xcode \
+            -DQT_HOST_PATH="$RUNNER_WORKSPACE/Qt/$QT_VERSION/macos"
+
+      - name: Build for device without signing
+        run: |
+          cmake --build build --config Release -- \
+            -sdk iphoneos CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""
