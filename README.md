@@ -10,7 +10,7 @@ Qupil 2 is the complete rewrite of [Qupil](https://qupil.de) 1.x – from a Qt W
 
 > **Deutsch:** Qupil ist die Unterrichtsverwaltung für Instrumentalpädagoginnen und -pädagogen. Qupil 2 läuft auf Desktop, Tablet und Handy und gleicht die Geräte per WLAN oder Nextcloud ab.
 
-**Status: early development.** The app shell with adaptive navigation, dark mode and four languages is in place; the features of 1.4.1 follow step by step. For daily work use Qupil 1.4.1 from [qupil.de](https://qupil.de).
+**Status: testing.** Nearly all features of 1.4.1 are in place, plus sync between devices; nightly test builds for every platform are on the [nightly release](https://github.com/doitux/qupil2/releases/tag/nightly). Until the first release, keep using Qupil 1.4.1 from [qupil.de](https://qupil.de) for daily work.
 
 ## What Qupil 2 will do
 
@@ -42,7 +42,7 @@ Every push and pull request is built on GitHub Actions:
 | Workflow | What it does | Download |
 |---|---|---|
 | **Desktop** | Linux, Windows, macOS (universal): build, unit tests, QML smoke test (loads the UI, switches all languages and colour schemes, fails on any QML warning), package with Qt runtime | `.tar.gz` / `.zip` per platform |
-| **Mobile** | Android arm64 APK signed with a throwaway test key; iOS device build without signing | test APK |
+| **Mobile** | Android arm64 APK signed with a public test key (installs as an update over older test builds); iOS device build without signing | test APK, unsigned IPA |
 | **Translations** | TS files match the catalog, placeholders and plurals consistent, every string translated | – |
 
 Downloads are on the run's page under *Artifacts* and are kept for 30 days. The desktop builds are not code-signed yet, so Windows SmartScreen and macOS Gatekeeper will warn.
@@ -54,8 +54,8 @@ qml/            user interface (Main.qml, Theme.qml, pages/)
 src/            C++ (main.cpp, core/ with LanguageManager)
 i18n/           qupil_en/de/fr/es.ts – generated, see docs/i18n.md
 tools/i18n/     string catalog (single source of truth) and generators
-assets/         font (Figtree) and app icons
-platform/       platform files (Windows icon, iOS/Android localisation)
+assets/         font (Figtree), app icons, the alert sounds of Qupil 1.x
+platform/       platform files (Windows icon, iOS/Android localisation, Android alarms and notifications)
 tests/          unit tests
 docs/           developer documentation
 ```
