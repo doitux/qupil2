@@ -25,6 +25,17 @@ QtObject {
     readonly property bool systemDark: Qt.styleHints.colorScheme === Qt.ColorScheme.Dark
     readonly property bool dark: mode === "dark" || (mode === "system" && systemDark)
 
+    // ---------------------------------------------------------------- your two colours
+    // Chosen under Appearance, per device. Empty: Qupil's plum and lime (from the
+    // timetable colours of Qupil 1.x), with the hand-tuned shades below.
+    property string accentChoice: ""
+    property string highlightChoice: ""
+    readonly property color defaultAccent: "#6E3C5A"
+    readonly property color defaultHighlight: "#C9F36B"
+    readonly property bool customAccent: accentChoice !== "" && !Qt.colorEqual(accentChoice, defaultAccent)
+    readonly property color accentBase: customAccent ? accentChoice : defaultAccent
+    readonly property color highlightBase: highlightChoice !== "" ? highlightChoice : defaultHighlight
+
     // ---------------------------------------------------------------- surfaces
     readonly property color bg:            dark ? "#121014" : "#F4F3F6"
     readonly property color surface:       dark ? "#1D1A21" : "#FFFFFF"
@@ -42,16 +53,28 @@ QtObject {
     readonly property color icon:          dark ? "#8F8797" : "#6A6472"
 
     // ---------------------------------------------------------------- brand
-    readonly property color accent:         dark ? "#A35C88" : "#6E3C5A"  // filled buttons, selection
+    // Every shade of the main colour stays readable: white text on filled areas,
+    // coloured text on the page (see _readable)
+    readonly property color accent:         !customAccent ? (dark ? "#A35C88" : "#6E3C5A")  // filled buttons, selection
+                                            : dark ? _readable(_shade(accentBase, 1, 0.5), "#FFFFFF", 4.5, false)
+                                                   : _readable(accentBase, "#FFFFFF", 4.5, false)
     readonly property color textOnAccent:       "#FFFFFF"
-    readonly property color accentText:     dark ? "#E6B9D7" : "#6E3C5A"  // links, active labels, dates
-    readonly property color accentSoft:     dark ? "#3A2534" : "#F1E7EE"
-    readonly property color hero:           dark ? "#4B2742" : "#6E3C5A"  // running lesson card
+    readonly property color accentText:     !customAccent ? (dark ? "#E6B9D7" : "#6E3C5A")  // links, active labels, dates
+                                            : dark ? _readable(_shade(accentBase, 1.6, 0.81), surface, 7, true)
+                                                   : _readable(accentBase, "#FFFFFF", 5, false)
+    readonly property color accentSoft:     !customAccent ? (dark ? "#3A2534" : "#F1E7EE")
+                                            : dark ? _shade(accentBase, 0.75, 0.185) : _shade(accentBase, 0.95, 0.93)
+    readonly property color hero:           !customAccent ? (dark ? "#4B2742" : "#6E3C5A")  // running lesson card
+                                            : dark ? _readable(_shade(accentBase, 1.07, 0.225), "#FFFFFF", 7, false)
+                                                   : _readable(accentBase, "#FFFFFF", 4.5, false)
     readonly property color heroText:       "#FFFFFF"
-    readonly property color heroMuted:      dark ? "#DCC4D4" : "#EADDE6"
-    readonly property color heroButton:     dark ? "#6B3A5D" : "#835071"
-    readonly property color lime:           "#C9F36B"                     // "now", primary quick action
-    readonly property color textOnLime:         "#1D1A22"
+    readonly property color heroMuted:      !customAccent ? (dark ? "#DCC4D4" : "#EADDE6")
+                                            : dark ? _shade(accentBase, 0.85, 0.82) : _shade(accentBase, 0.8, 0.89)
+    readonly property color heroButton:     !customAccent ? (dark ? "#6B3A5D" : "#835071")
+                                            : dark ? _shade(hero, 1, Math.min(0.42, hero.hslLightness + 0.1))
+                                                   : _shade(hero, 0.82, Math.min(0.55, hero.hslLightness + 0.08))
+    readonly property color lime:           highlightBase                 // "now", primary quick action
+    readonly property color textOnLime:     textOn(highlightBase)
     readonly property color inverse:        dark ? "#F3EFF6" : "#1D1A22"  // active chip, pressed toggle
     readonly property color textOnInverse:      dark ? "#1D1A22" : "#FFFFFF"
     readonly property color inverseMuted:   dark ? "#5E5866" : "#CFC9D4"
@@ -87,7 +110,7 @@ QtObject {
     // ---------------------------------------------------------------- icon tiles
     readonly property var tile: ({
         orange: { bg: dark ? "#3B2413" : "#FFE9D6", fg: dark ? "#FFB77A" : "#9A4A0B" },
-        plum:   { bg: dark ? "#3A2534" : "#F1E7EE", fg: dark ? "#E6B9D7" : "#6E3C5A" },
+        plum:   { bg: accentSoft, fg: accentText },   // the main colour
         blue:   { bg: dark ? "#172A48" : "#E3EDFF", fg: dark ? "#A9C7FF" : "#1F4E8C" },
         green:  { bg: dark ? "#173020" : "#DDF1DF", fg: dark ? "#8FD69B" : "#2F6B3A" },
         yellow: { bg: dark ? "#3B3000" : "#FFF0B3", fg: dark ? "#F0D45E" : "#6B5300" },
@@ -95,8 +118,8 @@ QtObject {
     })
 
     // Avatar circles cycle through these
-    readonly property var avatar: dark ? ["#A35C88", "#3D6BB0", "#3E8A50"]
-                                       : ["#6E3C5A", "#1F4E8C", "#2F6B3A"]
+    readonly property var avatar: dark ? [accent, "#3D6BB0", "#3E8A50"]
+                                       : [accent, "#1F4E8C", "#2F6B3A"]
 
     // ---------------------------------------------------------------- type & shape
     readonly property string fontFamily: "Figtree"
@@ -113,10 +136,45 @@ QtObject {
         return Qt.hsla(col.hslHue, col.hslSaturation, 0.75, 1)
     }
 
+    // ---------------------------------------------------------------- colour helpers
+    //! Dark or white text, whichever is easier to read on c
+    function textOn(c) {
+        return _contrast(c, "#1D1A22") >= _contrast(c, "#FFFFFF") ? "#1D1A22" : "#FFFFFF"
+    }
+    // Same hue, saturation × satFactor, the given lightness
+    function _shade(c, satFactor, lightness) {
+        const col = Qt.darker(c, 1.0)
+        return Qt.hsla(Math.max(0, col.hslHue), Math.min(1, col.hslSaturation * satFactor),
+                       Math.max(0, Math.min(1, lightness)), 1)
+    }
+    // WCAG contrast ratio of two colours (1 … 21)
+    function _contrast(a, b) {
+        const lum = function(c) {
+            const col = Qt.darker(c, 1.0)
+            const ch = v => v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)
+            return 0.2126 * ch(col.r) + 0.7152 * ch(col.g) + 0.0722 * ch(col.b)
+        }
+        const la = lum(a)
+        const lb = lum(b)
+        return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05)
+    }
+    // Lighter or darker in small steps until the contrast against bg is reached
+    function _readable(c, bg, ratio, lighter) {
+        let col = Qt.darker(c, 1.0)
+        let l = col.hslLightness
+        for (let i = 0; i < 40 && _contrast(col, bg) < ratio; ++i) {
+            l = lighter ? Math.min(1, l + 0.025) : Math.max(0, l - 0.025)
+            col = _shade(c, 1, l)
+        }
+        return col
+    }
+
     // ---------------------------------------------------------------- persistence
     property Settings _store: Settings {
         category: "appearance"
         property alias mode: theme.mode
+        property alias accentColor: theme.accentChoice
+        property alias highlightColor: theme.highlightChoice
     }
 
     // Qt >= 6.8: also switch native window decorations and dialogs.

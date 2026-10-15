@@ -140,6 +140,14 @@ int main(int argc, char *argv[])
                                              theme->setProperty("mode", QString::fromLatin1(mode));
                                              QCoreApplication::processEvents();
                                          }
+                                         // Own colours, also a light main and a dark highlight colour
+                                         const char *colours[][2] = { { "#1F4E8C", "#FFE066" }, { "#FFE066", "#3F4A5A" },
+                                                                      { "", "" } };
+                                         for (const auto &pair : colours) {
+                                             theme->setProperty("accentChoice", QString::fromLatin1(pair[0]));
+                                             theme->setProperty("highlightChoice", QString::fromLatin1(pair[1]));
+                                             QCoreApplication::processEvents();
+                                         }
                                      } else {
                                          std::fprintf(stderr, "smoke test: Theme singleton not found\n");
                                          ++s_qmlProblems;

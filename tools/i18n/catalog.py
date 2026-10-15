@@ -1707,6 +1707,17 @@ E("settings.recital_check.solo_ensemble", old="Solo Recitals and Ensemble Partic
 E("settings.colors", old="Colors", en="Colors", fr="Couleurs", es="Colores")
 E("settings.colors.text", old="Text", en="Text", fr="Texte", es="Texto")
 E("settings.colors.background", old="Background", en="Background", fr="Arrière-plan", es="Fondo")
+E("settings.colors.hint",
+  en="The main colour is used for buttons, selections and headings; the highlight marks what is happening now.",
+  de="Die Hauptfarbe nutzen Schaltflächen, Auswahl und Überschriften; die Hervorhebung zeigt, was gerade läuft.",
+  fr="La couleur principale sert aux boutons, aux sélections et aux titres ; la mise en évidence montre ce qui "
+     "se passe maintenant.",
+  es="El color principal se usa en botones, selecciones y títulos; el resaltado muestra lo que ocurre ahora.")
+E("settings.colors.accent", en="Main colour", de="Hauptfarbe", fr="Couleur principale", es="Color principal")
+E("settings.colors.highlight", en="Highlight", de="Hervorhebung", fr="Mise en évidence", es="Resaltado")
+E("settings.colors.custom", en="Your own colour", de="Eigene Farbe", fr="Couleur personnalisée", es="Color propio")
+E("settings.colors.reset", en="Default colours", de="Standardfarben", fr="Couleurs par défaut",
+  es="Colores predeterminados")
 E("settings.limit_notes", old="Limit the number of displayed lesson notes    ",
   en="Limit the number of lesson notes shown", fr="Limiter le nombre de notes de cours affichées",
   es="Limitar el número de notas de clase mostradas")

@@ -3073,6 +3073,26 @@ Póngase en contacto con el autor en %4 para resolver el problema.</translation>
         <source>Background</source>
         <translation>Fondo</translation>
     </message>
+    <message id="settings.colors.hint">
+        <source>The main colour is used for buttons, selections and headings; the highlight marks what is happening now.</source>
+        <translation>El color principal se usa en botones, selecciones y títulos; el resaltado muestra lo que ocurre ahora.</translation>
+    </message>
+    <message id="settings.colors.accent">
+        <source>Main colour</source>
+        <translation>Color principal</translation>
+    </message>
+    <message id="settings.colors.highlight">
+        <source>Highlight</source>
+        <translation>Resaltado</translation>
+    </message>
+    <message id="settings.colors.custom">
+        <source>Your own colour</source>
+        <translation>Color propio</translation>
+    </message>
+    <message id="settings.colors.reset">
+        <source>Default colours</source>
+        <translation>Colores predeterminados</translation>
+    </message>
     <message id="settings.limit_notes">
         <source>Limit the number of lesson notes shown</source>
         <translation>Limitar el número de notas de clase mostradas</translation>

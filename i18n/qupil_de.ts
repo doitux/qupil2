@@ -3074,6 +3074,26 @@ Bitte wenden Sie sich an den Programm-Autor: %4 um dieses Problem zu beheben!</t
         <source>Background</source>
         <translation>Hintergrund</translation>
     </message>
+    <message id="settings.colors.hint">
+        <source>The main colour is used for buttons, selections and headings; the highlight marks what is happening now.</source>
+        <translation>Die Hauptfarbe nutzen Schaltflächen, Auswahl und Überschriften; die Hervorhebung zeigt, was gerade läuft.</translation>
+    </message>
+    <message id="settings.colors.accent">
+        <source>Main colour</source>
+        <translation>Hauptfarbe</translation>
+    </message>
+    <message id="settings.colors.highlight">
+        <source>Highlight</source>
+        <translation>Hervorhebung</translation>
+    </message>
+    <message id="settings.colors.custom">
+        <source>Your own colour</source>
+        <translation>Eigene Farbe</translation>
+    </message>
+    <message id="settings.colors.reset">
+        <source>Default colours</source>
+        <translation>Standardfarben</translation>
+    </message>
     <message id="settings.limit_notes">
         <source>Limit the number of lesson notes shown</source>
         <translation>Begrenze die Anzahl angezeigter Unterrichtsnotizen</translation>

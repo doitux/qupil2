@@ -3073,6 +3073,26 @@ Please contact the author at %4 to fix this problem.</translation>
         <source>Background</source>
         <translation>Background</translation>
     </message>
+    <message id="settings.colors.hint">
+        <source>The main colour is used for buttons, selections and headings; the highlight marks what is happening now.</source>
+        <translation>The main colour is used for buttons, selections and headings; the highlight marks what is happening now.</translation>
+    </message>
+    <message id="settings.colors.accent">
+        <source>Main colour</source>
+        <translation>Main colour</translation>
+    </message>
+    <message id="settings.colors.highlight">
+        <source>Highlight</source>
+        <translation>Highlight</translation>
+    </message>
+    <message id="settings.colors.custom">
+        <source>Your own colour</source>
+        <translation>Your own colour</translation>
+    </message>
+    <message id="settings.colors.reset">
+        <source>Default colours</source>
+        <translation>Default colours</translation>
+    </message>
     <message id="settings.limit_notes">
         <source>Limit the number of lesson notes shown</source>
         <translation>Limit the number of lesson notes shown</translation>
