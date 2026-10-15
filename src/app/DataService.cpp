@@ -30,6 +30,7 @@
 #include "Ids.h"
 #include "Csv.h"
 #include "LanguageManager.h"
+#include "NoteHtml.h"
 #include "Store.h"
 
 using namespace Qt::StringLiterals;
@@ -212,62 +213,7 @@ QString DataService::plainText(const QString &html, int maxLength) const
 
 QString DataService::noteHtml(const QString &html, bool dark) const
 {
-    QTextDocument doc;
-    if (html.contains(u'<'))
-        doc.setHtml(html);
-    else
-        doc.setPlainText(html);   // notes from very old versions
-
-    // Explicit colours: black/white become "default text colour", dark colours are
-    // lightened in dark mode (and light ones darkened in light mode) to stay readable.
-    QTextCursor cursor(&doc);
-    for (QTextBlock block = doc.begin(); block.isValid(); block = block.next()) {
-        for (auto it = block.begin(); !it.atEnd(); ++it) {
-            const QTextFragment fragment = it.fragment();
-            if (!fragment.isValid())
-                continue;
-            QTextCharFormat format = fragment.charFormat();
-            bool touched = false;
-            if (format.hasProperty(QTextFormat::BackgroundBrush)) {
-                format.clearBackground();
-                touched = true;
-            }
-            if (format.hasProperty(QTextFormat::ForegroundBrush)) {
-                const QColor c = format.foreground().color();
-                const float lightness = c.lightnessF();
-                if (c.hslSaturationF() < 0.15f && (lightness < 0.25f || lightness > 0.85f)) {
-                    format.clearForeground();
-                } else if (dark && lightness < 0.6f) {
-                    format.setForeground(QColor::fromHslF(c.hslHueF(), c.hslSaturationF(), 0.75f));
-                } else if (!dark && lightness > 0.55f) {
-                    format.setForeground(QColor::fromHslF(c.hslHueF(), c.hslSaturationF(), 0.4f));
-                }
-                touched = true;
-            }
-            if (format.hasProperty(QTextFormat::FontPointSize) || format.hasProperty(QTextFormat::FontFamilies)) {
-                format.clearProperty(QTextFormat::FontPointSize);
-                format.clearProperty(QTextFormat::FontFamilies);
-                touched = true;
-            }
-            if (touched) {
-                cursor.setPosition(fragment.position());
-                cursor.setPosition(fragment.position() + fragment.length(), QTextCursor::KeepAnchor);
-                cursor.setCharFormat(format);
-            }
-        }
-    }
-    QString out = doc.toHtml();
-    // Only the body: the list sets font and size
-    const qsizetype start = out.indexOf(u"<body"_s);
-    if (start >= 0) {
-        const qsizetype open = out.indexOf(u'>', start) + 1;
-        const qsizetype close = out.lastIndexOf(u"</body>"_s);
-        out = out.mid(open, close - open).trimmed();
-    }
-    out.remove(QRegularExpression(u"<!--(StartFragment|EndFragment)-->"_s));
-    // Paragraph margins from Qt's own HTML are too large in a list
-    out.replace(QRegularExpression(u"margin-top:\\d+px; margin-bottom:\\d+px;"_s), u"margin-top:0px; margin-bottom:4px;"_s);
-    return out;
+    return NoteHtml::forList(html, dark);
 }
 
 // ---------------------------------------------------------------------------- settings

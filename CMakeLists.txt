@@ -273,6 +273,8 @@ qt_add_qml_module(qupil
         src/app/AppController.cpp
         src/app/DataService.h
         src/app/DataService.cpp
+        src/app/NoteHtml.h
+        src/app/NoteHtml.cpp
         src/app/Metronome.h
         src/app/Metronome.cpp
         src/app/TextFormatter.h
@@ -382,7 +384,15 @@ if(QUPIL_BUILD_TESTS AND NOT ANDROID AND NOT IOS)
     set_target_properties(tst_core PROPERTIES MACOSX_BUNDLE FALSE WIN32_EXECUTABLE FALSE)
     add_test(NAME core COMMAND tst_core)
 
+    # Lesson notes as rich text in lists
+    qt_add_executable(tst_notes tests/tst_notes.cpp src/app/NoteHtml.h src/app/NoteHtml.cpp)
+    target_include_directories(tst_notes PRIVATE src/app)
+    target_link_libraries(tst_notes PRIVATE Qt6::Gui Qt6::Test)
+    set_target_properties(tst_notes PROPERTIES MACOSX_BUNDLE FALSE WIN32_EXECUTABLE FALSE)
+    add_test(NAME notes COMMAND tst_notes)
+    set_tests_properties(notes PROPERTIES TIMEOUT 60)
+
     # Loads the whole QML UI once and fails on any QML warning
     add_test(NAME qml_smoke COMMAND qupil --smoke-test)
-    set_tests_properties(languagemanager core qml_smoke PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+    set_tests_properties(languagemanager core notes qml_smoke PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
 endif()

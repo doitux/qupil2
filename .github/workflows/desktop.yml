@@ -94,7 +94,7 @@ jobs:
         env:
           QT_QPA_PLATFORM: offscreen
         run: |
-          for t in tst_core tst_languagemanager; do
+          for t in tst_core tst_languagemanager tst_notes; do
             exe="build/$t"; [ -f "$exe.exe" ] && exe="$exe.exe"
             [ -f "$exe" ] || continue
             set +e

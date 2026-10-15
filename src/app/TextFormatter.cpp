@@ -6,6 +6,8 @@
 #include <QTextCursor>
 #include <QTextDocument>
 
+#include <algorithm>
+
 TextFormatter::TextFormatter(QObject *parent)
     : QObject(parent)
 {
@@ -27,11 +29,13 @@ QTextCursor TextFormatter::cursor() const
     if (!doc)
         return {};
     QTextCursor c(doc);
+    // The editor may report positions of the text before it was replaced
+    const auto valid = [doc](int position) { return std::clamp(position, 0, std::max(0, doc->characterCount() - 1)); };
     if (m_selectionStart != m_selectionEnd) {
-        c.setPosition(m_selectionStart);
-        c.setPosition(m_selectionEnd, QTextCursor::KeepAnchor);
+        c.setPosition(valid(m_selectionStart));
+        c.setPosition(valid(m_selectionEnd), QTextCursor::KeepAnchor);
     } else {
-        c.setPosition(m_cursorPosition);
+        c.setPosition(valid(m_cursorPosition));
     }
     return c;
 }
