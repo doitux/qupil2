@@ -16,7 +16,7 @@ ColumnLayout {
     readonly property var info: App.info
 
     function formatDate(iso) {
-        LanguageManager.effectiveLanguage   // re-evaluate on a language switch
+        if (LanguageManager.effectiveLanguage === "") return ""   // re-evaluate on a language switch
         if (!iso)
             return ""
         return new Date(iso).toLocaleString(Qt.locale(), Locale.ShortFormat)

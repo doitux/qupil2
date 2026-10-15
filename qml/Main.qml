@@ -148,10 +148,10 @@ ApplicationWindow {
                 Layout.fillHeight: true
                 currentIndex: window.currentPage
 
-                TodayPage {}
-                PlaceholderPage { title: qsTrId("nav.students"); iconName: "students" }
-                PlaceholderPage { title: qsTrId("nav.events"); iconName: "events" }
-                PlaceholderPage { title: qsTrId("metronome.title"); iconName: "metronome" }
+                SchedulePage {}
+                StudentsPage {}
+                EventsPage {}
+                MetronomePage {}
                 MorePage {}
             }
         }
@@ -288,6 +288,132 @@ ApplicationWindow {
         TakeOverSummary {
             Layout.fillWidth: true
             result: App.lastTakeOver
+        }
+    }
+
+    //! Closes all editor sheets (used by the screenshot tour)
+    function closeEditors() {
+        for (const sheet of [noteEditor, pieceEditor, newStudent, lessonEditor, activityEditor, reminderEditor])
+            sheet.close()
+    }
+
+    // ---------------------------------------------------------------- editors used from every page
+    NoteEditor { id: noteEditor }
+    PieceEditor { id: pieceEditor }
+    NewStudent { id: newStudent }
+    LessonEditor { id: lessonEditor }
+    ActivityEditor { id: activityEditor }
+    ReminderEditor { id: reminderEditor }
+
+    Connections {
+        target: Nav
+        function onNewStudent() { newStudent.start() }
+        function onEditLesson(id, weekday) { lessonEditor.edit(id, weekday) }
+        function onEditNote(membership, note) { noteEditor.edit(membership, note) }
+        function onEditPiece(membership, piece) { pieceEditor.edit(membership, piece) }
+        function onEditActivity(student, activity, continuous) { activityEditor.edit(student, activity, continuous) }
+        function onEditReminder(reminder, student) { reminderEditor.edit(reminder, student) }
+        function onShowPage(index) { window.currentPage = index }
+        function onShowStudent(id, membership) { window.currentPage = 1 }
+        function onShowEvent(id) { window.currentPage = 2 }
+        function onToast(message) {
+            toast.text = message
+            toast.show = true
+            toastTimer.restart()
+        }
+    }
+
+    // Space starts and stops the metronome on its page (desktop)
+    Shortcut {
+        sequence: "Space"
+        enabled: window.currentPage === 3 && App.phase === App.Ready
+        onActivated: Metronome.toggle()
+    }
+
+    // ---------------------------------------------------------------- running metronome, everywhere else
+    Rectangle {
+        id: miniPlayer
+        visible: Metronome.running && window.currentPage !== 3 && App.phase === App.Ready
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        anchors.rightMargin: 20
+        anchors.bottomMargin: 20
+        implicitWidth: playerRow.implicitWidth + 26
+        implicitHeight: 56
+        radius: 28
+        color: Theme.player
+        z: 10
+        RowLayout {
+            id: playerRow
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            anchors.leftMargin: 18
+            spacing: 12
+            Rectangle {
+                implicitWidth: 12
+                implicitHeight: 12
+                radius: 6
+                color: Metronome.beat === 0 ? Theme.lime : Theme.playerMuted
+            }
+            ColumnLayout {
+                spacing: 0
+                Text {
+                    text: Metronome.bpm + " " + qsTrId("metronome.unit.bpm")
+                    color: Theme.textOnPlayer
+                    font.family: Theme.fontFamily
+                    font.pixelSize: 15
+                    font.weight: Font.ExtraBold
+                }
+                Text {
+                    text: qsTrId("metronome.accent_every") + " " + Metronome.beatsPerBar
+                    color: Theme.playerMuted
+                    font.family: Theme.fontFamily
+                    font.pixelSize: 12
+                }
+            }
+            IconButton {
+                size: 42
+                fill: Theme.lime
+                tint: Theme.textOnLime
+                iconName: "stop"
+                text: qsTrId("metronome.stop")
+                onClicked: Metronome.stop()
+            }
+        }
+        TapHandler { onTapped: window.currentPage = 3 }
+    }
+
+    // ---------------------------------------------------------------- short messages
+    Rectangle {
+        id: toast
+        property alias text: toastText.text
+        property bool show: false
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 24
+        width: Math.min(toastText.implicitWidth + 40, parent.width - 40)
+        height: toastText.implicitHeight + 24
+        radius: 14
+        color: Theme.inverse
+        opacity: show ? 1 : 0
+        visible: opacity > 0
+        z: 20
+        Behavior on opacity { NumberAnimation { duration: 180 } }
+        Text {
+            id: toastText
+            anchors.centerIn: parent
+            width: Math.min(implicitWidth, toast.parent ? toast.parent.width - 80 : 400)
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.WordWrap
+            color: Theme.textOnInverse
+            font.family: Theme.fontFamily
+            font.pixelSize: 14
+            font.weight: Font.DemiBold
+        }
+        Timer {
+            id: toastTimer
+            interval: 2800
+            onTriggered: toast.show = false
         }
     }
 

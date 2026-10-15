@@ -11,6 +11,7 @@ Item {
 
     property string title
     property string iconName
+    property string hint: qsTrId("app.under_construction")
 
     ColumnLayout {
         anchors.centerIn: parent
@@ -45,7 +46,8 @@ Item {
             Layout.fillWidth: true
             horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.WordWrap
-            text: qsTrId("app.under_construction")
+            visible: page.hint !== ""
+            text: page.hint
             color: Theme.textMuted
             font.family: Theme.fontFamily
             font.pixelSize: 15

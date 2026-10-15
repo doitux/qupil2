@@ -95,6 +95,8 @@ endif()
 set(QUPIL_QML_FILES
     qml/Main.qml
     qml/Theme.qml
+    qml/Nav.qml
+    qml/Labels.qml
     qml/Icon.qml
     qml/NavButton.qml
     qml/ActionButton.qml
@@ -104,10 +106,51 @@ set(QUPIL_QML_FILES
     qml/DataSettings.qml
     qml/TakeOverActions.qml
     qml/TakeOverSummary.qml
+    qml/components/Avatar.qml
+    qml/components/Chip.qml
+    qml/components/ChoiceField.qml
+    qml/components/DateField.qml
+    qml/components/EmptyHint.qml
+    qml/components/Fab.qml
+    qml/components/FieldLabel.qml
+    qml/components/IconButton.qml
+    qml/components/InputField.qml
+    qml/components/ListEditor.qml
+    qml/components/MenuRow.qml
+    qml/components/PageHeader.qml
+    qml/components/SectionLabel.qml
+    qml/components/Segmented.qml
+    qml/components/Sheet.qml
+    qml/components/StatusBadge.qml
+    qml/components/Stepper.qml
+    qml/components/SubPage.qml
+    qml/components/SwitchRow.qml
+    qml/components/TimeField.qml
+    qml/editors/ActivityEditor.qml
+    qml/editors/EventEditor.qml
+    qml/editors/ExternalEditor.qml
+    qml/editors/LessonEditor.qml
+    qml/editors/NewStudent.qml
+    qml/editors/NoteEditor.qml
+    qml/editors/PieceEditor.qml
+    qml/editors/ReadyPiecesPicker.qml
+    qml/editors/ReminderEditor.qml
     qml/pages/SetupPage.qml
-    qml/pages/TodayPage.qml
-    qml/pages/PlaceholderPage.qml
-    qml/pages/MorePage.qml)
+    qml/pages/SchedulePage.qml
+    qml/pages/ScheduleOverview.qml
+    qml/pages/LessonDetail.qml
+    qml/pages/StudentsPage.qml
+    qml/pages/StudentDetail.qml
+    qml/pages/StudentForm.qml
+    qml/pages/EventsPage.qml
+    qml/pages/EventDetail.qml
+    qml/pages/MetronomePage.qml
+    qml/pages/MorePage.qml
+    qml/pages/RemindersPage.qml
+    qml/pages/BirthdaysPage.qml
+    qml/pages/CandidatesPage.qml
+    qml/pages/SettingsPage.qml
+    qml/pages/PlaceholderPage.qml)
 
 # All QML files sit next to the module's qmldir in the resources, so every file
 # sees all types of the module (and the Theme singleton) without an import.
@@ -117,7 +160,7 @@ foreach(_qml IN LISTS QUPIL_QML_FILES)
 endforeach()
 
 # Theme.qml is a singleton – must be set before qt_add_qml_module()
-set_source_files_properties(qml/Theme.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
+set_source_files_properties(qml/Theme.qml qml/Nav.qml qml/Labels.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
 
 qt_add_qml_module(qupil
     URI Qupil

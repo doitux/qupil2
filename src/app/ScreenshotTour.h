@@ -22,7 +22,7 @@ class ScreenshotTour : public QObject
     Q_OBJECT
 
 public:
-    ScreenshotTour(QQuickWindow *window, QObject *theme, AppController *app, const QString &folder,
+    ScreenshotTour(QQuickWindow *window, QObject *theme, QObject *nav, AppController *app, const QString &folder,
                    QObject *parent = nullptr);
 
     void start();
@@ -37,9 +37,13 @@ private:
     void run();
     void shot(const QString &name);
     void addPages(const QString &prefix);
+    void addDetails(const QString &prefix);
+    void pickExamples();
 
     QPointer<QQuickWindow> m_window;
     QPointer<QObject> m_theme;
+    QPointer<QObject> m_nav;
+    QString m_student, m_membership, m_lesson, m_piece, m_event;
     AppController *m_app;
     QString m_folder;
     QList<Step> m_steps;

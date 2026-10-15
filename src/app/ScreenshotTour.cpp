@@ -3,6 +3,7 @@
 #include "ScreenshotTour.h"
 
 #include <QCoreApplication>
+#include <QDateTime>
 #include <QDir>
 #include <QImage>
 #include <QQuickWindow>
@@ -12,6 +13,7 @@
 #include <iterator>
 
 #include "AppController.h"
+#include "DataService.h"
 
 using namespace Qt::StringLiterals;
 
@@ -25,11 +27,12 @@ const char *const kPages[] = { "today", "students", "events", "metronome", "more
 
 } // namespace
 
-ScreenshotTour::ScreenshotTour(QQuickWindow *window, QObject *theme, AppController *app, const QString &folder,
-                               QObject *parent)
+ScreenshotTour::ScreenshotTour(QQuickWindow *window, QObject *theme, QObject *nav, AppController *app,
+                               const QString &folder, QObject *parent)
     : QObject(parent)
     , m_window(window)
     , m_theme(theme)
+    , m_nav(nav)
     , m_app(app)
     , m_folder(folder)
 {
@@ -60,20 +63,93 @@ ScreenshotTour::ScreenshotTour(QQuickWindow *window, QObject *theme, AppControll
             << snap(u"03-imported-light"_s)
             << Step { [this] { m_app->finishSetup(); }, [this] { return m_app->phase() == AppController::Ready; } };
     addPages(u"1-desktop-light"_s);
+    addDetails(u"1-desktop-light"_s);
     m_steps << mode("dark");
     addPages(u"2-desktop-dark"_s);
+    addDetails(u"2-desktop-dark"_s);
     m_steps << mode("light") << size(390, 844);
     addPages(u"3-phone-light"_s);
+    addDetails(u"3-phone-light"_s);
     m_steps << mode("dark");
     addPages(u"4-phone-dark"_s);
+    addDetails(u"4-phone-dark"_s);
 }
 
 void ScreenshotTour::addPages(const QString &prefix)
 {
     for (int i = 0; i < int(std::size(kPages)); ++i) {
         const QString name = u"%1-%2-%3"_s.arg(prefix).arg(i).arg(QLatin1StringView(kPages[i]));
-        m_steps << Step { [this, i] { m_window->setProperty("currentPage", i); }, {} }
+        m_steps << Step { [this, i] {
+                              m_window->setProperty("currentPage", i);
+                              // A lesson is running in the pictures: 14:20 today
+                              const QDateTime lessonTime(QDate::currentDate(), QTime(14, 20));
+                              for (QObject *o : m_window->findChildren<QObject *>(u"scheduleOverview"_s))
+                                  o->setProperty("now", lessonTime);
+                          },
+                          {} }
                 << Step { [this, name] { shot(name); }, {} };
+    }
+}
+
+// A student with lessons, an event with a programme, the note and piece editors
+void ScreenshotTour::addDetails(const QString &prefix)
+{
+    auto nav = [this](const char *signal, const QString &a, const QString &b = {}) {
+        return Step { [this, signal, a, b] {
+                          QObject *nav = m_nav;
+                          if (!nav)
+                              return;
+                          if (b.isNull())
+                              QMetaObject::invokeMethod(nav, signal, Q_ARG(QString, a));
+                          else
+                              QMetaObject::invokeMethod(nav, signal, Q_ARG(QString, a), Q_ARG(QString, b));
+                      },
+                      {} };
+    };
+    auto snap = [this](const QString &name) { return Step { [this, name] { shot(name); }, {} }; };
+    auto close = Step { [this] { QMetaObject::invokeMethod(m_window, "closeEditors"); }, {} };
+
+    m_steps << Step { [this] { pickExamples(); }, {} };
+    m_steps << Step { [this, nav] { nav("showStudent", m_student, m_membership).action(); }, {} }
+            << snap(prefix + u"-5-student"_s)
+            << Step { [this, nav] { nav("editNote", m_membership, u""_s).action(); }, {} }
+            << snap(prefix + u"-6-note-editor"_s) << close
+            << Step { [this, nav] { nav("editPiece", m_membership, m_piece).action(); }, {} }
+            << snap(prefix + u"-7-piece-editor"_s) << close
+            << Step { [this, nav] { nav("showEvent", m_event).action(); }, {} }
+            << snap(prefix + u"-8-event"_s)
+            << Step { [this] {
+                          if (m_nav)
+                              QMetaObject::invokeMethod(m_nav, "editLesson", Q_ARG(QString, m_lesson), Q_ARG(int, -1));
+                      },
+                      {} }
+            << snap(prefix + u"-9-lesson-editor"_s) << close
+            << Step { [this] { m_window->setProperty("currentPage", 0); }, {} };
+}
+
+void ScreenshotTour::pickExamples()
+{
+    DataService *data = DataService::instance();
+    if (!data)
+        return;
+    // The student of the first group lesson today: notes shared with the group
+    for (const QVariant &s : data->students()) {
+        const QVariantMap student = data->student(s.toMap().value(u"id"_s).toString());
+        const QVariantList memberships = student.value(u"memberships"_s).toList();
+        if (memberships.isEmpty())
+            continue;
+        m_student = student.value(u"id"_s).toString();
+        m_membership = memberships.first().toMap().value(u"id"_s).toString();
+        m_lesson = memberships.first().toMap().value(u"lesson_id"_s).toString();
+        const QVariantList pieces = data->pieces(m_membership);
+        m_piece = pieces.isEmpty() ? QString() : pieces.first().toMap().value(u"id"_s).toString();
+        break;
+    }
+    for (const QVariant &e : data->events()) {
+        if (e.toMap().value(u"state"_s).toInt() == 0) {
+            m_event = e.toMap().value(u"id"_s).toString();
+            break;
+        }
     }
 }
 

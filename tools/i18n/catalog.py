@@ -1198,6 +1198,103 @@ E("backup.restore.action", en="Restore", de="Zurückspielen", fr="Restaurer", es
 E("common.filter_all", en="All files (*)", de="Alle Dateien (*)", fr="Tous les fichiers (*)",
   es="Todos los archivos (*)", c="File dialog filter. Keep the pattern in parentheses unchanged.")
 
+# ---------------------------------------------------------------- screens of Qupil 2 (new)
+E("common.saved", en="Saved", de="Gespeichert", fr="Enregistré", es="Guardado")
+E("time.today", en="Today", de="Heute", fr="Aujourd’hui", es="Hoy")
+E("time.yesterday", en="Yesterday", de="Gestern", fr="Hier", es="Ayer")
+E("time.days_ago", src="%n day(s) ago", en=["%n day ago", "%n days ago"], de=["vor %n Tag", "vor %n Tagen"],
+  fr=["il y a %n jour", "il y a %n jours"], es=["hace %n día", "hace %n días"])
+E("time.weeks_ago", src="%n week(s) ago", en=["%n week ago", "%n weeks ago"], de=["vor %n Woche", "vor %n Wochen"],
+  fr=["il y a %n semaine", "il y a %n semaines"], es=["hace %n semana", "hace %n semanas"])
+E("time.in_days", src="in %n day(s)", en=["in %n day", "in %n days"], de=["in %n Tag", "in %n Tagen"],
+  fr=["dans %n jour", "dans %n jours"], es=["en %n día", "en %n días"])
+E("calendar.previous_month", en="Previous month", de="Vorheriger Monat", fr="Mois précédent", es="Mes anterior")
+E("calendar.next_month", en="Next month", de="Nächster Monat", fr="Mois suivant", es="Mes siguiente")
+E("calendar.previous_year", en="Previous year", de="Vorheriges Jahr", fr="Année précédente", es="Año anterior")
+E("calendar.next_year", en="Next year", de="Nächstes Jahr", fr="Année suivante", es="Año siguiente")
+E("calendar.clear", en="No date", de="Kein Datum", fr="Aucune date", es="Sin fecha")
+E("today.birthday_on", en="Birthday on %1", de="Geburtstag am %1", fr="Anniversaire le %1", es="Cumpleaños el %1",
+  c="%1 = weekday and date")
+E("today.reminder", en="Reminder", de="Erinnerung", fr="Rappel", es="Recordatorio")
+E("today.running", en="Now", de="Läuft", fr="En cours", es="En curso", c="Badge on the lesson that is running now")
+E("today.pieces_in_progress", src="%n piece(s) in progress", en=["%n piece in progress", "%n pieces in progress"],
+  de=["%n Werk in Arbeit", "%n Werke in Arbeit"], fr=["%n morceau en cours", "%n morceaux en cours"],
+  es=["%n obra en curso", "%n obras en curso"])
+E("today.pieces_ready", src="%n ready to perform", en=["%n ready to perform", "%n ready to perform"],
+  de=["%n vorspielreif", "%n vorspielreif"], fr=["%n prêt à jouer", "%n prêts à jouer"],
+  es=["%n lista para tocar", "%n listas para tocar"])
+E("schedule.new_student", en="New student", de="Neuer Schüler", fr="Nouvel élève", es="Nuevo alumno")
+E("schedule.new_lesson", en="New lesson", de="Neuer Unterricht", fr="Nouveau cours", es="Nueva clase")
+E("schedule.day_lessons", en="Lessons", de="Unterricht", fr="Cours", es="Clases")
+E("schedule.no_lessons_day", en="No lessons on this day", de="An diesem Tag kein Unterricht",
+  fr="Pas de cours ce jour-là", es="No hay clases este día")
+E("schedule.pick_hint", en="Choose a lesson or a student.", de="Wählen Sie einen Unterricht oder einen Schüler.",
+  fr="Choisissez un cours ou un élève.", es="Elija una clase o un alumno.")
+E("students.pick_hint", en="Choose a student.", de="Wählen Sie einen Schüler.", fr="Choisissez un élève.",
+  es="Elija un alumno.")
+E("students.empty", en="No students yet. Add one with +.", de="Noch keine Schüler. Mit + legen Sie einen an.",
+  fr="Aucun élève pour l’instant. Ajoutez-en un avec +.", es="Todavía no hay alumnos. Añada uno con +.")
+E("students.no_match", en="No student matches the search.", de="Kein Schüler passt zur Suche.",
+  fr="Aucun élève ne correspond à la recherche.", es="Ningún alumno coincide con la búsqueda.")
+E("students.no_lesson_short", en="no lesson", de="kein Unterricht", fr="aucun cours", es="sin clase")
+E("student.inactive_lessons", src="+%n inactive", en=["+%n inactive", "+%n inactive"], de=["+%n inaktiv", "+%n inaktiv"],
+  fr=["+%n inactif", "+%n inactifs"], es=["+%n inactiva", "+%n inactivas"], c="Earlier lessons of a student")
+E("student.no_lesson", en="This student is not in any lesson yet. Add the student to a lesson to write notes and pieces.",
+  de="Dieser Schüler ist noch in keinem Unterricht. Fügen Sie ihn einem Unterricht hinzu, um Notizen und Werke anzulegen.",
+  fr="Cet élève ne participe encore à aucun cours. Ajoutez-le à un cours pour saisir des notes et des morceaux.",
+  es="Este alumno aún no está en ninguna clase. Añádalo a una clase para escribir notas y obras.")
+E("student.new_hint", en="Everything else (address, parents, rental instrument) is under “Data” on the student’s page.",
+  de="Alles Weitere (Adresse, Eltern, Leihinstrument) finden Sie beim Schüler unter „Daten“.",
+  fr="Le reste (adresse, parents, instrument loué) se trouve dans « Données » sur la page de l’élève.",
+  es="Todo lo demás (dirección, padres, instrumento prestado) está en «Datos» en la página del alumno.")
+E("student.add_reminder", en="Set up reminder…", de="Erinnerung einrichten ...", fr="Créer un rappel…",
+  es="Crear recordatorio…")
+E("notes.empty", en="No notes yet.", de="Noch keine Notizen.", fr="Aucune note pour l’instant.",
+  es="Todavía no hay notas.")
+E("note.edit", en="Edit note", de="Notiz bearbeiten", fr="Modifier la note", es="Editar nota")
+E("pieces.empty", en="No pieces yet.", de="Noch keine Werke.", fr="Aucun morceau pour l’instant.",
+  es="Todavía no hay obras.")
+E("piece.edit", en="Edit piece", de="Werk bearbeiten", fr="Modifier le morceau", es="Editar obra")
+E("loans.empty", en="No borrowed sheet music.", de="Keine ausgeliehenen Noten.", fr="Aucune partition empruntée.",
+  es="No hay partituras prestadas.")
+E("lesson.edit", en="Edit lesson", de="Unterricht bearbeiten", fr="Modifier le cours", es="Editar clase")
+E("lesson.duration", en="%1 minutes", de="%1 Minuten", fr="%1 minutes", es="%1 minutos", c="%1 = lesson length")
+E("lesson.name.auto_short", en="Automatic", de="Automatisch", fr="Automatique", es="Automático")
+E("lesson.name.manual_short", en="Own name", de="Eigener Name", fr="Nom libre", es="Nombre propio")
+E("lesson.no_students", en="No students in this lesson yet.", de="Noch keine Schüler in diesem Unterricht.",
+  fr="Aucun élève dans ce cours pour l’instant.", es="Todavía no hay alumnos en esta clase.")
+E("lesson.note_for_all", en="Note for everybody", de="Notiz für alle", fr="Note pour tous", es="Nota para todos")
+E("events.empty", en="No events yet.", de="Noch keine Veranstaltungen.", fr="Aucun événement pour l’instant.",
+  es="Todavía no hay eventos.")
+E("events.pick_hint", en="Choose an event.", de="Wählen Sie eine Veranstaltung.", fr="Choisissez un événement.",
+  es="Elija un evento.")
+E("event.programme", en="Programme", de="Programm", fr="Programme", es="Programa")
+E("event.programme_empty", en="No contributions yet. Add pieces that are ready to perform.",
+  de="Noch keine Beiträge. Fügen Sie vorspielreife Werke hinzu.",
+  fr="Aucune contribution pour l’instant. Ajoutez des morceaux prêts à jouer.",
+  es="Todavía no hay intervenciones. Añada obras listas para tocar.")
+E("event.label.contributions", en="Contributions:", de="Beiträge:", fr="Contributions :", es="Intervenciones:")
+E("event.contributions", src="%n contribution(s)", en=["%n contribution", "%n contributions"],
+  de=["%n Beitrag", "%n Beiträge"], fr=["%n contribution", "%n contributions"],
+  es=["%n intervención", "%n intervenciones"])
+E("event.external_count", src="%n external", en=["%n external", "%n external"], de=["%n extern", "%n extern"],
+  fr=["%n externe", "%n externes"], es=["%n externa", "%n externas"])
+E("event.add_ready", en="Ready piece", de="Vorspielreifes Werk", fr="Morceau prêt", es="Obra lista")
+E("event.no_ready_pieces", en="No pieces are marked as “ready to perform” at the moment.",
+  de="Zurzeit ist kein Werk als „vorspielreif“ markiert.",
+  fr="Aucun morceau n’est actuellement marqué « prêt à jouer ».",
+  es="Por ahora ninguna obra está marcada como «lista para tocar».")
+E("event.move_up", en="Move up", de="Nach oben", fr="Monter", es="Subir")
+E("event.move_down", en="Move down", de="Nach unten", fr="Descendre", es="Bajar")
+E("metronome.pitch_down", en="Lower pitch", de="Tiefer stimmen", fr="Diapason plus bas", es="Afinación más baja")
+E("metronome.pitch_up", en="Higher pitch", de="Höher stimmen", fr="Diapason plus haut", es="Afinación más alta")
+E("more.birthdays_today", src="%n today", en=["%n today", "%n today"], de=["%n heute", "%n heute"],
+  fr=["%n aujourd’hui", "%n aujourd’hui"], es=["%n hoy", "%n hoy"])
+E("birthday.none_soon", en="No birthdays in the next weeks.", de="In den nächsten Wochen hat niemand Geburtstag.",
+  fr="Aucun anniversaire dans les prochaines semaines.", es="No hay cumpleaños en las próximas semanas.")
+E("reminders.empty", en="No reminders.", de="Keine Erinnerungen.", fr="Aucun rappel.", es="No hay recordatorios.")
+E("settings.lists", en="Lists", de="Listen", fr="Listes", es="Listas")
+
 # ---------------------------------------------------------------- sync (new)
 E("sync.title", en="Sync", de="Synchronisation", fr="Synchronisation", es="Sincronización")
 E("sync.all_synced", en="Everything is in sync", de="Alles synchron", fr="Tout est synchronisé",

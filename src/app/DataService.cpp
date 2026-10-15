@@ -156,6 +156,20 @@ QString DataService::today() const
     return todayIso();
 }
 
+QString DataService::dayHeading(const QDateTime &when) const
+{
+    const QLocale locale = uiLocale();
+    const QDate d = when.date();
+    QString pattern;
+    switch (locale.language()) {
+    case QLocale::German: pattern = u"dddd, d. MMMM"_s; break;
+    case QLocale::French: pattern = u"dddd d MMMM"_s; break;
+    case QLocale::Spanish: pattern = u"dddd, d 'de' MMMM"_s; break;
+    default: pattern = u"dddd, MMMM d"_s; break;
+    }
+    return locale.toString(d, pattern);
+}
+
 int DataService::ageOn(const QString &birthday, const QString &onDate) const
 {
     const QDate b = QDate::fromString(birthday, Qt::ISODate);
@@ -333,6 +347,26 @@ void DataService::ensureDefaults()
 }
 
 // ---------------------------------------------------------------------------- generic
+
+QVariantMap DataService::get(const QString &entity, const QString &id) const
+{
+    const QVariantMap m = m_store->get(entity, id);
+    return m.value(u"deleted"_s).toInt() != 0 ? QVariantMap() : m;
+}
+
+QVariantMap DataService::membershipInfo(const QString &membershipId) const
+{
+    QVariantMap m = m_store->get(u"membership"_s, membershipId);
+    if (m.isEmpty())
+        return {};
+    const QVariantMap lesson = m_store->get(u"lesson"_s, m.value(u"lesson_id"_s).toString());
+    m.insert(u"lessonName"_s, lesson.value(u"name"_s));
+    m.insert(u"kind"_s, lesson.value(u"kind"_s, 1));
+    const QVariantList members = activeMembers(m.value(u"lesson_id"_s).toString());
+    m.insert(u"students"_s, members);
+    m.insert(u"groupSize"_s, std::max<qsizetype>(1, members.size()));
+    return m;
+}
 
 QString DataService::create(const QString &entity, const QVariantMap &fields)
 {

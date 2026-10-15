@@ -2157,6 +2157,265 @@ Veuillez contacter l’auteur à l’adresse %4 pour résoudre ce problème.</tr
         <extracomment>File dialog filter. Keep the pattern in parentheses unchanged.</extracomment>
         <translation>Tous les fichiers (*)</translation>
     </message>
+    <message id="common.saved">
+        <source>Saved</source>
+        <translation>Enregistré</translation>
+    </message>
+    <message id="time.today">
+        <source>Today</source>
+        <translation>Aujourd’hui</translation>
+    </message>
+    <message id="time.yesterday">
+        <source>Yesterday</source>
+        <translation>Hier</translation>
+    </message>
+    <message id="time.days_ago" numerus="yes">
+        <source>%n day(s) ago</source>
+        <translation>
+            <numerusform>il y a %n jour</numerusform>
+            <numerusform>il y a %n jours</numerusform>
+        </translation>
+    </message>
+    <message id="time.weeks_ago" numerus="yes">
+        <source>%n week(s) ago</source>
+        <translation>
+            <numerusform>il y a %n semaine</numerusform>
+            <numerusform>il y a %n semaines</numerusform>
+        </translation>
+    </message>
+    <message id="time.in_days" numerus="yes">
+        <source>in %n day(s)</source>
+        <translation>
+            <numerusform>dans %n jour</numerusform>
+            <numerusform>dans %n jours</numerusform>
+        </translation>
+    </message>
+    <message id="calendar.previous_month">
+        <source>Previous month</source>
+        <translation>Mois précédent</translation>
+    </message>
+    <message id="calendar.next_month">
+        <source>Next month</source>
+        <translation>Mois suivant</translation>
+    </message>
+    <message id="calendar.previous_year">
+        <source>Previous year</source>
+        <translation>Année précédente</translation>
+    </message>
+    <message id="calendar.next_year">
+        <source>Next year</source>
+        <translation>Année suivante</translation>
+    </message>
+    <message id="calendar.clear">
+        <source>No date</source>
+        <translation>Aucune date</translation>
+    </message>
+    <message id="today.birthday_on">
+        <source>Birthday on %1</source>
+        <extracomment>%1 = weekday and date</extracomment>
+        <translation>Anniversaire le %1</translation>
+    </message>
+    <message id="today.reminder">
+        <source>Reminder</source>
+        <translation>Rappel</translation>
+    </message>
+    <message id="today.running">
+        <source>Now</source>
+        <extracomment>Badge on the lesson that is running now</extracomment>
+        <translation>En cours</translation>
+    </message>
+    <message id="today.pieces_in_progress" numerus="yes">
+        <source>%n piece(s) in progress</source>
+        <translation>
+            <numerusform>%n morceau en cours</numerusform>
+            <numerusform>%n morceaux en cours</numerusform>
+        </translation>
+    </message>
+    <message id="today.pieces_ready" numerus="yes">
+        <source>%n ready to perform</source>
+        <translation>
+            <numerusform>%n prêt à jouer</numerusform>
+            <numerusform>%n prêts à jouer</numerusform>
+        </translation>
+    </message>
+    <message id="schedule.new_student">
+        <source>New student</source>
+        <translation>Nouvel élève</translation>
+    </message>
+    <message id="schedule.new_lesson">
+        <source>New lesson</source>
+        <translation>Nouveau cours</translation>
+    </message>
+    <message id="schedule.day_lessons">
+        <source>Lessons</source>
+        <translation>Cours</translation>
+    </message>
+    <message id="schedule.no_lessons_day">
+        <source>No lessons on this day</source>
+        <translation>Pas de cours ce jour-là</translation>
+    </message>
+    <message id="schedule.pick_hint">
+        <source>Choose a lesson or a student.</source>
+        <translation>Choisissez un cours ou un élève.</translation>
+    </message>
+    <message id="students.pick_hint">
+        <source>Choose a student.</source>
+        <translation>Choisissez un élève.</translation>
+    </message>
+    <message id="students.empty">
+        <source>No students yet. Add one with +.</source>
+        <translation>Aucun élève pour l’instant. Ajoutez-en un avec +.</translation>
+    </message>
+    <message id="students.no_match">
+        <source>No student matches the search.</source>
+        <translation>Aucun élève ne correspond à la recherche.</translation>
+    </message>
+    <message id="students.no_lesson_short">
+        <source>no lesson</source>
+        <translation>aucun cours</translation>
+    </message>
+    <message id="student.inactive_lessons" numerus="yes">
+        <source>+%n inactive</source>
+        <extracomment>Earlier lessons of a student</extracomment>
+        <translation>
+            <numerusform>+%n inactif</numerusform>
+            <numerusform>+%n inactifs</numerusform>
+        </translation>
+    </message>
+    <message id="student.no_lesson">
+        <source>This student is not in any lesson yet. Add the student to a lesson to write notes and pieces.</source>
+        <translation>Cet élève ne participe encore à aucun cours. Ajoutez-le à un cours pour saisir des notes et des morceaux.</translation>
+    </message>
+    <message id="student.new_hint">
+        <source>Everything else (address, parents, rental instrument) is under “Data” on the student’s page.</source>
+        <translation>Le reste (adresse, parents, instrument loué) se trouve dans « Données » sur la page de l’élève.</translation>
+    </message>
+    <message id="student.add_reminder">
+        <source>Set up reminder…</source>
+        <translation>Créer un rappel…</translation>
+    </message>
+    <message id="notes.empty">
+        <source>No notes yet.</source>
+        <translation>Aucune note pour l’instant.</translation>
+    </message>
+    <message id="note.edit">
+        <source>Edit note</source>
+        <translation>Modifier la note</translation>
+    </message>
+    <message id="pieces.empty">
+        <source>No pieces yet.</source>
+        <translation>Aucun morceau pour l’instant.</translation>
+    </message>
+    <message id="piece.edit">
+        <source>Edit piece</source>
+        <translation>Modifier le morceau</translation>
+    </message>
+    <message id="loans.empty">
+        <source>No borrowed sheet music.</source>
+        <translation>Aucune partition empruntée.</translation>
+    </message>
+    <message id="lesson.edit">
+        <source>Edit lesson</source>
+        <translation>Modifier le cours</translation>
+    </message>
+    <message id="lesson.duration">
+        <source>%1 minutes</source>
+        <extracomment>%1 = lesson length</extracomment>
+        <translation>%1 minutes</translation>
+    </message>
+    <message id="lesson.name.auto_short">
+        <source>Automatic</source>
+        <translation>Automatique</translation>
+    </message>
+    <message id="lesson.name.manual_short">
+        <source>Own name</source>
+        <translation>Nom libre</translation>
+    </message>
+    <message id="lesson.no_students">
+        <source>No students in this lesson yet.</source>
+        <translation>Aucun élève dans ce cours pour l’instant.</translation>
+    </message>
+    <message id="lesson.note_for_all">
+        <source>Note for everybody</source>
+        <translation>Note pour tous</translation>
+    </message>
+    <message id="events.empty">
+        <source>No events yet.</source>
+        <translation>Aucun événement pour l’instant.</translation>
+    </message>
+    <message id="events.pick_hint">
+        <source>Choose an event.</source>
+        <translation>Choisissez un événement.</translation>
+    </message>
+    <message id="event.programme">
+        <source>Programme</source>
+        <translation>Programme</translation>
+    </message>
+    <message id="event.programme_empty">
+        <source>No contributions yet. Add pieces that are ready to perform.</source>
+        <translation>Aucune contribution pour l’instant. Ajoutez des morceaux prêts à jouer.</translation>
+    </message>
+    <message id="event.label.contributions">
+        <source>Contributions:</source>
+        <translation>Contributions :</translation>
+    </message>
+    <message id="event.contributions" numerus="yes">
+        <source>%n contribution(s)</source>
+        <translation>
+            <numerusform>%n contribution</numerusform>
+            <numerusform>%n contributions</numerusform>
+        </translation>
+    </message>
+    <message id="event.external_count" numerus="yes">
+        <source>%n external</source>
+        <translation>
+            <numerusform>%n externe</numerusform>
+            <numerusform>%n externes</numerusform>
+        </translation>
+    </message>
+    <message id="event.add_ready">
+        <source>Ready piece</source>
+        <translation>Morceau prêt</translation>
+    </message>
+    <message id="event.no_ready_pieces">
+        <source>No pieces are marked as “ready to perform” at the moment.</source>
+        <translation>Aucun morceau n’est actuellement marqué « prêt à jouer ».</translation>
+    </message>
+    <message id="event.move_up">
+        <source>Move up</source>
+        <translation>Monter</translation>
+    </message>
+    <message id="event.move_down">
+        <source>Move down</source>
+        <translation>Descendre</translation>
+    </message>
+    <message id="metronome.pitch_down">
+        <source>Lower pitch</source>
+        <translation>Diapason plus bas</translation>
+    </message>
+    <message id="metronome.pitch_up">
+        <source>Higher pitch</source>
+        <translation>Diapason plus haut</translation>
+    </message>
+    <message id="more.birthdays_today" numerus="yes">
+        <source>%n today</source>
+        <translation>
+            <numerusform>%n aujourd’hui</numerusform>
+            <numerusform>%n aujourd’hui</numerusform>
+        </translation>
+    </message>
+    <message id="birthday.none_soon">
+        <source>No birthdays in the next weeks.</source>
+        <translation>Aucun anniversaire dans les prochaines semaines.</translation>
+    </message>
+    <message id="reminders.empty">
+        <source>No reminders.</source>
+        <translation>Aucun rappel.</translation>
+    </message>
+    <message id="settings.lists">
+        <source>Lists</source>
+        <translation>Listes</translation>
+    </message>
     <message id="sync.title">
         <source>Sync</source>
         <translation>Synchronisation</translation>

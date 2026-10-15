@@ -155,7 +155,8 @@ int main(int argc, char *argv[])
                              if (!window)
                                  return;
                              QObject *theme = engine.singletonInstance<QObject *>("Qupil", "Theme");
-                             tour = std::make_unique<ScreenshotTour>(window, theme, &controller,
+                             QObject *nav = engine.singletonInstance<QObject *>("Qupil", "Nav");
+                             tour = std::make_unique<ScreenshotTour>(window, theme, nav, &controller,
                                                                      args.value(screenshotsOption));
                              tour->start();
                          });

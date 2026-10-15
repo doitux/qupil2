@@ -3,6 +3,7 @@
 #pragma once
 
 #include <QDate>
+#include <QDateTime>
 #include <QObject>
 #include <QStringList>
 #include <QVariantList>
@@ -128,6 +129,9 @@ public:
     Q_INVOKABLE void ensureDefaults();
 
     // ------------------------------------------------------------ generic
+    Q_INVOKABLE QVariantMap get(const QString &entity, const QString &id) const;
+    //! Membership with its lesson and the students currently in that lesson
+    Q_INVOKABLE QVariantMap membershipInfo(const QString &membershipId) const;
     Q_INVOKABLE QString create(const QString &entity, const QVariantMap &fields);
     Q_INVOKABLE bool update(const QString &entity, const QString &id, const QVariantMap &fields);
     Q_INVOKABLE bool remove(const QString &entity, const QString &id);
@@ -139,6 +143,8 @@ public:
     //! "Wed, 07.10.2026" style date in the UI language
     Q_INVOKABLE QString formatDate(const QString &iso, bool withWeekday = false) const;
     Q_INVOKABLE QString today() const;
+    //! "Wednesday, 14 October" in the UI language
+    Q_INVOKABLE QString dayHeading(const QDateTime &when) const;
     Q_INVOKABLE int ageOn(const QString &birthday, const QString &onDate = {}) const;
 
 signals:

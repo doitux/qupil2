@@ -2157,6 +2157,265 @@ Please contact the author at %4 to fix this problem.</translation>
         <extracomment>File dialog filter. Keep the pattern in parentheses unchanged.</extracomment>
         <translation>All files (*)</translation>
     </message>
+    <message id="common.saved">
+        <source>Saved</source>
+        <translation>Saved</translation>
+    </message>
+    <message id="time.today">
+        <source>Today</source>
+        <translation>Today</translation>
+    </message>
+    <message id="time.yesterday">
+        <source>Yesterday</source>
+        <translation>Yesterday</translation>
+    </message>
+    <message id="time.days_ago" numerus="yes">
+        <source>%n day(s) ago</source>
+        <translation>
+            <numerusform>%n day ago</numerusform>
+            <numerusform>%n days ago</numerusform>
+        </translation>
+    </message>
+    <message id="time.weeks_ago" numerus="yes">
+        <source>%n week(s) ago</source>
+        <translation>
+            <numerusform>%n week ago</numerusform>
+            <numerusform>%n weeks ago</numerusform>
+        </translation>
+    </message>
+    <message id="time.in_days" numerus="yes">
+        <source>in %n day(s)</source>
+        <translation>
+            <numerusform>in %n day</numerusform>
+            <numerusform>in %n days</numerusform>
+        </translation>
+    </message>
+    <message id="calendar.previous_month">
+        <source>Previous month</source>
+        <translation>Previous month</translation>
+    </message>
+    <message id="calendar.next_month">
+        <source>Next month</source>
+        <translation>Next month</translation>
+    </message>
+    <message id="calendar.previous_year">
+        <source>Previous year</source>
+        <translation>Previous year</translation>
+    </message>
+    <message id="calendar.next_year">
+        <source>Next year</source>
+        <translation>Next year</translation>
+    </message>
+    <message id="calendar.clear">
+        <source>No date</source>
+        <translation>No date</translation>
+    </message>
+    <message id="today.birthday_on">
+        <source>Birthday on %1</source>
+        <extracomment>%1 = weekday and date</extracomment>
+        <translation>Birthday on %1</translation>
+    </message>
+    <message id="today.reminder">
+        <source>Reminder</source>
+        <translation>Reminder</translation>
+    </message>
+    <message id="today.running">
+        <source>Now</source>
+        <extracomment>Badge on the lesson that is running now</extracomment>
+        <translation>Now</translation>
+    </message>
+    <message id="today.pieces_in_progress" numerus="yes">
+        <source>%n piece(s) in progress</source>
+        <translation>
+            <numerusform>%n piece in progress</numerusform>
+            <numerusform>%n pieces in progress</numerusform>
+        </translation>
+    </message>
+    <message id="today.pieces_ready" numerus="yes">
+        <source>%n ready to perform</source>
+        <translation>
+            <numerusform>%n ready to perform</numerusform>
+            <numerusform>%n ready to perform</numerusform>
+        </translation>
+    </message>
+    <message id="schedule.new_student">
+        <source>New student</source>
+        <translation>New student</translation>
+    </message>
+    <message id="schedule.new_lesson">
+        <source>New lesson</source>
+        <translation>New lesson</translation>
+    </message>
+    <message id="schedule.day_lessons">
+        <source>Lessons</source>
+        <translation>Lessons</translation>
+    </message>
+    <message id="schedule.no_lessons_day">
+        <source>No lessons on this day</source>
+        <translation>No lessons on this day</translation>
+    </message>
+    <message id="schedule.pick_hint">
+        <source>Choose a lesson or a student.</source>
+        <translation>Choose a lesson or a student.</translation>
+    </message>
+    <message id="students.pick_hint">
+        <source>Choose a student.</source>
+        <translation>Choose a student.</translation>
+    </message>
+    <message id="students.empty">
+        <source>No students yet. Add one with +.</source>
+        <translation>No students yet. Add one with +.</translation>
+    </message>
+    <message id="students.no_match">
+        <source>No student matches the search.</source>
+        <translation>No student matches the search.</translation>
+    </message>
+    <message id="students.no_lesson_short">
+        <source>no lesson</source>
+        <translation>no lesson</translation>
+    </message>
+    <message id="student.inactive_lessons" numerus="yes">
+        <source>+%n inactive</source>
+        <extracomment>Earlier lessons of a student</extracomment>
+        <translation>
+            <numerusform>+%n inactive</numerusform>
+            <numerusform>+%n inactive</numerusform>
+        </translation>
+    </message>
+    <message id="student.no_lesson">
+        <source>This student is not in any lesson yet. Add the student to a lesson to write notes and pieces.</source>
+        <translation>This student is not in any lesson yet. Add the student to a lesson to write notes and pieces.</translation>
+    </message>
+    <message id="student.new_hint">
+        <source>Everything else (address, parents, rental instrument) is under “Data” on the student’s page.</source>
+        <translation>Everything else (address, parents, rental instrument) is under “Data” on the student’s page.</translation>
+    </message>
+    <message id="student.add_reminder">
+        <source>Set up reminder…</source>
+        <translation>Set up reminder…</translation>
+    </message>
+    <message id="notes.empty">
+        <source>No notes yet.</source>
+        <translation>No notes yet.</translation>
+    </message>
+    <message id="note.edit">
+        <source>Edit note</source>
+        <translation>Edit note</translation>
+    </message>
+    <message id="pieces.empty">
+        <source>No pieces yet.</source>
+        <translation>No pieces yet.</translation>
+    </message>
+    <message id="piece.edit">
+        <source>Edit piece</source>
+        <translation>Edit piece</translation>
+    </message>
+    <message id="loans.empty">
+        <source>No borrowed sheet music.</source>
+        <translation>No borrowed sheet music.</translation>
+    </message>
+    <message id="lesson.edit">
+        <source>Edit lesson</source>
+        <translation>Edit lesson</translation>
+    </message>
+    <message id="lesson.duration">
+        <source>%1 minutes</source>
+        <extracomment>%1 = lesson length</extracomment>
+        <translation>%1 minutes</translation>
+    </message>
+    <message id="lesson.name.auto_short">
+        <source>Automatic</source>
+        <translation>Automatic</translation>
+    </message>
+    <message id="lesson.name.manual_short">
+        <source>Own name</source>
+        <translation>Own name</translation>
+    </message>
+    <message id="lesson.no_students">
+        <source>No students in this lesson yet.</source>
+        <translation>No students in this lesson yet.</translation>
+    </message>
+    <message id="lesson.note_for_all">
+        <source>Note for everybody</source>
+        <translation>Note for everybody</translation>
+    </message>
+    <message id="events.empty">
+        <source>No events yet.</source>
+        <translation>No events yet.</translation>
+    </message>
+    <message id="events.pick_hint">
+        <source>Choose an event.</source>
+        <translation>Choose an event.</translation>
+    </message>
+    <message id="event.programme">
+        <source>Programme</source>
+        <translation>Programme</translation>
+    </message>
+    <message id="event.programme_empty">
+        <source>No contributions yet. Add pieces that are ready to perform.</source>
+        <translation>No contributions yet. Add pieces that are ready to perform.</translation>
+    </message>
+    <message id="event.label.contributions">
+        <source>Contributions:</source>
+        <translation>Contributions:</translation>
+    </message>
+    <message id="event.contributions" numerus="yes">
+        <source>%n contribution(s)</source>
+        <translation>
+            <numerusform>%n contribution</numerusform>
+            <numerusform>%n contributions</numerusform>
+        </translation>
+    </message>
+    <message id="event.external_count" numerus="yes">
+        <source>%n external</source>
+        <translation>
+            <numerusform>%n external</numerusform>
+            <numerusform>%n external</numerusform>
+        </translation>
+    </message>
+    <message id="event.add_ready">
+        <source>Ready piece</source>
+        <translation>Ready piece</translation>
+    </message>
+    <message id="event.no_ready_pieces">
+        <source>No pieces are marked as “ready to perform” at the moment.</source>
+        <translation>No pieces are marked as “ready to perform” at the moment.</translation>
+    </message>
+    <message id="event.move_up">
+        <source>Move up</source>
+        <translation>Move up</translation>
+    </message>
+    <message id="event.move_down">
+        <source>Move down</source>
+        <translation>Move down</translation>
+    </message>
+    <message id="metronome.pitch_down">
+        <source>Lower pitch</source>
+        <translation>Lower pitch</translation>
+    </message>
+    <message id="metronome.pitch_up">
+        <source>Higher pitch</source>
+        <translation>Higher pitch</translation>
+    </message>
+    <message id="more.birthdays_today" numerus="yes">
+        <source>%n today</source>
+        <translation>
+            <numerusform>%n today</numerusform>
+            <numerusform>%n today</numerusform>
+        </translation>
+    </message>
+    <message id="birthday.none_soon">
+        <source>No birthdays in the next weeks.</source>
+        <translation>No birthdays in the next weeks.</translation>
+    </message>
+    <message id="reminders.empty">
+        <source>No reminders.</source>
+        <translation>No reminders.</translation>
+    </message>
+    <message id="settings.lists">
+        <source>Lists</source>
+        <translation>Lists</translation>
+    </message>
     <message id="sync.title">
         <source>Sync</source>
         <translation>Sync</translation>

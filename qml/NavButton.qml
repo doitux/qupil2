@@ -44,7 +44,7 @@ AbstractButton {
                 Layout.alignment: Qt.AlignHCenter
                 name: control.iconName
                 color: control.tint
-                strokeWidth: control.iconName === "more" ? 3 : (control.selected ? 2 : 1.8)
+                strokeWidth: control.iconName === "more" ? 2.4 : (control.selected ? 2 : 1.8)
             }
             Text {
                 Layout.alignment: Qt.AlignHCenter
@@ -70,7 +70,7 @@ AbstractButton {
             Icon {
                 name: control.iconName
                 color: control.tint
-                strokeWidth: control.iconName === "more" ? 3 : (control.selected ? 2 : 1.8)
+                strokeWidth: control.iconName === "more" ? 2.4 : (control.selected ? 2 : 1.8)
             }
             Text {
                 Layout.fillWidth: true
