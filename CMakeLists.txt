@@ -17,8 +17,25 @@ if(MSVC)
     add_compile_options(/utf-8)
 endif()
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Qml Quick QuickControls2 LinguistTools)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Sql Qml Quick QuickControls2 LinguistTools)
 qt_standard_project_setup(REQUIRES 6.5)
+
+# ---------------------------------------------------------------------------- data core
+# Database, change log for sync, import of Qupil 1.x – no GUI, unit tested
+
+qt_add_library(qupilcore STATIC
+    src/core/Ids.h
+    src/core/Ids.cpp
+    src/core/Schema.h
+    src/core/Schema.cpp
+    src/core/Database.h
+    src/core/Database.cpp
+    src/core/Store.h
+    src/core/Store.cpp
+    src/core/LegacyImporter.h
+    src/core/LegacyImporter.cpp)
+target_include_directories(qupilcore PUBLIC src/core)
+target_link_libraries(qupilcore PUBLIC Qt6::Core Qt6::Sql)
 
 # ---------------------------------------------------------------------------- app
 
@@ -26,7 +43,7 @@ qt_add_executable(qupil src/main.cpp)
 
 target_compile_definitions(qupil PRIVATE QUPIL_VERSION="${PROJECT_VERSION}")
 target_include_directories(qupil PRIVATE src src/core)
-target_link_libraries(qupil PRIVATE Qt6::Core Qt6::Gui Qt6::Qml Qt6::Quick Qt6::QuickControls2)
+target_link_libraries(qupil PRIVATE qupilcore Qt6::Core Qt6::Gui Qt6::Qml Qt6::Quick Qt6::QuickControls2)
 
 if(APPLE OR WIN32)
     set_target_properties(qupil PROPERTIES OUTPUT_NAME Qupil)
@@ -175,7 +192,13 @@ if(QUPIL_BUILD_TESTS AND NOT ANDROID AND NOT IOS)
         FILES ${QUPIL_QM_FILES})
     add_test(NAME languagemanager COMMAND tst_languagemanager)
 
+    # Data core: ids, clock, change log, sync merge, 1.x import, backup
+    qt_add_executable(tst_core tests/tst_core.cpp tests/LegacyFixture.h)
+    target_link_libraries(tst_core PRIVATE qupilcore Qt6::Test)
+    set_target_properties(tst_core PROPERTIES MACOSX_BUNDLE FALSE WIN32_EXECUTABLE FALSE)
+    add_test(NAME core COMMAND tst_core)
+
     # Loads the whole QML UI once and fails on any QML warning
     add_test(NAME qml_smoke COMMAND qupil --smoke-test)
-    set_tests_properties(languagemanager qml_smoke PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+    set_tests_properties(languagemanager core qml_smoke PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
 endif()

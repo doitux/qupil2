@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
     // Our own look on every platform; the colours come from Theme.qml
     QQuickStyle::setStyle(u"Basic"_s);
 
-    LanguageManager languages;      // translators are installed before any UI exists
+    LanguageManager languages(nullptr);  // translators are installed before any UI exists
     QQmlApplicationEngine engine;
     languages.setEngine(&engine);   // retranslate() on a language switch
 
@@ -85,6 +85,7 @@ int main(int argc, char *argv[])
                                          QCoreApplication::processEvents();
                                      }
                                  } else {
+                                     std::fprintf(stderr, "smoke test: Theme singleton not found\n");
                                      ++s_qmlProblems;
                                  }
                                  QTimer::singleShot(200, qApp, [] {

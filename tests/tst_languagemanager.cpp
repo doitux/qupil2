@@ -45,7 +45,7 @@ private slots:
     void languageList()
     {
         QCOMPARE(LanguageManager::supportedLanguages(), (QStringList{ u"en"_s, u"de"_s, u"fr"_s, u"es"_s }));
-        LanguageManager manager;
+        LanguageManager manager(nullptr);
         const QVariantList list = manager.languages();
         QCOMPARE(list.size(), 5);
         QCOMPARE(list.first().toMap().value(u"code"_s).toString(), u"system"_s);
@@ -71,7 +71,7 @@ private slots:
         QFETCH(QString, bFlat);
         QFETCH(QString, monthsAgo);
 
-        LanguageManager manager;
+        LanguageManager manager(nullptr);
         manager.setLanguage(language);
         QCOMPARE(manager.effectiveLanguage(), language);
         QCOMPARE(qtTrId("common.cancel"), cancel);
@@ -81,7 +81,7 @@ private slots:
 
     void singularPlural()
     {
-        LanguageManager manager;
+        LanguageManager manager(nullptr);
         manager.setLanguage(u"es"_s);
         QVERIFY(qtTrId("import.csv.done", 1).endsWith(u"Se ha añadido 1 entrada."_s));
         QVERIFY(qtTrId("import.csv.done", 12).endsWith(u"Se han añadido 12 entradas."_s));
@@ -90,7 +90,7 @@ private slots:
     void persistsAndSignals()
     {
         {
-            LanguageManager manager;
+            LanguageManager manager(nullptr);
             QSignalSpy spy(&manager, &LanguageManager::languageChanged);
             manager.setLanguage(u"fr"_s);
             QCOMPARE(spy.count(), 1);
@@ -102,7 +102,7 @@ private slots:
         }
         QCOMPARE(QSettings().value(u"ui/language"_s).toString(), u"fr"_s);
 
-        LanguageManager restored;                     // next start
+        LanguageManager restored(nullptr);                     // next start
         QCOMPARE(restored.language(), u"fr"_s);
         QCOMPARE(restored.effectiveLanguage(), u"fr"_s);
         QCOMPARE(qtTrId("common.cancel"), u"Annuler"_s);

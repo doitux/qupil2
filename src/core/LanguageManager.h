@@ -33,7 +33,9 @@ class LanguageManager : public QObject
     Q_PROPERTY(QVariantList languages READ languages CONSTANT FINAL)
 
 public:
-    explicit LanguageManager(QObject *parent = nullptr);
+    // No default argument on purpose: QML must not be able to construct a second
+    // instance, so it uses create() and gets the one from main().
+    explicit LanguageManager(QObject *parent);
     ~LanguageManager() override;
 
     static LanguageManager *instance();
