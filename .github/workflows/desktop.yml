@@ -42,14 +42,22 @@ jobs:
             artifact: qupil-macos-universal
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Install system packages (Linux)
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgl1-mesa-dev libegl1 libxkbcommon-dev libxkbcommon-x11-0 \
+          sudo apt-get install -y ninja-build libgl1-mesa-dev libegl1 libxkbcommon-dev libxkbcommon-x11-0 \
             libxcb-cursor0 libxcb-icccm4 libxcb-keysyms1 libxcb-shape0 libfontconfig1 libdbus-1-3
+
+      - name: Install Ninja (macOS)
+        if: runner.os == 'macOS'
+        run: brew install ninja
+
+      - name: Install Ninja (Windows)
+        if: runner.os == 'Windows'
+        run: choco install ninja --no-progress -y
 
       - name: Install Qt ${{ env.QT_VERSION }}
         uses: jurplel/install-qt-action@v4
@@ -57,8 +65,6 @@ jobs:
           version: ${{ env.QT_VERSION }}
           arch: ${{ matrix.qt_arch }}
           cache: true
-
-      - uses: seanmiddleditch/gha-setup-ninja@v5
 
       - name: Set up MSVC (Windows)
         if: runner.os == 'Windows'
@@ -69,18 +75,21 @@ jobs:
         run: |
           extra=()
           if [ "$RUNNER_OS" = "macOS" ]; then extra+=("-DCMAKE_OSX_ARCHITECTURES=arm64;x86_64"); fi
-          cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release "${extra[@]}"
+          bash .github/scripts/run-logged.sh cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release "${extra[@]}"
 
       - name: Build
-        run: cmake --build build --parallel
+        shell: bash
+        run: bash .github/scripts/run-logged.sh cmake --build build --parallel
 
       - name: Test
+        shell: bash
         env:
           QT_QPA_PLATFORM: offscreen
-        run: ctest --test-dir build --output-on-failure
+        run: bash .github/scripts/run-logged.sh ctest --test-dir build --output-on-failure
 
       - name: Install with Qt runtime
-        run: cmake --install build --prefix dist
+        shell: bash
+        run: bash .github/scripts/run-logged.sh cmake --install build --prefix dist
 
       - name: Pack
         shell: bash
@@ -93,7 +102,7 @@ jobs:
           esac
           ls -l package
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: ${{ matrix.artifact }}
           path: package/*

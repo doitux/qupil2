@@ -30,9 +30,9 @@ jobs:
     name: Android (arm64-v8a)
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: '17'
@@ -58,23 +58,26 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: ${{ env.QT_VERSION }}
-          host: linux
+          host: all_os            # Qt >= 6.7 ships Android for all hosts
           target: android
           arch: android_arm64_v8a
           cache: true
 
-      - uses: seanmiddleditch/gha-setup-ninja@v5
+      - name: Install Ninja
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build
 
       - name: Configure
         run: |
-          "$QT_ROOT_DIR/bin/qt-cmake" -S . -B build -G Ninja \
+          bash .github/scripts/run-logged.sh "$QT_ROOT_DIR/bin/qt-cmake" -S . -B build -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DQT_HOST_PATH="$RUNNER_WORKSPACE/Qt/$QT_VERSION/gcc_64" \
             -DANDROID_SDK_ROOT="$ANDROID_SDK_ROOT" \
             -DANDROID_NDK_ROOT="$ANDROID_NDK_ROOT"
 
       - name: Build APK
-        run: cmake --build build --target apk --parallel
+        run: bash .github/scripts/run-logged.sh cmake --build build --target apk --parallel
 
       - name: Sign with a throwaway test key
         run: |
@@ -91,7 +94,7 @@ jobs:
           "$bt/apksigner" verify package/qupil-android-arm64-test.apk
           ls -l package
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: qupil-android-arm64-test
           path: package/*.apk
@@ -102,7 +105,7 @@ jobs:
     name: iOS (unsigned)
     runs-on: macos-14
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Install Qt for macOS (host tools)
         uses: jurplel/install-qt-action@v4
@@ -125,10 +128,10 @@ jobs:
 
       - name: Configure
         run: |
-          "$QT_ROOT_DIR/bin/qt-cmake" -S . -B build -G Xcode \
+          bash .github/scripts/run-logged.sh "$QT_ROOT_DIR/bin/qt-cmake" -S . -B build -G Xcode \
             -DQT_HOST_PATH="$RUNNER_WORKSPACE/Qt/$QT_VERSION/macos"
 
       - name: Build for device without signing
         run: |
-          cmake --build build --config Release -- \
+          bash .github/scripts/run-logged.sh cmake --build build --config Release -- \
             -sdk iphoneos CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""
