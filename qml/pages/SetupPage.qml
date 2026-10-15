@@ -359,6 +359,15 @@ Flickable {
             enabled: !App.busy
             onClicked: App.loadDemo()
         }
+
+        // Which build is installed (test builds)
+        Text {
+            Layout.alignment: Qt.AlignHCenter
+            text: "Qupil " + App.versionText
+            color: Theme.textMuted
+            font.family: Theme.fontFamily
+            font.pixelSize: 12
+        }
     }
 
     // Icon tile, title and description of a choice

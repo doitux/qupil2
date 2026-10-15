@@ -56,6 +56,13 @@ target_link_libraries(qupilcore PUBLIC Qt6::Core Qt6::Sql)
 qt_add_executable(qupil src/main.cpp src/app/ScreenshotTour.h src/app/ScreenshotTour.cpp)
 
 target_compile_definitions(qupil PRIVATE QUPIL_VERSION="${PROJECT_VERSION}")
+# Which build this is (shown under "About"): the commit on CI, "dev" otherwise
+if(DEFINED ENV{GITHUB_SHA})
+    string(SUBSTRING "$ENV{GITHUB_SHA}" 0 7 QUPIL_BUILD)
+else()
+    set(QUPIL_BUILD "dev")
+endif()
+target_compile_definitions(qupil PRIVATE QUPIL_BUILD="${QUPIL_BUILD}")
 target_include_directories(qupil PRIVATE src src/core src/app)
 # Finding devices in the network: Bonjour on Apple systems, our own mDNS elsewhere
 if(APPLE)
@@ -120,6 +127,10 @@ if(ANDROID)
         QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/platform/android
         QT_ANDROID_PACKAGE_NAME de.qupil.app
         QT_ANDROID_VERSION_NAME ${PROJECT_VERSION})
+    # Every CI build counts up, so Android installs it as an update
+    if(DEFINED ENV{GITHUB_RUN_NUMBER})
+        set_target_properties(qupil PROPERTIES QT_ANDROID_VERSION_CODE $ENV{GITHUB_RUN_NUMBER})
+    endif()
 endif()
 
 if(WIN32)

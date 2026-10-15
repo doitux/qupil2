@@ -360,7 +360,7 @@ StackView {
                     divider: true
                     iconName: "info"
                     text: qsTrId("about.title")
-                    value: Qt.application.version
+                    value: App.versionText
                     chevron: false
                 }
             }

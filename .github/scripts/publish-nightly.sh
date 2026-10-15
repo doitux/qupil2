@@ -46,7 +46,7 @@ They are **not signed** and only meant for testing.
 | File | How to install |
 |---|---|
 | \`Qupil-iOS-unsigned.ipa\` | iPad / iPhone: sideload with AltStore, SideStore or Sideloadly, which sign it with your Apple ID. Needs iOS 16 or later. |
-| \`Qupil-Android-arm64-test.apk\` | Android: open the file and allow installing from this source. Signed with a throwaway test key. |
+| \`Qupil-Android-arm64-test.apk\` | Android: open the file and allow installing from this source. Signed with a public test key, so a newer nightly installs as an update (builds before Oct 15, 2026 used a different key: uninstall those once). The build is shown on the first screen and under More › About. |
 | \`Qupil-macOS-universal.zip\` | macOS 12+: unzip, then right-click Qupil → Open the first time. |
 | \`Qupil-Windows-x64.zip\` | Windows 10/11: unzip and start \`bin\\Qupil.exe\`; SmartScreen → More info → Run anyway. |
 | \`Qupil-Linux-x86_64.tar.gz\` | Linux: unpack and start \`bin/qupil\`. Needs \`libxcb-cursor0\` (\`sudo apt install libxcb-cursor0\`). |

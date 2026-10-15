@@ -54,10 +54,24 @@ ScreenshotTour::ScreenshotTour(QQuickWindow *window, QObject *theme, QObject *na
                       {} };
     };
     auto snap = [this](const QString &name) { return Step { [this, name] { shot(name); }, {} }; };
+    // Scrolls the first Flickable of the window (setup screen on a phone)
+    auto scroll = [this](int y) {
+        return Step { [this, y] {
+                          for (QObject *o : m_window->findChildren<QObject *>()) {
+                              if (o->inherits("QQuickFlickable")) {
+                                  o->setProperty("contentY", y);
+                                  break;
+                              }
+                          }
+                      },
+                      {} };
+    };
 
     // Setup screen
     m_steps << size(1180, 800) << mode("light") << snap(u"01-setup-light"_s)
-            << mode("dark") << snap(u"02-setup-dark"_s) << mode("light");
+            << mode("dark") << snap(u"02-setup-dark"_s) << mode("light")
+            << size(390, 844) << snap(u"01-setup-phone"_s) << scroll(600) << snap(u"01-setup-phone-2"_s)
+            << size(1180, 800);
     // Sample data through the real 1.x import
     m_steps << Step { [this] { m_app->loadDemo(); },
                       [this] { return !m_app->busy() && !m_app->lastTakeOver().isEmpty(); } }

@@ -3,6 +3,8 @@
     Qupil's Android manifest: Qt 6.8's template plus
     - the per-app language list (Android 13+)
     - Wi-Fi sync: multicast lock for finding devices (mDNS), Wi-Fi state
+    - no Android cloud backup: student data stays on the device (Qupil has its
+      own backups and the end-to-end encrypted sync)
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.qupil.app"
@@ -26,7 +28,7 @@
         android:label="Qupil"
         android:localeConfig="@xml/locales_config"
         android:requestLegacyExternalStorage="true"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:fullBackupOnly="false">
         <activity
             android:name="org.qtproject.qt.android.bindings.QtActivity"

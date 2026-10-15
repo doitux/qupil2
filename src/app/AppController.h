@@ -48,6 +48,8 @@ class AppController : public QObject
     Q_PROPERTY(QVariantMap info READ info NOTIFY infoChanged FINAL)
     //! Desktop systems can pick folders and show hidden 1.x data folders
     Q_PROPERTY(bool desktop READ desktop CONSTANT FINAL)
+    //! Version and build, e.g. "2.0.0 (0c34f48)" – shows which test build is installed
+    Q_PROPERTY(QString versionText READ versionText CONSTANT FINAL)
     //! iOS has no "save as" dialog: backups go to the app's Documents (Files app)
     Q_PROPERTY(bool saveDialogAvailable READ saveDialogAvailable CONSTANT FINAL)
     Q_PROPERTY(QUrl backupFolder READ backupFolder CONSTANT FINAL)
@@ -75,6 +77,7 @@ public:
     QVariantMap lastTakeOver() const { return m_lastTakeOver; }
     QVariantMap info() const;
     bool desktop() const;
+    QString versionText() const;
     bool saveDialogAvailable() const;
     QUrl backupFolder() const;
 

@@ -242,6 +242,15 @@ QUrl AppController::backupFolder() const
     return QUrl::fromLocalFile(QDir(m_dataDir).filePath(u"backups"_s));
 }
 
+QString AppController::versionText() const
+{
+#ifdef QUPIL_BUILD
+    return QCoreApplication::applicationVersion() + u" ("_s + QStringLiteral(QUPIL_BUILD) + u')';
+#else
+    return QCoreApplication::applicationVersion();
+#endif
+}
+
 QVariantMap AppController::info() const
 {
     QVariantMap m;
