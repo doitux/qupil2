@@ -2,7 +2,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 #include "AppController.h"
 
+#include <QClipboard>
 #include <QCoreApplication>
+#include <QGuiApplication>
 #include <QDateTime>
 #include <QDir>
 #include <QFile>
@@ -242,13 +244,24 @@ QUrl AppController::backupFolder() const
     return QUrl::fromLocalFile(QDir(m_dataDir).filePath(u"backups"_s));
 }
 
-QString AppController::versionText() const
+QString AppController::build() const
 {
 #ifdef QUPIL_BUILD
-    return QCoreApplication::applicationVersion() + u" ("_s + QStringLiteral(QUPIL_BUILD) + u')';
+    return QStringLiteral(QUPIL_BUILD);
 #else
-    return QCoreApplication::applicationVersion();
+    return u"dev"_s;
 #endif
+}
+
+QString AppController::versionText() const
+{
+    return QCoreApplication::applicationVersion() + u" ("_s + build() + u')';
+}
+
+void AppController::copyText(const QString &text) const
+{
+    if (QClipboard *clipboard = QGuiApplication::clipboard())
+        clipboard->setText(text);
 }
 
 QVariantMap AppController::info() const

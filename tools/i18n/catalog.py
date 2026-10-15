@@ -1654,6 +1654,9 @@ E("settings.this_device", en="On this device", de="Auf diesem Gerät", fr="Sur c
 E("settings.lesson_end.hint", en="A sound and a message while Qupil is open.",
   de="Ein Klang und eine Meldung, solange Qupil geöffnet ist.",
   fr="Un son et un message tant que Qupil est ouvert.", es="Un sonido y un mensaje mientras Qupil está abierto.")
+E("app.build", en="Build %1", de="Build %1", fr="Build %1", es="Build %1", c="%1 = commit, e.g. 8828322")
+E("app.build_copied", en="Copied: Qupil %1", de="Kopiert: Qupil %1", fr="Copié : Qupil %1", es="Copiado: Qupil %1",
+  c="%1 = version and commit")
 E("setup.sync.title", en="Data from another device", de="Daten von einem anderen Gerät",
   fr="Données d’un autre appareil", es="Datos de otro dispositivo")
 E("setup.sync.text",

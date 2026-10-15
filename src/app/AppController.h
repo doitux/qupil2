@@ -50,6 +50,8 @@ class AppController : public QObject
     Q_PROPERTY(bool desktop READ desktop CONSTANT FINAL)
     //! Version and build, e.g. "2.0.0 (0c34f48)" – shows which test build is installed
     Q_PROPERTY(QString versionText READ versionText CONSTANT FINAL)
+    //! The commit this build was made from ("dev" for local builds)
+    Q_PROPERTY(QString build READ build CONSTANT FINAL)
     //! iOS has no "save as" dialog: backups go to the app's Documents (Files app)
     Q_PROPERTY(bool saveDialogAvailable READ saveDialogAvailable CONSTANT FINAL)
     Q_PROPERTY(QUrl backupFolder READ backupFolder CONSTANT FINAL)
@@ -78,6 +80,9 @@ public:
     QVariantMap info() const;
     bool desktop() const;
     QString versionText() const;
+    QString build() const;
+    //! Puts text on the clipboard (e.g. the version for a bug report)
+    Q_INVOKABLE void copyText(const QString &text) const;
     bool saveDialogAvailable() const;
     QUrl backupFolder() const;
 

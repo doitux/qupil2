@@ -158,6 +158,7 @@ set(QUPIL_QML_FILES
     qml/TakeOverActions.qml
     qml/TakeOverSummary.qml
     qml/components/Avatar.qml
+    qml/components/BuildChip.qml
     qml/components/Chip.qml
     qml/components/ChoiceOption.qml
     qml/components/ChoiceField.qml

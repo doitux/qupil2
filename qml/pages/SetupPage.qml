@@ -33,12 +33,15 @@ Flickable {
         RowLayout {
             spacing: 8
             Text {
+                Layout.fillWidth: true
                 text: "Qupil"
                 color: Theme.accentText
                 font.family: Theme.fontFamily
                 font.pixelSize: 30
                 font.weight: Font.ExtraBold
             }
+            // Which build is installed (test builds)
+            BuildChip {}
         }
 
         ColumnLayout {
@@ -345,14 +348,7 @@ Flickable {
             onClicked: App.loadDemo()
         }
 
-        // Which build is installed (test builds)
-        Text {
-            Layout.alignment: Qt.AlignHCenter
-            text: "Qupil " + App.versionText
-            color: Theme.textMuted
-            font.family: Theme.fontFamily
-            font.pixelSize: 12
-        }
+
     }
 
     // Icon tile, title and description of a choice

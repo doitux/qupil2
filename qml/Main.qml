@@ -19,7 +19,7 @@ ApplicationWindow {
     minimumHeight: 560
     visible: true
     color: Theme.bg
-    title: qsTrId("app.window_title").arg(Qt.application.version)
+    title: qsTrId("app.window_title").arg(App.versionText)
 
     font.family: Theme.fontFamily
 
@@ -107,6 +107,7 @@ ApplicationWindow {
                             font.pixelSize: 24
                             font.weight: Font.ExtraBold
                         }
+                        BuildChip {}
                     }
 
                     Repeater {

@@ -2969,6 +2969,16 @@ Póngase en contacto con el autor en %4 para resolver el problema.</translation>
         <source>A sound and a message while Qupil is open.</source>
         <translation>Un sonido y un mensaje mientras Qupil está abierto.</translation>
     </message>
+    <message id="app.build">
+        <source>Build %1</source>
+        <extracomment>%1 = commit, e.g. 8828322</extracomment>
+        <translation>Build %1</translation>
+    </message>
+    <message id="app.build_copied">
+        <source>Copied: Qupil %1</source>
+        <extracomment>%1 = version and commit</extracomment>
+        <translation>Copiado: Qupil %1</translation>
+    </message>
     <message id="setup.sync.title">
         <source>Data from another device</source>
         <translation>Datos de otro dispositivo</translation>

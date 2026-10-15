@@ -106,12 +106,17 @@ StackView {
             y: 40
             spacing: 14
 
-            Text {
-                text: qsTrId("nav.more")
-                color: Theme.text
-                font.family: Theme.fontFamily
-                font.pixelSize: 34
-                font.weight: Font.ExtraBold
+            RowLayout {
+                Layout.fillWidth: true
+                Text {
+                    Layout.fillWidth: true
+                    text: qsTrId("nav.more")
+                    color: Theme.text
+                    font.family: Theme.fontFamily
+                    font.pixelSize: 34
+                    font.weight: Font.ExtraBold
+                }
+                BuildChip {}
             }
 
             // Sync status at the top, like in the design
