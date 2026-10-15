@@ -76,6 +76,9 @@ if(IOS)
         target_sources(qupil PRIVATE ${_strings})
         set_source_files_properties(${_strings} PROPERTIES MACOSX_PACKAGE_LOCATION Resources/${_lang}.lproj)
     endforeach()
+    # Qupil only needs audio output (metronome): the native Darwin backend is enough
+    # and keeps the FFmpeg libraries out of the app
+    qt_import_plugins(qupil INCLUDE_BY_TYPE multimedia Qt6::QDarwinMediaPlugin)
     # Files app access, languages, Wi-Fi sync keys (added to Qt's generated Info.plist)
     # (the script takes the bundle path from Xcode's build settings)
     add_custom_command(TARGET qupil POST_BUILD

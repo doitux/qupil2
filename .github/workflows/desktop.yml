@@ -96,7 +96,7 @@ jobs:
         run: |
           for t in build/tst_core build/tst_languagemanager; do
             [ -f "$t" ] || [ -f "$t.exe" ] || continue
-            out=$("$t" 2>&1 | grep -E "FAIL|Loc:|Actual|Expected|QWARN|QFATAL|Totals" | head -n 40)
+            out=$("$t" 2>&1 | grep -vE "^PASS" | tail -n 40 || true)
             echo "$out"
             msg=$(echo "$out" | sed -e 's/%/%25/g' -e 's/\r//g' | awk 'BEGIN { ORS = "%0A" } { print }')
             echo "::error title=$(basename "$t")::${msg}"
