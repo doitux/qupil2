@@ -5,7 +5,6 @@
 #include <QDateTime>
 #include <QList>
 #include <QObject>
-#include <QPointer>
 #include <QTimer>
 #include <QUrl>
 #include <QVariantList>
@@ -13,22 +12,21 @@
 
 #include "LessonAlerts.h"
 #include "SystemAlerts.h"
-#include "Wav.h"
 
+class AlertSound;
 class DataService;
-class QAudioBuffer;
-class QAudioDecoder;
 class QJSEngine;
 class QQmlEngine;
-class QSoundEffect;
 
 /*!
     The sound and message a few minutes before a lesson ends (Qupil 1.x:
     "Notification at the end of lessons"), available in QML as "LessonEnd".
+    Also asks for and shows the system's permission for notifications, which
+    the reminders use as well.
 
     Settings are per device. Without own settings the values taken over from
     Qupil 1.x apply (on, 3 minutes, volume 7). The sound is the "ahem" of
-    Qupil 1.x or a file of your own (WAV, MP3, M4A, …; at most 10 seconds).
+    Qupil 1.x or a file of your own (see AlertSound).
 
     Desktop: Qupil checks the time itself while it runs. iOS and Android: the
     alerts are system notifications, so they also come in the background.
@@ -57,8 +55,6 @@ public:
     enum Permission { NotNeeded, NotAsked, Granted, Denied };
     Q_ENUM(Permission)
 
-    static constexpr int kMaxSeconds = 10;
-
     LessonEndAlert(DataService *data, QObject *parent);
     ~LessonEndAlert() override;
 
@@ -72,7 +68,7 @@ public:
     int volume() const;
     void setVolume(int volume);
     QString soundName() const;
-    bool busy() const { return m_busy; }
+    bool busy() const;
     bool background() const;
     Permission permission() const;
     bool exactAlarms() const { return m_state.exactAlarms; }
@@ -88,6 +84,8 @@ public:
 
     //! The sound file with the volume applied (created when needed); empty on failure
     QString soundFile();
+    //! No alerts in the app (screenshot tour)
+    void setQuiet(bool quiet) { m_quiet = quiet; }
 
 public slots:
     //! After changes to lessons, settings or language (collected, applied shortly after)
@@ -105,33 +103,18 @@ signals:
 private:
     void apply();
     void check();
-    void play();
     void refreshState();
     void askOnce();
-    void setBusy(bool busy);
     void notifyIfChanged();
-    QByteArray sourceSound() const;
-    QString soundsFolder() const;
-    void storeCustomSound(const Qupil::Wav::Sound &sound, const QString &name);
-    void decoded(const QAudioBuffer &buffer);
-    void finishDecoding(bool ok);
-    QList<SystemAlerts::Alert> systemAlerts() const;
 
     DataService *m_data;
+    AlertSound *m_sound;
     QTimer m_apply;
     QTimer m_tick;
     QDateTime m_lastCheck;
     QList<Qupil::LessonAlerts::Alert> m_alerts;
-    QSoundEffect *m_effect = nullptr;
-    QPointer<QAudioDecoder> m_decoder;
-    Qupil::Wav::Sound m_decoding;
-    QString m_decodingName;
-    QString m_decodingFile;
     SystemAlerts::State m_state;
     bool m_stateKnown = false;
-    bool m_busy = false;
-    bool m_playWhenReady = false;
-    bool m_force = false;
-    QByteArray m_scheduled;    //!< what the system has (skip unchanged)
+    bool m_quiet = false;
     QVariantList m_notified;   //!< enabled, minutes, volume as last announced
 };

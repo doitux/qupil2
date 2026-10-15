@@ -21,6 +21,7 @@
 #include "DocumentService.h"
 #include "LanguageManager.h"
 #include "LessonEndAlert.h"
+#include "ReminderAlert.h"
 #include "ScreenshotTour.h"
 #include "SyncController.h"
 #include "WifiController.h"
@@ -115,6 +116,21 @@ int main(int argc, char *argv[])
     QObject::connect(&languages, &LanguageManager::languageChanged, &lessonEnd, &LessonEndAlert::reschedule);
     QObject::connect(&controller, &AppController::phaseChanged, &lessonEnd, &LessonEndAlert::reschedule);
     QObject::connect(&controller, &AppController::dataReplaced, &lessonEnd, &LessonEndAlert::reschedule);
+    // Reminders popping up at start and when a lesson starts
+    ReminderAlert reminders(&data, nullptr);
+    QObject::connect(&languages, &LanguageManager::languageChanged, &reminders, &ReminderAlert::reschedule);
+    QObject::connect(&controller, &AppController::phaseChanged, &reminders, [&controller, &reminders] {
+        if (controller.phase() == AppController::Ready)
+            reminders.start(false);   // after taking over data: not the "when Qupil starts" ones
+    });
+    if (screenshots) {
+        lessonEnd.setQuiet(true);
+        reminders.setQuiet(true);
+    }
+    if (controller.phase() == AppController::Ready) {
+        // As in Qupil 1.x shortly after the window is there
+        QTimer::singleShot(1800, &reminders, [&reminders] { reminders.start(true); });
+    }
     QQmlApplicationEngine engine;
     languages.setEngine(&engine);   // retranslate() on a language switch
 

@@ -1804,6 +1804,13 @@ E("settings.lesson_end.hint_mobile", en="A notification with sound, also when Qu
   es="Una notificación con sonido, también con Qupil cerrado.")
 E("settings.sound.default_name", en="Ahem (default)", de="Ähem (Standard)", fr="Hum (par défaut)",
   es="Ejem (predeterminado)", c="The sound of Qupil 1.x: someone clearing their throat.")
+E("settings.sound.reminder_default", en="Ping (default)", de="Pling (Standard)", fr="Ding (par défaut)",
+  es="Ding (predeterminado)", c="The reminder sound of Qupil 1.x: a short bright ping.")
+E("settings.reminder_sound.hint",
+  en="Plays when a reminder with sound appears: when Qupil starts or when a lesson starts.",
+  de="Erklingt, wenn eine Erinnerung mit Klang erscheint: beim Start von Qupil oder zu Beginn eines Unterrichts.",
+  fr="Retentit quand un rappel avec son apparaît : au démarrage de Qupil ou au début d’un cours.",
+  es="Suena cuando aparece un recordatorio con sonido: al iniciar Qupil o al comenzar una clase.")
 E("settings.sound.use_default", en="Default sound", de="Standardklang", fr="Son par défaut",
   es="Sonido predeterminado", c="Button: go back to the sound that comes with Qupil.")
 E("settings.sound.test", en="Listen", de="Anhören", fr="Écouter", es="Escuchar")

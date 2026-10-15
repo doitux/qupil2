@@ -193,6 +193,7 @@ set(QUPIL_QML_FILES
     qml/components/MenuRow.qml
     qml/components/PageHeader.qml
     qml/components/SectionLabel.qml
+    qml/components/SoundChooser.qml
     qml/components/Segmented.qml
     qml/components/Sheet.qml
     qml/components/StatusBadge.qml
@@ -259,6 +260,7 @@ qt_add_qml_module(qupil
         assets/fonts/Figtree-ExtraBold.ttf
         assets/icons/qupil.png
         assets/sounds/lesson-end.wav
+        assets/sounds/reminder.wav
         LICENSE
         LICENSES/LicenseRef-Qupil-AppStore-exception.txt
         LICENSES/OFL-1.1.txt
@@ -284,9 +286,14 @@ qt_add_qml_module(qupil
         src/app/Discovery.h
         src/app/DocumentService.h
         src/app/DocumentService.cpp
+        src/app/AlertSound.h
+        src/app/AlertSound.cpp
         src/app/LessonEndAlert.h
         src/app/LessonEndAlert.cpp
+        src/app/ReminderAlert.h
+        src/app/ReminderAlert.cpp
         src/app/SystemAlerts.h
+        src/app/SystemAlerts.cpp
 )
 
 # ---------------------------------------------------------------------------- translations

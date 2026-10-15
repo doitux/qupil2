@@ -4,6 +4,7 @@ package de.qupil.app;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -35,21 +36,23 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 
 /**
- * Lesson-end alerts while Qupil is in the background or not running at all.
+ * Alerts while Qupil is in the background or not running at all: shortly
+ * before a lesson ends, and reminders at the start of a lesson.
  *
  * Qupil hands over the weekly alert times with schedule(). They are kept in
- * the shared preferences and exactly one alarm is set: the next alert. When
- * it goes off, onReceive() sets the alarm for the following alert, shows the
- * notification and plays the sound chosen in Qupil (with its volume already
- * applied). After a restart of the device, an update of Qupil or a change of
- * the clock or time zone the alarm is set again.
+ * the shared preferences and exactly one alarm is set: the next alert time.
+ * When it goes off, onReceive() sets the alarm for the following one, shows
+ * the notifications and plays the sound chosen in Qupil (with its volume
+ * already applied). After a restart of the device, an update of Qupil or a
+ * change of the clock or time zone the alarm is set again.
  */
 public class LessonAlarms extends BroadcastReceiver {
     private static final String TAG = "QupilLessonAlarms";
     private static final String PREFS = "qupil_lesson_alarms";
-    private static final String CHANNEL = "lesson_end";
+    private static final String LESSON_END = "lesson_end";   // kinds of alerts = notification channels
+    private static final String REMINDER = "reminder";
     private static final String ACTION_ALERT = "de.qupil.app.action.LESSON_END";
-    private static final int NOTIFICATION_ID = 4710;
+    private static final int NOTIFICATION_ID = 4710;         // + 1 for reminders
     private static final int REQUEST_NOTIFICATIONS = 47110;
     private static final int MINUTES_PER_DAY = 24 * 60;
     private static final int ACCENT = 0xFF6E3C5A;
@@ -57,14 +60,20 @@ public class LessonAlarms extends BroadcastReceiver {
     // ---------------------------------------------------------------- called by Qupil (C++)
 
     /**
-     * plan: {"sound": "/…/lesson-end-….wav", "channel": "End of lesson",
-     *        "alerts": [{"at": minute of the week (Monday 00:00 = 0), "lead": minutes, "title": "…", "text": "…"}]}
+     * plan: {"channels": {"lesson_end": "End of lesson", "reminder": "Reminders"},
+     *        "alerts": [{"kind": "lesson_end", "at": minute of the week (Monday 00:00 = 0),
+     *                    "lead": minutes until out of date, "title": "…", "text": "…", "sound": "/….wav"}]}
      */
     public static void schedule(Context context, String plan) {
         Context app = context.getApplicationContext();
         prefs(app).edit().putString("plan", plan).apply();
         try {
-            createChannel(app, new JSONObject(plan).optString("channel", "Qupil"));
+            JSONObject channels = new JSONObject(plan).optJSONObject("channels");
+            if (channels != null) {
+                JSONArray kinds = channels.names();
+                for (int i = 0; kinds != null && i < kinds.length(); ++i)
+                    createChannel(app, kinds.getString(i), channels.getString(kinds.getString(i)));
+            }
         } catch (JSONException e) {
             Log.w(TAG, "Unreadable plan", e);
         }
@@ -74,7 +83,7 @@ public class LessonAlarms extends BroadcastReceiver {
     public static void cancel(Context context) {
         Context app = context.getApplicationContext();
         prefs(app).edit().remove("plan").apply();
-        alarmManager(app).cancel(alarmIntent(app, null, 0));
+        alarmManager(app).cancel(alarmIntent(app, null));
     }
 
     /** Bit 0: notifications are shown; bit 1: exact alarms allowed; bit 2: Qupil may (still) ask */
@@ -82,7 +91,7 @@ public class LessonAlarms extends BroadcastReceiver {
         int state = 0;
         NotificationManager manager = context.getSystemService(NotificationManager.class);
         if (manager != null && manager.areNotificationsEnabled()) {
-            NotificationChannel channel = manager.getNotificationChannel(CHANNEL);
+            NotificationChannel channel = manager.getNotificationChannel(LESSON_END);
             if (channel == null || channel.getImportance() != NotificationManager.IMPORTANCE_NONE)
                 state |= 1;
         } else if (Build.VERSION.SDK_INT >= 33 && mayAsk(context)) {
@@ -135,28 +144,36 @@ public class LessonAlarms extends BroadcastReceiver {
         AlarmManager alarms = alarmManager(app);
         String plan = prefs(app).getString("plan", null);
         if (plan == null) {
-            alarms.cancel(alarmIntent(app, null, 0));
+            alarms.cancel(alarmIntent(app, null));
             return;
         }
         try {
-            JSONArray alerts = new JSONObject(plan).getJSONArray("alerts");
+            JSONObject all = new JSONObject(plan);
+            JSONArray alerts = all.getJSONArray("alerts");
             // A second later: an alarm that just went off is not set again
             long after = System.currentTimeMillis() + 1000;
-            JSONObject next = null;
             long nextAt = Long.MAX_VALUE;
-            for (int i = 0; i < alerts.length(); ++i) {
-                JSONObject alert = alerts.getJSONObject(i);
-                long at = nextTime(alert.getInt("at"), after);
-                if (at < nextAt) {
-                    nextAt = at;
-                    next = alert;
-                }
-            }
-            if (next == null) {
-                alarms.cancel(alarmIntent(app, null, 0));
+            for (int i = 0; i < alerts.length(); ++i)
+                nextAt = Math.min(nextAt, nextTime(alerts.getJSONObject(i).getInt("at"), after));
+            if (nextAt == Long.MAX_VALUE) {
+                alarms.cancel(alarmIntent(app, null));
                 return;
             }
-            PendingIntent pending = alarmIntent(app, next, nextAt + next.optInt("lead", 0) * 60000L);
+            // Everything due then (e.g. one lesson ends, the next one starts)
+            JSONArray due = new JSONArray();
+            for (int i = 0; i < alerts.length(); ++i) {
+                JSONObject alert = alerts.getJSONObject(i);
+                if (nextTime(alert.getInt("at"), after) != nextAt)
+                    continue;
+                JSONObject entry = new JSONObject();
+                entry.put("kind", alert.optString("kind", LESSON_END));
+                entry.put("title", alert.optString("title"));
+                entry.put("text", alert.optString("text"));
+                entry.put("sound", alert.optString("sound", all.optString("sound")));
+                entry.put("end", nextAt + alert.optInt("lead", 0) * 60000L);
+                due.put(entry);
+            }
+            PendingIntent pending = alarmIntent(app, due);
             if (canSetExact(app))
                 alarms.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, nextAt, pending);
             else
@@ -183,14 +200,11 @@ public class LessonAlarms extends BroadcastReceiver {
         return Long.MAX_VALUE;
     }
 
-    private static PendingIntent alarmIntent(Context context, JSONObject alert, long end) {
+    private static PendingIntent alarmIntent(Context context, JSONArray due) {
         Intent intent = new Intent(context, LessonAlarms.class);
         intent.setAction(ACTION_ALERT);
-        if (alert != null) {
-            intent.putExtra("title", alert.optString("title"));
-            intent.putExtra("text", alert.optString("text"));
-            intent.putExtra("end", end);
-        }
+        if (due != null)
+            intent.putExtra("due", due.toString());
         return PendingIntent.getBroadcast(context, 0, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
     }
@@ -198,19 +212,35 @@ public class LessonAlarms extends BroadcastReceiver {
     // ---------------------------------------------------------------- notification and sound
 
     private static void alert(Context context, Intent intent, PendingResult result) {
-        long end = intent.getLongExtra("end", 0);
-        long now = System.currentTimeMillis();
         NotificationManager manager = context.getSystemService(NotificationManager.class);
-        // Too late (the device was off) or notifications are turned off
-        if ((end > 0 && now >= end) || manager == null || (state(context) & 1) == 0) {
-            result.finish();
-            return;
+        String sound = null;
+        try {
+            JSONArray due = new JSONArray(intent.getStringExtra("due") != null ? intent.getStringExtra("due") : "[]");
+            long now = System.currentTimeMillis();
+            for (int i = 0; manager != null && i < due.length(); ++i) {
+                JSONObject alert = due.getJSONObject(i);
+                String kind = alert.optString("kind", LESSON_END);
+                long end = alert.optLong("end", 0);
+                // Too late (the device was off), turned off, or Qupil is in front and shows reminders itself
+                if ((end > 0 && now >= end) || !shown(manager, kind) || (REMINDER.equals(kind) && inFront()))
+                    continue;
+                notify(context, manager, kind, alert.optString("title"), alert.optString("text"), end - now);
+                if (sound == null && !alert.optString("sound").isEmpty())
+                    sound = alert.optString("sound");
+            }
+        } catch (JSONException e) {
+            Log.w(TAG, "Unreadable alert", e);
         }
+        playSound(context, sound, result);
+    }
 
-        Notification.Builder builder = new Notification.Builder(context, CHANNEL)
+    private static void notify(Context context, NotificationManager manager, String kind, String title, String text,
+                               long valid) {
+        Notification.Builder builder = new Notification.Builder(context, kind)
                 .setSmallIcon(icon(context))
-                .setContentTitle(intent.getStringExtra("title"))
-                .setContentText(intent.getStringExtra("text"))
+                .setContentTitle(title)
+                .setContentText(text)
+                .setStyle(new Notification.BigTextStyle().bigText(text))
                 .setCategory(Notification.CATEGORY_REMINDER)
                 .setColor(ACCENT)
                 .setAutoCancel(true)
@@ -220,23 +250,31 @@ public class LessonAlarms extends BroadcastReceiver {
             builder.setContentIntent(PendingIntent.getActivity(context, 0, open,
                     PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
         }
-        if (end > now)
-            builder.setTimeoutAfter(end - now);   // gone when the lesson is over
+        if (valid > 0)
+            builder.setTimeoutAfter(valid);   // gone when the lesson is over
         try {
-            manager.notify(NOTIFICATION_ID, builder.build());
+            manager.notify(NOTIFICATION_ID + (REMINDER.equals(kind) ? 1 : 0), builder.build());
         } catch (SecurityException e) {
             Log.w(TAG, "Notification not allowed", e);
         }
-        playSound(context, result);
     }
 
-    private static void playSound(Context context, final PendingResult result) {
-        String sound = null;
-        try {
-            sound = new JSONObject(prefs(context).getString("plan", "{}")).optString("sound", null);
-        } catch (JSONException e) {
-            Log.w(TAG, "Unreadable plan", e);
-        }
+    /** Notifications allowed, and the kind's channel not turned off */
+    private static boolean shown(NotificationManager manager, String kind) {
+        if (!manager.areNotificationsEnabled())
+            return false;
+        NotificationChannel channel = manager.getNotificationChannel(kind);
+        return channel != null && channel.getImportance() != NotificationManager.IMPORTANCE_NONE;
+    }
+
+    /** Qupil is on the screen */
+    private static boolean inFront() {
+        ActivityManager.RunningAppProcessInfo info = new ActivityManager.RunningAppProcessInfo();
+        ActivityManager.getMyMemoryState(info);
+        return info.importance <= ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
+    }
+
+    private static void playSound(Context context, String sound, final PendingResult result) {
         final AudioManager audio = context.getSystemService(AudioManager.class);
         NotificationManager manager = context.getSystemService(NotificationManager.class);
         // Silent or vibrate, "Do not disturb": no sound (the notification may still vibrate)
@@ -284,11 +322,11 @@ public class LessonAlarms extends BroadcastReceiver {
         }
     }
 
-    private static void createChannel(Context context, String name) {
+    private static void createChannel(Context context, String kind, String name) {
         NotificationManager manager = context.getSystemService(NotificationManager.class);
         if (manager == null)
             return;
-        NotificationChannel channel = new NotificationChannel(CHANNEL, name, NotificationManager.IMPORTANCE_HIGH);
+        NotificationChannel channel = new NotificationChannel(kind, name, NotificationManager.IMPORTANCE_HIGH);
         channel.setSound(null, null);   // Qupil plays the sound chosen in its settings
         channel.enableVibration(true);
         channel.setVibrationPattern(new long[] { 0, 250, 150, 250 });

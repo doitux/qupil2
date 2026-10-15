@@ -3241,6 +3241,15 @@ Póngase en contacto con el autor en %4 para resolver el problema.</translation>
         <extracomment>The sound of Qupil 1.x: someone clearing their throat.</extracomment>
         <translation>Ejem (predeterminado)</translation>
     </message>
+    <message id="settings.sound.reminder_default">
+        <source>Ping (default)</source>
+        <extracomment>The reminder sound of Qupil 1.x: a short bright ping.</extracomment>
+        <translation>Ding (predeterminado)</translation>
+    </message>
+    <message id="settings.reminder_sound.hint">
+        <source>Plays when a reminder with sound appears: when Qupil starts or when a lesson starts.</source>
+        <translation>Suena cuando aparece un recordatorio con sonido: al iniciar Qupil o al comenzar una clase.</translation>
+    </message>
     <message id="settings.sound.use_default">
         <source>Default sound</source>
         <extracomment>Button: go back to the sound that comes with Qupil.</extracomment>

@@ -20,6 +20,30 @@ SubPage {
 
     SectionLabel { text: qsTrId("settings.this_device") }
     LessonEndSettings {}
+    Card {
+        Layout.fillWidth: true
+        Text {
+            Layout.fillWidth: true
+            wrapMode: Text.WordWrap
+            text: qsTrId("settings.reminder_sound")
+            color: Theme.text
+            font.family: Theme.fontFamily
+            font.pixelSize: 15
+            font.weight: Font.Bold
+        }
+        Text {
+            Layout.fillWidth: true
+            wrapMode: Text.WordWrap
+            text: qsTrId("settings.reminder_sound.hint")
+            color: Theme.textMuted
+            font.family: Theme.fontFamily
+            font.pixelSize: 13
+        }
+        SoundChooser {
+            alert: ReminderAlert
+            defaultName: qsTrId("settings.sound.reminder_default")
+        }
+    }
 
     SectionLabel { Layout.topMargin: 6; text: qsTrId("common.lesson") }
     Card {

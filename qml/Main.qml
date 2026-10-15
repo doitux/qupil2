@@ -280,7 +280,7 @@ ApplicationWindow {
     //! Closes all editor sheets (used by the screenshot tour)
     function closeEditors() {
         for (const sheet of [noteEditor, pieceEditor, newStudent, lessonEditor, activityEditor, reminderEditor,
-                             pairingSheet])
+                             pairingSheet, reminderDialog])
             sheet.close()
     }
 
@@ -450,6 +450,85 @@ ApplicationWindow {
     Connections {
         target: Docs
         function onFailed(message) { Nav.toast(message) }
+    }
+
+    // Reminders "when Qupil starts" and at the start of a lesson (Qupil 1.x pop-ups);
+    // student reminders can be ticked as done
+    AppDialog {
+        id: reminderDialog
+        // Changed only while open: layouts must not lose items while hidden
+        property var group: null
+        property var done: ({})
+        iconName: "bell"
+        title: group ? group.title : ""
+        text: group ? group.subtitle : ""
+        function showNext() {
+            if (ReminderAlert.pending.length > 0 && !visible) {
+                done = {}
+                open()
+                group = ReminderAlert.pending[0]
+                window.alert(0)
+            }
+        }
+        // OK, Escape: seen; ticked student reminders are deleted
+        onClosed: {
+            const ids = Object.keys(done).filter(id => done[id])
+            Qt.callLater(() => {
+                ReminderAlert.acknowledge(ids)
+                showNext()
+            })
+        }
+        Repeater {
+            model: reminderDialog.group ? reminderDialog.group.items : []
+            delegate: Rectangle {
+                id: reminderItem
+                required property var modelData
+                Layout.fillWidth: true
+                implicitHeight: itemColumn.implicitHeight + 24
+                radius: 14
+                color: Theme.surfaceAlt
+                ColumnLayout {
+                    id: itemColumn
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.margins: 12
+                    spacing: 6
+                    Text {
+                        visible: reminderItem.modelData.mode === 2
+                        Layout.fillWidth: true
+                        wrapMode: Text.WordWrap
+                        text: qsTrId("reminder.for_student").arg(reminderItem.modelData.studentName || "")
+                        color: Theme.accentText
+                        font.family: Theme.fontFamily
+                        font.pixelSize: 13
+                        font.weight: Font.Bold
+                    }
+                    Text {
+                        Layout.fillWidth: true
+                        wrapMode: Text.WordWrap
+                        text: reminderItem.modelData.text
+                        color: Theme.text
+                        font.family: Theme.fontFamily
+                        font.pixelSize: 16
+                        font.weight: Font.Bold
+                    }
+                    CheckBox {
+                        visible: reminderItem.modelData.mode === 2
+                        Layout.leftMargin: -6
+                        text: qsTrId("reminder.done_remove")
+                        font.family: Theme.fontFamily
+                        font.pixelSize: 14
+                        onToggled: reminderDialog.done[reminderItem.modelData.id] = checked
+                    }
+                }
+            }
+        }
+    }
+    Connections {
+        target: ReminderAlert
+        function onPendingChanged() { reminderDialog.showNext() }
+        function onMessage(text) { Nav.toast(text) }
     }
 
     // Desktop: message (the sound already plays) shortly before a lesson ends.

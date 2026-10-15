@@ -13,6 +13,7 @@
 #include <iterator>
 
 #include "AppController.h"
+#include "ReminderAlert.h"
 #include "DataService.h"
 #include "DocumentService.h"
 
@@ -168,6 +169,12 @@ void ScreenshotTour::addDetails(const QString &prefix)
             << more("settings") << snap(prefix + u"-17-settings"_s)
             << more("about") << snap(prefix + u"-18-about"_s)
             << more("license") << snap(prefix + u"-19-license"_s)
+            << Step { [] {
+                          if (ReminderAlert *reminders = ReminderAlert::instance())
+                              reminders->showAll();
+                      },
+                      {} }
+            << snap(prefix + u"-20-reminder"_s) << close
             << Step { [this] {
                           for (QObject *o : m_window->findChildren<QObject *>(u"morePage"_s))
                               QMetaObject::invokeMethod(o, "home");

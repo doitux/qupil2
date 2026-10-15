@@ -11,6 +11,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QPointer>
+#include <QStringList>
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
@@ -18,7 +19,7 @@
 
 using namespace Qt::StringLiterals;
 
-//! Shows the notification (banner and sound) also while Qupil is in front
+//! Shows lesson-end notifications (banner and sound) also while Qupil is in front
 @interface QupilNotificationDelegate : NSObject <UNUserNotificationCenterDelegate>
 @end
 
@@ -29,7 +30,11 @@ using namespace Qt::StringLiterals;
          withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
 {
     (void)center;
-    (void)notification;
+    // Reminders: Qupil shows them itself while it is in front (with "Done?")
+    if ([notification.request.content.userInfo[@"kind"] isEqual:@"reminder"]) {
+        completionHandler(UNNotificationPresentationOptionNone);
+        return;
+    }
     if (@available(iOS 14.0, *)) {
         completionHandler(UNNotificationPresentationOptionBanner | UNNotificationPresentationOptionList
                           | UNNotificationPresentationOptionSound);
@@ -58,14 +63,16 @@ QupilNotificationDelegate *s_delegate = nil;   // the notification center only k
 
 NSString *identifier(int index)
 {
-    return [NSString stringWithFormat:@"qupil.lesson-end.%d", index];
+    return [NSString stringWithFormat:@"qupil.alert.%d", index];
 }
 
 NSArray<NSString *> *allIdentifiers()
 {
-    NSMutableArray<NSString *> *ids = [NSMutableArray arrayWithCapacity:64];
-    for (int i = 0; i < 64; ++i)
+    NSMutableArray<NSString *> *ids = [NSMutableArray arrayWithCapacity:128];
+    for (int i = 0; i < 64; ++i) {
         [ids addObject:identifier(i)];
+        [ids addObject:[NSString stringWithFormat:@"qupil.lesson-end.%d", i]];   // test builds before
+    }
     return ids;
 }
 
@@ -115,59 +122,6 @@ void setUp()
     [center removeDeliveredNotificationsWithIdentifiers:allIdentifiers()];
 }
 
-void schedule(const QList<Alert> &alerts, const QString &soundFile, const QString &)
-{
-    // The sound has to be in Library/Sounds. Its name changes with sound and volume
-    // (iOS keeps sounds by name); older ones are removed.
-    const QString folder = soundsFolder();
-    QDir().mkpath(folder);
-    const QString name = QFileInfo(soundFile).fileName();
-    const QString target = folder + u'/' + name;
-    if (!soundFile.isEmpty() && !QFileInfo::exists(target))
-        QFile::copy(soundFile, target);
-    for (const QString &old : QDir(folder).entryList({ u"lesson-end-*.wav"_s }, QDir::Files)) {
-        if (old != name)
-            QFile::remove(folder + u'/' + old);
-    }
-    UNNotificationSound *sound = !name.isEmpty() && QFileInfo::exists(target)
-                                     ? [UNNotificationSound soundNamed:name.toNSString()]
-                                     : [UNNotificationSound defaultSound];
-
-    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-    [center removePendingNotificationRequestsWithIdentifiers:allIdentifiers()];
-    NSCalendar *gregorian = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
-    int index = 0;
-    for (const Alert &alert : alerts) {
-        if (index >= kMaxPending)
-            break;   // the next ones are added when Qupil is opened again
-        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
-        content.title = alert.title.toNSString();
-        content.body = alert.text.toNSString();
-        content.sound = sound;
-        content.threadIdentifier = @"qupil.lesson-end";
-
-        NSDateComponents *when = [[NSDateComponents alloc] init];
-        when.calendar = gregorian;
-        // Ours: 0 = Monday; Gregorian weekday: 1 = Sunday … 7 = Saturday
-        when.weekday = (alert.at / (24 * 60) + 1) % 7 + 1;
-        when.hour = (alert.at % (24 * 60)) / 60;
-        when.minute = alert.at % 60;
-        UNCalendarNotificationTrigger *trigger = [UNCalendarNotificationTrigger triggerWithDateMatchingComponents:when
-                                                                                                         repeats:YES];
-        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:identifier(index++)
-                                                                              content:content
-                                                                              trigger:trigger];
-        [center addNotificationRequest:request withCompletionHandler:nil];
-    }
-}
-
-void cancel()
-{
-    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-    [center removePendingNotificationRequestsWithIdentifiers:allIdentifiers()];
-    [center removeDeliveredNotificationsWithIdentifiers:allIdentifiers()];
-}
-
 void queryState(QObject *context, std::function<void(State)> done)
 {
     const QPointer<QObject> guard(context);
@@ -208,5 +162,67 @@ void openSettings(bool)
         address = UIApplicationOpenNotificationSettingsURLString;
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:address] options:@{} completionHandler:nil];
 }
+
+namespace Platform {
+
+void schedule(const QList<Alert> &alerts, const QMap<QString, QString> &)
+{
+    // The sounds have to be in Library/Sounds. Their names change with sound and volume
+    // (iOS keeps sounds by name); the ones no longer used are removed.
+    const QString folder = soundsFolder();
+    QDir().mkpath(folder);
+    QStringList used;
+    for (const Alert &alert : alerts) {
+        if (alert.sound.isEmpty())
+            continue;
+        const QString name = QFileInfo(alert.sound).fileName();
+        const QString target = folder + u'/' + name;
+        if (!used.contains(name) && (QFileInfo::exists(target) || QFile::copy(alert.sound, target)))
+            used << name;
+    }
+    for (const QString &old : QDir(folder).entryList({ u"*.wav"_s }, QDir::Files)) {
+        if (!used.contains(old))
+            QFile::remove(folder + u'/' + old);
+    }
+
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    [center removePendingNotificationRequestsWithIdentifiers:allIdentifiers()];
+    NSCalendar *gregorian = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
+    int index = 0;
+    for (const Alert &alert : alerts) {
+        if (index >= kMaxPending)
+            break;   // the next ones are added when Qupil is opened again
+        UNMutableNotificationContent *content = [[UNMutableNotificationContent alloc] init];
+        content.title = alert.title.toNSString();
+        content.body = alert.text.toNSString();
+        const QString soundName = QFileInfo(alert.sound).fileName();
+        if (!alert.sound.isEmpty() && used.contains(soundName))
+            content.sound = [UNNotificationSound soundNamed:soundName.toNSString()];
+        content.threadIdentifier = (u"qupil."_s + alert.kind).toNSString();
+        content.userInfo = @{ @"kind": alert.kind.toNSString() };
+
+        NSDateComponents *when = [[NSDateComponents alloc] init];
+        when.calendar = gregorian;
+        // Ours: 0 = Monday; Gregorian weekday: 1 = Sunday … 7 = Saturday
+        when.weekday = (alert.at / (24 * 60) + 1) % 7 + 1;
+        when.hour = (alert.at % (24 * 60)) / 60;
+        when.minute = alert.at % 60;
+        UNCalendarNotificationTrigger *trigger = [UNCalendarNotificationTrigger triggerWithDateMatchingComponents:when
+                                                                                                         repeats:YES];
+        UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:identifier(index++)
+                                                                              content:content
+                                                                              trigger:trigger];
+        [center addNotificationRequest:request withCompletionHandler:nil];
+    }
+}
+
+void cancel()
+{
+    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+    [center removePendingNotificationRequestsWithIdentifiers:allIdentifiers()];
+    [center removeDeliveredNotificationsWithIdentifiers:allIdentifiers()];
+}
+
+} // namespace Platform
 
 } // namespace SystemAlerts
