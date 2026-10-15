@@ -45,6 +45,11 @@ set_target_properties(qupil PROPERTIES
 if(IOS)
     # iPhone and iPad
     set_target_properties(qupil PROPERTIES XCODE_ATTRIBUTE_TARGETED_DEVICE_FAMILY "1,2")
+    # Home screen icon (single 1024 px image, Xcode renders all sizes)
+    set(QUPIL_ASSET_CATALOG ${CMAKE_CURRENT_SOURCE_DIR}/platform/ios/Assets.xcassets)
+    target_sources(qupil PRIVATE ${QUPIL_ASSET_CATALOG})
+    set_source_files_properties(${QUPIL_ASSET_CATALOG} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+    set_target_properties(qupil PROPERTIES XCODE_ATTRIBUTE_ASSETCATALOG_COMPILER_APPICON_NAME AppIcon)
 endif()
 
 if(WIN32)
