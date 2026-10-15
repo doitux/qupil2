@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Puts test builds on the "nightly" pre-release, so they can be downloaded
+# directly (also on an iPad or phone) without logging in to GitHub.
+# The tag "nightly" is moved to the commit that was built.
+#
+# Usage: bash .github/scripts/publish-nightly.sh 'path/glob*.ipa=Asset-Name.ipa' ...
+# Needs GH_TOKEN with contents: write, GITHUB_REPOSITORY and GITHUB_SHA.
+set -euo pipefail
+
+repo="$GITHUB_REPOSITORY"
+tag="nightly"
+
+if ! gh release view "$tag" --repo "$repo" > /dev/null 2>&1; then
+    # Desktop and Mobile may both try this on the very first run
+    gh release create "$tag" --repo "$repo" --prerelease --target "$GITHUB_SHA" \
+        --title "Nightly test builds" --notes "Test builds of the latest commit on main." || true
+fi
+gh api -X PATCH "repos/$repo/git/refs/tags/$tag" -f sha="$GITHUB_SHA" -F force=true > /dev/null
+
+staging="$(mktemp -d)"
+for pair in "$@"; do
+    pattern="${pair%%=*}"
+    name="${pair##*=}"
+    file="$(compgen -G "$pattern" | head -n 1 || true)"
+    if [ -z "$file" ]; then
+        echo "::error::nothing matches $pattern"
+        exit 1
+    fi
+    cp "$file" "$staging/$name"
+    gh release upload "$tag" "$staging/$name" --repo "$repo" --clobber
+    echo "Published $name"
+done
+
+gh release edit "$tag" --repo "$repo" --prerelease --title "Nightly test builds" --notes "$(cat <<EOF
+Automatic test builds of the newest commit on \`main\` (last update: ${GITHUB_SHA::7}, $(date -u '+%Y-%m-%d %H:%M UTC')).
+They are **not signed** and only meant for testing.
+
+| File | How to install |
+|---|---|
+| \`Qupil-iOS-unsigned.ipa\` | iPad / iPhone: sideload with AltStore, SideStore or Sideloadly, which sign it with your Apple ID. Needs iOS 16 or later. |
+| \`Qupil-Android-arm64-test.apk\` | Android: open the file and allow installing from this source. Signed with a throwaway test key. |
+| \`Qupil-macOS-universal.zip\` | macOS 12+: unzip, then right-click Qupil → Open the first time. |
+| \`Qupil-Windows-x64.zip\` | Windows 10/11: unzip and start \`bin\\Qupil.exe\`; SmartScreen → More info → Run anyway. |
+| \`Qupil-Linux-x86_64.tar.gz\` | Linux: unpack and start \`bin/qupil\`. |
+
+Built by the [Desktop](${GITHUB_SERVER_URL}/${repo}/actions/workflows/desktop.yml) and [Mobile](${GITHUB_SERVER_URL}/${repo}/actions/workflows/mobile.yml) workflows.
+EOF
+)"

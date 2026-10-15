@@ -109,3 +109,28 @@ jobs:
           path: package/*
           if-no-files-found: error
           retention-days: 30
+
+  publish:
+    name: Publish to "nightly" release
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          sparse-checkout: .github/scripts
+
+      - uses: actions/download-artifact@v7
+        with:
+          path: artifacts
+
+      - name: Update the nightly pre-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          bash .github/scripts/publish-nightly.sh \
+            'artifacts/qupil-linux-x86_64/*.tar.gz=Qupil-Linux-x86_64.tar.gz' \
+            'artifacts/qupil-windows-x64/*.zip=Qupil-Windows-x64.zip' \
+            'artifacts/qupil-macos-universal/*.zip=Qupil-macOS-universal.zip'

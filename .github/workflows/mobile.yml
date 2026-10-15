@@ -154,3 +154,27 @@ jobs:
           path: package/*.ipa
           if-no-files-found: error
           retention-days: 30
+
+  publish:
+    name: Publish to "nightly" release
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [android, ios]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          sparse-checkout: .github/scripts
+
+      - uses: actions/download-artifact@v7
+        with:
+          path: artifacts
+
+      - name: Update the nightly pre-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          bash .github/scripts/publish-nightly.sh \
+            'artifacts/qupil-ios-unsigned-ipa/*.ipa=Qupil-iOS-unsigned.ipa' \
+            'artifacts/qupil-android-arm64-test/*.apk=Qupil-Android-arm64-test.apk'
