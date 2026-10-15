@@ -9,6 +9,7 @@
 #include <QVariantMap>
 #include <QtQml/qqmlregistration.h>
 
+#include <functional>
 #include <memory>
 
 class QQmlEngine;
@@ -89,6 +90,8 @@ public:
     Q_INVOKABLE void takeOver(const QUrl &source);
     //! Starts with an empty database (an unreadable old file is kept as a backup)
     Q_INVOKABLE bool startFresh();
+    //! Starts empty and waits for the data of another device (Nextcloud or Wi-Fi)
+    Q_INVOKABLE bool startForSync();
     //! Takes over invented sample data (in the UI language) to try Qupil out
     Q_INVOKABLE void loadDemo();
     //! Leaves the setup screen after the import summary
@@ -110,6 +113,20 @@ public:
     //! Looks again for Qupil 1.x data folders on this computer
     Q_INVOKABLE void refreshLegacyFolders();
 
+    // ------------------------------------------------------------ for the sync
+    //! The sync writes from its own connection: the data is not replaced meanwhile
+    void setSyncRunning(bool running);
+    bool syncRunning() const { return m_syncRunning; }
+    /*!
+        Replaces the data on this device with an empty database that waits for
+        the first sync. The old data is kept as a backup.
+    */
+    bool replaceWithEmpty();
+    //! Empty data that waits for its first sync (no default lists yet)
+    bool awaitingSync() const;
+    //! The first sync is done: from now on this is normal data
+    void syncArrived();
+
 signals:
     void phaseChanged();
     void busyChanged();
@@ -125,6 +142,7 @@ private:
     struct Outcome;
     static Outcome runTakeOver(AppController *self, const QString &source, const QString &workDir);
     void finishTakeOver(const Outcome &outcome);
+    bool startEmpty(bool awaitingSync);
 
     bool openDatabase(QString *error);
     bool safetyBackup(const QString &reason);
@@ -144,4 +162,6 @@ private:
     QVariantList m_legacyFolders;
     QVariantMap m_lastTakeOver;
     bool m_demoPending = false;
+    bool m_syncRunning = false;
+    std::function<void()> m_afterSync;   // a take-over that waits for the sync to finish
 };

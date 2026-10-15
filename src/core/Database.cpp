@@ -69,6 +69,7 @@ bool Database::open(const QString &path, QString *error)
     exec(u"PRAGMA foreign_keys = OFF"_s);
     exec(u"PRAGMA journal_mode = WAL"_s);
     exec(u"PRAGMA synchronous = NORMAL"_s);
+    exec(u"PRAGMA busy_timeout = 10000"_s);   // the sync writes from a second connection
 
     if (!existed || !connection().tables().contains(u"meta"_s)) {
         if (existed && !connection().tables().isEmpty()) {

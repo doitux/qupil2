@@ -73,4 +73,19 @@ QtObject {
     function recitalInterval(index) {
         return index === 0 ? qsTrId("common.never") : qsTrId("common.duration_months", intervalMonths[index])
     }
+
+    //! "just now", "3 minutes ago", "today 13:05" or a short date (ISO time in UTC)
+    function syncWhen(iso, now) {
+        if (!iso)
+            return qsTrId("sync.never")
+        const when = new Date(iso)
+        const minutes = Math.floor((now.getTime() - when.getTime()) / 60000)
+        if (minutes < 1)
+            return qsTrId("sync.just_now")
+        if (minutes < 60)
+            return qsTrId("sync.minutes_ago", minutes)
+        if (when.toDateString() === now.toDateString())
+            return qsTrId("sync.today_at").arg(when.toLocaleTimeString(Qt.locale(), Locale.ShortFormat))
+        return when.toLocaleString(Qt.locale(), Locale.ShortFormat)
+    }
 }

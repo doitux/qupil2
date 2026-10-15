@@ -316,6 +316,7 @@ ApplicationWindow {
         function onShowPage(index) { window.currentPage = index }
         function onShowStudent(id, membership) { window.currentPage = 1 }
         function onShowEvent(id) { window.currentPage = 2 }
+        function onShowSync() { window.currentPage = 4 }
         function onToast(message) {
             toast.text = message
             toast.show = true
@@ -412,9 +413,14 @@ ApplicationWindow {
         }
         Timer {
             id: toastTimer
-            interval: 2800
+            interval: Math.max(2800, toast.text.length * 60)   // time to read longer messages
             onTriggered: toast.show = false
         }
+    }
+
+    Connections {
+        target: Sync
+        function onMessage(text) { Nav.toast(text) }
     }
 
     Connections {

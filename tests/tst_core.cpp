@@ -9,6 +9,8 @@
 #include <QTemporaryDir>
 #include <QTest>
 
+#include <algorithm>
+
 #include "Crypto.h"
 #include "Database.h"
 #include "FolderSync.h"
@@ -65,6 +67,22 @@ public:
         files.insert(path, data);
         return true;
     }
+    bool move(const QString &from, const QString &to) override
+    {
+        if (offline)
+            return false;
+        QMap<QString, QByteArray> movedFiles;
+        for (auto it = files.cbegin(); it != files.cend(); ++it)
+            movedFiles.insert(it.key() == from || it.key().startsWith(from + u'/') ? to + it.key().mid(from.size())
+                                                                                    : it.key(),
+                              it.value());
+        QSet<QString> movedFolders;
+        for (const QString &f : std::as_const(folders))
+            movedFolders.insert(f == from || f.startsWith(from + u'/') ? to + f.mid(from.size()) : f);
+        files = movedFiles;
+        folders = movedFolders;
+        return true;
+    }
     QString lastError() const override { return QStringLiteral("offline"); }
     bool lastErrorWasNotFound() const override { return notFound; }
 };
@@ -111,6 +129,14 @@ private slots:
         QString device;
         QVERIFY(HybridClock::parse(t3, &ms, &counter, &device));
         QCOMPARE(device, u"dev-a"_s);
+
+        // A remote change from the very same millisecond as our wall clock: what we
+        // write next must still be later, whatever the device ids
+        static qint64 still = 20000;
+        HybridClock early(u"0-first-in-sort-order"_s);
+        early.setWallClock([] { return still; });
+        early.observe(HybridClock::format(20000, 2, u"z-device"_s));
+        QVERIFY(early.now() > HybridClock::format(20000, 2, u"z-device"_s));
     }
 
     void storeWritesAndLogs()
@@ -452,6 +478,24 @@ private slots:
         QCOMPARE(fa.run(keyA, u"Laptop"_s, nullptr), FolderSync::Status::Ok);
         QCOMPARE(fb.run(keyB, u"iPad"_s, nullptr), FolderSync::Status::Ok);
         QCOMPARE(sb.get(u"student"_s, lena).value(u"notes"_s).toString(), u"offline"_s);
+
+        // A starts over with a new password: the old folder is kept, B has to unlock again
+        const QByteArray keyA2 = fa.startOver(u"Cello 7/8"_s, &status);
+        QCOMPARE(status, FolderSync::Status::Ok);
+        QVERIFY(keyA2 != keyA);
+        QVERIFY(std::any_of(cloud.files.keyBegin(), cloud.files.keyEnd(),
+                            [](const QString &f) { return f.startsWith(u"Qupil-"_s) && f.endsWith(u"/key.json"_s); }));
+        QCOMPARE(fa.run(keyA2, u"Laptop"_s, nullptr), FolderSync::Status::Ok);
+        QCOMPARE(fb.run(keyB, u"iPad"_s, nullptr), FolderSync::Status::WrongPassword);
+        const QByteArray keyB2 = fb.unlock(u"Cello 7/8"_s, &status);
+        QCOMPARE(keyB2, keyA2);
+        QCOMPARE(fb.run(keyB2, u"iPad"_s, nullptr), FolderSync::Status::Ok);
+
+        // The folder was deleted on the server: B needs the password again
+        for (const QString &f : cloud.files.keys())
+            if (f.startsWith(u"Qupil/"_s))
+                cloud.files.remove(f);
+        QCOMPARE(fb.run(keyB2, u"iPad"_s, nullptr), FolderSync::Status::NoPassword);
     }
 
     void rejectsForeignFiles()

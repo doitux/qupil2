@@ -25,4 +25,8 @@ QtObject {
     signal showStudent(string studentId, string membershipId)
     //! Events tab with this event open
     signal showEvent(string eventId)
+    //! More tab with the sync page open
+    signal showSync()
+    //! Set on the setup screen ("data from another device"): open the sync page once the app is ready
+    property bool openSyncOnStart: false
 }

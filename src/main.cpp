@@ -20,6 +20,7 @@
 #include "DataService.h"
 #include "LanguageManager.h"
 #include "ScreenshotTour.h"
+#include "SyncController.h"
 
 using namespace Qt::StringLiterals;
 
@@ -101,6 +102,8 @@ int main(int argc, char *argv[])
     QObject::connect(&controller, &AppController::dataReplaced, &data, &DataService::ensureDefaults);
     if (controller.phase() == AppController::Ready)
         data.ensureDefaults();
+    SyncController sync(&controller, nullptr);
+    QObject::connect(&sync, &SyncController::firstSyncDone, &data, &DataService::ensureDefaults);
     QQmlApplicationEngine engine;
     languages.setEngine(&engine);   // retranslate() on a language switch
 

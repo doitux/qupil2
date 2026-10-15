@@ -94,12 +94,22 @@ jobs:
         env:
           QT_QPA_PLATFORM: offscreen
         run: |
-          for t in build/tst_core build/tst_languagemanager; do
-            [ -f "$t" ] || [ -f "$t.exe" ] || continue
-            out=$("$t" 2>&1 | grep -vE "^PASS" | tail -n 40 || true)
+          for t in tst_core tst_languagemanager; do
+            exe="build/$t"; [ -f "$exe.exe" ] && exe="$exe.exe"
+            [ -f "$exe" ] || continue
+            set +e
+            "$exe" -o "build/$t.txt,txt" > /dev/null 2>&1
+            code=$?
+            set -e
+            out=$( (grep -vE "^PASS" "build/$t.txt" 2>/dev/null || true) | tail -n 40 )
+            [ -n "$out" ] || out="no output (exit code $code): missing library or crash?"
             echo "$out"
             msg=$(echo "$out" | sed -e 's/%/%25/g' -e 's/\r//g' | awk 'BEGIN { ORS = "%0A" } { print }')
-            echo "::error title=$(basename "$t")::${msg}"
+            if [ "$code" -eq 0 ]; then
+              echo "::warning title=$t passed when run again (flaky?)::${msg}"
+            else
+              echo "::error title=$t (exit $code)::${msg}"
+            fi
           done
 
       # Every screen with sample data, light/dark, desktop/phone size – published with the nightly build

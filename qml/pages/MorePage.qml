@@ -11,14 +11,57 @@ import Qupil
 
 StackView {
     id: stack
+    objectName: "morePage"
 
     readonly property var reminders: { if (Data.revision < 0) return undefined; return Data.reminders() }
     readonly property var birthdays: { if (Data.revision < 0) return undefined; return Data.birthdays(0) }
     readonly property int candidates: { if (Data.revision < 0) return undefined; return Data.recitalCandidates().length }
 
+    property date now: new Date()
+
     function openPage(component) {
         stack.pop(null)
         stack.push(component)
+    }
+    //! Back to the first level (screenshot tour)
+    function home() {
+        stack.pop(null)
+    }
+
+    Timer {
+        interval: 30000
+        running: true
+        repeat: true
+        onTriggered: stack.now = new Date()
+    }
+    Connections {
+        target: Nav
+        function onShowSync() { stack.openPage(syncPage) }
+    }
+    Component.onCompleted: {
+        if (Nav.openSyncOnStart) {
+            Nav.openSyncOnStart = false
+            Qt.callLater(Nav.showSync)
+        }
+    }
+
+    // Title and detail line of the sync card
+    readonly property bool syncSetUp: Sync.connected && !Sync.needsPassword
+    readonly property string syncTitle: {
+        if (Sync.loggingIn) return qsTrId("sync.title")
+        if (!Sync.connected) return qsTrId("sync.title")
+        if (Sync.needsPassword) return Sync.folderExists ? qsTrId("sync.password.enter_title") : qsTrId("sync.password.choose_title")
+        if (Sync.busy) return qsTrId("sync.in_progress")
+        if (Sync.error !== "") return qsTrId("sync.status.problem")
+        if (Sync.lastSync === "") return qsTrId("sync.never")
+        return qsTrId("sync.all_synced")
+    }
+    readonly property string syncDetail: {
+        if (Sync.loggingIn) return qsTrId("sync.nextcloud.waiting")
+        if (!Sync.connected) return qsTrId("sync.status.off")
+        if (Sync.needsPassword) return qsTrId("sync.nextcloud.connected_as").arg(Sync.user).arg(Sync.server.replace(/^https?:\/\//, ""))
+        if (Sync.error !== "") return Sync.error
+        return qsTrId("sync.nextcloud.when").arg(Labels.syncWhen(Sync.lastSync, stack.now))
     }
 
     initialItem: Flickable {
@@ -40,6 +83,109 @@ StackView {
                 font.family: Theme.fontFamily
                 font.pixelSize: 34
                 font.weight: Font.ExtraBold
+            }
+
+            // Sync status at the top, like in the design
+            Rectangle {
+                id: syncCard
+                Layout.fillWidth: true
+                implicitHeight: syncColumn.implicitHeight + 28
+                radius: Theme.radiusLarge - 2
+                color: Theme.surface
+                readonly property bool warn: Sync.connected && (Sync.needsPassword || Sync.error !== "")
+                readonly property var tile: !Sync.connected ? Theme.tile.gray
+                                          : warn ? Theme.tile.orange
+                                          : Theme.tile.green
+
+                ColumnLayout {
+                    id: syncColumn
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.margins: 14
+                    spacing: 12
+
+                    AbstractButton {
+                        id: syncHeader
+                        Layout.fillWidth: true
+                        implicitHeight: syncHeaderRow.implicitHeight
+                        focusPolicy: Qt.StrongFocus
+                        Accessible.role: Accessible.Button
+                        Accessible.name: stack.syncTitle + ", " + stack.syncDetail
+                        onClicked: stack.openPage(syncPage)
+                        background: Rectangle {
+                            radius: 10
+                            color: "transparent"
+                            border.width: syncHeader.visualFocus ? 2 : 0
+                            border.color: Theme.accentText
+                        }
+                        contentItem: RowLayout {
+                            id: syncHeaderRow
+                            spacing: 12
+                            Rectangle {
+                                implicitWidth: 44
+                                implicitHeight: 44
+                                radius: 14
+                                color: syncCard.tile.bg
+                                Icon {
+                                    anchors.centerIn: parent
+                                    width: 24
+                                    height: 24
+                                    name: !Sync.connected ? "cloud" : syncCard.warn ? "cloudOff" : "sync"
+                                    color: syncCard.tile.fg
+                                }
+                            }
+                            ColumnLayout {
+                                Layout.fillWidth: true
+                                spacing: 2
+                                Text {
+                                    Layout.fillWidth: true
+                                    elide: Text.ElideRight
+                                    text: stack.syncTitle
+                                    color: Theme.text
+                                    font.family: Theme.fontFamily
+                                    font.pixelSize: 16
+                                    font.weight: Font.ExtraBold
+                                }
+                                Text {
+                                    Layout.fillWidth: true
+                                    wrapMode: Text.WordWrap
+                                    maximumLineCount: 2
+                                    elide: Text.ElideRight
+                                    text: stack.syncDetail
+                                    color: Theme.textMuted
+                                    font.family: Theme.fontFamily
+                                    font.pixelSize: 13
+                                }
+                            }
+                            Icon {
+                                Layout.preferredWidth: 18
+                                Layout.preferredHeight: 18
+                                name: "chevron"
+                                color: Theme.icon
+                            }
+                        }
+                    }
+
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 8
+                        ActionButton {
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 1
+                            kind: "primary"
+                            text: stack.syncSetUp ? qsTrId("sync.now") : qsTrId("sync.setup_short")
+                            enabled: !stack.syncSetUp || !Sync.busy
+                            onClicked: stack.syncSetUp ? Sync.syncNow() : stack.openPage(syncPage)
+                        }
+                        ActionButton {
+                            Layout.fillWidth: true
+                            Layout.preferredWidth: 1
+                            text: qsTrId("sync.pair")
+                            onClicked: stack.openPage(syncPage)
+                        }
+                    }
+                }
             }
 
             Rectangle {
@@ -123,6 +269,7 @@ StackView {
     Component { id: birthdaysPage; BirthdaysPage { onBack: stack.pop() } }
     Component { id: candidatesPage; CandidatesPage { onBack: stack.pop() } }
     Component { id: settingsPage; SettingsPage { onBack: stack.pop() } }
+    Component { id: syncPage; SyncPage { onBack: stack.pop() } }
 
     component Group: Rectangle {
         default property alias rows: groupColumn.data

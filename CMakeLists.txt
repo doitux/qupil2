@@ -17,7 +17,7 @@ if(MSVC)
     add_compile_options(/utf-8)
 endif()
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Sql Qml Quick QuickControls2 Multimedia LinguistTools)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Sql Qml Quick QuickControls2 Multimedia Network LinguistTools)
 qt_standard_project_setup(REQUIRES 6.5)
 
 # ---------------------------------------------------------------------------- data core
@@ -52,7 +52,7 @@ qt_add_executable(qupil src/main.cpp src/app/ScreenshotTour.h src/app/Screenshot
 target_compile_definitions(qupil PRIVATE QUPIL_VERSION="${PROJECT_VERSION}")
 target_include_directories(qupil PRIVATE src src/core src/app)
 target_link_libraries(qupil PRIVATE qupilcore Qt6::Core Qt6::Gui Qt6::Qml Qt6::Quick Qt6::QuickControls2
-    Qt6::Multimedia)
+    Qt6::Multimedia Qt6::Network)
 
 if(APPLE OR WIN32)
     set_target_properties(qupil PROPERTIES OUTPUT_NAME Qupil)
@@ -159,6 +159,7 @@ set(QUPIL_QML_FILES
     qml/pages/BirthdaysPage.qml
     qml/pages/CandidatesPage.qml
     qml/pages/SettingsPage.qml
+    qml/pages/SyncPage.qml
     qml/pages/PlaceholderPage.qml)
 
 # All QML files sit next to the module's qmldir in the resources, so every file
@@ -192,6 +193,10 @@ qt_add_qml_module(qupil
         src/app/Metronome.cpp
         src/app/TextFormatter.h
         src/app/TextFormatter.cpp
+        src/app/WebDavFolder.h
+        src/app/WebDavFolder.cpp
+        src/app/SyncController.h
+        src/app/SyncController.cpp
 )
 
 # ---------------------------------------------------------------------------- translations

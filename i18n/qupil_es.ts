@@ -2504,6 +2504,206 @@ Póngase en contacto con el autor en %4 para resolver el problema.</translation>
         <extracomment>iOS permission text (NSLocalNetworkUsageDescription).</extracomment>
         <translation>Qupil necesita acceso a la red local para sincronizarse por Wi-Fi con sus otros dispositivos.</translation>
     </message>
+    <message id="sync.status.off">
+        <source>Off – your data is only on this device</source>
+        <translation>Desactivada: sus datos solo están en este dispositivo</translation>
+    </message>
+    <message id="sync.setup_short">
+        <source>Set up</source>
+        <translation>Configurar</translation>
+    </message>
+    <message id="sync.status.problem">
+        <source>Sync problem</source>
+        <translation>Problema de sincronización</translation>
+    </message>
+    <message id="sync.never">
+        <source>Not synced yet</source>
+        <translation>Aún no sincronizado</translation>
+    </message>
+    <message id="sync.just_now">
+        <source>just now</source>
+        <translation>ahora mismo</translation>
+    </message>
+    <message id="sync.today_at">
+        <source>today %1</source>
+        <extracomment>%1 = time, e.g. 13:05</extracomment>
+        <translation>hoy %1</translation>
+    </message>
+    <message id="sync.nextcloud.when">
+        <source>Nextcloud %1</source>
+        <extracomment>%1 = when, e.g. &apos;3 minutes ago&apos; or &apos;today 13:05&apos;</extracomment>
+        <translation>Nextcloud %1</translation>
+    </message>
+    <message id="sync.intro">
+        <source>Keep Qupil up to date on all your devices – through your own Nextcloud or directly over Wi-Fi. Your data is encrypted before it leaves the device.</source>
+        <translation>Mantenga Qupil al día en todos sus dispositivos, a través de su propio Nextcloud o directamente por Wi-Fi. Sus datos se cifran antes de salir del dispositivo.</translation>
+    </message>
+    <message id="sync.nextcloud.intro">
+        <source>Qupil stores its data encrypted in a folder named “Qupil” in your Nextcloud. You sign in in the browser – Qupil never sees your Nextcloud password.</source>
+        <translation>Qupil guarda sus datos cifrados en una carpeta «Qupil» de su Nextcloud. Usted inicia sesión en el navegador: Qupil nunca ve su contraseña de Nextcloud.</translation>
+    </message>
+    <message id="sync.nextcloud.waiting">
+        <source>Waiting for the sign-in in the browser …</source>
+        <translation>Esperando el inicio de sesión en el navegador…</translation>
+    </message>
+    <message id="sync.nextcloud.connected_as">
+        <source>Signed in as %1 on %2</source>
+        <extracomment>%1 = user name, %2 = server</extracomment>
+        <translation>Sesión iniciada como %1 en %2</translation>
+    </message>
+    <message id="sync.nextcloud.disconnect">
+        <source>Disconnect</source>
+        <translation>Desconectar</translation>
+    </message>
+    <message id="sync.nextcloud.disconnect.confirm">
+        <source>Disconnect from Nextcloud? The data on this device stays, and your other devices are not affected.</source>
+        <translation>¿Desconectar de Nextcloud? Los datos de este dispositivo se conservan y sus otros dispositivos no se ven afectados.</translation>
+    </message>
+    <message id="sync.checking">
+        <source>Checking Nextcloud …</source>
+        <translation>Comprobando Nextcloud…</translation>
+    </message>
+    <message id="sync.password">
+        <source>Sync password</source>
+        <translation>Contraseña de sincronización</translation>
+    </message>
+    <message id="sync.password.repeat">
+        <source>Repeat password</source>
+        <translation>Repetir la contraseña</translation>
+    </message>
+    <message id="sync.password.choose_title">
+        <source>Choose a sync password</source>
+        <translation>Elegir una contraseña de sincronización</translation>
+    </message>
+    <message id="sync.password.choose_text">
+        <source>Your data is encrypted with this password before it leaves the device – not even the operator of the Nextcloud can read it. You need it on each of your other devices. It cannot be recovered, so keep it in a safe place.</source>
+        <translation>Sus datos se cifran con esta contraseña antes de salir del dispositivo: ni siquiera el operador del Nextcloud puede leerlos. La necesitará en cada uno de sus otros dispositivos. No se puede recuperar, así que guárdela en un lugar seguro.</translation>
+    </message>
+    <message id="sync.password.enter_title">
+        <source>Enter the sync password</source>
+        <translation>Introducir la contraseña de sincronización</translation>
+    </message>
+    <message id="sync.password.enter_text">
+        <source>This Nextcloud already holds Qupil data. Enter the sync password you chose on your first device.</source>
+        <translation>Este Nextcloud ya contiene datos de Qupil. Introduzca la contraseña de sincronización que eligió en su primer dispositivo.</translation>
+    </message>
+    <message id="sync.password.too_short">
+        <source>At least 8 characters</source>
+        <translation>Al menos 8 caracteres</translation>
+    </message>
+    <message id="sync.password.mismatch">
+        <source>The passwords do not match</source>
+        <translation>Las contraseñas no coinciden</translation>
+    </message>
+    <message id="sync.password.show">
+        <source>Show password</source>
+        <translation>Mostrar la contraseña</translation>
+    </message>
+    <message id="sync.password.set">
+        <source>Save password and sync</source>
+        <translation>Guardar y sincronizar</translation>
+    </message>
+    <message id="sync.password.unlock">
+        <source>Unlock and sync</source>
+        <translation>Desbloquear y sincronizar</translation>
+    </message>
+    <message id="sync.join.title">
+        <source>The data on this device</source>
+        <translation>Los datos de este dispositivo</translation>
+    </message>
+    <message id="sync.join.replace">
+        <source>Replace with the data from Nextcloud</source>
+        <translation>Reemplazar por los datos del Nextcloud</translation>
+    </message>
+    <message id="sync.join.replace.hint">
+        <source>Recommended. A backup of the data on this device is kept.</source>
+        <translation>Recomendado. Se guarda una copia de seguridad de los datos de este dispositivo.</translation>
+    </message>
+    <message id="sync.join.merge">
+        <source>Merge with the data from Nextcloud</source>
+        <translation>Combinar con los datos del Nextcloud</translation>
+    </message>
+    <message id="sync.join.merge.hint">
+        <source>Only if this data does not exist anywhere else – the same data twice (e.g. taken over from Qupil 1.x on two devices) leads to duplicate entries.</source>
+        <translation>Solo si estos datos no existen en ningún otro lugar: los mismos datos dos veces (p. ej. importados de Qupil 1.x en dos dispositivos) generan entradas duplicadas.</translation>
+    </message>
+    <message id="sync.join.start_over">
+        <source>Start over with the data on this device</source>
+        <translation>Empezar de nuevo con los datos de este dispositivo</translation>
+    </message>
+    <message id="sync.join.start_over.hint">
+        <source>The existing folder in Nextcloud is kept under a new name. Choose a new sync password; your other devices will ask for it.</source>
+        <translation>La carpeta existente del Nextcloud se conserva con otro nombre. Elija una nueva contraseña de sincronización; sus otros dispositivos se la pedirán.</translation>
+    </message>
+    <message id="sync.join.start_over.action">
+        <source>Start over and sync</source>
+        <translation>Empezar de nuevo y sincronizar</translation>
+    </message>
+    <message id="sync.auto">
+        <source>Sync automatically</source>
+        <translation>Sincronizar automáticamente</translation>
+    </message>
+    <message id="sync.auto.hint">
+        <source>At start, shortly after changes and every 10 minutes.</source>
+        <translation>Al iniciar, poco después de los cambios y cada 10 minutos.</translation>
+    </message>
+    <message id="sync.device_name">
+        <source>Name of this device</source>
+        <translation>Nombre de este dispositivo</translation>
+    </message>
+    <message id="sync.devices.none">
+        <source>No other devices yet.</source>
+        <translation>Aún no hay otros dispositivos.</translation>
+    </message>
+    <message id="sync.error.server">
+        <source>No Nextcloud found at %1.</source>
+        <extracomment>%1 = server address</extracomment>
+        <translation>No se encontró ningún Nextcloud en %1.</translation>
+    </message>
+    <message id="sync.error.login_timeout">
+        <source>The sign-in in the browser took too long. Please try again.</source>
+        <translation>El inicio de sesión en el navegador tardó demasiado. Inténtelo de nuevo.</translation>
+    </message>
+    <message id="sync.error.access_denied">
+        <source>Nextcloud denied access. Please disconnect and connect again.</source>
+        <translation>Nextcloud denegó el acceso. Desconéctese y vuelva a conectarse.</translation>
+    </message>
+    <message id="sync.error.replace">
+        <source>The data on this device could not be replaced.</source>
+        <translation>No se pudieron reemplazar los datos de este dispositivo.</translation>
+    </message>
+    <message id="sync.wrong_password">
+        <source>The sync password is wrong.</source>
+        <translation>La contraseña de sincronización es incorrecta.</translation>
+    </message>
+    <message id="sync.password_changed">
+        <source>The sync password was changed on another device. Please enter the new one.</source>
+        <translation>La contraseña de sincronización se cambió en otro dispositivo. Introduzca la nueva.</translation>
+    </message>
+    <message id="sync.folder_missing">
+        <source>The Qupil folder in Nextcloud is gone. Choose a sync password to set it up again.</source>
+        <translation>La carpeta Qupil del Nextcloud ya no existe. Elija una contraseña de sincronización para volver a crearla.</translation>
+    </message>
+    <message id="sync.paused_after_replace">
+        <source>Sync is paused because the data on this device was replaced. Enter the sync password again.</source>
+        <translation>La sincronización está en pausa porque se reemplazaron los datos de este dispositivo. Vuelva a introducir la contraseña de sincronización.</translation>
+    </message>
+    <message id="sync.waiting_for_data">
+        <source>This device is still empty and gets its data with the first sync.</source>
+        <translation>Este dispositivo aún está vacío y recibirá sus datos en la primera sincronización.</translation>
+    </message>
+    <message id="setup.sync.title">
+        <source>Data from another device</source>
+        <translation>Datos de otro dispositivo</translation>
+    </message>
+    <message id="setup.sync.text">
+        <source>Qupil already runs on another device? Connect this one to the same Nextcloud or pair it over Wi-Fi.</source>
+        <translation>¿Qupil ya funciona en otro dispositivo? Conecte este al mismo Nextcloud o vincúlelo por Wi-Fi.</translation>
+    </message>
+    <message id="setup.sync.action">
+        <source>Connect this device</source>
+        <translation>Conectar este dispositivo</translation>
+    </message>
     <message id="settings.title">
         <source>Settings</source>
         <translation>Ajustes</translation>

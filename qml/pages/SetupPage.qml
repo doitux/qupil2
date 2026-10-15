@@ -311,7 +311,29 @@ Flickable {
             }
         }
 
-        // ------------------------------------------------------------ 3. empty
+        // ------------------------------------------------------------ 3. another device
+        Card {
+            visible: !page.done
+            Layout.fillWidth: true
+            ChoiceHeader {
+                iconName: "sync"
+                tile: Theme.tile.plum
+                title: qsTrId("setup.sync.title")
+                text: qsTrId("setup.sync.text")
+            }
+            ActionButton {
+                iconName: "cloud"
+                text: qsTrId("setup.sync.action")
+                enabled: !App.busy
+                onClicked: {
+                    Nav.openSyncOnStart = true
+                    if (!App.startForSync())
+                        Nav.openSyncOnStart = false
+                }
+            }
+        }
+
+        // ------------------------------------------------------------ 4. empty
         Card {
             visible: !page.done
             Layout.fillWidth: true

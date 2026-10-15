@@ -63,12 +63,14 @@ void HybridClock::observe(const QString &remoteTimestamp)
     int counter = 0;
     if (!parse(remoteTimestamp, &ms, &counter))
         return;
-    const qint64 wall = m_wall ? m_wall() : systemMs();
-    if (ms > m_lastMs && ms > wall) {
+    // Never fall behind a timestamp we have seen: now() then issues a later one,
+    // also when the remote time equals our wall clock (same millisecond, or a
+    // coarse system timer like the 16 ms on Windows)
+    if (ms > m_lastMs) {
         m_lastMs = ms;
-        m_counter = counter + 1;
+        m_counter = counter;
     } else if (ms == m_lastMs) {
-        m_counter = qMax(m_counter, counter) + 1;
+        m_counter = qMax(m_counter, counter);
     }
 }
 

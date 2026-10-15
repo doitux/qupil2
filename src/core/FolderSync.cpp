@@ -163,6 +163,37 @@ QByteArray FolderSync::unlock(const QString &password, Status *status)
     return key;
 }
 
+QByteArray FolderSync::startOver(const QString &password, Status *status)
+{
+    *status = Status::Failed;
+    const auto setUp = isSetUp();
+    if (!setUp)
+        return {};
+    if (*setUp) {
+        const QString aside = m_root + u'-' + QDateTime::currentDateTime().toString(u"yyyy-MM-dd-HHmmss"_s);
+        if (!m_remote->move(m_root, aside)) {
+            fail(m_remote->lastError());
+            return {};
+        }
+    }
+    return unlock(password, status);
+}
+
+FolderSync::Status FolderSync::checkKey(const QByteArray &key)
+{
+    const auto info = m_remote->read(path(u"key.json"_s));
+    if (!info) {
+        if (m_remote->lastErrorWasNotFound())
+            return fail(u"key.json missing"_s), Status::NoPassword;
+        return fail(m_remote->lastError()), Status::Failed;
+    }
+    const QJsonObject o = QJsonDocument::fromJson(*info).object();
+    const auto check = Crypto::open(key, QByteArray::fromBase64(o.value(u"check"_s).toString().toLatin1()), kCheckAd);
+    if (!check || *check != kCheckText)
+        return fail(u"The sync password was changed"_s), Status::WrongPassword;
+    return Status::Ok;
+}
+
 FolderSync::Status FolderSync::run(const QByteArray &key, const QString &deviceName, Stats *stats)
 {
     Stats local;
@@ -170,7 +201,11 @@ FolderSync::Status FolderSync::run(const QByteArray &key, const QString &deviceN
     Database *db = m_store->database();
     const QString me = db->deviceId();
 
-    for (const QString &folder : { QString(), u"devices"_s, u"changes"_s }) {
+    // Never write into a folder that belongs to another password
+    if (const Status keyStatus = checkKey(key); keyStatus != Status::Ok)
+        return keyStatus;
+
+    for (const QString &folder : { u"devices"_s, u"changes"_s }) {
         if (!m_remote->makeFolder(path(folder)))
             return fail(m_remote->lastError()), Status::Failed;
     }

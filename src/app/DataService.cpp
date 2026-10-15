@@ -323,6 +323,9 @@ void DataService::ensureDefaults()
 {
     if (!m_store->database()->isOpen())
         return;
+    // A device that waits for its first sync gets the lists of the other devices
+    if (m_store->database()->meta(u"awaiting_sync"_s) == u"1"_s)
+        return;
     m_store->beginBatch();
     if (setting(u"genres"_s).isNull()) {
         setSetting(u"genres"_s, QStringList {

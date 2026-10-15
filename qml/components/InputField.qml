@@ -14,6 +14,7 @@ ColumnLayout {
     property string text
     property string placeholder
     property int inputMethodHints: Qt.ImhNone
+    property int echoMode: TextInput.Normal
     property bool multiline: false
     property var completions: []          // suggestions while typing (e.g. composers)
 
@@ -53,6 +54,7 @@ ColumnLayout {
         onAccepted: field.accepted()
         placeholderText: field.placeholder
         inputMethodHints: field.inputMethodHints
+        echoMode: field.echoMode
         font.family: Theme.fontFamily
         font.pixelSize: 16
         color: Theme.text

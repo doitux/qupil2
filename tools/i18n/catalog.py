@@ -1338,6 +1338,181 @@ E("sync.local_network_permission",
   fr="Qupil a besoin d’accéder au réseau local pour se synchroniser en Wi-Fi avec vos autres appareils.",
   es="Qupil necesita acceso a la red local para sincronizarse por Wi-Fi con sus otros dispositivos.",
   c="iOS permission text (NSLocalNetworkUsageDescription).")
+E("sync.status.off", en="Off – your data is only on this device", de="Aus – Ihre Daten sind nur auf diesem Gerät",
+  fr="Désactivée – vos données sont uniquement sur cet appareil",
+  es="Desactivada: sus datos solo están en este dispositivo")
+E("sync.setup_short", en="Set up", de="Einrichten", fr="Configurer", es="Configurar")
+E("sync.status.problem", en="Sync problem", de="Problem bei der Synchronisation", fr="Problème de synchronisation",
+  es="Problema de sincronización")
+E("sync.never", en="Not synced yet", de="Noch nicht synchronisiert", fr="Pas encore synchronisé",
+  es="Aún no sincronizado")
+E("sync.just_now", en="just now", de="gerade eben", fr="à l’instant", es="ahora mismo")
+E("sync.today_at", en="today %1", de="heute %1", fr="aujourd’hui %1", es="hoy %1", c="%1 = time, e.g. 13:05")
+E("sync.nextcloud.when", en="Nextcloud %1", de="Nextcloud %1", fr="Nextcloud %1", es="Nextcloud %1",
+  c="%1 = when, e.g. '3 minutes ago' or 'today 13:05'")
+E("sync.intro",
+  en="Keep Qupil up to date on all your devices – through your own Nextcloud or directly over Wi-Fi. "
+     "Your data is encrypted before it leaves the device.",
+  de="Halten Sie Qupil auf all Ihren Geräten auf dem gleichen Stand – über Ihre eigene Nextcloud oder direkt "
+     "per WLAN. Ihre Daten werden verschlüsselt, bevor sie das Gerät verlassen.",
+  fr="Gardez Qupil à jour sur tous vos appareils – via votre propre Nextcloud ou directement en Wi-Fi. "
+     "Vos données sont chiffrées avant de quitter l’appareil.",
+  es="Mantenga Qupil al día en todos sus dispositivos, a través de su propio Nextcloud o directamente por Wi-Fi. "
+     "Sus datos se cifran antes de salir del dispositivo.")
+E("sync.nextcloud.intro",
+  en="Qupil stores its data encrypted in a folder named “Qupil” in your Nextcloud. You sign in in the browser – "
+     "Qupil never sees your Nextcloud password.",
+  de="Qupil legt seine Daten verschlüsselt im Ordner „Qupil“ Ihrer Nextcloud ab. Sie melden sich im Browser an – "
+     "Ihr Nextcloud-Passwort sieht Qupil nie.",
+  fr="Qupil enregistre ses données chiffrées dans un dossier « Qupil » de votre Nextcloud. Vous vous connectez "
+     "dans le navigateur – Qupil ne voit jamais votre mot de passe Nextcloud.",
+  es="Qupil guarda sus datos cifrados en una carpeta «Qupil» de su Nextcloud. Usted inicia sesión en el "
+     "navegador: Qupil nunca ve su contraseña de Nextcloud.")
+E("sync.nextcloud.waiting", en="Waiting for the sign-in in the browser …",
+  de="Warte auf die Anmeldung im Browser ...", fr="En attente de la connexion dans le navigateur…",
+  es="Esperando el inicio de sesión en el navegador…")
+E("sync.nextcloud.connected_as", en="Signed in as %1 on %2", de="Angemeldet als %1 auf %2",
+  fr="Connecté en tant que %1 sur %2", es="Sesión iniciada como %1 en %2", c="%1 = user name, %2 = server")
+E("sync.nextcloud.disconnect", en="Disconnect", de="Verbindung trennen", fr="Se déconnecter", es="Desconectar")
+E("sync.nextcloud.disconnect.confirm",
+  en="Disconnect from Nextcloud? The data on this device stays, and your other devices are not affected.",
+  de="Verbindung zur Nextcloud trennen? Die Daten auf diesem Gerät bleiben erhalten, Ihre anderen Geräte sind "
+     "nicht betroffen.",
+  fr="Se déconnecter de Nextcloud ? Les données de cet appareil sont conservées et vos autres appareils ne sont "
+     "pas concernés.",
+  es="¿Desconectar de Nextcloud? Los datos de este dispositivo se conservan y sus otros dispositivos no se ven "
+     "afectados.")
+E("sync.checking", en="Checking Nextcloud …", de="Prüfe Nextcloud ...", fr="Vérification de Nextcloud…",
+  es="Comprobando Nextcloud…")
+E("sync.password", en="Sync password", de="Sync-Passwort", fr="Mot de passe de synchronisation",
+  es="Contraseña de sincronización")
+E("sync.password.repeat", en="Repeat password", de="Passwort wiederholen", fr="Répéter le mot de passe",
+  es="Repetir la contraseña")
+E("sync.password.choose_title", en="Choose a sync password", de="Sync-Passwort festlegen",
+  fr="Choisir un mot de passe de synchronisation", es="Elegir una contraseña de sincronización")
+E("sync.password.choose_text",
+  en="Your data is encrypted with this password before it leaves the device – not even the operator of the "
+     "Nextcloud can read it. You need it on each of your other devices. It cannot be recovered, so keep it in a "
+     "safe place.",
+  de="Mit diesem Passwort werden Ihre Daten verschlüsselt, bevor sie das Gerät verlassen – selbst der Betreiber "
+     "der Nextcloud kann sie nicht lesen. Sie brauchen es auf jedem weiteren Gerät. Es lässt sich nicht "
+     "wiederherstellen, bewahren Sie es also gut auf.",
+  fr="Vos données sont chiffrées avec ce mot de passe avant de quitter l’appareil – même l’opérateur du Nextcloud "
+     "ne peut pas les lire. Il vous le faudra sur chacun de vos autres appareils. Il ne peut pas être récupéré : "
+     "conservez-le en lieu sûr.",
+  es="Sus datos se cifran con esta contraseña antes de salir del dispositivo: ni siquiera el operador del "
+     "Nextcloud puede leerlos. La necesitará en cada uno de sus otros dispositivos. No se puede recuperar, así que "
+     "guárdela en un lugar seguro.")
+E("sync.password.enter_title", en="Enter the sync password", de="Sync-Passwort eingeben",
+  fr="Saisir le mot de passe de synchronisation", es="Introducir la contraseña de sincronización")
+E("sync.password.enter_text",
+  en="This Nextcloud already holds Qupil data. Enter the sync password you chose on your first device.",
+  de="In dieser Nextcloud liegen bereits Qupil-Daten. Geben Sie das Sync-Passwort ein, das Sie auf Ihrem ersten "
+     "Gerät festgelegt haben.",
+  fr="Ce Nextcloud contient déjà des données Qupil. Saisissez le mot de passe de synchronisation choisi sur votre "
+     "premier appareil.",
+  es="Este Nextcloud ya contiene datos de Qupil. Introduzca la contraseña de sincronización que eligió en su "
+     "primer dispositivo.")
+E("sync.password.too_short", en="At least 8 characters", de="Mindestens 8 Zeichen", fr="Au moins 8 caractères",
+  es="Al menos 8 caracteres")
+E("sync.password.mismatch", en="The passwords do not match", de="Die Passwörter stimmen nicht überein",
+  fr="Les mots de passe ne correspondent pas", es="Las contraseñas no coinciden")
+E("sync.password.show", en="Show password", de="Passwort anzeigen", fr="Afficher le mot de passe",
+  es="Mostrar la contraseña")
+E("sync.password.set", en="Save password and sync", de="Passwort festlegen und synchronisieren",
+  fr="Enregistrer et synchroniser", es="Guardar y sincronizar")
+E("sync.password.unlock", en="Unlock and sync", de="Entsperren und synchronisieren",
+  fr="Déverrouiller et synchroniser", es="Desbloquear y sincronizar")
+E("sync.join.title", en="The data on this device", de="Die Daten auf diesem Gerät", fr="Les données de cet appareil",
+  es="Los datos de este dispositivo")
+E("sync.join.replace", en="Replace with the data from Nextcloud", de="Durch die Daten aus der Nextcloud ersetzen",
+  fr="Remplacer par les données du Nextcloud", es="Reemplazar por los datos del Nextcloud")
+E("sync.join.replace.hint", en="Recommended. A backup of the data on this device is kept.",
+  de="Empfohlen. Die Daten auf diesem Gerät werden vorher gesichert.",
+  fr="Recommandé. Une sauvegarde des données de cet appareil est conservée.",
+  es="Recomendado. Se guarda una copia de seguridad de los datos de este dispositivo.")
+E("sync.join.merge", en="Merge with the data from Nextcloud", de="Mit den Daten aus der Nextcloud zusammenführen",
+  fr="Fusionner avec les données du Nextcloud", es="Combinar con los datos del Nextcloud")
+E("sync.join.merge.hint",
+  en="Only if this data does not exist anywhere else – the same data twice (e.g. taken over from Qupil 1.x on two "
+     "devices) leads to duplicate entries.",
+  de="Nur wenn diese Daten sonst nirgends vorhanden sind – dieselben Daten doppelt (z. B. auf zwei Geräten aus "
+     "Qupil 1.x übernommen) führen zu doppelten Einträgen.",
+  fr="Seulement si ces données n’existent nulle part ailleurs – les mêmes données en double (p. ex. reprises de "
+     "Qupil 1.x sur deux appareils) créent des doublons.",
+  es="Solo si estos datos no existen en ningún otro lugar: los mismos datos dos veces (p. ej. importados de "
+     "Qupil 1.x en dos dispositivos) generan entradas duplicadas.")
+E("sync.join.start_over", en="Start over with the data on this device",
+  de="Mit den Daten auf diesem Gerät neu beginnen", fr="Recommencer avec les données de cet appareil",
+  es="Empezar de nuevo con los datos de este dispositivo")
+E("sync.join.start_over.hint",
+  en="The existing folder in Nextcloud is kept under a new name. Choose a new sync password; your other devices "
+     "will ask for it.",
+  de="Der bisherige Ordner in der Nextcloud bleibt unter neuem Namen erhalten. Legen Sie ein neues Sync-Passwort "
+     "fest; Ihre anderen Geräte fragen danach.",
+  fr="Le dossier existant du Nextcloud est conservé sous un autre nom. Choisissez un nouveau mot de passe ; vos "
+     "autres appareils le demanderont.",
+  es="La carpeta existente del Nextcloud se conserva con otro nombre. Elija una nueva contraseña de "
+     "sincronización; sus otros dispositivos se la pedirán.")
+E("sync.join.start_over.action", en="Start over and sync", de="Neu beginnen und synchronisieren",
+  fr="Recommencer et synchroniser", es="Empezar de nuevo y sincronizar")
+E("sync.auto", en="Sync automatically", de="Automatisch synchronisieren", fr="Synchroniser automatiquement",
+  es="Sincronizar automáticamente")
+E("sync.auto.hint", en="At start, shortly after changes and every 10 minutes.",
+  de="Beim Start, kurz nach Änderungen und alle 10 Minuten.",
+  fr="Au démarrage, peu après les modifications et toutes les 10 minutes.",
+  es="Al iniciar, poco después de los cambios y cada 10 minutos.")
+E("sync.device_name", en="Name of this device", de="Name dieses Geräts", fr="Nom de cet appareil",
+  es="Nombre de este dispositivo")
+E("sync.devices.none", en="No other devices yet.", de="Noch keine weiteren Geräte.",
+  fr="Aucun autre appareil pour l’instant.", es="Aún no hay otros dispositivos.")
+E("sync.error.server", en="No Nextcloud found at %1.", de="Unter %1 wurde keine Nextcloud gefunden.",
+  fr="Aucun Nextcloud trouvé à l’adresse %1.", es="No se encontró ningún Nextcloud en %1.", c="%1 = server address")
+E("sync.error.login_timeout", en="The sign-in in the browser took too long. Please try again.",
+  de="Die Anmeldung im Browser hat zu lange gedauert. Bitte versuchen Sie es noch einmal.",
+  fr="La connexion dans le navigateur a pris trop de temps. Veuillez réessayer.",
+  es="El inicio de sesión en el navegador tardó demasiado. Inténtelo de nuevo.")
+E("sync.error.access_denied", en="Nextcloud denied access. Please disconnect and connect again.",
+  de="Die Nextcloud hat den Zugriff verweigert. Bitte trennen Sie die Verbindung und verbinden Sie sich neu.",
+  fr="Nextcloud a refusé l’accès. Veuillez vous déconnecter puis vous reconnecter.",
+  es="Nextcloud denegó el acceso. Desconéctese y vuelva a conectarse.")
+E("sync.error.replace", en="The data on this device could not be replaced.",
+  de="Die Daten auf diesem Gerät konnten nicht ersetzt werden.",
+  fr="Les données de cet appareil n’ont pas pu être remplacées.",
+  es="No se pudieron reemplazar los datos de este dispositivo.")
+E("sync.wrong_password", en="The sync password is wrong.", de="Das Sync-Passwort ist falsch.",
+  fr="Le mot de passe de synchronisation est incorrect.", es="La contraseña de sincronización es incorrecta.")
+E("sync.password_changed", en="The sync password was changed on another device. Please enter the new one.",
+  de="Das Sync-Passwort wurde auf einem anderen Gerät geändert. Bitte geben Sie das neue ein.",
+  fr="Le mot de passe de synchronisation a été modifié sur un autre appareil. Veuillez saisir le nouveau.",
+  es="La contraseña de sincronización se cambió en otro dispositivo. Introduzca la nueva.")
+E("sync.folder_missing", en="The Qupil folder in Nextcloud is gone. Choose a sync password to set it up again.",
+  de="Der Qupil-Ordner in der Nextcloud ist nicht mehr da. Legen Sie ein Sync-Passwort fest, um ihn neu "
+     "einzurichten.",
+  fr="Le dossier Qupil du Nextcloud a disparu. Choisissez un mot de passe pour le recréer.",
+  es="La carpeta Qupil del Nextcloud ya no existe. Elija una contraseña de sincronización para volver a crearla.")
+E("sync.paused_after_replace",
+  en="Sync is paused because the data on this device was replaced. Enter the sync password again.",
+  de="Die Synchronisation ist pausiert, weil die Daten auf diesem Gerät ersetzt wurden. Geben Sie das "
+     "Sync-Passwort erneut ein.",
+  fr="La synchronisation est en pause car les données de cet appareil ont été remplacées. Saisissez à nouveau le "
+     "mot de passe de synchronisation.",
+  es="La sincronización está en pausa porque se reemplazaron los datos de este dispositivo. Vuelva a introducir "
+     "la contraseña de sincronización.")
+E("sync.waiting_for_data", en="This device is still empty and gets its data with the first sync.",
+  de="Dieses Gerät ist noch leer und erhält seine Daten bei der ersten Synchronisation.",
+  fr="Cet appareil est encore vide et recevra ses données lors de la première synchronisation.",
+  es="Este dispositivo aún está vacío y recibirá sus datos en la primera sincronización.")
+E("setup.sync.title", en="Data from another device", de="Daten von einem anderen Gerät",
+  fr="Données d’un autre appareil", es="Datos de otro dispositivo")
+E("setup.sync.text",
+  en="Qupil already runs on another device? Connect this one to the same Nextcloud or pair it over Wi-Fi.",
+  de="Qupil läuft schon auf einem anderen Gerät? Verbinden Sie dieses Gerät mit derselben Nextcloud oder koppeln "
+     "Sie es per WLAN.",
+  fr="Qupil fonctionne déjà sur un autre appareil ? Connectez celui-ci au même Nextcloud ou associez-le en Wi-Fi.",
+  es="¿Qupil ya funciona en otro dispositivo? Conecte este al mismo Nextcloud o vincúlelo por Wi-Fi.")
+E("setup.sync.action", en="Connect this device", de="Dieses Gerät verbinden", fr="Connecter cet appareil",
+  es="Conectar este dispositivo")
 
 # ---------------------------------------------------------------- settings
 E("settings.title", old="Settings - Qupil", en="Settings", fr="Paramètres", es="Ajustes",

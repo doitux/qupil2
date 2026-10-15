@@ -124,7 +124,18 @@ void ScreenshotTour::addDetails(const QString &prefix)
                       },
                       {} }
             << snap(prefix + u"-9-lesson-editor"_s) << close
-            << Step { [this] { m_window->setProperty("currentPage", 0); }, {} };
+            << Step { [this] {
+                          if (m_nav)
+                              QMetaObject::invokeMethod(m_nav, "showSync");
+                      },
+                      {} }
+            << snap(prefix + u"-10-sync"_s)
+            << Step { [this] {
+                          for (QObject *o : m_window->findChildren<QObject *>(u"morePage"_s))
+                              QMetaObject::invokeMethod(o, "home");
+                          m_window->setProperty("currentPage", 0);
+                      },
+                      {} };
 }
 
 void ScreenshotTour::pickExamples()

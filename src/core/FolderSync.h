@@ -28,6 +28,8 @@ public:
     //! nullopt on error or if the file does not exist (see lastErrorWasNotFound)
     virtual std::optional<QByteArray> read(const QString &path) = 0;
     virtual bool write(const QString &path, const QByteArray &data) = 0;
+    //! Renames a file or folder (the target must not exist)
+    virtual bool move(const QString &from, const QString &to) = 0;
     virtual QString lastError() const = 0;
     virtual bool lastErrorWasNotFound() const = 0;
 };
@@ -71,7 +73,17 @@ public:
         the password. Returns the key to keep on this device (empty on failure).
     */
     QByteArray unlock(const QString &password, Status *status);
-    //! Uploads this device's new changes and applies those of the others
+    /*!
+        Starts over with this device's data: the existing folder is kept under
+        a new name (Qupil-2026-10-15-1420) and a new one is set up for this
+        password. Other devices then need the (new) password again.
+    */
+    QByteArray startOver(const QString &password, Status *status);
+    /*!
+        Uploads this device's new changes and applies those of the others.
+        NoPassword if the folder was removed or started over, WrongPassword if
+        the key does not fit any more (password changed on another device).
+    */
     Status run(const QByteArray &key, const QString &deviceName, Stats *stats);
 
     QString error() const { return m_error; }
@@ -82,6 +94,8 @@ public:
 private:
     bool fail(const QString &message);
     QString path(const QString &relative) const;
+    //! Does the key still belong to key.json?
+    Status checkKey(const QByteArray &key);
 
     Store *m_store;
     RemoteFolder *m_remote;

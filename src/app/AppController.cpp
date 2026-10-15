@@ -86,6 +86,17 @@ void consolidate(const QString &file)
     QSqlDatabase::removeDatabase(name);
 }
 
+// A virus scanner may hold a freshly written file for a moment (Windows)
+bool renameWithRetry(const QString &from, const QString &to)
+{
+    for (int attempt = 0; attempt < 20; ++attempt) {
+        if (QFile::rename(from, to))
+            return true;
+        QThread::msleep(100);
+    }
+    return false;
+}
+
 void removeDatabaseFiles(const QString &path)
 {
     for (const char *suffix : { "", "-wal", "-shm", "-journal" })
@@ -245,6 +256,7 @@ QVariantMap AppController::info() const
     m.insert(u"restoredAt"_s, m_db->meta(u"restored_at"_s));
     m.insert(u"lastAutoBackup"_s, m_db->meta(u"last_auto_backup"_s));
     m.insert(u"demo"_s, m_db->meta(u"demo"_s) == u"1"_s);
+    m.insert(u"awaitingSync"_s, m_db->meta(u"awaiting_sync"_s) == u"1"_s);
     static const std::pair<const char *, const char *> counted[] = {
         { "students", "student" }, { "lessons", "lesson" }, { "events", "event" },
         { "pieces", "piece" }, { "notes", "note" },
@@ -412,6 +424,11 @@ AppController::Outcome AppController::runTakeOver(AppController *self, const QSt
 
 void AppController::finishTakeOver(const Outcome &o)
 {
+    if (o.ok && m_syncRunning) {
+        // Swap the files only when the sync no longer writes to them
+        m_afterSync = [this, o] { finishTakeOver(o); };
+        return;
+    }
     if (!o.ok) {
         m_demoPending = false;
         setBusy(false);
@@ -431,7 +448,7 @@ void AppController::finishTakeOver(const Outcome &o)
     }
     removeDatabaseFiles(live);
     QString error;
-    if (!QFile::rename(o.newDatabase, live) || !openDatabase(&error)) {
+    if (!renameWithRetry(o.newDatabase, live) || !openDatabase(&error)) {
         setBusy(false);
         emit takeOverFailed(error.isEmpty() ? qtTrId("setup.error.failed").arg(live) : error);
         return;
@@ -479,6 +496,16 @@ void AppController::loadDemo()
 
 bool AppController::startFresh()
 {
+    return startEmpty(false);
+}
+
+bool AppController::startForSync()
+{
+    return startEmpty(true);
+}
+
+bool AppController::startEmpty(bool awaitingSync)
+{
     const QString live = databasePath();
     if (!m_db->isOpen() && QFileInfo(live).size() > 0) {
         // Unreadable data: keep it as a backup, never delete it
@@ -490,6 +517,8 @@ bool AppController::startFresh()
         emit takeOverFailed(qtTrId("setup.error.failed").arg(error));
         return false;
     }
+    if (awaitingSync && m_db->isEmpty())
+        m_db->setMeta(u"awaiting_sync"_s, u"1"_s);
     m_startupError.clear();
     m_lastTakeOver.clear();
     emit lastTakeOverChanged();
@@ -514,6 +543,55 @@ void AppController::dismissTakeOver()
         return;
     m_lastTakeOver.clear();
     emit lastTakeOverChanged();
+}
+
+// ---------------------------------------------------------------------------- sync
+
+void AppController::setSyncRunning(bool running)
+{
+    m_syncRunning = running;
+    if (!running && m_afterSync) {
+        const auto pending = std::move(m_afterSync);
+        m_afterSync = nullptr;
+        pending();
+    }
+}
+
+bool AppController::replaceWithEmpty()
+{
+    if (m_busy || m_syncRunning)
+        return false;
+    if (m_db->isOpen() && !m_db->isEmpty())
+        safetyBackup(u"before-sync"_s);
+    m_db->close();
+    const QString live = databasePath();
+    removeDatabaseFiles(live);
+    QString error;
+    if (!openDatabase(&error)) {
+        emit takeOverFailed(error);
+        return false;
+    }
+    m_db->setMeta(u"awaiting_sync"_s, u"1"_s);
+    m_lastTakeOver.clear();
+    emit lastTakeOverChanged();
+    setPhase(Ready);
+    emit dataReplaced();
+    m_store->notifyReset();
+    emit infoChanged();
+    return true;
+}
+
+bool AppController::awaitingSync() const
+{
+    return m_db->isOpen() && m_db->meta(u"awaiting_sync"_s) == u"1"_s;
+}
+
+void AppController::syncArrived()
+{
+    if (!awaitingSync())
+        return;
+    m_db->setMeta(u"awaiting_sync"_s, QString());
+    emit infoChanged();
 }
 
 // ---------------------------------------------------------------------------- backups

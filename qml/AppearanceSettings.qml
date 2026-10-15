@@ -72,7 +72,7 @@ ColumnLayout {
 
     Label {
         Layout.topMargin: 8
-        text: qsTrId("settings.language")
+        text: qsTrId("settings.language").replace(/\s*:\s*$/, "")   // 1.4.1 wording ends with a colon
         color: Theme.text
         font.family: Theme.fontFamily
         font.pixelSize: 15
