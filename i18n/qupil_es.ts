@@ -3338,6 +3338,30 @@ Póngase en contacto con el autor en %4 para resolver el problema.</translation>
         <extracomment>%1 = version</extracomment>
         <translation>Versión %1</translation>
     </message>
+    <message id="about.website">
+        <source>Website</source>
+        <translation>Sitio web</translation>
+    </message>
+    <message id="about.author">
+        <source>Author</source>
+        <translation>Autor</translation>
+    </message>
+    <message id="about.source">
+        <source>Source code</source>
+        <translation>Código fuente</translation>
+    </message>
+    <message id="about.license.show">
+        <source>License text</source>
+        <translation>Texto de la licencia</translation>
+    </message>
+    <message id="about.license.summary">
+        <source>Qupil is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License, version 3 or (at your option) any later version. An additional permission allows distribution through app stores as long as the complete source code stays freely available. Qupil comes without any warranty.</source>
+        <translation>Qupil es software libre: puede redistribuirlo y/o modificarlo según los términos de la GNU General Public License, versión 3 o (a su elección) cualquier versión posterior. Un permiso adicional permite distribuirlo a través de tiendas de aplicaciones, siempre que el código fuente completo siga disponible libremente. Qupil se ofrece sin ninguna garantía.</translation>
+    </message>
+    <message id="about.components">
+        <source>Qupil uses Qt (GNU LGPL 3.0), the Figtree font (SIL Open Font License 1.1) and Monocypher (CC0 / BSD 2-Clause).</source>
+        <translation>Qupil utiliza Qt (GNU LGPL 3.0), la fuente Figtree (SIL Open Font License 1.1) y Monocypher (CC0 / BSD 2-Clause).</translation>
+    </message>
     <message id="about.features">
         <source>- Student and lesson management
 - Event manager

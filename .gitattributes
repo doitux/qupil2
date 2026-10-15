@@ -6,3 +6,5 @@
 *.icns binary
 *.ttf binary
 *.xlsx binary
+*.wav binary
+*.ogg binary

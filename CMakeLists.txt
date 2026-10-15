@@ -232,7 +232,9 @@ set(QUPIL_QML_FILES
     qml/pages/LibraryPage.qml
     qml/pages/InstrumentsPage.qml
     qml/pages/EnsembleCandidatesPage.qml
+    qml/pages/AboutPage.qml
     qml/pages/ArchivePage.qml
+    qml/pages/LicensePage.qml
     qml/pages/ArchiveEntryPage.qml
     qml/pages/PlaceholderPage.qml)
 
@@ -257,6 +259,10 @@ qt_add_qml_module(qupil
         assets/fonts/Figtree-ExtraBold.ttf
         assets/icons/qupil.png
         assets/sounds/lesson-end.wav
+        LICENSE
+        LICENSES/LicenseRef-Qupil-AppStore-exception.txt
+        LICENSES/OFL-1.1.txt
+        3rdparty/monocypher/LICENCE.md
     SOURCES
         src/core/LanguageManager.h
         src/core/LanguageManager.cpp

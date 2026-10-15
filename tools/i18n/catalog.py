@@ -1838,6 +1838,35 @@ E("about.tab.project", old="Project", en="Project", fr="Projet", es="Proyecto")
 E("about.tab.translation", old="Translation", en="Translation", fr="Traduction", es="Traducción")
 E("about.tab.license", old="License", en="License", fr="Licence", es="Licencia")
 E("about.version", en="Version %1", de="Version %1", fr="Version %1", es="Versión %1", c="%1 = version")
+E("about.website", en="Website", de="Website", fr="Site web", es="Sitio web")
+E("about.author", en="Author", de="Autor", fr="Auteur", es="Autor")
+E("about.source", en="Source code", de="Quellcode", fr="Code source", es="Código fuente")
+E("about.license.show", en="License text", de="Lizenztext", fr="Texte de la licence", es="Texto de la licencia")
+E("about.license.summary",
+  en="Qupil is free software: you can redistribute it and/or modify it under the terms of the GNU General Public "
+     "License, version 3 or (at your option) any later version. An additional permission allows distribution "
+     "through app stores as long as the complete source code stays freely available. Qupil comes without any "
+     "warranty.",
+  de="Qupil ist freie Software: Sie können es unter den Bedingungen der GNU General Public License, Version 3 oder "
+     "(nach Ihrer Wahl) jeder späteren Version, weitergeben und verändern. Eine zusätzliche Erlaubnis gestattet die "
+     "Verbreitung über App-Stores, solange der vollständige Quellcode frei verfügbar bleibt. Qupil wird ohne jede "
+     "Gewährleistung bereitgestellt.",
+  fr="Qupil est un logiciel libre : vous pouvez le redistribuer et/ou le modifier selon les termes de la GNU "
+     "General Public License, version 3 ou (à votre choix) toute version ultérieure. Une autorisation "
+     "supplémentaire permet la distribution via les magasins d’applications, à condition que le code source "
+     "complet reste librement disponible. Qupil est fourni sans aucune garantie.",
+  es="Qupil es software libre: puede redistribuirlo y/o modificarlo según los términos de la GNU General Public "
+     "License, versión 3 o (a su elección) cualquier versión posterior. Un permiso adicional permite distribuirlo "
+     "a través de tiendas de aplicaciones, siempre que el código fuente completo siga disponible libremente. "
+     "Qupil se ofrece sin ninguna garantía.")
+E("about.components",
+  en="Qupil uses Qt (GNU LGPL 3.0), the Figtree font (SIL Open Font License 1.1) and Monocypher (CC0 / BSD 2-Clause).",
+  de="Qupil verwendet Qt (GNU LGPL 3.0), die Schrift Figtree (SIL Open Font License 1.1) und Monocypher "
+     "(CC0 / BSD 2-Clause).",
+  fr="Qupil utilise Qt (GNU LGPL 3.0), la police Figtree (SIL Open Font License 1.1) et Monocypher "
+     "(CC0 / BSD 2-Clause).",
+  es="Qupil utiliza Qt (GNU LGPL 3.0), la fuente Figtree (SIL Open Font License 1.1) y Monocypher "
+     "(CC0 / BSD 2-Clause).")
 E("about.features", old="__HTML_FEATURES__",
   de="- Verwaltung von Unterrichts- und Schülerdaten\n- Veranstaltungsmanager\n- Metronom, Stimmgerät\n- Notenbibliothek",
   en="- Student and lesson management\n- Event manager\n- Metronome, tuner\n- Sheet music library",

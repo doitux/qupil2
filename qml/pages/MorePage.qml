@@ -39,6 +39,8 @@ StackView {
         case "ensemble": openPage(ensemblePage); break
         case "archive": openPage(studentArchivePage); break
         case "settings": openPage(settingsPage); break
+        case "about": openPage(aboutPage); break
+        case "license": openPage(aboutPage); stack.push(licensePage); break
         case "archiveEntry": {
             const first = Data.studentArchive()[0]
             if (first)
@@ -367,7 +369,7 @@ StackView {
                     iconName: "info"
                     text: qsTrId("about.title")
                     value: App.versionText
-                    chevron: false
+                    onClicked: stack.push(aboutPage)
                 }
             }
         }
@@ -377,6 +379,8 @@ StackView {
     Component { id: birthdaysPage; BirthdaysPage { onBack: stack.pop() } }
     Component { id: candidatesPage; CandidatesPage { onBack: stack.pop() } }
     Component { id: settingsPage; SettingsPage { onBack: stack.pop() } }
+    Component { id: aboutPage; AboutPage { onBack: stack.pop(); onShowLicense: stack.push(licensePage) } }
+    Component { id: licensePage; LicensePage { onBack: stack.pop() } }
     Component { id: syncPage; SyncPage { onBack: stack.pop() } }
     Component { id: libraryPage; LibraryPage { onBack: stack.pop() } }
     Component { id: instrumentsPage; InstrumentsPage { onBack: stack.pop() } }

@@ -6,11 +6,13 @@
 #include <QCoreApplication>
 #include <QGuiApplication>
 #include <QDateTime>
+#include <QDate>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
 #include <QJSEngine>
 #include <QQmlEngine>
+#include <QRegularExpression>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QStandardPaths>
@@ -262,6 +264,43 @@ void AppController::copyText(const QString &text) const
 {
     if (QClipboard *clipboard = QGuiApplication::clipboard())
         clipboard->setText(text);
+}
+
+QString AppController::licenseText() const
+{
+    // The texts come with line breaks for 80 columns: paragraphs flow on the screen
+    const auto read = [](const QString &file) {
+        QFile f(u":/qt/qml/Qupil/"_s + file);
+        if (!f.open(QIODevice::ReadOnly))
+            return QString();
+        static const QRegularExpression blankLine(u"\\n\\s*\\n"_s);
+        static const QRegularExpression underline(u"^[-=]{3,}$"_s);
+        QStringList paragraphs;
+        for (const QString &block : QString::fromUtf8(f.readAll()).split(blankLine)) {
+            QStringList lines;
+            for (const QString &line : block.split(u'\n')) {
+                const QString trimmed = line.trimmed();
+                if (!trimmed.isEmpty() && !underline.match(trimmed).hasMatch())
+                    lines << trimmed;
+            }
+            if (!lines.isEmpty())
+                paragraphs << lines.join(u' ');
+        }
+        return paragraphs.join(u"\n\n"_s);
+    };
+    const QString rule(20, u'─');
+    return u"Qupil %1\n© 2006–%2 Felix Hammer · https://qupil.de\n"
+           u"GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception\n\n"_s
+               .arg(versionText())
+               .arg(QDate::currentDate().year())
+        + read(u"LICENSES/LicenseRef-Qupil-AppStore-exception.txt"_s) + u"\n\n"_s + rule + u"\n\n"_s
+        + read(u"LICENSE"_s) + u"\n\n"_s + rule
+        + u"\n\nFigtree font: © The Figtree Project Authors\n\n"_s + read(u"LICENSES/OFL-1.1.txt"_s)
+        + u"\n\n"_s + rule + u"\n\nMonocypher: © 2017–2020 Loup Vaillant\n\n"_s
+        + read(u"3rdparty/monocypher/LICENCE.md"_s) + u"\n\n"_s + rule
+        + u"\n\nQt: © The Qt Company Ltd. and other contributors, used under the GNU Lesser General "
+          u"Public License version 3 (https://www.gnu.org/licenses/lgpl-3.0.html). "
+          u"Source code: https://code.qt.io\n"_s;
 }
 
 QVariantMap AppController::info() const

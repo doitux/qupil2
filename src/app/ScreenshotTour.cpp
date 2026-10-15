@@ -166,6 +166,8 @@ void ScreenshotTour::addDetails(const QString &prefix)
             << more("archive") << snap(prefix + u"-15-archive"_s)
             << more("archiveEntry") << snap(prefix + u"-16-archive-entry"_s)
             << more("settings") << snap(prefix + u"-17-settings"_s)
+            << more("about") << snap(prefix + u"-18-about"_s)
+            << more("license") << snap(prefix + u"-19-license"_s)
             << Step { [this] {
                           for (QObject *o : m_window->findChildren<QObject *>(u"morePage"_s))
                               QMetaObject::invokeMethod(o, "home");

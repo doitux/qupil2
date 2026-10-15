@@ -83,6 +83,8 @@ public:
     QString build() const;
     //! Puts text on the clipboard (e.g. the version for a bug report)
     Q_INVOKABLE void copyText(const QString &text) const;
+    //! Qupil's license (GPL 3 with the app store permission) and those of the bundled parts
+    Q_INVOKABLE QString licenseText() const;
     bool saveDialogAvailable() const;
     QUrl backupFolder() const;
 
