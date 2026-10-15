@@ -55,6 +55,7 @@ Item {
         RowLayout {
             spacing: 0
             ScheduleOverview {
+                id: overviewColumn
                 Layout.preferredWidth: Math.min(380, page.width * 0.4)
                 Layout.fillHeight: true
                 columnMode: true
@@ -78,7 +79,20 @@ Item {
             Loader {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                sourceComponent: page.lessonId ? wideLesson : page.studentId ? wideStudent : wideEmpty
+                // Nothing picked: the lesson that is running now
+                sourceComponent: page.lessonId ? wideLesson : page.studentId ? wideStudent
+                                 : overviewColumn.running ? wideRunning : wideEmpty
+            }
+            Component {
+                id: wideRunning
+                LessonDetail {
+                    showBack: false
+                    lessonId: overviewColumn.running ? overviewColumn.running.id : ""
+                    onStudentClicked: (studentId, membershipId) => {
+                        page.studentId = studentId
+                        page.membershipId = membershipId
+                    }
+                }
             }
             Component {
                 id: wideStudent
