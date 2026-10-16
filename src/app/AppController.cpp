@@ -174,7 +174,15 @@ QString AppController::databasePath() const
 bool AppController::openDatabase(QString *error)
 {
     const QString path = databasePath();
-    if (m_db->open(path, error)) {
+    // An older layout is updated when opened: keep a copy of it first
+    const QString backup = QDir(m_dataDir).filePath(u"backups/before-update-%1.db"_s.arg(timestamp()));
+    QDir().mkpath(QFileInfo(backup).absolutePath());
+    m_db->setMigrationBackup(backup);
+    const bool opened = m_db->open(path, error);
+    m_db->setMigrationBackup({});
+    if (QFileInfo::exists(backup))
+        rotate(u"before-update-"_s, kKeepSafetyBackups);
+    if (opened) {
         upgradeNotes();
         return true;
     }
@@ -206,7 +214,7 @@ int AppController::upgradeNotes()
         return *it;
     };
     QList<QPair<QString, QString>> notes;   // id, content
-    QList<std::tuple<QString, qint64, QString>> log;   // origin, seq, value
+    QList<std::tuple<int, qint64, QString>> log;   // origin, seq, data
     {
         QSqlQuery q(db);
         q.exec(u"SELECT id, content FROM note WHERE content LIKE '%<%'"_s);
@@ -215,12 +223,14 @@ int AppController::upgradeNotes()
             if (NoteFormat::isHtml(content))
                 notes.append({ q.value(0).toString(), convert(content) });
         }
-        q.exec(u"SELECT origin, seq, value FROM change_log WHERE entity = 'note' AND field = 'content' AND value LIKE '%<%'"_s);
+        q.exec(u"SELECT origin, seq, data FROM change_log WHERE entity = 'note' AND data LIKE '%<%'"_s);
         while (q.next()) {
-            const QVariant value = Qupil::Store::decodeValue(q.value(2).toString());
-            if (value.typeId() == QMetaType::QString && NoteFormat::isHtml(value.toString()))
-                log.append({ q.value(0).toString(), q.value(1).toLongLong(),
-                             Qupil::Store::encodeValue(convert(value.toString())) });
+            QVariantMap fields = Qupil::Store::decodeFields(q.value(2).toString());
+            const QVariant content = fields.value(u"content"_s);
+            if (content.typeId() == QMetaType::QString && NoteFormat::isHtml(content.toString())) {
+                fields.insert(u"content"_s, convert(content.toString()));
+                log.append({ q.value(0).toInt(), q.value(1).toLongLong(), Qupil::Store::encodeFields(fields) });
+            }
         }
     }
     if (notes.isEmpty() && log.isEmpty())
@@ -237,7 +247,7 @@ int AppController::upgradeNotes()
         ok = ok && note.exec();
     }
     QSqlQuery entry(db);
-    entry.prepare(u"UPDATE change_log SET value = ? WHERE origin = ? AND seq = ?"_s);
+    entry.prepare(u"UPDATE change_log SET data = ? WHERE origin = ? AND seq = ?"_s);
     for (const auto &[origin, seq, value] : std::as_const(log)) {
         entry.addBindValue(value);
         entry.addBindValue(origin);

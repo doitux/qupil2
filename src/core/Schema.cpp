@@ -159,15 +159,23 @@ QStringList createStatements()
     // Local key/value data of this database (device id, clock, schema version, …)
     sql << QStringLiteral("CREATE TABLE meta (key TEXT PRIMARY KEY NOT NULL, value TEXT)");
 
-    // Newest timestamp per field: decides which change wins
+    // Which change wins: the time and device of the newest value. Field '' is the
+    // whole record (when it was created); a field has its own row only when it was
+    // changed after that. Devices are numbered locally (table origin).
     sql << QStringLiteral("CREATE TABLE field_clock (entity TEXT NOT NULL, row_id TEXT NOT NULL, field TEXT NOT NULL, "
-                          "hlc TEXT NOT NULL, PRIMARY KEY (entity, row_id, field)) WITHOUT ROWID");
+                          "time INTEGER NOT NULL, origin INTEGER NOT NULL, "
+                          "PRIMARY KEY (entity, row_id, field)) WITHOUT ROWID");
 
-    // Every accepted change, local or received. (origin, seq) identifies it on all devices.
-    sql << QStringLiteral("CREATE TABLE change_log (origin TEXT NOT NULL, seq INTEGER NOT NULL, hlc TEXT NOT NULL, "
-                          "entity TEXT NOT NULL, row_id TEXT NOT NULL, field TEXT NOT NULL, value TEXT, "
+    // Every accepted change, local or received: one row per record and write, data
+    // holds the new values ({"field": value, …}). (device id, seq) identifies a
+    // change on all devices; a row can stand for several older changes in a row
+    // (seq is the last of them).
+    sql << QStringLiteral("CREATE TABLE change_log (origin INTEGER NOT NULL, seq INTEGER NOT NULL, time INTEGER NOT NULL, "
+                          "entity TEXT NOT NULL, row_id TEXT NOT NULL, data TEXT NOT NULL, "
                           "PRIMARY KEY (origin, seq)) WITHOUT ROWID");
-    sql << QStringLiteral("CREATE INDEX idx_change_log_hlc ON change_log (hlc)");
+
+    // Local numbers for device ids, so the tables above stay small
+    sql << QStringLiteral("CREATE TABLE origin (num INTEGER PRIMARY KEY, id TEXT NOT NULL UNIQUE)");
 
     // Known devices and sync partners
     sql << QStringLiteral("CREATE TABLE device (id TEXT PRIMARY KEY NOT NULL, name TEXT NOT NULL DEFAULT '', "

@@ -6,33 +6,42 @@
 #include <QList>
 #include <QObject>
 #include <QSet>
+#include <QStringList>
 #include <QVariantMap>
 
 namespace Qupil {
 
 class Database;
+struct EntityDef;
 
-//! One field change, as stored in the change log and exchanged between devices
+//! One write of a record (a new record or changed fields), as stored in the
+//! change log and exchanged between devices
 struct Change
 {
-    QString origin;     // device that made the change
-    qint64 seq = 0;     // per-origin sequence number
-    QString hlc;        // hybrid-clock timestamp
+    QString origin;       // device that made the change
+    qint64 seq = 0;       // per-origin sequence number
+    qint64 time = 0;      // hybrid clock (HybridClock)
     QString entity;
     QString rowId;
-    QString field;
-    QVariant value;
+    QVariantMap fields;   // the new values
 
-    bool operator==(const Change &o) const { return origin == o.origin && seq == o.seq; }
+    //! Order of all changes, the same on every device: later time first, the device id decides a tie
+    bool isNewerThan(qint64 otherTime, const QString &otherOrigin) const
+    {
+        return time != otherTime ? time > otherTime : origin > otherOrigin;
+    }
 };
 
 //! Highest sequence number known per origin device
 using VersionVector = QHash<QString, qint64>;
 
 /*!
-    All writes to synchronised data. Each changed field is written to the table,
-    to the change log and to the field clock in one transaction, so any device
-    can later merge the change field by field ("newest timestamp wins").
+    All writes to synchronised data. A write goes to the table, to the change
+    log and to the clock in one transaction, so any device can later merge it
+    field by field ("newest time wins").
+
+    The clock of a record is kept once for the whole record (when it was
+    created) and once more only for each field changed after that.
 */
 class Store : public QObject
 {
@@ -68,6 +77,10 @@ public:
     //! Merges changes from another device; returns how many changed local data
     int applyRemote(const QList<Change> &changes);
 
+    //! Field values as stored in the change log ({"field": value, …})
+    static QString encodeFields(const QVariantMap &fields);
+    static QVariantMap decodeFields(const QString &json);
+    //! One value as "[value]" (sync format 1)
     static QString encodeValue(const QVariant &value);
     static QVariant decodeValue(const QString &json);
 
@@ -81,10 +94,21 @@ signals:
     void dataChanged(const QStringList &entities);
 
 private:
-    bool writeField(const QString &entity, const QString &id, const QString &field,
-                    const QVariant &value, const QString &hlc);
-    bool ensureRow(const QString &entity, const QString &id);
-    bool logChange(const Change &c);
+    //! When a value was written and by which device (local number)
+    struct Clock
+    {
+        qint64 time = 0;
+        int origin = 0;
+        bool isNull() const { return origin == 0; }
+    };
+    bool isNewer(const Clock &a, const Clock &b) const;
+    //! Clocks of a record: field '' is the record's own
+    QHash<QString, Clock> clocks(const QString &entity, const QString &id) const;
+    bool setClocks(const EntityDef *def, const QString &id, const QStringList &written, bool complete,
+                   const QHash<QString, Clock> &before, const Clock &clock);
+    bool writeFields(const EntityDef *def, const QString &id, const QVariantMap &fields);
+    bool writeLocal(const EntityDef *def, const QString &id, const QVariantMap &fields);
+    bool logChange(int origin, const Change &c);
     void touched(const QString &entity);
     void flushNotifications();
     bool fail(const QString &message);

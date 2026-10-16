@@ -13,6 +13,7 @@
 
 #include "Crypto.h"
 #include "Database.h"
+#include "Ids.h"
 
 using namespace Qt::StringLiterals;
 
@@ -22,33 +23,59 @@ namespace Qupil {
 
 namespace SyncFormat {
 
+/*
+    Version 2: {"v":2,"changes":[[device, seq, ms, counter, entity, id, {field: value, …}], …]}
+    Version 1 (until October 2026): one field per change,
+    [device, seq, "<ms>.<counter>.<device>", entity, id, field, "[value]"]
+*/
 QByteArray encode(const QList<Change> &changes)
 {
     QJsonArray list;
     for (const Change &c : changes) {
-        list.append(QJsonArray { c.origin, double(c.seq), c.hlc, c.entity, c.rowId, c.field,
-                                 Store::encodeValue(c.value) });
+        list.append(QJsonArray { c.origin, double(c.seq), double(c.time >> 16), double(c.time & 0xFFFF), c.entity,
+                                 c.rowId, QJsonObject::fromVariantMap(c.fields) });
     }
-    const QJsonObject root { { u"v"_s, 1 }, { u"changes"_s, list } };
+    const QJsonObject root { { u"v"_s, Version }, { u"changes"_s, list } };
     return qCompress(QJsonDocument(root).toJson(QJsonDocument::Compact), 6);
 }
 
-std::optional<QList<Change>> decode(const QByteArray &data)
+std::optional<QList<Change>> decode(const QByteArray &data, int *version)
 {
     const QByteArray json = qUncompress(data);
     if (json.isEmpty())
         return std::nullopt;
     QJsonParseError error;
     const QJsonDocument doc = QJsonDocument::fromJson(json, &error);
-    if (error.error != QJsonParseError::NoError || !doc.isObject() || doc.object().value(u"v"_s).toInt() != 1)
+    if (error.error != QJsonParseError::NoError || !doc.isObject())
+        return std::nullopt;
+    const int v = doc.object().value(u"v"_s).toInt();
+    if (version)
+        *version = v;
+    if (v != 1 && v != Version)
         return std::nullopt;
     QList<Change> out;
-    for (const QJsonValue &v : doc.object().value(u"changes"_s).toArray()) {
-        const QJsonArray a = v.toArray();
+    for (const QJsonValue &item : doc.object().value(u"changes"_s).toArray()) {
+        const QJsonArray a = item.toArray();
         if (a.size() != 7)
             return std::nullopt;
-        out.append({ a.at(0).toString(), qint64(a.at(1).toDouble()), a.at(2).toString(), a.at(3).toString(),
-                     a.at(4).toString(), a.at(5).toString(), Store::decodeValue(a.at(6).toString()) });
+        Change c;
+        c.origin = a.at(0).toString();
+        c.seq = qint64(a.at(1).toDouble());
+        if (v == 1) {
+            if (!HybridClock::parse(a.at(2).toString(), &c.time))
+                return std::nullopt;
+            c.entity = a.at(3).toString();
+            c.rowId = a.at(4).toString();
+            c.fields.insert(a.at(5).toString(), Store::decodeValue(a.at(6).toString()));
+        } else {
+            if (!a.at(6).isObject())
+                return std::nullopt;
+            c.time = HybridClock::make(qint64(a.at(2).toDouble()), a.at(3).toInt());
+            c.entity = a.at(4).toString();
+            c.rowId = a.at(5).toString();
+            c.fields = a.at(6).toObject().toVariantMap();
+        }
+        out.append(c);
     }
     return out;
 }
@@ -238,6 +265,7 @@ FolderSync::Status FolderSync::run(const QByteArray &key, const QString &deviceN
 
     // 1. Download what is new for us (before uploading, so relayed changes are complete)
     const VersionVector known = m_store->versionVector();
+    bool oldFormat = false;
     for (auto it = remote.cbegin(); it != remote.cend(); ++it) {
         const qint64 have = known.value(it.key(), 0);
         for (const Batch &b : it.value()) {
@@ -250,19 +278,26 @@ FolderSync::Status FolderSync::run(const QByteArray &key, const QString &deviceN
             const auto plain = Crypto::open(key, *sealed, (it.key() + u'/' + b.name).toUtf8());
             if (!plain)
                 return fail(u"Could not decrypt %1"_s.arg(file)), Status::WrongPassword;
-            const auto changes = SyncFormat::decode(*plain);
-            if (!changes)
+            int version = 0;
+            const auto changes = SyncFormat::decode(*plain, &version);
+            if (!changes) {
+                if (version > SyncFormat::Version)
+                    return fail(u"%1 comes from a newer version of Qupil"_s.arg(file)), Status::Outdated;
                 return fail(u"Unreadable sync file %1"_s.arg(file)), Status::Failed;
+            }
+            oldFormat = oldFormat || version < SyncFormat::Version;
             const int applied = m_store->applyRemote(*changes);
             if (applied < 0)
                 return fail(m_store->lastError()), Status::Failed;
             s.downloaded += int(changes->size());
             s.applied += applied;
             for (const Change &c : *changes)
-                if (c.hlc > s.maxHlc)
-                    s.maxHlc = c.hlc;
+                s.maxTime = std::max(s.maxTime, c.time);
         }
     }
+    // Files of older versions bring one change per field: compact them like an updated database
+    if (oldFormat && !db->compactChangeLog(&m_error))
+        return Status::Failed;
 
     // 2. Upload every change the folder does not have yet – ours and those we got
     //    from other devices by Wi-Fi, so devices that only use the folder get them too

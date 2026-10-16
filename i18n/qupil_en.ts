@@ -2655,6 +2655,10 @@ Please contact the author at %4 to fix this problem.</translation>
         <source>Nextcloud denied access. Please disconnect and connect again.</source>
         <translation>Nextcloud denied access. Please disconnect and connect again.</translation>
     </message>
+    <message id="sync.error.newer_version">
+        <source>Another device synchronises with a newer version of Qupil. Please update Qupil on this device too.</source>
+        <translation>Another device synchronises with a newer version of Qupil. Please update Qupil on this device too.</translation>
+    </message>
     <message id="sync.error.replace">
         <source>The data on this device could not be replaced.</source>
         <translation>The data on this device could not be replaced.</translation>
@@ -2766,6 +2770,10 @@ Please contact the author at %4 to fix this problem.</translation>
         <source>No longer knows this device – please pair again</source>
         <translation>No longer knows this device – please pair again</translation>
     </message>
+    <message id="wifi.problem.version">
+        <source>Different Qupil version – please update both devices</source>
+        <translation>Different Qupil version – please update both devices</translation>
+    </message>
     <message id="wifi.forget">
         <source>Unpair</source>
         <translation>Unpair</translation>
@@ -2826,6 +2834,10 @@ Please contact the author at %4 to fix this problem.</translation>
         <source>Could not reach the other device (%1).</source>
         <extracomment>%1 = technical reason</extracomment>
         <translation>Could not reach the other device (%1).</translation>
+    </message>
+    <message id="wifi.error.version">
+        <source>The other device has a different version of Qupil. Please install the latest version on both devices.</source>
+        <translation>The other device has a different version of Qupil. Please install the latest version on both devices.</translation>
     </message>
     <message id="library.empty">
         <source>No sheet music in the library yet.</source>

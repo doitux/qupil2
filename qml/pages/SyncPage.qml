@@ -419,7 +419,8 @@ SubPage {
                 name: modelData.name
                 syncing: modelData.syncing
                 warn: modelData.problem !== "" || modelData.paused
-                status: modelData.problem !== "" ? qsTrId("wifi.problem.unknown")
+                status: modelData.problem === "version" ? qsTrId("wifi.problem.version")
+                      : modelData.problem !== "" ? qsTrId("wifi.problem.unknown")
                       : modelData.paused ? qsTrId("wifi.paused")
                       : (modelData.online ? qsTrId("wifi.online") : qsTrId("wifi.offline"))
                         + (modelData.lastSync ? " · " + Labels.syncWhen(modelData.lastSync, page.now) : "")

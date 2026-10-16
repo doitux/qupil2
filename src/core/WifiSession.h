@@ -46,7 +46,8 @@ public:
 */
 namespace WifiSync {
 
-constexpr int ProtocolVersion = 1;
+//! 2: sync format 2 (one change per record and write)
+constexpr int ProtocolVersion = 2;
 
 //! This installation (not the database: that one gets a new id on restore)
 struct Identity
@@ -73,6 +74,7 @@ enum class Status {
     UnknownDevice,    //!< sync: the other device does not know us (not paired or removed)
     Refused,          //!< sync: the other device paused the sync with us
     AuthFailed,       //!< sync: keys do not match (paired again elsewhere?)
+    Outdated,         //!< the other device speaks another protocol version
     Failed            //!< connection or data problem
 };
 
@@ -81,7 +83,7 @@ struct Stats
     int sent = 0;        //!< changes sent
     int received = 0;    //!< changes received
     int applied = 0;     //!< of those, newer than what we had
-    QString maxHlc;      //!< latest received timestamp (for our clock)
+    qint64 maxTime = 0;  //!< latest received time (for our clock)
 };
 
 //! Client: pairs with the device that shows code. On success, *peer is that device.

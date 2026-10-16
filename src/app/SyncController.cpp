@@ -472,8 +472,7 @@ void SyncController::syncNow()
             saveSettings();
             if (r.stats.applied > 0) {
                 // Our clock must not fall behind what other devices wrote
-                if (!r.stats.maxHlc.isEmpty())
-                    m_app->database()->clock().observe(r.stats.maxHlc);
+                m_app->database()->clock().observe(r.stats.maxTime);
                 m_applyingRemote = true;   // no new sync because of these changes
                 m_app->store()->notifyReset();
                 m_applyingRemote = false;
@@ -491,6 +490,8 @@ void SyncController::syncNow()
             m_folderExists = false;
             emit folderExistsChanged();
             forgetKey(qtTrId("sync.folder_missing"));
+        } else if (r.status == FolderSync::Status::Outdated) {
+            setError(qtTrId("sync.error.newer_version"));
         } else {
             setError(r.http == 401 ? qtTrId("sync.error.access_denied") : r.error);
         }

@@ -12,38 +12,36 @@ namespace Qupil {
 QString newId();
 
 /*!
-    Hybrid logical clock. A timestamp is "<13-digit ms>.<4-hex counter>.<device id>"
-    and compares correctly as a plain string, which keeps "last writer wins"
-    decisions identical on every device, even with slightly wrong device clocks.
+    Hybrid logical clock. A time is one 64-bit number: milliseconds since 1970
+    times 65536 plus a counter for changes within the same millisecond. Together
+    with the id of the device that made a change it orders all changes the same
+    way on every device ("last writer wins"), even with slightly wrong device
+    clocks: a device never issues a time earlier than one it has already seen.
 */
 class HybridClock
 {
 public:
-    explicit HybridClock(QString deviceId = {});
-
-    void setDeviceId(const QString &deviceId) { m_device = deviceId; }
-    QString deviceId() const { return m_device; }
-
-    //! Timestamp for a local change
-    QString now();
-    //! Merge a timestamp received from another device (keeps the clock ahead of it)
-    void observe(const QString &remoteTimestamp);
+    //! Time of a local change
+    qint64 now();
+    //! Merge a time received from another device (keeps the clock ahead of it)
+    void observe(qint64 time);
 
     //! Restore/persist the clock state (last physical ms and counter)
     void restore(qint64 lastMs, int counter);
-    qint64 lastMs() const { return m_lastMs; }
-    int counter() const { return m_counter; }
+    qint64 lastMs() const { return m_last >> 16; }
+    int counter() const { return int(m_last & 0xFFFF); }
+    qint64 last() const { return m_last; }
 
-    static QString format(qint64 ms, int counter, const QString &device);
-    static bool parse(const QString &ts, qint64 *ms, int *counter, QString *device = nullptr);
+    static qint64 make(qint64 ms, int counter) { return (ms << 16) + (counter & 0xFFFF); }
+    //! "<13-digit ms>.<4-hex counter>.<device id>": the text form of sync format 1
+    static QString format(qint64 time, const QString &device);
+    static bool parse(const QString &text, qint64 *time, QString *device = nullptr);
 
     //! For tests: replace the wall clock
     void setWallClock(qint64 (*fn)()) { m_wall = fn; }
 
 private:
-    QString m_device;
-    qint64 m_lastMs = 0;
-    int m_counter = 0;
+    qint64 m_last = 0;
     qint64 (*m_wall)() = nullptr;
 };
 

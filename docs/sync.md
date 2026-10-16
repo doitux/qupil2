@@ -10,17 +10,34 @@ what the laptop received from Nextcloud, and the other way round.
 
 ## Data model
 
-Every change to synchronised data is a row in `change_log`:
-`(origin, seq, hlc, entity, row_id, field, value)`.
+Every write to synchronised data (a new record, or changed fields of one) is a
+row in `change_log`: `(origin, seq, time, entity, row_id, data)`, with the new
+values in `data` as JSON (`{"surname": "Muster", "phone": "0123"}`). A new record
+is one row with all its fields.
 
-* `origin` is the device id of the database (new after restoring a backup),
-  `seq` counts the changes of that origin without gaps.
-* `hlc` is a hybrid logical clock (`<ms>-<counter>-<device>`): ordered like time,
-  but never behind a change the device has already seen.
-* Merging is per field: the change with the larger `hlc` wins (last writer wins).
-  Different fields of the same student changed on two devices both survive.
+* `origin` is the device id of the database (new after restoring a backup), kept
+  as a small local number (table `origin`). `seq` counts the writes of that
+  origin; a row stands for every number up to its own.
+* `time` is a hybrid logical clock: milliseconds × 65536 + a counter. It is
+  ordered like time, but never behind a change the device has already seen.
+* Merging is per field: the newer write wins (larger `time`, the larger device id
+  on a tie). Different fields of the same student changed on two devices both
+  survive.
+* `field_clock` remembers which write each value came from: once per record
+  (field `''`, normally its creation) and once more only for fields changed
+  later. That keeps the bookkeeping small: a record created once and never
+  changed needs one log row and one clock row.
 * A version vector (`origin → highest seq`) says what a device has; the other side
   sends everything above it. Applying the same changes twice changes nothing.
+
+Databases of earlier builds (schema 2: one log row and one text clock per field)
+are converted once when opened, after a copy in `backups/before-update-*.db`.
+Every write keeps its device and number, so devices that were in sync stay in
+sync; the fields of a record written within two seconds become one row. Sync
+files and Wi-Fi messages use format 2; files of format 1 in the Nextcloud folder
+are still read (and compacted the same way). Devices with the old version can no
+longer sync with updated ones: Wi-Fi shows "different Qupil version", Nextcloud
+"newer version on another device".
 
 ## Nextcloud
 
@@ -99,6 +116,7 @@ Automatic sync: when a paired device appears, 15 seconds after a change, every
 | Wi-Fi: discovery, server, scheduling | `src/app/WifiController.*`, `src/app/*Discovery.*`, `src/app/SocketChannel.h` |
 | User interface | `qml/pages/SyncPage.qml`, `qml/editors/PairingSheet.qml`, More page card |
 
-The unit tests (`tests/tst_core.cpp`) cover merging, relaying, the folder sync
-(in memory), pairing and sync over an in-memory connection, and the mDNS
-messages.
+The unit tests (`tests/tst_core.cpp`) cover merging, relaying, changes arriving
+before the record they belong to, the update of schema-2 databases and old sync
+files, the folder sync (in memory), pairing and sync over an in-memory
+connection, and the mDNS messages.

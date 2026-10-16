@@ -2,6 +2,10 @@
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 
 #include <QDate>
+#include <QFileInfo>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QSignalSpy>
 #include <QSqlQuery>
 #include <QMap>
@@ -174,29 +178,36 @@ private slots:
     void hybridClock()
     {
         static qint64 wall = 1000;
-        HybridClock c(u"dev-a"_s);
+        HybridClock c;
         c.setWallClock([] { return wall; });
-        const QString t1 = c.now();
-        const QString t2 = c.now();          // same ms: counter goes up
+        const qint64 t1 = c.now();
+        const qint64 t2 = c.now();          // same ms: counter goes up
         QVERIFY(t1 < t2);
-        c.observe(HybridClock::format(5000, 3, u"dev-b"_s));   // other device is ahead
-        const QString t3 = c.now();
-        QVERIFY(t3 > HybridClock::format(5000, 3, u"dev-b"_s));
+        QCOMPARE(t1 >> 16, 1000);
+        c.observe(HybridClock::make(5000, 3));   // other device is ahead
+        const qint64 t3 = c.now();
+        QVERIFY(t3 > HybridClock::make(5000, 3));
         wall = 9000;
         QVERIFY(c.now() > t3);
-        qint64 ms = 0;
-        int counter = 0;
+        QCOMPARE(c.lastMs(), 9000);
+
+        // Text form of sync format 1
+        const QString text = HybridClock::format(HybridClock::make(1'800'000'000'123, 0x2a), u"dev-a"_s);
+        QCOMPARE(text, u"1800000000123.002a.dev-a"_s);
+        qint64 time = 0;
         QString device;
-        QVERIFY(HybridClock::parse(t3, &ms, &counter, &device));
+        QVERIFY(HybridClock::parse(text, &time, &device));
+        QCOMPARE(time, HybridClock::make(1'800'000'000'123, 0x2a));
         QCOMPARE(device, u"dev-a"_s);
+        QVERIFY(!HybridClock::parse(u"no clock"_s, &time));
 
         // A remote change from the very same millisecond as our wall clock: what we
-        // write next must still be later, whatever the device ids
+        // write next must still be later
         static qint64 still = 20000;
-        HybridClock early(u"0-first-in-sort-order"_s);
+        HybridClock early;
         early.setWallClock([] { return still; });
-        early.observe(HybridClock::format(20000, 2, u"z-device"_s));
-        QVERIFY(early.now() > HybridClock::format(20000, 2, u"z-device"_s));
+        early.observe(HybridClock::make(20000, 2));
+        QVERIFY(early.now() > HybridClock::make(20000, 2));
     }
 
     void storeWritesAndLogs()
@@ -216,11 +227,28 @@ private slots:
         QCOMPARE(store.get(u"student"_s, id).value(u"recital_interval"_s).toInt(), 5);   // default
         QVERIFY(!db.isEmpty());
 
-        QVERIFY(store.update(u"student"_s, id, { { u"forename"_s, u"Lea"_s }, { u"surname"_s, u"Muster"_s } }));
+        // A new record is one change with all fields, and one clock for the record
         QSqlQuery q(db.connection());
-        q.exec(u"SELECT COUNT(*) FROM change_log WHERE row_id = '%1' AND field = 'surname'"_s.arg(id));
-        q.next();
-        QCOMPARE(q.value(0).toInt(), 1);     // unchanged surname not logged again
+        const auto count = [&q, &id](const QString &table) {
+            q.exec(u"SELECT COUNT(*) FROM %1 WHERE row_id = '%2'"_s.arg(table, id));
+            return q.next() ? q.value(0).toInt() : -1;
+        };
+        QCOMPARE(count(u"change_log"_s), 1);
+        QCOMPARE(count(u"field_clock"_s), 1);
+        const QList<Change> created = store.changesOf(db.deviceId(), 0);
+        QCOMPARE(created.size(), 1);
+        QCOMPARE(created.first().fields.value(u"recital_interval"_s).toInt(), 5);
+        QCOMPARE(created.first().fields.value(u"deleted"_s).toInt(), 0);
+        QCOMPARE(created.first().fields.size(), Schema::entity(u"student"_s)->fields.size() + 1);
+
+        QVERIFY(store.update(u"student"_s, id, { { u"forename"_s, u"Lea"_s }, { u"surname"_s, u"Muster"_s } }));
+        QCOMPARE(count(u"change_log"_s), 2);
+        QCOMPARE(count(u"field_clock"_s), 2);   // the record and the forename
+        const QList<Change> updated = store.changesOf(db.deviceId(), created.first().seq);
+        QCOMPARE(updated.size(), 1);
+        QCOMPARE(updated.first().fields, (QVariantMap { { u"forename"_s, u"Lea"_s } }));   // unchanged surname not logged
+        QVERIFY(store.update(u"student"_s, id, { { u"forename"_s, u"Lea"_s } }));   // nothing changed: nothing logged
+        QCOMPARE(count(u"change_log"_s), 2);
 
         QTest::ignoreMessage(QtWarningMsg, "Store: unknown field student.no_such_field");
         QVERIFY(!store.update(u"student"_s, id, { { u"no_such_field"_s, 1 } }));
@@ -279,6 +307,58 @@ private slots:
         sc.remove(u"lesson"_s, id);
         sa.applyRemote(sc.changesSince(sa.versionVector()));
         QCOMPARE(sa.get(u"lesson"_s, id).value(u"deleted"_s).toInt(), 1);
+    }
+
+    void updateArrivesBeforeCreate()
+    {
+        // C hears of B's change before it gets A's new record (e.g. B by Wi-Fi, A only later)
+        Database a, b, c;
+        QVERIFY(a.open(file(u"o-a.db"_s)) && b.open(file(u"o-b.db"_s)) && c.open(file(u"o-c.db"_s)));
+        for (Database *d : { &a, &b, &c })
+            d->clock().setWallClock(&TestCore::fakeWall);
+        Store sa(&a), sb(&b), sc(&c);
+        const QString id = sa.create(u"student"_s, { { u"surname"_s, u"Muster"_s }, { u"forename"_s, u"Lena"_s } });
+        sb.applyRemote(sa.changesSince(sb.versionVector()));
+        QVERIFY(sb.update(u"student"_s, id, { { u"phone"_s, u"0123"_s } }));
+
+        QCOMPARE(sc.applyRemote(sb.changesOf(b.deviceId(), 0)), 1);
+        QCOMPARE(sc.applyRemote(sa.changesOf(a.deviceId(), 0)), 1);
+        QVariantMap r = sc.get(u"student"_s, id);
+        QCOMPARE(r.value(u"surname"_s).toString(), u"Muster"_s);
+        QCOMPARE(r.value(u"forename"_s).toString(), u"Lena"_s);
+        QCOMPARE(r.value(u"phone"_s).toString(), u"0123"_s);
+        QSqlQuery q(c.connection());
+        QVERIFY(q.exec(u"SELECT field FROM field_clock WHERE row_id = '%1' ORDER BY field"_s.arg(id)));
+        QStringList fields;
+        while (q.next())
+            fields << q.value(0).toString();
+        QCOMPARE(fields, (QStringList { QString(), u"phone"_s }));   // the record and the phone
+
+        // Later changes still decide by time
+        QVERIFY(sa.update(u"student"_s, id, { { u"phone"_s, u"0456"_s } }));
+        QCOMPARE(sc.applyRemote(sa.changesOf(a.deviceId(), 0)), 1);
+        QCOMPARE(sc.get(u"student"_s, id).value(u"phone"_s).toString(), u"0456"_s);
+        QCOMPARE(sb.applyRemote(sc.changesSince(sb.versionVector())), 1);
+        QCOMPARE(sb.get(u"student"_s, id), sc.get(u"student"_s, id));
+    }
+
+    void sameTimeDeviceDecides()
+    {
+        // Two devices write the same field at exactly the same time: the larger device id wins everywhere
+        Database a, b;
+        QVERIFY(a.open(file(u"t-a.db"_s)) && b.open(file(u"t-b.db"_s)));
+        Store sa(&a), sb(&b);
+        const QString id = sa.create(u"event"_s, { { u"title"_s, u"Vorspiel"_s } });
+        sb.applyRemote(sa.changesSince({}));
+        const qint64 later = a.clock().now() + 1000;
+        const Change low { u"00000000-0000-7000-8000-000000000001"_s, 1, later, u"event"_s, id, { { u"title"_s, u"Klein"_s } } };
+        const Change high { u"ffffffff-0000-7000-8000-000000000001"_s, 1, later, u"event"_s, id, { { u"title"_s, u"Groß"_s } } };
+        QCOMPARE(sa.applyRemote({ low }), 1);
+        QCOMPARE(sa.applyRemote({ high }), 1);
+        QCOMPARE(sb.applyRemote({ high }), 1);
+        QCOMPARE(sb.applyRemote({ low }), 0);
+        QCOMPARE(sa.get(u"event"_s, id).value(u"title"_s).toString(), u"Groß"_s);
+        QCOMPARE(sb.get(u"event"_s, id).value(u"title"_s).toString(), u"Groß"_s);
     }
 
     void reopenKeepsSequenceAndClock()
@@ -914,6 +994,205 @@ private slots:
         QVERIFY(q.exec(u"SELECT number, title FROM library_item WHERE id = 'x'"_s) && q.next());
         QCOMPARE(q.value(0).toInt(), 0);
         QCOMPARE(q.value(1).toString(), u"Suiten"_s);
+    }
+
+    void migratesSyncLog()
+    {
+        // A database as schema 2 wrote it: one log row and one clock per field, the clock as text
+        const QString path = file(u"v2-sync.db"_s);
+        const QString me = u"0190a0b0-0000-7000-8000-00000000000a"_s;
+        const QString other = u"0190a0b0-0000-7000-8000-00000000000b"_s;
+        const QString id = u"0190a0b0-1111-7000-8000-000000000001"_s;
+        const qint64 ms = 1'800'000'000'000;
+        const EntityDef *def = Schema::entity(u"student"_s);
+        const qint64 createdSeq = def->fields.size() + 1;
+        {
+            Database db;
+            QVERIFY(db.open(path));
+            QSqlQuery q(db.connection());
+            for (const char *sql : {
+                     "DROP TABLE change_log", "DROP TABLE field_clock", "DROP TABLE origin",
+                     "CREATE TABLE field_clock (entity TEXT NOT NULL, row_id TEXT NOT NULL, field TEXT NOT NULL, "
+                     "hlc TEXT NOT NULL, PRIMARY KEY (entity, row_id, field)) WITHOUT ROWID",
+                     "CREATE TABLE change_log (origin TEXT NOT NULL, seq INTEGER NOT NULL, hlc TEXT NOT NULL, "
+                     "entity TEXT NOT NULL, row_id TEXT NOT NULL, field TEXT NOT NULL, value TEXT, "
+                     "PRIMARY KEY (origin, seq)) WITHOUT ROWID",
+                     "CREATE INDEX idx_change_log_hlc ON change_log (hlc)" })
+                QVERIFY2(q.exec(QString::fromLatin1(sql)), sql);
+            QVERIFY(db.setMeta(u"device_id"_s, me));
+            QVERIFY(db.setMeta(u"schema_version"_s, u"2"_s));
+            QVERIFY(q.exec(u"INSERT INTO student (id) VALUES ('%1')"_s.arg(id)));
+            int counter = 0;
+            const auto write = [&](const QString &origin, qint64 seq, qint64 at, const QString &field, const QVariant &value) {
+                const QString hlc = HybridClock::format(HybridClock::make(at, counter++), origin);
+                q.prepare(u"INSERT INTO change_log VALUES (?, ?, ?, 'student', ?, ?, ?)"_s);
+                for (const QVariant &v : { QVariant(origin), QVariant(seq), QVariant(hlc), QVariant(id), QVariant(field),
+                                           QVariant(Store::encodeValue(value)) })
+                    q.addBindValue(v);
+                QVERIFY(q.exec());
+                q.prepare(u"INSERT INTO field_clock VALUES ('student', ?, ?, ?) "
+                          u"ON CONFLICT(entity, row_id, field) DO UPDATE SET hlc = excluded.hlc"_s);
+                for (const QVariant &v : { QVariant(id), QVariant(field), QVariant(hlc) })
+                    q.addBindValue(v);
+                QVERIFY(q.exec());
+                q.prepare(u"UPDATE student SET %1 = ? WHERE id = ?"_s.arg(field));
+                q.addBindValue(value);
+                q.addBindValue(id);
+                QVERIFY(q.exec());
+            };
+            // The old Store: a new record wrote every field with its own time, "deleted" last …
+            qint64 seq = 0;
+            for (const FieldDef &f : def->fields)
+                write(me, ++seq, ms, f.name, f.type == u"INTEGER"_s ? QVariant(3) : QVariant(u"alt-"_s + f.name));
+            write(me, ++seq, ms + 1, u"deleted"_s, 0);
+            // … and changes later on: one here, one on another device
+            write(me, ++seq, ms + 60'000, u"forename"_s, u"Lena"_s);
+            write(other, 1, ms + 120'000, u"phone"_s, u"0123"_s);
+        }
+
+        Database db;
+        db.setMigrationBackup(file(u"v2-sync-backup.db"_s));
+        QString error;
+        QVERIFY2(db.open(path, &error), qPrintable(error));
+        QCOMPARE(db.meta(u"schema_version"_s).toInt(), Schema::Version);
+        QCOMPARE(Database::schemaVersionOf(file(u"v2-sync-backup.db"_s)), 2);   // the copy from before
+        QCOMPARE(db.deviceId(), me);
+        QCOMPARE(db.localOrigin(), 1);
+        Store store(&db);
+
+        // Same data, same change identities (device and last sequence number)
+        const QVariantMap r = store.get(u"student"_s, id);
+        QCOMPARE(r.value(u"surname"_s).toString(), u"alt-surname"_s);
+        QCOMPARE(r.value(u"forename"_s).toString(), u"Lena"_s);
+        QCOMPARE(r.value(u"phone"_s).toString(), u"0123"_s);
+        QCOMPARE(r.value(u"recital_interval"_s).toInt(), 3);
+        const VersionVector vv = store.versionVector();
+        QCOMPARE(vv.value(me), createdSeq + 1);
+        QCOMPARE(vv.value(other), 1);
+
+        // The new record is one log row now, the clock one for the record plus the fields changed later
+        const QList<Change> mine = store.changesOf(me, 0);
+        QCOMPARE(mine.size(), 2);
+        QCOMPARE(mine.at(0).seq, createdSeq);
+        QCOMPARE(mine.at(0).fields.size(), def->fields.size() + 1);
+        QCOMPARE(mine.at(0).fields.value(u"forename"_s).toString(), u"alt-forename"_s);
+        QCOMPARE(mine.at(1).fields, (QVariantMap { { u"forename"_s, u"Lena"_s } }));
+        QSqlQuery q(db.connection());
+        QVERIFY(q.exec(u"SELECT field FROM field_clock WHERE row_id = '%1' ORDER BY field"_s.arg(id)));
+        QStringList clocks;
+        while (q.next())
+            clocks << q.value(0).toString();
+        QCOMPARE(clocks, (QStringList { QString(), u"forename"_s, u"phone"_s }));
+        QVERIFY(q.exec(u"SELECT COUNT(*) FROM sqlite_master WHERE name = 'idx_change_log_hlc'"_s) && q.next());
+        QCOMPARE(q.value(0).toInt(), 0);
+
+        // Decisions stay the same: older than the phone change loses, newer than the record wins
+        const QString third = u"0190a0b0-0000-7000-8000-00000000000c"_s;
+        QCOMPARE(store.applyRemote({ { third, 1, HybridClock::make(ms + 90'000, 0), u"student"_s, id,
+                                       { { u"phone"_s, u"alt"_s }, { u"email"_s, u"neu@example.org"_s } } } }),
+                 1);
+        QCOMPARE(store.get(u"student"_s, id).value(u"phone"_s).toString(), u"0123"_s);
+        QCOMPARE(store.get(u"student"_s, id).value(u"email"_s).toString(), u"neu@example.org"_s);
+
+        // A new device gets everything from the updated log
+        Database fresh;
+        QVERIFY(fresh.open(file(u"v2-fresh.db"_s)));
+        Store sf(&fresh);
+        QVERIFY(sf.applyRemote(store.changesSince({})) > 0);
+        QCOMPARE(sf.get(u"student"_s, id), store.get(u"student"_s, id));
+        QCOMPARE(sf.versionVector(), store.versionVector());
+
+        // New changes continue after the last number
+        QVERIFY(!store.create(u"event"_s, { { u"title"_s, u"Neu"_s } }).isEmpty());
+        QCOMPARE(store.versionVector().value(me), createdSeq + 2);
+    }
+
+    void syncFormats()
+    {
+        const Change c { u"dev-a"_s, 42, HybridClock::make(1'800'000'000'123, 7), u"note"_s, u"n1"_s,
+                         { { u"content"_s, u"**Tonleiter** G-Dur"_s }, { u"deleted"_s, 0 }, { u"pieces"_s, QVariant() } } };
+        int version = 0;
+        const auto back = SyncFormat::decode(SyncFormat::encode({ c }), &version);
+        QVERIFY(back);
+        QCOMPARE(version, 2);
+        QCOMPARE(back->size(), 1);
+        const Change &d = back->first();
+        QCOMPARE(d.origin, c.origin);
+        QCOMPARE(d.seq, c.seq);
+        QCOMPARE(d.time, c.time);
+        QCOMPARE(d.entity, c.entity);
+        QCOMPARE(d.rowId, c.rowId);
+        QCOMPARE(d.fields.value(u"content"_s).toString(), u"**Tonleiter** G-Dur"_s);
+        QCOMPARE(d.fields.value(u"deleted"_s).toInt(), 0);
+        QVERIFY(d.fields.contains(u"pieces"_s) && d.fields.value(u"pieces"_s).isNull());
+
+        // Files of older builds: one field per change, the clock as text
+        const QJsonArray old { u"dev-a"_s, 7.0, u"1800000000123.0007.dev-a"_s, u"note"_s, u"n1"_s, u"content"_s,
+                               u"[\"alt\"]"_s };
+        const auto fromV1 = SyncFormat::decode(
+            qCompress(QJsonDocument(QJsonObject { { u"v"_s, 1 }, { u"changes"_s, QJsonArray { old } } }).toJson(), 6),
+            &version);
+        QVERIFY(fromV1);
+        QCOMPARE(version, 1);
+        QCOMPARE(fromV1->first().time, c.time);
+        QCOMPARE(fromV1->first().seq, 7);
+        QCOMPARE(fromV1->first().fields, (QVariantMap { { u"content"_s, u"alt"_s } }));
+
+        // A newer format is refused, and recognised as newer
+        QVERIFY(!SyncFormat::decode(qCompress(QByteArray("{\"v\":3,\"changes\":[]}"), 6), &version));
+        QCOMPARE(version, 3);
+    }
+
+    void readsOldSyncFiles()
+    {
+        // The sync folder still holds files of a build before sync format 2
+        MemoryFolder cloud;
+        Database a;
+        QVERIFY(a.open(file(u"old-files.db"_s)));
+        Store sa(&a);
+        FolderSync fa(&sa, &cloud);
+        FolderSync::Status status;
+        const QByteArray key = fa.unlock(u"Geige 3/4"_s, &status);
+        QCOMPARE(status, FolderSync::Status::Ok);
+
+        const QString origin = u"0190a0b0-0000-7000-8000-0000000000dd"_s;
+        const QString id = u"0190a0b0-2222-7000-8000-000000000001"_s;
+        QJsonArray changes;
+        qint64 seq = 0;
+        const auto add = [&](const QString &field, const QVariant &value) {
+            ++seq;
+            changes.append(QJsonArray { origin, double(seq),
+                                        HybridClock::format(HybridClock::make(1'800'000'000'000, int(seq)), origin),
+                                        u"event"_s, id, field, Store::encodeValue(value) });
+        };
+        for (const FieldDef &f : Schema::entity(u"event"_s)->fields)
+            add(f.name, f.name == u"title"_s ? QVariant(u"Vorspiel"_s)
+                                             : (f.type == u"INTEGER"_s ? QVariant(0) : QVariant(QString())));
+        add(u"deleted"_s, 0);
+        const QByteArray plain =
+            qCompress(QJsonDocument(QJsonObject { { u"v"_s, 1 }, { u"changes"_s, changes } }).toJson(QJsonDocument::Compact), 6);
+        const QString name = u"%1-%2.bin"_s.arg(1, 12, 10, QLatin1Char('0')).arg(seq, 12, 10, QLatin1Char('0'));
+        cloud.folders.insert(u"Qupil/changes"_s);
+        cloud.folders.insert(u"Qupil/changes/"_s + origin);
+        cloud.files.insert(u"Qupil/changes/"_s + origin + u'/' + name,
+                           Crypto::seal(key, plain, (origin + u'/' + name).toUtf8()));
+
+        FolderSync::Stats stats;
+        QCOMPARE(fa.run(key, u"Laptop"_s, &stats), FolderSync::Status::Ok);
+        QCOMPARE(sa.get(u"event"_s, id).value(u"title"_s).toString(), u"Vorspiel"_s);
+        QCOMPARE(stats.maxTime, HybridClock::make(1'800'000'000'000, int(seq)));
+        // Compacted like an updated database: one log row, one clock
+        const QList<Change> logged = sa.changesOf(origin, 0);
+        QCOMPARE(logged.size(), 1);
+        QCOMPARE(logged.first().seq, seq);
+        QCOMPARE(sa.versionVector().value(origin), seq);
+        QSqlQuery q(a.connection());
+        QVERIFY(q.exec(u"SELECT COUNT(*) FROM field_clock WHERE row_id = '%1'"_s.arg(id)) && q.next());
+        QCOMPARE(q.value(0).toInt(), 1);
+        // Nothing of it is uploaded again
+        const int files = int(cloud.files.size());
+        QCOMPARE(fa.run(key, u"Laptop"_s, &stats), FolderSync::Status::Ok);
+        QCOMPARE(int(cloud.files.size()), files);
     }
 
     void rejectsForeignFiles()

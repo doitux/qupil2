@@ -52,6 +52,7 @@ public:
         Ok,
         NoPassword,       //!< the folder is set up, the password is needed on this device
         WrongPassword,
+        Outdated,         //!< another device wrote with a newer version of Qupil
         Failed            //!< network or server problem, see error()
     };
 
@@ -60,7 +61,7 @@ public:
         int uploaded = 0;
         int downloaded = 0;
         int applied = 0;
-        QString maxHlc;
+        qint64 maxTime = 0;   //!< latest received time (for our clock)
         QStringList devices;   //!< names of the other devices
     };
 
@@ -105,8 +106,11 @@ private:
 
 //! Changes as compact, compressed bytes (sync files and Wi-Fi messages)
 namespace SyncFormat {
+//! 2: one change per record and write (Qupil 2 builds since October 2026)
+constexpr int Version = 2;
 QByteArray encode(const QList<Change> &changes);
-std::optional<QList<Change>> decode(const QByteArray &data);
+//! Versions 1 and 2; version: the one found (also when it is not readable)
+std::optional<QList<Change>> decode(const QByteArray &data, int *version = nullptr);
 } // namespace SyncFormat
 
 } // namespace Qupil

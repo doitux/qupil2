@@ -7,6 +7,8 @@
 #include <QRandomGenerator>
 #include <QtEndian>
 
+#include <algorithm>
+
 #include "Crypto.h"
 #include "FolderSync.h"
 
@@ -62,6 +64,8 @@ Status statusOf(const QString &error)
         return Status::UnknownDevice;
     if (error == u"paused"_s)
         return Status::Refused;
+    if (error == u"version"_s)
+        return Status::Outdated;
     return Status::Failed;
 }
 
@@ -218,8 +222,7 @@ bool receiveChanges(Secure &secure, Store *store, Stats *stats, QString *error)
         stats->received += int(changes->size());
         stats->applied += applied;
         for (const Change &c : *changes)
-            if (c.hlc > stats->maxHlc)
-                stats->maxHlc = c.hlc;
+            stats->maxTime = std::max(stats->maxTime, c.time);
     }
 }
 
@@ -365,8 +368,12 @@ ServeResult serve(FrameChannel *channel, Store *store, const Identity &me, const
         r.error = QString::fromLatin1(why);
         return r;
     };
-    if (hello->value(u"v"_s).toInt() != ProtocolVersion)
-        return refuse("version", Status::Failed);
+    if (hello->value(u"v"_s).toInt() != ProtocolVersion) {
+        // Tell the user which paired device needs an update
+        r.kind = kind == u"sync"_s ? ServeResult::Synced : ServeResult::None;
+        r.peer.id = clientId;
+        return refuse("version", Status::Outdated);
+    }
 
     if (kind == u"pair"_s) {
         r.kind = ServeResult::Paired;

@@ -31,77 +31,52 @@ QString newId()
     return s;
 }
 
-HybridClock::HybridClock(QString deviceId)
-    : m_device(std::move(deviceId))
-{
-}
-
 static qint64 systemMs()
 {
     return QDateTime::currentMSecsSinceEpoch();
 }
 
-QString HybridClock::now()
+qint64 HybridClock::now()
 {
-    const qint64 wall = m_wall ? m_wall() : systemMs();
-    if (wall > m_lastMs) {
-        m_lastMs = wall;
-        m_counter = 0;
-    } else {
-        ++m_counter;
-        if (m_counter > 0xFFFF) {   // extremely unlikely: borrow from the future
-            ++m_lastMs;
-            m_counter = 0;
-        }
-    }
-    return format(m_lastMs, m_counter, m_device);
+    // Never earlier than a time we have seen: within the same millisecond (or
+    // a coarse system timer like the 16 ms on Windows) the counter goes up, and
+    // after more than 65535 changes it borrows from the next millisecond
+    const qint64 wall = make(m_wall ? m_wall() : systemMs(), 0);
+    m_last = wall > m_last ? wall : m_last + 1;
+    return m_last;
 }
 
-void HybridClock::observe(const QString &remoteTimestamp)
+void HybridClock::observe(qint64 time)
 {
-    qint64 ms = 0;
-    int counter = 0;
-    if (!parse(remoteTimestamp, &ms, &counter))
-        return;
-    // Never fall behind a timestamp we have seen: now() then issues a later one,
-    // also when the remote time equals our wall clock (same millisecond, or a
-    // coarse system timer like the 16 ms on Windows)
-    if (ms > m_lastMs) {
-        m_lastMs = ms;
-        m_counter = counter;
-    } else if (ms == m_lastMs) {
-        m_counter = qMax(m_counter, counter);
-    }
+    if (time > m_last)
+        m_last = time;
 }
 
 void HybridClock::restore(qint64 lastMs, int counter)
 {
-    m_lastMs = lastMs;
-    m_counter = counter;
+    m_last = make(lastMs, counter);
 }
 
-QString HybridClock::format(qint64 ms, int counter, const QString &device)
+QString HybridClock::format(qint64 time, const QString &device)
 {
     return QStringLiteral("%1.%2.%3")
-        .arg(ms, 13, 10, QLatin1Char('0'))
-        .arg(counter, 4, 16, QLatin1Char('0'))
+        .arg(time >> 16, 13, 10, QLatin1Char('0'))
+        .arg(int(time & 0xFFFF), 4, 16, QLatin1Char('0'))
         .arg(device);
 }
 
-bool HybridClock::parse(const QString &ts, qint64 *ms, int *counter, QString *device)
+bool HybridClock::parse(const QString &text, qint64 *time, QString *device)
 {
-    const QStringList parts = ts.split(QLatin1Char('.'));
+    const QStringList parts = text.split(QLatin1Char('.'));
     if (parts.size() < 3)
         return false;
     bool ok1 = false, ok2 = false;
-    const qint64 m = parts.at(0).toLongLong(&ok1);
-    const int c = parts.at(1).toInt(&ok2, 16);
-    if (!ok1 || !ok2)
+    const qint64 ms = parts.at(0).toLongLong(&ok1);
+    const int counter = parts.at(1).toInt(&ok2, 16);
+    if (!ok1 || !ok2 || ms < 0 || counter < 0 || counter > 0xFFFF)
         return false;
-    if (ms)
-        *ms = m;
-    if (counter)
-        *counter = c;
+    if (time)
+        *time = make(ms, counter);
     if (device)
         *device = parts.mid(2).join(QLatin1Char('.'));
     return true;

@@ -311,7 +311,7 @@ QVariantList WifiController::nearby() const
     for (auto it = m_found.cbegin(); it != m_found.cend(); ++it) {
         if (!it->pairing)
             continue;
-        if (const PeerInfo *known = peer(it.key()); known && known->problem.isEmpty())
+        if (const PeerInfo *known = peer(it.key()); known && known->problem != u"unknown"_s)
             continue;   // paired already
         out << QVariantMap { { u"id"_s, it.key() }, { u"name"_s, it->name } };
     }
@@ -478,6 +478,9 @@ void WifiController::pairAt(const QString &host, quint16 port, const QString &co
         case Wifi::Status::NotPairing:
             emit message(qtTrId("wifi.error.not_pairing"));
             break;
+        case Wifi::Status::Outdated:
+            emit message(qtTrId("wifi.error.version"));
+            break;
         default:
             //: %1 = technical reason
             emit message(qtTrId("wifi.error.connect").arg(r.error));
@@ -611,6 +614,8 @@ void WifiController::syncWith(const QString &peerId)
                 p->problem.clear();
             } else if (r.status == Wifi::Status::UnknownDevice || r.status == Wifi::Status::AuthFailed) {
                 p->problem = u"unknown"_s;   // removed or paired again on the other device
+            } else if (r.status == Wifi::Status::Outdated) {
+                p->problem = u"version"_s;   // one of the two needs an update
             }
             saveSettings();
         }
@@ -689,6 +694,9 @@ void WifiController::accept(qintptr socketDescriptor)
                     if (!r.host.isEmpty() && p->host != r.host && !m_found.contains(p->peer.id))
                         p->host = r.host;
                     saveSettings();
+                } else if (s.status == Wifi::Status::Outdated) {
+                    p->problem = u"version"_s;
+                    saveSettings();
                 }
             }
             if (s.status == Wifi::Status::Ok)
@@ -702,8 +710,7 @@ void WifiController::accept(qintptr socketDescriptor)
 void WifiController::applied(const Wifi::Stats &stats)
 {
     if (stats.applied > 0) {
-        if (!stats.maxHlc.isEmpty())
-            m_app->database()->clock().observe(stats.maxHlc);
+        m_app->database()->clock().observe(stats.maxTime);
         m_app->store()->notifyReset();
     }
     if (m_app->awaitingSync() && stats.received > 0) {

@@ -2655,6 +2655,10 @@ Veuillez contacter l’auteur à l’adresse %4 pour résoudre ce problème.</tr
         <source>Nextcloud denied access. Please disconnect and connect again.</source>
         <translation>Nextcloud a refusé l’accès. Veuillez vous déconnecter puis vous reconnecter.</translation>
     </message>
+    <message id="sync.error.newer_version">
+        <source>Another device synchronises with a newer version of Qupil. Please update Qupil on this device too.</source>
+        <translation>Un autre appareil synchronise avec une version plus récente de Qupil. Veuillez aussi mettre à jour Qupil sur cet appareil.</translation>
+    </message>
     <message id="sync.error.replace">
         <source>The data on this device could not be replaced.</source>
         <translation>Les données de cet appareil n’ont pas pu être remplacées.</translation>
@@ -2766,6 +2770,10 @@ Veuillez contacter l’auteur à l’adresse %4 pour résoudre ce problème.</tr
         <source>No longer knows this device – please pair again</source>
         <translation>Ne reconnaît plus cet appareil – veuillez l’associer à nouveau</translation>
     </message>
+    <message id="wifi.problem.version">
+        <source>Different Qupil version – please update both devices</source>
+        <translation>Autre version de Qupil – veuillez mettre à jour les deux appareils</translation>
+    </message>
     <message id="wifi.forget">
         <source>Unpair</source>
         <translation>Dissocier</translation>
@@ -2826,6 +2834,10 @@ Veuillez contacter l’auteur à l’adresse %4 pour résoudre ce problème.</tr
         <source>Could not reach the other device (%1).</source>
         <extracomment>%1 = technical reason</extracomment>
         <translation>Impossible de joindre l’autre appareil (%1).</translation>
+    </message>
+    <message id="wifi.error.version">
+        <source>The other device has a different version of Qupil. Please install the latest version on both devices.</source>
+        <translation>L’autre appareil utilise une autre version de Qupil. Veuillez installer la dernière version sur les deux appareils.</translation>
     </message>
     <message id="library.empty">
         <source>No sheet music in the library yet.</source>

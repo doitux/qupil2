@@ -2655,6 +2655,10 @@ Póngase en contacto con el autor en %4 para resolver el problema.</translation>
         <source>Nextcloud denied access. Please disconnect and connect again.</source>
         <translation>Nextcloud denegó el acceso. Desconéctese y vuelva a conectarse.</translation>
     </message>
+    <message id="sync.error.newer_version">
+        <source>Another device synchronises with a newer version of Qupil. Please update Qupil on this device too.</source>
+        <translation>Otro dispositivo sincroniza con una versión más reciente de Qupil. Actualice Qupil también en este dispositivo.</translation>
+    </message>
     <message id="sync.error.replace">
         <source>The data on this device could not be replaced.</source>
         <translation>No se pudieron reemplazar los datos de este dispositivo.</translation>
@@ -2766,6 +2770,10 @@ Póngase en contacto con el autor en %4 para resolver el problema.</translation>
         <source>No longer knows this device – please pair again</source>
         <translation>Ya no reconoce este dispositivo: vuelva a vincularlo</translation>
     </message>
+    <message id="wifi.problem.version">
+        <source>Different Qupil version – please update both devices</source>
+        <translation>Otra versión de Qupil: actualice ambos dispositivos</translation>
+    </message>
     <message id="wifi.forget">
         <source>Unpair</source>
         <translation>Desvincular</translation>
@@ -2826,6 +2834,10 @@ Póngase en contacto con el autor en %4 para resolver el problema.</translation>
         <source>Could not reach the other device (%1).</source>
         <extracomment>%1 = technical reason</extracomment>
         <translation>No se pudo conectar con el otro dispositivo (%1).</translation>
+    </message>
+    <message id="wifi.error.version">
+        <source>The other device has a different version of Qupil. Please install the latest version on both devices.</source>
+        <translation>El otro dispositivo tiene otra versión de Qupil. Instale la versión más reciente en ambos dispositivos.</translation>
     </message>
     <message id="library.empty">
         <source>No sheet music in the library yet.</source>

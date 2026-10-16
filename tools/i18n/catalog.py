@@ -1469,6 +1469,10 @@ E("sync.error.access_denied", en="Nextcloud denied access. Please disconnect and
   de="Die Nextcloud hat den Zugriff verweigert. Bitte trennen Sie die Verbindung und verbinden Sie sich neu.",
   fr="Nextcloud a refusé l’accès. Veuillez vous déconnecter puis vous reconnecter.",
   es="Nextcloud denegó el acceso. Desconéctese y vuelva a conectarse.")
+E("sync.error.newer_version", en="Another device synchronises with a newer version of Qupil. Please update Qupil on this device too.",
+  de="Ein anderes Gerät synchronisiert mit einer neueren Qupil-Version. Bitte aktualisieren Sie Qupil auch auf diesem Gerät.",
+  fr="Un autre appareil synchronise avec une version plus récente de Qupil. Veuillez aussi mettre à jour Qupil sur cet appareil.",
+  es="Otro dispositivo sincroniza con una versión más reciente de Qupil. Actualice Qupil también en este dispositivo.")
 E("sync.error.replace", en="The data on this device could not be replaced.",
   de="Die Daten auf diesem Gerät konnten nicht ersetzt werden.",
   fr="Les données de cet appareil n’ont pas pu être remplacées.",
@@ -1545,6 +1549,10 @@ E("wifi.problem.unknown", en="No longer knows this device – please pair again"
   de="Kennt dieses Gerät nicht mehr – bitte neu koppeln",
   fr="Ne reconnaît plus cet appareil – veuillez l’associer à nouveau",
   es="Ya no reconoce este dispositivo: vuelva a vincularlo")
+E("wifi.problem.version", en="Different Qupil version – please update both devices",
+  de="Andere Qupil-Version – bitte beide Geräte aktualisieren",
+  fr="Autre version de Qupil – veuillez mettre à jour les deux appareils",
+  es="Otra versión de Qupil: actualice ambos dispositivos")
 E("wifi.forget", en="Unpair", de="Kopplung aufheben", fr="Dissocier", es="Desvincular")
 E("wifi.forget.confirm", en="Unpair %1? The data on both devices stays.",
   de="Kopplung mit %1 aufheben? Die Daten auf beiden Geräten bleiben erhalten.",
@@ -1586,6 +1594,10 @@ E("wifi.error.not_pairing", en="The other device no longer shows a code. Tap “
 E("wifi.error.connect", en="Could not reach the other device (%1).",
   de="Keine Verbindung zum anderen Gerät (%1).", fr="Impossible de joindre l’autre appareil (%1).",
   es="No se pudo conectar con el otro dispositivo (%1).", c="%1 = technical reason")
+E("wifi.error.version", en="The other device has a different version of Qupil. Please install the latest version on both devices.",
+  de="Auf dem anderen Gerät läuft eine andere Qupil-Version. Bitte installieren Sie auf beiden Geräten die neueste Version.",
+  fr="L’autre appareil utilise une autre version de Qupil. Veuillez installer la dernière version sur les deux appareils.",
+  es="El otro dispositivo tiene otra versión de Qupil. Instale la versión más reciente en ambos dispositivos.")
 # ---------------------------------------------------------------- library, instruments, archive, documents (new)
 E("library.empty", en="No sheet music in the library yet.", de="Noch keine Noten in der Bibliothek.",
   fr="Aucune partition dans la bibliothèque pour l’instant.", es="Aún no hay partituras en la biblioteca.")

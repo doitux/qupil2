@@ -17,8 +17,8 @@ struct FieldDef
 
 /*!
     A synchronised entity: one table, primary key "id" (UUIDv7 text), a "deleted"
-    tombstone flag and the listed fields. Every change to a field is logged with
-    a hybrid-clock timestamp so devices can merge field by field.
+    tombstone flag and the listed fields. Every write is logged with a
+    hybrid-clock time so devices can merge field by field.
 */
 struct EntityDef
 {
@@ -34,7 +34,8 @@ namespace Schema {
 
 //! Current version of the Qupil 2 database layout
 //! 2: library_item.number
-constexpr int Version = 2;
+//! 3: compact sync bookkeeping (device numbers, integer clock, one change per record and write)
+constexpr int Version = 3;
 
 const QList<EntityDef> &entities();
 const EntityDef *entity(const QString &name);
