@@ -936,6 +936,29 @@
         <source>Delete note</source>
         <translation>Supprimer la note</translation>
     </message>
+    <message id="note.copied_from">
+        <source>New note with the text of %1. To change or delete the old note, press and hold it.</source>
+        <extracomment>Note editor, after tapping an older note; %1 = date of that note</extracomment>
+        <translation>Nouvelle note avec le texte du %1. Pour modifier ou supprimer l’ancienne note, maintenez-la appuyée.</translation>
+    </message>
+    <message id="note.clear">
+        <source>Clear</source>
+        <extracomment>Empties the note editor</extracomment>
+        <translation>Vider</translation>
+    </message>
+    <message id="note.delete.confirm">
+        <source>The note of %1 will be deleted.</source>
+        <extracomment>%1 = date of the note</extracomment>
+        <translation>La note du %1 sera supprimée.</translation>
+    </message>
+    <message id="note.delete.for_all" numerus="yes">
+        <source>Delete for all %n students of the group</source>
+        <extracomment>Check box when deleting a note of a group lesson.</extracomment>
+        <translation>
+            <numerusform>Supprimer pour %n élève</numerusform>
+            <numerusform>Supprimer pour les %n élèves du groupe</numerusform>
+        </translation>
+    </message>
     <message id="note.new">
         <source>New note</source>
         <translation>Nouvelle note</translation>

@@ -137,6 +137,11 @@ void ScreenshotTour::addDetails(const QString &prefix)
     m_steps << Step { [this] { pickExamples(); }, {} };
     m_steps << Step { [this, nav] { nav("showStudent", m_student, m_membership).action(); }, {} }
             << snap(prefix + u"-5-student"_s)
+            << Step { [this] { revealNote(m_note); }, {} }
+            << snap(prefix + u"-5b-note-actions"_s)
+            << Step { [this] { revealNote(QString()); }, {} }
+            << Step { [this, nav] { nav("newNoteFrom", m_membership, m_note).action(); }, {} }
+            << snap(prefix + u"-5c-note-copy"_s) << close
             << Step { [this, nav] { nav("editNote", m_membership, u""_s).action(); }, {} }
             << snap(prefix + u"-6-note-editor"_s) << close
             << Step { [this, nav] { nav("editPiece", m_membership, m_piece).action(); }, {} }
@@ -203,6 +208,14 @@ void ScreenshotTour::writeDocuments()
         docs->writePdf(docs->studentArchiveHtml(m_student), u"student-archive"_s, false, folder);
 }
 
+void ScreenshotTour::revealNote(const QString &noteId)
+{
+    for (QObject *o : m_window->findChildren<QObject *>()) {
+        if (o->property("revealedNote").isValid())
+            o->setProperty("revealedNote", noteId);
+    }
+}
+
 void ScreenshotTour::pickExamples()
 {
     DataService *data = DataService::instance();
@@ -219,6 +232,8 @@ void ScreenshotTour::pickExamples()
         m_lesson = memberships.first().toMap().value(u"lesson_id"_s).toString();
         const QVariantList pieces = data->pieces(m_membership);
         m_piece = pieces.isEmpty() ? QString() : pieces.first().toMap().value(u"id"_s).toString();
+        const QVariantList notes = data->notes(m_membership);
+        m_note = notes.isEmpty() ? QString() : notes.first().toMap().value(u"id"_s).toString();
         break;
     }
     for (const QVariant &e : data->events()) {

@@ -36,6 +36,8 @@ private:
 
     void run();
     void shot(const QString &name);
+    //! Shows the edit and delete buttons of a note on the student page ("" hides them)
+    void revealNote(const QString &noteId);
     void addPages(const QString &prefix);
     void addDetails(const QString &prefix);
     void pickExamples();
@@ -44,7 +46,7 @@ private:
     QPointer<QQuickWindow> m_window;
     QPointer<QObject> m_theme;
     QPointer<QObject> m_nav;
-    QString m_student, m_membership, m_lesson, m_piece, m_event;
+    QString m_student, m_membership, m_lesson, m_piece, m_event, m_note;
     AppController *m_app;
     QString m_folder;
     QList<Step> m_steps;

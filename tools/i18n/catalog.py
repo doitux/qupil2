@@ -446,6 +446,21 @@ E("archive.doc.activities", old="Activities of the student", en="Student’s act
 # ---------------------------------------------------------------- notes
 E("note.add", old="&Add new note", en="Add new note", fr="Ajouter une note", es="Añadir nota")
 E("note.delete", old="&Delete note", en="Delete note", fr="Supprimer la note", es="Eliminar nota")
+E("note.copied_from",
+  en="New note with the text of %1. To change or delete the old note, press and hold it.",
+  de="Neue Notiz mit dem Text vom %1. Um die alte Notiz zu ändern oder zu löschen, halten Sie sie gedrückt.",
+  fr="Nouvelle note avec le texte du %1. Pour modifier ou supprimer l’ancienne note, maintenez-la appuyée.",
+  es="Nueva nota con el texto del %1. Para cambiar o eliminar la nota anterior, manténgala pulsada.",
+  c="Note editor, after tapping an older note; %1 = date of that note")
+E("note.clear", en="Clear", de="Leeren", fr="Vider", es="Vaciar", c="Empties the note editor")
+E("note.delete.confirm", en="The note of %1 will be deleted.", de="Die Notiz vom %1 wird gelöscht.",
+  fr="La note du %1 sera supprimée.", es="Se eliminará la nota del %1.", c="%1 = date of the note")
+E("note.delete.for_all", src="Delete for all %n students of the group",
+  en=["Delete for %n student", "Delete for all %n students of the group"],
+  de=["Für %n Schüler löschen", "Für alle %n Schüler der Gruppe löschen"],
+  fr=["Supprimer pour %n élève", "Supprimer pour les %n élèves du groupe"],
+  es=["Eliminar para %n alumno", "Eliminar para los %n alumnos del grupo"],
+  c="Check box when deleting a note of a group lesson.")
 E("note.new", en="New note", de="Neue Notiz", fr="Nouvelle note", es="Nueva nota")
 E("note.save", en="Save note", de="Notiz speichern", fr="Enregistrer la note", es="Guardar nota")
 E("note.save_for_all", src="Save for all %n students",

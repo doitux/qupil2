@@ -11,6 +11,9 @@ QtObject {
     signal newStudent()
     signal editLesson(string lessonId, int weekday)
     signal editNote(string membershipId, string noteId)
+    //! A new note (today) that starts with the text of an older one – as in Qupil 1.x,
+    //! where tapping a note copied it into the field for the next one
+    signal newNoteFrom(string membershipId, string noteId)
     signal editPiece(string membershipId, string pieceId)
     signal editEvent(string eventId)
     signal editActivity(string studentId, string activityId, bool continuous)

@@ -19,6 +19,10 @@ Item {
     property string backText: qsTrId("common.back")
     property int tab: 0
     property int pieceFilter: -1
+    //! Note whose edit and delete buttons are shown ("" for none)
+    property string revealedNote
+    onCurrentMembershipChanged: revealedNote = ""
+    onTabChanged: revealedNote = ""
 
     signal back()
 
@@ -305,6 +309,40 @@ Item {
     }
 
     AppDialog {
+        id: deleteNoteDialog
+        property string noteId
+        property string date
+        property int shared: 1
+        property bool forAll: true
+        function ask(note) {
+            noteId = note.id
+            date = note.date || ""
+            shared = note.shared || 1
+            forAll = Data.setting("save_for_all_students", 1) !== 0
+            open()
+        }
+        iconName: "trash"
+        destructive: true
+        title: qsTrId("note.delete")
+        text: qsTrId("note.delete.confirm").arg(Data.formatDate(date))
+        rejectText: qsTrId("common.cancel")
+        acceptText: qsTrId("common.delete")
+        onAccepted: {
+            Data.deleteNote(noteId, forAll && shared > 1)
+            detail.revealedNote = ""
+        }
+        CheckBox {
+            visible: deleteNoteDialog.shared > 1
+            Layout.leftMargin: -6
+            text: qsTrId("note.delete.for_all", deleteNoteDialog.shared)
+            checked: deleteNoteDialog.forAll
+            onToggled: deleteNoteDialog.forAll = checked
+            font.family: Theme.fontFamily
+            font.pixelSize: 14
+        }
+    }
+
+    AppDialog {
         id: deleteStudent
         iconName: "trash"
         destructive: true
@@ -329,21 +367,31 @@ Item {
             }
             Repeater {
                 model: detail.notes
+                // Tap: a new note for today with this text, to adjust for the next lesson (as in
+                // Qupil 1.x). Long press or right click: edit and delete slide in on the right.
                 delegate: AbstractButton {
                     id: noteCard
                     required property var modelData
+                    readonly property bool revealed: detail.revealedNote === modelData.id
                     Layout.fillWidth: true
-                    implicitHeight: noteColumn.implicitHeight + 28
+                    implicitHeight: Math.max(noteColumn.implicitHeight + 28, actionRow.implicitHeight + 20)
+                    clip: true
                     focusPolicy: Qt.StrongFocus
                     hoverEnabled: true
                     Accessible.role: Accessible.Button
                     Accessible.name: Data.formatDate(modelData.date) + " " + Data.plainText(modelData.content, 120)
-                    onClicked: Nav.editNote(detail.currentMembership, modelData.id)
-                    onPressAndHold: noteMenu.popup()
+                    onClicked: {
+                        if (detail.revealedNote !== "")
+                            detail.revealedNote = ""
+                        else
+                            Nav.newNoteFrom(detail.currentMembership, modelData.id)
+                    }
+                    onPressAndHold: detail.revealedNote = revealed ? "" : modelData.id
                     TapHandler {
                         acceptedButtons: Qt.RightButton
-                        onTapped: noteMenu.popup()
+                        onTapped: detail.revealedNote = noteCard.revealed ? "" : noteCard.modelData.id
                     }
+                    Keys.onMenuPressed: detail.revealedNote = noteCard.revealed ? "" : noteCard.modelData.id
                     background: Rectangle {
                         radius: Theme.radius
                         color: Theme.surface
@@ -391,21 +439,55 @@ Item {
                     leftPadding: 16
                     rightPadding: 16
 
-                    Menu {
-                        id: noteMenu
-                        MenuItem {
-                            text: qsTrId("common.edit")
-                            onTriggered: Nav.editNote(detail.currentMembership, noteCard.modelData.id)
+                    // Edit and delete, rolled in from the right edge over the text
+                    Rectangle {
+                        id: actions
+                        z: 2
+                        y: 0
+                        width: actionRow.implicitWidth + 28
+                        height: noteCard.height
+                        x: noteCard.revealed ? noteCard.width - width : noteCard.width + 24
+                        visible: x < noteCard.width
+                        radius: Theme.radius
+                        color: Theme.surface
+                        Behavior on x {
+                            NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
                         }
-                        MenuItem {
-                            text: qsTrId("note.delete")
-                            onTriggered: Data.deleteNote(noteCard.modelData.id, false)
+                        // Soft edge towards the text
+                        Rectangle {
+                            anchors.right: parent.left
+                            anchors.rightMargin: -Theme.radius
+                            width: 28
+                            height: parent.height
+                            gradient: Gradient {
+                                orientation: Gradient.Horizontal
+                                GradientStop { position: 0; color: Qt.rgba(Theme.surface.r, Theme.surface.g, Theme.surface.b, 0) }
+                                GradientStop { position: 1; color: Theme.surface }
+                            }
                         }
-                        MenuItem {
-                            visible: noteCard.modelData.shared > 1
-                            height: visible ? implicitHeight : 0
-                            text: qsTrId("piece.delete_for_all")
-                            onTriggered: Data.deleteNote(noteCard.modelData.id, true)
+                        Row {
+                            id: actionRow
+                            anchors.verticalCenter: parent.verticalCenter
+                            anchors.right: parent.right
+                            anchors.rightMargin: 14
+                            spacing: 10
+                            IconButton {
+                                iconName: "edit"
+                                text: qsTrId("note.edit")
+                                fill: Theme.accent
+                                tint: Theme.textOnAccent
+                                onClicked: {
+                                    detail.revealedNote = ""
+                                    Nav.editNote(detail.currentMembership, noteCard.modelData.id)
+                                }
+                            }
+                            IconButton {
+                                iconName: "trash"
+                                text: qsTrId("note.delete")
+                                fill: Theme.dangerFill
+                                tint: Theme.textOnAccent
+                                onClicked: deleteNoteDialog.ask(noteCard.modelData)
+                            }
                         }
                     }
                 }

@@ -18,12 +18,15 @@ Sheet {
     property string date
     property bool forAll: true
     property var info: ({})
+    //! Date of the note whose text a new note started with ("" if none)
+    property string copiedFrom
 
     readonly property int groupSize: info.groupSize || 1
 
     function edit(membership, note) {
         membershipId = membership
         noteId = note
+        copiedFrom = ""
         info = Data.membershipInfo(membership)
         const defaultForAll = Data.setting("save_for_all_students", 1) !== 0
         if (note) {
@@ -39,6 +42,15 @@ Sheet {
         }
         open()
         noteText.forceActiveFocus()
+    }
+
+    //! New note for today with the text of an older one, to adjust for the next lesson
+    function copy(membership, sourceNote) {
+        const n = Data.get("note", sourceNote)
+        edit(membership, "")
+        copiedFrom = n.date || ""
+        noteText.text = Data.noteHtml(n.content || "", Theme.noteMark)
+        noteText.cursorPosition = noteText.length
     }
 
     title: noteId ? qsTrId("note.edit") : qsTrId("note.new")
@@ -109,6 +121,31 @@ Sheet {
         label: qsTrId("common.label.date")
         date: editor.date
         onPicked: (value) => editor.date = value || Data.today()
+    }
+
+    // Started from an older note: say so, and offer an empty start
+    RowLayout {
+        visible: editor.copiedFrom !== ""
+        Layout.fillWidth: true
+        spacing: 10
+        Text {
+            Layout.fillWidth: true
+            wrapMode: Text.WordWrap
+            text: qsTrId("note.copied_from").arg(Data.formatDate(editor.copiedFrom))
+            color: Theme.textMuted
+            font.family: Theme.fontFamily
+            font.pixelSize: 13
+        }
+        ActionButton {
+            kind: "quiet"
+            iconName: "close"
+            text: qsTrId("note.clear")
+            onClicked: {
+                noteText.text = ""
+                editor.copiedFrom = ""
+                noteText.forceActiveFocus()
+            }
+        }
     }
 
     ColumnLayout {

@@ -333,6 +333,7 @@ ApplicationWindow {
         function onNewStudent() { newStudent.start() }
         function onEditLesson(id, weekday) { lessonEditor.edit(id, weekday) }
         function onEditNote(membership, note) { noteEditor.edit(membership, note) }
+        function onNewNoteFrom(membership, note) { noteEditor.copy(membership, note) }
         function onEditPiece(membership, piece) { pieceEditor.edit(membership, piece) }
         function onEditActivity(student, activity, continuous) { activityEditor.edit(student, activity, continuous) }
         function onEditReminder(reminder, student) { reminderEditor.edit(reminder, student) }
