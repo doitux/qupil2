@@ -392,9 +392,11 @@ Item {
                     id: noteCard
                     required property var modelData
                     readonly property bool revealed: detail.revealedNote === modelData.id
-                    // Horizontal finger movement while swiping (0 otherwise)
-                    property real swipe: 0
+                    // A finger moves the buttons sideways: they follow it, nothing else moves them
+                    property bool dragging: false
                     function toggle() { detail.revealedNote = revealed ? "" : modelData.id }
+                    onRevealedChanged: if (!dragging) actions.slideTo(revealed)
+                    Component.onCompleted: actions.shown = revealed ? actions.width : 0
                     function copy() {
                         if (detail.revealedNote !== "")
                             detail.revealedNote = ""
@@ -425,34 +427,54 @@ Item {
                         }
                         onLongPressed: noteCard.toggle()
                     }
-                    // Only watches (passive): the page keeps scrolling up and down
+                    // Only watches (passive): the page keeps scrolling up and down. Sideways, the
+                    // buttons follow the finger; on release they stay when more than half is in
+                    // (or after a flick to the left) and slide back otherwise.
                     PointHandler {
                         id: swipeTracker
                         property real startX
                         property real startY
+                        property real base      // how far they were in when the finger started
+                        property real velocity  // px per ms, last movement
                         property real lastX
-                        property real lastY
+                        property double lastTime
                         onPointChanged: {
                             if (!active)
                                 return
-                            lastX = point.position.x
-                            lastY = point.position.y
-                            const dx = lastX - startX
-                            noteCard.swipe = Math.abs(dx) > Math.abs(lastY - startY) ? dx : 0
+                            const x = point.position.x
+                            const dx = x - startX
+                            const now = Date.now()
+                            if (now > lastTime)
+                                velocity = 0.5 * velocity + 0.5 * (x - lastX) / (now - lastTime)
+                            lastX = x
+                            lastTime = now
+                            if (!noteCard.dragging && Math.abs(dx) > Qt.styleHints.startDragDistance && Math.abs(dx) > Math.abs(point.position.y - startY)) {
+                                noteCard.dragging = true
+                                actions.stopSliding()
+                                base = actions.shown
+                            }
+                            if (noteCard.dragging)
+                                actions.shown = Math.max(0, Math.min(actions.width, base - dx))
                         }
                         onActiveChanged: {
                             if (active) {
                                 startX = lastX = point.position.x
-                                startY = lastY = point.position.y
+                                startY = point.position.y
+                                lastTime = Date.now()
+                                velocity = 0
                                 return
                             }
-                            const dx = lastX - startX
-                            const dy = lastY - startY
-                            noteCard.swipe = 0
-                            if (Math.abs(dx) < 40 || Math.abs(dx) < 2 * Math.abs(dy))
+                            if (!noteCard.dragging)
                                 return
-                            detail.revealedNote = dx < 0 ? noteCard.modelData.id
-                                                         : (noteCard.revealed ? "" : detail.revealedNote)
+                            const open = velocity < -0.5 ? true
+                                       : velocity > 0.5 ? false
+                                       : actions.shown > actions.width / 2
+                            if (open)
+                                detail.revealedNote = noteCard.modelData.id
+                            else if (noteCard.revealed)
+                                detail.revealedNote = ""
+                            noteCard.dragging = false
+                            actions.slideTo(open)
                         }
                     }
                     background: Rectangle {
@@ -515,15 +537,26 @@ Item {
                         y: 0
                         width: actionRow.implicitWidth + 28
                         height: noteCard.height
-                        // How far it is rolled in: follows the finger while swiping
-                        readonly property real shown: Math.max(0, Math.min(width, (noteCard.revealed ? width : 0) - noteCard.swipe))
-                        x: shown > 0 ? noteCard.width - shown : noteCard.width + 24
-                        visible: x < noteCard.width
+                        // How far it is rolled in (0 … width): set by the finger or by slideTo().
+                        // Only this value moves, so a new layout (another student) moves nothing.
+                        property real shown: 0
+                        function slideTo(open) {
+                            slide.stop()
+                            slide.to = open ? width : 0
+                            if (shown !== slide.to)
+                                slide.start()
+                        }
+                        function stopSliding() { slide.stop() }
+                        x: noteCard.width - shown
+                        visible: shown > 0.5
                         radius: Theme.radius
                         color: Theme.surface
-                        Behavior on x {
-                            enabled: noteCard.swipe === 0
-                            NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
+                        NumberAnimation {
+                            id: slide
+                            target: actions
+                            property: "shown"
+                            duration: 200
+                            easing.type: Easing.OutCubic
                         }
                         // Soft edge towards the text
                         Rectangle {
