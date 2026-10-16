@@ -27,6 +27,7 @@
 
 #include "Database.h"
 #include "DemoData.h"
+#include "FileExport.h"
 #include "LanguageManager.h"
 #include "LegacyImporter.h"
 #include "NoteFormat.h"
@@ -323,6 +324,11 @@ bool AppController::saveDialogAvailable() const
 #else
     return true;
 #endif
+}
+
+bool AppController::exportPickerAvailable() const
+{
+    return FileExport::available();
 }
 
 QUrl AppController::backupFolder() const
@@ -830,6 +836,38 @@ QVariantMap AppController::createBackup(const QUrl &target)
                                         + u"\n\n"_s + error);
     }
     return result;
+}
+
+void AppController::exportBackup()
+{
+    if (!m_db->isOpen())
+        return;
+    // A copy under its final name: the picker shows and keeps that name
+    const QString dir = QDir(QStandardPaths::writableLocation(QStandardPaths::TempLocation)).filePath(u"export"_s);
+    QDir(dir).removeRecursively();
+    QDir().mkpath(dir);
+    const QString file = QDir(dir).filePath(suggestedBackupName());
+    QString error;
+    if (!m_db->backupTo(file, &error)) {
+        QFile::remove(file);
+        emit backupExported({ { u"ok"_s, false },
+                              { u"message"_s, qtTrId("backup.create.failed").arg(QDir::toNativeSeparators(dir))
+                                                  + u"\n\n"_s + error } });
+        return;
+    }
+    FileExport::exportFile(file, [this, file](bool saved, const QString &name) {
+        QFile::remove(file);
+        if (!saved) {
+            emit backupExported({ { u"ok"_s, false }, { u"cancelled"_s, true } });
+            return;
+        }
+        m_db->setMeta(u"last_backup"_s, QDateTime::currentDateTimeUtc().toString(Qt::ISODate));
+        emit infoChanged();
+        //: %1 = file name
+        emit backupExported({ { u"ok"_s, true },
+                              { u"message"_s, qtTrId("backup.create.success").arg(name.isEmpty() ? QFileInfo(file).fileName()
+                                                                                                  : name) } });
+    });
 }
 
 bool AppController::safetyBackup(const QString &reason)

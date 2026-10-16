@@ -15,6 +15,7 @@ Item {
 
     // Existing data is replaced: ask first (on the setup screen there is nothing to lose)
     readonly property bool replacing: App.phase === App.Ready
+    property bool exporting: false
 
     function chooseLegacyFolder() {
         folderDialog.open()
@@ -40,6 +41,9 @@ Item {
         if (App.saveDialogAvailable) {
             saveDialog.selectedFile = saveDialog.currentFolder + "/" + App.suggestedBackupName()
             saveDialog.open()
+        } else if (App.exportPickerAvailable) {
+            exporting = true
+            App.exportBackup()   // iOS: "Save to Files", the result comes with backupExported
         } else {
             showBackupResult(App.createBackup(""))
         }
@@ -48,6 +52,17 @@ Item {
         backupResult.ok = result.ok
         backupResult.text = result.message
         backupResult.open()
+    }
+
+    Connections {
+        target: App
+        function onBackupExported(result) {
+            if (!actions.exporting)
+                return   // started from the other place that offers backups
+            actions.exporting = false
+            if (!result.cancelled)
+                actions.showBackupResult(result)
+        }
     }
 
     FolderDialog {

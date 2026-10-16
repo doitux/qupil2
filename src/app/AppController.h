@@ -52,8 +52,10 @@ class AppController : public QObject
     Q_PROPERTY(QString versionText READ versionText CONSTANT FINAL)
     //! The commit this build was made from ("dev" for local builds)
     Q_PROPERTY(QString build READ build CONSTANT FINAL)
-    //! iOS has no "save as" dialog: backups go to the app's Documents (Files app)
+    //! Qt's "save as" dialog works here (not on iOS: see exportPickerAvailable)
     Q_PROPERTY(bool saveDialogAvailable READ saveDialogAvailable CONSTANT FINAL)
+    //! The system's own "Save to Files" picker chooses where a backup goes (iOS)
+    Q_PROPERTY(bool exportPickerAvailable READ exportPickerAvailable CONSTANT FINAL)
     Q_PROPERTY(QUrl backupFolder READ backupFolder CONSTANT FINAL)
 
 public:
@@ -86,6 +88,7 @@ public:
     //! Qupil's license (GPL 3 with the app store permission) and those of the bundled parts
     Q_INVOKABLE QString licenseText() const;
     bool saveDialogAvailable() const;
+    bool exportPickerAvailable() const;
     QUrl backupFolder() const;
 
     Qupil::Database *database() const { return m_db.get(); }
@@ -115,6 +118,11 @@ public:
         (on iOS visible in the Files app). Returns { ok, file, message }.
     */
     Q_INVOKABLE QVariantMap createBackup(const QUrl &target = {});
+    /*!
+        iOS: writes a backup and lets the user choose where it goes ("Save to
+        Files"). The result comes with backupExported.
+    */
+    Q_INVOKABLE void exportBackup();
     //! Automatic daily backup into the backups folder, keeps the last 14
     Q_INVOKABLE bool autoBackupIfDue();
 
@@ -157,6 +165,8 @@ signals:
     void lastTakeOverChanged();
     void infoChanged();
     void takeOverFailed(const QString &message);
+    //! Result of exportBackup: { ok, cancelled, message }
+    void backupExported(const QVariantMap &result);
     //! The whole database was replaced (import / restore): reload everything
     void dataReplaced();
 
