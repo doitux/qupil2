@@ -1344,14 +1344,14 @@ E("sync.today_at", en="today %1", de="heute %1", fr="aujourd’hui %1", es="hoy 
 E("sync.nextcloud.when", en="Nextcloud %1", de="Nextcloud %1", fr="Nextcloud %1", es="Nextcloud %1",
   c="%1 = when, e.g. '3 minutes ago' or 'today 13:05'")
 E("sync.intro",
-  en="Keep Qupil up to date on all your devices – through your own Nextcloud or directly over Wi-Fi. "
+  en="Keep Qupil up to date on all your devices – through your own Nextcloud, directly over Wi-Fi or both together. "
      "Your data is encrypted before it leaves the device.",
-  de="Halten Sie Qupil auf all Ihren Geräten auf dem gleichen Stand – über Ihre eigene Nextcloud oder direkt "
-     "per WLAN. Ihre Daten werden verschlüsselt, bevor sie das Gerät verlassen.",
-  fr="Gardez Qupil à jour sur tous vos appareils – via votre propre Nextcloud ou directement en Wi-Fi. "
-     "Vos données sont chiffrées avant de quitter l’appareil.",
-  es="Mantenga Qupil al día en todos sus dispositivos, a través de su propio Nextcloud o directamente por Wi-Fi. "
-     "Sus datos se cifran antes de salir del dispositivo.")
+  de="Halten Sie Qupil auf all Ihren Geräten auf dem gleichen Stand – über Ihre eigene Nextcloud, direkt per WLAN "
+     "oder beides zusammen. Ihre Daten werden verschlüsselt, bevor sie das Gerät verlassen.",
+  fr="Gardez Qupil à jour sur tous vos appareils – via votre propre Nextcloud, directement en Wi-Fi ou les deux "
+     "ensemble. Vos données sont chiffrées avant de quitter l’appareil.",
+  es="Mantenga Qupil al día en todos sus dispositivos, a través de su propio Nextcloud, directamente por Wi-Fi o con "
+     "ambos a la vez. Sus datos se cifran antes de salir del dispositivo.")
 E("sync.nextcloud.intro",
   en="Qupil stores its data encrypted in a folder named “Qupil” in your Nextcloud. You sign in in the browser – "
      "Qupil never sees your Nextcloud password.",
@@ -1438,6 +1438,15 @@ E("sync.join.merge.hint",
 E("sync.join.start_over", en="Start over with the data on this device",
   de="Mit den Daten auf diesem Gerät neu beginnen", fr="Recommencer avec les données de cet appareil",
   es="Empezar de nuevo con los datos de este dispositivo")
+E("sync.join.shared",
+  en="The data on this device already belongs to this sync folder (e.g. synchronised over Wi-Fi). It is merged "
+     "with the folder.",
+  de="Die Daten auf diesem Gerät gehören schon zu diesem Sync-Ordner (z. B. per WLAN abgeglichen). Sie werden mit "
+     "dem Ordner zusammengeführt.",
+  fr="Les données de cet appareil appartiennent déjà à ce dossier de synchronisation (p. ex. synchronisées en "
+     "Wi-Fi). Elles sont fusionnées avec le dossier.",
+  es="Los datos de este dispositivo ya pertenecen a esta carpeta de sincronización (p. ej. sincronizados por "
+     "Wi-Fi). Se combinan con la carpeta.")
 E("sync.join.start_over.hint",
   en="The existing folder in Nextcloud is kept under a new name. Choose a new sync password; your other devices "
      "will ask for it.",
@@ -1503,12 +1512,22 @@ E("sync.waiting_for_data", en="This device is still empty and gets its data with
 E("sync.wifi.when", en="Wi-Fi: %1 %2", de="WLAN: %1 %2", fr="Wi-Fi : %1 %2", es="Wi-Fi: %1 %2",
   c="%1 = device name, %2 = when, e.g. 'today 13:05'")
 E("wifi.intro",
-  en="Devices on the same Wi-Fi sync directly with each other – no server needed. Pair each device once.",
-  de="Geräte im selben WLAN gleichen sich direkt miteinander ab – ganz ohne Server. Koppeln Sie jedes Gerät einmal.",
-  fr="Les appareils sur le même Wi-Fi se synchronisent directement entre eux – sans serveur. Associez chaque "
-     "appareil une fois.",
-  es="Los dispositivos en la misma Wi-Fi se sincronizan directamente entre sí, sin servidor. Vincule cada "
-     "dispositivo una vez.")
+  en="Devices on the same Wi-Fi sync directly with each other – no server needed, while Qupil is open on both. "
+     "Pair each device once.",
+  de="Geräte im selben WLAN gleichen sich direkt miteinander ab – ganz ohne Server, solange Qupil auf beiden "
+     "geöffnet ist. Koppeln Sie jedes Gerät einmal.",
+  fr="Les appareils sur le même Wi-Fi se synchronisent directement entre eux – sans serveur, tant que Qupil est "
+     "ouvert sur les deux. Associez chaque appareil une fois.",
+  es="Los dispositivos en la misma Wi-Fi se sincronizan directamente entre sí, sin servidor, mientras Qupil esté "
+     "abierto en ambos. Vincule cada dispositivo una vez.")
+E("wifi.with_nextcloud",
+  en="Works together with the Nextcloud: what arrives over Wi-Fi, Qupil passes on to the Nextcloud – and the other "
+     "way round.",
+  de="Lässt sich mit der Nextcloud zusammen nutzen: Was per WLAN ankommt, gibt Qupil auch an die Nextcloud weiter – "
+     "und umgekehrt.",
+  fr="Fonctionne avec le Nextcloud : ce qui arrive par Wi-Fi, Qupil le transmet aussi au Nextcloud – et "
+     "inversement.",
+  es="Funciona junto con Nextcloud: lo que llega por Wi-Fi, Qupil también lo pasa a Nextcloud, y al revés.")
 E("wifi.enabled.hint", en="This device can be reached by your paired devices on the Wi-Fi.",
   de="Ihre gekoppelten Geräte erreichen dieses Gerät im WLAN.",
   fr="Vos appareils associés peuvent joindre cet appareil sur le Wi-Fi.",

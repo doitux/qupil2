@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 #include "WifiSession.h"
 
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QRandomGenerator>
@@ -52,6 +53,16 @@ std::optional<QJsonObject> parseClear(const std::optional<QByteArray> &frame)
     if (error.error != QJsonParseError::NoError || !doc.isObject())
         return std::nullopt;
     return doc.object();
+}
+
+//! Device ids told while pairing (none from devices before this was added)
+QStringList historyOf(const QJsonObject &o)
+{
+    QStringList out;
+    for (const QJsonValue &v : o.value(u"history"_s).toArray())
+        if (v.isString())
+            out << v.toString();
+    return out;
 }
 
 Status statusOf(const QString &error)
@@ -256,7 +267,8 @@ QString newCode()
 
 // ---------------------------------------------------------------------------- client
 
-Status pair(FrameChannel *channel, const Identity &me, const QString &code, bool hasData, Peer *peer, QString *error)
+Status pair(FrameChannel *channel, const Identity &me, const QString &code, bool hasData, const QStringList &history,
+            Peer *peer, QString *error)
 {
     const QString digits = normalizeCode(code);
     const QByteArray sessionId = Crypto::randomBytes(16);
@@ -285,7 +297,8 @@ Status pair(FrameChannel *channel, const Identity &me, const QString &code, bool
     Secure secure(channel, master, true);
     Crypto::wipe(master);
 
-    if (!secure.sendJson({ { u"pub"_s, b64(me.publicKey) }, { u"name"_s, me.name }, { u"hasData"_s, hasData } }))
+    if (!secure.sendJson({ { u"pub"_s, b64(me.publicKey) }, { u"name"_s, me.name }, { u"hasData"_s, hasData },
+                           { u"history"_s, QJsonArray::fromStringList(history) } }))
         return setError(error, u"connection lost"_s), Status::Failed;
     QJsonObject clear;
     const auto theirs = secure.receiveJson(&clear);
@@ -300,6 +313,7 @@ Status pair(FrameChannel *channel, const Identity &me, const QString &code, bool
     peer->id = answer->value(u"id"_s).toString();
     peer->name = theirs->value(u"name"_s).toString();
     peer->publicKey = pub;
+    peer->history = historyOf(*theirs);
     peer->hasData = theirs->value(u"hasData"_s).toBool();
     return Status::Ok;
 }
@@ -402,11 +416,13 @@ ServeResult serve(FrameChannel *channel, Store *store, const Identity &me, const
         const QByteArray pub = unb64(theirs->value(u"pub"_s));
         if (pub.size() != 32)
             return refuse("bad_key", Status::Failed);
-        if (!secure.sendJson({ { u"pub"_s, b64(me.publicKey) }, { u"name"_s, me.name }, { u"hasData"_s, state.hasData } })) {
+        if (!secure.sendJson({ { u"pub"_s, b64(me.publicKey) }, { u"name"_s, me.name }, { u"hasData"_s, state.hasData },
+                               { u"history"_s, QJsonArray::fromStringList(state.history) } })) {
             r.error = u"connection lost"_s;
             return r;
         }
-        r.peer = { clientId, theirs->value(u"name"_s).toString(), pub, theirs->value(u"hasData"_s).toBool() };
+        r.peer = { clientId, theirs->value(u"name"_s).toString(), pub, theirs->value(u"hasData"_s).toBool(),
+                   historyOf(*theirs) };
         r.status = Status::Ok;
         return r;
     }

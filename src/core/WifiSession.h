@@ -65,6 +65,9 @@ struct Peer
     QString name;
     QByteArray publicKey;
     bool hasData = false;   //!< told while pairing: the device already had data
+    //! Told while pairing: devices in its change log. A device in both logs means
+    //! the same data (synchronised before, e.g. through the Nextcloud)
+    QStringList history;
 };
 
 enum class Status {
@@ -87,8 +90,9 @@ struct Stats
 };
 
 //! Client: pairs with the device that shows code. On success, *peer is that device.
-Status pair(FrameChannel *channel, const Identity &me, const QString &code, bool hasData, Peer *peer,
-            QString *error = nullptr);
+//! hasData and history: what the other device is told about the data here (see Peer)
+Status pair(FrameChannel *channel, const Identity &me, const QString &code, bool hasData, const QStringList &history,
+            Peer *peer, QString *error = nullptr);
 
 //! Client: syncs with a paired device
 Status sync(FrameChannel *channel, Store *store, const Identity &me, const Peer &peer, Stats *stats,
@@ -101,6 +105,7 @@ struct ServerState
     QStringList paused;         //!< paired, but sync is paused until the user decides
     QString pairingCode;        //!< empty: not in pairing mode
     bool hasData = false;
+    QStringList history;        //!< devices in this database's change log (see Peer)
 };
 
 struct ServeResult

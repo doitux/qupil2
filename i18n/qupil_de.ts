@@ -2523,8 +2523,8 @@ Bitte wenden Sie sich an den Programm-Autor: %4 um dieses Problem zu beheben!</t
         <translation>Nextcloud %1</translation>
     </message>
     <message id="sync.intro">
-        <source>Keep Qupil up to date on all your devices – through your own Nextcloud or directly over Wi-Fi. Your data is encrypted before it leaves the device.</source>
-        <translation>Halten Sie Qupil auf all Ihren Geräten auf dem gleichen Stand – über Ihre eigene Nextcloud oder direkt per WLAN. Ihre Daten werden verschlüsselt, bevor sie das Gerät verlassen.</translation>
+        <source>Keep Qupil up to date on all your devices – through your own Nextcloud, directly over Wi-Fi or both together. Your data is encrypted before it leaves the device.</source>
+        <translation>Halten Sie Qupil auf all Ihren Geräten auf dem gleichen Stand – über Ihre eigene Nextcloud, direkt per WLAN oder beides zusammen. Ihre Daten werden verschlüsselt, bevor sie das Gerät verlassen.</translation>
     </message>
     <message id="sync.nextcloud.intro">
         <source>Qupil stores its data encrypted in a folder named “Qupil” in your Nextcloud. You sign in in the browser – Qupil never sees your Nextcloud password.</source>
@@ -2619,6 +2619,10 @@ Bitte wenden Sie sich an den Programm-Autor: %4 um dieses Problem zu beheben!</t
         <source>Start over with the data on this device</source>
         <translation>Mit den Daten auf diesem Gerät neu beginnen</translation>
     </message>
+    <message id="sync.join.shared">
+        <source>The data on this device already belongs to this sync folder (e.g. synchronised over Wi-Fi). It is merged with the folder.</source>
+        <translation>Die Daten auf diesem Gerät gehören schon zu diesem Sync-Ordner (z. B. per WLAN abgeglichen). Sie werden mit dem Ordner zusammengeführt.</translation>
+    </message>
     <message id="sync.join.start_over.hint">
         <source>The existing folder in Nextcloud is kept under a new name. Choose a new sync password; your other devices will ask for it.</source>
         <translation>Der bisherige Ordner in der Nextcloud bleibt unter neuem Namen erhalten. Legen Sie ein neues Sync-Passwort fest; Ihre anderen Geräte fragen danach.</translation>
@@ -2690,8 +2694,12 @@ Bitte wenden Sie sich an den Programm-Autor: %4 um dieses Problem zu beheben!</t
         <translation>WLAN: %1 %2</translation>
     </message>
     <message id="wifi.intro">
-        <source>Devices on the same Wi-Fi sync directly with each other – no server needed. Pair each device once.</source>
-        <translation>Geräte im selben WLAN gleichen sich direkt miteinander ab – ganz ohne Server. Koppeln Sie jedes Gerät einmal.</translation>
+        <source>Devices on the same Wi-Fi sync directly with each other – no server needed, while Qupil is open on both. Pair each device once.</source>
+        <translation>Geräte im selben WLAN gleichen sich direkt miteinander ab – ganz ohne Server, solange Qupil auf beiden geöffnet ist. Koppeln Sie jedes Gerät einmal.</translation>
+    </message>
+    <message id="wifi.with_nextcloud">
+        <source>Works together with the Nextcloud: what arrives over Wi-Fi, Qupil passes on to the Nextcloud – and the other way round.</source>
+        <translation>Lässt sich mit der Nextcloud zusammen nutzen: Was per WLAN ankommt, gibt Qupil auch an die Nextcloud weiter – und umgekehrt.</translation>
     </message>
     <message id="wifi.enabled.hint">
         <source>This device can be reached by your paired devices on the Wi-Fi.</source>

@@ -63,7 +63,10 @@ bool copyFile(const QString &from, const QString &to, QString *error)
         *error = in.errorString();
         return false;
     }
-    QFile::remove(to);
+    // Not for content:// URIs (Android): removing deletes the document the save
+    // dialog has just created, and it cannot be opened for writing any more
+    if (!to.contains(u"://"_s))
+        QFile::remove(to);
     QFile out(to);
     if (!out.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
         *error = out.errorString();
@@ -415,9 +418,23 @@ QString AppController::displayPath(const QUrl &url) const
 {
     if (url.isLocalFile())
         return QDir::toNativeSeparators(url.toLocalFile());
+#ifdef Q_OS_ANDROID
+    // The name the document provider shows (also for content://…/document/msf%3A123)
+    if (const QString name = QFileInfo(url.toString()).fileName(); !name.isEmpty() && !name.contains(u'/'))
+        return name;
+#endif
     // content://…/document/primary%3ADownload%2Fqupil.db → qupil.db
     const QString last = QUrl::fromPercentEncoding(url.path().section(u'/', -1).toUtf8());
     return last.section(u'/', -1).section(u':', -1);
+}
+
+QString AppController::displayFolder(const QUrl &url) const
+{
+    if (url.isLocalFile())
+        return QDir::toNativeSeparators(QFileInfo(url.toLocalFile()).absolutePath());
+    // content://…/document/primary%3ADownload%2Fqupil.db → Download
+    const QString document = QUrl::fromPercentEncoding(url.path().section(u'/', -1).toUtf8()).section(u':', -1);
+    return document.contains(u'/') ? document.section(u'/', 0, -2) : displayPath(url);
 }
 
 // ---------------------------------------------------------------------------- take over
@@ -549,6 +566,8 @@ AppController::Outcome AppController::runTakeOver(AppController *self, const QSt
         }
         db.resetDeviceId();
         db.setMeta(u"restored_from"_s, o.source);
+        // An older state of data that other devices may have changed since: ask before joining them
+        db.setMeta(u"ask_before_joining"_s, u"1"_s);
         db.setMeta(u"restored_at"_s, QDateTime::currentDateTimeUtc().toString(Qt::ISODate));
         QSqlQuery q(db.connection());
         for (const char *table : { "student", "lesson", "event", "piece", "note" }) {
@@ -733,6 +752,19 @@ bool AppController::awaitingSync() const
     return m_db->isOpen() && m_db->meta(u"awaiting_sync"_s) == u"1"_s;
 }
 
+QStringList AppController::syncHistory() const
+{
+    if (!m_db->isOpen() || !m_db->meta(u"ask_before_joining"_s).isEmpty())
+        return {};
+    return m_store->versionVector().keys();
+}
+
+void AppController::joinDecided()
+{
+    if (m_db->isOpen() && !m_db->meta(u"ask_before_joining"_s).isEmpty())
+        m_db->setMeta(u"ask_before_joining"_s, QString());
+}
+
 void AppController::syncArrived()
 {
     if (!awaitingSync())
@@ -787,7 +819,8 @@ QVariantMap AppController::createBackup(const QUrl &target)
         emit infoChanged();
     } else {
         //: %1 = folder
-        result.insert(u"message"_s, qtTrId("backup.create.failed").arg(QFileInfo(shown).absolutePath())
+        const QString folder = target.isEmpty() ? QFileInfo(destination).absolutePath() : displayFolder(target);
+        result.insert(u"message"_s, qtTrId("backup.create.failed").arg(QDir::toNativeSeparators(folder))
                                         + u"\n\n"_s + error);
     }
     return result;

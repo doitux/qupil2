@@ -142,6 +142,20 @@ std::optional<bool> FolderSync::isSetUp()
     return files->contains(u"key.json"_s);
 }
 
+std::optional<QStringList> FolderSync::origins()
+{
+    const auto entries = m_remote->list(path(u"changes"_s));
+    if (!entries) {
+        m_error = m_remote->lastError();
+        return std::nullopt;
+    }
+    QStringList out;
+    for (const QString &entry : *entries)
+        if (entry.endsWith(u'/'))
+            out << entry.chopped(1);
+    return out;
+}
+
 QByteArray FolderSync::unlock(const QString &password, Status *status)
 {
     *status = Status::Failed;

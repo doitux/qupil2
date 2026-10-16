@@ -16,6 +16,8 @@
 #include <QThread>
 #include <QUuid>
 
+#include <algorithm>
+
 #include "AppController.h"
 #include "Crypto.h"
 #include "Database.h"
@@ -442,8 +444,9 @@ void WifiController::pairAt(const QString &host, quint16 port, const QString &co
     emit busyChanged();
     const Wifi::Identity me = identity();
     const bool hasData = hasLocalData();
+    const QStringList history = m_app->syncHistory();
     struct Result { Wifi::Status status = Wifi::Status::Failed; Wifi::Peer peer; QString error; };
-    inWorker<Result>(this, [host, port, code, me, hasData] {
+    inWorker<Result>(this, [host, port, code, me, hasData, history] {
         Result r;
         QTcpSocket socket;
         socket.connectToHost(host, port);
@@ -452,7 +455,7 @@ void WifiController::pairAt(const QString &host, quint16 port, const QString &co
             return r;
         }
         SocketChannel channel(&socket);
-        r.status = Wifi::pair(&channel, me, code, hasData, &r.peer, &r.error);
+        r.status = Wifi::pair(&channel, me, code, hasData, history, &r.peer, &r.error);
         socket.disconnectFromHost();
         return r;
     }, [this, host, port](const Result &r) {
@@ -460,8 +463,12 @@ void WifiController::pairAt(const QString &host, quint16 port, const QString &co
         emit busyChanged();
         switch (r.status) {
         case Wifi::Status::Ok: {
-            // Both had data: the user decides how they go together, until then nothing is synced
-            const bool ask = hasLocalData() && r.peer.hasData;
+            // Both had data: the user decides how they go together, until then nothing is synced.
+            // Not when it is the same data (synchronised before, e.g. through the Nextcloud).
+            const QStringList known = m_app->syncHistory();
+            const bool same = std::any_of(r.peer.history.cbegin(), r.peer.history.cend(),
+                                          [&known](const QString &device) { return known.contains(device); });
+            const bool ask = hasLocalData() && r.peer.hasData && !same;
             addPeer(r.peer, host, port, ask);
             stopPairing();
             //: %1 = device name
@@ -530,6 +537,7 @@ void WifiController::resolveJoin(const QString &peerId, int mode)
         }
         p = peer(peerId);
     }
+    m_app->joinDecided();
     // The decision covers the data as it is now: every device that waited may sync
     for (PeerInfo &other : m_peers)
         other.paused = false;
@@ -643,6 +651,7 @@ void WifiController::accept(qintptr socketDescriptor)
     }
     state.pairingCode = m_pairingCode;
     state.hasData = hasLocalData();
+    state.history = m_app->syncHistory();
     ensureIdentity();
     const Wifi::Identity me = identity();
     const QString databasePath = m_app->databasePath();

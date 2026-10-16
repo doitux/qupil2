@@ -17,6 +17,8 @@
 #include <QThread>
 #include <QUrlQuery>
 
+#include <algorithm>
+
 #include "AppController.h"
 #include "Crypto.h"
 #include "Database.h"
@@ -351,12 +353,19 @@ void SyncController::disconnectNextcloud()
 
 // ---------------------------------------------------------------------------- password and sync
 
+bool SyncController::sharesData() const
+{
+    const QStringList known = m_app->syncHistory();
+    return std::any_of(m_folderOrigins.cbegin(), m_folderOrigins.cend(),
+                       [&known](const QString &origin) { return known.contains(origin); });
+}
+
 void SyncController::checkFolder()
 {
     if (!connected())
         return;
     const Account account { m_server, m_loginName, m_userId, m_appPassword };
-    struct Result { std::optional<bool> exists; QString error; int http = 0; };
+    struct Result { std::optional<bool> exists; QStringList origins; QString error; int http = 0; };
     m_checking = true;
     setBusy(true);
     inWorker<Result>(this, [account] {
@@ -364,6 +373,8 @@ void SyncController::checkFolder()
         FolderSync sync(nullptr, &folder);
         Result r;
         r.exists = sync.isSetUp();
+        if (r.exists.value_or(false))
+            r.origins = sync.origins().value_or(QStringList());
         r.error = sync.error();
         r.http = folder.lastStatus();
         return r;
@@ -375,6 +386,7 @@ void SyncController::checkFolder()
             return;
         }
         m_folderExists = *r.exists;
+        m_folderOrigins = r.origins;
         saveSettings();
         emit folderExistsChanged();
     });
@@ -412,6 +424,7 @@ void SyncController::setPassword(const QString &password, JoinMode joinMode)
         }
         m_key = r.key;
         m_folderExists = true;
+        m_app->joinDecided();
         saveSettings();
         if (r.existed && joinMode == ReplaceLocal && !m_app->awaitingSync()) {
             m_replacingData = true;
@@ -485,6 +498,7 @@ void SyncController::syncNow()
         } else if (r.status == FolderSync::Status::WrongPassword) {
             // Another device started over with a new password
             forgetKey(qtTrId("sync.password_changed"));
+            checkFolder();   // which devices the new folder has
         } else if (r.status == FolderSync::Status::NoPassword) {
             // The folder was removed on the server
             m_folderExists = false;

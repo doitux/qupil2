@@ -594,6 +594,8 @@ private slots:
         QCOMPARE(fb.run(keyB, u"iPad"_s, &stats), FolderSync::Status::Ok);
         QVERIFY(stats.applied > 0);
         QCOMPARE(stats.devices, QStringList { u"Laptop"_s });
+        // Which devices have changes in the folder (to recognise the same data)
+        QCOMPARE(fb.origins().value_or(QStringList()), QStringList { a.deviceId() });
         QCOMPARE(sb.get(u"student"_s, lena).value(u"forename"_s).toString(), u"Lena"_s);
 
         // Changes travel both ways
@@ -733,16 +735,18 @@ private slots:
         ServerState pairing;
         pairing.pairingCode = u"482913"_s;
         pairing.hasData = true;
+        pairing.history = { u"ipad-db"_s, u"cloud-device"_s };
         Peer seenByLaptop;
         Status clientStatus = Status::Failed;
         ServeResult served = run(u"w-ipad.db"_s, ipad, pairing, [&](FrameChannel *ch) {
-            clientStatus = pair(ch, laptop, u"000 000"_s, false, &seenByLaptop);
+            clientStatus = pair(ch, laptop, u"000 000"_s, false, {}, &seenByLaptop);
         });
         QCOMPARE(clientStatus, Status::WrongCode);
         QCOMPARE(served.status, Status::WrongCode);
 
         served = run(u"w-ipad.db"_s, ipad, pairing, [&](FrameChannel *ch) {
-            clientStatus = pair(ch, laptop, u"482-913"_s, false, &seenByLaptop);
+            clientStatus = pair(ch, laptop, u"482-913"_s, false, { u"laptop-db"_s, u"cloud-device"_s },
+                                &seenByLaptop);
         });
         QCOMPARE(clientStatus, Status::Ok);
         QCOMPARE(served.status, Status::Ok);
@@ -750,6 +754,9 @@ private slots:
         QCOMPARE(seenByLaptop.id, ipad.id);
         QCOMPARE(seenByLaptop.publicKey, ipad.publicKey);
         QVERIFY(seenByLaptop.hasData);
+        // Which devices are in each change log: the two have one in common (the same data)
+        QCOMPARE(seenByLaptop.history, (QStringList { u"ipad-db"_s, u"cloud-device"_s }));
+        QCOMPARE(served.peer.history, (QStringList { u"laptop-db"_s, u"cloud-device"_s }));
         QCOMPARE(served.peer.id, laptop.id);
         QCOMPARE(served.peer.publicKey, laptop.publicKey);
         QVERIFY(!served.peer.hasData);
@@ -757,7 +764,7 @@ private slots:
 
         ServerState notPairing;
         served = run(u"w-ipad.db"_s, ipad, notPairing, [&](FrameChannel *ch) {
-            clientStatus = pair(ch, laptop, u"482913"_s, false, &seenByLaptop);
+            clientStatus = pair(ch, laptop, u"482913"_s, false, {}, &seenByLaptop);
         });
         QCOMPARE(clientStatus, Status::NotPairing);
 

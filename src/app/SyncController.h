@@ -38,6 +38,9 @@ class SyncController : public QObject
     Q_PROPERTY(bool needsPassword READ needsPassword NOTIFY accountChanged FINAL)
     //! The sync folder exists already (enter password) or not (choose password)
     Q_PROPERTY(bool folderExists READ folderExists NOTIFY folderExistsChanged FINAL)
+    //! The folder has changes this device knows already (same data, e.g. synchronised by Wi-Fi):
+    //! joining it merges without asking
+    Q_PROPERTY(bool sharesData READ sharesData NOTIFY folderExistsChanged FINAL)
     Q_PROPERTY(bool busy READ busy NOTIFY busyChanged FINAL)
     //! Looking whether the sync folder exists (right after connecting)
     Q_PROPERTY(bool checking READ checking NOTIFY busyChanged FINAL)
@@ -61,6 +64,7 @@ public:
     bool loggingIn() const { return m_pollTimer.isActive() || m_loginReply; }
     bool needsPassword() const { return connected() && m_key.isEmpty(); }
     bool folderExists() const { return m_folderExists; }
+    bool sharesData() const;
     bool busy() const { return m_busy; }
     bool checking() const { return m_checking; }
     QString lastSync() const { return m_lastSync; }
@@ -131,6 +135,7 @@ private:
     QString m_appPassword;
     QByteArray m_key;
     bool m_folderExists = false;
+    QStringList m_folderOrigins;   // devices with changes in the folder (from the last check)
     bool m_busy = false;
     bool m_checking = false;
     bool m_syncAgain = false;

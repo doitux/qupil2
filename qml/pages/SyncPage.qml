@@ -25,7 +25,9 @@ SubPage {
     //! Data that would be affected when joining an existing folder
     readonly property bool hasLocalData: App.info.awaitingSync !== true
         && ((App.info.students ?? 0) + (App.info.lessons ?? 0) + (App.info.events ?? 0)) > 0
-    readonly property bool joining: Sync.folderExists && hasLocalData
+    //! The data here and the folder: replace, merge or start over? Not asked when it is the same
+    //! data (synchronised before, e.g. by Wi-Fi): that is merged
+    readonly property bool joining: Sync.folderExists && hasLocalData && !Sync.sharesData
     //! A new password is chosen (first device or starting over)
     readonly property bool choosing: !Sync.folderExists || (joining && joinMode === Sync.StartOver)
     readonly property string passwordProblem: !choosing ? ""
@@ -246,6 +248,17 @@ SubPage {
                 }
             }
 
+            // Same data as in the folder: nothing to decide
+            Text {
+                visible: Sync.folderExists && page.hasLocalData && Sync.sharesData
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+                text: qsTrId("sync.join.shared")
+                color: Theme.textMuted
+                font.family: Theme.fontFamily
+                font.pixelSize: 14
+            }
+
             RowLayout {
                 Layout.topMargin: page.joining ? 6 : 0
                 spacing: 12
@@ -411,6 +424,14 @@ SubPage {
             color: Theme.textMuted
             font.family: Theme.fontFamily
             font.pixelSize: 14
+        }
+        Text {
+            Layout.fillWidth: true
+            wrapMode: Text.WordWrap
+            text: qsTrId("wifi.with_nextcloud")
+            color: Theme.textMuted
+            font.family: Theme.fontFamily
+            font.pixelSize: 13
         }
         Repeater {
             model: Wifi.peers

@@ -5,8 +5,19 @@ Qupil keeps the same data on all devices of one teacher. Two ways, usable togeth
 * **Nextcloud**: through a folder in the user's own Nextcloud, end-to-end encrypted.
 * **Wi-Fi**: devices in the same network sync directly, without any server.
 
+Both can be used together, and either can be added or removed at any time.
 Changes travel in both ways and are relayed: a phone that only uses Wi-Fi gets
-what the laptop received from Nextcloud, and the other way round.
+what the laptop received from Nextcloud, and the other way round. A change that
+arrives both ways is recognised by its device and number and applied once.
+
+**Same data or not?** When a device with data joins the Nextcloud folder or pairs
+with a device that has data, Qupil compares the device ids in the change logs
+(the folder names under `changes/`, or the list both devices send while
+pairing). One in common means the data was synchronised before, e.g. a tablet
+that got its data by Wi-Fi from the laptop that uses the Nextcloud: it is merged
+without a question. Otherwise the user decides (replace, merge or start over).
+After a restored backup the question always comes once (meta
+`ask_before_joining`), because that older state may be meant to win.
 
 ## Data model
 
@@ -62,7 +73,7 @@ Qupil/
 * Every sync first checks the key against `key.json`. If another device *started
   over* (new password) or the folder was deleted, Qupil asks for the password
   again instead of writing into the folder.
-* A device that already has data and joins an existing folder chooses:
+* A device that already has other data and joins an existing folder chooses:
   **replace** its data with the folder's (default, a backup is kept), **merge**
   (only for data that exists nowhere else, otherwise entries appear twice), or
   **start over** with its data (the old folder is kept as `Qupil-<date>`).

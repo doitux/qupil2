@@ -120,6 +120,8 @@ public:
 
     //! Readable path for a picked URL (content:// URIs show their file name)
     Q_INVOKABLE QString displayPath(const QUrl &url) const;
+    //! Folder of a picked URL as far as it can be told ("Download" for content:// URIs)
+    QString displayFolder(const QUrl &url) const;
     //! Looks again for Qupil 1.x data folders on this computer
     Q_INVOKABLE void refreshLegacyFolders();
 
@@ -137,6 +139,15 @@ public:
     bool awaitingSync() const;
     //! The first sync is done: from now on this is normal data
     void syncArrived();
+    /*!
+        Devices in this database's change log. Another device (or the Nextcloud
+        folder) that knows one of them has the same data, synchronised before:
+        joining it needs no question. Empty after a restored backup until the user
+        decided once how that data goes together with the other devices.
+    */
+    QStringList syncHistory() const;
+    //! The user decided how the data here goes together with another device or the folder
+    void joinDecided();
 
 signals:
     void phaseChanged();

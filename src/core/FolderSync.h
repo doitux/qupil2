@@ -69,6 +69,8 @@ public:
 
     //! Is the folder set up already (key.json exists)? nullopt on error
     std::optional<bool> isSetUp();
+    //! Devices whose changes are in the folder (readable without the password); nullopt on error
+    std::optional<QStringList> origins();
     /*!
         First device: creates key.json for this password. Other devices: checks
         the password. Returns the key to keep on this device (empty on failure).
