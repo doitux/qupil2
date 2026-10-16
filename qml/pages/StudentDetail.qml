@@ -368,11 +368,23 @@ Item {
             Repeater {
                 model: detail.notes
                 // Tap: a new note for today with this text, to adjust for the next lesson (as in
-                // Qupil 1.x). Long press or right click: edit and delete slide in on the right.
-                delegate: AbstractButton {
+                // Qupil 1.x). Swipe left, press and hold or right click: edit and delete roll in
+                // on the right; swipe right or tap hides them again.
+                // Pointer handlers (not a button): a button would also react to swipes and to the
+                // right-click handler on touch screens.
+                delegate: Control {
                     id: noteCard
                     required property var modelData
                     readonly property bool revealed: detail.revealedNote === modelData.id
+                    // Horizontal finger movement while swiping (0 otherwise)
+                    property real swipe: 0
+                    function toggle() { detail.revealedNote = revealed ? "" : modelData.id }
+                    function copy() {
+                        if (detail.revealedNote !== "")
+                            detail.revealedNote = ""
+                        else
+                            Nav.newNoteFrom(detail.currentMembership, modelData.id)
+                    }
                     Layout.fillWidth: true
                     implicitHeight: Math.max(noteColumn.implicitHeight + 28, actionRow.implicitHeight + 20)
                     clip: true
@@ -380,23 +392,64 @@ Item {
                     hoverEnabled: true
                     Accessible.role: Accessible.Button
                     Accessible.name: Data.formatDate(modelData.date) + " " + Data.plainText(modelData.content, 120)
-                    onClicked: {
-                        if (detail.revealedNote !== "")
-                            detail.revealedNote = ""
-                        else
-                            Nav.newNoteFrom(detail.currentMembership, modelData.id)
-                    }
-                    onPressAndHold: detail.revealedNote = revealed ? "" : modelData.id
+                    Accessible.onPressAction: copy()
+                    Keys.onReturnPressed: copy()
+                    Keys.onEnterPressed: copy()
+                    Keys.onSpacePressed: copy()
+                    Keys.onMenuPressed: toggle()
+
                     TapHandler {
-                        acceptedButtons: Qt.RightButton
-                        onTapped: detail.revealedNote = noteCard.revealed ? "" : noteCard.modelData.id
+                        id: tap
+                        acceptedButtons: Qt.LeftButton | Qt.RightButton
+                        onTapped: (eventPoint, button) => {
+                            if (button === Qt.RightButton)
+                                noteCard.toggle()
+                            else
+                                noteCard.copy()
+                        }
+                        onLongPressed: noteCard.toggle()
                     }
-                    Keys.onMenuPressed: detail.revealedNote = noteCard.revealed ? "" : noteCard.modelData.id
+                    // Only watches (passive): the page keeps scrolling up and down
+                    PointHandler {
+                        id: swipeTracker
+                        property real startX
+                        property real startY
+                        property real lastX
+                        property real lastY
+                        onPointChanged: {
+                            if (!active)
+                                return
+                            lastX = point.position.x
+                            lastY = point.position.y
+                            const dx = lastX - startX
+                            noteCard.swipe = Math.abs(dx) > Math.abs(lastY - startY) ? dx : 0
+                        }
+                        onActiveChanged: {
+                            if (active) {
+                                startX = lastX = point.position.x
+                                startY = lastY = point.position.y
+                                return
+                            }
+                            const dx = lastX - startX
+                            const dy = lastY - startY
+                            noteCard.swipe = 0
+                            if (Math.abs(dx) < 40 || Math.abs(dx) < 2 * Math.abs(dy))
+                                return
+                            detail.revealedNote = dx < 0 ? noteCard.modelData.id
+                                                         : (noteCard.revealed ? "" : detail.revealedNote)
+                        }
+                    }
                     background: Rectangle {
                         radius: Theme.radius
                         color: Theme.surface
                         border.width: noteCard.visualFocus ? 2 : 0
                         border.color: Theme.accentText
+                        Rectangle {
+                            anchors.fill: parent
+                            radius: parent.radius
+                            color: Theme.text
+                            opacity: tap.pressed ? 0.06 : 0
+                        }
                     }
                     contentItem: ColumnLayout {
                         id: noteColumn
@@ -446,11 +499,14 @@ Item {
                         y: 0
                         width: actionRow.implicitWidth + 28
                         height: noteCard.height
-                        x: noteCard.revealed ? noteCard.width - width : noteCard.width + 24
+                        // How far it is rolled in: follows the finger while swiping
+                        readonly property real shown: Math.max(0, Math.min(width, (noteCard.revealed ? width : 0) - noteCard.swipe))
+                        x: shown > 0 ? noteCard.width - shown : noteCard.width + 24
                         visible: x < noteCard.width
                         radius: Theme.radius
                         color: Theme.surface
                         Behavior on x {
+                            enabled: noteCard.swipe === 0
                             NumberAnimation { duration: 200; easing.type: Easing.OutCubic }
                         }
                         // Soft edge towards the text
@@ -533,26 +589,44 @@ Item {
             }
             Repeater {
                 model: detail.pieces
-                delegate: AbstractButton {
+                // Tap: edit; press and hold or right click: menu (pointer handlers, see the notes)
+                delegate: Control {
                     id: pieceCard
                     required property var modelData
+                    function edit() { Nav.editPiece(detail.currentMembership, modelData.id) }
                     Layout.fillWidth: true
                     implicitHeight: pieceColumn.implicitHeight + 28
                     focusPolicy: Qt.StrongFocus
                     hoverEnabled: true
                     Accessible.role: Accessible.Button
                     Accessible.name: modelData.composer + " " + modelData.title
-                    onClicked: Nav.editPiece(detail.currentMembership, modelData.id)
-                    onPressAndHold: pieceMenu.popup()
+                    Accessible.onPressAction: edit()
+                    Keys.onReturnPressed: edit()
+                    Keys.onEnterPressed: edit()
+                    Keys.onSpacePressed: edit()
+                    Keys.onMenuPressed: pieceMenu.popup()
                     TapHandler {
-                        acceptedButtons: Qt.RightButton
-                        onTapped: pieceMenu.popup()
+                        id: pieceTap
+                        acceptedButtons: Qt.LeftButton | Qt.RightButton
+                        onTapped: (eventPoint, button) => {
+                            if (button === Qt.RightButton)
+                                pieceMenu.popup()
+                            else
+                                pieceCard.edit()
+                        }
+                        onLongPressed: pieceMenu.popup()
                     }
                     background: Rectangle {
                         radius: Theme.radius
                         color: Theme.surface
                         border.width: pieceCard.visualFocus ? 2 : 0
                         border.color: Theme.accentText
+                        Rectangle {
+                            anchors.fill: parent
+                            radius: parent.radius
+                            color: Theme.text
+                            opacity: pieceTap.pressed ? 0.06 : 0
+                        }
                     }
                     contentItem: ColumnLayout {
                         id: pieceColumn
