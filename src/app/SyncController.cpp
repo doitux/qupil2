@@ -256,7 +256,9 @@ void SyncController::connectNextcloud(const QString &serverAddress)
         m_pollToken = o.value(u"poll"_s).toObject().value(u"token"_s).toString().toUtf8();
         if (status != 200 || login.isEmpty() || !m_pollEndpoint.isValid()) {
             //: %1 = server address
-            const QString text = qtTrId("sync.error.server").arg(m_server.host().isEmpty() ? m_server.toString() : m_server.host());
+            QString text = qtTrId("sync.error.server").arg(m_server.host().isEmpty() ? m_server.toString() : m_server.host());
+            if (reply->error() != QNetworkReply::NoError)
+                text += u" ("_s + reply->errorString() + u")"_s;   // e.g. no TLS, no network, wrong address
             setError(text);
             emit message(text);
             m_loginReply = nullptr;

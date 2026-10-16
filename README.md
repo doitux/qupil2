@@ -33,7 +33,7 @@ ctest --test-dir build --output-on-failure
 
 A self-contained copy with the Qt runtime: `cmake --install build --prefix "$PWD/dist"` (the prefix must be an absolute path).
 
-For Android and iOS, configure with the `qt-cmake` of the mobile Qt kit and point `QT_HOST_PATH` to the desktop Qt of the same version. `.github/workflows/mobile.yml` shows the exact commands.
+For Android and iOS, configure with the `qt-cmake` of the mobile Qt kit and point `QT_HOST_PATH` to the desktop Qt of the same version. Android also needs OpenSSL for HTTPS (the Nextcloud sync): check out [KDAB/android_openssl](https://github.com/KDAB/android_openssl) and pass `-DQUPIL_ANDROID_OPENSSL=<that folder>`. `.github/workflows/mobile.yml` shows the exact commands.
 
 ## Continuous integration
 

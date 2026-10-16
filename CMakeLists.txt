@@ -151,6 +151,16 @@ if(ANDROID)
     if(DEFINED ENV{GITHUB_RUN_NUMBER})
         set_target_properties(qupil PROPERTIES QT_ANDROID_VERSION_CODE $ENV{GITHUB_RUN_NUMBER})
     endif()
+    # HTTPS (the Nextcloud sync) needs OpenSSL, which Qt does not bring for Android:
+    # the prebuilt libraries of https://github.com/KDAB/android_openssl go into the APK
+    set(QUPIL_ANDROID_OPENSSL "" CACHE PATH "Checkout of KDAB/android_openssl (HTTPS on Android)")
+    set(_ssl "${QUPIL_ANDROID_OPENSSL}/ssl_3/${CMAKE_ANDROID_ARCH_ABI}")
+    if(QUPIL_ANDROID_OPENSSL AND EXISTS "${_ssl}/libssl_3.so" AND EXISTS "${_ssl}/libcrypto_3.so")
+        set_property(TARGET qupil APPEND PROPERTY QT_ANDROID_EXTRA_LIBS "${_ssl}/libcrypto_3.so" "${_ssl}/libssl_3.so")
+        message(STATUS "OpenSSL for Android: ${_ssl}")
+    else()
+        message(WARNING "No OpenSSL for Android (QUPIL_ANDROID_OPENSSL): the Nextcloud sync cannot connect (HTTPS)")
+    endif()
 endif()
 
 if(WIN32)
@@ -265,6 +275,7 @@ qt_add_qml_module(qupil
         LICENSE
         LICENSES/LicenseRef-Qupil-AppStore-exception.txt
         LICENSES/OFL-1.1.txt
+        LICENSES/Apache-2.0.txt
         3rdparty/monocypher/LICENCE.md
     SOURCES
         src/core/LanguageManager.h

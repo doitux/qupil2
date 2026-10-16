@@ -384,7 +384,13 @@ QString AppController::licenseText() const
         + read(u"3rdparty/monocypher/LICENCE.md"_s) + u"\n\n"_s + rule
         + u"\n\nQt: © The Qt Company Ltd. and other contributors, used under the GNU Lesser General "
           u"Public License version 3 (https://www.gnu.org/licenses/lgpl-3.0.html). "
-          u"Source code: https://code.qt.io\n"_s;
+          u"Source code: https://code.qt.io\n"_s
+#ifdef Q_OS_ANDROID
+        + u"\n"_s + rule + u"\n\nOpenSSL: © The OpenSSL Project Authors, https://www.openssl.org "
+                             u"(built by KDAB, https://github.com/KDAB/android_openssl)\n\n"_s
+        + read(u"LICENSES/Apache-2.0.txt"_s) + u"\n"_s
+#endif
+        ;
 }
 
 QVariantMap AppController::info() const
