@@ -78,8 +78,8 @@ public:
 
     // ------------------------------------------------------------ notes and pieces
     Q_INVOKABLE QVariantList notes(const QString &membershipId) const;
-    Q_INVOKABLE QString addNote(const QString &membershipId, const QString &date, const QString &html, bool forAll);
-    Q_INVOKABLE bool updateNote(const QString &id, const QString &date, const QString &html, bool forAll);
+    Q_INVOKABLE QString addNote(const QString &membershipId, const QString &date, const QString &content, bool forAll);
+    Q_INVOKABLE bool updateNote(const QString &id, const QString &date, const QString &content, bool forAll);
     Q_INVOKABLE bool deleteNote(const QString &id, bool forAll);
 
     //! stateFilter -1 = all
@@ -179,8 +179,10 @@ public:
 
     // ------------------------------------------------------------ text helpers
     //! Note HTML for display: only the body, colours readable on the current background
-    Q_INVOKABLE QString noteHtml(const QString &html, bool dark) const;
-    Q_INVOKABLE QString plainText(const QString &html, int maxLength = 0) const;
+    //! A lesson note (also old HTML) as simple HTML for showing or editing; markColor: marked text
+    Q_INVOKABLE QString noteHtml(const QString &note, const QString &markColor = {}) const;
+    //! A lesson note without formatting, shortened with "…" to maxLength
+    Q_INVOKABLE QString plainText(const QString &note, int maxLength = 0) const;
     //! "Wed, 07.10.2026" style date in the UI language
     Q_INVOKABLE QString formatDate(const QString &iso, bool withWeekday = false) const;
     Q_INVOKABLE QString today() const;

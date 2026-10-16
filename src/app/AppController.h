@@ -156,6 +156,7 @@ private:
     bool startEmpty(bool awaitingSync);
 
     bool openDatabase(QString *error);
+    int upgradeNotes();
     bool safetyBackup(const QString &reason);
     void rotate(const QString &prefix, int keep);
     void setPhase(Phase phase);

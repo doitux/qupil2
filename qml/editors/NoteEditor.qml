@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: 2006-2026 Felix Hammer
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 //
-// New or changed lesson note with bold, italic, underline and red.
+// New or changed lesson note with bold, italic, underline and marking (colour
+// chosen under Appearance).
 // In group lessons it can be saved for all students of the lesson.
 
 import QtQuick
@@ -28,7 +29,7 @@ Sheet {
         if (note) {
             const n = Data.get("note", note)
             date = n.date || Data.today()
-            noteText.text = Data.noteHtml(n.content || "", false)
+            noteText.text = Data.noteHtml(n.content || "", Theme.noteMark)
             const copies = Data.notes(membership).find(x => x.id === note)
             forAll = defaultForAll && copies !== undefined && copies.shared > 1
         } else {
@@ -44,11 +45,12 @@ Sheet {
     acceptText: qsTrId("note.save")
     canAccept: noteText.length > 0
     onAccepted: {
-        const html = formatter.html()
+        // Stored compactly: **bold**, *italic*, ++underlined++, ==marked==
+        const content = formatter.markup()
         if (noteId)
-            Data.updateNote(noteId, date, html, forAll && groupSize > 1)
+            Data.updateNote(noteId, date, content, forAll && groupSize > 1)
         else
-            Data.addNote(membershipId, date, html, forAll && groupSize > 1)
+            Data.addNote(membershipId, date, content, forAll && groupSize > 1)
     }
 
     // Lesson and students the note is for
@@ -139,13 +141,13 @@ Sheet {
             FormatButton {
                 checked: formatter.colored
                 Accessible.name: qsTrId("format.text_color")
-                onClicked: formatter.toggleColor("#C62828")
+                onClicked: formatter.toggleColor(Theme.noteMark)
                 Rectangle {
                     anchors.centerIn: parent
                     width: 18
                     height: 18
                     radius: 9
-                    color: Theme.noteRed
+                    color: Theme.noteMark
                 }
             }
         }

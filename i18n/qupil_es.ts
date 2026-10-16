@@ -3090,6 +3090,11 @@ Póngase en contacto con el autor en %4 para resolver el problema.</translation>
         <source>Highlight</source>
         <translation>Resaltado</translation>
     </message>
+    <message id="settings.colors.mark">
+        <source>Marking in notes</source>
+        <extracomment>Colour of marked text in lesson notes.</extracomment>
+        <translation>Marcado en las notas</translation>
+    </message>
     <message id="settings.colors.custom">
         <source>Your own colour</source>
         <translation>Color propio</translation>

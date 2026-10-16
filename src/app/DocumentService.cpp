@@ -304,7 +304,7 @@ QString DocumentService::dayOverviewHtml(const QString &dateIso, int notesPerLes
                     if (!shared || whose.size() > 1)
                         when += u"<br><i>"_s + esc(student.value(u"listName"_s).toString()) + u"</i>"_s;
                     list += u"<tr><td width=\"18%\">"_s + when + u"</td><td>"_s
-                            + m_data->noteHtml(note.value(u"content"_s).toString(), false) + u"</td></tr>"_s;
+                            + m_data->noteHtml(note.value(u"content"_s).toString()) + u"</td></tr>"_s;
                 }
             }
             if (!list.isEmpty())
@@ -552,7 +552,7 @@ QString DocumentService::studentArchiveHtml(const QString &studentId) const
                                                   u"ORDER BY date"_s, { membership })) {
                 const QVariantMap note = n.toMap();
                 notes << QStringList { esc(m_data->formatDate(note.value(u"date"_s).toString())),
-                                       m_data->noteHtml(note.value(u"content"_s).toString(), false) };
+                                       m_data->noteHtml(note.value(u"content"_s).toString()) };
             }
             if (!notes.isEmpty())
                 body += u"<h3>"_s + esc(qtTrId("common.lesson_notes") + u" – "_s + titles.at(i)) + u"</h3>"_s

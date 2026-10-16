@@ -104,14 +104,23 @@ ColumnLayout {
         onPicked: (c) => Theme.highlightChoice = Qt.colorEqual(c, Theme.defaultHighlight) ? "" : c
         onCustom: colorDialog.choose("highlight", Theme.highlightBase)
     }
+    ColorRow {
+        label: qsTrId("settings.colors.mark")
+        // marked text in lesson notes
+        colors: ["#B3261E", "#D84315", "#B8860B", "#2E7D32", "#00838F", "#1565C0", "#6A1B9A", "#AD1457"]
+        current: Theme.customMark ? Theme.markChoice : Theme.defaultMark
+        onPicked: (c) => Theme.markChoice = Qt.colorEqual(c, Theme.defaultMark) ? "" : c
+        onCustom: colorDialog.choose("mark", Theme.customMark ? Theme.markChoice : Theme.defaultMark)
+    }
     ActionButton {
-        visible: Theme.accentChoice !== "" || Theme.highlightChoice !== ""
+        visible: Theme.accentChoice !== "" || Theme.highlightChoice !== "" || Theme.markChoice !== ""
         kind: "quiet"
         iconName: "restore"
         text: qsTrId("settings.colors.reset")
         onClicked: {
             Theme.accentChoice = ""
             Theme.highlightChoice = ""
+            Theme.markChoice = ""
         }
     }
 
@@ -123,11 +132,14 @@ ColumnLayout {
             selectedColor = current
             open()
         }
-        title: target === "accent" ? qsTrId("settings.colors.accent") : qsTrId("settings.colors.highlight")
+        title: target === "accent" ? qsTrId("settings.colors.accent")
+             : target === "mark" ? qsTrId("settings.colors.mark") : qsTrId("settings.colors.highlight")
         onAccepted: {
             const c = selectedColor.toString()
             if (target === "accent")
                 Theme.accentChoice = Qt.colorEqual(c, Theme.defaultAccent) ? "" : c
+            else if (target === "mark")
+                Theme.markChoice = Qt.colorEqual(c, Theme.defaultMark) ? "" : c
             else
                 Theme.highlightChoice = Qt.colorEqual(c, Theme.defaultHighlight) ? "" : c
         }

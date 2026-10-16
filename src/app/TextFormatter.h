@@ -52,8 +52,8 @@ public:
     Q_INVOKABLE void toggleUnderline();
     //! Marks the selection in the colour, or removes it if it already has that colour
     Q_INVOKABLE void toggleColor(const QColor &color);
-    //! The note as HTML for storing (empty if there is no text)
-    Q_INVOKABLE QString html() const;
+    //! The note in Qupil's compact format (**bold**, *italic*, ++underlined++, ==marked==)
+    Q_INVOKABLE QString markup() const;
     Q_INVOKABLE bool isEmpty() const;
 
 signals:

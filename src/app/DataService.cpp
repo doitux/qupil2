@@ -30,7 +30,7 @@
 #include "Ids.h"
 #include "Csv.h"
 #include "LanguageManager.h"
-#include "NoteHtml.h"
+#include "NoteFormat.h"
 #include "Store.h"
 
 using namespace Qt::StringLiterals;
@@ -202,18 +202,17 @@ QString DataService::formatDate(const QString &iso, bool withWeekday) const
     return text;
 }
 
-QString DataService::plainText(const QString &html, int maxLength) const
+QString DataService::plainText(const QString &note, int maxLength) const
 {
-    QString text = html.contains(u'<') ? QTextDocumentFragment::fromHtml(html).toPlainText() : html;
-    text = text.simplified();
+    QString text = NoteFormat::toPlainText(note).simplified();
     if (maxLength > 0 && text.size() > maxLength)
         text = text.left(maxLength - 1).trimmed() + u'…';
     return text;
 }
 
-QString DataService::noteHtml(const QString &html, bool dark) const
+QString DataService::noteHtml(const QString &note, const QString &markColor) const
 {
-    return NoteHtml::forList(html, dark);
+    return NoteFormat::toHtml(note, markColor);
 }
 
 // ---------------------------------------------------------------------------- settings
@@ -762,7 +761,7 @@ QVariantList DataService::notes(const QString &membershipId) const
     return out;
 }
 
-QString DataService::addNote(const QString &membershipId, const QString &date, const QString &html, bool forAll)
+QString DataService::addNote(const QString &membershipId, const QString &date, const QString &content, bool forAll)
 {
     const QString key = newId();
     const QStringList targets = forAll ? activeMembershipsOfSameLesson(membershipId) : QStringList { membershipId };
@@ -770,7 +769,7 @@ QString DataService::addNote(const QString &membershipId, const QString &date, c
     QString first;
     for (const QString &m : targets) {
         const QString id = m_store->create(u"note"_s, { { u"membership_id"_s, m }, { u"group_key"_s, key },
-                                                        { u"date"_s, date }, { u"content"_s, html } });
+                                                        { u"date"_s, date }, { u"content"_s, NoteFormat::normalized(content) } });
         if (m == membershipId)
             first = id;
     }
@@ -778,12 +777,12 @@ QString DataService::addNote(const QString &membershipId, const QString &date, c
     return first;
 }
 
-bool DataService::updateNote(const QString &id, const QString &date, const QString &html, bool forAll)
+bool DataService::updateNote(const QString &id, const QString &date, const QString &content, bool forAll)
 {
     m_store->beginBatch();
     bool ok = true;
     for (const QString &copy : forAll ? groupCopies(u"note"_s, id) : QStringList { id })
-        ok = ok && m_store->update(u"note"_s, copy, { { u"date"_s, date }, { u"content"_s, html } });
+        ok = ok && m_store->update(u"note"_s, copy, { { u"date"_s, date }, { u"content"_s, NoteFormat::normalized(content) } });
     return m_store->endBatch(ok) && ok;
 }
 

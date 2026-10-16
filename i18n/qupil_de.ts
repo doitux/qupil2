@@ -3091,6 +3091,11 @@ Bitte wenden Sie sich an den Programm-Autor: %4 um dieses Problem zu beheben!</t
         <source>Highlight</source>
         <translation>Hervorhebung</translation>
     </message>
+    <message id="settings.colors.mark">
+        <source>Marking in notes</source>
+        <extracomment>Colour of marked text in lesson notes.</extracomment>
+        <translation>Markierung in Notizen</translation>
+    </message>
     <message id="settings.colors.custom">
         <source>Your own colour</source>
         <translation>Eigene Farbe</translation>

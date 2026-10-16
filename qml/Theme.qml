@@ -94,9 +94,14 @@ QtObject {
     readonly property color overlay:        dark ? Qt.rgba(0, 0, 0, 0.62) : Qt.rgba(0.114, 0.102, 0.133, 0.55)
     readonly property color shadow:         dark ? Qt.rgba(0, 0, 0, 0.45) : Qt.rgba(0.114, 0.102, 0.133, 0.18)
 
-    // Colours the user chose in rich-text notes are lightened in dark mode,
-    // see noteColor(). Red is the most common one and used as reference.
-    readonly property color noteRed:        dark ? "#FF8F85" : "#B3261E"
+    // Marked text in lesson notes (==…==): red unless another colour is chosen
+    // under Appearance; always readable on the page
+    property string markChoice: ""
+    readonly property color defaultMark: "#B3261E"
+    readonly property bool customMark: markChoice !== "" && !Qt.colorEqual(markChoice, defaultMark)
+    readonly property color noteMark:       !customMark ? (dark ? "#FF8F85" : "#B3261E")
+                                            : dark ? _readable(_shade(markChoice, 1, 0.75), surface, 4.5, true)
+                                                   : _readable(markChoice, "#FFFFFF", 4.5, false)
 
     // ---------------------------------------------------------------- piece status
     // index = piece state in the database (0 planned … 4 finished)
@@ -127,14 +132,6 @@ QtObject {
     readonly property int radius: 16
     readonly property int radiusLarge: 22
     readonly property int touchTarget: 44
-
-    // Keeps a colour from a rich-text note readable on the current background.
-    function noteColor(c) {
-        const col = Qt.darker(c, 1.0)          // accepts strings and colours, returns a colour
-        if (!dark || col.hslLightness >= 0.6)
-            return col
-        return Qt.hsla(col.hslHue, col.hslSaturation, 0.75, 1)
-    }
 
     // ---------------------------------------------------------------- colour helpers
     //! Dark or white text, whichever is easier to read on c
@@ -175,6 +172,7 @@ QtObject {
         property alias mode: theme.mode
         property alias accentColor: theme.accentChoice
         property alias highlightColor: theme.highlightChoice
+        property alias markColor: theme.markChoice
     }
 
     // Qt >= 6.8: also switch native window decorations and dialogs.

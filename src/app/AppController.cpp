@@ -8,6 +8,8 @@
 #include <QDateTime>
 #include <QDate>
 #include <QDir>
+#include <QHash>
+#include <QSqlError>
 #include <QFile>
 #include <QFileInfo>
 #include <QJSEngine>
@@ -21,11 +23,13 @@
 #include <QUuid>
 
 #include <algorithm>
+#include <tuple>
 
 #include "Database.h"
 #include "DemoData.h"
 #include "LanguageManager.h"
 #include "LegacyImporter.h"
+#include "NoteFormat.h"
 #include "Schema.h"
 #include "Store.h"
 
@@ -170,8 +174,10 @@ QString AppController::databasePath() const
 bool AppController::openDatabase(QString *error)
 {
     const QString path = databasePath();
-    if (m_db->open(path, error))
+    if (m_db->open(path, error)) {
+        upgradeNotes();
         return true;
+    }
     const int version = Database::schemaVersionOf(path);
     if (version > Qupil::Schema::Version) {
         //: %1 = data version number
@@ -181,6 +187,71 @@ bool AppController::openDatabase(QString *error)
         *error = qtTrId("setup.error.open").arg(*error);
     }
     return false;
+}
+
+/*!
+    Lesson notes of Qupil 1.x and of earlier test builds are whole HTML documents.
+    They are converted once to the compact format (NoteFormat), in the notes and
+    in the change log, and the file is shrunk. Notes that come later from a
+    device with an older version are converted the next time.
+*/
+int AppController::upgradeNotes()
+{
+    QSqlDatabase db = m_db->connection();
+    QHash<QString, QString> converted;   // copies of group notes and log entries are the same
+    const auto convert = [&converted](const QString &html) {
+        auto it = converted.constFind(html);
+        if (it == converted.constEnd())
+            it = converted.insert(html, NoteFormat::fromHtml(html));
+        return *it;
+    };
+    QList<QPair<QString, QString>> notes;   // id, content
+    QList<std::tuple<QString, qint64, QString>> log;   // origin, seq, value
+    {
+        QSqlQuery q(db);
+        q.exec(u"SELECT id, content FROM note WHERE content LIKE '%<%'"_s);
+        while (q.next()) {
+            const QString content = q.value(1).toString();
+            if (NoteFormat::isHtml(content))
+                notes.append({ q.value(0).toString(), convert(content) });
+        }
+        q.exec(u"SELECT origin, seq, value FROM change_log WHERE entity = 'note' AND field = 'content' AND value LIKE '%<%'"_s);
+        while (q.next()) {
+            const QVariant value = Qupil::Store::decodeValue(q.value(2).toString());
+            if (value.typeId() == QMetaType::QString && NoteFormat::isHtml(value.toString()))
+                log.append({ q.value(0).toString(), q.value(1).toLongLong(),
+                             Qupil::Store::encodeValue(convert(value.toString())) });
+        }
+    }
+    if (notes.isEmpty() && log.isEmpty())
+        return 0;
+
+    safetyBackup(u"before-notes"_s);
+    m_db->transaction();
+    bool ok = true;
+    QSqlQuery note(db);
+    note.prepare(u"UPDATE note SET content = ? WHERE id = ?"_s);
+    for (const auto &[id, content] : std::as_const(notes)) {
+        note.addBindValue(content);
+        note.addBindValue(id);
+        ok = ok && note.exec();
+    }
+    QSqlQuery entry(db);
+    entry.prepare(u"UPDATE change_log SET value = ? WHERE origin = ? AND seq = ?"_s);
+    for (const auto &[origin, seq, value] : std::as_const(log)) {
+        entry.addBindValue(value);
+        entry.addBindValue(origin);
+        entry.addBindValue(seq);
+        ok = ok && entry.exec();
+    }
+    if (!ok) {
+        qWarning("Could not convert the lesson notes: %s", qPrintable(db.lastError().text()));
+        m_db->rollback();
+        return 0;
+    }
+    m_db->commit();
+    QSqlQuery(db).exec(u"VACUUM"_s);   // gives the space back
+    return int(notes.size());
 }
 
 void AppController::setPhase(Phase phase)

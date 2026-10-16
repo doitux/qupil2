@@ -1717,6 +1717,8 @@ E("settings.colors.hint",
   es="El color principal se usa en botones, selecciones y títulos; el resaltado muestra lo que ocurre ahora.")
 E("settings.colors.accent", en="Main colour", de="Hauptfarbe", fr="Couleur principale", es="Color principal")
 E("settings.colors.highlight", en="Highlight", de="Hervorhebung", fr="Mise en évidence", es="Resaltado")
+E("settings.colors.mark", en="Marking in notes", de="Markierung in Notizen", fr="Marquage dans les notes",
+  es="Marcado en las notas", c="Colour of marked text in lesson notes.")
 E("settings.colors.custom", en="Your own colour", de="Eigene Farbe", fr="Couleur personnalisée", es="Color propio")
 E("settings.colors.reset", en="Default colours", de="Standardfarben", fr="Couleurs par défaut",
   es="Colores predeterminados")

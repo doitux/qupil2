@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 #include "TextFormatter.h"
 
+#include "NoteFormat.h"
+
 #include <QTextCharFormat>
 #include <QTextCursor>
 #include <QTextDocument>
@@ -128,10 +130,10 @@ bool TextFormatter::isEmpty() const
     return !doc || doc->toPlainText().trimmed().isEmpty();
 }
 
-QString TextFormatter::html() const
+QString TextFormatter::markup() const
 {
     QTextDocument *doc = m_document ? m_document->textDocument() : nullptr;
     if (!doc || isEmpty())
         return {};
-    return doc->toHtml();
+    return NoteFormat::fromDocument(*doc);
 }

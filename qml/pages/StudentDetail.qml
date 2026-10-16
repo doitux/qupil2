@@ -381,7 +381,7 @@ Item {
                             Layout.fillWidth: true
                             textFormat: Text.RichText
                             wrapMode: Text.Wrap
-                            text: Data.noteHtml(noteCard.modelData.content, Theme.dark)
+                            text: Data.noteHtml(noteCard.modelData.content, Theme.noteMark)
                             color: Theme.text
                             font.family: Theme.fontFamily
                             font.pixelSize: 15
