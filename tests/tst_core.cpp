@@ -1129,9 +1129,10 @@ private slots:
         // Files of older builds: one field per change, the clock as text
         const QJsonArray old { u"dev-a"_s, 7.0, u"1800000000123.0007.dev-a"_s, u"note"_s, u"n1"_s, u"content"_s,
                                u"[\"alt\"]"_s };
+        QJsonArray list;   // not QJsonArray { old }: some compilers make that a copy of old
+        list.append(old);
         const auto fromV1 = SyncFormat::decode(
-            qCompress(QJsonDocument(QJsonObject { { u"v"_s, 1 }, { u"changes"_s, QJsonArray { old } } }).toJson(), 6),
-            &version);
+            qCompress(QJsonDocument(QJsonObject { { u"v"_s, 1 }, { u"changes"_s, list } }).toJson(), 6), &version);
         QVERIFY(fromV1);
         QCOMPARE(version, 1);
         QCOMPARE(fromV1->first().time, c.time);
