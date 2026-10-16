@@ -132,6 +132,8 @@ QtObject {
     readonly property int radius: 16
     readonly property int radiusLarge: 22
     readonly property int touchTarget: 44
+    //! Hints while a mouse rests on a button (Tip): not on phones and tablets
+    readonly property bool hoverHints: Qt.platform.os !== "ios" && Qt.platform.os !== "android"
 
     // ---------------------------------------------------------------- colour helpers
     //! Dark or white text, whichever is easier to read on c

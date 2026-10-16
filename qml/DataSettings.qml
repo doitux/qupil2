@@ -125,24 +125,28 @@ ColumnLayout {
         }
     }
 
-    Menu {
+    AppMenu {
         id: takeOverMenu
+        maxWidth: 480
 
         Repeater {
             model: App.legacyFolders
-            delegate: MenuItem {
+            delegate: AppMenuItem {
                 required property var modelData
+                iconName: "database"
                 text: qsTrId("setup.legacy.found").arg(modelData.path)
                 onTriggered: actions.start(modelData.url, "legacy")
             }
         }
-        MenuItem {
+        AppMenuItem {
+            iconName: "folder"
             visible: App.desktop
             height: visible ? implicitHeight : 0
             text: qsTrId("setup.legacy.choose_folder")
             onTriggered: actions.chooseLegacyFolder()
         }
-        MenuItem {
+        AppMenuItem {
+            iconName: "file"
             text: qsTrId("setup.legacy.choose_file")
             onTriggered: actions.chooseLegacyFile()
         }

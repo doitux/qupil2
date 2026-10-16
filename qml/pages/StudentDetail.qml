@@ -87,7 +87,7 @@ Item {
                     id: moreButton
                     iconName: "more"
                     text: qsTrId("common.more_actions")
-                    onClicked: studentMenu.popup(moreButton, moreButton.width - studentMenu.width, moreButton.height)
+                    onClicked: detail.openMoreMenu()
                 }
             }
 
@@ -134,7 +134,7 @@ Item {
                     visible: !detail.showBack
                     iconName: "more"
                     text: qsTrId("common.more_actions")
-                    onClicked: studentMenu.popup(moreButtonWide, moreButtonWide.width - studentMenu.width, moreButtonWide.height)
+                    onClicked: detail.openMoreMenu()
                 }
             }
 
@@ -196,12 +196,12 @@ Item {
                 leftPadding: 14
                 rightPadding: 14
 
-                Menu {
+                AppMenu {
                     id: lessonMenu
-                    width: lessonSelector.width
+                    width: Math.max(lessonSelector.width, implicitWidth)
                     Repeater {
                         model: detail.memberships
-                        delegate: MenuItem {
+                        delegate: AppMenuItem {
                             required property var modelData
                             text: modelData.label
                             checkable: true
@@ -263,29 +263,45 @@ Item {
         onClicked: detail.tab === 0 ? Nav.editNote(detail.currentMembership, "") : Nav.editPiece(detail.currentMembership, "")
     }
 
-    Menu {
+    //! The menu behind "…" (also for the screenshot tour)
+    function openMoreMenu() {
+        const button = moreButtonWide.visible ? moreButtonWide : moreButton
+        studentMenu.popup(button, button.width - studentMenu.width, button.height + 4)
+    }
+    function closeMoreMenu() {
+        studentMenu.close()
+    }
+
+    AppMenu {
         id: studentMenu
-        MenuItem {
+        AppMenuItem {
+            iconName: "edit"
             text: qsTrId("common.edit")
             onTriggered: detail.tab = 3
         }
-        MenuItem {
+        AppMenuItem {
+            iconName: "bell"
             text: qsTrId("student.add_reminder")
             onTriggered: Nav.editReminder("", detail.studentId)
         }
-        MenuItem {
+        AppMenuItem {
+            iconName: "archive"
             text: qsTrId("student.archive")
             onTriggered: {
                 Docs.archiveStudent(detail.studentId)
                 Nav.toast(qsTrId("archive.saved").arg(detail.student.name || ""))
             }
         }
-        MenuSeparator {}
-        MenuItem {
+        AppMenuSeparator {}
+        AppMenuItem {
+            iconName: "archive"
+            destructive: true
             text: qsTrId("student.archive_delete")
             onTriggered: archiveAndDelete.open()
         }
-        MenuItem {
+        AppMenuItem {
+            iconName: "trash"
+            destructive: true
             text: qsTrId("student.delete")
             onTriggered: deleteStudent.open()
         }
@@ -677,13 +693,14 @@ Item {
                     leftPadding: 16
                     rightPadding: 16
 
-                    Menu {
+                    AppMenu {
                         id: pieceMenu
-                        Menu {
+                        AppMenu {
+                            iconName: "star"
                             title: qsTrId("piece.change_status")
                             Repeater {
                                 model: [0, 1, 2, 3, 4]
-                                delegate: MenuItem {
+                                delegate: AppMenuItem {
                                     required property int modelData
                                     text: badgeLabel.label(modelData)
                                     checkable: true
@@ -692,15 +709,21 @@ Item {
                                 }
                             }
                         }
-                        MenuItem {
+                        AppMenuItem {
+                            iconName: "edit"
                             text: qsTrId("common.edit")
                             onTriggered: Nav.editPiece(detail.currentMembership, pieceCard.modelData.id)
                         }
-                        MenuItem {
+                        AppMenuSeparator {}
+                        AppMenuItem {
+                            iconName: "trash"
+                            destructive: true
                             text: qsTrId("piece.delete")
                             onTriggered: Data.deletePiece(pieceCard.modelData.id, false)
                         }
-                        MenuItem {
+                        AppMenuItem {
+                            iconName: "trash"
+                            destructive: true
                             visible: pieceCard.modelData.shared > 1
                             height: visible ? implicitHeight : 0
                             text: qsTrId("piece.delete_for_all")

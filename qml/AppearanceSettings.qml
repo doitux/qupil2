@@ -222,8 +222,9 @@ ColumnLayout {
         Accessible.role: Accessible.RadioButton
         Accessible.checked: selected
         Accessible.name: text !== "" ? text : fill.toString()
-        ToolTip.visible: hovered && text !== ""
-        ToolTip.text: text
+        Tip {
+            text: swatch.text
+        }
         background: Rectangle {
             radius: width / 2
             color: swatch.fill

@@ -98,9 +98,10 @@ SubPage {
                     }
                     leftPadding: 14
                     rightPadding: 6
-                    Menu {
+                    AppMenu {
                         id: rowMenu
-                        MenuItem {
+                        AppMenuItem {
+                            iconName: "bell"
                             text: qsTrId("candidates.recital.add_reminder")
                             onTriggered: Data.create("reminder", { text: qsTrId("candidates.recital.reminder_text"), mode: 2,
                                                                    student_id: row.modelData.id, sound: 1 })

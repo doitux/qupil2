@@ -197,6 +197,9 @@ set(QUPIL_QML_FILES
     qml/LessonEndSettings.qml
     qml/TakeOverActions.qml
     qml/TakeOverSummary.qml
+    qml/components/AppMenu.qml
+    qml/components/AppMenuItem.qml
+    qml/components/AppMenuSeparator.qml
     qml/components/Avatar.qml
     qml/components/BuildChip.qml
     qml/components/Chip.qml
@@ -221,6 +224,7 @@ set(QUPIL_QML_FILES
     qml/components/SubPage.qml
     qml/components/SwitchRow.qml
     qml/components/TimeField.qml
+    qml/components/Tip.qml
     qml/editors/ActivityEditor.qml
     qml/editors/PairingSheet.qml
     qml/editors/LibraryItemEditor.qml

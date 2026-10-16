@@ -130,13 +130,15 @@ Flickable {
                 iconName: "plus"
                 text: qsTrId("menu.new")
                 onClicked: addMenu.popup(addButton, addButton.width - addMenu.width, addButton.height + 4)
-                Menu {
+                AppMenu {
                     id: addMenu
-                    MenuItem {
+                    AppMenuItem {
+                        iconName: "userPlus"
                         text: qsTrId("schedule.new_student")
                         onTriggered: Nav.newStudent()
                     }
-                    MenuItem {
+                    AppMenuItem {
+                        iconName: "calendar"
                         text: qsTrId("schedule.new_lesson")
                         onTriggered: Nav.editLesson("", overview.day)
                     }

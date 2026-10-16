@@ -21,9 +21,10 @@ AbstractButton {
     hoverEnabled: true
     Accessible.role: Accessible.Button
     Accessible.name: text
-    ToolTip.visible: hovered && text !== ""
-    ToolTip.text: text
-    ToolTip.delay: 600
+
+    Tip {
+        text: button.text
+    }
 
     background: Rectangle {
         radius: width / 2

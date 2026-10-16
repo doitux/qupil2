@@ -73,7 +73,7 @@ Item {
                     id: moreButton
                     iconName: "more"
                     text: qsTrId("common.more_actions")
-                    onClicked: eventMenu.popup(moreButton, moreButton.width - eventMenu.width, moreButton.height)
+                    onClicked: eventMenu.popup(moreButton, moreButton.width - eventMenu.width, moreButton.height + 4)
                 }
             }
 
@@ -323,25 +323,31 @@ Item {
         }
     }
 
-    Menu {
+    AppMenu {
         id: eventMenu
-        MenuItem {
+        AppMenuItem {
+            iconName: "document"
             text: qsTrId("event.export_program")
             onTriggered: Docs.programme(detail.eventId)
         }
-        MenuItem {
+        AppMenuItem {
+            iconName: "archive"
             text: qsTrId("event.archive")
             onTriggered: {
                 Docs.archiveEvent(detail.eventId)
                 Nav.toast(qsTrId("archive.saved").arg(detail.event.title || ""))
             }
         }
-        MenuSeparator {}
-        MenuItem {
+        AppMenuSeparator {}
+        AppMenuItem {
+            iconName: "archive"
+            destructive: true
             text: qsTrId("event.archive_delete")
             onTriggered: archiveAndDelete.open()
         }
-        MenuItem {
+        AppMenuItem {
+            iconName: "trash"
+            destructive: true
             text: qsTrId("event.delete.title")
             onTriggered: confirmDelete.open()
         }

@@ -37,6 +37,8 @@ private:
     void run();
     void shot(const QString &name);
     //! Shows the edit and delete buttons of a note on the student page ("" hides them)
+    //! Calls a QML function without arguments, e.g. "openMoreMenu()", wherever it exists
+    void callAll(const char *method);
     void revealNote(const QString &noteId);
     void addPages(const QString &prefix);
     void addDetails(const QString &prefix);

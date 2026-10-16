@@ -17,9 +17,11 @@ AbstractButton {
     hoverEnabled: true
     Accessible.role: Accessible.Button
     Accessible.name: "Qupil " + App.versionText
-    ToolTip.visible: hovered
-    ToolTip.text: "Qupil " + App.versionText
-    ToolTip.delay: 500
+
+    Tip {
+        text: "Qupil " + App.versionText
+        delay: 500
+    }
 
     onClicked: {
         App.copyText("Qupil " + App.versionText)

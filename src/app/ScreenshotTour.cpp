@@ -140,6 +140,9 @@ void ScreenshotTour::addDetails(const QString &prefix)
             << Step { [this] { revealNote(m_note); }, {} }
             << snap(prefix + u"-5b-note-actions"_s)
             << Step { [this] { revealNote(QString()); }, {} }
+            << Step { [this] { callAll("openMoreMenu()"); }, {} }
+            << snap(prefix + u"-5d-student-menu"_s)
+            << Step { [this] { callAll("closeMoreMenu()"); }, {} }
             << Step { [this, nav] { nav("newNoteFrom", m_membership, m_note).action(); }, {} }
             << snap(prefix + u"-5c-note-copy"_s) << close
             << Step { [this, nav] { nav("editNote", m_membership, u""_s).action(); }, {} }
@@ -206,6 +209,16 @@ void ScreenshotTour::writeDocuments()
         docs->writePdf(docs->programmeHtml(m_event), u"programme"_s, true, folder);
     if (!m_student.isEmpty())
         docs->writePdf(docs->studentArchiveHtml(m_student), u"student-archive"_s, false, folder);
+}
+
+void ScreenshotTour::callAll(const char *method)
+{
+    const QByteArray signature = QMetaObject::normalizedSignature(method);
+    const QByteArray name = signature.left(signature.indexOf('('));
+    for (QObject *o : m_window->findChildren<QObject *>()) {
+        if (o->metaObject()->indexOfMethod(signature.constData()) >= 0)
+            QMetaObject::invokeMethod(o, name.constData());
+    }
 }
 
 void ScreenshotTour::revealNote(const QString &noteId)
