@@ -313,6 +313,50 @@ bool Store::remove(const QString &entity, const QString &id)
     return update(entity, id, { { u"deleted"_s, 1 } });
 }
 
+bool Store::rewrite(const QString &entity, const QString &id, const QString &field, const QString &from,
+                    const QString &to)
+{
+    const EntityDef *def = Schema::entity(entity);
+    if (!def || !def->hasField(field) || field == u"deleted"_s)
+        return fail(u"cannot rewrite %1.%2"_s.arg(entity, field));
+    beginBatch();
+    QSqlQuery q(m_db->connection());
+    q.prepare(u"UPDATE %1 SET %2 = ? WHERE id = ? AND %2 = ?"_s.arg(entity, field));
+    q.addBindValue(to);
+    q.addBindValue(id);
+    q.addBindValue(from);
+    bool ok = q.exec() || fail(q.lastError().text());
+    const bool changed = ok && q.numRowsAffected() > 0;
+    // The log entries of this record that still carry the old form
+    QList<QPair<int, qint64>> entries;
+    q.prepare(u"SELECT origin, seq, data FROM change_log WHERE entity = ? AND row_id = ?"_s);
+    q.addBindValue(entity);
+    q.addBindValue(id);
+    if (ok && q.exec()) {
+        while (q.next()) {
+            if (decodeFields(q.value(2).toString()).value(field).toString() == from)
+                entries.append({ q.value(0).toInt(), q.value(1).toLongLong() });
+        }
+    }
+    for (const auto &[origin, seq] : std::as_const(entries)) {
+        q.prepare(u"SELECT data FROM change_log WHERE origin = ? AND seq = ?"_s);
+        q.addBindValue(origin);
+        q.addBindValue(seq);
+        if (!ok || !q.exec() || !q.next())
+            continue;
+        QVariantMap fields = decodeFields(q.value(0).toString());
+        fields.insert(field, to);
+        q.prepare(u"UPDATE change_log SET data = ? WHERE origin = ? AND seq = ?"_s);
+        q.addBindValue(encodeFields(fields));
+        q.addBindValue(origin);
+        q.addBindValue(seq);
+        ok = q.exec() || fail(q.lastError().text());
+    }
+    if (changed)
+        touched(entity);
+    return endBatch(ok) && ok;
+}
+
 // ------------------------------------------------------------------ reads
 
 static QVariantMap recordToMap(const QSqlQuery &q)

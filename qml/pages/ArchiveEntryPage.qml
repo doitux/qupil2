@@ -14,6 +14,8 @@ SubPage {
     property string entity: "student_archive"
     property string entryId
     readonly property var entry: { if (Data.revision < 0) return undefined; return Data.get(page.entity, page.entryId) }
+    // Stored packed; entries of Qupil 1.x come in the compact layout
+    readonly property string html: { if (Data.revision < 0) return ""; return Docs.archiveHtml(page.entity, page.entryId) }
     readonly property string name: page.entity === "student_archive"
                                     ? [page.entry.forename, page.entry.surname].filter(x => x).join(" ")
                                     : (page.entry.title || "")
@@ -51,7 +53,7 @@ SubPage {
             selectByMouse: true
             textFormat: TextEdit.RichText
             wrapMode: TextEdit.Wrap
-            text: page.entry.content || ""
+            text: page.html
             color: "#1D1A22"
             font.family: Theme.fontFamily
             font.pixelSize: 14

@@ -6,7 +6,9 @@
 #include <QTest>
 #include <QTextDocument>
 
+#include "ArchiveFormat.h"
 #include "NoteFormat.h"
+#include "TextPack.h"
 
 using namespace Qt::StringLiterals;
 
@@ -22,6 +24,25 @@ const QString kLegacy =
     u"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
     u"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
     u"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Arial'; font-size:14pt; color:#000000;\">Bourrée: Takt 9–16 </span><span style=\" font-size:14pt; font-style:italic; text-decoration: underline; color:#000000;\">auswendig</span>.</p></body></html>"_s;
+
+// An archive entry as Qupil 1.4.1 wrote it (layout tables, every note a whole HTML document)
+const QString kLegacyArchive =
+    u"<!DOCTYPE html PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN'> <html> <head> "
+    u"<meta content='text/html; charset=utf-8' http-equiv='content-type'> <title>Qupil - Archive Entry 7</title> "
+    u"</head> <body> <table style='text-align: left; margin-left: auto; margin-right: auto; width: 100%;' border='0' "
+    u"cellpadding='0' cellspacing='0'> <tr><td align='center' width='100%'><h1>Qupil 1.4.1 - Archive Entry: Anna Test "
+    u"(#7)</h2></td></tr> <tr><td width='100%'></td></tr><tr><td ><table style='text-align: left;' border='0' "
+    u"cellpadding='1' cellspacing='0' width='100%'> <tr><td colspan='4' rowspan='1'><h3><u>Personal data:</u></h3>"
+    u"</td></tr><tr><td colspan='4' rowspan='1'></td></tr><tr><td width='100%'><b>First name:</b></td>"
+    u"<td width='100%'>Anna</td><td width='100%'><b>Last name:</b></td><td width='100%'>Test</td></tr></table></td></tr>"
+    u"<tr><td><b>The student took part in the following lessons:</b></td></tr><tr><td>1. EU-45-Anna (from 01.09.2024 "
+    u"to 30.06.2025)</td></tr><tr><td><hr style='width: 100%; height: 1px;'></td></tr>"
+    u"<tr><td><b>Lesson notes (EU-45-Anna)</b></td></tr><tr><td><table style='text-align: left;' cellpadding='1' "
+    u"cellspacing='0' width='100%' border='1'><tr><td><u>Date</u></td><td><u>Note</u></td></tr>"
+    u"<tr><td>09.10.2024</td><td>"_s
+    + kLegacy +
+    u"</td></tr></table></td></tr><tr><td align='center'><i>Qupil 1.4.1 - &copy;2006-2026 - Felix Hammer - "
+    u"qupil.de</i></td></tr></table></body></html>"_s;
 
 //! Shown in the editor and read back: the editor's way
 QString throughEditor(const QString &note)
@@ -114,6 +135,43 @@ private slots:
         const QString html = u"<ul><li>Tonleitern</li><li><b>Etüde</b></li></ul><ol><li>eins</li><li>zwei</li></ol>"
                              u"<p>Zeile<br />neue Zeile</p>"_s;
         QCOMPARE(NoteFormat::fromHtml(html), u"• Tonleitern\n• **Etüde**\n1. eins\n2. zwei\nZeile\nneue Zeile"_s);
+    }
+
+    void archiveEntries()
+    {
+        QVERIFY(ArchiveFormat::isLegacy(kLegacyArchive));
+        QVERIFY(!ArchiveFormat::isLegacy(u"<html><head><meta charset=\"utf-8\"></head></html>"_s));
+        QString title;
+        const QString body = ArchiveFormat::compactBody(kLegacyArchive, &title);
+        QCOMPARE(title, u"Qupil 1.4.1 - Archive Entry: Anna Test (#7)"_s);
+        QVERIFY(body.startsWith(u"<h1>Qupil 1.4.1 - Archive Entry: Anna Test (#7)</h1>"_s));
+        // Layout tables are gone, the data tables stay: personal data without lines, notes with
+        QVERIFY(body.contains(u"<table cellspacing=\"0\" cellpadding=\"3\"><tr><td colspan=\"4\"><h3>Personal data:</h3>"_s));
+        QVERIFY(body.contains(u"<td><b>First name:</b></td><td>Anna</td>"_s));
+        QVERIFY(body.contains(u"<hr>"_s));
+        QVERIFY(body.contains(u"<tr><th>Date</th><th>Note</th></tr><tr><td>09.10.2024</td>"_s));
+        // The note keeps bold and marked text, loses fonts and sizes
+        QVERIFY2(body.contains(u"<b>G-Dur-Tonleiter</b> über zwei Oktaven, <span class=\"m\">langsam mit Metronom (60)</span>."_s),
+                 qPrintable(body));
+        QVERIFY(body.contains(u"<i><u>auswendig</u></i>"_s));
+        for (const char *gone : { "font-size", "font-family", "DOCTYPE", "qrichtext", "margin-left" })
+            QVERIFY2(!body.contains(QLatin1StringView(gone)), gone);
+        QVERIFY(body.contains(u"<p><i>Qupil 1.4.1 - ©2006-2026 - Felix Hammer - qupil.de</i></p>"_s));
+        QVERIFY2(body.size() * 3 < kLegacyArchive.size(), qPrintable(u"%1 of %2"_s.arg(body.size()).arg(kLegacyArchive.size())));
+    }
+
+    void packedTexts()
+    {
+        const QString text = kLegacyArchive.repeated(20);
+        const QString packed = TextPack::pack(text);
+        QVERIFY(TextPack::isPacked(packed));
+        QVERIFY(packed.size() * 10 < text.size());
+        QCOMPARE(TextPack::unpack(packed), text);
+        QCOMPARE(TextPack::pack(packed), packed);           // not twice
+        QCOMPARE(TextPack::unpack(u"<h1>alt</h1>"_s), u"<h1>alt</h1>"_s);   // never packed
+        QCOMPARE(TextPack::pack(QString()), QString());
+        QCOMPARE(TextPack::unpack(u"Größe ¾ ♯"_s), u"Größe ¾ ♯"_s);
+        QCOMPARE(TextPack::unpack(TextPack::pack(u"Größe ¾ ♯"_s)), u"Größe ¾ ♯"_s);
     }
 
     void noHang()

@@ -2,12 +2,16 @@
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 #pragma once
 
+#include <QList>
 #include <QObject>
+#include <QPair>
 #include <QUrl>
 #include <QVariantList>
 #include <QtQml/qqmlregistration.h>
 
 class DataService;
+class QThread;
+class QTimer;
 class QJSEngine;
 class QQmlEngine;
 
@@ -43,6 +47,11 @@ public:
     Q_INVOKABLE QUrl programme(const QString &eventId);
     //! entity: "student_archive" or "event_archive"
     Q_INVOKABLE QUrl archiveEntry(const QString &entity, const QString &id);
+    /*!
+        An archive entry to show: unpacked, and an entry of Qupil 1.x in the
+        compact layout (it is then saved like that, see convertLegacyArchives).
+    */
+    Q_INVOKABLE QString archiveHtml(const QString &entity, const QString &id);
 
     //! Weekdays with their next date for the daily overview: { label, date, weekday }
     Q_INVOKABLE QVariantList dayChoices() const;
@@ -52,6 +61,21 @@ public:
     Q_INVOKABLE QString archiveStudent(const QString &studentId);
     //! The programme as it is now; returns the archive id
     Q_INVOKABLE QString archiveEvent(const QString &eventId);
+    /*!
+        Archive entries of Qupil 1.x get the compact layout, one after the other
+        in a worker thread (about a second each). In place, in the table and in
+        the change log: each device converts its own entries (also those it gets
+        later from devices with older versions), nothing is sent.
+    */
+    void convertLegacyArchives();
+    /*!
+        Keeps the archive compact from now on: converts (see above) shortly after
+        archive entries changed, e.g. after a sync brought entries of an older
+        version, and packs entries that arrived unpacked.
+    */
+    void setArchiveUpkeep(bool on);
+    //! A Qupil 1.x archive document in the compact layout (a whole page)
+    static QString compactLegacyArchive(const QString &legacyHtml);
 
     // HTML (public for tests and the archive)
     QString dayOverviewHtml(const QString &dateIso, int notesPerLesson, int spaceLines) const;
@@ -66,9 +90,16 @@ public:
 signals:
     //! Could not write or open a document
     void failed(const QString &message);
+    //! iOS: the document was saved where the user chose
+    void exported(const QString &message);
 
 private:
     QUrl writeAndOpen(const QString &html, const QString &baseName, bool landscape);
+    void convertNext();
 
     DataService *m_data;
+    QList<QPair<QString, QString>> m_legacyArchives;   // entity, id still to convert
+    QThread *m_converter = nullptr;
+    QTimer *m_archiveScan = nullptr;
+    int m_converted = 0;   // in this run
 };

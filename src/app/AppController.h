@@ -178,6 +178,7 @@ private:
 
     bool openDatabase(QString *error);
     int upgradeNotes();
+    int upgradeArchives();
     bool safetyBackup(const QString &reason);
     void rotate(const QString &prefix, int keep);
     void setPhase(Phase phase);

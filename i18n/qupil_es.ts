@@ -2981,6 +2981,11 @@ Póngase en contacto con el autor en %4 para resolver el problema.</translation>
         <source>The document could not be created.</source>
         <translation>No se pudo crear el documento.</translation>
     </message>
+    <message id="doc.saved">
+        <source>“%1” saved.</source>
+        <extracomment>After saving a PDF where the user chose; %1 = file name</extracomment>
+        <translation>Se guardó «%1».</translation>
+    </message>
     <message id="doc.error.open">
         <source>The document was saved but could not be opened: %1</source>
         <extracomment>%1 = file path</extracomment>

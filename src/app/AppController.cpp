@@ -33,6 +33,7 @@
 #include "NoteFormat.h"
 #include "Schema.h"
 #include "Store.h"
+#include "TextPack.h"
 
 using namespace Qt::StringLiterals;
 using Qupil::Database;
@@ -187,7 +188,9 @@ bool AppController::openDatabase(QString *error)
     if (QFileInfo::exists(backup))
         rotate(u"before-update-"_s, kKeepSafetyBackups);
     if (opened) {
-        upgradeNotes();
+        // Compact notes and archives of older versions, then give the space back
+        if (upgradeNotes() + upgradeArchives() > 0)
+            QSqlQuery(m_db->connection()).exec(u"VACUUM"_s);
         return true;
     }
     const int version = Database::schemaVersionOf(path);
@@ -264,8 +267,86 @@ int AppController::upgradeNotes()
         return 0;
     }
     m_db->commit();
-    QSqlQuery(db).exec(u"VACUUM"_s);   // gives the space back
     return int(notes.size());
+}
+
+/*!
+    Archive entries are stored packed (TextPack): in the tables and in the change
+    log. Entries of Qupil 1.x and of earlier test builds are packed once here; the
+    compact layout follows in the background (DocumentService::convertLegacyArchives).
+*/
+int AppController::upgradeArchives()
+{
+    QSqlDatabase db = m_db->connection();
+    QList<QPair<QString, QString>> rows;   // entity, id
+    QList<QPair<int, qint64>> log;         // origin, seq
+    {
+        QSqlQuery q(db);
+        for (const QString &entity : { u"student_archive"_s, u"event_archive"_s }) {
+            q.exec(u"SELECT id FROM %1 WHERE content <> '' AND content NOT LIKE 'qz1:%'"_s.arg(entity));
+            while (q.next())
+                rows.append({ entity, q.value(0).toString() });
+        }
+        // Candidates without anything packed; then exactly (whatever the JSON looks like)
+        QList<QPair<int, qint64>> candidates;
+        q.exec(u"SELECT origin, seq FROM change_log WHERE entity IN ('student_archive', 'event_archive') "
+               u"AND data LIKE '%\"content\"%' AND data NOT LIKE '%qz1:%'"_s);
+        while (q.next())
+            candidates.append({ q.value(0).toInt(), q.value(1).toLongLong() });
+        q.prepare(u"SELECT data FROM change_log WHERE origin = ? AND seq = ?"_s);
+        for (const auto &entry : std::as_const(candidates)) {
+            q.addBindValue(entry.first);
+            q.addBindValue(entry.second);
+            if (!q.exec() || !q.next())
+                continue;
+            const QString content = Qupil::Store::decodeFields(q.value(0).toString()).value(u"content"_s).toString();
+            if (!content.isEmpty() && !TextPack::isPacked(content))
+                log.append(entry);
+        }
+    }
+    if (rows.isEmpty() && log.isEmpty())
+        return 0;
+
+    safetyBackup(u"before-archives"_s);
+    m_db->transaction();
+    bool ok = true;
+    // One at a time: the entries can be large
+    QSqlQuery read(db);
+    QSqlQuery write(db);
+    for (const auto &[entity, id] : std::as_const(rows)) {
+        read.prepare(u"SELECT content FROM %1 WHERE id = ?"_s.arg(entity));
+        read.addBindValue(id);
+        if (!read.exec() || !read.next())
+            continue;
+        const QString packed = TextPack::pack(read.value(0).toString());
+        read.finish();
+        write.prepare(u"UPDATE %1 SET content = ? WHERE id = ?"_s.arg(entity));
+        write.addBindValue(packed);
+        write.addBindValue(id);
+        ok = ok && write.exec();
+    }
+    read.prepare(u"SELECT data FROM change_log WHERE origin = ? AND seq = ?"_s);
+    write.prepare(u"UPDATE change_log SET data = ? WHERE origin = ? AND seq = ?"_s);
+    for (const auto &[origin, seq] : std::as_const(log)) {
+        read.addBindValue(origin);
+        read.addBindValue(seq);
+        if (!read.exec() || !read.next())
+            continue;
+        QVariantMap fields = Qupil::Store::decodeFields(read.value(0).toString());
+        read.finish();
+        fields.insert(u"content"_s, TextPack::pack(fields.value(u"content"_s).toString()));
+        write.addBindValue(Qupil::Store::encodeFields(fields));
+        write.addBindValue(origin);
+        write.addBindValue(seq);
+        ok = ok && write.exec();
+    }
+    if (!ok) {
+        qWarning("Could not pack the archive entries: %s", qPrintable(db.lastError().text()));
+        m_db->rollback();
+        return 0;
+    }
+    m_db->commit();
+    return int(rows.size() + log.size());
 }
 
 void AppController::setPhase(Phase phase)

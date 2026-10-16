@@ -21,6 +21,7 @@
 #include "Database.h"
 #include "Ids.h"
 #include "Store.h"
+#include "TextPack.h"
 
 using namespace Qt::StringLiterals;
 
@@ -313,7 +314,7 @@ LegacyImporter::Result LegacyImporter::run(const QString &legacyDatabase, Store 
         create(u"student_archive"_s, {
             { u"surname"_s, str(row, "surname") },
             { u"forename"_s, str(row, "forename") },
-            { u"content"_s, row.value(u"data"_s).toString() },
+            { u"content"_s, TextPack::pack(row.value(u"data"_s).toString()) },   // large, rarely opened
         });
         ++r.archivedStudents;
     }
@@ -498,7 +499,7 @@ LegacyImporter::Result LegacyImporter::run(const QString &legacyDatabase, Store 
     for (const Row &row : old.rows(u"recitalarchive"_s, u"recitalid"_s)) {
         create(u"event_archive"_s, {
             { u"title"_s, str(row, "desc") },
-            { u"content"_s, row.value(u"data"_s).toString() },
+            { u"content"_s, TextPack::pack(row.value(u"data"_s).toString()) },
         });
         ++r.archivedEvents;
     }

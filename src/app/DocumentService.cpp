@@ -15,16 +15,24 @@
 #include <QPdfWriter>
 #include <QQmlEngine>
 #include <QRegularExpression>
+#include <QSqlQuery>
 #include <QStandardPaths>
 #include <QAbstractTextDocumentLayout>
 #include <QTextDocument>
 #include <QTextFrame>
+#include <QTimer>
+#include <QThread>
 
+#include "ArchiveFormat.h"
 #include "DataService.h"
+#include "Database.h"
+#include "FileExport.h"
 #include "LanguageManager.h"
 #include "Store.h"
+#include "TextPack.h"
 
 #include <algorithm>
+#include <memory>
 
 using namespace Qt::StringLiterals;
 
@@ -65,18 +73,20 @@ QString label(const char *id)
     return qtTrId(id).remove(QRegularExpression(u"\\s*:\\s*$"_s));
 }
 
-QString page(const QString &title, const QString &body)
+QString page(const QString &title, const QString &body, bool footer = true)
 {
-    // Simple layout that QTextDocument renders the same everywhere
+    // Simple layout that QTextDocument renders the same everywhere (.m: marked note text)
     return u"<html><head><meta charset=\"utf-8\"><title>"_s + esc(title) + u"</title><style>"
            u"h1 { font-size: 17pt; margin-bottom: 2pt; } h2 { font-size: 13pt; margin-top: 14pt; } "
            u"h3 { font-size: 11pt; margin-top: 10pt; } th { background-color: #ECEAF0; text-align: left; } "
-           u"td, th { padding: 3pt; vertical-align: top; } .muted { color: #5E5866; } "
+           u"td, th { padding: 3pt; vertical-align: top; } .muted { color: #5E5866; } .m { color: #B3261E; } "
            u"</style></head><body>"_s
            + body
-           + u"<p class=\"muted\"><i>Qupil "_s + QCoreApplication::applicationVersion().section(u'.', 0, 1)
-           + u" – © 2006–"_s + QString::number(QDate::currentDate().year()) + u" Felix Hammer – qupil.de</i></p>"
-           u"</body></html>"_s;
+           + (footer ? u"<p class=\"muted\"><i>Qupil "_s + QCoreApplication::applicationVersion().section(u'.', 0, 1)
+                           + u" – © 2006–"_s + QString::number(QDate::currentDate().year())
+                           + u" Felix Hammer – qupil.de</i></p>"_s
+                     : QString())
+           + u"</body></html>"_s;
 }
 
 QString table(const QStringList &headers, const QList<QStringList> &rows, bool escapeCells = true)
@@ -127,6 +137,12 @@ DocumentService::DocumentService(DataService *data, QObject *parent)
 
 DocumentService::~DocumentService()
 {
+    m_legacyArchives.clear();
+    setArchiveUpkeep(false);
+    if (m_converter) {
+        m_converter->wait();   // one entry: a second or two
+        delete m_converter;
+    }
     if (s_instance == this)
         s_instance = nullptr;
 }
@@ -184,6 +200,24 @@ QUrl DocumentService::writePdf(const QString &html, const QString &baseName, boo
 
 QUrl DocumentService::writeAndOpen(const QString &html, const QString &baseName, bool landscape)
 {
+    if (FileExport::available()) {
+        // iOS: the user chooses where the PDF goes ("Save to Files"); Qt cannot open it here
+        const QString folder = QDir(QStandardPaths::writableLocation(QStandardPaths::TempLocation)).filePath(u"pdf"_s);
+        QDir(folder).removeRecursively();
+        const QUrl url = writePdf(html, baseName, landscape, folder);
+        if (url.isEmpty()) {
+            emit failed(qtTrId("doc.error.write"));
+            return {};
+        }
+        const QString path = url.toLocalFile();
+        FileExport::exportFile(path, [this, path](bool saved, const QString &name) {
+            QFile::remove(path);
+            //: %1 = file name
+            if (saved)
+                emit exported(qtTrId("doc.saved").arg(name.isEmpty() ? QFileInfo(path).fileName() : name));
+        });
+        return url;
+    }
     const QUrl url = writePdf(html, baseName, landscape);
     if (url.isEmpty()) {
         emit failed(qtTrId("doc.error.write"));
@@ -233,7 +267,105 @@ QUrl DocumentService::archiveEntry(const QString &entity, const QString &id)
                              ? qtTrId("archive.entry") + u' '
                                    + listName(entry.value(u"forename"_s).toString(), entry.value(u"surname"_s).toString())
                              : entry.value(u"title"_s).toString();
-    return writeAndOpen(entry.value(u"content"_s).toString(), name, entity == u"event_archive"_s);
+    return writeAndOpen(archiveHtml(entity, id), name, entity == u"event_archive"_s);
+}
+
+QString DocumentService::compactLegacyArchive(const QString &legacyHtml)
+{
+    QString title;
+    const QString body = ArchiveFormat::compactBody(legacyHtml, &title);
+    return page(title, body, false);   // the old entry has its own footer
+}
+
+QString DocumentService::archiveHtml(const QString &entity, const QString &id)
+{
+    if (entity != u"student_archive"_s && entity != u"event_archive"_s)
+        return {};
+    const QString stored = m_data->get(entity, id).value(u"content"_s).toString();
+    const QString html = TextPack::unpack(stored);
+    if (!ArchiveFormat::isLegacy(html))
+        return html;
+    // Opening it takes as long as converting it: convert, and keep that (after this call,
+    // so a view that shows it is not changed while it asks)
+    const QString compact = compactLegacyArchive(html);
+    QTimer::singleShot(0, this, [this, entity, id, stored, compact] {
+        m_data->m_store->rewrite(entity, id, u"content"_s, stored, TextPack::pack(compact));
+    });
+    return compact;
+}
+
+void DocumentService::setArchiveUpkeep(bool on)
+{
+    if (!on) {
+        delete m_archiveScan;
+        m_archiveScan = nullptr;
+        return;
+    }
+    if (m_archiveScan)
+        return;
+    m_archiveScan = new QTimer(this);
+    m_archiveScan->setSingleShot(true);
+    m_archiveScan->setInterval(20000);   // once things are calm
+    connect(m_archiveScan, &QTimer::timeout, this, &DocumentService::convertLegacyArchives);
+    connect(m_data->m_store, &Qupil::Store::dataChanged, this, [this](const QStringList &entities) {
+        if (m_archiveScan && !m_converter
+            && (entities.contains(u"student_archive"_s) || entities.contains(u"event_archive"_s)))
+            m_archiveScan->start();
+    });
+    m_archiveScan->start();
+}
+
+void DocumentService::convertLegacyArchives()
+{
+    if (m_converter)
+        return;   // running; it goes on with the list
+    m_legacyArchives.clear();
+    for (const QString &entity : { u"student_archive"_s, u"event_archive"_s }) {
+        for (const QVariant &v : m_data->rows(u"SELECT id, content FROM %1 WHERE deleted = 0"_s.arg(entity), {})) {
+            const QVariantMap row = v.toMap();
+            const QString stored = row.value(u"content"_s).toString();
+            const QString id = row.value(u"id"_s).toString();
+            if (ArchiveFormat::isLegacy(TextPack::unpack(stored)))
+                m_legacyArchives.append({ entity, id });
+            else if (!stored.isEmpty() && !TextPack::isPacked(stored))
+                m_data->m_store->rewrite(entity, id, u"content"_s, stored, TextPack::pack(stored));
+        }
+    }
+    convertNext();
+}
+
+void DocumentService::convertNext()
+{
+    if (m_converter)
+        return;   // one at a time; it goes on with the list
+    while (!m_legacyArchives.isEmpty()) {
+        const QPair<QString, QString> next = m_legacyArchives.takeFirst();
+        const QString entity = next.first;
+        const QString id = next.second;
+        const QString stored = m_data->get(entity, id).value(u"content"_s).toString();
+        const QString legacy = TextPack::unpack(stored);
+        if (!ArchiveFormat::isLegacy(legacy))
+            continue;   // converted meanwhile (opened, or by another device)
+        auto result = std::make_shared<QString>();
+        m_converter = QThread::create([legacy, result] { *result = TextPack::pack(compactLegacyArchive(legacy)); });
+        connect(m_converter, &QThread::finished, this, [this, entity, id, stored, result] {
+            m_converter->deleteLater();
+            m_converter = nullptr;
+            // In place, also in the change log: every device converts its own entries, so the
+            // old layout does not stay in the log and nothing needs to be sent (only where
+            // the entry is still the same)
+            if (!result->isEmpty() && m_data->m_store->rewrite(entity, id, u"content"_s, stored, *result))
+                ++m_converted;
+            QTimer::singleShot(200, this, &DocumentService::convertNext);
+        });
+        m_converter->start(QThread::LowPriority);
+        return;
+    }
+    if (m_converted > 0) {
+        // All done: give the space of the old layout back
+        m_converted = 0;
+        QSqlQuery(m_data->m_store->database()->connection()).exec(u"VACUUM"_s);
+    }
 }
 
 QVariantList DocumentService::dayChoices() const
@@ -434,11 +566,12 @@ QString DocumentService::archiveEvent(const QString &eventId)
     for (const QVariant &v : m_data->eventArchive()) {
         const QVariantMap a = v.toMap();
         if (a.value(u"title"_s).toString() == title) {
-            m_data->update(u"event_archive"_s, a.value(u"id"_s).toString(), { { u"content"_s, html } });
+            m_data->update(u"event_archive"_s, a.value(u"id"_s).toString(), { { u"content"_s, TextPack::pack(html) } });
             return a.value(u"id"_s).toString();
         }
     }
-    return m_data->create(u"event_archive"_s, { { u"title"_s, title }, { u"content"_s, html } });
+    // Stored packed: archive entries are large and rarely opened
+    return m_data->create(u"event_archive"_s, { { u"title"_s, title }, { u"content"_s, TextPack::pack(html) } });
 }
 
 // ---------------------------------------------------------------------------- student archive
@@ -585,7 +718,8 @@ QString DocumentService::archiveStudent(const QString &studentId)
     if (s.isEmpty())
         return {};
     const QVariantMap fields { { u"forename"_s, s.value(u"forename"_s) }, { u"surname"_s, s.value(u"surname"_s) },
-                               { u"content"_s, studentArchiveHtml(studentId) }, { u"archived_on"_s, m_data->today() } };
+                               { u"content"_s, TextPack::pack(studentArchiveHtml(studentId)) },
+                               { u"archived_on"_s, m_data->today() } };
     // The archive entry has the student's id: archiving again replaces it (as in Qupil 1.x),
     // also an entry that was deleted before
     if (!m_data->m_store->get(u"student_archive"_s, studentId).isEmpty()) {

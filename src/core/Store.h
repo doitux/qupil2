@@ -58,6 +58,14 @@ public:
     bool update(const QString &entity, const QString &id, const QVariantMap &fields);
     //! Marks the record as deleted (tombstone, synchronised like any other field)
     bool remove(const QString &entity, const QString &id);
+    /*!
+        Replaces a value by another form of the same content (packed, a newer
+        layout) in the table and in the change log, without a new change: every
+        device makes that form itself, so nothing needs to travel and the old
+        form does not stay in the log. Only where the value is still from.
+    */
+    bool rewrite(const QString &entity, const QString &id, const QString &field, const QString &from,
+                 const QString &to);
 
     QVariantMap get(const QString &entity, const QString &id) const;
     //! Non-deleted rows; where/order are SQL fragments with ? placeholders

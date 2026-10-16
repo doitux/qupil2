@@ -1684,6 +1684,8 @@ E("doc.total_years", src="%n year(s) in total", en=["%n year in total", "%n year
   es=["%n año en total", "%n años en total"])
 E("doc.error.write", en="The document could not be created.", de="Das Dokument konnte nicht erstellt werden.",
   fr="Le document n’a pas pu être créé.", es="No se pudo crear el documento.")
+E("doc.saved", en="“%1” saved.", de="„%1“ wurde gespeichert.", fr="« %1 » a été enregistré.",
+  es="Se guardó «%1».", c="After saving a PDF where the user chose; %1 = file name")
 E("doc.error.open", en="The document was saved but could not be opened: %1",
   de="Das Dokument wurde gespeichert, konnte aber nicht geöffnet werden: %1",
   fr="Le document a été enregistré mais n’a pas pu être ouvert : %1",

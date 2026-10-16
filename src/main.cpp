@@ -173,6 +173,10 @@ int main(int argc, char *argv[])
         // As in Qupil 1.x shortly after the window is there
         QTimer::singleShot(1800, &reminders, [&reminders] { reminders.start(true); });
     }
+    // Archive entries of Qupil 1.x get the compact layout, in the background once things are calm
+    // (also after an import, a restore or a sync that brought such entries)
+    if (!smokeTest && !screenshots)
+        docs.setArchiveUpkeep(true);
     QQmlApplicationEngine engine;
     languages.setEngine(&engine);   // retranslate() on a language switch
 

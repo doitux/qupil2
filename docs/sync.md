@@ -50,6 +50,14 @@ are still read (and compacted the same way). Devices with the old version can no
 longer sync with updated ones: Wi-Fi shows "different Qupil version", Nextcloud
 "newer version on another device".
 
+Archive entries (`student_archive`, `event_archive`) keep their `content`
+compressed (`qz1:` + base64 of zlib, see `TextPack`). Entries taken over from
+Qupil 1.x are converted to a compact layout in the background (`ArchiveFormat`).
+That is a derived form of the same content, not a change: `Store::rewrite`
+replaces the value in the table and in the log rows that carry it, without a new
+log row, a new clock or anything to send. Every device converts its own copies the
+same way, so devices stay in sync; a real later change still wins as usual.
+
 ## Nextcloud
 
 Sign-in uses Nextcloud's *Login Flow v2*: Qupil opens the browser, the user signs

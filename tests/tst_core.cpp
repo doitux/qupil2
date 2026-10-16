@@ -295,6 +295,46 @@ private slots:
         QCOMPARE(sb.applyRemote(sa.changesSince({})), 0);
     }
 
+    void rewriteInPlace()
+    {
+        // A derived form of the same content (e.g. an archive entry in the compact
+        // layout) replaces the old one in the table and in the log, without a new change
+        Database a, b;
+        QVERIFY(a.open(file(u"rewrite-a.db"_s)));
+        QVERIFY(b.open(file(u"rewrite-b.db"_s)));
+        a.clock().setWallClock(&TestCore::fakeWall);
+        b.clock().setWallClock(&TestCore::fakeWall);
+        Store sa(&a), sb(&b);
+        const QString id = sa.create(u"student_archive"_s, { { u"surname"_s, u"Muster"_s }, { u"content"_s, u"old"_s } });
+        QVERIFY(sa.update(u"student_archive"_s, id, { { u"forename"_s, u"Lena"_s } }));
+        QVERIFY(sb.applyRemote(sa.changesSince(sb.versionVector())) > 0);
+        const auto vector = sa.versionVector();
+
+        QSignalSpy spy(&sa, &Store::dataChanged);
+        QVERIFY(sa.rewrite(u"student_archive"_s, id, u"content"_s, u"old"_s, u"new"_s));
+        QCOMPARE(spy.count(), 1);
+        QCOMPARE(sa.get(u"student_archive"_s, id).value(u"content"_s).toString(), u"new"_s);
+        QCOMPARE(sa.versionVector(), vector);   // nothing to send
+        const QList<Change> log = sa.changesOf(a.deviceId(), 0);
+        QCOMPARE(log.size(), 2);
+        QCOMPARE(log.first().fields.value(u"content"_s).toString(), u"new"_s);
+        QCOMPARE(log.first().fields.value(u"surname"_s).toString(), u"Muster"_s);
+        QVERIFY(!log.last().fields.contains(u"content"_s));
+        // Only where the content is still the old form
+        QVERIFY(sa.rewrite(u"student_archive"_s, id, u"content"_s, u"old"_s, u"other"_s));
+        QCOMPARE(sa.get(u"student_archive"_s, id).value(u"content"_s).toString(), u"new"_s);
+        QCOMPARE(spy.count(), 1);
+
+        // The other device rewrites its own copy of the same entries the same way
+        QVERIFY(sb.rewrite(u"student_archive"_s, id, u"content"_s, u"old"_s, u"new"_s));
+        QCOMPARE(sb.changesOf(a.deviceId(), 0).first().fields.value(u"content"_s).toString(), u"new"_s);
+        // A later real change still wins on both sides
+        QVERIFY(sb.update(u"student_archive"_s, id, { { u"content"_s, u"edited"_s } }));
+        QVERIFY(sa.applyRemote(sb.changesSince(sa.versionVector())) > 0);
+        QCOMPARE(sa.get(u"student_archive"_s, id).value(u"content"_s).toString(), u"edited"_s);
+        QCOMPARE(sa.versionVector(), sb.versionVector());
+    }
+
     void relayThroughThirdDevice()
     {
         Database a, b, c;

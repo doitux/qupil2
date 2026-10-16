@@ -495,6 +495,7 @@ ApplicationWindow {
     Connections {
         target: Docs
         function onFailed(message) { Nav.toast(message) }
+        function onExported(message) { Nav.toast(message) }
     }
 
     // Reminders "when Qupil starts" and at the start of a lesson (Qupil 1.x pop-ups);

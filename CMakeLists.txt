@@ -55,6 +55,8 @@ qt_add_library(qupilcore STATIC
     src/core/Crypto.cpp
     src/core/FolderSync.h
     src/core/FolderSync.cpp
+    src/core/TextPack.h
+    src/core/TextPack.cpp
     3rdparty/monocypher/monocypher.c
     3rdparty/monocypher/monocypher.h)
 target_include_directories(qupilcore PUBLIC src/core PRIVATE 3rdparty/monocypher)
@@ -294,6 +296,8 @@ qt_add_qml_module(qupil
         src/app/DataService.cpp
         src/app/NoteFormat.h
         src/app/NoteFormat.cpp
+        src/app/ArchiveFormat.h
+        src/app/ArchiveFormat.cpp
         src/app/Metronome.h
         src/app/Metronome.cpp
         src/app/TextFormatter.h
@@ -403,9 +407,10 @@ if(QUPIL_BUILD_TESTS AND NOT ANDROID AND NOT IOS)
     set_target_properties(tst_core PROPERTIES MACOSX_BUNDLE FALSE WIN32_EXECUTABLE FALSE)
     add_test(NAME core COMMAND tst_core)
 
-    # Lesson notes: the compact format, old HTML notes
-    qt_add_executable(tst_notes tests/tst_notes.cpp src/app/NoteFormat.h src/app/NoteFormat.cpp)
-    target_include_directories(tst_notes PRIVATE src/app)
+    # Lesson notes and archive entries: the compact formats, old HTML of Qupil 1.x
+    qt_add_executable(tst_notes tests/tst_notes.cpp src/app/NoteFormat.h src/app/NoteFormat.cpp
+        src/app/ArchiveFormat.h src/app/ArchiveFormat.cpp src/core/TextPack.h src/core/TextPack.cpp)
+    target_include_directories(tst_notes PRIVATE src/app src/core)
     target_link_libraries(tst_notes PRIVATE Qt6::Gui Qt6::Test)
     set_target_properties(tst_notes PROPERTIES MACOSX_BUNDLE FALSE WIN32_EXECUTABLE FALSE)
     add_test(NAME notes COMMAND tst_notes)
