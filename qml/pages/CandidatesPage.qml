@@ -45,7 +45,7 @@ SubPage {
                     Layout.fillWidth: true
                     implicitHeight: 64
                     onClicked: Nav.showStudent(modelData.id, "")
-                    onPressAndHold: rowMenu.popup()
+                    onPressAndHold: rowMenu.openAt(row, row.pressX, row.pressY)
                     background: Rectangle {
                         color: row.down ? Theme.surfaceAlt : "transparent"
                         Rectangle {

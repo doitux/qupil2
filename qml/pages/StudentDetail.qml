@@ -653,17 +653,18 @@ Item {
                     Keys.onReturnPressed: edit()
                     Keys.onEnterPressed: edit()
                     Keys.onSpacePressed: edit()
-                    Keys.onMenuPressed: pieceMenu.popup()
+                    Keys.onMenuPressed: pieceMenu.openAt(pieceCard, pieceCard.width / 2, pieceCard.height / 2)
                     TapHandler {
                         id: pieceTap
                         acceptedButtons: Qt.LeftButton | Qt.RightButton
                         onTapped: (eventPoint, button) => {
                             if (button === Qt.RightButton)
-                                pieceMenu.popup()
+                                pieceMenu.openAt(pieceCard, eventPoint.position.x, eventPoint.position.y)
                             else
                                 pieceCard.edit()
                         }
-                        onLongPressed: pieceMenu.popup()
+                        // Where the finger is (popup() alone would use the last mouse position)
+                        onLongPressed: pieceMenu.openAt(pieceCard, point.position.x, point.position.y)
                     }
                     background: Rectangle {
                         radius: Theme.radius

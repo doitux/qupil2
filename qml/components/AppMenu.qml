@@ -42,6 +42,30 @@ Menu {
 
     delegate: AppMenuItem {}
 
+    /*!
+        Opens the menu where a finger or the mouse is (x, y in item), e.g. after
+        press and hold. popup() without a position would use the last mouse
+        position, which on touch screens is somewhere else. Where there is no room
+        below or on the right, it opens above or on the left of that point, so
+        the finger does not cover it.
+    */
+    function openAt(item, x, y) {
+        const gap = 2
+        const win = item.Window.window
+        const w = Math.max(width, implicitWidth)
+        const h = implicitHeight
+        let px = x + gap
+        let py = y + gap
+        if (win) {
+            const p = item.mapToItem(null, x, y)
+            if (p.x + gap + w > win.width - margins && p.x - gap - w >= margins)
+                px = x - gap - w
+            if (p.y + gap + h > win.height - margins && p.y - gap - h >= margins)
+                py = y - gap - h
+        }
+        popup(item, px, py)
+    }
+
     contentItem: ListView {
         implicitHeight: contentHeight
         model: menu.contentModel
