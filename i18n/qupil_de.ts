@@ -41,6 +41,14 @@
         <source>Add…</source>
         <translation>Hinzufügen ...</translation>
     </message>
+    <message id="listeditor.hint_remove">
+        <source>Tap an entry to remove it.</source>
+        <translation>Tippen entfernt einen Eintrag.</translation>
+    </message>
+    <message id="listeditor.hint_reorder">
+        <source>Tap an entry to remove it, press and hold and drag to change the order.</source>
+        <translation>Tippen entfernt einen Eintrag, gedrückt halten und ziehen ändert die Reihenfolge.</translation>
+    </message>
     <message id="common.remove">
         <source>Remove</source>
         <translation>Entfernen</translation>
@@ -1334,10 +1342,6 @@ Möchten Sie diese Funktion nutzen?</translation>
         <source>Piece / movements</source>
         <translation>Werk / Satzbezeichnung</translation>
     </message>
-    <message id="event.reorder_hint">
-        <source>Drag the handle to reorder</source>
-        <translation>Zum Sortieren am Griff ziehen</translation>
-    </message>
     <message id="event.export_program">
         <source>Program as PDF</source>
         <translation>Programm als PDF</translation>
@@ -2410,13 +2414,13 @@ Bitte wenden Sie sich an den Programm-Autor: %4 um dieses Problem zu beheben!</t
         <source>No pieces are marked as “ready to perform” at the moment.</source>
         <translation>Zurzeit ist kein Werk als „vorspielreif“ markiert.</translation>
     </message>
-    <message id="event.move_up">
-        <source>Move up</source>
-        <translation>Nach oben</translation>
+    <message id="event.reorder">
+        <source>Move (drag, or arrow keys)</source>
+        <translation>Verschieben (ziehen oder Pfeiltasten)</translation>
     </message>
-    <message id="event.move_down">
-        <source>Move down</source>
-        <translation>Nach unten</translation>
+    <message id="event.reorder_hint">
+        <source>To change the order, press and hold a contribution and drag it.</source>
+        <translation>Zum Umsortieren einen Beitrag gedrückt halten und ziehen.</translation>
     </message>
     <message id="metronome.pitch_down">
         <source>Lower pitch</source>

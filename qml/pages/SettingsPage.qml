@@ -146,11 +146,13 @@ SubPage {
         }
         ListEditor {
             label: qsTrId("settings.genres")
+            hint: false
             items: { if (Data.revision < 0) return undefined; return Data.listSetting("genres") }
             onChanged: (items) => Data.setSetting("genres", items)
         }
         ListEditor {
             label: qsTrId("settings.sizes")
+            hint: false
             items: { if (Data.revision < 0) return undefined; return Data.listSetting("instrument_sizes") }
             onChanged: (items) => Data.setSetting("instrument_sizes", items)
         }

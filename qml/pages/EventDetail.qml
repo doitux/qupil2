@@ -21,13 +21,148 @@ Item {
     signal back()
 
     function move(index, delta) {
+        moveTo(index, index + delta)
+    }
+    function moveTo(from, to) {
         const ids = programme.map(p => p.itemId)
-        const target = index + delta
-        if (target < 0 || target >= ids.length)
+        if (from === to || to < 0 || to >= ids.length)
+            return false
+        const [item] = ids.splice(from, 1)
+        ids.splice(to, 0, item)
+        return Data.reorderProgramme(eventId, ids)
+    }
+
+    // ---------------------------------------------------------------- drag to reorder
+    // The lifted row follows the finger, the others move aside (no model change
+    // until it is dropped). Near the top or bottom edge the page scrolls along.
+    property int dragIndex: -1
+    property int dropIndex: -1
+    property real dragOffset: 0
+    property bool settling: false
+    property real dragStartY: 0       // scene y where it was lifted
+    property real dragStartContentY: 0
+    property real dragPointerY: 0     // scene y of the finger now
+    property real dragHeight: 0
+
+    function startDrag(index, sceneY) {
+        if (dragIndex >= 0 || programme.length < 2)
             return
-        const [item] = ids.splice(index, 1)
-        ids.splice(target, 0, item)
-        Data.reorderProgramme(eventId, ids)
+        const row = programmeRows.itemAt(index)
+        if (!row)
+            return
+        dragHeight = row.height
+        dragStartY = dragPointerY = sceneY
+        dragStartContentY = flick.contentY
+        dragOffset = 0
+        dropIndex = index
+        settling = false
+        dragIndex = index
+        flick.interactive = false   // the finger moves the row now, not the page
+    }
+    function dragTo(sceneY) {
+        if (dragIndex < 0 || settling)
+            return
+        dragPointerY = sceneY
+        updateDrag()
+    }
+    function updateDrag() {
+        const row = programmeRows.itemAt(dragIndex)
+        if (!row)
+            return
+        const offset = dragPointerY - dragStartY + flick.contentY - dragStartContentY
+        dragOffset = Math.max(-row.y, Math.min(programmeColumn.height - row.y - row.height, offset))
+        // New place: a row below is passed once the lower edge crosses its middle,
+        // a row above once the upper edge does
+        const top = row.y + dragOffset
+        const bottom = top + row.height
+        let place = 0
+        for (let i = 0; i < programme.length; ++i) {
+            const other = programmeRows.itemAt(i)
+            if (i === dragIndex || !other)
+                continue
+            const middle = other.y + other.height / 2
+            if (i < dragIndex ? top >= middle : bottom > middle)
+                ++place
+        }
+        dropIndex = place
+    }
+    function shiftFor(index) {
+        if (dragIndex < 0 || index === dragIndex)
+            return 0
+        if (index > dragIndex && index <= dropIndex)
+            return -dragHeight
+        if (index < dragIndex && index >= dropIndex)
+            return dragHeight
+        return 0
+    }
+    function drop() {
+        if (dragIndex < 0 || settling)
+            return
+        flick.interactive = true
+        // Glide into the gap, then store the order
+        let target = 0
+        if (dropIndex > dragIndex)
+            for (let i = dragIndex + 1; i <= dropIndex; ++i) target += programmeRows.itemAt(i).height
+        else
+            for (let j = dropIndex; j < dragIndex; ++j) target -= programmeRows.itemAt(j).height
+        settling = true
+        settle.to = target
+        settle.restart()
+    }
+    function finishDrag() {
+        const from = dragIndex
+        const to = dropIndex
+        // The rows stay as they are until the new order arrives (no flash of the old one)
+        if (!moveTo(from, to))
+            resetDrag()
+        else
+            resetSoon.restart()
+    }
+    function resetDrag() {
+        resetSoon.stop()
+        settle.stop()
+        flick.interactive = true
+        dragIndex = -1
+        dropIndex = -1
+        dragOffset = 0
+        settling = false
+    }
+    onProgrammeChanged: resetDrag()
+
+    NumberAnimation {
+        id: settle
+        target: detail
+        property: "dragOffset"
+        duration: 140
+        easing.type: Easing.OutCubic
+        onFinished: detail.finishDrag()
+    }
+    Timer {
+        id: resetSoon   // in case the new order never arrives
+        interval: 600
+        onTriggered: detail.resetDrag()
+    }
+    Timer {
+        // Scrolls along near the top or bottom edge
+        interval: 16
+        repeat: true
+        running: detail.dragIndex >= 0 && !detail.settling
+        onTriggered: {
+            const top = flick.mapToItem(null, 0, 0).y
+            const edge = 56
+            let step = 0
+            if (detail.dragPointerY < top + edge)
+                step = -Math.ceil((top + edge - detail.dragPointerY) / 6)
+            else if (detail.dragPointerY > top + flick.height - edge)
+                step = Math.ceil((detail.dragPointerY - (top + flick.height - edge)) / 6)
+            if (step === 0)
+                return
+            const y = Math.max(0, Math.min(flick.contentHeight - flick.height, flick.contentY + step))
+            if (y !== flick.contentY) {
+                flick.contentY = y
+                detail.updateDrag()
+            }
+        }
     }
 
     Flickable {
@@ -129,42 +264,110 @@ Item {
                 text: qsTrId("event.programme_empty")
             }
 
+            Text {
+                visible: detail.programme.length > 1
+                Layout.fillWidth: true
+                Layout.topMargin: -8
+                wrapMode: Text.WordWrap
+                text: qsTrId("event.reorder_hint")
+                color: Theme.textMuted
+                font.family: Theme.fontFamily
+                font.pixelSize: 13
+            }
+
             Rectangle {
                 visible: detail.programme.length > 0
                 Layout.fillWidth: true
                 implicitHeight: programmeColumn.implicitHeight
                 radius: Theme.radius
                 color: Theme.surface
-                clip: true
                 ColumnLayout {
                     id: programmeColumn
                     width: parent.width
                     spacing: 0
                     Repeater {
+                        id: programmeRows
                         model: detail.programme
+                        // Press and hold (or grab the handle) and drag: the others make room
                         delegate: Item {
                             id: item
                             required property var modelData
                             required property int index
+                            readonly property bool dragged: detail.dragIndex === index
+                            // Place while dragging (numbering and divider follow it)
+                            readonly property int visualIndex: dragged ? detail.dropIndex : index + Math.sign(detail.shiftFor(index))
                             Layout.fillWidth: true
                             implicitHeight: itemRow.implicitHeight + 24
+                            z: dragged ? 10 : 0
+                            scale: dragged && !detail.settling ? 1.02 : 1
+                            Behavior on scale { NumberAnimation { duration: 120 } }
+                            transform: Translate {
+                                id: shift
+                                y: item.dragged ? detail.dragOffset : detail.shiftFor(item.index)
+                                Behavior on y {
+                                    enabled: !item.dragged
+                                    NumberAnimation { duration: 160; easing.type: Easing.OutCubic }
+                                }
+                            }
+                            Accessible.role: Accessible.ListItem
+                            Accessible.name: (index + 1) + ". " + (modelData.composer ? modelData.composer + " – " : "") + modelData.title
+
+                            // Lifted card while dragging
+                            Item {
+                                anchors.fill: parent
+                                opacity: item.dragged ? 1 : 0
+                                visible: opacity > 0
+                                Behavior on opacity { NumberAnimation { duration: 120 } }
+                                Repeater {
+                                    model: [{ grow: 1, y: 2, alpha: 0.5 }, { grow: 5, y: 6, alpha: 0.22 }]
+                                    delegate: Rectangle {
+                                        required property var modelData
+                                        x: -modelData.grow
+                                        y: modelData.y - modelData.grow
+                                        width: parent.width + 2 * modelData.grow
+                                        height: parent.height + 2 * modelData.grow
+                                        radius: Theme.radiusSmall + modelData.grow
+                                        color: Theme.shadow
+                                        opacity: modelData.alpha
+                                    }
+                                }
+                                Rectangle {
+                                    anchors.fill: parent
+                                    radius: Theme.radiusSmall
+                                    color: Theme.dark ? Theme.surfaceAlt : Theme.surface
+                                    border.width: 1
+                                    border.color: Theme.border
+                                }
+                            }
                             Rectangle {
-                                visible: item.index > 0
+                                visible: item.visualIndex > 0 && !item.dragged
                                 width: parent.width
                                 height: 1
                                 color: Theme.divider
                             }
+
+                            TapHandler {
+                                // Holding still lifts it; moving first scrolls the page as usual
+                                onLongPressed: detail.startDrag(item.index, tracker.point.scenePosition.y)
+                            }
+                            // Only watches (passive): follows the finger once it is lifted
+                            PointHandler {
+                                id: tracker
+                                onPointChanged: if (active && item.dragged) detail.dragTo(point.scenePosition.y)
+                                onActiveChanged: if (!active && item.dragged) detail.drop()
+                            }
+
                             RowLayout {
                                 id: itemRow
                                 anchors.left: parent.left
                                 anchors.right: parent.right
                                 anchors.verticalCenter: parent.verticalCenter
                                 anchors.leftMargin: 14
-                                anchors.rightMargin: 8
+                                anchors.rightMargin: 4
                                 spacing: 10
                                 Text {
                                     Layout.preferredWidth: 22
-                                    text: item.index + 1
+                                    text: item.visualIndex + 1
                                     color: Theme.accentText
                                     font.family: Theme.fontFamily
                                     font.pixelSize: 15
@@ -218,29 +421,6 @@ Item {
                                     font.pixelSize: 14
                                     font.weight: Font.DemiBold
                                 }
-                                ColumnLayout {
-                                    spacing: 0
-                                    IconButton {
-                                        size: 32
-                                        iconName: "arrowUp"
-                                        fill: "transparent"
-                                        tint: Theme.textMuted
-                                        enabled: item.index > 0
-                                        opacity: enabled ? 1 : 0.3
-                                        text: qsTrId("event.move_up")
-                                        onClicked: detail.move(item.index, -1)
-                                    }
-                                    IconButton {
-                                        size: 32
-                                        iconName: "arrowDown"
-                                        fill: "transparent"
-                                        tint: Theme.textMuted
-                                        enabled: item.index < detail.programme.length - 1
-                                        opacity: enabled ? 1 : 0.3
-                                        text: qsTrId("event.move_down")
-                                        onClicked: detail.move(item.index, 1)
-                                    }
-                                }
                                 IconButton {
                                     size: 36
                                     iconName: "close"
@@ -248,6 +428,54 @@ Item {
                                     tint: Theme.textMuted
                                     text: qsTrId("common.remove")
                                     onClicked: Data.removeFromProgramme(item.modelData.itemId)
+                                }
+                                // Handle: drags at once (mouse and finger); arrow keys move it too
+                                Item {
+                                    id: grip
+                                    visible: detail.programme.length > 1
+                                    implicitWidth: 36
+                                    implicitHeight: 44
+                                    activeFocusOnTab: true
+                                    Accessible.role: Accessible.Button
+                                    Accessible.name: qsTrId("event.reorder")
+                                    Accessible.onIncreaseAction: detail.move(item.index, 1)
+                                    Accessible.onDecreaseAction: detail.move(item.index, -1)
+                                    Keys.onUpPressed: detail.move(item.index, -1)
+                                    Keys.onDownPressed: detail.move(item.index, 1)
+                                    HoverHandler { cursorShape: item.dragged ? Qt.ClosedHandCursor : Qt.OpenHandCursor }
+                                    TapHandler {
+                                        // Passive, so the row's tracker sees the finger as well
+                                        onPressedChanged: {
+                                            if (pressed)
+                                                detail.startDrag(item.index, point.scenePosition.y)
+                                            else if (item.dragged && !tracker.active)
+                                                detail.drop()
+                                        }
+                                    }
+                                    Rectangle {
+                                        anchors.centerIn: parent
+                                        width: 32
+                                        height: 32
+                                        radius: 8
+                                        color: Theme.text
+                                        opacity: item.dragged ? 0.1 : 0
+                                    }
+                                    Rectangle {
+                                        anchors.centerIn: parent
+                                        width: 32
+                                        height: 32
+                                        radius: 8
+                                        color: "transparent"
+                                        border.width: grip.activeFocus ? 2 : 0
+                                        border.color: Theme.accentText
+                                    }
+                                    Icon {
+                                        anchors.centerIn: parent
+                                        width: 20
+                                        height: 20
+                                        name: "grip"
+                                        color: item.dragged ? Theme.accentText : Theme.icon
+                                    }
                                 }
                             }
                         }

@@ -41,6 +41,14 @@
         <source>Add…</source>
         <translation>Añadir…</translation>
     </message>
+    <message id="listeditor.hint_remove">
+        <source>Tap an entry to remove it.</source>
+        <translation>Toque una entrada para quitarla.</translation>
+    </message>
+    <message id="listeditor.hint_reorder">
+        <source>Tap an entry to remove it, press and hold and drag to change the order.</source>
+        <translation>Toque una entrada para quitarla; manténgala pulsada y arrástrela para cambiar el orden.</translation>
+    </message>
     <message id="common.remove">
         <source>Remove</source>
         <translation>Quitar</translation>
@@ -1333,10 +1341,6 @@ Do you want to use this feature?</source>
         <source>Piece / movements</source>
         <translation>Obra / movimientos</translation>
     </message>
-    <message id="event.reorder_hint">
-        <source>Drag the handle to reorder</source>
-        <translation>Arrastre el tirador para cambiar el orden</translation>
-    </message>
     <message id="event.export_program">
         <source>Program as PDF</source>
         <translation>Programa en PDF</translation>
@@ -2409,13 +2413,13 @@ Póngase en contacto con el autor en %4 para resolver el problema.</translation>
         <source>No pieces are marked as “ready to perform” at the moment.</source>
         <translation>Por ahora ninguna obra está marcada como «lista para tocar».</translation>
     </message>
-    <message id="event.move_up">
-        <source>Move up</source>
-        <translation>Subir</translation>
+    <message id="event.reorder">
+        <source>Move (drag, or arrow keys)</source>
+        <translation>Mover (arrastrar o flechas)</translation>
     </message>
-    <message id="event.move_down">
-        <source>Move down</source>
-        <translation>Bajar</translation>
+    <message id="event.reorder_hint">
+        <source>To change the order, press and hold a contribution and drag it.</source>
+        <translation>Para cambiar el orden, mantenga pulsada una intervención y arrástrela.</translation>
     </message>
     <message id="metronome.pitch_down">
         <source>Lower pitch</source>

@@ -77,6 +77,12 @@ E("common.no", old="No", en="No", fr="Non", es="No")
 E("common.save", old="&Save", en="Save", fr="Enregistrer", es="Guardar")
 E("common.add", old="&Add", en="Add", fr="Ajouter", es="Añadir", merged=["Add"])
 E("common.add_ellipsis", old="Add ...", en="Add…", fr="Ajouter…", es="Añadir…")
+E("listeditor.hint_remove", en="Tap an entry to remove it.", de="Tippen entfernt einen Eintrag.",
+  fr="Touchez une entrée pour la supprimer.", es="Toque una entrada para quitarla.")
+E("listeditor.hint_reorder", en="Tap an entry to remove it, press and hold and drag to change the order.",
+  de="Tippen entfernt einen Eintrag, gedrückt halten und ziehen ändert die Reihenfolge.",
+  fr="Touchez une entrée pour la supprimer, maintenez-la et faites-la glisser pour changer l’ordre.",
+  es="Toque una entrada para quitarla; manténgala pulsada y arrástrela para cambiar el orden.")
 E("common.remove", old="&Remove", en="Remove", fr="Retirer", es="Quitar")
 E("common.delete", old="Delete", en="Delete", fr="Supprimer", es="Eliminar")
 E("common.edit", old="&Edit", en="Edit", fr="Modifier", es="Editar", merged=["Edit"],
@@ -665,8 +671,6 @@ E("event.program.heading", old="Program for", en="Program for “%1”", de="Pro
   note="Fragment „Programmübersicht für“ mit Platzhalter für den Namen")
 E("event.program.col_piece", old="Music Piece / Movements", en="Piece / movements",
   fr="Morceau / mouvements", es="Obra / movimientos")
-E("event.reorder_hint", en="Drag the handle to reorder", de="Zum Sortieren am Griff ziehen",
-  fr="Faites glisser la poignée pour réorganiser", es="Arrastre el tirador para cambiar el orden")
 E("event.export_program", en="Program as PDF", de="Programm als PDF", fr="Programme en PDF",
   es="Programa en PDF")
 E("event.duration_breakdown", en="Includes %1 min of presentation and %2 min per contribution",
@@ -1301,8 +1305,12 @@ E("event.no_ready_pieces", en="No pieces are marked as “ready to perform” at
   de="Zurzeit ist kein Werk als „vorspielreif“ markiert.",
   fr="Aucun morceau n’est actuellement marqué « prêt à jouer ».",
   es="Por ahora ninguna obra está marcada como «lista para tocar».")
-E("event.move_up", en="Move up", de="Nach oben", fr="Monter", es="Subir")
-E("event.move_down", en="Move down", de="Nach unten", fr="Descendre", es="Bajar")
+E("event.reorder", en="Move (drag, or arrow keys)", de="Verschieben (ziehen oder Pfeiltasten)",
+  fr="Déplacer (faire glisser ou flèches)", es="Mover (arrastrar o flechas)")
+E("event.reorder_hint", en="To change the order, press and hold a contribution and drag it.",
+  de="Zum Umsortieren einen Beitrag gedrückt halten und ziehen.",
+  fr="Pour changer l’ordre, maintenez une contribution appuyée et faites-la glisser.",
+  es="Para cambiar el orden, mantenga pulsada una intervención y arrástrela.")
 E("metronome.pitch_down", en="Lower pitch", de="Tiefer stimmen", fr="Diapason plus bas", es="Afinación más baja")
 E("metronome.pitch_up", en="Higher pitch", de="Höher stimmen", fr="Diapason plus haut", es="Afinación más alta")
 E("more.birthdays_today", src="%n today", en=["%n today", "%n today"], de=["%n heute", "%n heute"],

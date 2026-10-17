@@ -8,6 +8,7 @@
 #include <QHash>
 #include <QJSEngine>
 #include <QJsonArray>
+#include <QJSValue>
 #include <QJsonDocument>
 #include <QLocale>
 #include <QQmlEngine>
@@ -228,8 +229,10 @@ QVariant DataService::setting(const QString &key, const QVariant &fallback) cons
     return v;
 }
 
-bool DataService::setSetting(const QString &key, const QVariant &value)
+bool DataService::setSetting(const QString &key, const QVariant &given)
 {
+    // A list from QML can arrive as a JavaScript array (QJSValue), e.g. through a var signal parameter
+    const QVariant value = given.metaType() == QMetaType::fromType<QJSValue>() ? given.value<QJSValue>().toVariant() : given;
     QString text;
     if (value.typeId() == QMetaType::QStringList || value.typeId() == QMetaType::QVariantList)
         text = QString::fromUtf8(QJsonDocument(QJsonArray::fromStringList(value.toStringList())).toJson(QJsonDocument::Compact));

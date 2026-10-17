@@ -41,6 +41,14 @@
         <source>Add…</source>
         <translation>Add…</translation>
     </message>
+    <message id="listeditor.hint_remove">
+        <source>Tap an entry to remove it.</source>
+        <translation>Tap an entry to remove it.</translation>
+    </message>
+    <message id="listeditor.hint_reorder">
+        <source>Tap an entry to remove it, press and hold and drag to change the order.</source>
+        <translation>Tap an entry to remove it, press and hold and drag to change the order.</translation>
+    </message>
     <message id="common.remove">
         <source>Remove</source>
         <translation>Remove</translation>
@@ -1333,10 +1341,6 @@ Do you want to use this feature?</translation>
         <source>Piece / movements</source>
         <translation>Piece / movements</translation>
     </message>
-    <message id="event.reorder_hint">
-        <source>Drag the handle to reorder</source>
-        <translation>Drag the handle to reorder</translation>
-    </message>
     <message id="event.export_program">
         <source>Program as PDF</source>
         <translation>Program as PDF</translation>
@@ -2409,13 +2413,13 @@ Please contact the author at %4 to fix this problem.</translation>
         <source>No pieces are marked as “ready to perform” at the moment.</source>
         <translation>No pieces are marked as “ready to perform” at the moment.</translation>
     </message>
-    <message id="event.move_up">
-        <source>Move up</source>
-        <translation>Move up</translation>
+    <message id="event.reorder">
+        <source>Move (drag, or arrow keys)</source>
+        <translation>Move (drag, or arrow keys)</translation>
     </message>
-    <message id="event.move_down">
-        <source>Move down</source>
-        <translation>Move down</translation>
+    <message id="event.reorder_hint">
+        <source>To change the order, press and hold a contribution and drag it.</source>
+        <translation>To change the order, press and hold a contribution and drag it.</translation>
     </message>
     <message id="metronome.pitch_down">
         <source>Lower pitch</source>

@@ -41,6 +41,14 @@
         <source>Add…</source>
         <translation>Ajouter…</translation>
     </message>
+    <message id="listeditor.hint_remove">
+        <source>Tap an entry to remove it.</source>
+        <translation>Touchez une entrée pour la supprimer.</translation>
+    </message>
+    <message id="listeditor.hint_reorder">
+        <source>Tap an entry to remove it, press and hold and drag to change the order.</source>
+        <translation>Touchez une entrée pour la supprimer, maintenez-la et faites-la glisser pour changer l’ordre.</translation>
+    </message>
     <message id="common.remove">
         <source>Remove</source>
         <translation>Retirer</translation>
@@ -1333,10 +1341,6 @@ Voulez-vous utiliser cette fonction ?</translation>
         <source>Piece / movements</source>
         <translation>Morceau / mouvements</translation>
     </message>
-    <message id="event.reorder_hint">
-        <source>Drag the handle to reorder</source>
-        <translation>Faites glisser la poignée pour réorganiser</translation>
-    </message>
     <message id="event.export_program">
         <source>Program as PDF</source>
         <translation>Programme en PDF</translation>
@@ -2409,13 +2413,13 @@ Veuillez contacter l’auteur à l’adresse %4 pour résoudre ce problème.</tr
         <source>No pieces are marked as “ready to perform” at the moment.</source>
         <translation>Aucun morceau n’est actuellement marqué « prêt à jouer ».</translation>
     </message>
-    <message id="event.move_up">
-        <source>Move up</source>
-        <translation>Monter</translation>
+    <message id="event.reorder">
+        <source>Move (drag, or arrow keys)</source>
+        <translation>Déplacer (faire glisser ou flèches)</translation>
     </message>
-    <message id="event.move_down">
-        <source>Move down</source>
-        <translation>Descendre</translation>
+    <message id="event.reorder_hint">
+        <source>To change the order, press and hold a contribution and drag it.</source>
+        <translation>Pour changer l’ordre, maintenez une contribution appuyée et faites-la glisser.</translation>
     </message>
     <message id="metronome.pitch_down">
         <source>Lower pitch</source>
