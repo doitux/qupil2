@@ -1,8 +1,8 @@
 // SPDX-FileCopyrightText: 2006-2026 Felix Hammer
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 //
-// "More": the content tools – management (library, instruments, reminders,
-// birthdays, student archive), reports and documents. Everything that is a
+// "More": the content tools – reports, management (library, instruments,
+// reminders, birthdays, student archive) and documents. Everything that is a
 // setting (sync, appearance, alerts, lists, data and backups, about) is one
 // level down under Settings: the gear at the top or the row at the end.
 
@@ -130,6 +130,33 @@ StackView {
                 onOpenSync: stack.openSettings("sync")
             }
 
+            SectionLabel { Layout.topMargin: 6; text: qsTrId("more.reports") }
+            MenuGroup {
+                MenuRow {
+                    iconName: "star"
+                    tile: Theme.tile.blue
+                    text: qsTrId("candidates.recital.title")
+                    value: stack.candidates > 0 ? String(stack.candidates) : ""
+                    onClicked: stack.push(candidatesPage)
+                }
+                MenuRow {
+                    divider: true
+                    iconName: "students"
+                    tile: Theme.tile.yellow
+                    text: qsTrId("candidates.ensemble.title")
+                    value: stack.ensembleCandidates > 0 ? String(stack.ensembleCandidates) : ""
+                    onClicked: stack.push(ensemblePage)
+                }
+                MenuRow {
+                    divider: true
+                    iconName: "events"
+                    tile: Theme.tile.green
+                    text: qsTrId("event.tab.ready")
+                    value: stack.readyPieces > 0 ? String(stack.readyPieces) : ""
+                    onClicked: stack.push(readyPage)
+                }
+            }
+
             SectionLabel { Layout.topMargin: 6; text: qsTrId("more.manage") }
             MenuGroup {
                 MenuRow {
@@ -170,33 +197,6 @@ StackView {
                     text: qsTrId("nav.student_archive")
                     value: stack.archived > 0 ? String(stack.archived) : ""
                     onClicked: stack.push(studentArchivePage)
-                }
-            }
-
-            SectionLabel { Layout.topMargin: 6; text: qsTrId("more.reports") }
-            MenuGroup {
-                MenuRow {
-                    iconName: "star"
-                    tile: Theme.tile.blue
-                    text: qsTrId("candidates.recital.title")
-                    value: stack.candidates > 0 ? String(stack.candidates) : ""
-                    onClicked: stack.push(candidatesPage)
-                }
-                MenuRow {
-                    divider: true
-                    iconName: "students"
-                    tile: Theme.tile.yellow
-                    text: qsTrId("candidates.ensemble.title")
-                    value: stack.ensembleCandidates > 0 ? String(stack.ensembleCandidates) : ""
-                    onClicked: stack.push(ensemblePage)
-                }
-                MenuRow {
-                    divider: true
-                    iconName: "events"
-                    tile: Theme.tile.green
-                    text: qsTrId("event.tab.ready")
-                    value: stack.readyPieces > 0 ? String(stack.readyPieces) : ""
-                    onClicked: stack.push(readyPage)
                 }
             }
 
