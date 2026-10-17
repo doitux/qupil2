@@ -97,9 +97,11 @@ jobs:
       - name: Build APK
         run: bash .github/scripts/run-logged.sh cmake --build build --target apk --parallel
 
-      # Always the same (public) test key: a newer nightly installs over an older one
+      # Always the same (public) test key: a newer nightly installs over an older one.
+      # The file name carries build number and commit, so downloads never mix up.
       - name: Sign with the test key
         run: |
+          out="package/Qupil-Android-arm64-test-${GITHUB_RUN_NUMBER}-${GITHUB_SHA::7}.apk"
           apk=$(find build -name '*.apk' -path '*release*' | head -n 1)
           if [ -z "$apk" ]; then apk=$(find build -name '*.apk' | head -n 1); fi
           echo "Built: $apk"
@@ -108,8 +110,8 @@ jobs:
           mkdir -p package
           "$bt/zipalign" -p -f 4 "$apk" aligned.apk
           "$bt/apksigner" sign --ks "$ks" --ks-key-alias qupil-test --ks-pass pass:qupil-test --key-pass pass:qupil-test \
-            --out package/qupil-android-arm64-test.apk aligned.apk
-          "$bt/apksigner" verify --print-certs package/qupil-android-arm64-test.apk
+            --out "$out" aligned.apk
+          "$bt/apksigner" verify --print-certs "$out"
           ls -l package
 
       - uses: actions/upload-artifact@v7
@@ -202,4 +204,4 @@ jobs:
         run: |
           bash .github/scripts/publish-nightly.sh \
             'artifacts/qupil-ios-unsigned-ipa/*.ipa=Qupil-iOS-unsigned.ipa' \
-            'artifacts/qupil-android-arm64-test/*.apk=Qupil-Android-arm64-test.apk'
+            'artifacts/qupil-android-arm64-test/*.apk=Qupil-Android-arm64-test*.apk'

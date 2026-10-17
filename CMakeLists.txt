@@ -157,9 +157,13 @@ if(ANDROID)
         QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/platform/android
         QT_ANDROID_PACKAGE_NAME de.qupil.app
         QT_ANDROID_VERSION_NAME ${PROJECT_VERSION})
-    # Every CI build counts up, so Android installs it as an update
+    # Every CI build counts up, so Android installs it as an update; Android's app
+    # info shows build number and commit (as in the file name of the test APK)
     if(DEFINED ENV{GITHUB_RUN_NUMBER})
-        set_target_properties(qupil PROPERTIES QT_ANDROID_VERSION_CODE $ENV{GITHUB_RUN_NUMBER})
+        string(SUBSTRING "$ENV{GITHUB_SHA}" 0 7 _sha)
+        set_target_properties(qupil PROPERTIES
+            QT_ANDROID_VERSION_CODE $ENV{GITHUB_RUN_NUMBER}
+            QT_ANDROID_VERSION_NAME "${PROJECT_VERSION} (build $ENV{GITHUB_RUN_NUMBER}, ${_sha})")
     endif()
     # HTTPS (the Nextcloud sync) needs OpenSSL, which Qt does not bring for Android:
     # the prebuilt libraries of https://github.com/KDAB/android_openssl go into the APK

@@ -4,6 +4,8 @@
 # The tag "nightly" is moved to the commit that was built.
 #
 # Usage: bash .github/scripts/publish-nightly.sh 'path/glob*.ipa=Asset-Name.ipa' ...
+#   An asset name with * keeps the file's own name (e.g. with the build number)
+#   and replaces the older assets matching it.
 # Needs GH_TOKEN with contents: write, GITHUB_REPOSITORY and GITHUB_SHA.
 set -euo pipefail
 
@@ -27,6 +29,15 @@ for pair in "$@"; do
         echo "::error::nothing matches $pattern"
         exit 1
     fi
+    replaces=""
+    if [[ "$name" == *"*"* ]]; then
+        replaces="$name"
+        name="$(basename "$file")"
+        if [[ "$name" != $replaces ]]; then
+            echo "::error::$name does not match $replaces"
+            exit 1
+        fi
+    fi
     cp "$file" "$staging/$name"
     # Uploads fail now and then (GitHub 5xx): try again before giving up
     for attempt in 1 2 3; do
@@ -37,6 +48,14 @@ for pair in "$@"; do
         sleep 10
     done
     echo "Published $name"
+    # Older builds of the same file (another build number) go away
+    if [ -n "$replaces" ]; then
+        gh release view "$tag" --repo "$repo" --json assets -q '.assets[].name' | while read -r asset; do
+            if [[ "$asset" == $replaces && "$asset" != "$name" ]]; then
+                gh release delete-asset "$tag" "$asset" --repo "$repo" -y && echo "Removed $asset"
+            fi
+        done
+    fi
 done
 
 gh release edit "$tag" --repo "$repo" --prerelease --title "Nightly test builds" --notes "$(cat <<EOF
@@ -46,7 +65,7 @@ They are **not signed** and only meant for testing.
 | File | How to install |
 |---|---|
 | \`Qupil-iOS-unsigned.ipa\` | iPad / iPhone: sideload with AltStore, SideStore or Sideloadly, which sign it with your Apple ID. Needs iOS 16 or later. |
-| \`Qupil-Android-arm64-test.apk\` | Android: open the file and allow installing from this source. Signed with a public test key, so a newer nightly installs as an update (builds before Oct 15, 2026 used a different key: uninstall those once). The build is shown on the first screen and under More › About. |
+| \`Qupil-Android-arm64-test-<build>-<commit>.apk\` | Android: open the file and allow installing from this source. Play Protect warns about an unknown developer: tap *More details* › *Install anyway* (the big *OK* cancels the installation). Signed with a public test key, so a newer nightly installs as an update and keeps the data (builds before Oct 15, 2026 used a different key: uninstall those once). The commit in the file name is shown on the first screen and under More › About; Android's app info shows the build number. |
 | \`Qupil-macOS-universal.zip\` | macOS 12+: unzip, then right-click Qupil → Open the first time. |
 | \`Qupil-Windows-x64.zip\` | Windows 10/11: unzip and start \`bin\\Qupil.exe\`; SmartScreen → More info → Run anyway. |
 | \`Qupil-Linux-x86_64.tar.gz\` | Linux: unpack and start \`bin/qupil\`. Needs \`libxcb-cursor0\` (\`sudo apt install libxcb-cursor0\`). |
