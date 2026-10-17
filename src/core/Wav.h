@@ -41,4 +41,10 @@ Sound scaled(Sound sound, double gain);
 //! At most maxSeconds long, with a short fade-out where it was cut
 Sound trimmed(Sound sound, double maxSeconds);
 
+//! Two channels (a mono sound on both); Android plays short mono sounds choppily
+Sound stereo(Sound sound);
+
+//! Silence after the sound, so a player that stops when the data ends does not cut it off
+Sound padded(Sound sound, double tailSeconds);
+
 } // namespace Qupil::Wav

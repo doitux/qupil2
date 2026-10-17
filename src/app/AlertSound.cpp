@@ -127,8 +127,10 @@ QString AlertSound::file()
     const auto sound = Wav::read(bytes);
     if (!sound)
         return {};
-    // A new name for every sound and volume: iOS keeps notification sounds by name
-    const QByteArray key = QCryptographicHash::hash(bytes + QByteArray::number(volume()), QCryptographicHash::Md5)
+    // A new name for every sound, volume and way of preparing it: iOS keeps
+    // notification sounds by name
+    const QByteArray key = QCryptographicHash::hash(bytes + QByteArray::number(volume()) + "|stereo|tail300",
+                                                    QCryptographicHash::Md5)
                                .toHex()
                                .left(12);
     const QDir dir(folder());
@@ -140,7 +142,9 @@ QString AlertSound::file()
     QSaveFile out(path);
     if (!out.open(QIODevice::WriteOnly))
         return {};
-    out.write(Wav::write(Wav::scaled(*sound, volume() / 10.0)));
+    // Stereo with a little silence at the end: Android played the short mono
+    // sounds of Qupil 1.x choppily and cut off their end
+    out.write(Wav::write(Wav::padded(Wav::stereo(Wav::scaled(*sound, volume() / 10.0)), 0.3)));
     if (!out.commit())
         return {};
     for (const QString &old : dir.entryList({ m_name + u"-*.wav"_s }, QDir::Files)) {

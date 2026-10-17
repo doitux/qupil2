@@ -942,6 +942,20 @@ private slots:
         QCOMPARE(cut.samples.last(), qint16(0));
         QCOMPARE(Wav::trimmed(tone, 5.0).samples.size(), 3000);
 
+        // Mono to stereo, both channels the same; silence after it
+        Wav::Sound single;
+        single.sampleRate = 1000;
+        single.channels = 1;
+        single.samples = { 1, 2, 3 };
+        const Wav::Sound both = Wav::stereo(single);
+        QCOMPARE(both.channels, 2);
+        QCOMPARE(both.samples, (QList<qint16> { 1, 1, 2, 2, 3, 3 }));
+        QCOMPARE(Wav::stereo(both).samples, both.samples);
+        const Wav::Sound tail = Wav::padded(both, 0.5);
+        QCOMPARE(tail.samples.size(), 6 + 1000);
+        QCOMPARE(tail.samples.last(), qint16(0));
+        QCOMPARE(tail.seconds(), 0.003 + 0.5);
+
         // 24-bit mono with an extra chunk before the data, as audio editors write it
         QByteArray wav24 = "RIFF\0\0\0\0WAVEfmt "_ba;
         const auto le = [](QByteArray &b, quint32 v, int bytes) {

@@ -171,4 +171,27 @@ Sound trimmed(Sound sound, double maxSeconds)
     return sound;
 }
 
+Sound stereo(Sound sound)
+{
+    if (!sound.isValid() || sound.channels == 2)
+        return sound;
+    QList<qint16> out;
+    out.reserve(sound.samples.size() / sound.channels * 2);
+    for (qsizetype i = 0; i < sound.samples.size(); i += sound.channels) {
+        out.append(sound.samples.at(i));
+        out.append(sound.channels > 1 ? sound.samples.at(i + 1) : sound.samples.at(i));
+    }
+    sound.samples = out;
+    sound.channels = 2;
+    return sound;
+}
+
+Sound padded(Sound sound, double tailSeconds)
+{
+    if (!sound.isValid() || tailSeconds <= 0)
+        return sound;
+    sound.samples.append(QList<qint16>(qsizetype(tailSeconds * sound.sampleRate) * sound.channels, 0));
+    return sound;
+}
+
 } // namespace Qupil::Wav
