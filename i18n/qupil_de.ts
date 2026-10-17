@@ -2839,6 +2839,10 @@ Bitte wenden Sie sich an den Programm-Autor: %4 um dieses Problem zu beheben!</t
         <source>The document could not be created.</source>
         <translation>Das Dokument konnte nicht erstellt werden.</translation>
     </message>
+    <message id="doc.save_title">
+        <source>Save document</source>
+        <translation>Dokument speichern</translation>
+    </message>
     <message id="doc.saved">
         <source>“%1” saved.</source>
         <extracomment>After saving a PDF where the user chose; %1 = file name</extracomment>

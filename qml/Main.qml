@@ -5,8 +5,10 @@
 //   narrow (phone, small window): tab bar at the bottom
 //   wide (tablet, desktop):       sidebar on the left
 
+import QtCore
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Dialogs
 import QtQuick.Layouts
 import Qupil
 
@@ -516,6 +518,22 @@ ApplicationWindow {
         target: Docs
         function onFailed(message) { Nav.toast(message) }
         function onExported(message) { Nav.toast(message) }
+        function onSaveRequested(file, name) {
+            pdfSaveDialog.file = file
+            pdfSaveDialog.selectedFile = pdfSaveDialog.currentFolder + "/" + name
+            pdfSaveDialog.open()
+        }
+    }
+    // Android: where a PDF goes (the system's save dialog)
+    FileDialog {
+        id: pdfSaveDialog
+        property url file
+        title: qsTrId("doc.save_title")
+        fileMode: FileDialog.SaveFile
+        defaultSuffix: "pdf"
+        currentFolder: StandardPaths.writableLocation(StandardPaths.DocumentsLocation)
+        onAccepted: Docs.saveCopy(file, selectedFile, App.displayPath(selectedFile))
+        onRejected: Docs.discard(file)
     }
 
     // Reminders "when Qupil starts" and at the start of a lesson (Qupil 1.x pop-ups);

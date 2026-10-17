@@ -86,12 +86,21 @@ public:
 
     //! Writes the HTML as PDF (into the documents folder unless one is given); empty URL on failure
     QUrl writePdf(const QString &html, const QString &baseName, bool landscape, const QString &folder = {}) const;
+    //! Android: copies the PDF of saveRequested to the chosen place (also content:// URIs)
+    Q_INVOKABLE bool saveCopy(const QUrl &file, const QUrl &target, const QString &targetName);
+    //! Android: the save dialog was cancelled
+    Q_INVOKABLE void discard(const QUrl &file);
 
 signals:
     //! Could not write or open a document
     void failed(const QString &message);
     //! iOS: the document was saved where the user chose
     void exported(const QString &message);
+    /*!
+        Android: the PDF is ready in a temporary file; the user chooses where it
+        goes (the system's save dialog in QML), then saveCopy() or discard().
+    */
+    void saveRequested(const QUrl &file, const QString &name);
 
 private:
     QUrl writeAndOpen(const QString &html, const QString &baseName, bool landscape);

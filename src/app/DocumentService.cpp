@@ -218,6 +218,20 @@ QUrl DocumentService::writeAndOpen(const QString &html, const QString &baseName,
         });
         return url;
     }
+#ifdef Q_OS_ANDROID
+    {
+        // Android: the user chooses where it goes (an app's own files cannot be opened by others)
+        const QString folder = QDir(QStandardPaths::writableLocation(QStandardPaths::TempLocation)).filePath(u"pdf"_s);
+        QDir(folder).removeRecursively();
+        const QUrl url = writePdf(html, baseName, landscape, folder);
+        if (url.isEmpty()) {
+            emit failed(qtTrId("doc.error.write"));
+            return {};
+        }
+        emit saveRequested(url, QFileInfo(url.toLocalFile()).fileName());
+        return url;
+    }
+#endif
     const QUrl url = writePdf(html, baseName, landscape);
     if (url.isEmpty()) {
         emit failed(qtTrId("doc.error.write"));
@@ -226,6 +240,40 @@ QUrl DocumentService::writeAndOpen(const QString &html, const QString &baseName,
     if (!QDesktopServices::openUrl(url))
         emit failed(qtTrId("doc.error.open").arg(QDir::toNativeSeparators(url.toLocalFile())));
     return url;
+}
+
+bool DocumentService::saveCopy(const QUrl &file, const QUrl &target, const QString &targetName)
+{
+    const QString from = file.toLocalFile();
+    // content:// URIs (Android) are opened as they are; the document the dialog
+    // created must not be removed first, it could not be written any more
+    const QString to = target.isLocalFile() ? target.toLocalFile() : target.toString();
+    QFile in(from);
+    QFile out(to);
+    bool ok = in.open(QIODevice::ReadOnly) && out.open(QIODevice::WriteOnly | QIODevice::Truncate);
+    while (ok) {
+        const QByteArray chunk = in.read(1 << 20);
+        if (chunk.isEmpty())
+            break;
+        ok = out.write(chunk) == chunk.size();
+    }
+    ok = ok && out.flush();
+    const QString error = !ok ? (out.errorString().isEmpty() ? in.errorString() : out.errorString()) : QString();
+    in.close();
+    out.close();
+    QFile::remove(from);
+    if (!ok) {
+        emit failed(qtTrId("doc.error.write") + u" ("_s + error + u')');
+        return false;
+    }
+    emit exported(qtTrId("doc.saved").arg(targetName.isEmpty() ? QFileInfo(from).fileName() : targetName));
+    return true;
+}
+
+void DocumentService::discard(const QUrl &file)
+{
+    if (file.isLocalFile())
+        QFile::remove(file.toLocalFile());
 }
 
 QUrl DocumentService::dayOverview(const QString &dateIso, int notesPerLesson, int spaceLines)

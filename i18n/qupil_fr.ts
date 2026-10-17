@@ -2838,6 +2838,10 @@ Veuillez contacter l’auteur à l’adresse %4 pour résoudre ce problème.</tr
         <source>The document could not be created.</source>
         <translation>Le document n’a pas pu être créé.</translation>
     </message>
+    <message id="doc.save_title">
+        <source>Save document</source>
+        <translation>Enregistrer le document</translation>
+    </message>
     <message id="doc.saved">
         <source>“%1” saved.</source>
         <extracomment>After saving a PDF where the user chose; %1 = file name</extracomment>
