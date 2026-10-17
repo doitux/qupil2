@@ -45,12 +45,12 @@ Sheet {
     }
 
     InputField {
-        label: qsTrId("common.label.description")
+        label: qsTrId("common.description")
         text: editor.draft.description || ""
         onEdited: (value) => editor.set("description", value)
     }
     ChoiceField {
-        label: qsTrId("common.label.type")
+        label: qsTrId("common.type")
         allowEmpty: false
         options: editor.continuous ? [0, 1, 2, 3].map(k => Labels.continuousKind(k)) : [0, 1, 2].map(k => Labels.singleKind(k))
         value: editor.continuous ? Labels.continuousKind(editor.draft.continuous_kind || 0) : Labels.singleKind(editor.draft.single_kind || 0)
@@ -63,14 +63,14 @@ Sheet {
         columnSpacing: 14
         rowSpacing: 16
         ChoiceField {
-            label: qsTrId("common.label.weekday")
+            label: qsTrId("common.weekday")
             allowEmpty: false
             options: [0, 1, 2, 3, 4, 5, 6, 7].map(d => Labels.weekday(d))
             value: Labels.weekday(editor.draft.weekday || 0)
             onPicked: (value) => editor.set("weekday", options.indexOf(value))
         }
         TimeField {
-            label: qsTrId("common.label.time")
+            label: qsTrId("common.time")
             time: editor.draft.time || "17:00"
             onPicked: (value) => editor.set("time", value)
         }
@@ -81,13 +81,13 @@ Sheet {
         columnSpacing: 14
         rowSpacing: 16
         DateField {
-            label: editor.continuous ? qsTrId("common.label.start") : qsTrId("common.label.date")
+            label: editor.continuous ? qsTrId("common.start") : qsTrId("common.date")
             date: editor.draft.date || ""
             onPicked: (value) => editor.set("date", value || Data.today())
         }
         DateField {
             visible: editor.continuous
-            label: qsTrId("common.label.end")
+            label: qsTrId("common.end")
             allowEmpty: true
             date: editor.draft.end_date || ""
             onPicked: (value) => editor.set("end_date", value)

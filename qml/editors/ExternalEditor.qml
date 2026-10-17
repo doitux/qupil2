@@ -35,13 +35,13 @@ Sheet {
     })
 
     InputField {
-        label: qsTrId("common.label.composer")
+        label: qsTrId("common.composer")
         text: editor.draft.composer || ""
         completions: editor.composers
         onEdited: (value) => editor.set("composer", value)
     }
     InputField {
-        label: qsTrId("common.label.title")
+        label: qsTrId("common.title")
         text: editor.draft.title || ""
         onEdited: (value) => editor.set("title", value)
     }
@@ -58,7 +58,7 @@ Sheet {
             onPicked: (value) => editor.set("genre", value)
         }
         Stepper {
-            label: qsTrId("common.label.duration")
+            label: qsTrId("common.duration")
             value: editor.draft.duration || 0
             suffix: qsTrId("common.unit.min")
             onPicked: (value) => editor.set("duration", value)

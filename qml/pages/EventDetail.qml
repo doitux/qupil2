@@ -233,11 +233,11 @@ Item {
                     columns: column.width > 520 ? 3 : 2
                     columnSpacing: 16
                     rowSpacing: 14
-                    Info { label: qsTrId("common.label.date"); value: Data.formatDate(detail.event.date || "", true) }
-                    Info { label: qsTrId("common.label.time"); value: detail.event.time || "" }
-                    Info { label: qsTrId("event.label.location"); value: detail.event.location || "" }
-                    Info { label: qsTrId("event.label.organizer"); value: detail.event.organizer || "" }
-                    Info { label: qsTrId("event.label.accompanist"); value: detail.event.accompanist || "" }
+                    Info { label: qsTrId("common.date"); value: Data.formatDate(detail.event.date || "", true) }
+                    Info { label: qsTrId("common.time"); value: detail.event.time || "" }
+                    Info { label: qsTrId("common.location"); value: detail.event.location || "" }
+                    Info { label: qsTrId("event.organizer"); value: detail.event.organizer || "" }
+                    Info { label: qsTrId("event.accompanist"); value: detail.event.accompanist || "" }
                     Info {
                         label: qsTrId("event.label.contributions")
                         value: qsTrId("event.contributions", detail.programme.length)

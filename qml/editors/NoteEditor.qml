@@ -118,7 +118,7 @@ Sheet {
     }
 
     DateField {
-        label: qsTrId("common.label.date")
+        label: qsTrId("common.date")
         date: editor.date
         onPicked: (value) => editor.date = value || Data.today()
     }

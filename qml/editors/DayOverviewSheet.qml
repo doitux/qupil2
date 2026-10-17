@@ -38,7 +38,7 @@ Sheet {
     }
 
     ChoiceField {
-        label: qsTrId("common.label.weekday")
+        label: qsTrId("common.weekday")
         allowEmpty: false
         options: sheet.choices.map(c => c.label)
         value: (sheet.choices.find(c => c.weekday === sheet.weekday) || {}).label || ""

@@ -9,7 +9,7 @@ import QtQuick.Layouts
 
 Text {
     property string label
-    text: label.replace(/\s*:\s*$/, "")
+    text: label
     Layout.fillWidth: true
     elide: Text.ElideRight
     color: Theme.textMuted

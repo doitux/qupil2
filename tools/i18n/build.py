@@ -11,7 +11,7 @@ import sys
 from xml.sax.saxutils import escape
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from catalog import CATALOG, DROPPED  # noqa: E402
+from catalog import CATALOG, DROPPED, KEEP_COLON, KEEP_ELLIPSIS  # noqa: E402
 
 RAW, OUT = sys.argv[1], sys.argv[2]
 os.makedirs(OUT, exist_ok=True)
@@ -134,6 +134,48 @@ def normalize_de(s):
     return t, changes
 
 
+ELLIPSIS_END = re.compile(r"[\s\u00a0]*(?:\.\.\.|…)\s*$")
+COLON_END = re.compile(r"[\s\u00a0\u202f]*:\s*$")
+
+
+def without_colon(s):
+    return COLON_END.sub("", s)
+
+
+def same_wording(a, b):
+    """Equal apart from a ":" or "…" at the end."""
+    def bare(s):
+        return ELLIPSIS_END.sub("", without_colon(s))
+    return bare(a) == bare(b)
+
+
+def tidy_endings(item):
+    """Same endings in every language (see KEEP_ELLIPSIS / KEEP_COLON in catalog.py)."""
+    keys = ("en", "de", "fr", "es", "src")
+
+    def texts():
+        for k in keys:
+            v = item[k]
+            for x in (v if isinstance(v, list) else [v]):
+                if x:
+                    yield x
+
+    def apply(fn):
+        for k in keys:
+            v = item[k]
+            if v is not None:
+                item[k] = [fn(x) for x in v] if isinstance(v, list) else fn(v)
+
+    if item["id"] in KEEP_ELLIPSIS:
+        apply(lambda x: re.sub(r"\.\.\.(\s*)$", r"…\1", x))
+    elif any(ELLIPSIS_END.search(x) for x in texts()):
+        apply(lambda x: ELLIPSIS_END.sub("", x))
+        item["changes"].append("„…“ am Ende entfernt (Befehle ohne Auslassungspunkte)")
+    if item["id"] not in KEEP_COLON and any(COLON_END.search(x) for x in texts()):
+        apply(without_colon)
+        item["changes"].append("„:“ am Ende entfernt (Beschriftungen ohne Doppelpunkt)")
+
+
 def fr_typo(s):
     s = s.replace(" :", " :").replace(" ?", " ?").replace(" !", " !").replace(" ;", " ;")
     s = s.replace("« ", "« ").replace(" »", " »")
@@ -167,12 +209,14 @@ for e in CATALOG:
         for m in e["merged"]:
             if m.startswith("(code)"):
                 continue
+            merged_de = [normalize_de(d)[0] for d in lookup.get(m, [])]
             for d in lookup.get(m, []):
                 covered.add((m, d))
-                if e["de"] is None and not e["num"]:
-                    nd = normalize_de(d)[0]
-                    if nd != normalize_de(de141)[0] and not (m == "irregular" and nd.lower() == "unregelmäßig"):
-                        warnings.append(f"{e['id']}: zusammengeführt „{m}“ hat anderes Deutsch: {nd!r}")
+            # One of the 1.4.1 translations must match (endings aside); "Location:" had several
+            if e["de"] is None and not e["num"] and merged_de and not any(
+                    same_wording(nd, normalize_de(de141)[0]) or (m == "irregular" and nd.lower() == "unregelmäßig")
+                    for nd in merged_de):
+                warnings.append(f"{e['id']}: zusammengeführt „{m}“ hat anderes Deutsch: {merged_de!r}")
             if m not in lookup:
                 errors.append(f"{e['id']}: zusammengeführte Quelle fehlt: {m!r}")
         if e["pick"] and old in lookup:
@@ -204,6 +248,7 @@ for e in CATALOG:
                 old=old if old is None or not old.startswith("<!") else "(HTML-Text)",
                 de141=de141 if de141 is None or not de141.startswith("<!") else plain(de141).strip(),
                 changes=changes, new=(old is None and not e["code"]), code=e["code"])
+    tidy_endings(item)
     # checks
     if e["num"]:
         if not item["src"]:

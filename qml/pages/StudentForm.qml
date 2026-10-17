@@ -59,30 +59,30 @@ ColumnLayout {
             columnSpacing: 14
             rowSpacing: 14
             InputField {
-                label: qsTrId("common.label.first_name")
+                label: qsTrId("common.first_name")
                 text: form.draft.forename || ""
                 onEdited: (value) => form.set("forename", value)
             }
             InputField {
-                label: qsTrId("common.label.last_name")
+                label: qsTrId("common.last_name")
                 text: form.draft.surname || ""
                 onEdited: (value) => form.set("surname", value)
             }
             DateField {
-                label: qsTrId("common.label.birthday")
+                label: qsTrId("common.birthday")
                 allowEmpty: true
                 date: form.draft.birthday || ""
                 onPicked: (value) => form.set("birthday", value)
             }
             DateField {
-                label: qsTrId("student.label.lesson_since")
+                label: qsTrId("student.lesson_since")
                 allowEmpty: true
                 date: form.draft.first_lesson || ""
                 onPicked: (value) => form.set("first_lesson", value)
             }
         }
         InputField {
-            label: qsTrId("common.label.address")
+            label: qsTrId("common.address")
             text: form.draft.address || ""
             onEdited: (value) => form.set("address", value)
         }
@@ -92,19 +92,19 @@ ColumnLayout {
             columnSpacing: 14
             rowSpacing: 14
             InputField {
-                label: qsTrId("common.label.email")
+                label: qsTrId("common.email")
                 inputMethodHints: Qt.ImhEmailCharactersOnly | Qt.ImhNoAutoUppercase
                 text: form.draft.email || ""
                 onEdited: (value) => form.set("email", value)
             }
             InputField {
-                label: qsTrId("common.label.phone")
+                label: qsTrId("common.phone")
                 inputMethodHints: Qt.ImhDialableCharactersOnly
                 text: form.draft.phone || ""
                 onEdited: (value) => form.set("phone", value)
             }
             InputField {
-                label: qsTrId("common.label.mobile")
+                label: qsTrId("common.mobile")
                 inputMethodHints: Qt.ImhDialableCharactersOnly
                 text: form.draft.mobile || ""
                 onEdited: (value) => form.set("mobile", value)
@@ -121,13 +121,13 @@ ColumnLayout {
             columnSpacing: 14
             rowSpacing: 14
             ChoiceField {
-                label: qsTrId("common.label.instrument")
+                label: qsTrId("common.instrument")
                 options: form.instruments
                 value: form.draft.instrument || ""
                 onPicked: (value) => form.set("instrument", value)
             }
             ChoiceField {
-                label: qsTrId("common.label.size")
+                label: qsTrId("common.size")
                 options: form.sizes
                 value: form.draft.instrument_size || ""
                 onPicked: (value) => form.set("instrument_size", value)
@@ -155,7 +155,7 @@ ColumnLayout {
                 onEdited: (value) => form.set("rental_desc", value)
             }
             DateField {
-                label: qsTrId("student.label.rented_since")
+                label: qsTrId("student.rented_since")
                 allowEmpty: true
                 date: form.draft.rental_since || ""
                 onPicked: (value) => form.set("rental_since", value)
@@ -195,33 +195,33 @@ ColumnLayout {
             columnSpacing: 14
             rowSpacing: 14
             InputField {
-                label: qsTrId("student.label.mother_name")
+                label: qsTrId("student.mother_name")
                 text: form.draft.mother_name || ""
                 onEdited: (value) => form.set("mother_name", value)
             }
             InputField {
-                label: qsTrId("student.label.mother_job")
+                label: qsTrId("student.mother_job")
                 text: form.draft.mother_job || ""
                 onEdited: (value) => form.set("mother_job", value)
             }
             InputField {
-                label: qsTrId("student.label.mother_phone")
+                label: qsTrId("student.mother_phone")
                 inputMethodHints: Qt.ImhDialableCharactersOnly
                 text: form.draft.mother_phone || ""
                 onEdited: (value) => form.set("mother_phone", value)
             }
             InputField {
-                label: qsTrId("student.label.father_name")
+                label: qsTrId("student.father_name")
                 text: form.draft.father_name || ""
                 onEdited: (value) => form.set("father_name", value)
             }
             InputField {
-                label: qsTrId("student.label.father_job")
+                label: qsTrId("student.father_job")
                 text: form.draft.father_job || ""
                 onEdited: (value) => form.set("father_job", value)
             }
             InputField {
-                label: qsTrId("student.label.father_phone")
+                label: qsTrId("student.father_phone")
                 inputMethodHints: Qt.ImhDialableCharactersOnly
                 text: form.draft.father_phone || ""
                 onEdited: (value) => form.set("father_phone", value)

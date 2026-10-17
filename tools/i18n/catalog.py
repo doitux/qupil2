@@ -13,6 +13,21 @@ build.py turns those into non-breaking spaces.
 
 CATALOG = []
 
+# Endings, the same in every language (build.py applies them):
+# - Commands (menu entries, buttons) have no "…" at the end; only texts for
+#   something in progress and placeholders in input fields keep it.
+# - Labels (above a field, in front of a value) have no ":" at the end; only
+#   sentences that introduce what follows below keep it.
+KEEP_ELLIPSIS = {
+    "common.add_ellipsis", "note.placeholder",
+    "migration.importing", "sync.in_progress", "sync.nextcloud.waiting", "sync.checking", "wifi.connecting",
+}
+KEEP_COLON = {
+    "candidates.ensemble.found", "candidates.recital.found",
+    "birthday.last_week_many", "birthday.last_week_one", "birthday.today_many", "birthday.today_one",
+    "event.finish.intro", "import.csv.assign", "reminder.for_student",
+}
+
 
 def E(id, old=None, en=None, fr=None, es=None, de=None, pick=None, c=None,
       note=None, merged=(), src=None, email=False, code=None):
@@ -104,48 +119,31 @@ E("common.dont_show_again", old="Do not show this message again.",
   en="Don’t show this message again", fr="Ne plus afficher ce message",
   es="No volver a mostrar este mensaje")
 E("common.name", old="Name", en="Name", fr="Nom", es="Nombre")
-E("common.description", old="Description", en="Description", fr="Description", es="Descripción")
-E("common.label.description", old="Description:", en="Description:", fr="Description :", es="Descripción:")
-E("common.date", old="Date", en="Date", fr="Date", es="Fecha")
-E("common.label.date", old="Date:", en="Date:", fr="Date :", es="Fecha:")
-E("common.time", old="Time", en="Time", fr="Heure", es="Hora", merged=["Time   "])
-E("common.label.time", old="Time:", en="Time:", fr="Heure :", es="Hora:")
+E("common.description", old="Description", en="Description", fr="Description", es="Descripción", merged=["Description:"])
+E("common.date", old="Date", en="Date", fr="Date", es="Fecha", merged=["Date:"])
+E("common.time", old="Time", en="Time", fr="Heure", es="Hora", merged=["Time   ", "Time:"])
 E("common.time_oclock", code=" Uhr", de="%1 Uhr", en="%1", fr="%1", es="%1 h",
   c="Clock time; %1 = formatted time such as 15:00. Add a unit only if your language uses one.",
   note="In 1.4.1 hartkodiert („ Uhr“ in recitaltabs.cpp)")
-E("common.weekday", old="Weekday", en="Weekday", fr="Jour", es="Día de la semana")
-E("common.label.weekday", old="Weekday:", en="Weekday:", fr="Jour :", es="Día de la semana:")
-E("common.start", old="Start", en="Start", fr="Début", es="Inicio")
-E("common.label.start", old="Start:", en="Start:", fr="Début :", es="Inicio:")
-E("common.end", old="End", en="End", fr="Fin", es="Fin")
-E("common.label.end", old="End:", en="End:", fr="Fin :", es="Fin:")
-E("common.duration", old="Duration", en="Duration", fr="Durée", es="Duración")
-E("common.label.duration", old="Duration:", en="Duration:", fr="Durée :", es="Duración:")
-E("common.type", old="Type", en="Type", fr="Type", es="Tipo")
-E("common.label.type", old="Type:", en="Type:", fr="Type :", es="Tipo:", merged=["Type: "])
-E("common.status", old="State", en="Status", fr="Statut", es="Estado")
-E("common.label.status", old="State:", en="Status:", fr="Statut :", es="Estado:")
-E("common.location", old="Location", en="Location", fr="Lieu", es="Lugar")
-E("common.composer", old="Composer", en="Composer", fr="Compositeur", es="Compositor")
-E("common.label.composer", old="Composer:", en="Composer:", fr="Compositeur :", es="Compositor:")
-E("common.title", old="Title", en="Title", fr="Titre", es="Título")
-E("common.label.title", old="Title:", en="Title:", fr="Titre :", es="Título:")
-E("common.genre", old="Genre", en="Genre", fr="Genre", es="Género", merged=["Genre               "])
-E("common.label.genre", old="Genre:", en="Genre:", fr="Genre :", es="Género:")
-E("common.instrument", old="Instrument", en="Instrument", fr="Instrument", es="Instrumento")
-E("common.label.instrument", old="Instrument:", en="Instrument:", fr="Instrument :", es="Instrumento:")
+E("common.weekday", old="Weekday", en="Weekday", fr="Jour", es="Día de la semana", merged=["Weekday:"])
+E("common.start", old="Start", en="Start", fr="Début", es="Inicio", merged=["Start:"])
+E("common.end", old="End", en="End", fr="Fin", es="Fin", merged=["End:"])
+E("common.duration", old="Duration", en="Duration", fr="Durée", es="Duración", merged=["Duration:"])
+E("common.type", old="Type", en="Type", fr="Type", es="Tipo", merged=["Type:", "Type: "])
+E("common.status", old="State", en="Status", fr="Statut", es="Estado", merged=["State:"])
+E("common.location", old="Location", en="Location", fr="Lieu", es="Lugar", merged=["Location:"])
+E("common.composer", old="Composer", en="Composer", fr="Compositeur", es="Compositor", merged=["Composer:"])
+E("common.title", old="Title", en="Title", fr="Titre", es="Título", merged=["Title:"])
+E("common.genre", old="Genre", en="Genre", fr="Genre", es="Género", merged=["Genre               ", "Genre:"])
+E("common.instrument", old="Instrument", en="Instrument", fr="Instrument", es="Instrumento", merged=["Instrument:"])
 E("common.instruments", old="Instruments", en="Instruments", fr="Instruments", es="Instrumentos")
 E("common.size", old="Size", en="Size", fr="Taille", es="Tamaño",
-  c="Instrument size, e.g. 3/4.")
-E("common.label.size", old="Size:", en="Size:", fr="Taille :", es="Tamaño:")
+  c="Instrument size, e.g. 3/4.", merged=["Size:"])
 E("common.count", old="Number", en="Count", fr="Nombre", es="Cantidad")
 E("common.note", old="Note", en="Note", fr="Note", es="Nota", c="A lesson note (text), not a musical note.")
-E("common.notes", old="Notes", en="Notes", fr="Notes", es="Notas")
-E("common.label.notes", old="Notes:", en="Notes:", fr="Notes :", es="Notas:")
-E("common.student", old="Pupil", en="Student", fr="Élève", es="Alumno", merged=["&Pupil"])
-E("common.label.student", old="Pupil:", en="Student:", fr="Élève :", es="Alumno:")
-E("common.lesson", old="Lesson", en="Lesson", fr="Cours", es="Clase", merged=["&Lesson"])
-E("common.label.lesson", old="Lesson:", en="Lesson:", fr="Cours :", es="Clase:")
+E("common.notes", old="Notes", en="Notes", fr="Notes", es="Notas", merged=["Notes:"])
+E("common.student", old="Pupil", en="Student", fr="Élève", es="Alumno", merged=["&Pupil", "Pupil:"])
+E("common.lesson", old="Lesson", en="Lesson", fr="Cours", es="Clase", merged=["&Lesson", "Lesson:"])
 E("common.lesson_notes", old="&Lesson Notes", en="Lesson notes", fr="Notes de cours",
   es="Notas de clase", merged=["Lesson notes"])
 E("common.pieces", old="&Music Pieces", en="Pieces", fr="Morceaux", es="Obras",
@@ -157,29 +155,18 @@ E("common.event", old="Event", en="Event", fr="Événement", es="Evento", merged
 E("common.events", old="Events", en="Events", fr="Événements", es="Eventos")
 E("common.archive", old="&Archive", en="Archive", fr="Archives", es="Archivo")
 E("common.first_name", old="First name", en="First name", fr="Prénom", es="Nombre",
-  merged=["First Name"], c="Also used to detect matching columns in imported CSV files.")
+  merged=["First Name", "First Name:"], c="Also used to detect matching columns in imported CSV files.")
 E("common.last_name", old="Last name", en="Last name", fr="Nom", es="Apellidos",
-  merged=["Last Name"], c="Also used to detect matching columns in imported CSV files.")
-E("common.label.first_name", old="First Name:", en="First name:", fr="Prénom :", es="Nombre:")
-E("common.label.last_name", old="Last Name:", en="Last name:", fr="Nom :", es="Apellidos:")
-E("common.address", old="Address", en="Address", fr="Adresse", es="Dirección")
-E("common.label.address", old="Address:", en="Address:", fr="Adresse :", es="Dirección:")
+  merged=["Last Name", "Last Name:"], c="Also used to detect matching columns in imported CSV files.")
+E("common.address", old="Address", en="Address", fr="Adresse", es="Dirección", merged=["Address:"])
 E("common.birthday", old="Birthday", en="Date of birth", fr="Date de naissance",
-  es="Fecha de nacimiento", c="Also used to detect matching columns in imported CSV files.")
-E("common.label.birthday", old="Birthday:", en="Date of birth:", fr="Date de naissance :",
-  es="Fecha de nacimiento:")
-E("common.street", old="Street", en="Street", fr="Rue", es="Calle")
-E("common.label.street", old="Street:", en="Street:", fr="Rue :", es="Calle:")
-E("common.zip", old="Zip Code", en="ZIP code", fr="Code postal", es="Código postal")
-E("common.label.zip", old="Zip Code:", en="ZIP code:", fr="Code postal :", es="Código postal:")
-E("common.city", old="City", en="City", fr="Ville", es="Ciudad")
-E("common.label.city", old="City:", en="City:", fr="Ville :", es="Ciudad:")
-E("common.phone", old="Phone", en="Phone", fr="Téléphone", es="Teléfono")
-E("common.label.phone", old="Phone:", en="Phone:", fr="Téléphone :", es="Teléfono:")
-E("common.mobile", old="Mobile", en="Mobile", fr="Portable", es="Móvil")
-E("common.label.mobile", old="Mobile:", en="Mobile:", fr="Portable :", es="Móvil:")
-E("common.email", old="E-Mail", en="Email", fr="E-mail", es="Correo electrónico")
-E("common.label.email", old="E-Mail:", en="Email:", fr="E-mail :", es="Correo electrónico:")
+  es="Fecha de nacimiento", c="Also used to detect matching columns in imported CSV files.", merged=["Birthday:"])
+E("common.street", old="Street", en="Street", fr="Rue", es="Calle", merged=["Street:"])
+E("common.zip", old="Zip Code", en="ZIP code", fr="Code postal", es="Código postal", merged=["Zip Code:"])
+E("common.city", old="City", en="City", fr="Ville", es="Ciudad", merged=["City:"])
+E("common.phone", old="Phone", en="Phone", fr="Téléphone", es="Teléfono", merged=["Phone:"])
+E("common.mobile", old="Mobile", en="Mobile", fr="Portable", es="Móvil", merged=["Mobile:"])
+E("common.email", old="E-Mail", en="Email", fr="E-mail", es="Correo electrónico", merged=["E-Mail:"])
 E("common.age_years", old="Years", src="%n year(s)",
   en=["%n year", "%n years"], de=["%n Jahr", "%n Jahre"],
   fr=["%n an", "%n ans"], es=["%n año", "%n años"],
@@ -387,33 +374,19 @@ E("student.search", en="Search students", de="Schüler suchen", fr="Rechercher d
   es="Buscar alumnos")
 E("student.label.age", old="Age:", en="Age:", fr="Âge :", es="Edad:")
 E("student.label.parents", old="Parents:", en="Parents:", fr="Parents :", es="Padres:")
-E("student.label.mother_name", old="Name (Mother):", en="Mother’s name:", fr="Nom de la mère :",
-  es="Nombre de la madre:")
-E("student.label.mother_job", old="Job (Mother):", en="Mother’s occupation:",
-  fr="Profession de la mère :", es="Profesión de la madre:")
-E("student.label.mother_phone", old="Phone (Mother):", en="Mother’s phone:",
-  fr="Téléphone de la mère :", es="Teléfono de la madre:")
-E("student.label.father_name", old="Name (Father):", en="Father’s name:", fr="Nom du père :",
-  es="Nombre del padre:")
-E("student.label.father_job", old="Job (Father):", en="Father’s occupation:",
-  fr="Profession du père :", es="Profesión del padre:")
-E("student.label.father_phone", old="Phone (Father):", en="Father’s phone:",
-  fr="Téléphone du père :", es="Teléfono del padre:")
 E("student.mother_name", old="Name (Mother)", en="Mother’s name", fr="Nom de la mère",
-  es="Nombre de la madre")
+  es="Nombre de la madre", merged=["Name (Mother):"])
 E("student.mother_job", old="Job (Mother)", en="Mother’s occupation", fr="Profession de la mère",
-  es="Profesión de la madre")
+  es="Profesión de la madre", merged=["Job (Mother):"])
 E("student.mother_phone", old="Phone (Mother)", en="Mother’s phone", fr="Téléphone de la mère",
-  es="Teléfono de la madre")
+  es="Teléfono de la madre", merged=["Phone (Mother):"])
 E("student.father_name", old="Name (Father)", en="Father’s name", fr="Nom du père",
-  es="Nombre del padre")
+  es="Nombre del padre", merged=["Name (Father):"])
 E("student.father_job", old="Job (Father)", en="Father’s occupation", fr="Profession du père",
-  es="Profesión del padre")
+  es="Profesión del padre", merged=["Job (Father):"])
 E("student.father_phone", old="Phone (Father)", en="Father’s phone", fr="Téléphone du père",
-  es="Teléfono del padre")
-E("student.label.lesson_since", old="Lesson since:", en="Lessons since:", fr="Cours depuis :",
-  es="Clases desde:")
-E("student.lesson_since", old="Lesson since", en="Lessons since", fr="Cours depuis", es="Clases desde")
+  es="Teléfono del padre", merged=["Phone (Father):"])
+E("student.lesson_since", old="Lesson since", en="Lessons since", fr="Cours depuis", es="Clases desde", merged=["Lesson since:"])
 E("student.label.total", old="Total:", en="Total:", fr="Total :", es="Total:",
   c="Followed by the total number of years of lessons.")
 E("student.label.recital_interval", old="Personal Concert Interval:",
@@ -424,10 +397,8 @@ E("student.ensemble_expected", old="Participation in Ensemble Expected",
   es="Se espera participación en un conjunto")
 E("student.label.inventory_number", old="Inventory Number:", en="Inventory number:",
   fr="Numéro d’inventaire :", es="Número de inventario:")
-E("student.label.rented_since", old="Rented since:", en="Rented since:", fr="Loué depuis le :",
-  es="Alquilado desde:")
 E("student.rented_since", old="Rented since", en="Rented since", fr="Loué depuis le",
-  es="Alquilado desde")
+  es="Alquilado desde", merged=["Rented since:"])
 E("student.rental_description", old="Rental instrument description",
   en="Rental instrument description", fr="Désignation de l’instrument en location",
   es="Descripción del instrumento de alquiler")
@@ -543,15 +514,10 @@ E("instruments.tab.size_count", old="Sizes - Number", en="Sizes – count", fr="
 E("instruments.statistics", old="Statistic", en="Statistics", fr="Statistiques", es="Estadísticas")
 E("instruments.label.rental_count", old="Rental Instruments:", en="Rental instruments:",
   fr="Instruments en location :", es="Instrumentos de alquiler:")
-E("instruments.label.next_size_count", old="Next size required:", en="Next size needed:",
-  fr="Taille suivante nécessaire :", es="Siguiente tamaño necesario:")
 E("instruments.next_size", old="Next size required", en="Next size needed",
-  fr="Taille suivante nécessaire", es="Siguiente tamaño necesario", merged=["Next Size needed"])
+  fr="Taille suivante nécessaire", es="Siguiente tamaño necesario", merged=["Next Size needed", "Next size required:"])
 E("instruments.inventory_list", old="Rental instrument inventory list", en="Rental instrument inventory",
-  fr="Inventaire des instruments en location", es="Inventario de instrumentos de alquiler")
-E("instruments.inventory_list_ellipsis", old="Rental Instruments Inventory List ...",
-  en="Rental instrument inventory…", fr="Inventaire des instruments en location…",
-  es="Inventario de instrumentos de alquiler…")
+  fr="Inventaire des instruments en location", es="Inventario de instrumentos de alquiler", merged=["Rental Instruments Inventory List ..."])
 E("common.rental_instrument", old="Rental Instrument", en="Rental instrument",
   fr="Instrument en location", es="Instrumento de alquiler")
 
@@ -560,11 +526,8 @@ E("library.title", old="Music Library - Qupil", en="Sheet music library", fr="Bi
   es="Biblioteca de partituras")
 E("library.col.index", old="Index", en="No.", fr="N°", es="N.º", c="Inventory number column.")
 E("library.col.author", old="Composer / Author", en="Composer / author", fr="Compositeur / auteur",
-  es="Compositor / autor")
-E("library.label.author", old="Composer / Author:", en="Composer / author:",
-  fr="Compositeur / auteur :", es="Compositor / autor:")
-E("library.col.publisher", old="Publisher", en="Publisher", fr="Éditeur", es="Editorial")
-E("library.label.publisher", old="Publisher:", en="Publisher:", fr="Éditeur :", es="Editorial:")
+  es="Compositor / autor", merged=["Composer / Author:"])
+E("library.col.publisher", old="Publisher", en="Publisher", fr="Éditeur", es="Editorial", merged=["Publisher:"])
 E("library.tab.available", old="Available", en="Available", fr="Disponibles", es="Disponibles",
   c="Sheet music that is not lent out.")
 E("library.tab.loaned", old="Loaned", en="On loan", fr="Prêtées", es="Prestadas")
@@ -608,12 +571,8 @@ E("event.delete.confirm", old="Do you really want to delete the event: \"%1\" ?"
   en="Do you really want to delete the event “%1”?",
   fr="Voulez-vous vraiment supprimer l’événement « %1 » ?",
   es="¿Seguro que desea eliminar el evento “%1”?", c="%1 = name of the event")
-E("event.organizer", old="Organiser", en="Organizer", fr="Organisateur", es="Organizador")
-E("event.label.organizer", old="Organiser:", en="Organizer:", fr="Organisateur :", es="Organizador:")
-E("event.accompanist", old="Accompanist", en="Accompanist", fr="Accompagnateur", es="Acompañante")
-E("event.label.accompanist", old="Accompanist:", en="Accompanist:", fr="Accompagnateur :",
-  es="Acompañante:")
-E("event.label.location", old="Location:", pick="Ort:", en="Location:", fr="Lieu :", es="Lugar:")
+E("event.organizer", old="Organiser", en="Organizer", fr="Organisateur", es="Organizador", merged=["Organiser:"])
+E("event.accompanist", old="Accompanist", en="Accompanist", fr="Accompagnateur", es="Acompañante", merged=["Accompanist:"])
 E("event.net_playing_time", old="Pure playing time", en="Net playing time",
   fr="Durée de jeu effective", es="Tiempo neto de interpretación")
 E("event.estimated_total", old="Estimated total duration", en="Estimated total duration",
@@ -800,6 +759,8 @@ E("reminder.error.save", old="The following error occurred while entering the re
   c="The error text follows on the next line.")
 E("reminder.heading", code="Erinnerung:", de="Erinnerung:", en="Reminder:", fr="Rappel :",
   es="Recordatorio:", note="In 1.4.1 hartkodiert (mainwindowimpl.cpp)")
+E("reminder.alert_title", en="Reminder: %1", de="Erinnerung: %1", fr="Rappel : %1", es="Recordatorio: %1",
+  c="Title of a system notification. %1 = lesson name; more lessons follow after a comma.")
 E("reminder.for_student", old="Reminder for the pupil ", en="Reminder for student “%1”:",
   de="Erinnerung für den Schüler \"%1\":", fr="Rappel pour l’élève « %1 » :",
   es="Recordatorio para el alumno “%1”:", c="%1 = student name",

@@ -44,29 +44,29 @@ Sheet {
         rowSpacing: 16
         InputField {
             id: first
-            label: qsTrId("common.label.first_name")
+            label: qsTrId("common.first_name")
             text: editor.draft.forename || ""
             onEdited: (value) => editor.set("forename", value)
         }
         InputField {
-            label: qsTrId("common.label.last_name")
+            label: qsTrId("common.last_name")
             text: editor.draft.surname || ""
             onEdited: (value) => editor.set("surname", value)
         }
         ChoiceField {
-            label: qsTrId("common.label.instrument")
+            label: qsTrId("common.instrument")
             options: editor.instruments
             value: editor.draft.instrument || ""
             onPicked: (value) => editor.set("instrument", value)
         }
         ChoiceField {
-            label: qsTrId("common.label.size")
+            label: qsTrId("common.size")
             options: editor.sizes
             value: editor.draft.instrument_size || ""
             onPicked: (value) => editor.set("instrument_size", value)
         }
         DateField {
-            label: qsTrId("common.label.birthday")
+            label: qsTrId("common.birthday")
             allowEmpty: true
             date: editor.draft.birthday || ""
             onPicked: (value) => editor.set("birthday", value)

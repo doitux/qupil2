@@ -100,7 +100,7 @@ Item {
                 }
             }
 
-            SectionLabel { text: qsTrId("lesson.label.students").replace(/\s*:\s*$/, "") + " · " + (detail.lesson.studentCount || 0) }
+            SectionLabel { text: qsTrId("lesson.label.students") + " · " + (detail.lesson.studentCount || 0) }
 
             EmptyHint {
                 visible: (detail.lesson.studentCount || 0) === 0

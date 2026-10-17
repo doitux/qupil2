@@ -65,7 +65,7 @@ Sheet {
     }
     ChoiceField {
         visible: editor.draft.mode === 2
-        label: qsTrId("common.label.student")
+        label: qsTrId("common.student")
         options: editor.students.map(s => s.listName)
         value: (editor.students.find(s => s.id === editor.draft.student_id) || {}).listName || ""
         onPicked: (value) => {

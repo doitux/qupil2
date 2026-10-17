@@ -56,18 +56,18 @@ Sheet {
         onEdited: (value) => editor.set("number", value.replace(/[^0-9]/g, ""))
     }
     InputField {
-        label: qsTrId("library.label.author")
+        label: qsTrId("library.col.author")
         text: editor.draft.author || ""
         completions: { if (Data.revision < 0) return []; return Data.libraryAuthors().concat(Data.composers()) }
         onEdited: (value) => editor.set("author", value)
     }
     InputField {
-        label: qsTrId("common.label.title")
+        label: qsTrId("common.title")
         text: editor.draft.title || ""
         onEdited: (value) => editor.set("title", value)
     }
     InputField {
-        label: qsTrId("library.label.publisher")
+        label: qsTrId("library.col.publisher")
         text: editor.draft.publisher || ""
         completions: { if (Data.revision < 0) return []; return Data.libraryPublishers() }
         onEdited: (value) => editor.set("publisher", value)

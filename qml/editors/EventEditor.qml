@@ -41,7 +41,7 @@ Sheet {
     }
 
     InputField {
-        label: qsTrId("common.label.title")
+        label: qsTrId("common.title")
         text: editor.draft.title || ""
         onEdited: (value) => editor.set("title", value)
     }
@@ -51,30 +51,30 @@ Sheet {
         columnSpacing: 14
         rowSpacing: 16
         DateField {
-            label: qsTrId("common.label.date")
+            label: qsTrId("common.date")
             date: editor.draft.date || ""
             onPicked: (value) => editor.set("date", value || Data.today())
         }
         TimeField {
-            label: qsTrId("common.label.time")
+            label: qsTrId("common.time")
             time: editor.draft.time || "16:00"
             onPicked: (value) => editor.set("time", value)
         }
     }
     ChoiceField {
-        label: qsTrId("event.label.location")
+        label: qsTrId("common.location")
         options: editor.locations
         editable: true
         value: editor.draft.location || ""
         onPicked: (value) => editor.set("location", value)
     }
     InputField {
-        label: qsTrId("event.label.organizer")
+        label: qsTrId("event.organizer")
         text: editor.draft.organizer || ""
         onEdited: (value) => editor.set("organizer", value)
     }
     InputField {
-        label: qsTrId("event.label.accompanist")
+        label: qsTrId("event.accompanist")
         text: editor.draft.accompanist || ""
         onEdited: (value) => editor.set("accompanist", value)
     }

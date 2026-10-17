@@ -70,7 +70,7 @@ QLocale uiLocale()
 //! A label from the catalog without the colon that Qupil 1.x put at the end
 QString label(const char *id)
 {
-    return qtTrId(id).remove(QRegularExpression(u"\\s*:\\s*$"_s));
+    return qtTrId(id);
 }
 
 QString page(const QString &title, const QString &body, bool footer = true)
@@ -528,11 +528,11 @@ QString DocumentService::programmeHtml(const QString &eventId) const
         if (!value.isEmpty())
             info << u"<b>"_s + esc(label(labelId)) + u":</b> "_s + esc(value);
     };
-    add("common.label.date", m_data->formatDate(e.value(u"date"_s).toString(), true));
-    add("common.label.time", e.value(u"time"_s).toString());
-    add("event.label.location", e.value(u"location"_s).toString());
-    add("event.label.organizer", e.value(u"organizer"_s).toString());
-    add("event.label.accompanist", e.value(u"accompanist"_s).toString());
+    add("common.date", m_data->formatDate(e.value(u"date"_s).toString(), true));
+    add("common.time", e.value(u"time"_s).toString());
+    add("common.location", e.value(u"location"_s).toString());
+    add("event.organizer", e.value(u"organizer"_s).toString());
+    add("event.accompanist", e.value(u"accompanist"_s).toString());
     body += u"<p>"_s + info.join(u" &nbsp;·&nbsp; "_s) + u"</p>"_s;
 
     QList<QStringList> rows;
@@ -583,7 +583,7 @@ QString DocumentService::studentArchiveHtml(const QString &studentId) const
     const QString surname = s.value(u"surname"_s).toString();
     const QString name = (forename + u' ' + surname).trimmed();
     QString body = u"<h1>"_s + esc(qtTrId("archive.entry") + u": "_s + name) + u"</h1><p>"_s
-                   + esc(label("common.label.date") + u": "_s + m_data->formatDate(m_data->today())) + u"</p>"_s;
+                   + esc(label("common.date") + u": "_s + m_data->formatDate(m_data->today())) + u"</p>"_s;
 
     // Personal data
     QList<QStringList> personal;

@@ -60,13 +60,13 @@ Sheet {
     }
 
     InputField {
-        label: qsTrId("common.label.composer")
+        label: qsTrId("common.composer")
         text: editor.draft.composer || ""
         completions: editor.composers
         onEdited: (value) => editor.set("composer", value)
     }
     InputField {
-        label: qsTrId("common.label.title")
+        label: qsTrId("common.title")
         text: editor.draft.title || ""
         onEdited: (value) => editor.set("title", value)
     }
@@ -83,7 +83,7 @@ Sheet {
             onPicked: (value) => editor.set("genre", value)
         }
         Stepper {
-            label: qsTrId("common.label.duration")
+            label: qsTrId("common.duration")
             value: editor.draft.duration || 0
             suffix: qsTrId("common.unit.min")
             onPicked: (value) => editor.set("duration", value)
@@ -92,7 +92,7 @@ Sheet {
     ColumnLayout {
         Layout.fillWidth: true
         spacing: 6
-        FieldLabel { label: qsTrId("common.label.status") }
+        FieldLabel { label: qsTrId("common.status") }
         Flow {
             Layout.fillWidth: true
             spacing: 6
@@ -118,13 +118,13 @@ Sheet {
         columnSpacing: 14
         rowSpacing: 16
         DateField {
-            label: qsTrId("common.label.start")
+            label: qsTrId("common.start")
             allowEmpty: true
             date: editor.draft.start_date || ""
             onPicked: (value) => editor.set("start_date", value)
         }
         DateField {
-            label: qsTrId("common.label.end")
+            label: qsTrId("common.end")
             allowEmpty: true
             date: editor.draft.end_date || ""
             onPicked: (value) => editor.set("end_date", value)

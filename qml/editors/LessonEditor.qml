@@ -98,14 +98,14 @@ Sheet {
         rowSpacing: 16
         ChoiceField {
             Layout.columnSpan: editor.compact ? 2 : 1
-            label: qsTrId("common.label.weekday")
+            label: qsTrId("common.weekday")
             allowEmpty: false
             options: [0, 1, 2, 3, 4, 5, 6].map(d => Labels.weekday(d))
             value: Labels.weekday(editor.draft.weekday || 0)
             onPicked: (value) => editor.set("weekday", options.indexOf(value))
         }
         TimeField {
-            label: qsTrId("common.label.start")
+            label: qsTrId("common.start")
             time: editor.draft.start_time || "14:00"
             onPicked: (value) => {
                 const length = editor.minutes(editor.draft.end_time) - editor.minutes(editor.draft.start_time)
@@ -116,7 +116,7 @@ Sheet {
             }
         }
         TimeField {
-            label: qsTrId("common.label.end")
+            label: qsTrId("common.end")
             time: editor.draft.end_time || "14:45"
             onPicked: (value) => editor.set("end_time", value)
         }
@@ -175,7 +175,7 @@ Sheet {
             Layout.fillWidth: true
             FieldLabel {
                 Layout.fillWidth: true
-                label: qsTrId("lesson.label.students").replace(/\s*:\s*$/, "") + " · " + editor.members.length
+                label: qsTrId("lesson.label.students") + " · " + editor.members.length
             }
         }
         InputField {

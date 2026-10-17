@@ -6,7 +6,6 @@
 #include <QGuiApplication>
 #include <QJSEngine>
 #include <QMap>
-#include <QRegularExpression>
 #include <QTime>
 
 #include <algorithm>
@@ -28,10 +27,9 @@ int minutesOf(const QString &time)
     return t.isValid() ? t.hour() * 60 + t.minute() : -1;
 }
 
-//! "Reminder:" of Qupil 1.x without the colon
 QString heading()
 {
-    return qtTrId("reminder.heading").remove(QRegularExpression(u"\\s*:\\s*$"_s));
+    return qtTrId("reminder.heading");
 }
 
 } // namespace
@@ -266,7 +264,8 @@ void ReminderAlert::apply()
                 alert.kind = QString::fromLatin1(SystemAlerts::kReminder);
                 alert.at = at;
                 alert.lead = std::max(1, end - start);   // out of date when the lesson is over
-                alert.title = qtTrId("reminder.heading") + u' ' + name;
+                //: %1 = lesson name (more follow after a comma)
+                alert.title = qtTrId("reminder.alert_title").arg(name);
                 alert.text = lines.join(u'\n');
             } else {
                 alert.title += u", "_s + name;
