@@ -1,8 +1,9 @@
 // SPDX-FileCopyrightText: 2006-2026 Felix Hammer
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 //
-// Settings that are shared by all your devices (stored with the data).
-// Appearance and language are per device and live on the More page.
+// Settings: sync at the top, then what applies to this device (appearance,
+// alerts), what is the same on every device (lessons and events, lists), the
+// data and backups, and about Qupil. Each opens its own page.
 
 import QtQuick
 import QtQuick.Controls
@@ -13,148 +14,72 @@ SubPage {
     id: page
     title: qsTrId("settings.title")
 
-    function value(key, fallback) {
-        if (Data.revision < 0) return undefined
-        return Data.setting(key, fallback)
+    signal openSync()
+    signal openAppearance()
+    signal openAlerts()
+    signal openLessons()
+    signal openLists()
+    signal openData()
+    signal openAbout()
+
+    SyncCard {
+        Layout.fillWidth: true
+        onOpenSync: page.openSync()
     }
 
-    SectionLabel { text: qsTrId("settings.this_device") }
-    LessonEndSettings {}
-    Card {
-        Layout.fillWidth: true
-        Text {
-            Layout.fillWidth: true
-            wrapMode: Text.WordWrap
-            text: qsTrId("settings.reminder_sound")
-            color: Theme.text
-            font.family: Theme.fontFamily
-            font.pixelSize: 15
-            font.weight: Font.Bold
+    SectionLabel { Layout.topMargin: 6; text: qsTrId("settings.this_device") }
+    MenuGroup {
+        MenuRow {
+            iconName: "palette"
+            tile: Theme.tile.plum
+            text: qsTrId("settings.appearance")
+            value: Theme.mode === "dark" ? qsTrId("appearance.dark")
+                 : Theme.mode === "light" ? qsTrId("appearance.light") : qsTrId("appearance.system")
+            onClicked: page.openAppearance()
         }
-        Text {
-            Layout.fillWidth: true
-            wrapMode: Text.WordWrap
-            text: qsTrId("settings.reminder_sound.hint")
-            color: Theme.textMuted
-            font.family: Theme.fontFamily
-            font.pixelSize: 13
-        }
-        SoundChooser {
-            alert: ReminderAlert
-            defaultName: qsTrId("settings.sound.reminder_default")
-        }
-    }
-
-    SectionLabel { Layout.topMargin: 6; text: qsTrId("common.lesson") }
-    Card {
-        Layout.fillWidth: true
-        SwitchRow {
-            text: qsTrId("settings.save_for_all")
-            checked: page.value("save_for_all_students", 1) !== 0
-            onToggled: Data.setSetting("save_for_all_students", checked ? 1 : 0)
-        }
-        SwitchRow {
-            text: qsTrId("settings.birthday_reminder")
-            checked: page.value("birthday_reminder", 1) !== 0
-            onToggled: Data.setSetting("birthday_reminder", checked ? 1 : 0)
-        }
-        SwitchRow {
-            text: qsTrId("settings.limit_notes")
-            checked: page.value("limit_notes", 0) !== 0
-            onToggled: Data.setSetting("limit_notes", checked ? 1 : 0)
-        }
-        Stepper {
-            visible: page.value("limit_notes", 0) !== 0
-            label: qsTrId("settings.limit_notes.count")
-            from: 1
-            value: page.value("limit_notes_count", 30)
-            onPicked: (value) => Data.setSetting("limit_notes_count", value)
-        }
-        SwitchRow {
-            text: qsTrId("settings.limit_pieces")
-            checked: page.value("limit_pieces", 0) !== 0
-            onToggled: Data.setSetting("limit_pieces", checked ? 1 : 0)
-        }
-        Stepper {
-            visible: page.value("limit_pieces", 0) !== 0
-            label: qsTrId("settings.limit_pieces.count")
-            from: 1
-            value: page.value("limit_pieces_count", 20)
-            onPicked: (value) => Data.setSetting("limit_pieces_count", value)
+        MenuRow {
+            divider: true
+            iconName: "bell"
+            tile: Theme.tile.orange
+            text: qsTrId("settings.alerts")
+            onClicked: page.openAlerts()
         }
     }
 
-    SectionLabel { Layout.topMargin: 6; text: qsTrId("nav.events") }
-    Card {
-        Layout.fillWidth: true
-        Text {
-            Layout.fillWidth: true
-            wrapMode: Text.WordWrap
-            text: qsTrId("settings.event_duration")
-            color: Theme.text
-            font.family: Theme.fontFamily
-            font.pixelSize: 15
-            font.weight: Font.Bold
+    SectionLabel { Layout.topMargin: 6; text: qsTrId("settings.all_devices") }
+    MenuGroup {
+        MenuRow {
+            iconName: "calendar"
+            tile: Theme.tile.blue
+            text: qsTrId("settings.lessons_events")
+            onClicked: page.openLessons()
         }
-        Stepper {
-            label: qsTrId("settings.event.moderation")
-            value: page.value("event_moderation_minutes", 4)
-            suffix: qsTrId("common.unit.min")
-            onPicked: (value) => Data.setSetting("event_moderation_minutes", value)
-        }
-        Stepper {
-            label: qsTrId("settings.event.changeover")
-            value: page.value("event_between_minutes", 2)
-            suffix: qsTrId("common.unit.min")
-            onPicked: (value) => Data.setSetting("event_between_minutes", value)
+        MenuRow {
+            divider: true
+            iconName: "tools"
+            tile: Theme.tile.yellow
+            text: qsTrId("settings.lists")
+            onClicked: page.openLists()
         }
     }
 
-    SectionLabel { Layout.topMargin: 6; text: qsTrId("candidates.recital.title") }
-    Card {
-        Layout.fillWidth: true
-        Text {
-            Layout.fillWidth: true
-            wrapMode: Text.WordWrap
-            text: qsTrId("settings.recital_check")
-            color: Theme.textSecondary
-            font.family: Theme.fontFamily
-            font.pixelSize: 14
-        }
-        Repeater {
-            model: [1, 0]
-            delegate: RadioDelegate {
-                required property int modelData
-                Layout.fillWidth: true
-                text: modelData === 1 ? qsTrId("settings.recital_check.solo") : qsTrId("settings.recital_check.solo_ensemble")
-                checked: page.value("recital_check_solo_only", 1) === modelData
-                font.family: Theme.fontFamily
-                font.pixelSize: 15
-                onClicked: Data.setSetting("recital_check_solo_only", modelData)
-            }
+    SectionLabel { Layout.topMargin: 6; text: qsTrId("more.data") }
+    MenuGroup {
+        MenuRow {
+            iconName: "database"
+            tile: Theme.tile.green
+            text: qsTrId("settings.data")
+            onClicked: page.openData()
         }
     }
 
-    SectionLabel { Layout.topMargin: 6; text: qsTrId("settings.lists") }
-    Card {
-        Layout.fillWidth: true
-        spacing: 18
-        ListEditor {
-            label: qsTrId("settings.locations")
-            items: { if (Data.revision < 0) return undefined; return Data.listSetting("locations") }
-            onChanged: (items) => Data.setSetting("locations", items)
-        }
-        ListEditor {
-            label: qsTrId("settings.genres")
-            hint: false
-            items: { if (Data.revision < 0) return undefined; return Data.listSetting("genres") }
-            onChanged: (items) => Data.setSetting("genres", items)
-        }
-        ListEditor {
-            label: qsTrId("settings.sizes")
-            hint: false
-            items: { if (Data.revision < 0) return undefined; return Data.listSetting("instrument_sizes") }
-            onChanged: (items) => Data.setSetting("instrument_sizes", items)
+    MenuGroup {
+        Layout.topMargin: 6
+        MenuRow {
+            iconName: "info"
+            text: qsTrId("about.title")
+            value: App.versionText
+            onClicked: page.openAbout()
         }
     }
 }

@@ -217,6 +217,7 @@ set(QUPIL_QML_FILES
     qml/components/ListRow.qml
     qml/components/InputField.qml
     qml/components/ListEditor.qml
+    qml/components/MenuGroup.qml
     qml/components/MenuRow.qml
     qml/components/PageHeader.qml
     qml/components/SectionLabel.qml
@@ -226,7 +227,9 @@ set(QUPIL_QML_FILES
     qml/components/StatusBadge.qml
     qml/components/Stepper.qml
     qml/components/SubPage.qml
+    qml/components/StudentPicker.qml
     qml/components/SwitchRow.qml
+    qml/components/SyncCard.qml
     qml/components/TimeField.qml
     qml/components/Tip.qml
     qml/editors/ActivityEditor.qml
@@ -257,6 +260,11 @@ set(QUPIL_QML_FILES
     qml/pages/BirthdaysPage.qml
     qml/pages/CandidatesPage.qml
     qml/pages/SettingsPage.qml
+    qml/pages/AppearancePage.qml
+    qml/pages/AlertSettingsPage.qml
+    qml/pages/LessonSettingsPage.qml
+    qml/pages/ListsPage.qml
+    qml/pages/DataPage.qml
     qml/pages/SyncPage.qml
     qml/pages/LibraryPage.qml
     qml/pages/InstrumentsPage.qml

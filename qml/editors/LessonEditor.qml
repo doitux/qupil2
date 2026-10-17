@@ -15,7 +15,6 @@ Sheet {
     property string lessonId
     property var draft: ({})
     property var members: []
-    property string filter
     property string error
 
     readonly property var locations: { if (Data.revision < 0) return undefined; return Data.listSetting("locations") }
@@ -26,7 +25,6 @@ Sheet {
     function edit(id, weekday) {
         lessonId = id
         error = ""
-        filter = ""
         if (id) {
             const l = Data.lesson(id)
             draft = { kind: l.kind, auto_name: l.auto_name, name: l.name, irregular: l.irregular === 1,
@@ -168,47 +166,12 @@ Sheet {
         }
     }
 
-    ColumnLayout {
-        Layout.fillWidth: true
-        spacing: 8
-        RowLayout {
-            Layout.fillWidth: true
-            FieldLabel {
-                Layout.fillWidth: true
-                label: qsTrId("lesson.label.students") + " · " + editor.members.length
-            }
-        }
-        InputField {
-            placeholder: qsTrId("student.search")
-            text: editor.filter
-            onEdited: (value) => editor.filter = value
-        }
-        Rectangle {
-            Layout.fillWidth: true
-            implicitHeight: studentList.implicitHeight
-            radius: 14
-            color: Theme.surfaceAlt
-            clip: true
-            ColumnLayout {
-                id: studentList
-                width: parent.width
-                spacing: 0
-                Repeater {
-                    model: editor.allStudents.filter(s => editor.members.indexOf(s.id) >= 0
-                                                         || editor.filter === ""
-                                                         || (s.name + " " + s.instrument).toLowerCase().indexOf(editor.filter.toLowerCase()) >= 0)
-                    delegate: CheckDelegate {
-                        required property var modelData
-                        Layout.fillWidth: true
-                        text: modelData.listName + (modelData.instrument ? " · " + modelData.instrument : "")
-                        checked: editor.members.indexOf(modelData.id) >= 0
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 15
-                        onClicked: editor.toggleMember(modelData.id)
-                    }
-                }
-            }
-        }
+    StudentPicker {
+        label: qsTrId("lesson.label.students")
+        students: editor.allStudents
+        selected: editor.members
+        single: (editor.draft.kind || 1) === 1
+        onToggled: (id) => editor.toggleMember(id)
     }
 
     ActionButton {

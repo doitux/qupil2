@@ -28,6 +28,7 @@ ColumnLayout {
         spacing: 12
         Layout.fillWidth: true
         Rectangle {
+            Layout.alignment: Qt.AlignTop
             implicitWidth: 34
             implicitHeight: 34
             radius: 10
@@ -52,7 +53,7 @@ ColumnLayout {
             }
             Text {
                 Layout.fillWidth: true
-                wrapMode: Text.WordWrap
+                elide: Text.ElideRight
                 text: [qsTrId("summary.students", root.info.students ?? 0),
                        qsTrId("summary.lessons", root.info.lessons ?? 0),
                        qsTrId("summary.events", root.info.events ?? 0)].join(" · ")

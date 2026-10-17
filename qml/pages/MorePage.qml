@@ -1,8 +1,10 @@
 // SPDX-FileCopyrightText: 2006-2026 Felix Hammer
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 //
-// "More": appearance, management (reminders, birthdays), reports (recital
-// candidates), data and backups, settings, about.
+// "More": the content tools – management (library, instruments, reminders,
+// birthdays, student archive), reports and documents. Everything that is a
+// setting (sync, appearance, alerts, lists, data and backups, about) is one
+// level down under Settings: the gear at the top or the row at the end.
 
 import QtQuick
 import QtQuick.Controls
@@ -22,7 +24,6 @@ StackView {
     readonly property int archived: { if (Data.revision < 0) return undefined; return Data.studentArchive().length }
     readonly property int readyPieces: { if (Data.revision < 0) return undefined; return Data.readyPieces("").length }
 
-    property date now: new Date()
 
     function openPage(component) {
         stack.pop(null)
@@ -31,6 +32,20 @@ StackView {
     //! System back button: closes the page on top
     function back() {
         return Nav.stackBack(stack)
+    }
+    //! The settings, optionally with one of their pages on top
+    function openSettings(page) {
+        openPage(settingsPage)
+        switch (page) {
+        case "sync": stack.push(syncPage); break
+        case "appearance": stack.push(appearancePage); break
+        case "alerts": stack.push(alertSettingsPage); break
+        case "lessons": stack.push(lessonSettingsPage); break
+        case "lists": stack.push(listsPage); break
+        case "data": stack.push(dataPage); break
+        case "about": stack.push(aboutPage); break
+        case "license": stack.push(aboutPage); stack.push(licensePage); break
+        }
     }
     //! Back to the first level (screenshot tour)
     function home() {
@@ -43,13 +58,18 @@ StackView {
         case "instruments": openPage(instrumentsPage); break
         case "ensemble": openPage(ensemblePage); break
         case "archive": openPage(studentArchivePage); break
-        case "settings": openPage(settingsPage); break
+        case "settings": openSettings(""); break
+        case "appearance": openSettings("appearance"); break
+        case "alerts": openSettings("alerts"); break
+        case "lessonSettings": openSettings("lessons"); break
+        case "lists": openSettings("lists"); break
+        case "data": openSettings("data"); break
         case "birthdays": openPage(birthdaysPage); break
         case "ready": openPage(readyPage); break
         case "reminders": openPage(remindersPage); break
         case "dayOverview": dayOverviewSheet.start(); break
-        case "about": openPage(aboutPage); break
-        case "license": openPage(aboutPage); stack.push(licensePage); break
+        case "about": openSettings("about"); break
+        case "license": openSettings("license"); break
         case "archiveEntry": {
             const first = Data.studentArchive()[0]
             if (first)
@@ -59,15 +79,9 @@ StackView {
         }
     }
 
-    Timer {
-        interval: 30000
-        running: true
-        repeat: true
-        onTriggered: stack.now = new Date()
-    }
     Connections {
         target: Nav
-        function onShowSync() { stack.openPage(syncPage) }
+        function onShowSync() { stack.openSettings("sync") }
         function onShowMore(name) { stack.showSubPage(name) }
     }
     Component.onCompleted: {
@@ -75,35 +89,6 @@ StackView {
             Nav.openSyncOnStart = false
             Qt.callLater(Nav.showSync)
         }
-    }
-
-    // Title and detail line of the sync card
-    readonly property bool wifiUsed: Wifi.peers.length > 0
-    readonly property bool syncUsed: Sync.connected || wifiUsed
-    readonly property bool syncSetUp: (Sync.connected && !Sync.needsPassword) || wifiUsed
-    readonly property bool wifiPaused: Wifi.peers.some(p => p.paused || p.problem !== "")
-    readonly property bool syncWarn: (Sync.connected && (Sync.needsPassword || Sync.error !== "")) || wifiPaused
-    readonly property string syncTitle: {
-        if (Sync.loggingIn || !syncUsed) return qsTrId("sync.title")
-        if (Sync.connected && Sync.needsPassword) return Sync.folderExists ? qsTrId("sync.password.enter_title") : qsTrId("sync.password.choose_title")
-        if (Sync.busy || Wifi.busy) return qsTrId("sync.in_progress")
-        if ((Sync.connected && Sync.error !== "") || wifiPaused) return qsTrId("sync.status.problem")
-        if (Sync.lastSync === "" && Wifi.lastSync === "") return qsTrId("sync.never")
-        return qsTrId("sync.all_synced")
-    }
-    readonly property string syncDetail: {
-        if (Sync.loggingIn) return qsTrId("sync.nextcloud.waiting")
-        if (!syncUsed) return qsTrId("sync.status.off")
-        if (Sync.connected && Sync.needsPassword) return qsTrId("sync.nextcloud.connected_as").arg(Sync.user).arg(Sync.server.replace(/^https?:\/\//, ""))
-        if (Sync.connected && Sync.error !== "") return Sync.error
-        const parts = []
-        if (Sync.connected)
-            parts.push(qsTrId("sync.nextcloud.when").arg(Labels.syncWhen(Sync.lastSync, stack.now)))
-        if (wifiPaused)
-            parts.push(qsTrId("wifi.paused"))
-        else if (Wifi.lastPeer !== "")
-            parts.push(qsTrId("sync.wifi.when").arg(Wifi.lastPeer).arg(Labels.syncWhen(Wifi.lastSync, stack.now)))
-        return parts.join(" · ")
     }
 
     initialItem: Flickable {
@@ -130,134 +115,23 @@ StackView {
                     font.weight: Font.ExtraBold
                 }
                 BuildChip {}
-            }
-
-            // Sync status at the top, like in the design
-            Rectangle {
-                id: syncCard
-                Layout.fillWidth: true
-                implicitHeight: syncColumn.implicitHeight + 28
-                radius: Theme.radiusLarge - 2
-                color: Theme.surface
-                readonly property bool warn: stack.syncWarn
-                readonly property var tile: !stack.syncUsed ? Theme.tile.gray
-                                          : warn ? Theme.tile.orange
-                                          : Theme.tile.green
-
-                ColumnLayout {
-                    id: syncColumn
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.top: parent.top
-                    anchors.margins: 14
-                    spacing: 12
-
-                    AbstractButton {
-                        id: syncHeader
-                        Layout.fillWidth: true
-                        implicitHeight: syncHeaderRow.implicitHeight
-                        focusPolicy: Qt.StrongFocus
-                        Accessible.role: Accessible.Button
-                        Accessible.name: stack.syncTitle + ", " + stack.syncDetail
-                        onClicked: stack.openPage(syncPage)
-                        background: Rectangle {
-                            radius: 10
-                            color: "transparent"
-                            border.width: syncHeader.visualFocus ? 2 : 0
-                            border.color: Theme.accentText
-                        }
-                        contentItem: RowLayout {
-                            id: syncHeaderRow
-                            spacing: 12
-                            Rectangle {
-                                implicitWidth: 44
-                                implicitHeight: 44
-                                radius: 14
-                                color: syncCard.tile.bg
-                                Icon {
-                                    anchors.centerIn: parent
-                                    width: 24
-                                    height: 24
-                                    name: !stack.syncUsed ? "cloud" : syncCard.warn ? "cloudOff" : "sync"
-                                    color: syncCard.tile.fg
-                                }
-                            }
-                            ColumnLayout {
-                                Layout.fillWidth: true
-                                spacing: 2
-                                Text {
-                                    Layout.fillWidth: true
-                                    elide: Text.ElideRight
-                                    text: stack.syncTitle
-                                    color: Theme.text
-                                    font.family: Theme.fontFamily
-                                    font.pixelSize: 16
-                                    font.weight: Font.ExtraBold
-                                }
-                                Text {
-                                    Layout.fillWidth: true
-                                    wrapMode: Text.WordWrap
-                                    maximumLineCount: 2
-                                    elide: Text.ElideRight
-                                    text: stack.syncDetail
-                                    color: Theme.textMuted
-                                    font.family: Theme.fontFamily
-                                    font.pixelSize: 13
-                                }
-                            }
-                            Icon {
-                                Layout.preferredWidth: 18
-                                Layout.preferredHeight: 18
-                                name: "chevron"
-                                color: Theme.icon
-                            }
-                        }
-                    }
-
-                    RowLayout {
-                        Layout.fillWidth: true
-                        spacing: 8
-                        ActionButton {
-                            Layout.fillWidth: true
-                            Layout.preferredWidth: 1
-                            kind: "primary"
-                            text: stack.syncSetUp ? qsTrId("sync.now") : qsTrId("sync.setup_short")
-                            enabled: !stack.syncSetUp || !(Sync.busy || Wifi.busy)
-                            onClicked: {
-                                if (!stack.syncSetUp) {
-                                    stack.openPage(syncPage)
-                                    return
-                                }
-                                Sync.syncNow()
-                                Wifi.syncNow()
-                            }
-                        }
-                        ActionButton {
-                            Layout.fillWidth: true
-                            Layout.preferredWidth: 1
-                            text: qsTrId("sync.pair")
-                            onClicked: Nav.pairDevice()
-                        }
-                    }
+                IconButton {
+                    iconName: "settings"
+                    text: qsTrId("settings.title")
+                    onClicked: stack.openSettings("")
                 }
             }
 
-            Rectangle {
+            // Only when the sync needs attention; everything else about it is in the settings
+            SyncCard {
                 Layout.fillWidth: true
-                implicitHeight: appearance.implicitHeight + 32
-                radius: Theme.radius + 2
-                color: Theme.surface
-                AppearanceSettings {
-                    id: appearance
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.top: parent.top
-                    anchors.margins: 16
-                }
+                visible: warn
+                compact: true
+                onOpenSync: stack.openSettings("sync")
             }
 
             SectionLabel { Layout.topMargin: 6; text: qsTrId("more.manage") }
-            Group {
+            MenuGroup {
                 MenuRow {
                     iconName: "book"
                     tile: Theme.tile.blue
@@ -289,10 +163,18 @@ StackView {
                     value: stack.birthdays.length > 0 ? qsTrId("more.birthdays_today", stack.birthdays.length) : ""
                     onClicked: stack.push(birthdaysPage)
                 }
+                MenuRow {
+                    divider: true
+                    iconName: "archive"
+                    tile: Theme.tile.gray
+                    text: qsTrId("nav.student_archive")
+                    value: stack.archived > 0 ? String(stack.archived) : ""
+                    onClicked: stack.push(studentArchivePage)
+                }
             }
 
             SectionLabel { Layout.topMargin: 6; text: qsTrId("more.reports") }
-            Group {
+            MenuGroup {
                 MenuRow {
                     iconName: "star"
                     tile: Theme.tile.blue
@@ -319,7 +201,7 @@ StackView {
             }
 
             SectionLabel { Layout.topMargin: 6; text: qsTrId("more.documents") }
-            Group {
+            MenuGroup {
                 MenuRow {
                     iconName: "document"
                     tile: Theme.tile.gray
@@ -344,50 +226,13 @@ StackView {
                 }
             }
 
-            SectionLabel { Layout.topMargin: 6; text: qsTrId("more.data") }
-            Rectangle {
-                Layout.fillWidth: true
-                implicitHeight: dataSettings.implicitHeight + 32
-                radius: Theme.radius + 2
-                color: Theme.surface
-                DataSettings {
-                    id: dataSettings
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.top: parent.top
-                    anchors.margins: 16
-                }
-            }
-            Group {
-                MenuRow {
-                    iconName: "archive"
-                    tile: Theme.tile.gray
-                    text: qsTrId("nav.student_archive")
-                    value: stack.archived > 0 ? String(stack.archived) : ""
-                    onClicked: stack.push(studentArchivePage)
-                }
-                MenuRow {
-                    divider: true
-                    iconName: "import"
-                    tile: Theme.tile.gray
-                    text: qsTrId("menu.import_csv").replace(/\s*(\.\.\.|…)\s*$/, "")
-                    onClicked: csvSheet.start()
-                }
-            }
-
-            Group {
+            MenuGroup {
                 Layout.topMargin: 6
                 MenuRow {
                     iconName: "settings"
                     text: qsTrId("settings.title")
-                    onClicked: stack.push(settingsPage)
-                }
-                MenuRow {
-                    divider: true
-                    iconName: "info"
-                    text: qsTrId("about.title")
-                    value: App.versionText
-                    onClicked: stack.push(aboutPage)
+                    value: qsTrId("settings.summary")
+                    onClicked: stack.openSettings("")
                 }
             }
         }
@@ -397,10 +242,27 @@ StackView {
     Component { id: birthdaysPage; BirthdaysPage { onBack: stack.pop() } }
     Component { id: readyPage; ReadyPiecesPage { onBack: stack.pop() } }
     Component { id: candidatesPage; CandidatesPage { onBack: stack.pop() } }
-    Component { id: settingsPage; SettingsPage { onBack: stack.pop() } }
-    Component { id: aboutPage; AboutPage { onBack: stack.pop(); onShowLicense: stack.push(licensePage) } }
+    Component {
+        id: settingsPage
+        SettingsPage {
+            onBack: stack.pop()
+            onOpenSync: stack.push(syncPage)
+            onOpenAppearance: stack.push(appearancePage)
+            onOpenAlerts: stack.push(alertSettingsPage)
+            onOpenLessons: stack.push(lessonSettingsPage)
+            onOpenLists: stack.push(listsPage)
+            onOpenData: stack.push(dataPage)
+            onOpenAbout: stack.push(aboutPage)
+        }
+    }
+    Component { id: appearancePage; AppearancePage { onBack: stack.pop() } }
+    Component { id: alertSettingsPage; AlertSettingsPage { onBack: stack.pop() } }
+    Component { id: lessonSettingsPage; LessonSettingsPage { onBack: stack.pop() } }
+    Component { id: listsPage; ListsPage { onBack: stack.pop() } }
+    Component { id: dataPage; DataPage { onBack: stack.pop(); onImportCsv: csvSheet.start() } }
+    Component { id: aboutPage; AboutPage { backText: qsTrId("settings.title"); onBack: stack.pop(); onShowLicense: stack.push(licensePage) } }
     Component { id: licensePage; LicensePage { onBack: stack.pop() } }
-    Component { id: syncPage; SyncPage { onBack: stack.pop() } }
+    Component { id: syncPage; SyncPage { backText: qsTrId("settings.title"); onBack: stack.pop() } }
     Component { id: libraryPage; LibraryPage { onBack: stack.pop() } }
     Component { id: instrumentsPage; InstrumentsPage { onBack: stack.pop() } }
     Component { id: ensemblePage; EnsembleCandidatesPage { onBack: stack.pop() } }
@@ -421,19 +283,5 @@ StackView {
     function showArchiveEntry(entryId) {
         openPage(studentArchivePage)
         stack.push(archiveEntryPage, { entity: "student_archive", entryId: entryId })
-    }
-
-    component Group: Rectangle {
-        default property alias rows: groupColumn.data
-        Layout.fillWidth: true
-        implicitHeight: groupColumn.implicitHeight
-        radius: Theme.radius + 2
-        color: Theme.surface
-        clip: true
-        ColumnLayout {
-            id: groupColumn
-            width: parent.width
-            spacing: 0
-        }
     }
 }

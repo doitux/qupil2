@@ -666,6 +666,18 @@
         <source>Choose lesson</source>
         <translation>Choisir le cours</translation>
     </message>
+    <message id="lesson.pick_students">
+        <source>Choose students</source>
+        <translation>Choisir les élèves</translation>
+    </message>
+    <message id="lesson.pick_student">
+        <source>Choose student</source>
+        <translation>Choisir l’élève</translation>
+    </message>
+    <message id="lesson.pick_other_student">
+        <source>Choose another student</source>
+        <translation>Choisir un autre élève</translation>
+    </message>
     <message id="student.new.first_name">
         <source>New</source>
         <extracomment>First name of a newly created student; the last name is the word &apos;Student&apos; (common.student), giving e.g. &apos;New Student&apos;.</extracomment>
@@ -2862,6 +2874,32 @@ Veuillez contacter l’auteur à l’adresse %4 pour résoudre ce problème.</tr
     <message id="settings.this_device">
         <source>On this device</source>
         <translation>Sur cet appareil</translation>
+    </message>
+    <message id="settings.all_devices">
+        <source>For all devices</source>
+        <extracomment>Settings that are stored with the data and synced</extracomment>
+        <translation>Pour tous les appareils</translation>
+    </message>
+    <message id="settings.device_only">
+        <source>These settings apply to this device only.</source>
+        <translation>Ces réglages ne s’appliquent qu’à cet appareil.</translation>
+    </message>
+    <message id="settings.alerts">
+        <source>Alerts and sounds</source>
+        <translation>Alertes et sons</translation>
+    </message>
+    <message id="settings.lessons_events">
+        <source>Lessons and events</source>
+        <translation>Cours et événements</translation>
+    </message>
+    <message id="settings.data">
+        <source>Data and backups</source>
+        <translation>Données et sauvegardes</translation>
+    </message>
+    <message id="settings.summary">
+        <source>Sync, appearance, data</source>
+        <extracomment>Short hint next to Settings on the More page</extracomment>
+        <translation>Synchro, apparence, données</translation>
     </message>
     <message id="settings.lesson_end.hint">
         <source>A sound and a message while Qupil is open.</source>

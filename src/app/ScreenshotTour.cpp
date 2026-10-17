@@ -156,7 +156,10 @@ void ScreenshotTour::addDetails(const QString &prefix)
                               QMetaObject::invokeMethod(m_nav, "editLesson", Q_ARG(QString, m_lesson), Q_ARG(int, -1));
                       },
                       {} }
-            << snap(prefix + u"-9-lesson-editor"_s) << close
+            << snap(prefix + u"-9-lesson-editor"_s)
+            << Step { [this] { callAll("openList()"); }, {} }
+            << snap(prefix + u"-9b-lesson-students"_s)
+            << Step { [this] { callAll("closeList()"); }, {} } << close
             << Step { [this] {
                           if (m_nav)
                               QMetaObject::invokeMethod(m_nav, "showSync");
@@ -176,6 +179,11 @@ void ScreenshotTour::addDetails(const QString &prefix)
             << more("archive") << snap(prefix + u"-15-archive"_s)
             << more("archiveEntry") << snap(prefix + u"-16-archive-entry"_s)
             << more("settings") << snap(prefix + u"-17-settings"_s)
+            << more("appearance") << snap(prefix + u"-17a-appearance"_s)
+            << more("alerts") << snap(prefix + u"-17b-alerts"_s)
+            << more("lessonSettings") << snap(prefix + u"-17c-lesson-settings"_s)
+            << more("lists") << snap(prefix + u"-17d-lists"_s)
+            << more("data") << snap(prefix + u"-17e-data"_s)
             << more("about") << snap(prefix + u"-18-about"_s)
             << more("license") << snap(prefix + u"-19-license"_s)
             << Step { [] {

@@ -108,6 +108,7 @@ Popup {
                 onClicked: sheet.reject()
             }
             Text {
+                id: titleText
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
                 text: sheet.title
@@ -124,10 +125,12 @@ Popup {
                 enabled: sheet.canAccept
                 onClicked: sheet.accept()
             }
-            // keeps the title centred when the save button is at the bottom
+            // keeps the title centred when the save button is at the bottom, as far
+            // as the title still fits (a long one moves a little to the right)
             Item {
                 visible: !sheet.showAccept || sheet.bottomButton
-                implicitWidth: cancelButton.implicitWidth
+                implicitWidth: header.width - 2 * (cancelButton.implicitWidth + header.spacing) >= titleText.implicitWidth + 8
+                               ? cancelButton.implicitWidth : 0
             }
         }
 

@@ -347,6 +347,10 @@ E("lesson.new_name", code="EU - neu", de="EU - neu", en="IL – new", fr="CI –
 E("lesson.inactive_suffix", old="(inactive)", en="(inactive)", fr="(inactif)", es="(inactiva)",
   c="Appended to the name of a lesson the student no longer attends.")
 E("lesson.choose", en="Choose lesson", de="Unterricht wählen", fr="Choisir le cours", es="Elegir clase")
+E("lesson.pick_students", en="Choose students", de="Schüler auswählen", fr="Choisir les élèves", es="Elegir alumnos")
+E("lesson.pick_student", en="Choose student", de="Schüler auswählen", fr="Choisir l’élève", es="Elegir alumno")
+E("lesson.pick_other_student", en="Choose another student", de="Anderen Schüler auswählen",
+  fr="Choisir un autre élève", es="Elegir otro alumno")
 
 # ---------------------------------------------------------------- students
 E("student.new.first_name", old="New", en="New", fr="Nouvel", es="Nuevo",
@@ -1671,6 +1675,17 @@ E("import.csv.hint", en="Each row with a name becomes a new student. Lessons can
   fr="Chaque ligne avec un nom devient un nouvel élève. Les cours peuvent être ajoutés ensuite.",
   es="Cada fila con un nombre se convierte en un alumno nuevo. Las clases se pueden asignar después.")
 E("settings.this_device", en="On this device", de="Auf diesem Gerät", fr="Sur cet appareil", es="En este dispositivo")
+E("settings.all_devices", en="For all devices", de="Für alle Geräte", fr="Pour tous les appareils",
+  es="Para todos los dispositivos", c="Settings that are stored with the data and synced")
+E("settings.device_only", en="These settings apply to this device only.", de="Diese Einstellungen gelten nur für dieses Gerät.",
+  fr="Ces réglages ne s’appliquent qu’à cet appareil.", es="Estos ajustes solo se aplican a este dispositivo.")
+E("settings.alerts", en="Alerts and sounds", de="Hinweise und Klänge", fr="Alertes et sons", es="Avisos y sonidos")
+E("settings.lessons_events", en="Lessons and events", de="Unterricht und Veranstaltungen", fr="Cours et événements",
+  es="Clases y eventos")
+E("settings.data", en="Data and backups", de="Daten und Backups", fr="Données et sauvegardes",
+  es="Datos y copias de seguridad")
+E("settings.summary", en="Sync, appearance, data", de="Sync, Darstellung, Daten", fr="Synchro, apparence, données",
+  es="Sincronización, apariencia, datos", c="Short hint next to Settings on the More page")
 E("settings.lesson_end.hint", en="A sound and a message while Qupil is open.",
   de="Ein Klang und eine Meldung, solange Qupil geöffnet ist.",
   fr="Un son et un message tant que Qupil est ouvert.", es="Un sonido y un mensaje mientras Qupil está abierto.")
