@@ -25,7 +25,9 @@ AbstractButton {
     default property alias extra: extraItems.data
 
     Layout.fillWidth: true
-    implicitHeight: Math.max(58, rowContent.implicitHeight + 22)
+    implicitHeight: Math.max(58, implicitContentHeight + topPadding + bottomPadding)
+    topPadding: 11
+    bottomPadding: 11
     focusPolicy: Qt.StrongFocus
     hoverEnabled: true
     Accessible.role: Accessible.Button

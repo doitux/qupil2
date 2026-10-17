@@ -14,7 +14,9 @@ AbstractButton {
     property bool selected
 
     Layout.fillWidth: true
-    implicitHeight: optionRow.implicitHeight + 24
+    implicitHeight: implicitContentHeight + topPadding + bottomPadding
+    topPadding: 12
+    bottomPadding: 12
     focusPolicy: Qt.StrongFocus
     Accessible.role: Accessible.RadioButton
     Accessible.checked: selected

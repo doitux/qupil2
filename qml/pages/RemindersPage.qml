@@ -30,7 +30,9 @@ SubPage {
             id: row
             required property var modelData
             Layout.fillWidth: true
-            implicitHeight: rowContent.implicitHeight + 24
+            implicitHeight: implicitContentHeight + topPadding + bottomPadding
+            topPadding: 12
+            bottomPadding: 12
             focusPolicy: Qt.StrongFocus
             Accessible.role: Accessible.Button
             Accessible.name: modelData.text
@@ -45,7 +47,6 @@ SubPage {
                 id: rowContent
                 spacing: 12
                 Icon {
-                    Layout.alignment: Qt.AlignTop
                     Layout.preferredWidth: 22
                     Layout.preferredHeight: 22
                     name: "bell"

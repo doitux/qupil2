@@ -240,7 +240,9 @@ Item {
                                 required property var modelData
                                 readonly property bool isSelected: list.selected === modelData.id
                                 Layout.fillWidth: true
-                                implicitHeight: rowContent.implicitHeight + 24
+                                implicitHeight: implicitContentHeight + topPadding + bottomPadding
+                                topPadding: 12
+                                bottomPadding: 12
                                 focusPolicy: Qt.StrongFocus
                                 hoverEnabled: true
                                 Accessible.role: Accessible.Button

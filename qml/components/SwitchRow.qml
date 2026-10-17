@@ -15,7 +15,9 @@ AbstractButton {
 
     checkable: true
     Layout.fillWidth: true
-    implicitHeight: Math.max(56, content.implicitHeight + 24)
+    implicitHeight: Math.max(56, implicitContentHeight + topPadding + bottomPadding)
+    topPadding: 12
+    bottomPadding: 12
     focusPolicy: Qt.StrongFocus
     Accessible.role: Accessible.CheckBox
     Accessible.checked: checked

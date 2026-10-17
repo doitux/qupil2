@@ -153,22 +153,31 @@ Flickable {
                 }
             }
 
-            // Beat dots: accent bigger, current beat lit
+            // Beat dots: accent bigger, current beat lit. Every dot sits in a slot as tall as
+            // the accent dot, so the small ones line up with its centre (a Flow aligns tops).
             Flow {
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignHCenter
                 spacing: 8
                 Repeater {
                     model: Metronome.beatsPerBar
-                    delegate: Rectangle {
+                    delegate: Item {
+                        id: beatSlot
                         required property int index
+                        readonly property bool accent: index === 0 && Metronome.beatsPerBar > 1
                         readonly property bool active: Metronome.beat === index
-                        width: index === 0 && Metronome.beatsPerBar > 1 ? 22 : 16
-                        height: width
-                        radius: width / 2
-                        color: active ? (index === 0 ? Theme.accent : Theme.lime) : Theme.segment
-                        border.width: index === 0 && Metronome.beatsPerBar > 1 ? 2 : 0
-                        border.color: Theme.accent
+                        width: dot.width
+                        height: 22
+                        Rectangle {
+                            id: dot
+                            anchors.centerIn: parent
+                            width: beatSlot.accent ? 22 : 16
+                            height: width
+                            radius: width / 2
+                            color: beatSlot.active ? (beatSlot.index === 0 ? Theme.accent : Theme.lime) : Theme.segment
+                            border.width: beatSlot.accent ? 2 : 0
+                            border.color: Theme.accent
+                        }
                     }
                 }
             }

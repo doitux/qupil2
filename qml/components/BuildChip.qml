@@ -12,7 +12,9 @@ AbstractButton {
     id: chip
 
     implicitWidth: label.implicitWidth + 16
-    implicitHeight: label.implicitHeight + 8
+    implicitHeight: implicitContentHeight + topPadding + bottomPadding
+    topPadding: 4
+    bottomPadding: 4
     focusPolicy: Qt.StrongFocus
     hoverEnabled: true
     Accessible.role: Accessible.Button

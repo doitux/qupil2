@@ -48,7 +48,9 @@ SubPage {
                 AbstractButton {
                     id: version
                     Layout.fillWidth: true
-                    implicitHeight: versionText.implicitHeight + 4
+                    implicitHeight: implicitContentHeight + topPadding + bottomPadding
+                    topPadding: 2
+                    bottomPadding: 2
                     focusPolicy: Qt.StrongFocus
                     Accessible.role: Accessible.Button
                     Accessible.name: versionText.text

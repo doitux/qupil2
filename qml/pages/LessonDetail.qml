@@ -125,7 +125,9 @@ Item {
                             required property var modelData
                             required property int index
                             Layout.fillWidth: true
-                            implicitHeight: rowContent.implicitHeight + 24
+                            implicitHeight: implicitContentHeight + topPadding + bottomPadding
+                            topPadding: 12
+                            bottomPadding: 12
                             focusPolicy: Qt.StrongFocus
                             hoverEnabled: true
                             Accessible.role: Accessible.Button
@@ -196,7 +198,9 @@ Item {
                         id: reminderRow
                         required property var modelData
                         Layout.fillWidth: true
-                        implicitHeight: reminderText.implicitHeight + 24
+                        implicitHeight: implicitContentHeight + topPadding + bottomPadding
+                        topPadding: 12
+                        bottomPadding: 12
                         onClicked: Nav.editReminder(modelData.id, "")
                         background: Rectangle {
                             radius: Theme.radius

@@ -420,7 +420,9 @@ Item {
                             Nav.newNoteFrom(detail.currentMembership, modelData.id)
                     }
                     Layout.fillWidth: true
-                    implicitHeight: Math.max(noteColumn.implicitHeight + 28, actionRow.implicitHeight + 20)
+                    implicitHeight: Math.max(implicitContentHeight + topPadding + bottomPadding, actionRow.implicitHeight + 20)
+                    topPadding: 16
+                    bottomPadding: 16
                     clip: true
                     focusPolicy: Qt.StrongFocus
                     hoverEnabled: true
@@ -660,7 +662,9 @@ Item {
                     required property var modelData
                     function edit() { Nav.editPiece(detail.currentMembership, modelData.id) }
                     Layout.fillWidth: true
-                    implicitHeight: pieceColumn.implicitHeight + 28
+                    implicitHeight: implicitContentHeight + topPadding + bottomPadding
+                    topPadding: 16
+                    bottomPadding: 16
                     focusPolicy: Qt.StrongFocus
                     hoverEnabled: true
                     Accessible.role: Accessible.Button
@@ -829,7 +833,9 @@ Item {
                                     required property var modelData
                                     required property int index
                                     Layout.fillWidth: true
-                                    implicitHeight: activityText.implicitHeight + 24
+                                    implicitHeight: implicitContentHeight + topPadding + bottomPadding
+                                    topPadding: 12
+                                    bottomPadding: 12
                                     focusPolicy: Qt.StrongFocus
                                     onClicked: Nav.editActivity(detail.studentId, modelData.id, modelData.continuous === 1)
                                     background: Rectangle {

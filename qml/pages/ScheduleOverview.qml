@@ -622,7 +622,9 @@ Flickable {
     component StudentCard: AbstractButton {
         id: card
         property var student: ({})
-        implicitHeight: cardRow.implicitHeight + 24
+        implicitHeight: implicitContentHeight + topPadding + bottomPadding
+        topPadding: 12
+        bottomPadding: 12
         focusPolicy: Qt.StrongFocus
         Accessible.role: Accessible.Button
         Accessible.name: student.name || ""
@@ -696,7 +698,9 @@ Flickable {
         property var lesson: ({})
         property bool past: false
         property bool divider: false
-        implicitHeight: rowLayout.implicitHeight + 28
+        implicitHeight: implicitContentHeight + topPadding + bottomPadding
+        topPadding: 14
+        bottomPadding: 14
         focusPolicy: Qt.StrongFocus
         hoverEnabled: true
         opacity: past ? 0.6 : 1
