@@ -159,7 +159,7 @@ Flickable {
                     readonly property bool selected: overview.day === index
                     Layout.fillWidth: true
                     Layout.preferredWidth: 10
-                    implicitHeight: overview.columnMode ? 48 : 60
+                    implicitHeight: overview.columnMode ? 54 : 60
                     focusPolicy: Qt.StrongFocus
                     Accessible.role: Accessible.Button
                     Accessible.name: Qt.locale().standaloneDayName((index + 1) % 7, Locale.LongFormat)
@@ -170,35 +170,40 @@ Flickable {
                         border.width: dayButton.visualFocus ? 2 : (index === overview.todayIndex && !dayButton.selected ? 1.5 : 0)
                         border.color: dayButton.visualFocus ? Theme.accentText : Theme.accent
                     }
-                    contentItem: ColumnLayout {
-                        spacing: 1
-                        Text {
-                            Layout.alignment: Qt.AlignHCenter
-                            text: {
-                                if (LanguageManager.effectiveLanguage === "") return ""
-                                return Qt.locale().standaloneDayName((dayButton.index + 1) % 7, Locale.ShortFormat).replace(".", "").slice(0, 2)
+                    // Weekday, date and a dot when there are lessons: kept together in the
+                    // middle (also in the narrow column next to a student)
+                    contentItem: Item {
+                        Column {
+                            anchors.centerIn: parent
+                            spacing: 0
+                            Text {
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                text: {
+                                    if (LanguageManager.effectiveLanguage === "") return ""
+                                    return Qt.locale().standaloneDayName((dayButton.index + 1) % 7, Locale.ShortFormat).replace(".", "").slice(0, 2)
+                                }
+                                color: dayButton.selected ? Theme.textOnAccent : Theme.textMuted
+                                font.family: Theme.fontFamily
+                                font.pixelSize: 11
+                                font.weight: Font.DemiBold
                             }
-                            color: dayButton.selected ? Theme.textOnAccent : Theme.textMuted
-                            font.family: Theme.fontFamily
-                            font.pixelSize: 11
-                            font.weight: Font.DemiBold
-                        }
-                        Text {
-                            Layout.alignment: Qt.AlignHCenter
-                            text: overview.dateOf(dayButton.index).getDate()
-                            color: dayButton.selected ? Theme.textOnAccent : Theme.text
-                            font.family: Theme.fontFamily
-                            font.pixelSize: overview.columnMode ? 14 : 17
-                            font.weight: Font.Bold
-                        }
-                        Rectangle {
-                            visible: !overview.columnMode
-                            Layout.alignment: Qt.AlignHCenter
-                            implicitWidth: 5
-                            implicitHeight: 5
-                            radius: 3
-                            color: overview.counts[dayButton.index] > 0 ? (dayButton.selected ? Theme.lime : Theme.accent)
-                                                                        : "transparent"
+                            Text {
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                text: overview.dateOf(dayButton.index).getDate()
+                                color: dayButton.selected ? Theme.textOnAccent : Theme.text
+                                font.family: Theme.fontFamily
+                                font.pixelSize: overview.columnMode ? 15 : 17
+                                font.weight: Font.Bold
+                            }
+                            Item { width: 1; height: 3 }
+                            Rectangle {
+                                anchors.horizontalCenter: parent.horizontalCenter
+                                width: 6
+                                height: 6
+                                radius: 3
+                                color: overview.counts[dayButton.index] > 0 ? (dayButton.selected ? Theme.lime : Theme.accent)
+                                                                            : "transparent"
+                            }
                         }
                     }
                 }
