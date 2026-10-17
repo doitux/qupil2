@@ -16,7 +16,8 @@ MenuItem {
     readonly property color tint: !enabled ? Theme.textMuted : destructive ? Theme.danger : Theme.text
 
     implicitWidth: contentItem.implicitWidth + leftPadding + rightPadding
-    implicitHeight: Math.max(Theme.touchTarget, contentItem.implicitHeight + topPadding + bottomPadding)
+    // Hidden rows take no room
+    implicitHeight: visible ? Math.max(Theme.touchTarget, contentItem.implicitHeight + topPadding + bottomPadding) : 0
     leftPadding: 12
     rightPadding: 12
     topPadding: 6

@@ -7,6 +7,7 @@ import QtQuick
 import QtQuick.Controls
 
 MenuSeparator {
+    implicitHeight: visible ? contentItem.implicitHeight + topPadding + bottomPadding : 0
     leftPadding: 12
     rightPadding: 12
     topPadding: 5

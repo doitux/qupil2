@@ -34,6 +34,7 @@ Item {
         return memberships.length > 0 ? memberships[0].id : ""
     }
     readonly property var membership: memberships.find(m => m.id === currentMembership) || null
+    readonly property string currentLessonId: membership && membership.lesson_id ? membership.lesson_id : ""
     readonly property int inactiveCount: memberships.filter(m => !m.active).length
     readonly property var notes: { if (Data.revision < 0) return undefined; return currentMembership ? Data.notes(currentMembership) : [] }
     readonly property var pieces: { if (Data.revision < 0) return undefined; return currentMembership ? Data.pieces(currentMembership, pieceFilter) : [] }
@@ -209,6 +210,15 @@ Item {
                             onTriggered: detail.membershipId = modelData.id
                         }
                     }
+                    AppMenuSeparator {
+                        visible: detail.currentLessonId !== ""
+                    }
+                    AppMenuItem {
+                        visible: detail.currentLessonId !== ""
+                        iconName: "calendar"
+                        text: qsTrId("lesson.edit")
+                        onTriggered: Nav.editLesson(detail.currentLessonId, -1)
+                    }
                 }
             }
 
@@ -276,8 +286,14 @@ Item {
         id: studentMenu
         AppMenuItem {
             iconName: "edit"
-            text: qsTrId("common.edit")
+            text: qsTrId("student.edit_data")
             onTriggered: detail.tab = 3
+        }
+        AppMenuItem {
+            visible: detail.currentLessonId !== ""
+            iconName: "calendar"
+            text: qsTrId("lesson.edit")
+            onTriggered: Nav.editLesson(detail.currentLessonId, -1)
         }
         AppMenuItem {
             iconName: "bell"

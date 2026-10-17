@@ -2351,6 +2351,10 @@ Bitte wenden Sie sich an den Programm-Autor: %4 um dieses Problem zu beheben!</t
         <source>Edit lesson</source>
         <translation>Unterricht bearbeiten</translation>
     </message>
+    <message id="student.edit_data">
+        <source>Edit student</source>
+        <translation>Schülerdaten bearbeiten</translation>
+    </message>
     <message id="lesson.duration">
         <source>%1 minutes</source>
         <extracomment>%1 = lesson length</extracomment>

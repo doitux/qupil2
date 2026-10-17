@@ -2350,6 +2350,10 @@ Please contact the author at %4 to fix this problem.</translation>
         <source>Edit lesson</source>
         <translation>Edit lesson</translation>
     </message>
+    <message id="student.edit_data">
+        <source>Edit student</source>
+        <translation>Edit student</translation>
+    </message>
     <message id="lesson.duration">
         <source>%1 minutes</source>
         <extracomment>%1 = lesson length</extracomment>

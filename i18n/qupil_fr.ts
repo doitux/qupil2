@@ -2350,6 +2350,10 @@ Veuillez contacter l’auteur à l’adresse %4 pour résoudre ce problème.</tr
         <source>Edit lesson</source>
         <translation>Modifier le cours</translation>
     </message>
+    <message id="student.edit_data">
+        <source>Edit student</source>
+        <translation>Modifier l’élève</translation>
+    </message>
     <message id="lesson.duration">
         <source>%1 minutes</source>
         <extracomment>%1 = lesson length</extracomment>

@@ -278,44 +278,74 @@ Flickable {
                 anchors.margins: 16
                 spacing: 12
 
-                RowLayout {
+                // Time, room and lesson: opens the lesson (times, students, reminders)
+                AbstractButton {
+                    id: heroHead
                     Layout.fillWidth: true
-                    spacing: 8
-                    Text {
-                        Layout.fillWidth: true
-                        elide: Text.ElideRight
-                        text: overview.running ? overview.running.start_time + " – " + overview.running.end_time
-                                                 + (overview.running.location ? " · " + overview.running.location : "") : ""
-                        color: Theme.heroText
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 16
-                        font.weight: Font.Bold
+                    implicitHeight: heroHeadColumn.implicitHeight
+                    focusPolicy: Qt.StrongFocus
+                    Accessible.role: Accessible.Button
+                    Accessible.name: overview.running ? overview.running.name : ""
+                    onClicked: if (overview.running) overview.lessonClicked(overview.running.id)
+                    background: Rectangle {
+                        color: "transparent"
+                        radius: 8
+                        border.width: heroHead.visualFocus ? 2 : 0
+                        border.color: Theme.lime
                     }
-                    Rectangle {
-                        implicitWidth: runningLabel.implicitWidth + 20
-                        implicitHeight: runningLabel.implicitHeight + 10
-                        radius: height / 2
-                        color: Theme.lime
-                        Text {
-                            id: runningLabel
-                            anchors.centerIn: parent
-                            text: overview.running ? qsTrId("today.running") + " · "
-                                                     + qsTrId("today.remaining", overview.minutesLeft(overview.running)) : ""
-                            color: Theme.textOnLime
-                            font.family: Theme.fontFamily
-                            font.pixelSize: 12
-                            font.weight: Font.ExtraBold
+                    contentItem: ColumnLayout {
+                        id: heroHeadColumn
+                        spacing: 12
+                        RowLayout {
+                            Layout.fillWidth: true
+                            spacing: 8
+                            Text {
+                                Layout.fillWidth: true
+                                elide: Text.ElideRight
+                                text: overview.running ? overview.running.start_time + " – " + overview.running.end_time
+                                                         + (overview.running.location ? " · " + overview.running.location : "") : ""
+                                color: Theme.heroText
+                                font.family: Theme.fontFamily
+                                font.pixelSize: 16
+                                font.weight: Font.Bold
+                            }
+                            Rectangle {
+                                implicitWidth: runningLabel.implicitWidth + 20
+                                implicitHeight: runningLabel.implicitHeight + 10
+                                radius: height / 2
+                                color: Theme.lime
+                                Text {
+                                    id: runningLabel
+                                    anchors.centerIn: parent
+                                    text: overview.running ? qsTrId("today.running") + " · "
+                                                             + qsTrId("today.remaining", overview.minutesLeft(overview.running)) : ""
+                                    color: Theme.textOnLime
+                                    font.family: Theme.fontFamily
+                                    font.pixelSize: 12
+                                    font.weight: Font.ExtraBold
+                                }
+                            }
+                        }
+                        RowLayout {
+                            Layout.fillWidth: true
+                            spacing: 4
+                            Text {
+                                Layout.fillWidth: true
+                                elide: Text.ElideRight
+                                text: overview.running ? overview.running.name + " · " + overview.kindLabel(overview.running.kind) : ""
+                                color: Theme.textOnAccent
+                                opacity: 0.85
+                                font.family: Theme.fontFamily
+                                font.pixelSize: 13
+                            }
+                            Icon {
+                                Layout.preferredWidth: 16
+                                Layout.preferredHeight: 16
+                                name: "chevron"
+                                color: Theme.heroMuted
+                            }
                         }
                     }
-                }
-                Text {
-                    Layout.fillWidth: true
-                    elide: Text.ElideRight
-                    text: overview.running ? overview.running.name + " · " + overview.kindLabel(overview.running.kind) : ""
-                    color: Theme.textOnAccent
-                    opacity: 0.85
-                    font.family: Theme.fontFamily
-                    font.pixelSize: 13
                 }
 
                 Repeater {
@@ -433,6 +463,8 @@ Flickable {
                             past: overview.isToday && modelData.end_time <= overview.nowTime
                             divider: index > 0
                             onClicked: overview.openLesson(modelData)
+                            // A lesson with one student opens the student; holding opens the lesson
+                            onPressAndHold: overview.lessonClicked(modelData.id)
                         }
                     }
                 }

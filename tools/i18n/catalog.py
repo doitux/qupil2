@@ -1279,6 +1279,7 @@ E("piece.edit", en="Edit piece", de="Werk bearbeiten", fr="Modifier le morceau",
 E("loans.empty", en="No borrowed sheet music.", de="Keine ausgeliehenen Noten.", fr="Aucune partition empruntée.",
   es="No hay partituras prestadas.")
 E("lesson.edit", en="Edit lesson", de="Unterricht bearbeiten", fr="Modifier le cours", es="Editar clase")
+E("student.edit_data", en="Edit student", de="Schülerdaten bearbeiten", fr="Modifier l’élève", es="Editar alumno")
 E("lesson.duration", en="%1 minutes", de="%1 Minuten", fr="%1 minutes", es="%1 minutos", c="%1 = lesson length")
 E("lesson.name.auto_short", en="Automatic", de="Automatisch", fr="Automatique", es="Automático")
 E("lesson.name.manual_short", en="Own name", de="Eigener Name", fr="Nom libre", es="Nombre propio")
