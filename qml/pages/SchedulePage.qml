@@ -17,7 +17,20 @@ Item {
     property string membershipId
     property string lessonId
 
+    //! System back button: closes the page on top (phone) or the selection (wide)
+    function back() {
+        if (!wide)
+            return Nav.stackBack(loader.item)
+        if (lessonId === "" && studentId === "")
+            return false
+        lessonId = ""
+        studentId = ""
+        membershipId = ""
+        return true
+    }
+
     Loader {
+        id: loader
         anchors.fill: parent
         sourceComponent: page.wide ? wideUi : compactUi
     }

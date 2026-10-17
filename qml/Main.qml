@@ -44,6 +44,25 @@ ApplicationWindow {
 
     readonly property bool compact: width < 720
     property int currentPage: 0
+    property Item pageLayout: null
+
+    /*!
+        System back button (Android), called from C++ (BackKey): one step back in
+        the current tab, then to the first tab. False on the first screen: Qupil
+        then goes to the background.
+    */
+    function goBack() {
+        if (App.phase !== App.Ready || !pageLayout)
+            return false
+        const page = pageLayout.children[currentPage]
+        if (page && typeof page.back === "function" && page.back())
+            return true
+        if (currentPage !== 0) {
+            currentPage = 0
+            return true
+        }
+        return false
+    }
 
     // Static model: a language switch only re-evaluates the labels,
     // it does not destroy and re-create the navigation buttons.
@@ -133,6 +152,7 @@ ApplicationWindow {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
                 currentIndex: window.currentPage
+                Component.onCompleted: window.pageLayout = this
 
                 SchedulePage {}
                 StudentsPage {}

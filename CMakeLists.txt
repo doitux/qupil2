@@ -300,6 +300,8 @@ qt_add_qml_module(qupil
         src/core/LanguageManager.cpp
         src/app/AppController.h
         src/app/AppController.cpp
+        src/app/BackKey.h
+        src/app/BackKey.cpp
         src/app/DataService.h
         src/app/DataService.cpp
         src/app/NoteFormat.h

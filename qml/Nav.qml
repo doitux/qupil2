@@ -7,6 +7,23 @@ pragma Singleton
 import QtQuick
 
 QtObject {
+    /*!
+        One step back in a StackView of pages (system back button): the page on top
+        closes the way its own back arrow does (it may tidy up first), otherwise
+        it is popped. False when there is nothing to go back to.
+    */
+    function stackBack(stack) {
+        if (!stack || stack.depth <= 1)
+            return false
+        const depth = stack.depth
+        const top = stack.currentItem
+        if (top && typeof top.back === "function")
+            top.back()
+        if (stack.depth === depth)
+            stack.pop()
+        return true
+    }
+
     // ------------------------------------------------------------ editors (handled by Main.qml)
     signal newStudent()
     signal editLesson(string lessonId, int weekday)

@@ -28,6 +28,10 @@ StackView {
         stack.pop(null)
         stack.push(component)
     }
+    //! System back button: closes the page on top
+    function back() {
+        return Nav.stackBack(stack)
+    }
     //! Back to the first level (screenshot tour)
     function home() {
         stack.pop(null)

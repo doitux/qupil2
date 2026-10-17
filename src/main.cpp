@@ -19,6 +19,7 @@
 #include <memory>
 
 #include "AppController.h"
+#include "BackKey.h"
 #include "DataService.h"
 #include "DocumentService.h"
 #include "LanguageManager.h"
@@ -194,6 +195,7 @@ int main(int argc, char *argv[])
                          auto *window = qobject_cast<QQuickWindow *>(object);
                          if (!window)
                              return;
+                         new BackKey(window);
                          if (desktop && !smokeTest && !screenshots)
                              placeWindow(window);
                          else

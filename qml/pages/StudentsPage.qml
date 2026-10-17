@@ -26,6 +26,17 @@ Item {
             loader.item.openStudent(id, membership)
     }
 
+    //! System back button: closes the student (phone: the page on top)
+    function back() {
+        if (!wide)
+            return Nav.stackBack(loader.item)
+        if (studentId === "")
+            return false
+        studentId = ""
+        membershipId = ""
+        return true
+    }
+
     Connections {
         target: Nav
         function onShowStudent(id, membership) { page.show(id, membership) }

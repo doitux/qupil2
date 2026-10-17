@@ -35,6 +35,21 @@ Item {
             loader.item.openArchive()
     }
 
+    //! System back button: closes the event or archive entry (phone: the page on top)
+    function back() {
+        if (!wide)
+            return Nav.stackBack(loader.item)
+        if (archiveId !== "") {
+            archiveId = ""
+            return true
+        }
+        if (eventId === "" && !archive)
+            return false
+        eventId = ""
+        archive = false
+        return true
+    }
+
     Connections {
         target: Nav
         function onShowEvent(id) { page.open(id) }
