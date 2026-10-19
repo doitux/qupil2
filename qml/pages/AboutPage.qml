@@ -29,7 +29,7 @@ SubPage {
             Image {
                 Layout.preferredWidth: 72
                 Layout.preferredHeight: 72
-                source: "assets/icons/qupil.png"
+                source: "assets/icons/qupil-256.png"
                 sourceSize.width: 144
                 sourceSize.height: 144
                 fillMode: Image.PreserveAspectFit

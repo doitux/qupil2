@@ -295,7 +295,13 @@ qt_add_qml_module(qupil
         assets/fonts/Figtree-SemiBold.ttf
         assets/fonts/Figtree-Bold.ttf
         assets/fonts/Figtree-ExtraBold.ttf
-        assets/icons/qupil.png
+        assets/icons/qupil-16.png
+        assets/icons/qupil-24.png
+        assets/icons/qupil-32.png
+        assets/icons/qupil-48.png
+        assets/icons/qupil-64.png
+        assets/icons/qupil-128.png
+        assets/icons/qupil-256.png
         assets/sounds/lesson-end.wav
         assets/sounds/reminder.wav
         LICENSE
@@ -389,6 +395,17 @@ install(TARGETS qupil
     BUNDLE DESTINATION .
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+if(UNIX AND NOT APPLE AND NOT ANDROID)
+    # Desktop entry and icon theme files (menus, docks; Wayland takes the window icon from here)
+    install(FILES platform/linux/de.qupil.app.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
+    foreach(_size 16 24 32 48 64 128 256 512)
+        install(FILES assets/icons/qupil-${_size}.png RENAME de.qupil.app.png
+            DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/${_size}x${_size}/apps)
+    endforeach()
+    install(FILES assets/icons/qupil.svg RENAME de.qupil.app.svg
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps)
+endif()
 
 if(NOT ANDROID AND NOT IOS)
     qt_generate_deploy_qml_app_script(

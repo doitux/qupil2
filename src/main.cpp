@@ -97,7 +97,18 @@ int main(int argc, char *argv[])
     QGuiApplication::setOrganizationDomain(u"qupil.de"_s);
     QGuiApplication::setApplicationName(u"Qupil"_s);
     QGuiApplication::setApplicationVersion(QStringLiteral(QUPIL_VERSION));
-    QGuiApplication::setWindowIcon(QIcon(u":/qt/qml/Qupil/assets/icons/qupil.png"_s));
+#if !defined(Q_OS_MACOS) && !defined(Q_OS_IOS) && !defined(Q_OS_ANDROID)
+    // Title bar and task bar on Windows and Linux (the Dock on macOS keeps the bundle's
+    // icon, which follows Apple's grid; phones and tablets take it from the package)
+    QIcon icon;
+    for (const int size : {16, 24, 32, 48, 64, 128, 256})
+        icon.addFile(u":/qt/qml/Qupil/assets/icons/qupil-%1.png"_s.arg(size), QSize(size, size));
+    QGuiApplication::setWindowIcon(icon);
+#endif
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+    // Wayland shows the icon of the desktop entry (share/applications/de.qupil.app.desktop)
+    QGuiApplication::setDesktopFileName(u"de.qupil.app"_s);
+#endif
 
     QCommandLineParser args;
     args.addHelpOption();

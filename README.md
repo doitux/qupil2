@@ -1,3 +1,5 @@
+<img src="assets/icons/qupil.svg" alt="Qupil" width="96">
+
 # Qupil 2
 
 [![Desktop](https://github.com/doitux/qupil2/actions/workflows/desktop.yml/badge.svg)](https://github.com/doitux/qupil2/actions/workflows/desktop.yml)
@@ -54,8 +56,10 @@ qml/            user interface (Main.qml, Theme.qml, pages/)
 src/            C++ (main.cpp, core/ with LanguageManager)
 i18n/           qupil_en/de/fr/es.ts – generated, see docs/i18n.md
 tools/i18n/     string catalog (single source of truth) and generators
-assets/         font (Figtree), app icons, the alert sounds of Qupil 1.x
-platform/       platform files (Windows icon, iOS/Android localisation, Android alarms and notifications)
+tools/icons/    renders all app icons from the logo (assets/icons/*.svg)
+assets/         font (Figtree), logo and app icons, the alert sounds of Qupil 1.x
+platform/       platform files (Windows icon, Linux desktop entry, iOS/Android icons and localisation,
+                Android alarms and notifications)
 tests/          unit tests
 docs/           developer documentation
 ```

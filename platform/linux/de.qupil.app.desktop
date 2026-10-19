@@ -1,0 +1,18 @@
+[Desktop Entry]
+Type=Application
+Name=Qupil
+GenericName=Lesson management
+GenericName[de]=Unterrichtsverwaltung
+GenericName[fr]=Gestion des cours
+GenericName[es]=Gestión de clases
+Comment=Lesson management for music teachers
+Comment[de]=Unterrichtsmanagement für Instrumentalpädagogen
+Comment[fr]=Gestion des cours pour professeurs de musique
+Comment[es]=Gestión de clases para profesores de música
+Exec=qupil
+Icon=de.qupil.app
+Terminal=false
+Categories=Education;Music;
+Keywords=music;lesson;student;teacher;metronome;
+Keywords[de]=Musik;Unterricht;Schüler;Lehrer;Metronom;
+StartupWMClass=Qupil
