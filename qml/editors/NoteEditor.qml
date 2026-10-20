@@ -123,27 +123,55 @@ Sheet {
         onPicked: (value) => editor.date = value || Data.today()
     }
 
-    // Started from an older note: say so, and offer an empty start
-    RowLayout {
-        visible: editor.copiedFrom !== ""
-        Layout.fillWidth: true
-        spacing: 10
-        Text {
-            Layout.fillWidth: true
-            wrapMode: Text.WordWrap
-            text: qsTrId("note.copied_from").arg(Data.formatDate(editor.copiedFrom))
-            color: Theme.textMuted
-            font.family: Theme.fontFamily
-            font.pixelSize: 13
+    // Started from an older note: say so, and offer an empty start. Emptying keeps the
+    // focus (and the keyboard) in the note: the line folds away, the cursor is at the start.
+    Item {
+        id: copiedBar
+        property real shown: editor.copiedFrom !== "" ? 1 : 0
+        // The date stays while the line folds away
+        property string from
+        Binding on from {
+            when: editor.copiedFrom !== ""
+            value: editor.copiedFrom
+            restoreMode: Binding.RestoreNone
         }
-        ActionButton {
-            kind: "quiet"
-            iconName: "close"
-            text: qsTrId("note.clear")
-            onClicked: {
-                noteText.text = ""
-                editor.copiedFrom = ""
-                noteText.forceActiveFocus()
+        Behavior on shown {
+            enabled: editor.opened
+            NumberAnimation { duration: 180; easing.type: Easing.OutCubic }
+        }
+        visible: shown > 0
+        clip: true
+        Layout.fillWidth: true
+        // The column's spacing folds away with it (no jump at the end)
+        Layout.preferredHeight: shown * (copiedRow.implicitHeight + 16)
+        Layout.bottomMargin: -16
+        RowLayout {
+            id: copiedRow
+            width: parent.width
+            opacity: copiedBar.shown
+            spacing: 10
+            Text {
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+                text: qsTrId("note.copied_from").arg(Data.formatDate(copiedBar.from))
+                color: Theme.textMuted
+                font.family: Theme.fontFamily
+                font.pixelSize: 13
+            }
+            ActionButton {
+                kind: "quiet"
+                iconName: "close"
+                text: qsTrId("note.clear")
+                // A tap must not take the focus from the note: the keyboard would close
+                // and open again, and the sheet jump down and back up with it
+                focusPolicy: Qt.TabFocus
+                onClicked: {
+                    noteText.clear()        // also ends a word the keyboard is still composing
+                    noteText.cursorPosition = 0
+                    editor.copiedFrom = ""
+                    if (!noteText.activeFocus)
+                        noteText.forceActiveFocus()
+                }
             }
         }
     }

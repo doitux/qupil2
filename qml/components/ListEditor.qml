@@ -253,6 +253,8 @@ ColumnLayout {
             Layout.alignment: Qt.AlignBottom
             iconName: "plus"
             text: qsTrId("common.add")
+            // A tap leaves the focus (and the keyboard) in the field for the next entry
+            focusPolicy: Qt.TabFocus
             enabled: editor.entry.trim() !== ""
             onClicked: editor.add()
         }
