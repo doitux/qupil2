@@ -24,8 +24,8 @@ jobs:
     env:
       APPIMAGE_EXTRACT_AND_RUN: '1'
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5
         with:
           repository: doitux/qupil
           ref: ${{ env.QUPIL_REF }}
@@ -93,8 +93,8 @@ jobs:
       run:
         shell: msys2 {0}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5
         with:
           repository: doitux/qupil
           ref: ${{ env.QUPIL_REF }}
@@ -144,40 +144,10 @@ jobs:
           mingw32-make -j4
 
       - name: Package
-        run: |
-          D=dist/Qupil-$VERSION
-          mkdir -p "$D"
-          cp qupil/release/qupil.exe "$D/"
-          cp -r qupil/data "$D/data"
-          rm -f "$D/data/.directory" "$D/data/sounds/.directory"
-          DEPLOY=$(command -v windeployqt-qt5 || command -v windeployqt)
-          "$DEPLOY" --release --no-translations --no-compiler-runtime --no-opengl-sw "$D/qupil.exe"
-          # MSYS2 runtime DLLs (Qt's dependencies, SDL, Ogg Vorbis, GCC runtime)
-          for pass in 1 2 3 4 5; do
-            find "$D" -iname '*.exe' -o -iname '*.dll' | while read -r f; do
-              ldd "$f" | awk '/\/mingw64\/|\/sdlmixer\//{print $3}'
-            done | sort -u | while read -r dll; do cp -n "$dll" "$D/"; done
-          done
-          # sdl12-compat loads SDL2 at runtime
-          if [ -f /mingw64/bin/SDL2.dll ]; then cp -n /mingw64/bin/SDL2.dll "$D/"; fi
-          ls -la "$D" "$D"/*/
-          mkdir out
-          (cd dist && zip -qr ../out/Qupil-$VERSION-windows-x64.zip Qupil-$VERSION)
+        run: bash ci/run-logged.sh "Windows package" ci/win-package.sh
 
       - name: Smoke test (starts, creates its database)
-        run: |
-          appdata=$(cygpath -u "$APPDATA")
-          rm -rf "$appdata/qupil"
-          cd dist/Qupil-$VERSION
-          # only the bundled DLLs, nothing from MSYS2
-          export PATH=/usr/bin:/c/Windows/system32:/c/Windows SDL_AUDIODRIVER=dummy
-          ./qupil.exe &
-          pid=$!
-          sleep 15
-          kill -0 $pid
-          kill $pid || true
-          ls -la "$appdata/qupil" "$appdata/qupil/db"
-          test -n "$(ls "$appdata/qupil/db")"
+        run: bash ci/run-logged.sh "Windows smoke test" ci/win-smoke.sh
 
       - uses: actions/upload-artifact@v4
         with:
@@ -196,8 +166,8 @@ jobs:
           - os: macos-15-intel
             arch: x86_64
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5
         with:
           repository: doitux/qupil
           ref: ${{ env.QUPIL_REF }}
@@ -237,42 +207,12 @@ jobs:
           lipo -info qupil.app/Contents/MacOS/qupil
 
       - name: Package dmg
-        run: |
-          app=qupil/qupil.app
-          cp -R qupil/data "$app/Contents/Resources/data"
-          rm -f "$app/Contents/Resources/data/.directory" "$app/Contents/Resources/data/sounds/.directory"
-          "$QT5/bin/macdeployqt" "$app" -verbose=1
-          # sdl12-compat loads SDL2 at runtime from next to itself
-          cp "$(brew --prefix sdl2)/lib/libSDL2-2.0.0.dylib" "$app/Contents/Frameworks/"
-          chmod u+w "$app/Contents/Frameworks/libSDL2-2.0.0.dylib"
-          install_name_tool -id @executable_path/../Frameworks/libSDL2-2.0.0.dylib \
-            "$app/Contents/Frameworks/libSDL2-2.0.0.dylib"
-          codesign --force --deep --sign - "$app"
-          # nothing may point to Homebrew any more
-          if otool -L "$app/Contents/MacOS/qupil" "$app"/Contents/Frameworks/*.dylib \
-               | grep -E "^\s+$BREW/|/sdlmixer/"; then
-            echo "unbundled library"; exit 1
-          fi
-          ls "$app/Contents/Frameworks" "$app/Contents/PlugIns"/*
-          otool -l "$app/Contents/Frameworks/QtCore.framework/QtCore" | grep -A3 LC_BUILD_VERSION | grep minos || true
-          mkdir -p dmgroot out
-          cp -R "$app" dmgroot/Qupil.app
-          ln -s /Applications dmgroot/Applications
-          hdiutil create -volname "Qupil $VERSION" -srcfolder dmgroot -ov -format UDZO \
-            out/Qupil-$VERSION-macos-${{ matrix.arch }}.dmg
+        env:
+          ARCH: ${{ matrix.arch }}
+        run: bash ci/run-logged.sh "macOS package" ci/mac-package.sh
 
       - name: Smoke test (starts, creates its database)
-        run: |
-          export HOME=$RUNNER_TEMP/home SDL_AUDIODRIVER=dummy
-          mkdir -p "$HOME"
-          # run the copy from the dmg folder, without Homebrew on the search path
-          env -u DYLD_LIBRARY_PATH dmgroot/Qupil.app/Contents/MacOS/qupil &
-          pid=$!
-          sleep 15
-          kill -0 $pid
-          kill $pid || true
-          ls -la "$HOME/.qupil" "$HOME/.qupil/db"
-          test -n "$(ls "$HOME/.qupil/db")"
+        run: bash ci/run-logged.sh "macOS smoke test" ci/mac-smoke.sh
 
       - uses: actions/upload-artifact@v4
         with:
