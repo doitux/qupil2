@@ -142,7 +142,15 @@ jobs:
         run: |
           mkdir -p package
           case "$RUNNER_OS" in
-            Linux)   tar -C dist -czf "package/${{ matrix.artifact }}.tar.gz" . ;;
+            Linux)
+              # Start script (also through a link) and menu/desktop launcher next to bin/
+              cp platform/linux/qupil.sh platform/linux/install-launcher.sh dist/
+              chmod +x dist/qupil.sh dist/install-launcher.sh
+              # Everything in one folder "Qupil": a newer build unpacked over it keeps the launcher working.
+              # The name says what it is: nightly and commit (a release: its tag)
+              name="Qupil-Linux-x86_64-nightly-${GITHUB_SHA::7}"
+              if [ "$GITHUB_REF_TYPE" = tag ]; then name="Qupil-Linux-x86_64-${GITHUB_REF_NAME}"; fi
+              tar --transform='s,^\.,Qupil,' -C dist -czf "package/$name.tar.gz" . ;;
             macOS)   ditto -c -k --keepParent dist/Qupil.app "package/${{ matrix.artifact }}.zip" ;;
             Windows) 7z a "package/${{ matrix.artifact }}.zip" ./dist/* > /dev/null ;;
           esac
@@ -176,7 +184,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           bash .github/scripts/publish-nightly.sh \
-            'artifacts/qupil-linux-x86_64/*.tar.gz=Qupil-Linux-x86_64.tar.gz' \
+            'artifacts/qupil-linux-x86_64/*.tar.gz=Qupil-Linux-x86_64*.tar.gz' \
             'artifacts/qupil-windows-x64/*.zip=Qupil-Windows-x64.zip' \
             'artifacts/qupil-macos-universal/*.zip=Qupil-macOS-universal.zip' \
             'artifacts/qupil-screenshots/*.zip=Qupil-Screenshots.zip'

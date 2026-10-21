@@ -68,7 +68,7 @@ They are **not signed** and only meant for testing.
 | \`Qupil-Android-arm64-test-<build>-<commit>.apk\` | Android: open the file and allow installing from this source. Play Protect warns about an unknown developer: tap *More details* › *Install anyway* (the big *OK* cancels the installation). Signed with a public test key, so a newer nightly installs as an update and keeps the data (builds before Oct 15, 2026 used a different key: uninstall those once). The commit in the file name is shown on the first screen and under More › About; Android's app info shows the build number. |
 | \`Qupil-macOS-universal.zip\` | macOS 12+: unzip, then right-click Qupil → Open the first time. |
 | \`Qupil-Windows-x64.zip\` | Windows 10/11: unzip and start \`bin\\Qupil.exe\`; SmartScreen → More info → Run anyway. |
-| \`Qupil-Linux-x86_64.tar.gz\` | Linux: unpack and start \`bin/qupil\`. Needs \`libxcb-cursor0\` (\`sudo apt install libxcb-cursor0\`). |
+| \`Qupil-Linux-x86_64-nightly-<commit>.tar.gz\` | Linux: unpacks into a folder \`Qupil\`; start \`Qupil/qupil.sh\` (works through a link, too). Run \`Qupil/install-launcher.sh\` once to get Qupil with its icon in the application menu and on the desktop (\`--remove\` takes both away); a newer nightly unpacked over the same folder keeps them working. Needs \`libxcb-cursor0\` (\`sudo apt install libxcb-cursor0\`). |
 | \`Qupil-Screenshots.zip\` | Every screen of this build with sample data (German and English, light and dark, desktop and phone size). |
 
 Built by the [Desktop](${GITHUB_SERVER_URL}/${repo}/actions/workflows/desktop.yml) and [Mobile](${GITHUB_SERVER_URL}/${repo}/actions/workflows/mobile.yml) workflows.
