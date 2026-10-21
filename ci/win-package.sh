@@ -7,7 +7,7 @@ rm -f "$D/data/.directory" "$D/data/sounds/.directory"
 
 DEPLOY=$(command -v windeployqt-qt5 || command -v windeployqt)
 echo "windeployqt: $DEPLOY"
-"$DEPLOY" --release --no-translations --no-compiler-runtime --no-opengl-sw "$D/qupil.exe"
+"$DEPLOY" --release --no-translations --no-compiler-runtime --no-opengl-sw --no-angle "$D/qupil.exe"
 
 # MSYS2 runtime DLLs (Qt's dependencies, SDL, Ogg Vorbis, GCC runtime)
 for pass in 1 2 3 4 5; do
