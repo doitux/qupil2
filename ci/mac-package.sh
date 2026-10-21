@@ -4,11 +4,16 @@ cp -R qupil/data "$app/Contents/Resources/data"
 rm -f "$app/Contents/Resources/data/.directory" "$app/Contents/Resources/data/sounds/.directory"
 "$QT5/bin/macdeployqt" "$app" -verbose=1
 
-# sdl12-compat loads SDL2 at runtime from next to itself
-cp "$(brew --prefix sdl2)/lib/libSDL2-2.0.0.dylib" "$app/Contents/Frameworks/"
-chmod u+w "$app/Contents/Frameworks/libSDL2-2.0.0.dylib"
-install_name_tool -id @executable_path/../Frameworks/libSDL2-2.0.0.dylib \
-  "$app/Contents/Frameworks/libSDL2-2.0.0.dylib"
+# sdl12-compat loads SDL2 at runtime from next to itself. Homebrew's sdl2 is
+# sdl2-compat, which in turn loads SDL3 the same way.
+for lib in "$(brew --prefix sdl2)/lib/libSDL2-2.0.0.dylib" "$(brew --prefix sdl3 2>/dev/null)/lib/libSDL3.0.dylib"; do
+  [ -f "$lib" ] || continue
+  name=$(basename "$lib")
+  cp -L "$lib" "$app/Contents/Frameworks/$name"
+  chmod u+w "$app/Contents/Frameworks/$name"
+  install_name_tool -id "@executable_path/../Frameworks/$name" "$app/Contents/Frameworks/$name"
+  echo "bundled $name from $lib"
+done
 codesign --force --deep --sign - "$app"
 
 echo "--- linked libraries"
