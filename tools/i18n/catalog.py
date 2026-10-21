@@ -773,6 +773,9 @@ E("reminder.for_student", old="Reminder for the pupil ", en="Reminder for studen
   de="Erinnerung für den Schüler \"%1\":", fr="Rappel pour l’élève « %1 » :",
   es="Recordatorio para el alumno “%1”:", c="%1 = student name",
   note="Fragment mit Platzhalter (so wurde es angezeigt)")
+E("reminder.done", en="Done – delete the reminder", de="Erledigt – Erinnerung löschen",
+  fr="Fait – supprimer le rappel", es="Hecho: borrar el recordatorio",
+  c="Tick next to a student's reminder on the student's page (tooltip and screen reader).")
 E("reminder.done_remove", old="Done? - Reminder will be removed!",
   en="Done? The reminder will be removed.", fr="Terminé ? Le rappel sera supprimé.",
   es="¿Hecho? El recordatorio se eliminará.", c="Checkbox in the reminder popup.")

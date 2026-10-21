@@ -1388,6 +1388,11 @@ Beau travail !</translation>
         <extracomment>%1 = student name</extracomment>
         <translation>Rappel pour l’élève « %1 » :</translation>
     </message>
+    <message id="reminder.done">
+        <source>Done – delete the reminder</source>
+        <extracomment>Tick next to a student&apos;s reminder on the student&apos;s page (tooltip and screen reader).</extracomment>
+        <translation>Fait – supprimer le rappel</translation>
+    </message>
     <message id="reminder.done_remove">
         <source>Done? The reminder will be removed.</source>
         <extracomment>Checkbox in the reminder popup.</extracomment>

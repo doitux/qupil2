@@ -41,6 +41,11 @@ Item {
     readonly property var pieceCounts: { if (Data.revision < 0) return undefined; return currentMembership ? Data.pieceCounts(currentMembership) : [0, 0, 0, 0, 0, 0] }
     readonly property var activities: { if (Data.revision < 0) return undefined; return studentId ? Data.activities(studentId) : [] }
     readonly property var loans: { if (Data.revision < 0) return undefined; return studentId ? Data.loans(studentId) : [] }
+    //! Reminders for this student (they also pop up when the student's lesson starts)
+    readonly property var reminders: {
+        if (Data.revision < 0) return undefined
+        return studentId ? Data.reminders().filter(r => r.mode === 2 && r.student_id === studentId) : []
+    }
     readonly property int groupSize: { if (Data.revision < 0) return undefined; return currentMembership ? Data.groupSize(currentMembership) : 1 }
 
     function relative(iso) {
@@ -222,6 +227,74 @@ Item {
                 }
             }
 
+            // ------------------------------------------------------------ reminders
+            // Visible whenever the student is open: tap the text to change it, the tick when done
+            Repeater {
+                model: detail.reminders
+                delegate: Rectangle {
+                    id: reminderRow
+                    required property var modelData
+                    readonly property color ink: Theme.dark ? Theme.lime : Theme.accentText
+                    Layout.fillWidth: true
+                    implicitHeight: Math.max(56, reminderText.implicitHeight + 24)
+                    radius: 16
+                    color: Theme.accentSoft
+                    RowLayout {
+                        anchors.fill: parent
+                        anchors.leftMargin: 14
+                        anchors.rightMargin: 6
+                        spacing: 10
+                        // The bell dark on a lime dot
+                        Rectangle {
+                            implicitWidth: 30
+                            implicitHeight: 30
+                            radius: 15
+                            color: Theme.lime
+                            Icon {
+                                anchors.centerIn: parent
+                                width: 17
+                                height: 17
+                                name: "bell"
+                                color: Theme.textOnLime
+                                strokeWidth: 2.4
+                            }
+                        }
+                        AbstractButton {
+                            Layout.fillWidth: true
+                            Layout.fillHeight: true
+                            focusPolicy: Qt.StrongFocus
+                            hoverEnabled: true
+                            Accessible.role: Accessible.Button
+                            Accessible.name: qsTrId("reminder.edit.title") + ": " + reminderRow.modelData.text
+                            onClicked: Nav.editReminder(reminderRow.modelData.id, detail.studentId)
+                            background: Rectangle {
+                                radius: 8
+                                color: "transparent"
+                                border.width: parent.visualFocus ? 2 : 0
+                                border.color: Theme.accentText
+                            }
+                            contentItem: Text {
+                                id: reminderText
+                                text: reminderRow.modelData.text
+                                wrapMode: Text.Wrap
+                                verticalAlignment: Text.AlignVCenter
+                                color: Theme.text
+                                font.family: Theme.fontFamily
+                                font.pixelSize: 15
+                                font.weight: Font.Medium
+                            }
+                        }
+                        IconButton {
+                            iconName: "check"
+                            text: qsTrId("reminder.done")
+                            tint: reminderRow.ink
+                            fill: Theme.dark ? Qt.lighter(Theme.accentSoft, 1.35) : Qt.darker(Theme.accentSoft, 1.06)
+                            onClicked: reminderDone.ask(reminderRow.modelData)
+                        }
+                    }
+                }
+            }
+
             // ------------------------------------------------------------ sections
             Flickable {
                 Layout.fillWidth: true
@@ -321,6 +394,21 @@ Item {
             text: qsTrId("student.delete")
             onTriggered: deleteStudent.open()
         }
+    }
+
+    AppDialog {
+        id: reminderDone
+        property string reminderId
+        function ask(reminder) {
+            reminderId = reminder.id
+            text = reminder.text
+            open()
+        }
+        iconName: "bell"
+        title: qsTrId("reminder.done_remove")
+        rejectText: qsTrId("common.no")
+        acceptText: qsTrId("common.yes")
+        onAccepted: Data.remove("reminder", reminderId)
     }
 
     AppDialog {
