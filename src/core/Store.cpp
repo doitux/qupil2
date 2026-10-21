@@ -454,6 +454,9 @@ QList<Change> Store::changesOf(const QString &origin, qint64 afterSeq, int limit
 int Store::applyRemote(const QList<Change> &changes)
 {
     QList<Change> sorted = changes;
+    // Older builds still write renamed fields under their old name
+    for (Change &c : sorted)
+        c.fields = Schema::currentFields(c.entity, c.fields);
     std::sort(sorted.begin(), sorted.end(), [](const Change &a, const Change &b) { return b.isNewerThan(a.time, a.origin); });
 
     int applied = 0;

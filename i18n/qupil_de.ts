@@ -735,25 +735,27 @@ Bitte ändern Sie die Schüleranzahl um zu speichern!</translation>
         <source>Mother’s name</source>
         <translation>Name (Mutter)</translation>
     </message>
-    <message id="student.mother_job">
-        <source>Mother’s occupation</source>
-        <translation>Arbeit (Mutter)</translation>
-    </message>
     <message id="student.mother_phone">
         <source>Mother’s phone</source>
         <translation>Telefon (Mutter)</translation>
+    </message>
+    <message id="student.mother_note">
+        <source>Note on the mother</source>
+        <extracomment>Free note about the student&apos;s mother (e.g. when she can be reached).</extracomment>
+        <translation>Notiz (Mutter)</translation>
     </message>
     <message id="student.father_name">
         <source>Father’s name</source>
         <translation>Name (Vater)</translation>
     </message>
-    <message id="student.father_job">
-        <source>Father’s occupation</source>
-        <translation>Arbeit (Vater)</translation>
-    </message>
     <message id="student.father_phone">
         <source>Father’s phone</source>
         <translation>Telefon (Vater)</translation>
+    </message>
+    <message id="student.father_note">
+        <source>Note on the father</source>
+        <extracomment>Free note about the student&apos;s father (e.g. when he can be reached).</extracomment>
+        <translation>Notiz (Vater)</translation>
     </message>
     <message id="student.lesson_since">
         <source>Lessons since</source>

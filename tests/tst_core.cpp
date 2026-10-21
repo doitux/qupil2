@@ -1168,6 +1168,107 @@ private slots:
         QCOMPARE(store.versionVector().value(me), createdSeq + 2);
     }
 
+    void migratesParentNotes()
+    {
+        // Schema 3: the parents' occupation (mother_job, father_job) with clocks and log rows
+        const QString path = file(u"v3-parents.db"_s);
+        const QString me = u"0190a0b0-0000-7000-8000-00000000000a"_s;
+        const QString newer = u"0190a0b0-0000-7000-8000-00000000000b"_s;   // already on schema 4
+        const QString older = u"0190a0b0-0000-7000-8000-00000000000c"_s;   // still on schema 3
+        const QString id = u"0190a0b0-2222-7000-8000-000000000001"_s;
+        const qint64 t0 = HybridClock::make(1'800'000'000'000, 0);
+        const qint64 t1 = HybridClock::make(1'800'000'060'000, 0);
+        const qint64 t2 = HybridClock::make(1'800'000'120'000, 0);
+        int nMe = 0;
+        int nNewer = 0;
+        {
+            Database db;
+            QVERIFY(db.open(path));
+            QSqlQuery q(db.connection());
+            QVERIFY(q.exec(u"ALTER TABLE student RENAME COLUMN mother_note TO mother_job"_s));
+            QVERIFY(q.exec(u"ALTER TABLE student RENAME COLUMN father_note TO father_job"_s));
+            QVERIFY(db.setMeta(u"schema_version"_s, u"3"_s));
+            QVERIFY(db.setMeta(u"device_id"_s, me));
+            nMe = db.originNumber(me);
+            nNewer = db.originNumber(newer);
+            QVERIFY(q.exec(u"INSERT INTO student (id, surname, mother_job, father_job) "
+                           u"VALUES ('%1', 'Muster', 'Ärztin', 'Bäcker, Frühschicht')"_s.arg(id)));
+            const auto log = [&](int origin, qint64 seq, qint64 time, const QVariantMap &data) {
+                q.prepare(u"INSERT INTO change_log VALUES (?, ?, ?, 'student', ?, ?)"_s);
+                for (const QVariant &v : { QVariant(origin), QVariant(seq), QVariant(time), QVariant(id),
+                                           QVariant(Store::encodeFields(data)) })
+                    q.addBindValue(v);
+                QVERIFY(q.exec());
+            };
+            const auto clock = [&](const QString &field, qint64 time, int origin) {
+                q.prepare(u"INSERT INTO field_clock VALUES ('student', ?, ?, ?, ?)"_s);
+                for (const QVariant &v : { QVariant(id), QVariant(field), QVariant(time), QVariant(origin) })
+                    q.addBindValue(v);
+                QVERIFY(q.exec());
+            };
+            log(nMe, 1, t0, { { u"surname"_s, u"Muster"_s }, { u"mother_job"_s, u"Ärztin"_s },
+                              { u"father_job"_s, u"Bäcker"_s }, { u"deleted"_s, 0 } });
+            clock(u""_s, t0, nMe);   // the record (not a null string: NOT NULL)
+            log(nMe, 2, t1, { { u"father_job"_s, u"Bäcker, Frühschicht"_s } });
+            clock(u"father_job"_s, t1, nMe);
+            // Received from a device with the new build while this one was older: in the
+            // log, not applied (the field was unknown here); one newer, one older than ours
+            log(nNewer, 1, t2, { { u"mother_note"_s, u"Bitte per Mail"_s } });
+            log(nNewer, 2, t0 - 1, { { u"father_note"_s, u"zu alt"_s } });
+        }
+
+        Database db;
+        db.setMigrationBackup(file(u"v3-parents-backup.db"_s));
+        QString error;
+        QVERIFY2(db.open(path, &error), qPrintable(error));
+        QCOMPARE(db.meta(u"schema_version"_s).toInt(), Schema::Version);
+        QCOMPARE(Database::schemaVersionOf(file(u"v3-parents-backup.db"_s)), 3);
+
+        // The occupation columns are gone, their values are the notes
+        QSqlQuery q(db.connection());
+        QStringList columns;
+        QVERIFY(q.exec(u"PRAGMA table_info(student)"_s));
+        while (q.next())
+            columns << q.value(1).toString();
+        QVERIFY(!columns.contains(u"mother_job"_s) && !columns.contains(u"father_job"_s));
+        Store store(&db);
+        QVariantMap s = store.get(u"student"_s, id);
+        QCOMPARE(s.value(u"mother_note"_s).toString(), u"Bitte per Mail"_s);        // the newer device's note
+        QCOMPARE(s.value(u"father_note"_s).toString(), u"Bäcker, Frühschicht"_s);   // copied, the older note lost
+
+        // Clocks and log under the new names, the same changes (device and number)
+        QVERIFY(q.exec(u"SELECT field, time, origin FROM field_clock WHERE row_id = '%1' ORDER BY field"_s.arg(id)));
+        QList<QStringList> clocks;
+        while (q.next())
+            clocks << QStringList { q.value(0).toString(), q.value(1).toString(), q.value(2).toString() };
+        QCOMPARE(clocks, (QList<QStringList> { { QString(), QString::number(t0), QString::number(nMe) },
+                                               { u"father_note"_s, QString::number(t1), QString::number(nMe) },
+                                               { u"mother_note"_s, QString::number(t2), QString::number(nNewer) } }));
+        const QList<Change> mine = store.changesOf(me, 0);
+        QCOMPARE(mine.size(), 2);
+        QCOMPARE(mine.at(0).fields.value(u"mother_note"_s).toString(), u"Ärztin"_s);
+        QVERIFY(!mine.at(0).fields.contains(u"mother_job"_s));
+        QCOMPARE(mine.at(1).fields, (QVariantMap { { u"father_note"_s, u"Bäcker, Frühschicht"_s } }));
+        QCOMPARE(store.versionVector().value(me), 2);
+        QCOMPARE(store.versionVector().value(newer), 2);
+
+        // A device still on the old build sends the occupation: it arrives as the note
+        QCOMPARE(store.applyRemote({ { older, 1, HybridClock::make(1'800'000'180'000, 0), u"student"_s, id,
+                                       { { u"mother_job"_s, u"Nur abends"_s } } } }),
+                 1);
+        QCOMPARE(store.get(u"student"_s, id).value(u"mother_note"_s).toString(), u"Nur abends"_s);
+        QCOMPARE(store.changesOf(older, 0).first().fields, (QVariantMap { { u"mother_note"_s, u"Nur abends"_s } }));
+        QVERIFY(!store.update(u"student"_s, id, { { u"mother_job"_s, u"x"_s } }));
+        QVERIFY(store.update(u"student"_s, id, { { u"father_note"_s, u"Spricht Englisch"_s } }));
+
+        // A new device gets the same from the log
+        Database fresh;
+        QVERIFY(fresh.open(file(u"v3-parents-fresh.db"_s)));
+        Store sf(&fresh);
+        QVERIFY(sf.applyRemote(store.changesSince({})) > 0);
+        QCOMPARE(sf.get(u"student"_s, id), store.get(u"student"_s, id));
+    }
+
     void syncFormats()
     {
         const Change c { u"dev-a"_s, 42, HybridClock::make(1'800'000'000'123, 7), u"note"_s, u"n1"_s,

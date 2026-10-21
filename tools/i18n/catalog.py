@@ -67,6 +67,10 @@ DROPPED = {
     "Could not load Metronoms Sounds": "Metronom erzeugt Klicks in Qupil 2 selbst",
     "Error loading sound files: All sound files must have the same sample format.": "Metronom erzeugt Klicks in Qupil 2 selbst",
     "This version of Qupil uses a new format to store data. Qupil will now try to convert the old data into the new format. \nThis process may take several minutes.": "Konvertierung von Daten vor 1.0 entfällt (siehe migration.pre10)",
+    "Job (Mother)": "Beruf der Eltern entfällt (Qupil 2: Notiz zu Mutter/Vater)",
+    "Job (Mother):": "Beruf der Eltern entfällt (Qupil 2: Notiz zu Mutter/Vater)",
+    "Job (Father)": "Beruf der Eltern entfällt (Qupil 2: Notiz zu Mutter/Vater)",
+    "Job (Father):": "Beruf der Eltern entfällt (Qupil 2: Notiz zu Mutter/Vater)",
     "Convert old data - Qupil": "Konvertierung vor 1.0 entfällt",
     "Convert old data ...": "Konvertierung vor 1.0 entfällt",
     "Conversion of the old data into the new format successfully completed!": "Konvertierung vor 1.0 entfällt",
@@ -380,16 +384,16 @@ E("student.label.age", old="Age:", en="Age:", fr="Âge :", es="Edad:")
 E("student.label.parents", old="Parents:", en="Parents:", fr="Parents :", es="Padres:")
 E("student.mother_name", old="Name (Mother)", en="Mother’s name", fr="Nom de la mère",
   es="Nombre de la madre", merged=["Name (Mother):"])
-E("student.mother_job", old="Job (Mother)", en="Mother’s occupation", fr="Profession de la mère",
-  es="Profesión de la madre", merged=["Job (Mother):"])
 E("student.mother_phone", old="Phone (Mother)", en="Mother’s phone", fr="Téléphone de la mère",
   es="Teléfono de la madre", merged=["Phone (Mother):"])
+E("student.mother_note", en="Note on the mother", de="Notiz (Mutter)", fr="Remarque sur la mère",
+  es="Nota sobre la madre", c="Free note about the student's mother (e.g. when she can be reached).")
 E("student.father_name", old="Name (Father)", en="Father’s name", fr="Nom du père",
   es="Nombre del padre", merged=["Name (Father):"])
-E("student.father_job", old="Job (Father)", en="Father’s occupation", fr="Profession du père",
-  es="Profesión del padre", merged=["Job (Father):"])
 E("student.father_phone", old="Phone (Father)", en="Father’s phone", fr="Téléphone du père",
   es="Teléfono del padre", merged=["Phone (Father):"])
+E("student.father_note", en="Note on the father", de="Notiz (Vater)", fr="Remarque sur le père",
+  es="Nota sobre el padre", c="Free note about the student's father (e.g. when he can be reached).")
 E("student.lesson_since", old="Lesson since", en="Lessons since", fr="Cours depuis", es="Clases desde", merged=["Lesson since:"])
 E("student.label.total", old="Total:", en="Total:", fr="Total :", es="Total:",
   c="Followed by the total number of years of lessons.")

@@ -50,6 +50,16 @@ are still read (and compacted the same way). Devices with the old version can no
 longer sync with updated ones: Wi-Fi shows "different Qupil version", Nextcloud
 "newer version on another device".
 
+Schema 4 replaced the parents' occupation (`mother_job`, `father_job`) with a
+note about the parent (`mother_note`, `father_note`), starting with what the
+occupation held (`Schema::renamedFields()`). When an older database is opened,
+value, clock and the log rows that carry it move to the new name in place and
+the old column is removed: no new change, every device does the same with its
+own copies. Changes from devices still on an older build arrive under the old
+name and are applied as the note (`Schema::currentFields()`). An older build
+ignores the note (it keeps it in its log for relaying); once updated, it applies
+the notes it received meanwhile where they are the newest.
+
 Archive entries (`student_archive`, `event_archive`) keep their `content`
 compressed (`qz1:` + base64 of zlib, see `TextPack`). Entries taken over from
 Qupil 1.x are converted to a compact layout in the background (`ArchiveFormat`).

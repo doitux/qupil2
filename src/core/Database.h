@@ -85,6 +85,7 @@ private:
     bool createSchema(QString *error);
     bool migrate(int from, QString *error);
     bool migrateSyncTables(QString *error);
+    bool migrateRenamedFields(int from, QString *error);
     bool exec(const QString &sql, QString *error = nullptr);
 
     QString m_connectionName;

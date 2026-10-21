@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 #include "Database.h"
 
+#include <algorithm>
+
 #include <QDir>
 #include <QFileInfo>
 #include <QJsonArray>
@@ -173,14 +175,18 @@ bool Database::migrate(int from, QString *error)
         rollback();
         return false;
     }
+    if (from < 4 && !migrateRenamedFields(from, error)) {
+        rollback();
+        return false;
+    }
     if (!setMeta(u"schema_version"_s, QString::number(Schema::Version)) || !commit()) {
         if (error)
             *error = connection().lastError().text();
         rollback();
         return false;
     }
-    if (from < 3)
-        exec(u"VACUUM"_s);   // gives the space back
+    // Gives the space back (and leaves nothing of removed columns in the file)
+    exec(u"VACUUM"_s);
     return true;
 }
 
@@ -279,6 +285,176 @@ bool Database::migrateSyncTables(QString *error)
     read.finish();
     return exec(u"DROP TABLE change_log_v2"_s, error) && exec(u"DROP TABLE field_clock_v2"_s, error)
            && compactChangeLog(error);
+}
+
+/*!
+    Schema 4: renamed fields (Schema::renamedFields(), e.g. the parent's occupation
+    became a note about the parent). Value, clock and the log rows that carry the
+    value move to the new name in place, without a new change: like the
+    conversion of the archives, every device does the same with its own copies,
+    so devices that were in step stay in step. The old column is removed.
+
+    A device that was still on an older build may have received values a newer
+    one wrote under the new name: they are in its log but were not applied (the
+    field was unknown). They are applied now where they are the newest.
+*/
+bool Database::migrateRenamedFields(int from, QString *error)
+{
+    const auto failed = [error](const QSqlQuery &query) {
+        if (error)
+            *error = query.lastError().text();
+        return false;
+    };
+    QList<Schema::RenamedField> renamed;
+    for (const Schema::RenamedField &r : Schema::renamedFields()) {
+        if (r.version > from)
+            renamed << r;
+    }
+    struct Pending
+    {
+        QString entity, rowId, field;
+        QVariant value;
+        qint64 time = 0;
+        int origin = 0;
+    };
+    QList<Pending> pending;
+    QStringList entities;
+    for (const Schema::RenamedField &r : std::as_const(renamed)) {
+        if (!entities.contains(r.entity))
+            entities << r.entity;
+    }
+
+    for (const QString &entity : std::as_const(entities)) {
+        const EntityDef *def = Schema::entity(entity);
+        QStringList columns;
+        QSqlQuery info(connection());
+        if (!info.exec(u"PRAGMA table_info(%1)"_s.arg(entity)))
+            return failed(info);
+        while (info.next())
+            columns << info.value(1).toString();
+
+        QSqlQuery q(connection());
+        QStringList like;
+        for (const Schema::RenamedField &r : std::as_const(renamed)) {
+            if (r.entity != entity)
+                continue;
+            // The value under the new name
+            if (!columns.contains(r.to)) {
+                const auto f = std::find_if(def->fields.cbegin(), def->fields.cend(),
+                                            [&r](const FieldDef &fd) { return fd.name == r.to; });
+                const QString type = f != def->fields.cend() ? f->type : u"TEXT"_s;
+                const QString fallback = f != def->fields.cend() ? f->defaultValue : u"''"_s;
+                if (!exec(u"ALTER TABLE %1 ADD COLUMN %2 %3 NOT NULL DEFAULT %4"_s.arg(entity, r.to, type, fallback), error))
+                    return false;
+            }
+            if (columns.contains(r.from) && !exec(u"UPDATE %1 SET %2 = %3"_s.arg(entity, r.to, r.from), error))
+                return false;
+            // Its clock (a clock under the new name cannot exist yet; if it does, it stays)
+            q.prepare(u"UPDATE OR IGNORE field_clock SET field = ? WHERE entity = ? AND field = ?"_s);
+            q.addBindValue(r.to);
+            q.addBindValue(entity);
+            q.addBindValue(r.from);
+            if (!q.exec())
+                return failed(q);
+            q.prepare(u"DELETE FROM field_clock WHERE entity = ? AND field = ?"_s);
+            q.addBindValue(entity);
+            q.addBindValue(r.from);
+            if (!q.exec())
+                return failed(q);
+            like << u"data LIKE '%\"%1\"%'"_s.arg(r.from) << u"data LIKE '%\"%1\"%'"_s.arg(r.to);
+        }
+
+        // The log rows that carry one of the names
+        QSqlQuery read(connection());
+        read.prepare(u"SELECT origin, seq, time, row_id, data FROM change_log WHERE entity = ? AND (%1)"_s
+                         .arg(like.join(u" OR "_s)));
+        read.addBindValue(entity);
+        if (!read.exec())
+            return failed(read);
+        struct Row
+        {
+            int origin;
+            qint64 seq;
+            QString data;
+        };
+        QList<Row> rewritten;
+        while (read.next()) {
+            QJsonObject data = QJsonDocument::fromJson(read.value(4).toString().toUtf8()).object();
+            bool changed = false;
+            for (const Schema::RenamedField &r : std::as_const(renamed)) {
+                if (r.entity != entity)
+                    continue;
+                if (data.contains(r.from)) {
+                    if (!data.contains(r.to))
+                        data.insert(r.to, data.value(r.from));
+                    data.remove(r.from);
+                    changed = true;
+                } else if (data.contains(r.to)) {
+                    // Written by a newer build while this device was older
+                    pending.append({ entity, read.value(3).toString(), r.to, data.value(r.to).toVariant(),
+                                     read.value(2).toLongLong(), read.value(0).toInt() });
+                }
+            }
+            if (changed)
+                rewritten.append({ read.value(0).toInt(), read.value(1).toLongLong(), compactJson(data) });
+        }
+        read.finish();
+        q.prepare(u"UPDATE change_log SET data = ? WHERE origin = ? AND seq = ?"_s);
+        for (const Row &row : std::as_const(rewritten)) {
+            q.addBindValue(row.data);
+            q.addBindValue(row.origin);
+            q.addBindValue(row.seq);
+            if (!q.exec())
+                return failed(q);
+        }
+
+        // The old column goes (SQLite 3.35+); where it cannot, it is at least emptied
+        for (const Schema::RenamedField &r : std::as_const(renamed)) {
+            if (r.entity != entity || !columns.contains(r.from))
+                continue;
+            if (!exec(u"ALTER TABLE %1 DROP COLUMN %2"_s.arg(entity, r.from))
+                && !exec(u"UPDATE %1 SET %2 = ''"_s.arg(entity, r.from), error))
+                return false;
+        }
+    }
+
+    // Values a newer build wrote under the new name: applied where they are the newest
+    std::sort(pending.begin(), pending.end(), [](const Pending &a, const Pending &b) { return a.time < b.time; });
+    QSqlQuery clock(connection());
+    QSqlQuery write(connection());
+    for (const Pending &p : std::as_const(pending)) {
+        clock.prepare(u"SELECT field, time, origin FROM field_clock WHERE entity = ? AND row_id = ? AND field IN ('', ?) "
+                      u"ORDER BY field DESC LIMIT 1"_s);
+        clock.addBindValue(p.entity);
+        clock.addBindValue(p.rowId);
+        clock.addBindValue(p.field);
+        if (!clock.exec())
+            return failed(clock);
+        if (clock.next()) {
+            const qint64 time = clock.value(1).toLongLong();
+            const int origin = clock.value(2).toInt();
+            const bool newer = p.time != time ? p.time > time : (p.origin != origin && originId(p.origin) > originId(origin));
+            if (!newer)
+                continue;
+        }
+        write.prepare(u"UPDATE %1 SET %2 = ? WHERE id = ?"_s.arg(p.entity, p.field));
+        write.addBindValue(p.value);
+        write.addBindValue(p.rowId);
+        if (!write.exec())
+            return failed(write);
+        if (write.numRowsAffected() == 0)
+            continue;   // no such record
+        write.prepare(u"INSERT INTO field_clock (entity, row_id, field, time, origin) VALUES (?, ?, ?, ?, ?) "
+                      u"ON CONFLICT(entity, row_id, field) DO UPDATE SET time = excluded.time, origin = excluded.origin"_s);
+        write.addBindValue(p.entity);
+        write.addBindValue(p.rowId);
+        write.addBindValue(p.field);
+        write.addBindValue(p.time);
+        write.addBindValue(p.origin);
+        if (!write.exec())
+            return failed(write);
+    }
+    return true;
 }
 
 bool Database::compactChangeLog(QString *error)

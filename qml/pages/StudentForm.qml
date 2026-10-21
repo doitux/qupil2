@@ -33,7 +33,7 @@ ColumnLayout {
     }
     function save() {
         const keys = ["forename", "surname", "birthday", "address", "email", "phone", "mobile", "notes",
-                      "mother_name", "mother_job", "mother_phone", "father_name", "father_job", "father_phone",
+                      "mother_name", "mother_phone", "mother_note", "father_name", "father_phone", "father_note",
                       "first_lesson", "instrument", "instrument_size", "next_size", "rental", "rental_desc",
                       "rental_since", "recital_interval", "ensemble_expected"]
         const fields = {}
@@ -200,15 +200,15 @@ ColumnLayout {
                 onEdited: (value) => form.set("mother_name", value)
             }
             InputField {
-                label: qsTrId("student.mother_job")
-                text: form.draft.mother_job || ""
-                onEdited: (value) => form.set("mother_job", value)
-            }
-            InputField {
                 label: qsTrId("student.mother_phone")
                 inputMethodHints: Qt.ImhDialableCharactersOnly
                 text: form.draft.mother_phone || ""
                 onEdited: (value) => form.set("mother_phone", value)
+            }
+            InputField {
+                label: qsTrId("student.mother_note")
+                text: form.draft.mother_note || ""
+                onEdited: (value) => form.set("mother_note", value)
             }
             InputField {
                 label: qsTrId("student.father_name")
@@ -216,15 +216,15 @@ ColumnLayout {
                 onEdited: (value) => form.set("father_name", value)
             }
             InputField {
-                label: qsTrId("student.father_job")
-                text: form.draft.father_job || ""
-                onEdited: (value) => form.set("father_job", value)
-            }
-            InputField {
                 label: qsTrId("student.father_phone")
                 inputMethodHints: Qt.ImhDialableCharactersOnly
                 text: form.draft.father_phone || ""
                 onEdited: (value) => form.set("father_phone", value)
+            }
+            InputField {
+                label: qsTrId("student.father_note")
+                text: form.draft.father_note || ""
+                onEdited: (value) => form.set("father_note", value)
             }
         }
     }

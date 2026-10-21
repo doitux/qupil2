@@ -646,12 +646,12 @@ QString DocumentService::studentArchiveHtml(const QString &studentId) const
     field(qtTrId("common.phone"), s.value(u"phone"_s).toString());
     field(qtTrId("common.mobile"), s.value(u"mobile"_s).toString());
     field(qtTrId("common.birthday"), m_data->formatDate(s.value(u"birthday"_s).toString()));
-    field(qtTrId("student.father_name"), s.value(u"father_name"_s).toString());
-    field(qtTrId("student.father_job"), s.value(u"father_job"_s).toString());
-    field(qtTrId("student.father_phone"), s.value(u"father_phone"_s).toString());
     field(qtTrId("student.mother_name"), s.value(u"mother_name"_s).toString());
-    field(qtTrId("student.mother_job"), s.value(u"mother_job"_s).toString());
     field(qtTrId("student.mother_phone"), s.value(u"mother_phone"_s).toString());
+    field(qtTrId("student.mother_note"), s.value(u"mother_note"_s).toString());
+    field(qtTrId("student.father_name"), s.value(u"father_name"_s).toString());
+    field(qtTrId("student.father_phone"), s.value(u"father_phone"_s).toString());
+    field(qtTrId("student.father_note"), s.value(u"father_note"_s).toString());
     const QDate first = QDate::fromString(s.value(u"first_lesson"_s).toString(), Qt::ISODate);
     if (first.isValid()) {
         const int years = std::max(0, m_data->ageOn(first.toString(Qt::ISODate)));

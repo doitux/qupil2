@@ -44,8 +44,9 @@ QList<EntityDef> buildEntities()
     list << EntityDef{ QStringLiteral("student"), {
         text("surname"), text("forename"), text("address"), text("email"), text("phone"), text("mobile"),
         text("birthday"), text("notes"),
-        text("father_name"), text("father_job"), text("father_phone"),
-        text("mother_name"), text("mother_job"), text("mother_phone"),
+        // Parents: name, phone and a free note (until schema 3 the occupation, see renamedFields())
+        text("father_name"), text("father_phone"), text("father_note"),
+        text("mother_name"), text("mother_phone"), text("mother_note"),
         text("first_lesson"), text("instrument"), text("instrument_size"), integer("next_size"),
         integer("rental"), text("rental_desc"), text("rental_since"),
         integer("recital_interval", 5), integer("ensemble_expected", 1),
@@ -141,6 +142,30 @@ const EntityDef *entity(const QString &name)
         if (e.name == name)
             return &e;
     return nullptr;
+}
+
+const QList<RenamedField> &renamedFields()
+{
+    // The occupation of the parents sounded too much like collecting data: a note
+    // about the parent instead, starting with what the occupation field held
+    static const QList<RenamedField> list = {
+        { QStringLiteral("student"), QStringLiteral("mother_job"), QStringLiteral("mother_note"), 4 },
+        { QStringLiteral("student"), QStringLiteral("father_job"), QStringLiteral("father_note"), 4 },
+    };
+    return list;
+}
+
+QVariantMap currentFields(const QString &entity, const QVariantMap &fields)
+{
+    QVariantMap out = fields;
+    for (const RenamedField &r : renamedFields()) {
+        if (r.entity != entity || !out.contains(r.from))
+            continue;
+        const QVariant value = out.take(r.from);
+        if (!out.contains(r.to))
+            out.insert(r.to, value);
+    }
+    return out;
 }
 
 QStringList createStatements()

@@ -734,25 +734,27 @@
         <source>Mother’s name</source>
         <translation>Nom de la mère</translation>
     </message>
-    <message id="student.mother_job">
-        <source>Mother’s occupation</source>
-        <translation>Profession de la mère</translation>
-    </message>
     <message id="student.mother_phone">
         <source>Mother’s phone</source>
         <translation>Téléphone de la mère</translation>
+    </message>
+    <message id="student.mother_note">
+        <source>Note on the mother</source>
+        <extracomment>Free note about the student&apos;s mother (e.g. when she can be reached).</extracomment>
+        <translation>Remarque sur la mère</translation>
     </message>
     <message id="student.father_name">
         <source>Father’s name</source>
         <translation>Nom du père</translation>
     </message>
-    <message id="student.father_job">
-        <source>Father’s occupation</source>
-        <translation>Profession du père</translation>
-    </message>
     <message id="student.father_phone">
         <source>Father’s phone</source>
         <translation>Téléphone du père</translation>
+    </message>
+    <message id="student.father_note">
+        <source>Note on the father</source>
+        <extracomment>Free note about the student&apos;s father (e.g. when he can be reached).</extracomment>
+        <translation>Remarque sur le père</translation>
     </message>
     <message id="student.lesson_since">
         <source>Lessons since</source>
