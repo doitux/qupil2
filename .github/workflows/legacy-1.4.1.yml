@@ -1,0 +1,280 @@
+# Builds the unchanged Qupil 1.4.1 (github.com/doitux/qupil, tag v1.4.1)
+# for current Linux, Windows and macOS. The packages are kept as artifacts
+# of the run only; nothing is published.
+name: Qupil 1.4.1 (legacy)
+
+on:
+  push:
+    branches: [legacy-1.4.1]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  QUPIL_REF: v1.4.1
+  VERSION: '1.4.1'
+  # SDL_mixer 1.2 maintenance branch (has current config.sub for arm64)
+  SDL_MIXER_COMMIT: d0ced428604ee4e645e5a8813b3022cd20519d72
+
+jobs:
+  linux:
+    name: Linux (AppImage)
+    runs-on: ubuntu-22.04
+    env:
+      APPIMAGE_EXTRACT_AND_RUN: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: doitux/qupil
+          ref: ${{ env.QUPIL_REF }}
+          path: qupil
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq qtbase5-dev qttools5-dev libqt5svg5-dev \
+            libqt5sql5-sqlite libsdl1.2-dev libsdl-mixer1.2-dev libboost-dev \
+            libfuse2 xvfb file
+
+      - name: Sound check (SDL_mixer loads the Ogg/WAV files)
+        run: |
+          cc ci/soundtest.c -o soundtest $(sdl-config --cflags --libs) -lSDL_mixer
+          SDL_AUDIODRIVER=dummy ./soundtest qupil/data/sounds/*
+
+      - name: Build
+        working-directory: qupil
+        run: |
+          qmake qupil.pro CONFIG+=release
+          make -j"$(nproc)"
+
+      - name: Package AppImage
+        run: |
+          # 1.4.1 looks for its data in <bin>/../share/pokerth/data (old path logic)
+          mkdir -p AppDir/usr/share/pokerth
+          cp -r qupil/data AppDir/usr/share/pokerth/data
+          rm -f AppDir/usr/share/pokerth/data/.directory AppDir/usr/share/pokerth/data/sounds/.directory
+          base=https://github.com/linuxdeploy
+          curl -fsSLO $base/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          curl -fsSLO $base/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
+          chmod +x linuxdeploy*.AppImage
+          export QMAKE=$(command -v qmake) LINUXDEPLOY_OUTPUT_VERSION=$VERSION
+          ./linuxdeploy-x86_64.AppImage --appdir AppDir \
+            -e qupil/qupil -d qupil/qupil.desktop -i qupil/qupil.png \
+            --plugin qt --output appimage
+          mkdir out
+          mv Qupil-*.AppImage out/Qupil-$VERSION-linux-x86_64.AppImage
+          ls -la out
+          find AppDir/usr/plugins -name '*.so' | sort
+
+      - name: Smoke test (starts, creates its database)
+        run: |
+          export HOME=$RUNNER_TEMP/home SDL_AUDIODRIVER=dummy
+          mkdir -p "$HOME"
+          set +e
+          timeout 15 xvfb-run -a out/Qupil-$VERSION-linux-x86_64.AppImage
+          rc=$?
+          set -e
+          echo "exit code $rc (124 = still running after 15 s)"
+          test $rc -eq 124
+          ls -la "$HOME/.qupil" "$HOME/.qupil/db"
+          test -n "$(ls "$HOME/.qupil/db")"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: qupil-1.4.1-linux-x86_64
+          path: out/*
+
+  windows:
+    name: Windows (portable ZIP)
+    runs-on: windows-2022
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: doitux/qupil
+          ref: ${{ env.QUPIL_REF }}
+          path: qupil
+
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >-
+            git zip autoconf automake libtool make
+            mingw-w64-x86_64-gcc mingw-w64-x86_64-make mingw-w64-x86_64-pkgconf
+            mingw-w64-x86_64-qt5-base mingw-w64-x86_64-qt5-svg mingw-w64-x86_64-qt5-tools
+            mingw-w64-x86_64-boost mingw-w64-x86_64-libvorbis mingw-w64-x86_64-libogg
+
+      - name: Install SDL 1.2 and SDL_mixer 1.2
+        run: |
+          pacman -S --noconfirm --needed mingw-w64-x86_64-SDL \
+            || pacman -S --noconfirm --needed mingw-w64-x86_64-sdl12-compat
+          if pacman -S --noconfirm --needed mingw-w64-x86_64-SDL_mixer; then
+            echo "MIXER=/mingw64" >> "$GITHUB_ENV"
+          else
+            bash ci/build-sdl-mixer.sh "$HOME/sdlmixer" "$(command -v sdl-config)"
+            echo "MIXER=$HOME/sdlmixer" >> "$GITHUB_ENV"
+          fi
+          sdl-config --version --cflags --libs
+          pacman -Q | grep -iE 'sdl|qt5-base'
+
+      - name: Sound check (SDL_mixer loads the Ogg/WAV files)
+        run: |
+          gcc ci/soundtest.c -o soundtest.exe -DSDL_main=main $(sdl-config --cflags) \
+            -I"$MIXER/include/SDL" -L"$MIXER/lib" -lSDL_mixer \
+            $(sdl-config --libs | sed -e 's/-lSDLmain//' -e 's/-mwindows//')
+          export PATH="$MIXER/bin:$PATH"
+          SDL_AUDIODRIVER=dummy ./soundtest.exe qupil/data/sounds/*
+
+      - name: Build
+        working-directory: qupil
+        run: |
+          QMAKE=$(command -v qmake-qt5 || command -v qmake)
+          "$QMAKE" -v
+          "$QMAKE" qupil.pro CONFIG+=release \
+            "INCLUDEPATH+=$(cygpath -m /mingw64/include) $(cygpath -m /mingw64/include/SDL) $(cygpath -m "$MIXER/include/SDL")" \
+            "LIBS+=-L$(cygpath -m "$MIXER/lib")" \
+            "DEFINES+=SDL_main=main" \
+            -after "LIBS-=-lidn -lSDLmain" "DEFINES-=_WIN32_WINNT=0x0501"
+          mingw32-make -j4
+
+      - name: Package
+        run: |
+          D=dist/Qupil-$VERSION
+          mkdir -p "$D"
+          cp qupil/release/qupil.exe "$D/"
+          cp -r qupil/data "$D/data"
+          rm -f "$D/data/.directory" "$D/data/sounds/.directory"
+          DEPLOY=$(command -v windeployqt-qt5 || command -v windeployqt)
+          "$DEPLOY" --release --no-translations --no-compiler-runtime --no-opengl-sw "$D/qupil.exe"
+          # MSYS2 runtime DLLs (Qt's dependencies, SDL, Ogg Vorbis, GCC runtime)
+          for pass in 1 2 3 4 5; do
+            find "$D" -iname '*.exe' -o -iname '*.dll' | while read -r f; do
+              ldd "$f" | awk '/\/mingw64\/|\/sdlmixer\//{print $3}'
+            done | sort -u | while read -r dll; do cp -n "$dll" "$D/"; done
+          done
+          # sdl12-compat loads SDL2 at runtime
+          if [ -f /mingw64/bin/SDL2.dll ]; then cp -n /mingw64/bin/SDL2.dll "$D/"; fi
+          ls -la "$D" "$D"/*/
+          mkdir out
+          (cd dist && zip -qr ../out/Qupil-$VERSION-windows-x64.zip Qupil-$VERSION)
+
+      - name: Smoke test (starts, creates its database)
+        run: |
+          appdata=$(cygpath -u "$APPDATA")
+          rm -rf "$appdata/qupil"
+          cd dist/Qupil-$VERSION
+          # only the bundled DLLs, nothing from MSYS2
+          export PATH=/usr/bin:/c/Windows/system32:/c/Windows SDL_AUDIODRIVER=dummy
+          ./qupil.exe &
+          pid=$!
+          sleep 15
+          kill -0 $pid
+          kill $pid || true
+          ls -la "$appdata/qupil" "$appdata/qupil/db"
+          test -n "$(ls "$appdata/qupil/db")"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: qupil-1.4.1-windows-x64
+          path: out/*
+
+  macos:
+    name: macOS ${{ matrix.arch }} (dmg)
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-15
+            arch: arm64
+          - os: macos-15-intel
+            arch: x86_64
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: doitux/qupil
+          ref: ${{ env.QUPIL_REF }}
+          path: qupil
+
+      - name: Install dependencies
+        run: |
+          brew install qt@5 sdl12-compat sdl2 libvorbis libogg boost pkg-config
+          echo "BREW=$(brew --prefix)" >> "$GITHUB_ENV"
+          echo "QT5=$(brew --prefix qt@5)" >> "$GITHUB_ENV"
+          echo "SDLCONFIG=$(brew --prefix sdl12-compat)/bin/sdl-config" >> "$GITHUB_ENV"
+          echo "MIXER=$RUNNER_TEMP/sdlmixer" >> "$GITHUB_ENV"
+
+      - name: Build SDL_mixer 1.2
+        run: |
+          bash ci/build-sdl-mixer.sh "$MIXER" "$SDLCONFIG" \
+            CPPFLAGS="-I$BREW/include" LDFLAGS="-L$BREW/lib"
+
+      - name: Sound check (SDL_mixer loads the Ogg/WAV files)
+        run: |
+          cc ci/soundtest.c -o soundtest -DSDL_main=main $("$SDLCONFIG" --cflags) \
+            -I"$MIXER/include/SDL" -L"$MIXER/lib" -lSDL_mixer \
+            -L"$("$SDLCONFIG" --prefix)/lib" -lSDL
+          SDL_AUDIODRIVER=dummy ./soundtest qupil/data/sounds/*
+
+      - name: Build
+        working-directory: qupil
+        run: |
+          "$QT5/bin/qmake" qupil.pro CONFIG+=release \
+            "INCLUDEPATH+=$BREW/include $BREW/include/SDL $MIXER/include/SDL" \
+            "DEFINES+=SDL_main=main" \
+            -after "CONFIG-=x86_64" "QMAKE_MACOSX_DEPLOYMENT_TARGET=11.0" \
+            "LIBS-=-framework QtCore QtGui QtSql SDL SDL_mixer Carbon" \
+            "LIBS+=-framework Carbon -L$("$SDLCONFIG" --prefix)/lib -L$MIXER/lib -lSDL -lSDL_mixer" \
+            "QMAKE_LFLAGS-=-F/Library/Frameworks" "ICON=qupil.icns"
+          make -j4
+          lipo -info qupil.app/Contents/MacOS/qupil
+
+      - name: Package dmg
+        run: |
+          app=qupil/qupil.app
+          cp -R qupil/data "$app/Contents/Resources/data"
+          rm -f "$app/Contents/Resources/data/.directory" "$app/Contents/Resources/data/sounds/.directory"
+          "$QT5/bin/macdeployqt" "$app" -verbose=1
+          # sdl12-compat loads SDL2 at runtime from next to itself
+          cp "$(brew --prefix sdl2)/lib/libSDL2-2.0.0.dylib" "$app/Contents/Frameworks/"
+          chmod u+w "$app/Contents/Frameworks/libSDL2-2.0.0.dylib"
+          install_name_tool -id @executable_path/../Frameworks/libSDL2-2.0.0.dylib \
+            "$app/Contents/Frameworks/libSDL2-2.0.0.dylib"
+          codesign --force --deep --sign - "$app"
+          # nothing may point to Homebrew any more
+          if otool -L "$app/Contents/MacOS/qupil" "$app"/Contents/Frameworks/*.dylib \
+               | grep -E "^\s+$BREW/|/sdlmixer/"; then
+            echo "unbundled library"; exit 1
+          fi
+          ls "$app/Contents/Frameworks" "$app/Contents/PlugIns"/*
+          otool -l "$app/Contents/Frameworks/QtCore.framework/QtCore" | grep -A3 LC_BUILD_VERSION | grep minos || true
+          mkdir -p dmgroot out
+          cp -R "$app" dmgroot/Qupil.app
+          ln -s /Applications dmgroot/Applications
+          hdiutil create -volname "Qupil $VERSION" -srcfolder dmgroot -ov -format UDZO \
+            out/Qupil-$VERSION-macos-${{ matrix.arch }}.dmg
+
+      - name: Smoke test (starts, creates its database)
+        run: |
+          export HOME=$RUNNER_TEMP/home SDL_AUDIODRIVER=dummy
+          mkdir -p "$HOME"
+          # run the copy from the dmg folder, without Homebrew on the search path
+          env -u DYLD_LIBRARY_PATH dmgroot/Qupil.app/Contents/MacOS/qupil &
+          pid=$!
+          sleep 15
+          kill -0 $pid
+          kill $pid || true
+          ls -la "$HOME/.qupil" "$HOME/.qupil/db"
+          test -n "$(ls "$HOME/.qupil/db")"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: qupil-1.4.1-macos-${{ matrix.arch }}
+          path: out/*
