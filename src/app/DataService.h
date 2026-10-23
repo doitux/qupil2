@@ -101,6 +101,9 @@ public:
     Q_INVOKABLE QVariantMap event(const QString &id) const;
     //! Pieces "ready to perform" not yet in this event, one entry per group piece
     Q_INVOKABLE QVariantList readyPieces(const QString &eventId) const;
+    //! The students who play a piece (its copies in their lessons, current lessons
+    //! first): piece_id, membership_id, student_id, name
+    Q_INVOKABLE QVariantList pieceCopies(const QString &groupKey) const;
     Q_INVOKABLE QString saveEvent(const QString &id, const QVariantMap &fields);
     Q_INVOKABLE bool deleteEvent(const QString &id);
     Q_INVOKABLE bool addToProgramme(const QString &eventId, const QStringList &pieceIds);

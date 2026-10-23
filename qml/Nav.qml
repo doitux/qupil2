@@ -43,6 +43,8 @@ QtObject {
     signal showPage(int index)
     //! Students tab with this student open
     signal showStudent(string studentId, string membershipId)
+    //! Students tab with this student's pieces, this piece in view and marked for a moment
+    signal showPiece(string studentId, string membershipId, string pieceId)
     //! Events tab with this event open
     signal showEvent(string eventId)
     //! More tab with the sync page open

@@ -15,15 +15,19 @@ Item {
     readonly property bool wide: width >= 900
     property string studentId
     property string membershipId
+    //! Piece to show on the student's page (Nav.showPiece)
+    property string focusPiece
     property string filter
 
     readonly property var students: { if (Data.revision < 0) return undefined; return Data.students(filter) }
 
-    function show(id, membership) {
+    function show(id, membership, piece) {
         studentId = id
         membershipId = membership
+        focusPiece = ""   // so the same piece can be shown again
+        focusPiece = piece || ""
         if (!wide && loader.item)
-            loader.item.openStudent(id, membership)
+            loader.item.openStudent(id, membership, focusPiece)
     }
 
     //! System back button: closes the student (phone: the page on top)
@@ -39,7 +43,8 @@ Item {
 
     Connections {
         target: Nav
-        function onShowStudent(id, membership) { page.show(id, membership) }
+        function onShowStudent(id, membership) { page.show(id, membership, "") }
+        function onShowPiece(id, membership, piece) { page.show(id, membership, piece) }
     }
 
     Loader {
@@ -52,17 +57,18 @@ Item {
         id: compactUi
         StackView {
             id: stack
-            function openStudent(id, membership) {
+            function openStudent(id, membership, piece) {
                 stack.pop(null)
-                stack.push(studentComponent, { studentId: id, membershipId: membership, backText: qsTrId("nav.students") })
+                stack.push(studentComponent, { studentId: id, membershipId: membership, focusPiece: piece || "",
+                                               backText: qsTrId("nav.students") })
             }
             initialItem: StudentList {
                 students: page.students
                 filter: page.filter
                 onFilterEdited: (value) => page.filter = value
-                onPicked: (id) => stack.openStudent(id, "")
+                onPicked: (id) => stack.openStudent(id, "", "")
             }
-            Component.onCompleted: if (page.studentId) openStudent(page.studentId, page.membershipId)
+            Component.onCompleted: if (page.studentId) openStudent(page.studentId, page.membershipId, page.focusPiece)
             Component {
                 id: studentComponent
                 StudentDetail {
@@ -107,6 +113,7 @@ Item {
                     showBack: false
                     studentId: page.studentId
                     membershipId: page.membershipId
+                    focusPiece: page.focusPiece
                     onBack: page.studentId = ""
                 }
             }

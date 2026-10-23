@@ -69,6 +69,48 @@ Item {
         pieceFilter = -1
     }
 
+    // ---------------------------------------------------------------- one piece in view
+    //! Piece to show (e.g. tapped in the pieces ready to perform): the pieces open with
+    //! it in view and marked for a few seconds. Set it again to show it again.
+    property string focusPiece
+    //! The piece marked right now ("" for none)
+    property string markedPiece
+    onFocusPieceChanged: if (focusPiece !== "") Qt.callLater(showFocusPiece)
+    Component.onCompleted: if (focusPiece !== "") Qt.callLater(showFocusPiece)
+    function showFocusPiece() {
+        if (focusPiece === "")
+            return
+        tab = 1
+        pieceFilter = -1
+        markedPiece = focusPiece
+        unmark.restart()
+    }
+    //! Scrolls the page so the marked piece's card is in view (after the layout settled)
+    function scrollToPiece(card) {
+        scrollTarget = card
+        scrollLater.restart()
+    }
+    property Item scrollTarget
+    Timer {
+        id: scrollLater
+        interval: 60
+        onTriggered: {
+            if (!detail.scrollTarget)
+                return
+            const y = detail.scrollTarget.mapToItem(flick.contentItem, 0, 0).y
+            const room = flick.height - detail.scrollTarget.height
+            // Some room above it, or centred when it fits
+            const target = y - Math.max(24, room / 3)
+            flick.contentY = Math.max(0, Math.min(target, flick.contentHeight - flick.height))
+            detail.scrollTarget = null
+        }
+    }
+    Timer {
+        id: unmark
+        interval: 4000
+        onTriggered: detail.markedPiece = ""
+    }
+
     Flickable {
         id: flick
         anchors.fill: parent
@@ -748,6 +790,10 @@ Item {
                 delegate: Control {
                     id: pieceCard
                     required property var modelData
+                    //! Shown on purpose (Nav.showPiece): scrolled to and marked for a moment
+                    readonly property bool marked: detail.markedPiece !== "" && detail.markedPiece === modelData.id
+                    onMarkedChanged: if (marked) detail.scrollToPiece(pieceCard)
+                    Component.onCompleted: if (marked) detail.scrollToPiece(pieceCard)
                     function edit() { Nav.editPiece(detail.currentMembership, modelData.id) }
                     Layout.fillWidth: true
                     implicitHeight: implicitContentHeight + topPadding + bottomPadding
@@ -776,9 +822,10 @@ Item {
                     }
                     background: Rectangle {
                         radius: Theme.radius
-                        color: Theme.surface
-                        border.width: pieceCard.visualFocus ? 2 : 0
-                        border.color: Theme.accentText
+                        color: pieceCard.marked ? Theme.accentSoft : Theme.surface
+                        Behavior on color { ColorAnimation { duration: 500 } }
+                        border.width: pieceCard.visualFocus || pieceCard.marked ? 2 : 0
+                        border.color: pieceCard.marked ? Theme.accent : Theme.accentText
                         Rectangle {
                             anchors.fill: parent
                             radius: parent.radius

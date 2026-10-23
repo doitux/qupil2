@@ -361,6 +361,7 @@ ApplicationWindow {
         function onEditReminder(reminder, student) { reminderEditor.edit(reminder, student) }
         function onShowPage(index) { window.currentPage = index }
         function onShowStudent(id, membership) { window.currentPage = 1 }
+        function onShowPiece(id, membership, piece) { window.currentPage = 1 }
         function onShowEvent(id) { window.currentPage = 2 }
         function onShowSync() { window.currentPage = 4 }
         function onShowMore(name) { window.currentPage = 4 }

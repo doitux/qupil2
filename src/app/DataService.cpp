@@ -1011,7 +1011,7 @@ QVariantList DataService::readyPieces(const QString &eventId) const
         planned.insert(v.toMap().value(u"group_key"_s).toString());
     QVariantList out;
     QSet<QString> seen;
-    for (const QVariant &v : rows(u"SELECT p.*, l.location FROM piece p JOIN membership m ON m.id = p.membership_id "
+    for (const QVariant &v : rows(u"SELECT p.*, l.location, m.student_id FROM piece p JOIN membership m ON m.id = p.membership_id "
                                   u"JOIN lesson l ON l.id = m.lesson_id "
                                   u"WHERE p.deleted = 0 AND m.deleted = 0 AND p.state = 3 AND (m.end_date = '' OR m.end_date > ?) "
                                   u"ORDER BY p.composer COLLATE NOCASE, p.title COLLATE NOCASE"_s, { todayIso() })) {
@@ -1021,6 +1021,22 @@ QVariantList DataService::readyPieces(const QString &eventId) const
             continue;
         seen.insert(key);
         m.insert(u"performers"_s, performers(key));
+        out << m;
+    }
+    return out;
+}
+
+QVariantList DataService::pieceCopies(const QString &groupKey) const
+{
+    QVariantList out;
+    for (const QVariant &v : rows(u"SELECT p.id AS piece_id, p.membership_id, m.student_id, s.forename, s.surname, "
+                                  u"(m.end_date = '' OR m.end_date > ?) AS current FROM piece p "
+                                  u"JOIN membership m ON m.id = p.membership_id JOIN student s ON s.id = m.student_id "
+                                  u"WHERE p.deleted = 0 AND m.deleted = 0 AND s.deleted = 0 AND p.group_key = ? "
+                                  u"ORDER BY current DESC, s.surname COLLATE NOCASE, s.forename COLLATE NOCASE"_s,
+                                  { todayIso(), groupKey })) {
+        QVariantMap m = v.toMap();
+        m.insert(u"name"_s, fullName(m.value(u"forename"_s).toString(), m.value(u"surname"_s).toString()));
         out << m;
     }
     return out;
