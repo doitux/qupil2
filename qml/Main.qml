@@ -46,6 +46,14 @@ ApplicationWindow {
 
     readonly property bool compact: width < 720
     property int currentPage: 0
+    //! A tab of the navigation was clicked: "More" always opens on its first level,
+    //! whatever page of it was open before
+    function selectPage(index) {
+        const more = index === 4 && pageLayout ? pageLayout.children[4] : null
+        if (more)
+            more.home()
+        currentPage = index
+    }
     property Item pageLayout: null
 
     /*!
@@ -141,7 +149,7 @@ ApplicationWindow {
                             text: window.navLabel(index)
                             iconName: modelData
                             selected: window.currentPage === index
-                            onClicked: window.currentPage = index
+                            onClicked: window.selectPage(index)
                         }
                     }
 
@@ -196,7 +204,7 @@ ApplicationWindow {
                     text: window.navLabel(index)
                     iconName: modelData
                     selected: window.currentPage === index
-                    onClicked: window.currentPage = index
+                    onClicked: window.selectPage(index)
                 }
             }
         }

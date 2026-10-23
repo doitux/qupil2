@@ -66,21 +66,38 @@ void placeWindow(QQuickWindow *window)
             }
         }
     }
-    // The size before maximizing is what counts when Qupil is quit maximized
+    // Saved shortly after every change, not only when Qupil is quit: closed by logging
+    // out or shutting down, a desktop does not always let it quit in an orderly way.
+    // The size before maximizing is what counts for a maximized window; it is read
+    // a moment after a change, as window managers report the new size before the
+    // new state.
     auto normal = std::make_shared<QRect>(window->geometry());
-    const auto track = [window, normal] {
-        if (window->visibility() == QWindow::Windowed)
+    auto *settle = new QTimer(window);
+    settle->setSingleShot(true);
+    settle->setInterval(700);
+    const auto save = [window, normal] {
+        const QWindow::Visibility v = window->visibility();
+        if (v == QWindow::Windowed)
             *normal = window->geometry();
-    };
-    QObject::connect(window, &QWindow::xChanged, window, track);
-    QObject::connect(window, &QWindow::yChanged, window, track);
-    QObject::connect(window, &QWindow::widthChanged, window, track);
-    QObject::connect(window, &QWindow::heightChanged, window, track);
-    QObject::connect(qApp, &QCoreApplication::aboutToQuit, window, [window, normal] {
+        if (v != QWindow::Windowed && v != QWindow::Maximized)
+            return;   // minimized, full screen, hidden: keep what was saved
         QSettings t;
         t.beginGroup(u"window"_s);
         t.setValue(u"geometry"_s, *normal);
-        t.setValue(u"maximized"_s, window->visibility() == QWindow::Maximized);
+        t.setValue(u"maximized"_s, v == QWindow::Maximized);
+    };
+    QObject::connect(settle, &QTimer::timeout, window, save);
+    const auto changed = [settle] { settle->start(); };
+    QObject::connect(window, &QWindow::xChanged, window, changed);
+    QObject::connect(window, &QWindow::yChanged, window, changed);
+    QObject::connect(window, &QWindow::widthChanged, window, changed);
+    QObject::connect(window, &QWindow::heightChanged, window, changed);
+    QObject::connect(window, &QWindow::visibilityChanged, window, changed);
+    QObject::connect(qApp, &QCoreApplication::aboutToQuit, window, [settle, save] {
+        if (settle->isActive()) {
+            settle->stop();
+            save();
+        }
     });
     if (maximized)
         window->showMaximized();

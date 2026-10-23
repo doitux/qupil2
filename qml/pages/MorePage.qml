@@ -47,9 +47,10 @@ StackView {
         case "license": stack.push(aboutPage); stack.push(licensePage); break
         }
     }
-    //! Back to the first level (screenshot tour)
+    //! Back to the first level: the "More" button of the navigation always lands
+    //! there (at once when coming from another tab), and the screenshot tour
     function home() {
-        stack.pop(null)
+        stack.pop(null, stack.visible ? StackView.PopTransition : StackView.Immediate)
     }
     //! A page of "More" by name (screenshot tour)
     function showSubPage(name) {
