@@ -5,7 +5,7 @@
 # Signing happens in Apple's cloud (Xcode "cloud signing") with an App Store
 # Connect API key, so no certificates or profiles are kept in the repository.
 # Repository secrets (Settings › Secrets and variables › Actions):
-#   APPLE_TEAM_ID      Team ID of the developer account (10 characters)
+#   APPLE_TEAM_ID      optional: Team ID, if not the one of the Musikschule des Emslandes
 #   ASC_KEY_ID         Key ID of the App Store Connect API key (role Admin)
 #   ASC_ISSUER_ID      Issuer ID shown above the list of keys
 #   ASC_KEY_P8         Contents of the downloaded AuthKey_<KEY ID>.p8 file
@@ -90,7 +90,8 @@ jobs:
 
       - name: Sign and upload to TestFlight
         env:
-          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          # Team ID of the Musikschule des Emslandes (public, part of every signed app)
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID || '8LBKF4942K' }}
           ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
           ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
