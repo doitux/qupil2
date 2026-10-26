@@ -50,7 +50,8 @@ done
 [ -n "$(get NSLocalNetworkUsageDescription)" ] || fail "NSLocalNetworkUsageDescription missing"
 plutil -lint "$app/PrivacyInfo.xcprivacy" || fail "PrivacyInfo.xcprivacy missing or invalid"
 for l in de en es fr; do
-    [ -f "$app/$l.lproj/InfoPlist.strings" ] || fail "$l.lproj/InfoPlist.strings missing"
+    [ -f "$app/$l.lproj/InfoPlist.strings" ] \
+        || fail "$l.lproj/InfoPlist.strings missing; found: $(cd "$app" && find . -name '*.strings' -o -name '*.lproj' | tr '\n' ' ')"
 done
 
 # Only the app may be in the archive
