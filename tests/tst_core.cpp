@@ -32,6 +32,7 @@
 #include "LessonAlerts.h"
 #include "Mdns.h"
 #include "Store.h"
+#include "TakeOver.h"
 #include "Wav.h"
 #include "WifiSession.h"
 
@@ -157,6 +158,25 @@ class TestCore : public QObject
 
     QTemporaryDir m_dir;
     QString file(const QString &name) const { return m_dir.filePath(name); }
+
+    //! Imports a 1.x database made of the given statements into \a db
+    LegacyImporter::Result importLegacy(const QString &name, const QStringList &statements, Database &db)
+    {
+        LegacyImporter::Result failed;
+        const QString legacy = file(name + u".qupil1.db"_s);
+        failed.error = LegacyFixture::create(legacy, statements);
+        if (!failed.error.isEmpty() || !db.open(file(name + u".db"_s), &failed.error))
+            return failed;
+        Store store(&db);
+        LegacyImporter importer;
+        return importer.run(legacy, &store);
+    }
+
+    static QByteArray contents(const QString &path)
+    {
+        QFile f(path);
+        return f.open(QIODevice::ReadOnly) ? f.readAll() : QByteArray();
+    }
 
     static qint64 fakeWall()
     {
@@ -502,6 +522,269 @@ private slots:
 
         // The old database is untouched
         QCOMPARE(Database::detectFormat(legacy), 1);
+    }
+
+    void legacyRevision1()
+    {
+        // The oldest 1.x databases: no dbinfos table, no composers, recitals or reminders
+        Database db;
+        const LegacyImporter::Result r = importLegacy(u"rev1"_s, LegacyFixture::schemaUpTo(1) + LegacyFixture::sampleDataRev1(), db);
+        QVERIFY2(r.ok, qPrintable(r.error));
+        QVERIFY(r.warnings.isEmpty());
+        QCOMPARE(r.students, 2);
+        QCOMPARE(r.archivedStudents, 1);
+        QCOMPARE(r.lessons, 2);
+        QCOMPARE(r.memberships, 3);
+        QCOMPARE(r.pieces, 3);
+        QCOMPARE(r.notes, 3);
+        QCOMPARE(r.activities, 2);
+        QCOMPARE(r.libraryItems, 1);
+        QCOMPARE(r.events, 0);
+        QCOMPARE(r.reminders, 0);
+        QCOMPARE(db.meta(u"imported_revision"_s), u"1"_s);
+
+        Store store(&db);
+        const auto clara = store.select(u"student"_s, u"forename = ?"_s, { u"Clara"_s });
+        QCOMPARE(clara.size(), 1);
+        QCOMPARE(clara.first().value(u"father_name"_s).toString(), u"Peter Alt"_s);
+        QCOMPARE(clara.first().value(u"father_note"_s).toString(), u"Bäcker"_s);   // the old "occupation"
+        QCOMPARE(clara.first().value(u"mother_phone"_s).toString(), u"01234 2222"_s);
+        QCOMPARE(clara.first().value(u"recital_interval"_s).toInt(), 5);   // came with revision 2: default
+        QCOMPARE(clara.first().value(u"ensemble_expected"_s).toInt(), 1);  // came with revision 3: default
+        const auto ole = store.select(u"student"_s, u"forename = ?"_s, { u"Ole"_s });
+        QCOMPARE(ole.first().value(u"birthday"_s).toString(), u"2011-07-04"_s);
+
+        const auto sonatine = store.select(u"piece"_s, u"title = ?"_s, { u"Sonatine"_s });
+        QCOMPARE(sonatine.first().value(u"composer"_s).toString(), QString());
+        QCOMPARE(sonatine.first().value(u"end_date"_s).toString(), u"2018-06-30"_s);
+        const auto kanon = store.select(u"piece"_s, u"title = ?"_s, { u"Kanon"_s });
+        QCOMPARE(kanon.size(), 2);
+        QCOMPARE(kanon.at(0).value(u"group_key"_s), kanon.at(1).value(u"group_key"_s));
+
+        const auto single = store.select(u"activity"_s, u"description = ?"_s, { u"Vorspiel"_s });
+        QCOMPARE(single.first().value(u"single_kind"_s).toInt(), 0);
+        QCOMPARE(single.first().value(u"end_date"_s).toString(), QString());   // NULL before revision 3
+        const auto lent = store.select(u"library_item"_s);
+        QCOMPARE(lent.first().value(u"lent_to"_s).toString(), ole.first().value(u"id"_s).toString());
+    }
+
+    void legacyRevision2()
+    {
+        // Recitals and composers, but no reminders and no kinds of regular activities yet
+        Database db;
+        const LegacyImporter::Result r = importLegacy(u"rev2"_s, LegacyFixture::schemaUpTo(2) + LegacyFixture::sampleDataRev2(), db);
+        QVERIFY2(r.ok, qPrintable(r.error));
+        QVERIFY(r.warnings.isEmpty());
+        QCOMPARE(r.students, 2);
+        QCOMPARE(r.pieces, 2);
+        QCOMPARE(r.notes, 1);
+        QCOMPARE(r.activities, 2);
+        QCOMPARE(r.events, 1);
+        QCOMPARE(r.archivedEvents, 1);
+        QCOMPARE(r.reminders, 0);
+        QCOMPARE(db.meta(u"imported_revision"_s), u"2"_s);
+
+        Store store(&db);
+        const auto ida = store.select(u"student"_s, u"forename = ?"_s, { u"Ida"_s });
+        QCOMPARE(ida.first().value(u"recital_interval"_s).toInt(), 3);
+        QCOMPARE(ida.first().value(u"ensemble_expected"_s).toInt(), 1);
+        const auto karl = store.select(u"student"_s, u"forename = ?"_s, { u"Karl"_s });
+        QCOMPARE(karl.first().value(u"recital_interval"_s).toInt(), 5);
+        QCOMPARE(karl.first().value(u"rental"_s).toInt(), 1);
+
+        const auto sarabande = store.select(u"piece"_s, u"title = ?"_s, { u"Sarabande"_s });
+        QCOMPARE(sarabande.first().value(u"composer"_s).toString(), u"G. F. Händel"_s);
+        const auto menuett = store.select(u"piece"_s, u"title = ?"_s, { u"Menuett"_s });
+        QCOMPARE(menuett.first().value(u"composer"_s).toString(), QString());
+
+        const auto competition = store.select(u"activity"_s, u"description = ?"_s, { u"Wettbewerb"_s });
+        QCOMPARE(competition.first().value(u"single_kind"_s).toInt(), 2);
+        const auto regular = store.select(u"activity"_s, u"description = ?"_s, { u"Kammermusik"_s });
+        QCOMPARE(regular.first().value(u"continuous_kind"_s).toInt(), 0);
+        QCOMPARE(regular.first().value(u"end_date"_s).toString(), QString());   // NULL: still running
+
+        // Programme in the order of 1.x
+        const auto items = store.select(u"event_item"_s, {}, {}, u"position"_s);
+        QCOMPARE(items.size(), 2);
+        QCOMPARE(items.at(0).value(u"piece_id"_s), sarabande.first().value(u"id"_s));
+        QCOMPARE(items.at(1).value(u"piece_id"_s), menuett.first().value(u"id"_s));
+    }
+
+    void legacyMessyData()
+    {
+        // What years of use leave behind: the import goes through and keeps what it can
+        Database db;
+        const LegacyImporter::Result r = importLegacy(u"messy"_s, LegacyFixture::schemaRev3() + LegacyFixture::messyData(), db);
+        QVERIFY2(r.ok, qPrintable(r.error));
+        QCOMPARE(r.students, 3);
+        QCOMPARE(r.lessons, 2);
+        QCOMPARE(r.memberships, 2);
+        QCOMPARE(r.pieces, 2);
+        QCOMPARE(r.notes, 2);
+        QCOMPARE(r.activities, 1);
+        QCOMPARE(r.libraryItems, 1);
+        QCOMPARE(r.events, 1);
+        QCOMPARE(r.reminders, 1);
+        QCOMPARE(r.skipped, 8);
+        QCOMPARE(r.unparsedDates, 5);
+        QCOMPARE(r.warnings.size(), 2);
+
+        Store store(&db);
+        QCOMPARE(store.select(u"student"_s).size(), 3);
+        const auto nameless = store.select(u"student"_s, u"surname = '' AND forename = ''"_s);
+        QCOMPARE(nameless.size(), 1);
+        QCOMPARE(nameless.first().value(u"birthday"_s).toString(), u"31.02.2010"_s);   // kept as typed
+        QCOMPARE(nameless.first().value(u"first_lesson"_s).toString(), u"Sept. 2019"_s);
+        QCOMPARE(nameless.first().value(u"rental"_s).toInt(), 0);              // 'ja'
+        QCOMPARE(nameless.first().value(u"recital_interval"_s).toInt(), 5);    // 'oft'
+
+        const auto zoe = store.select(u"student"_s, u"forename = ?"_s, { u"Zoë 🎻"_s });
+        QCOMPARE(zoe.size(), 1);
+        QCOMPARE(zoe.first().value(u"surname"_s).toString(), u"O'Neill; DROP TABLE pupil;--"_s);
+        QCOMPARE(zoe.first().value(u"notes"_s).toString(), u"<p><b>nicht geschlossen <i>kursiv</p"_s);
+        const auto blanks = store.select(u"student"_s, u"forename = ?"_s, { u"Zeichen"_s });
+        QCOMPARE(blanks.first().value(u"surname"_s).toString(), u"Leer"_s);
+        QCOMPARE(blanks.first().value(u"birthday"_s).toString(), u"2012-02-01"_s);
+
+        const auto odd = store.select(u"lesson"_s, u"name = ''"_s);
+        QCOMPARE(odd.size(), 1);
+        QCOMPARE(odd.first().value(u"start_time"_s).toString(), QString());
+        QCOMPARE(odd.first().value(u"end_time"_s).toString(), QString());
+        QCOMPARE(odd.first().value(u"active"_s).toInt(), 1);
+
+        const auto noComposer = store.select(u"piece"_s, u"title = ?"_s, { u"Ohne Komponist"_s });
+        QCOMPARE(noComposer.first().value(u"composer"_s).toString(), QString());
+        QCOMPARE(noComposer.first().value(u"duration"_s).toInt(), 0);
+        QCOMPARE(store.select(u"note"_s, u"content = ?"_s, { u"<div><p>Kaputt <b>fett</div>"_s }).size(), 1);
+        QCOMPARE(store.select(u"note"_s, u"date = ?"_s, { u"2026-13-45"_s }).size(), 1);
+
+        // References to students that are gone point nowhere, not to someone else
+        QCOMPARE(store.select(u"library_item"_s).first().value(u"lent_to"_s).toString(), QString());
+        QCOMPARE(store.select(u"reminder"_s).first().value(u"student_id"_s).toString(), QString());
+        QCOMPARE(store.select(u"event_item"_s).size(), 1);
+        QCOMPARE(store.select(u"event"_s).first().value(u"date"_s).toString(), u"Herbst"_s);
+    }
+
+    void takeOverLeavesOriginal()
+    {
+        // A 1.x data folder whose newest changes are still in the WAL file, as when it
+        // was copied while Qupil 1.x ran or Qupil 1.x did not end normally
+        const QString folder = file(u"takeover/qupil"_s);
+        const QString legacy = folder + u"/db/qupil.db"_s;
+        QDir().mkpath(folder + u"/db"_s);
+        {
+            const QString running = file(u"takeover/running.db"_s);
+            QCOMPARE(LegacyFixture::create(running), QString());
+            const QString name = u"qupil1-running"_s;
+            {
+                QSqlDatabase qupil1 = QSqlDatabase::addDatabase(u"QSQLITE"_s, name);
+                qupil1.setDatabaseName(running);
+                QVERIFY(qupil1.open());
+                QSqlQuery q(qupil1);
+                QVERIFY(q.exec(u"PRAGMA journal_mode = WAL"_s) && q.next());
+                QCOMPARE(q.value(0).toString(), u"wal"_s);
+                QVERIFY(q.exec(u"PRAGMA wal_autocheckpoint = 0"_s));
+                QVERIFY(q.exec(u"INSERT INTO pupil (pupilid, surname, forename, ifinstrumentnextsize, ifrentinstrument) "
+                               u"VALUES (5, 'Spät', 'Nora', 0, 0)"_s));
+                QVERIFY(QFileInfo(running + u"-wal"_s).size() > 0);
+                QVERIFY(QFile::copy(running, legacy));
+                QVERIFY(QFile::copy(running + u"-wal"_s, legacy + u"-wal"_s));
+                qupil1.close();
+            }
+            QSqlDatabase::removeDatabase(name);
+        }
+        LegacyFixture::writeConfig(folder + u"/config.xml"_s);
+        const QByteArray before = contents(legacy);
+        const QByteArray walBefore = contents(legacy + u"-wal"_s);
+        QVERIFY(!walBefore.isEmpty());
+        const QDateTime modified = QFileInfo(legacy).lastModified();
+
+        const QString work = file(u"takeover/work"_s);
+        const QString backups = file(u"takeover/backups"_s);
+        int progressCalls = 0;
+        const TakeOver::Outcome o = TakeOver::run(folder, work, backups, [&](int, const QString &) { ++progressCalls; });
+        QVERIFY2(o.ok, qPrintable(o.error));
+        QCOMPARE(o.kind, u"legacy"_s);
+        QCOMPARE(o.source, QDir::toNativeSeparators(folder));
+        QCOMPARE(o.summary.value(u"students"_s).toInt(), 5);   // with the one only in the WAL file
+        QVERIFY(o.summary.value(u"settingsFound"_s).toBool());
+        QVERIFY(progressCalls > 5);
+
+        // The original is exactly as it was, WAL file included
+        QCOMPARE(contents(legacy), before);
+        QCOMPARE(contents(legacy + u"-wal"_s), walBefore);
+        QCOMPARE(QFileInfo(legacy).lastModified(), modified);
+
+        // Only the result is left in the work folder
+        QCOMPARE(o.newDatabase, QDir(work).filePath(u"import.db"_s));
+        QCOMPARE(QDir(work).entryList(QDir::Files), QStringList { u"import.db"_s });
+
+        // A copy of the 1.x data as taken over, in one file, next to the backups
+        QVERIFY(!o.legacyCopy.isEmpty());
+        QCOMPARE(QFileInfo(o.legacyCopy).absolutePath(), QFileInfo(backups).absoluteFilePath());
+        QVERIFY(QFileInfo(o.legacyCopy).fileName().startsWith(u"qupil1-"_s));
+        QVERIFY(!QFileInfo::exists(o.legacyCopy + u"-wal"_s));
+        QString pupils;
+        QCOMPARE(Database::detectFormat(o.legacyCopy, &pupils), 1);
+        QCOMPARE(pupils, u"5"_s);
+
+        Database db;
+        QVERIFY(db.open(o.newDatabase));
+        QCOMPARE(db.meta(u"imported_copy"_s), QFileInfo(o.legacyCopy).fileName());
+        QCOMPARE(db.meta(u"imported_revision"_s), u"3"_s);
+        Store store(&db);
+        QCOMPARE(store.select(u"student"_s, u"forename = ?"_s, { u"Nora"_s }).size(), 1);
+        db.close();
+
+        // Without a backup folder (demo data): no copy
+        const TakeOver::Outcome demo = TakeOver::run(legacy, work, QString());
+        QVERIFY2(demo.ok, qPrintable(demo.error));
+        QVERIFY(demo.legacyCopy.isEmpty());
+        QCOMPARE(QDir(backups).entryList(QDir::Files).size(), 1);
+        QCOMPARE(contents(legacy), before);
+    }
+
+    void takeOverBackupOrForeignFile()
+    {
+        // A Qupil 2 backup: taken over with a new device id, the backup itself unchanged
+        const QString backup = file(u"takeover2/Qupil-Backup.db"_s);
+        QDir().mkpath(file(u"takeover2"_s));
+        QString device;
+        {
+            Database db;
+            QVERIFY(db.open(file(u"takeover2/live.db"_s)));
+            Store(&db).create(u"student"_s, { { u"surname"_s, u"Gesichert"_s } });
+            QVERIFY(db.backupTo(backup));
+            device = db.deviceId();
+        }
+        const QByteArray before = contents(backup);
+        const QString work = file(u"takeover2/work"_s);
+        const QString backups = file(u"takeover2/backups"_s);
+        const TakeOver::Outcome o = TakeOver::run(backup, work, backups);
+        QVERIFY2(o.ok, qPrintable(o.error));
+        QCOMPARE(o.kind, u"backup"_s);
+        QCOMPARE(o.summary.value(u"students"_s).toInt(), 1);
+        QVERIFY(o.legacyCopy.isEmpty());
+        QVERIFY(!QFileInfo::exists(backups));
+        QCOMPARE(contents(backup), before);
+        Database db;
+        QVERIFY(db.open(o.newDatabase));
+        QVERIFY(db.deviceId() != device);
+        QCOMPARE(db.meta(u"ask_before_joining"_s), u"1"_s);
+        db.close();
+
+        // Anything else is refused, and nothing is left behind
+        const QString foreign = file(u"takeover2/notes.txt"_s);
+        QFile f(foreign);
+        QVERIFY(f.open(QIODevice::WriteOnly));
+        f.write("not a database");
+        f.close();
+        const TakeOver::Outcome refused = TakeOver::run(foreign, work, backups);
+        QVERIFY(!refused.ok);
+        QVERIFY(!refused.error.isEmpty());
+        QVERIFY(!QFileInfo::exists(backups));
+        const TakeOver::Outcome empty = TakeOver::run(file(u"takeover2/nothing-here"_s), work, backups);
+        QVERIFY(!empty.ok);
     }
 
     void backupAndRestore()

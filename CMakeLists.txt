@@ -51,6 +51,8 @@ qt_add_library(qupilcore STATIC
     src/core/Store.cpp
     src/core/LegacyImporter.h
     src/core/LegacyImporter.cpp
+    src/core/TakeOver.h
+    src/core/TakeOver.cpp
     src/core/DemoData.h
     src/core/DemoData.cpp
     src/core/WifiSession.h

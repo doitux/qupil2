@@ -18,6 +18,9 @@ class QJSEngine;
 namespace Qupil {
 class Database;
 class Store;
+namespace TakeOver {
+struct Outcome;
+}
 }
 
 /*!
@@ -171,9 +174,7 @@ signals:
     void dataReplaced();
 
 private:
-    struct Outcome;
-    static Outcome runTakeOver(AppController *self, const QString &source, const QString &workDir);
-    void finishTakeOver(const Outcome &outcome);
+    void finishTakeOver(const Qupil::TakeOver::Outcome &outcome);
     bool startEmpty(bool awaitingSync);
 
     bool openDatabase(QString *error);
