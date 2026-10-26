@@ -19,6 +19,10 @@
 #include <cmath>
 #include <utility>
 
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+#include "AlertPlayer.h"
+#endif
+
 using namespace Qt::StringLiterals;
 using namespace Qupil;
 
@@ -159,6 +163,20 @@ void AlertSound::play()
     const QString path = file();
     if (path.isEmpty())
         return;
+#if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
+    // In a process of its own: the main thread can stall while the screen is off
+    if (!m_player) {
+        m_player = new AlertPlayer(this);
+        connect(m_player, &AlertPlayer::failed, this, &AlertSound::playHere);
+    }
+    if (m_player->play(path))
+        return;
+#endif
+    playHere(path);
+}
+
+void AlertSound::playHere(const QString &path)
+{
     if (!m_effect) {
         m_effect = new QSoundEffect(this);
         connect(m_effect, &QSoundEffect::statusChanged, this, [this] {

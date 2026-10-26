@@ -14,6 +14,7 @@
 class QAudioBuffer;
 class QAudioDecoder;
 class QSoundEffect;
+class AlertPlayer;
 
 /*!
     The sound of an alert (lesson end, reminders): the one from Qupil 1.x or a
@@ -65,12 +66,15 @@ private:
     void decoded(const QAudioBuffer &buffer);
     void finishDecoding(bool ok);
     void setBusy(bool busy);
+    //! QSoundEffect in Qupil's own process
+    void playHere(const QString &path);
 
     QString m_name;
     QString m_builtIn;
     QString m_group;
     std::function<int()> m_defaultVolume;
     QSoundEffect *m_effect = nullptr;
+    AlertPlayer *m_player = nullptr;   // Linux: the system's player in a process of its own
     bool m_playWhenReady = false;
     QPointer<QAudioDecoder> m_decoder;
     Qupil::Wav::Sound m_decoding;
