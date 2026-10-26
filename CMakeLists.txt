@@ -12,6 +12,18 @@ project(qupil
 # Objective-C++ for the system notifications on iOS
 if(IOS)
     enable_language(OBJCXX)
+    # Xcode archives (TestFlight, App Store) may only contain the app itself:
+    # no static libraries or Qt plugins (the app target switches this back on below)
+    set(CMAKE_XCODE_ATTRIBUTE_SKIP_INSTALL YES)
+endif()
+
+# CFBundleVersion: every upload to TestFlight/App Store needs a higher one, so the
+# TestFlight workflow passes its run number; otherwise it is the project version
+set(QUPIL_BUILD_NUMBER "" CACHE STRING "Build number (CFBundleVersion) for App Store uploads")
+if(QUPIL_BUILD_NUMBER)
+    set(QUPIL_BUNDLE_VERSION ${QUPIL_BUILD_NUMBER})
+else()
+    set(QUPIL_BUNDLE_VERSION ${PROJECT_VERSION})
 endif()
 
 set(CMAKE_CXX_STANDARD 17)
@@ -112,7 +124,7 @@ set_target_properties(qupil PROPERTIES
     MACOSX_BUNDLE TRUE
     MACOSX_BUNDLE_BUNDLE_NAME Qupil
     MACOSX_BUNDLE_GUI_IDENTIFIER de.qupil.app
-    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+    MACOSX_BUNDLE_BUNDLE_VERSION ${QUPIL_BUNDLE_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}
     MACOSX_BUNDLE_COPYRIGHT "© 2006–2026 Felix Hammer"
     XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER de.qupil.app)
@@ -131,6 +143,14 @@ if(IOS)
         target_sources(qupil PRIVATE ${_strings})
         set_source_files_properties(${_strings} PROPERTIES MACOSX_PACKAGE_LOCATION Resources/${_lang}.lproj)
     endforeach()
+    # Privacy manifest (required reason APIs of Qt and Qupil; no tracking, no data collected)
+    set(_privacy ${CMAKE_CURRENT_SOURCE_DIR}/platform/ios/PrivacyInfo.xcprivacy)
+    target_sources(qupil PRIVATE ${_privacy})
+    set_source_files_properties(${_privacy} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
+    # Product › Archive: the app goes into the archive (Products/Applications)
+    set_target_properties(qupil PROPERTIES
+        XCODE_ATTRIBUTE_SKIP_INSTALL NO
+        XCODE_ATTRIBUTE_INSTALL_PATH "$(LOCAL_APPS_DIR)")
     # Qupil only needs audio output (metronome): the native Darwin backend is enough
     # and keeps the FFmpeg libraries out of the app
     qt_import_plugins(qupil INCLUDE_BY_TYPE multimedia Qt6::QDarwinMediaPlugin)

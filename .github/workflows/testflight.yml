@@ -1,0 +1,133 @@
+# Builds Qupil for iOS as an App Store archive and uploads it to TestFlight.
+#
+# Start by hand: Actions › TestFlight › Run workflow. Each run is a new build
+# (CFBundleVersion = run number) of the version in CMakeLists.txt.
+# Signing happens in Apple's cloud (Xcode "cloud signing") with an App Store
+# Connect API key, so no certificates or profiles are kept in the repository.
+# Repository secrets (Settings › Secrets and variables › Actions):
+#   APPLE_TEAM_ID      Team ID of the developer account (10 characters)
+#   ASC_KEY_ID         Key ID of the App Store Connect API key (role Admin)
+#   ASC_ISSUER_ID      Issuer ID shown above the list of keys
+#   ASC_KEY_P8         Contents of the downloaded AuthKey_<KEY ID>.p8 file
+# Without the secrets the archive is built and checked, but not uploaded.
+name: TestFlight
+
+on:
+  workflow_dispatch:
+  # Check the archive (without upload) when the iOS packaging changes
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/testflight.yml'
+      - '.github/scripts/ios-check-archive.sh'
+      - 'platform/ios/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: testflight
+  cancel-in-progress: false
+
+env:
+  QT_VERSION: '6.8.3'
+
+jobs:
+  testflight:
+    name: iOS archive → TestFlight
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v7
+
+      # App Store Connect only accepts builds made with Xcode 26 / iOS 26 SDK (since 2026-04-28)
+      - name: Select Xcode 26
+        run: |
+          ls -d /Applications/Xcode*.app
+          xcode=$(ls -d /Applications/Xcode_26*.app | grep -viE 'beta|rc' | sort -V | tail -n 1)
+          if [ -z "$xcode" ]; then echo "::error::No Xcode 26 on this runner"; exit 1; fi
+          sudo xcode-select -s "$xcode"
+          xcodebuild -version
+          echo "iOS SDK $(xcrun --sdk iphoneos --show-sdk-version)"
+
+      - name: Install Qt for macOS (host tools)
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: mac
+          target: desktop
+          arch: clang_64
+          modules: qtmultimedia
+          cache: true
+          set-env: false
+
+      - name: Install Qt for iOS
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: mac
+          target: ios
+          arch: ios
+          modules: qtmultimedia
+          cache: true
+
+      - name: Configure
+        run: |
+          bash .github/scripts/run-logged.sh "$QT_ROOT_DIR/bin/qt-cmake" -S . -B build -G Xcode \
+            -DQT_HOST_PATH="$RUNNER_WORKSPACE/Qt/$QT_VERSION/macos" \
+            -DCMAKE_XCODE_GENERATE_SCHEME=ON \
+            -DQUPIL_BUILD_NUMBER="$GITHUB_RUN_NUMBER"
+
+      # Built without signing; the export below signs it for the App Store
+      - name: Archive
+        run: |
+          bash .github/scripts/run-logged.sh xcodebuild archive \
+            -project build/qupil.xcodeproj -scheme qupil -configuration Release \
+            -destination 'generic/platform=iOS' -archivePath "$RUNNER_TEMP/Qupil.xcarchive" \
+            CODE_SIGNING_ALLOWED=NO -quiet
+
+      - name: Check the archive
+        run: bash .github/scripts/ios-check-archive.sh "$RUNNER_TEMP/Qupil.xcarchive" "$GITHUB_RUN_NUMBER"
+
+      - name: Sign and upload to TestFlight
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+        run: |
+          if [ -z "$APPLE_TEAM_ID" ] || [ -z "$ASC_KEY_ID" ] || [ -z "$ASC_ISSUER_ID" ] || [ -z "$ASC_KEY_P8" ]; then
+            echo "::notice::Archive OK. Not uploaded: the App Store Connect secrets are not set (see the top of testflight.yml)."
+            echo "Not uploaded: App Store Connect secrets not set." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          keydir="$RUNNER_TEMP/asc"
+          mkdir -p "$keydir"
+          printf '%s\n' "$ASC_KEY_P8" > "$keydir/AuthKey_$ASC_KEY_ID.p8"
+          cat > "$keydir/ExportOptions.plist" <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>method</key><string>app-store-connect</string>
+              <key>destination</key><string>upload</string>
+              <key>teamID</key><string>$APPLE_TEAM_ID</string>
+              <key>signingStyle</key><string>automatic</string>
+              <key>uploadSymbols</key><true/>
+              <key>manageAppVersionAndBuildNumber</key><false/>
+              <key>testFlightInternalTestingOnly</key><false/>
+          </dict>
+          </plist>
+          EOF
+          plutil -lint "$keydir/ExportOptions.plist"
+          status=0
+          bash .github/scripts/run-logged.sh xcodebuild -exportArchive \
+            -archivePath "$RUNNER_TEMP/Qupil.xcarchive" \
+            -exportPath "$RUNNER_TEMP/export" \
+            -exportOptionsPlist "$keydir/ExportOptions.plist" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$keydir/AuthKey_$ASC_KEY_ID.p8" \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID" || status=$?
+          rm -rf "$keydir"
+          [ $status -eq 0 ] || exit $status
+          echo "Uploaded build $GITHUB_RUN_NUMBER to App Store Connect. It shows up under TestFlight after Apple's processing (usually 5–30 minutes)." >> "$GITHUB_STEP_SUMMARY"

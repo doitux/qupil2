@@ -45,6 +45,7 @@ Every push and pull request is built on GitHub Actions:
 |---|---|---|
 | **Desktop** | Linux, Windows, macOS (universal): build, unit tests, QML smoke test (loads the UI, switches all languages and colour schemes, fails on any QML warning), package with Qt runtime | `.tar.gz` / `.zip` per platform |
 | **Mobile** | Android arm64 APK signed with a public test key (installs as an update over older test builds); iOS device build without signing | test APK, unsigned IPA |
+| **TestFlight** | Started by hand: iOS App Store archive with Xcode 26, checks (bundle ID, build number, icon, launch screen, privacy manifest), signed in Apple's cloud and uploaded to TestFlight; needs the App Store Connect secrets listed in `testflight.yml` | – (TestFlight app) |
 | **Translations** | TS files match the catalog, placeholders and plurals consistent, every string translated | – |
 
 Downloads are on the run's page under *Artifacts* and are kept for 30 days. The desktop builds are not code-signed yet, so Windows SmartScreen and macOS Gatekeeper will warn.
