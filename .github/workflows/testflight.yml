@@ -10,6 +10,7 @@
 #   ASC_ISSUER_ID      Issuer ID shown above the list of keys
 #   ASC_KEY_P8         Contents of the downloaded AuthKey_<KEY ID>.p8 file
 # Without the secrets the archive is built and checked, but not uploaded.
+# Runs started by a push only check the archive; uploads happen only when started by hand.
 name: TestFlight
 
 on:
@@ -99,6 +100,11 @@ jobs:
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
           ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
         run: |
+          if [ "$GITHUB_EVENT_NAME" != "workflow_dispatch" ]; then
+            echo "::notice::Archive OK. Not uploaded: only runs started by hand (Run workflow) upload to TestFlight."
+            echo "Not uploaded: only runs started by hand upload to TestFlight." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
           if [ -z "$APPLE_TEAM_ID" ] || [ -z "$ASC_KEY_ID" ] || [ -z "$ASC_ISSUER_ID" ] || [ -z "$ASC_KEY_P8" ]; then
             echo "::notice::Archive OK. Not uploaded: the App Store Connect secrets are not set (see the top of testflight.yml)."
             echo "Not uploaded: App Store Connect secrets not set." >> "$GITHUB_STEP_SUMMARY"
