@@ -1,2 +1,4 @@
 /* Qupil – permission texts shown by iOS (es) */
 "NSLocalNetworkUsageDescription" = "Qupil utiliza la red local para sincronizarse con sus otros dispositivos a través de Wi-Fi.";
+"NSCameraUsageDescription" = "Qupil no utiliza la cámara. iOS exige este texto porque una biblioteca del sistema usada para reproducir sonidos hace referencia a ella.";
+"NSMicrophoneUsageDescription" = "Qupil no utiliza el micrófono. iOS exige este texto porque una biblioteca del sistema usada para reproducir sonidos hace referencia a él.";

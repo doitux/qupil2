@@ -83,7 +83,10 @@ jobs:
           bash .github/scripts/run-logged.sh xcodebuild archive \
             -project build/qupil.xcodeproj -scheme qupil -configuration Release \
             -destination 'generic/platform=iOS' -archivePath "$RUNNER_TEMP/Qupil.xcarchive" \
-            CODE_SIGNING_ALLOWED=NO -quiet
+            CODE_SIGNING_ALLOWED=NO -quiet \
+            DEBUG_INFORMATION_FORMAT=dwarf-with-dsym
+          # Symbols are uploaded with the build; without them TestFlight crash reports are unreadable
+          ls "$RUNNER_TEMP/Qupil.xcarchive/dSYMs"
 
       - name: Check the archive
         run: bash .github/scripts/ios-check-archive.sh "$RUNNER_TEMP/Qupil.xcarchive" "$GITHUB_RUN_NUMBER"
@@ -120,7 +123,8 @@ jobs:
           </plist>
           EOF
           plutil -lint "$keydir/ExportOptions.plist"
-          status=0
+          log="$RUNNER_TEMP/export.log"
+          set +e
           bash .github/scripts/run-logged.sh xcodebuild -exportArchive \
             -archivePath "$RUNNER_TEMP/Qupil.xcarchive" \
             -exportPath "$RUNNER_TEMP/export" \
@@ -128,7 +132,22 @@ jobs:
             -allowProvisioningUpdates \
             -authenticationKeyPath "$keydir/AuthKey_$ASC_KEY_ID.p8" \
             -authenticationKeyID "$ASC_KEY_ID" \
-            -authenticationKeyIssuerID "$ASC_ISSUER_ID" || status=$?
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID" 2>&1 | tee "$log"
+          status=${PIPESTATUS[0]}
+          set -e
           rm -rf "$keydir"
+          # Apple's answers, readable on the run's summary page (and via the API) without opening the log
+          {
+            if [ $status -eq 0 ]; then
+              echo "## Upload of build $GITHUB_RUN_NUMBER (version from CMakeLists.txt)"
+              echo "Accepted by App Store Connect. It shows up under TestFlight after Apple's processing (usually 10–60 minutes)."
+              echo "If it does not, Apple's processing rejected it: the reason comes by e-mail (ITMS-9xxxx) to the Apple ID that created the API key."
+            else
+              echo "## Upload of build $GITHUB_RUN_NUMBER failed (exit $status)"
+            fi
+            echo
+            echo '```'
+            grep -E "Upload succeeded|processing|EXPORT (SUCCEEDED|FAILED)|^error|^warning|ITMS-|Uploaded " "$log" | sed 's/^.*xcodebuild\[[0-9:]*\] //' | tail -n 20
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
           [ $status -eq 0 ] || exit $status
-          echo "Uploaded build $GITHUB_RUN_NUMBER to App Store Connect. It shows up under TestFlight after Apple's processing (usually 5–30 minutes)." >> "$GITHUB_STEP_SUMMARY"

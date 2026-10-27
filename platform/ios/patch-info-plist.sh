@@ -23,3 +23,11 @@ plutil -replace UIPrefersShowingLanguageSettings -bool YES "$plist"
 plutil -replace NSBonjourServices -json '["_qupil-sync._tcp"]' "$plist"
 plutil -replace NSLocalNetworkUsageDescription \
     -string "Qupil uses your local network to sync with your other devices over Wi-Fi." "$plist"
+
+# Qt Multimedia (metronome, sounds) links against camera and microphone APIs.
+# Qupil never uses them, but App Store Connect rejects the build without these
+# texts (ITMS-90683). English fallback; translations in <lang>.lproj/InfoPlist.strings
+plutil -replace NSCameraUsageDescription \
+    -string "Qupil does not use the camera. iOS requires this text because a system library used for sound playback refers to it." "$plist"
+plutil -replace NSMicrophoneUsageDescription \
+    -string "Qupil does not use the microphone. iOS requires this text because a system library used for sound playback refers to it." "$plist"

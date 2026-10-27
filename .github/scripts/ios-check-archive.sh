@@ -48,6 +48,9 @@ done
 # Qupil's own keys (patch-info-plist.sh) and the privacy manifest
 [ "$(get UIFileSharingEnabled)" = "true" ] || fail "UIFileSharingEnabled missing"
 [ -n "$(get NSLocalNetworkUsageDescription)" ] || fail "NSLocalNetworkUsageDescription missing"
+# Required by App Store Connect because Qt Multimedia refers to these APIs (ITMS-90683)
+[ -n "$(get NSCameraUsageDescription)" ] || fail "NSCameraUsageDescription missing"
+[ -n "$(get NSMicrophoneUsageDescription)" ] || fail "NSMicrophoneUsageDescription missing"
 plutil -lint "$app/PrivacyInfo.xcprivacy" || fail "PrivacyInfo.xcprivacy missing or invalid"
 for l in de en es fr; do
     [ -f "$app/$l.lproj/InfoPlist.strings" ] \
