@@ -706,15 +706,21 @@ Flickable {
         opacity: past ? 0.6 : 1
         Accessible.role: Accessible.Button
         Accessible.name: (lesson.start_time || "") + " " + (lesson.name || "")
-        background: Rectangle {
-            color: row.down ? Theme.surfaceAlt : row.hovered ? Theme.surfaceSunken : "transparent"
-            border.width: row.visualFocus ? 2 : 0
-            border.color: Theme.accentText
+        background: Item {
             Rectangle {
                 visible: row.divider
                 width: parent.width
                 height: 1
                 color: Theme.divider
+            }
+            // Inset and rounded like the card around it (clip cuts square corners)
+            Rectangle {
+                anchors.fill: parent
+                anchors.margins: 4
+                radius: Theme.radius - 2
+                color: row.down ? Theme.surfaceAlt : row.hovered ? Theme.surfaceSunken : "transparent"
+                border.width: row.visualFocus ? 2 : 0
+                border.color: Theme.accentText
             }
         }
         contentItem: RowLayout {
@@ -810,10 +816,16 @@ Flickable {
                 Accessible.role: Accessible.Button
                 Accessible.name: lessonCard.lesson.name || ""
                 onClicked: lessonCard.lessonClicked()
-                background: Rectangle {
-                    color: lessonHead.hovered ? Theme.surfaceSunken : "transparent"
-                    border.width: lessonHead.visualFocus ? 2 : 0
-                    border.color: Theme.accentText
+                background: Item {
+                    Rectangle {
+                        anchors.fill: parent
+                        anchors.margins: 4
+                        anchors.bottomMargin: 2
+                        radius: Theme.radius - 4
+                        color: lessonHead.down ? Theme.surfaceAlt : lessonHead.hovered ? Theme.surfaceSunken : "transparent"
+                        border.width: lessonHead.visualFocus ? 2 : 0
+                        border.color: Theme.accentText
+                    }
                 }
                 contentItem: RowLayout {
                     spacing: 10
@@ -870,27 +882,41 @@ Flickable {
                 rightPadding: 12
             }
             Repeater {
+                id: studentRows
                 model: lessonCard.lesson.kind === 3 ? [] : (lessonCard.lesson.students || [])
                 delegate: AbstractButton {
                     id: studentRow
                     required property var modelData
+                    required property int index
                     readonly property bool selected: lessonCard.selectedMembership === modelData.membership_id
+                    readonly property bool last: index === studentRows.count - 1
                     Layout.fillWidth: true
-                    implicitHeight: 40
+                    implicitHeight: last ? 42 : 40
                     focusPolicy: Qt.StrongFocus
                     hoverEnabled: true
                     Accessible.role: Accessible.Button
                     Accessible.name: modelData.name
                     onClicked: lessonCard.studentClicked(modelData.id, modelData.membership_id)
-                    background: Rectangle {
-                        color: studentRow.selected ? Theme.accent : studentRow.hovered ? Theme.surfaceSunken : "transparent"
-                        border.width: studentRow.visualFocus ? 2 : 0
-                        border.color: Theme.accentText
+                    background: Item {
                         Rectangle {
                             width: parent.width
                             height: 1
                             color: Theme.divider
                             visible: !studentRow.selected
+                        }
+                        // Inset and rounded, so it follows the corners of the card
+                        Rectangle {
+                            anchors.fill: parent
+                            anchors.leftMargin: 4
+                            anchors.rightMargin: 4
+                            anchors.topMargin: 2
+                            anchors.bottomMargin: studentRow.last ? 4 : 2
+                            radius: Theme.radius - 4
+                            color: studentRow.selected ? Theme.accent
+                                   : studentRow.down ? Theme.surfaceAlt
+                                   : studentRow.hovered ? Theme.surfaceSunken : "transparent"
+                            border.width: studentRow.visualFocus ? 2 : 0
+                            border.color: studentRow.selected ? Theme.textOnAccent : Theme.accentText
                         }
                     }
                     contentItem: Text {
