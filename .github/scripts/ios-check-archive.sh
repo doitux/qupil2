@@ -51,6 +51,7 @@ done
 # Required by App Store Connect because Qt Multimedia refers to these APIs (ITMS-90683)
 [ -n "$(get NSCameraUsageDescription)" ] || fail "NSCameraUsageDescription missing"
 [ -n "$(get NSMicrophoneUsageDescription)" ] || fail "NSMicrophoneUsageDescription missing"
+[ "$(get ITSAppUsesNonExemptEncryption)" = "false" ] || fail "ITSAppUsesNonExemptEncryption missing or not NO"
 plutil -lint "$app/PrivacyInfo.xcprivacy" || fail "PrivacyInfo.xcprivacy missing or invalid"
 for l in de en es fr; do
     [ -f "$app/$l.lproj/InfoPlist.strings" ] \

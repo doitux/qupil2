@@ -31,3 +31,10 @@ plutil -replace NSCameraUsageDescription \
     -string "Qupil does not use the camera. iOS requires this text because a system library used for sound playback refers to it." "$plist"
 plutil -replace NSMicrophoneUsageDescription \
     -string "Qupil does not use the microphone. iOS requires this text because a system library used for sound playback refers to it." "$plist"
+
+# Export compliance: the sync is encrypted with standard algorithms (Monocypher: XChaCha20-Poly1305,
+# X25519, Argon2id, BLAKE2b) in addition to the system's HTTPS. Answered in App Store Connect on
+# 2026-10-27: standard algorithms, not distributed in France -> no export documentation required,
+# which Apple's documentation maps to NO here. Revisit if the app is offered in France (French
+# encryption declaration, then ITSEncryptionExportComplianceCode).
+plutil -replace ITSAppUsesNonExemptEncryption -bool NO "$plist"
