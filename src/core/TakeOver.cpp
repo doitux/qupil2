@@ -76,7 +76,7 @@ QString timestamp()
 }
 
 Outcome run(const QString &source, const QString &workDir, const QString &backupDir,
-            const std::function<void(int, const QString &)> &progress)
+            const std::function<void(int, const QString &)> &progress, const QString &shownAs)
 {
     Outcome o;
     QDir(workDir).removeRecursively();
@@ -99,6 +99,8 @@ Outcome run(const QString &source, const QString &workDir, const QString &backup
     } else if (info.isFile()) {
         o.source = QDir::toNativeSeparators(info.absoluteFilePath());
     }
+    if (!shownAs.isEmpty())
+        o.source = shownAs;
     if (QFileInfo(file).isFile())
         config = LegacyImporter::findConfig(file);
 

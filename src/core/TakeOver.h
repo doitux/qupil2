@@ -30,9 +30,13 @@ struct Outcome
 
     A Qupil 1.x database is also kept as it was taken over, as
     \c qupil1-<time>.db in \a backupDir (none if \a backupDir is empty).
+
+    \a shownAs replaces the path in messages and in the database's notes on
+    where the data came from (e.g. the file name for a temporary copy).
 */
 Outcome run(const QString &source, const QString &workDir, const QString &backupDir,
-            const std::function<void(int percent, const QString &step)> &progress = {});
+            const std::function<void(int percent, const QString &step)> &progress = {},
+            const QString &shownAs = {});
 
 //! Copies a file (also from content:// URIs) in chunks
 bool copyFile(const QString &from, const QString &to, QString *error);

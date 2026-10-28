@@ -774,6 +774,16 @@ private slots:
         QCOMPARE(db.meta(u"ask_before_joining"_s), u"1"_s);
         db.close();
 
+        // A temporary copy (iOS picker): shown and noted by its file name
+        const TakeOver::Outcome named = TakeOver::run(backup, work, backups, {}, u"Qupil-Backup.db"_s);
+        QVERIFY2(named.ok, qPrintable(named.error));
+        QCOMPARE(named.source, u"Qupil-Backup.db"_s);
+        {
+            Database restored;
+            QVERIFY(restored.open(named.newDatabase));
+            QCOMPARE(restored.meta(u"restored_from"_s), u"Qupil-Backup.db"_s);
+        }
+
         // Anything else is refused, and nothing is left behind
         const QString foreign = file(u"takeover2/notes.txt"_s);
         QFile f(foreign);

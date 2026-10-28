@@ -59,6 +59,8 @@ class AppController : public QObject
     Q_PROPERTY(bool saveDialogAvailable READ saveDialogAvailable CONSTANT FINAL)
     //! The system's own "Save to Files" picker chooses where a backup goes (iOS)
     Q_PROPERTY(bool exportPickerAvailable READ exportPickerAvailable CONSTANT FINAL)
+    //! The system's own picker opens files as a copy (iOS): use pickFile instead of Qt's file dialog
+    Q_PROPERTY(bool importPickerAvailable READ importPickerAvailable CONSTANT FINAL)
     Q_PROPERTY(QUrl backupFolder READ backupFolder CONSTANT FINAL)
 
 public:
@@ -92,6 +94,7 @@ public:
     Q_INVOKABLE QString licenseText() const;
     bool saveDialogAvailable() const;
     bool exportPickerAvailable() const;
+    bool importPickerAvailable() const;
     QUrl backupFolder() const;
 
     Qupil::Database *database() const { return m_db.get(); }
@@ -126,6 +129,13 @@ public:
         Files"). The result comes with backupExported.
     */
     Q_INVOKABLE void exportBackup();
+    /*!
+        iOS: lets the user choose a file with the system's picker, which brings
+        a local copy. filePicked(purpose, file, error) follows (file empty when
+        cancelled); purpose tells the caller its own pick apart ("backup",
+        "legacy", "csv", "sound").
+    */
+    Q_INVOKABLE void pickFile(const QString &purpose);
     //! Automatic daily backup into the backups folder, keeps the last 14
     Q_INVOKABLE bool autoBackupIfDue();
 
@@ -170,6 +180,8 @@ signals:
     void takeOverFailed(const QString &message);
     //! Result of exportBackup: { ok, cancelled, message }
     void backupExported(const QVariantMap &result);
+    //! Result of pickFile: a local copy, nothing (cancelled) or an error message ready to show
+    void filePicked(const QString &purpose, const QUrl &file, const QString &error);
     //! The whole database was replaced (import / restore): reload everything
     void dataReplaced();
 

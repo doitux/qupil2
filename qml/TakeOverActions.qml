@@ -16,16 +16,25 @@ Item {
     // Existing data is replaced: ask first (on the setup screen there is nothing to lose)
     readonly property bool replacing: App.phase === App.Ready
     property bool exporting: false
+    // iOS: the system's picker brings a copy (Qt's dialog gives paths Qupil may not read)
+    property string picking: ""
 
     function chooseLegacyFolder() {
         folderDialog.open()
     }
     function chooseLegacyFile() {
-        fileDialog.purpose = "legacy"
-        fileDialog.open()
+        pick("legacy")
     }
     function chooseBackup() {
-        fileDialog.purpose = "backup"
+        pick("backup")
+    }
+    function pick(purpose) {
+        if (App.importPickerAvailable) {
+            picking = purpose
+            App.pickFile(purpose)
+            return
+        }
+        fileDialog.purpose = purpose
         fileDialog.open()
     }
     function start(source, purpose) {
@@ -56,6 +65,17 @@ Item {
 
     Connections {
         target: App
+        function onFilePicked(purpose, file, error) {
+            if (purpose !== actions.picking)
+                return   // started from the other place that offers this, or another picker
+            actions.picking = ""
+            if (error !== "") {
+                pickFailed.text = error
+                pickFailed.open()
+            } else if (file.toString() !== "") {
+                actions.start(file, purpose)
+            }
+        }
         function onBackupExported(result) {
             if (!actions.exporting)
                 return   // started from the other place that offers backups
@@ -104,6 +124,13 @@ Item {
         rejectText: qsTrId("common.cancel")
         acceptText: purpose === "backup" ? qsTrId("backup.restore.action") : qsTrId("setup.legacy.action")
         onAccepted: App.takeOver(source)
+    }
+
+    AppDialog {
+        id: pickFailed
+        iconName: "warning"
+        destructive: true
+        title: qsTrId("takeover.failed")
     }
 
     AppDialog {

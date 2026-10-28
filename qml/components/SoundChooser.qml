@@ -17,6 +17,29 @@ ColumnLayout {
     property QtObject alert
     //! Name of the sound that comes with Qupil
     property string defaultName
+    property bool picking: false
+
+    function chooseFile() {
+        if (App.importPickerAvailable) {
+            picking = true
+            App.pickFile("sound")   // iOS: the system's picker brings a copy
+        } else {
+            soundPicker.open()
+        }
+    }
+
+    Connections {
+        target: App
+        function onFilePicked(purpose, file, error) {
+            if (purpose !== "sound" || !chooser.picking)
+                return
+            chooser.picking = false
+            if (error !== "")
+                Nav.toast(error)
+            else if (file.toString() !== "")
+                chooser.alert.chooseSound(file)
+        }
+    }
 
     Layout.fillWidth: true
     spacing: 8
@@ -67,7 +90,7 @@ ColumnLayout {
             iconName: "folder"
             text: qsTrId("settings.select_sound")
             enabled: !chooser.alert.busy
-            onClicked: soundPicker.open()
+            onClicked: chooser.chooseFile()
         }
         ActionButton {
             visible: chooser.alert.soundName !== ""

@@ -33,8 +33,34 @@ Sheet {
         default: return qsTrId("common.mobile")
         }
     }
+    property bool picking: false
+
     function start() {
+        if (App.importPickerAvailable) {
+            picking = true
+            App.pickFile("csv")   // iOS: the system's picker brings a copy
+            return
+        }
         picker.open()
+    }
+    function picked(file) {
+        sheet.file = file
+        sheet.utf8 = true
+        if (sheet.load())
+            sheet.open()
+    }
+
+    Connections {
+        target: App
+        function onFilePicked(purpose, file, error) {
+            if (purpose !== "csv" || !sheet.picking)
+                return
+            sheet.picking = false
+            if (error !== "")
+                Nav.toast(error)
+            else if (file.toString() !== "")
+                sheet.picked(file)
+        }
     }
     function load() {
         info = Data.readCsv(file, utf8)
@@ -64,12 +90,7 @@ Sheet {
         title: qsTrId("import.open_file")
         fileMode: FileDialog.OpenFile
         nameFilters: App.desktop ? [qsTrId("import.filter_csv"), qsTrId("common.filter_all")] : []
-        onAccepted: {
-            sheet.file = selectedFile
-            sheet.utf8 = true
-            if (sheet.load())
-                sheet.open()
-        }
+        onAccepted: sheet.picked(selectedFile)
     }
 
     Text {

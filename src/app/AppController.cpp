@@ -28,6 +28,7 @@
 #include "Database.h"
 #include "DemoData.h"
 #include "FileExport.h"
+#include "FileImport.h"
 #include "LanguageManager.h"
 #include "LegacyImporter.h"
 #include "NoteFormat.h"
@@ -364,6 +365,32 @@ bool AppController::exportPickerAvailable() const
     return FileExport::available();
 }
 
+bool AppController::importPickerAvailable() const
+{
+    return FileImport::available();
+}
+
+namespace {
+//! Where picked files are copied to (iOS); emptied with every pick and after a take-over
+QString importFolder()
+{
+    return QDir(QStandardPaths::writableLocation(QStandardPaths::TempLocation)).filePath(u"import"_s);
+}
+} // namespace
+
+void AppController::pickFile(const QString &purpose)
+{
+    FileImport::pickFile(importFolder(), [this, purpose](const QString &path, const QString &name, const QString &error) {
+        if (!error.isEmpty()) {
+            //: %1 = file, %2 = technical reason
+            emit filePicked(purpose, {}, qtTrId("setup.error.read").arg(name, error));
+            return;
+        }
+        // Cancelled: an empty file, so the caller stops waiting
+        emit filePicked(purpose, path.isEmpty() ? QUrl() : QUrl::fromLocalFile(path), QString());
+    });
+}
+
 QUrl AppController::backupFolder() const
 {
     return QUrl::fromLocalFile(QDir(m_dataDir).filePath(u"backups"_s));
@@ -495,12 +522,15 @@ void AppController::takeOver(const QUrl &source)
     const QString backupDir = m_demoPending ? QString() : QDir(m_dataDir).filePath(u"backups"_s);
     const QString from = openablePath(source);
     const QString shown = displayPath(source);
+    // A copy the iOS picker brought: name the file, not the temporary folder
+    const QString shownAs = QFileInfo(from).absolutePath() == QFileInfo(importFolder()).absoluteFilePath()
+                                ? QFileInfo(from).fileName() : QString();
 
-    QThread *thread = QThread::create([this, from, shown, workDir, backupDir] {
+    QThread *thread = QThread::create([this, from, shown, shownAs, workDir, backupDir] {
         const auto progress = [this](int percent, const QString &step) {
             QMetaObject::invokeMethod(this, [this, percent, step] { setProgress(percent, step); }, Qt::QueuedConnection);
         };
-        Qupil::TakeOver::Outcome outcome = Qupil::TakeOver::run(from, workDir, backupDir, progress);
+        Qupil::TakeOver::Outcome outcome = Qupil::TakeOver::run(from, workDir, backupDir, progress, shownAs);
         if (outcome.source.isEmpty())
             outcome.source = shown;
         QMetaObject::invokeMethod(this, [this, outcome] { finishTakeOver(outcome); }, Qt::QueuedConnection);
@@ -520,6 +550,7 @@ void AppController::finishTakeOver(const Qupil::TakeOver::Outcome &o)
         m_demoPending = false;
         setBusy(false);
         QDir(QDir(m_dataDir).filePath(u"work"_s)).removeRecursively();
+        QDir(importFolder()).removeRecursively();
         emit takeOverFailed(o.error);
         return;
     }
@@ -543,6 +574,7 @@ void AppController::finishTakeOver(const Qupil::TakeOver::Outcome &o)
         return;
     }
     QDir(QDir(m_dataDir).filePath(u"work"_s)).removeRecursively();
+    QDir(importFolder()).removeRecursively();   // a picked copy (iOS)
 
     QVariantMap summary = o.summary;
     summary.insert(u"kind"_s, o.kind);
