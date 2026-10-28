@@ -1959,10 +1959,27 @@ Veuillez contacter l’auteur à l’adresse %4 pour résoudre ce problème.</tr
         </translation>
     </message>
     <message id="summary.skipped" numerus="yes">
-        <source>%n entry/entries without student or lesson skipped</source>
+        <source>%n leftover(s) of deleted students not taken over (%1)</source>
+        <extracomment>Records that Qupil 1.x kept in its database after a student was deleted or removed from a lesson, but no longer showed. %1 = what they were, e.g. “250 activities, 40 programme items, 10 notes”</extracomment>
         <translation>
-            <numerusform>%n entrée dont l’élève ou le cours n’existait plus a été ignorée.</numerusform>
-            <numerusform>%n entrées dont l’élève ou le cours n’existait plus ont été ignorées.</numerusform>
+            <numerusform>%n reste d’élèves ou d’inscriptions à des cours supprimés n’a pas été repris (%1). Qupil 1.x ne l’affichait plus non plus.</numerusform>
+            <numerusform>%n restes d’élèves ou d’inscriptions à des cours supprimés n’ont pas été repris (%1). Qupil 1.x ne les affichait plus non plus.</numerusform>
+        </translation>
+    </message>
+    <message id="summary.programme_items" numerus="yes">
+        <source>%n programme item(s)</source>
+        <extracomment>Pieces in the programme of a recital</extracomment>
+        <translation>
+            <numerusform>%n numéro de programme</numerusform>
+            <numerusform>%n numéros de programme</numerusform>
+        </translation>
+    </message>
+    <message id="summary.lesson_assignments" numerus="yes">
+        <source>%n lesson assignment(s)</source>
+        <extracomment>A student assigned to a lesson</extracomment>
+        <translation>
+            <numerusform>%n inscription à un cours</numerusform>
+            <numerusform>%n inscriptions à des cours</numerusform>
         </translation>
     </message>
     <message id="summary.unparsed_dates" numerus="yes">

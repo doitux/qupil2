@@ -38,7 +38,15 @@ public:
         int libraryItems = 0;
         int reminders = 0;
         int instruments = 0;
-        int skipped = 0;          //!< records whose student or lesson no longer exists
+        int skipped = 0;          //!< records whose student or lesson no longer exists (sum of the below)
+        //! Leftovers Qupil 1.x left behind and no longer showed itself, by kind: deleting a
+        //! student kept its activities and recital programme items, removing a student from a
+        //! lesson within 30 days kept the notes and pieces of that lesson
+        int skippedMemberships = 0;
+        int skippedNotes = 0;
+        int skippedPieces = 0;
+        int skippedActivities = 0;
+        int skippedProgramme = 0;
         int unparsedDates = 0;    //!< dates in an unknown format, kept as text
         QStringList warnings;
     };

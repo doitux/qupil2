@@ -161,6 +161,12 @@ Outcome run(const QString &source, const QString &workDir, const QString &backup
             { u"events"_s, r.events }, { u"archivedEvents"_s, r.archivedEvents },
             { u"libraryItems"_s, r.libraryItems }, { u"reminders"_s, r.reminders },
             { u"instruments"_s, r.instruments }, { u"skipped"_s, r.skipped },
+            // What the skipped records were (Qupil 1.x no longer showed them either)
+            { u"skippedDetail"_s, QVariantMap { { u"activities"_s, r.skippedActivities },
+                                                { u"programme"_s, r.skippedProgramme },
+                                                { u"notes"_s, r.skippedNotes },
+                                                { u"pieces"_s, r.skippedPieces },
+                                                { u"memberships"_s, r.skippedMemberships } } },
             { u"unparsedDates"_s, r.unparsedDates }, { u"settingsFound"_s, !config.isEmpty() },
         };
         db.close();

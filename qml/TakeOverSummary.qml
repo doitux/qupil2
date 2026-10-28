@@ -35,6 +35,23 @@ ColumnLayout {
         }
     }
 
+    //! What the skipped leftovers were, the most first: "250 activities, 40 programme items, 10 notes"
+    function skippedParts() {
+        const detail = result.skippedDetail || {}
+        const parts = []
+        for (const kind of ["activities", "programme", "notes", "pieces", "memberships"]) {
+            const n = detail[kind] || 0
+            if (n <= 0)
+                continue
+            const text = kind === "programme" ? qsTrId("summary.programme_items", n)
+                       : kind === "memberships" ? qsTrId("summary.lesson_assignments", n)
+                       : label(kind, n)
+            parts.push({ n: n, text: text })
+        }
+        parts.sort((a, b) => b.n - a.n)
+        return parts.map(p => p.text).join(", ")
+    }
+
     RowLayout {
         Layout.fillWidth: true
         spacing: 10
@@ -142,7 +159,7 @@ ColumnLayout {
             Text {
                 Layout.fillWidth: true
                 wrapMode: Text.WordWrap
-                text: notice.modelData === "skipped" ? qsTrId("summary.skipped", notice.count)
+                text: notice.modelData === "skipped" ? qsTrId("summary.skipped", notice.count).arg(root.skippedParts())
                                                      : qsTrId("summary.unparsed_dates", notice.count)
                 color: Theme.tile.orange.fg
                 font.family: Theme.fontFamily

@@ -340,12 +340,11 @@ LegacyImporter::Result LegacyImporter::run(const QString &legacyDatabase, Store 
     }
 
     QHash<qint64, QString> memberships;
-    int orphans = 0;
     for (const Row &row : old.rows(u"pupilatlesson"_s, u"palid"_s)) {
         const QString lesson = lessons.value(key(row, "lessonid"));
         const QString student = students.value(key(row, "pupilid"));
         if (lesson.isEmpty() || student.isEmpty()) {
-            ++orphans;
+            ++r.skippedMemberships;
             continue;
         }
         const QString id = create(u"membership"_s, {
@@ -366,7 +365,7 @@ LegacyImporter::Result LegacyImporter::run(const QString &legacyDatabase, Store 
     for (const Row &row : old.rows(u"piece"_s, u"pieceid"_s)) {
         const QString membership = memberships.value(key(row, "palid"));
         if (membership.isEmpty()) {
-            ++orphans;
+            ++r.skippedPieces;
             continue;
         }
         const qint64 common = key(row, "cpieceid");
@@ -398,7 +397,7 @@ LegacyImporter::Result LegacyImporter::run(const QString &legacyDatabase, Store 
     for (const Row &row : old.rows(u"note"_s, u"noteid"_s)) {
         const QString membership = memberships.value(key(row, "palid"));
         if (membership.isEmpty()) {
-            ++orphans;
+            ++r.skippedNotes;
             continue;
         }
         const qint64 common = key(row, "cnoteid");
@@ -422,7 +421,7 @@ LegacyImporter::Result LegacyImporter::run(const QString &legacyDatabase, Store 
     for (const Row &row : old.rows(u"activity"_s, u"activityid"_s)) {
         const QString student = students.value(key(row, "pupilid"));
         if (student.isEmpty()) {
-            ++orphans;
+            ++r.skippedActivities;
             continue;
         }
         create(u"activity"_s, {
@@ -488,7 +487,7 @@ LegacyImporter::Result LegacyImporter::run(const QString &legacyDatabase, Store 
         const QString item = external ? externals.value(pieceKey)
                                       : pieces.value(pieceKey, pieceByCommon.value(pieceKey));
         if (event.isEmpty() || item.isEmpty()) {
-            ++orphans;
+            ++r.skippedProgramme;
             continue;
         }
         create(u"event_item"_s, {
@@ -558,10 +557,13 @@ LegacyImporter::Result LegacyImporter::run(const QString &legacyDatabase, Store 
                 create(u"setting"_s, { { u"id"_s, to }, { u"value"_s, cfg.values.value(from) } });
     }
 
-    r.skipped = orphans;
+    r.skipped = r.skippedMemberships + r.skippedNotes + r.skippedPieces + r.skippedActivities + r.skippedProgramme;
     r.unparsedDates = unparsedDates;
-    if (orphans > 0)
-        r.warnings << u"%1 records without their student or lesson were skipped"_s.arg(orphans);
+    if (r.skipped > 0)
+        r.warnings << u"%1 records without their student or lesson were skipped "
+                      u"(%2 lesson assignments, %3 notes, %4 pieces, %5 activities, %6 programme items)"_s
+                          .arg(r.skipped).arg(r.skippedMemberships).arg(r.skippedNotes).arg(r.skippedPieces)
+                          .arg(r.skippedActivities).arg(r.skippedProgramme);
     if (unparsedDates > 0)
         r.warnings << u"%1 dates had an unknown format and were kept as text"_s.arg(unparsedDates);
 

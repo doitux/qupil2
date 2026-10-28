@@ -627,6 +627,11 @@ private slots:
         QCOMPARE(r.events, 1);
         QCOMPARE(r.reminders, 1);
         QCOMPARE(r.skipped, 8);
+        QCOMPARE(r.skippedMemberships, 2);   // lesson or student gone
+        QCOMPARE(r.skippedPieces, 1);
+        QCOMPARE(r.skippedNotes, 1);
+        QCOMPARE(r.skippedActivities, 1);
+        QCOMPARE(r.skippedProgramme, 3);
         QCOMPARE(r.unparsedDates, 5);
         QCOMPARE(r.warnings.size(), 2);
 

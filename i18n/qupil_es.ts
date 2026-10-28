@@ -1959,10 +1959,27 @@ Póngase en contacto con el autor en %4 para resolver el problema.</translation>
         </translation>
     </message>
     <message id="summary.skipped" numerus="yes">
-        <source>%n entry/entries without student or lesson skipped</source>
+        <source>%n leftover(s) of deleted students not taken over (%1)</source>
+        <extracomment>Records that Qupil 1.x kept in its database after a student was deleted or removed from a lesson, but no longer showed. %1 = what they were, e.g. “250 activities, 40 programme items, 10 notes”</extracomment>
         <translation>
-            <numerusform>Se ha omitido %n entrada cuyo alumno o clase ya no existía.</numerusform>
-            <numerusform>Se han omitido %n entradas cuyo alumno o clase ya no existía.</numerusform>
+            <numerusform>No se ha transferido %n resto de alumnos o asignaciones a clases eliminados (%1). Qupil 1.x tampoco lo mostraba ya.</numerusform>
+            <numerusform>No se han transferido %n restos de alumnos o asignaciones a clases eliminados (%1). Qupil 1.x tampoco los mostraba ya.</numerusform>
+        </translation>
+    </message>
+    <message id="summary.programme_items" numerus="yes">
+        <source>%n programme item(s)</source>
+        <extracomment>Pieces in the programme of a recital</extracomment>
+        <translation>
+            <numerusform>%n punto del programa</numerusform>
+            <numerusform>%n puntos del programa</numerusform>
+        </translation>
+    </message>
+    <message id="summary.lesson_assignments" numerus="yes">
+        <source>%n lesson assignment(s)</source>
+        <extracomment>A student assigned to a lesson</extracomment>
+        <translation>
+            <numerusform>%n asignación a una clase</numerusform>
+            <numerusform>%n asignaciones a clases</numerusform>
         </translation>
     </message>
     <message id="summary.unparsed_dates" numerus="yes">
