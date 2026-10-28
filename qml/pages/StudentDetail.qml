@@ -50,8 +50,7 @@ Item {
 
     function relative(iso) {
         const d = new Date(iso + "T00:00:00")
-        const today = new Date()
-        today.setHours(0, 0, 0, 0)
+        const today = new Date(Data.today() + "T00:00:00")
         const days = Math.round((today - d) / 86400000)
         if (days === 0) return qsTrId("time.today")
         if (days === 1) return qsTrId("time.yesterday")

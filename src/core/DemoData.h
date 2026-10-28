@@ -12,8 +12,9 @@ QStringList legacySchema();
 
 /*!
     Writes a Qupil 1.x data folder (db/qupil.db and config.xml) with invented
-    students, lessons, notes, pieces, events and library items. Dates are
-    relative to today, so the schedule always has lessons today.
+    students, lessons, notes, pieces, events and library items. Lessons are on
+    fixed weekdays from Monday to Friday, the most on Tuesday; other dates are
+    relative to Clock::today().
     Used for "Try with sample data" and for screenshots – never real data.
     language: "de" gives German names and texts, anything else English.
 */

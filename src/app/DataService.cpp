@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <iterator>
 
+#include "Clock.h"
 #include "Database.h"
 #include "Ids.h"
 #include "Csv.h"
@@ -46,7 +47,7 @@ constexpr int kIntervalDays[] = { 0, 30, 60, 90, 120, 180, 270, 360, 540, 720 };
 
 QString todayIso()
 {
-    return QDate::currentDate().toString(Qt::ISODate);
+    return Qupil::Clock::today().toString(Qt::ISODate);
 }
 
 QString initials(const QString &forename, const QString &surname)
@@ -160,6 +161,11 @@ QString DataService::today() const
     return todayIso();
 }
 
+QDateTime DataService::now() const
+{
+    return Qupil::Clock::now();
+}
+
 QString DataService::dayHeading(const QDateTime &when) const
 {
     const QLocale locale = uiLocale();
@@ -177,7 +183,7 @@ QString DataService::dayHeading(const QDateTime &when) const
 int DataService::ageOn(const QString &birthday, const QString &onDate) const
 {
     const QDate b = QDate::fromString(birthday, Qt::ISODate);
-    const QDate on = onDate.isEmpty() ? QDate::currentDate() : QDate::fromString(onDate, Qt::ISODate);
+    const QDate on = onDate.isEmpty() ? Qupil::Clock::today() : QDate::fromString(onDate, Qt::ISODate);
     if (!b.isValid() || !on.isValid() || b > on)
         return -1;
     int age = on.year() - b.year();
@@ -524,7 +530,7 @@ bool DataService::endMembership(const QString &membershipId, const QString &less
     const QVariantMap m = m_store->get(u"membership"_s, membershipId);
     const QDate start = QDate::fromString(m.value(u"start_date"_s).toString(), Qt::ISODate);
     // Added by mistake (less than 30 days): remove; otherwise keep the history under the old name
-    if (!start.isValid() || start.daysTo(QDate::currentDate()) <= 30) {
+    if (!start.isValid() || start.daysTo(Qupil::Clock::today()) <= 30) {
         const bool hasContent = scalar(u"SELECT (SELECT COUNT(*) FROM note WHERE deleted = 0 AND membership_id = ?) + "
                                        u"(SELECT COUNT(*) FROM piece WHERE deleted = 0 AND membership_id = ?)"_s,
                                        { membershipId, membershipId }).toInt() > 0;
@@ -1147,7 +1153,7 @@ bool DataService::setEventState(const QString &id, int state, bool addActivities
 
 QVariantList DataService::birthdays(int daysAhead) const
 {
-    const QDate today = QDate::currentDate();
+    const QDate today = Qupil::Clock::today();
     QList<QVariantMap> list;
     for (const QVariant &v : rows(u"SELECT id, forename, surname, birthday FROM student WHERE deleted = 0 AND birthday <> ''"_s)) {
         QVariantMap m = v.toMap();
@@ -1193,7 +1199,7 @@ QVariantList DataService::reminders() const
 QVariantList DataService::recitalCandidates() const
 {
     const bool soloOnly = setting(u"recital_check_solo_only"_s, 1).toInt() != 0;
-    const QDate today = QDate::currentDate();
+    const QDate today = Qupil::Clock::today();
     QList<QVariantMap> list;
     for (const QVariant &v : rows(u"SELECT id, forename, surname, recital_interval, first_lesson FROM student "
                                   u"WHERE deleted = 0 AND recital_interval > 0"_s)) {

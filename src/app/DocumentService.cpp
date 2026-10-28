@@ -24,6 +24,7 @@
 #include <QThread>
 
 #include "ArchiveFormat.h"
+#include "Clock.h"
 #include "DataService.h"
 #include "Database.h"
 #include "FileExport.h"
@@ -83,7 +84,7 @@ QString page(const QString &title, const QString &body, bool footer = true)
            u"</style></head><body>"_s
            + body
            + (footer ? u"<p class=\"muted\"><i>Qupil "_s + QCoreApplication::applicationVersion().section(u'.', 0, 1)
-                           + u" – © 2006–"_s + QString::number(QDate::currentDate().year())
+                           + u" – © 2006–"_s + QString::number(Qupil::Clock::today().year())
                            + u" Felix Hammer – qupil.de</i></p>"_s
                      : QString())
            + u"</body></html>"_s;
@@ -285,14 +286,14 @@ QUrl DocumentService::dayOverview(const QString &dateIso, int notesPerLesson, in
 
 QUrl DocumentService::timetable()
 {
-    return writeAndOpen(timetableHtml(), qtTrId("doc.timetable.title") + u' ' + QDate::currentDate().toString(Qt::ISODate),
+    return writeAndOpen(timetableHtml(), qtTrId("doc.timetable.title") + u' ' + Qupil::Clock::today().toString(Qt::ISODate),
                         false);
 }
 
 QUrl DocumentService::rentalList()
 {
     return writeAndOpen(rentalListHtml(),
-                        qtTrId("instruments.inventory_list") + u' ' + QDate::currentDate().toString(Qt::ISODate), false);
+                        qtTrId("instruments.inventory_list") + u' ' + Qupil::Clock::today().toString(Qt::ISODate), false);
 }
 
 QUrl DocumentService::programme(const QString &eventId)
@@ -419,7 +420,7 @@ void DocumentService::convertNext()
 QVariantList DocumentService::dayChoices() const
 {
     const QLocale locale = uiLocale();
-    const QDate today = QDate::currentDate();
+    const QDate today = Qupil::Clock::today();
     QVariantList out;
     for (int weekday = 0; weekday < 7; ++weekday) {
         // Today, or the next day with this weekday

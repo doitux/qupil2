@@ -18,7 +18,7 @@ Flickable {
     property bool columnMode: false
     property int day: todayIndex
     property string selectedMembership: ""
-    property date now: new Date()
+    property date now: Data.now()
 
     signal studentClicked(string studentId, string membershipId)
     signal lessonClicked(string lessonId)
@@ -73,7 +73,7 @@ Flickable {
         interval: 20000
         running: true
         repeat: true
-        onTriggered: overview.now = new Date()
+        onTriggered: overview.now = Data.now()
     }
 
     clip: true

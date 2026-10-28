@@ -43,6 +43,8 @@ qt_standard_project_setup(REQUIRES 6.5)
 qt_add_library(qupilcore STATIC
     src/core/Ids.h
     src/core/Ids.cpp
+    src/core/Clock.h
+    src/core/Clock.cpp
     src/core/Schema.h
     src/core/Schema.cpp
     src/core/Database.h

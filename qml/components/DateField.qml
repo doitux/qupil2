@@ -23,7 +23,7 @@ ColumnLayout {
 
     function parse(iso) {
         const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "")
-        return m ? new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3])) : new Date()
+        return m ? new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3])) : Data.now()
     }
     function iso(d) {
         const p = n => (n < 10 ? "0" : "") + n
@@ -212,7 +212,7 @@ ColumnLayout {
                         kind: "quiet"
                         text: qsTrId("nav.today")
                         onClicked: {
-                            field.picked(field.iso(new Date()))
+                            field.picked(Data.today())
                             popup.close()
                         }
                     }

@@ -188,7 +188,9 @@ public:
     Q_INVOKABLE QString plainText(const QString &note, int maxLength = 0) const;
     //! "Wed, 07.10.2026" style date in the UI language
     Q_INVOKABLE QString formatDate(const QString &iso, bool withWeekday = false) const;
+    //! Today (ISO) and now, as shown: a fixed Tuesday in the screenshots, see Clock
     Q_INVOKABLE QString today() const;
+    Q_INVOKABLE QDateTime now() const;
     //! "Wednesday, 14 October" in the UI language
     Q_INVOKABLE QString dayHeading(const QDateTime &when) const;
     Q_INVOKABLE int ageOn(const QString &birthday, const QString &onDate = {}) const;

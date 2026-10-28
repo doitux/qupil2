@@ -13,6 +13,7 @@
 #include <iterator>
 
 #include "AppController.h"
+#include "Clock.h"
 #include "ReminderAlert.h"
 #include "DataService.h"
 #include "DocumentService.h"
@@ -98,10 +99,9 @@ void ScreenshotTour::addPages(const QString &prefix)
         const QString name = u"%1-%2-%3"_s.arg(prefix).arg(i).arg(QLatin1StringView(kPages[i]));
         m_steps << Step { [this, i] {
                               m_window->setProperty("currentPage", i);
-                              // A lesson is running in the pictures: 14:20 today
-                              const QDateTime lessonTime(QDate::currentDate(), QTime(14, 20));
+                              // A lesson is running in the pictures (main.cpp stops the clock at 14:20)
                               for (QObject *o : m_window->findChildren<QObject *>(u"scheduleOverview"_s))
-                                  o->setProperty("now", lessonTime);
+                                  o->setProperty("now", Qupil::Clock::now());
                           },
                           {} }
                 << Step { [this, name] { shot(name); }, {} };
@@ -209,7 +209,7 @@ void ScreenshotTour::writeDocuments()
         return;
     pickExamples();
     const QString folder = m_folder + u"/documents"_s;
-    const QString today = QDate::currentDate().toString(Qt::ISODate);
+    const QString today = Qupil::Clock::today().toString(Qt::ISODate);
     docs->writePdf(docs->dayOverviewHtml(today, 3, 2), u"day-overview"_s, false, folder);
     docs->writePdf(docs->timetableHtml(), u"timetable"_s, false, folder);
     docs->writePdf(docs->rentalListHtml(), u"rental-instruments"_s, false, folder);

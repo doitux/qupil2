@@ -20,7 +20,7 @@ Sheet {
 
     function start() {
         choices = Docs.dayChoices()
-        weekday = (new Date().getDay() + 6) % 7
+        weekday = (Data.now().getDay() + 6) % 7
         open()
     }
 

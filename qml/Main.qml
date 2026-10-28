@@ -399,7 +399,7 @@ ApplicationWindow {
     Shortcut {
         enabled: App.phase === App.Ready
         sequences: ["Ctrl+N, U", "Ctrl+N, L"]
-        onActivated: Nav.editLesson("", (new Date().getDay() + 6) % 7)
+        onActivated: Nav.editLesson("", (Data.now().getDay() + 6) % 7)
     }
     Shortcut {
         enabled: App.phase === App.Ready

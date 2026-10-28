@@ -20,6 +20,7 @@
 
 #include "AppController.h"
 #include "BackKey.h"
+#include "Clock.h"
 #include "DataService.h"
 #include "DocumentService.h"
 #include "LanguageManager.h"
@@ -135,14 +136,30 @@ int main(int argc, char *argv[])
     const QCommandLineOption smokeOption(u"smoke-test"_s, u"Load the UI once and fail on QML warnings (CI)."_s);
     const QCommandLineOption screenshotsOption(
         u"screenshots"_s, u"Save screenshots of all screens with sample data into a folder."_s, u"folder"_s);
+    const QCommandLineOption dateOption(
+        u"date"_s, u"Show the app as if today were this date (sample data, schedule)."_s, u"yyyy-mm-dd"_s);
     args.addOption(dataDirOption);
     args.addOption(langOption);
     args.addOption(smokeOption);
     args.addOption(screenshotsOption);
+    args.addOption(dateOption);
     args.process(app);
 
     const bool smokeTest = args.isSet(smokeOption);
     const bool screenshots = args.isSet(screenshotsOption);
+    // The day shown as "today". Screenshots: a Tuesday (lessons, never a weekend),
+    // at 14:20 while the first lesson of the day runs
+    QDate shownDate;
+    if (args.isSet(dateOption)) {
+        shownDate = QDate::fromString(args.value(dateOption), Qt::ISODate);
+        if (!shownDate.isValid())
+            qWarning("--date: not a date (yyyy-mm-dd): %s", qPrintable(args.value(dateOption)));
+    }
+    if (screenshots)
+        Qupil::Clock::pretend(shownDate.isValid() ? shownDate : Qupil::Clock::lastWeekday(QDate::currentDate(), 2),
+                              QTime(14, 20));
+    else if (shownDate.isValid())
+        Qupil::Clock::pretend(shownDate);
     QTemporaryDir scratchDir;
     if (smokeTest || screenshots) {
         // Keep the user's real settings and data untouched

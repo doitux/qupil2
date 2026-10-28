@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <memory>
 
+#include "Clock.h"
 #include "Crypto.h"
 #include "Csv.h"
 #include "Database.h"
@@ -820,9 +821,14 @@ private slots:
 
     void demoDataImports()
     {
+        // Made on a Saturday: still no lessons at the weekend
+        const QDate saturday = Clock::lastWeekday(QDate::currentDate(), 6);
+        Clock::pretend(saturday);
         const QString folder = file(u"demo"_s);
         QString error;
-        QVERIFY2(DemoData::writeLegacyFolder(folder, u"de"_s, &error), qPrintable(error));
+        const bool written = DemoData::writeLegacyFolder(folder, u"de"_s, &error);
+        Clock::pretend({});
+        QVERIFY2(written, qPrintable(error));
         const QString legacy = LegacyImporter::findDatabase(folder);
         QVERIFY(!legacy.isEmpty());
         QVERIFY(!LegacyImporter::findConfig(legacy).isEmpty());
@@ -843,9 +849,28 @@ private slots:
         QCOMPARE(r.unparsedDates, 0);
         QVERIFY2(r.warnings.isEmpty(), qPrintable(r.warnings.join(u'\n')));
 
-        // Today always has lessons, and the next event has a programme incl. the external piece
-        const int today = QDate::currentDate().dayOfWeek() - 1;
-        QVERIFY(store.select(u"lesson"_s, u"active = 1 AND irregular = 0 AND weekday = ?"_s, { today }).size() >= 4);
+        // Lessons, regular activities and lesson notes only Monday to Friday; Tuesday is the fullest day
+        const auto lessons = store.select(u"lesson"_s, u"active = 1 AND irregular = 0"_s);
+        QSet<int> days;
+        for (const auto &l : lessons) {
+            QVERIFY2(l.value(u"weekday"_s).toInt() <= 4, qPrintable(l.value(u"name"_s).toString()));
+            days.insert(l.value(u"weekday"_s).toInt());
+        }
+        QVERIFY(days == (QSet<int> { 0, 1, 2, 3, 4 }));
+        QVERIFY(store.select(u"lesson"_s, u"active = 1 AND irregular = 0 AND weekday = 1"_s).size() >= 4);
+        for (const auto &a : store.select(u"activity"_s, u"continuous = 1"_s))
+            QVERIFY(a.value(u"weekday"_s).toInt() <= 4);
+        for (const auto &n : store.select(u"note"_s)) {
+            const QDate date = QDate::fromString(n.value(u"date"_s).toString(), Qt::ISODate);
+            QVERIFY2(date.isValid() && date.dayOfWeek() <= 5, qPrintable(n.value(u"date"_s).toString()));
+            QVERIFY(date < saturday);
+        }
+        for (const auto &m : store.select(u"membership"_s)) {
+            const QDate start = QDate::fromString(m.value(u"start_date"_s).toString(), Qt::ISODate);
+            QVERIFY(start.dayOfWeek() <= 5);
+        }
+
+        // The next event has a programme incl. the external piece
         const auto upcoming = store.select(u"event"_s, u"state = 0"_s);
         QCOMPARE(upcoming.size(), 1);
         const auto programme = store.select(u"event_item"_s, u"event_id = ?"_s, { upcoming.first().value(u"id"_s) });

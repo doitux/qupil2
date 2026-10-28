@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 #include "DemoData.h"
 
+#include "Clock.h"
+
 #include <QDate>
 #include <QHash>
 #include <QTime>
@@ -110,7 +112,7 @@ const Student kStudentsEn[] = {
 struct Lesson
 {
     int type;               // 1 single, 2 group, 3 ensemble
-    int dayOffset;          // weekday relative to today; -1 = irregular
+    int weekday;            // 0 = Monday … 4 = Friday; -1 = irregular
     const char *start;
     const char *end;
     int location;           // index into the location list
@@ -161,8 +163,13 @@ QString iso(const QDate &d)
 //! Most recent date (today or before) that falls on the given weekday (0 = Monday)
 QDate lastWeekday(const QDate &today, int weekday)
 {
-    const int diff = (today.dayOfWeek() - 1 - weekday + 7) % 7;
-    return today.addDays(-diff);
+    return Clock::lastWeekday(today, weekday + 1);
+}
+
+//! The date, or the Friday before when it falls on a weekend: no lessons at weekends
+QDate workday(const QDate &date)
+{
+    return date.dayOfWeek() > 5 ? lastWeekday(date, 4) : date;
 }
 
 QString autoName(const Lesson &l, const Student *students, const QStringList &locations, bool de)
@@ -170,7 +177,7 @@ QString autoName(const Lesson &l, const Student *students, const QStringList &lo
     QString name = l.type == 1 ? (de ? u"EU-"_s : u"IL-"_s)
                  : l.type == 2 ? (de ? u"GU-"_s : u"GL-"_s)
                                : (de ? u"EnsU-"_s : u"EnsL-"_s);
-    if (l.dayOffset >= 0)
+    if (l.weekday >= 0)
         name += QString::number(QTime::fromString(QLatin1StringView(l.start), u"hh:mm"_s)
                                     .secsTo(QTime::fromString(QLatin1StringView(l.end), u"hh:mm"_s)) / 60)
                 + u"-"_s;
@@ -227,7 +234,7 @@ bool writeLegacyFolder(const QString &folder, const QString &language, QString *
     const Text t { de };
     const Student *students = de ? kStudentsDe : kStudentsEn;
     constexpr int studentCount = int(std::size(kStudentsDe));
-    const QDate today = QDate::currentDate();
+    const QDate today = Clock::today();
     const QStringList locations { t("Raum 20", "Room 20"), t("Raum 16", "Room 16"), t("Aula", "Auditorium") };
 
     QDir().mkpath(QDir(folder).filePath(u"db"_s));
@@ -266,10 +273,10 @@ bool writeLegacyFolder(const QString &folder, const QString &language, QString *
                       i == 0 ? t("Übt am liebsten morgens. Spielt gern Barock.", "Likes to practise in the morning. Loves baroque music.")
                              : QString(),
                       t("Mutter von %1", "Mother of %1").arg(QString::fromUtf8(s.forename)), u"0123 98 76%1"_s.arg(i),
-                      iso(today.addYears(-s.learningYears).addMonths(-1)), t(s.instrumentDe, s.instrumentEn),
+                      iso(workday(today.addYears(-s.learningYears).addMonths(-1))), t(s.instrumentDe, s.instrumentEn),
                       QString::fromLatin1(s.size), i == 0 || i == 3 ? 1 : 0, rental ? 1 : 0,
                       rental ? t("Leihinstrument Nr. %1", "Rental instrument no. %1").arg(12 + i) : QString(),
-                      rental ? iso(today.addMonths(-14)) : QString(), i == 2 ? 3 : 5, i == 2 ? 0 : 1 });
+                      rental ? iso(workday(today.addMonths(-14))) : QString(), i == 2 ? 3 : 5, i == 2 ? 0 : 1 });
             }
             w.insert(u"pupilarchive"_s, { u"surname"_s, u"forename"_s, u"data"_s },
                      { t("Früher", "Former"), t("Anna", "Amy"),
@@ -277,13 +284,14 @@ bool writeLegacyFolder(const QString &folder, const QString &language, QString *
                          "<h1>Archive entry: Amy Former</h1><p>Lessons from 2016 to 2022.</p>") });
 
             // ------------------------------------------------------------ lessons
+            // Fixed weekdays, Monday to Friday; the screenshots show Tuesday, the fullest day
             const QList<Lesson> lessons {
-                { 1, 0, "14:00", "14:45", 0, { 0 } },
-                { 1, 0, "14:45", "15:15", 0, { 6 } },
-                { 2, 0, "15:30", "16:30", 0, { 1, 2 } },
-                { 3, 0, "17:00", "18:30", 2, { 0, 4, 5, 7, 8 }, "Streicherensemble", true },
-                { 1, 1, "15:00", "15:30", 1, { 3 } },
-                { 1, 1, "16:00", "16:45", 1, { 4 } },
+                { 1, 1, "14:00", "14:45", 0, { 0 } },
+                { 1, 1, "14:45", "15:15", 0, { 6 } },
+                { 2, 1, "15:30", "16:30", 0, { 1, 2 } },
+                { 3, 1, "17:00", "18:30", 2, { 0, 4, 5, 7, 8 }, "Streicherensemble", true },
+                { 1, 0, "15:00", "15:30", 1, { 3 } },
+                { 1, 4, "16:00", "16:45", 1, { 4 } },
                 { 1, 2, "14:30", "15:15", 0, { 5 } },
                 { 1, 3, "16:15", "17:00", 0, { 7 } },
                 { 1, -1, "", "", 1, { 8 } },
@@ -294,19 +302,20 @@ bool writeLegacyFolder(const QString &folder, const QString &language, QString *
                 const QString name = l.manualName
                                          ? (de || !l.manualGerman ? QString::fromUtf8(l.manualName) : u"String ensemble"_s)
                                          : autoName(l, students, locations, de);
-                const int weekday = l.dayOffset < 0 ? 0 : (today.dayOfWeek() - 1 + l.dayOffset) % 7;
+                const int weekday = l.weekday < 0 ? 0 : l.weekday;
                 const qint64 lesson = w.insert(u"lesson"_s,
                     { u"state"_s, u"type"_s, u"autolessonname"_s, u"lessonname"_s, u"unsteadylesson"_s,
                       u"lessonday"_s, u"lessonstarttime"_s, u"lessonstoptime"_s, u"lessonlocation"_s },
-                    { 1, l.type, l.manualName ? 0 : 1, name, l.dayOffset < 0 ? 1 : 0, weekday,
+                    { 1, l.type, l.manualName ? 0 : 1, name, l.weekday < 0 ? 1 : 0, weekday,
                       QString::fromLatin1(l.start), QString::fromLatin1(l.end), locations.value(l.location) });
                 QList<qint64> pals;
                 for (int s : l.students) {
                     pals << w.insert(u"pupilatlesson"_s, { u"lessonid"_s, u"pupilid"_s, u"startdate"_s, u"stopdate"_s },
-                                     { lesson, pupil.value(s), iso(today.addMonths(-13 - s)), QString::fromLatin1(kOpen) });
+                                     { lesson, pupil.value(s), iso(workday(today.addMonths(-13 - s))), QString::fromLatin1(kOpen) });
                 }
                 memberships << pals;
-                lastLesson << (l.dayOffset < 0 ? today.addDays(-9) : lastWeekday(today.addDays(-1), weekday));
+                // Irregular: a Thursday the week before
+                lastLesson << (l.weekday < 0 ? lastWeekday(today.addDays(-7), 3) : lastWeekday(today.addDays(-1), weekday));
             }
             // A former lesson of Tom / Leo, ended last summer
             const qint64 llnid = w.insert(u"lastlessonname"_s, { u"lessonname"_s }, { t("EU-30-Rau-TomWag", "IL-30-Roo-LeoHug") });
@@ -316,7 +325,7 @@ bool writeLegacyFolder(const QString &folder, const QString &language, QString *
                 { 0, 1, 1, t("EU-30-Rau-TomWag", "IL-30-Roo-LeoHug"), 0, 3, u"15:00"_s, u"15:30"_s, locations[0] });
             const qint64 oldPal = w.insert(u"pupilatlesson"_s,
                 { u"lessonid"_s, u"pupilid"_s, u"llnid"_s, u"startdate"_s, u"stopdate"_s },
-                { oldLesson, pupil.value(3), llnid, iso(today.addYears(-3)), iso(today.addMonths(-4)) });
+                { oldLesson, pupil.value(3), llnid, iso(workday(today.addYears(-3))), iso(lastWeekday(today.addMonths(-4), 3)) });
 
             // ------------------------------------------------------------ notes
             const QStringList noteTexts {
@@ -348,7 +357,7 @@ bool writeLegacyFolder(const QString &folder, const QString &language, QString *
             }
             {
                 const qint64 id = w.insert(u"note"_s, { u"palid"_s, u"date"_s, u"content"_s },
-                                           { oldPal, iso(today.addMonths(-4).addDays(-2)),
+                                           { oldPal, iso(lastWeekday(today.addMonths(-4), 3)),
                                              t("<p>Letzte Stunde vor dem Wechsel zu Raum 16.</p>",
                                                "<p>Last lesson before moving to room 16.</p>") });
                 w.exec(u"UPDATE note SET cnoteid = %1 WHERE noteid = %1"_s.arg(id));
@@ -385,8 +394,8 @@ bool writeLegacyFolder(const QString &folder, const QString &language, QString *
                             { u"palid"_s, u"title"_s, u"genre"_s, u"duration"_s, u"startdate"_s, u"stopdate"_s,
                               u"state"_s, u"piececomposerid"_s },
                             { pal, QString::fromUtf8(p.title), t(p.genreDe, p.genreEn), p.duration,
-                              iso(today.addDays(-20 * (k + 1) - li)),
-                              state == 4 ? QVariant(iso(today.addDays(-10))) : QVariant(), state,
+                              iso(workday(today.addDays(-20 * (k + 1) - li))),
+                              state == 4 ? QVariant(iso(workday(today.addDays(-10)))) : QVariant(), state,
                               composerId(p.composer) });
                         if (common < 0)
                             common = id;
@@ -403,13 +412,13 @@ bool writeLegacyFolder(const QString &folder, const QString &language, QString *
                 w.insert(u"activity"_s,
                     { u"pupilid"_s, u"ifcontinous"_s, u"desc"_s, u"continousday"_s, u"continoustime"_s, u"date"_s,
                       u"continousstopdate"_s, u"continoustype"_s, u"noncontinoustype"_s },
-                    { pupil.value(i), 1, t("Jugendorchester", "Youth orchestra"), (today.dayOfWeek() + 2) % 7,
-                      u"17:30"_s, iso(today.addYears(-1)), QString::fromLatin1(kOpen), 0, 0 });
+                    { pupil.value(i), 1, t("Jugendorchester", "Youth orchestra"), 3,
+                      u"17:30"_s, iso(lastWeekday(today.addYears(-1), 3)), QString::fromLatin1(kOpen), 0, 0 });
             }
             w.insert(u"activity"_s,
                 { u"pupilid"_s, u"ifcontinous"_s, u"desc"_s, u"continousday"_s, u"continoustime"_s, u"date"_s,
                   u"continousstopdate"_s, u"continoustype"_s, u"noncontinoustype"_s },
-                { pupil.value(1), 1, t("Musiktheorie", "Music theory"), 2, u"18:00"_s, iso(today.addMonths(-8)),
+                { pupil.value(1), 1, t("Musiktheorie", "Music theory"), 2, u"18:00"_s, iso(lastWeekday(today.addMonths(-8), 2)),
                   QString::fromLatin1(kOpen), 1, 0 });
             for (int i : { 0, 1, 4 }) {
                 w.insert(u"activity"_s,
@@ -443,7 +452,7 @@ bool writeLegacyFolder(const QString &folder, const QString &language, QString *
                          { authors.value(author), k == 5 ? t("Weihnachtslieder für Streicher", "Christmas carols for strings")
                                                          : QString::fromUtf8(library[k][1]),
                            publishers.value(publisher), lent ? pupil.value(k == 0 ? 0 : 6) : -1,
-                           lent ? QVariant(iso(today.addDays(-21 - k))) : QVariant() });
+                           lent ? QVariant(iso(workday(today.addDays(-21 - k)))) : QVariant() });
             }
 
             // ------------------------------------------------------------ events
