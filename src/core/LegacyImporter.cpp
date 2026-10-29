@@ -327,7 +327,8 @@ LegacyImporter::Result LegacyImporter::run(const QString &legacyDatabase, Store 
         const QString id = create(u"lesson"_s, {
             { u"active"_s, num(row, "state", 1) },
             { u"kind"_s, num(row, "type", 1) },
-            { u"auto_name"_s, num(row, "autolessonname", 0) },
+            // An own name that was left empty in 1.x: the automatic name instead
+            { u"auto_name"_s, num(row, "autolessonname", 0) != 0 || str(row, "lessonname").isEmpty() ? 1 : 0 },
             { u"name"_s, str(row, "lessonname") },
             { u"irregular"_s, num(row, "unsteadylesson", 0) },
             { u"weekday"_s, num(row, "lessonday", 0) },

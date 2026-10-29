@@ -2240,6 +2240,11 @@ Póngase en contacto con el autor en %4 para resolver el problema.</translation>
         <source>Own name</source>
         <translation>Nombre propio</translation>
     </message>
+    <message id="lesson.name.required">
+        <source>Please enter a name or choose “Automatic”.</source>
+        <extracomment>Under the empty name field of a lesson; “Automatic” is lesson.name.auto_short</extracomment>
+        <translation>Introduzca un nombre o elija «Automático».</translation>
+    </message>
     <message id="lesson.no_students">
         <source>No students in this lesson yet.</source>
         <translation>Todavía no hay alumnos en esta clase.</translation>

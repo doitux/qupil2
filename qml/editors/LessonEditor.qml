@@ -27,7 +27,9 @@ Sheet {
         error = ""
         if (id) {
             const l = Data.lesson(id)
-            draft = { kind: l.kind, auto_name: l.auto_name, name: l.name, irregular: l.irregular === 1,
+            // An own name left empty (e.g. from Qupil 1.x) would block saving: use the automatic name
+            const ownName = l.auto_name === 0 && (l.name || "").trim() !== ""
+            draft = { kind: l.kind, auto_name: ownName ? 0 : 1, name: l.name, irregular: l.irregular === 1,
                       weekday: l.weekday, start_time: l.start_time || "14:00", end_time: l.end_time || "14:45",
                       location: l.location }
             members = (l.students || []).map(s => s.id)
@@ -60,7 +62,8 @@ Sheet {
     }
 
     title: lessonId ? qsTrId("lesson.edit") : qsTrId("schedule.new_lesson")
-    canAccept: draft.auto_name === 1 || (draft.name || "").trim() !== ""
+    // Only an own name that is empty blocks saving (the hint under the field says so)
+    canAccept: draft.auto_name !== 0 || (draft.name || "").trim() !== ""
     onAccepted: {
         const fields = {
             kind: draft.kind, auto_name: draft.auto_name, name: (draft.name || "").trim(), irregular: draft.irregular,
@@ -163,6 +166,15 @@ Sheet {
             visible: editor.draft.auto_name === 0
             text: editor.draft.name || ""
             onEdited: (value) => editor.set("name", value)
+        }
+        Text {
+            visible: editor.draft.auto_name === 0 && (editor.draft.name || "").trim() === ""
+            Layout.fillWidth: true
+            wrapMode: Text.WordWrap
+            text: qsTrId("lesson.name.required")
+            color: Theme.danger
+            font.family: Theme.fontFamily
+            font.pixelSize: 13
         }
     }
 

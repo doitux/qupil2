@@ -175,7 +175,7 @@ inline QStringList messyData()
         "INSERT INTO pupil (pupilid, surname, forename, birthday, ifinstrumentnextsize, ifrentinstrument) "
         "VALUES (3, '  Leer  ', 'Zeichen', ' 1.2.2012 ', 0, 0)",
 
-        "INSERT INTO lesson VALUES (1, NULL, 1, 1, '', 0, NULL, '9:5', '25:00', NULL)",
+        "INSERT INTO lesson VALUES (1, NULL, 1, 0, '', 0, NULL, '9:5', '25:00', NULL)",   // own name, left empty
         "INSERT INTO lesson VALUES (2, 1, 2, 0, 'Gruppe', 0, 4, '16:00', '17:00', 'Raum 1')",
 
         "INSERT INTO pupilatlesson (palid, lessonid, pupilid, startdate, stopdate) VALUES (1, 1, 1, '2019-09-01', '9999-99-99')",
