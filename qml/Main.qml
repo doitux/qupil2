@@ -106,8 +106,10 @@ ApplicationWindow {
             spacing: 0
 
             // ------------------------------------------------------------ sidebar (wide)
+            // Always on top: pages sliding in or out pass underneath, never over it
             Rectangle {
                 visible: !window.compact
+                z: 1
                 Layout.fillHeight: true
                 Layout.preferredWidth: 216
                 color: Theme.surface
@@ -158,9 +160,11 @@ ApplicationWindow {
             }
 
             // ------------------------------------------------------------ pages
+            // Clipped: a page sliding in (student, lesson …) stays right of the sidebar
             StackLayout {
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+                clip: true
                 currentIndex: window.currentPage
                 Component.onCompleted: window.pageLayout = this
 
