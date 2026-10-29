@@ -138,6 +138,8 @@ begin
 end;
 
 procedure CurPageChanged(CurPageID: Integer);
+var
+  Delta: Integer;
 begin
   // An update: say so instead of "ready to install"
   if (InstalledVersion <> '') and (CurPageID = wpReady) then
@@ -145,6 +147,10 @@ begin
     WizardForm.PageNameLabel.Caption := CustomMessage('UpdateTitle');
     WizardForm.PageDescriptionLabel.Caption := CustomMessage('UpdateDescription');
     WizardForm.ReadyLabel.Caption := FmtMessage(CustomMessage('UpdateReady'), [InstalledVersion, '{#AppVersion}']);
+    // The longer text pushes the summary below it down (0 when shown again)
+    Delta := WizardForm.AdjustLabelHeight(WizardForm.ReadyLabel);
+    WizardForm.ReadyMemo.Top := WizardForm.ReadyMemo.Top + Delta;
+    WizardForm.ReadyMemo.Height := WizardForm.ReadyMemo.Height - Delta;
     WizardForm.NextButton.Caption := CustomMessage('UpdateButton');
   end;
 end;
