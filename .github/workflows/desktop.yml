@@ -156,6 +156,67 @@ jobs:
           esac
           ls -l package
 
+      # Installer: a newer one updates the installed Qupil in place (platform/windows/qupil.iss)
+      - name: Installer (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $dist = (Resolve-Path dist).Path
+          $package = (Resolve-Path package).Path
+          $version = (Select-String -Path CMakeLists.txt -Pattern '^\s*VERSION (\d+\.\d+\.\d+)' | Select-Object -First 1).Matches[0].Groups[1].Value
+          $build = "nightly-$($env:GITHUB_SHA.Substring(0, 7))"
+          $appVersion = "$version ($build)"
+          if ($env:GITHUB_REF_TYPE -eq 'tag') { $build = $env:GITHUB_REF_NAME; $appVersion = $version }
+          $exe = (Get-ChildItem $dist -Recurse -Filter Qupil.exe | Select-Object -First 1).FullName.Substring($dist.Length + 1)
+          Write-Host "Qupil.exe: $exe"
+          Get-ChildItem $dist | Format-Table Mode, Name
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) {
+            choco install innosetup --no-progress -y
+            if ($LASTEXITCODE -ne 0) { exit 1 }
+          }
+          & $iscc /Q "/DSourceDir=$dist" "/DAppExe=$exe" "/DAppVersion=$appVersion" `
+            "/DFileVersion=$version.$($env:GITHUB_RUN_NUMBER)" "/DOutputDir=$package" `
+            "/DOutputName=Qupil-Windows-x64-Setup-$build" platform\windows\qupil.iss
+          if ($LASTEXITCODE -ne 0) { Write-Host "::error::Inno Setup failed ($LASTEXITCODE)"; exit 1 }
+          Get-ChildItem $package | Format-Table Name, Length
+
+      # Install, update over it (a file of the old build must go), uninstall – all for the current user
+      - name: Check installer (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $setup = (Get-ChildItem package -Filter 'Qupil-Windows-x64-Setup-*.exe' | Select-Object -First 1).FullName
+          $dist = (Resolve-Path dist).Path
+          $exe = (Get-ChildItem $dist -Recurse -Filter Qupil.exe | Select-Object -First 1).FullName.Substring($dist.Length + 1)
+          $app = "$env:LOCALAPPDATA\Programs\Qupil"
+          $key = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\{70C98A36-44FC-4D45-9D00-3B795E3A8E87}_is1'
+          function Fail($message) {
+            Write-Host "::error::Installer: $message"
+            Get-ChildItem $env:RUNNER_TEMP -Filter 'qupil-setup-*.log' | ForEach-Object { Get-Content $_.FullName -Tail 40 }
+            exit 1
+          }
+          function Run-Setup($log) {
+            $p = Start-Process $setup -Wait -PassThru -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/CURRENTUSER', "/LOG=$env:RUNNER_TEMP\$log"
+            if ($p.ExitCode -ne 0) { Fail "setup exit code $($p.ExitCode) ($log)" }
+          }
+          Run-Setup 'qupil-setup-1.log'
+          if (-not (Test-Path "$app\$exe")) { Fail "no $exe after installing" }
+          $folder = Get-ChildItem $dist -Directory | Select-Object -First 1
+          if ($folder) { Set-Content "$app\$($folder.Name)\left-from-old-build.txt" 'old' }
+          Run-Setup 'qupil-setup-2.log'
+          if (-not (Test-Path "$app\$exe")) { Fail "no $exe after updating" }
+          if ($folder -and (Test-Path "$app\$($folder.Name)\left-from-old-build.txt")) { Fail 'a file of the old build is still there' }
+          $entries = @(Get-ChildItem 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall' | Where-Object { $_.PSChildName -like '*70C98A36-44FC-4D45-9D00-3B795E3A8E87*' })
+          if ($entries.Count -ne 1) { Fail "$($entries.Count) entries under installed apps instead of 1" }
+          Write-Host "Installed: $((Get-ItemProperty $key).DisplayName) $((Get-ItemProperty $key).DisplayVersion) in $app"
+          Start-Process "$app\unins000.exe" -Wait -ArgumentList '/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART'
+          # The uninstaller hands over to a copy of itself in TEMP: wait until it is done
+          for ($i = 0; $i -lt 60 -and ((Test-Path "$app\$exe") -or (Test-Path $key)); $i++) { Start-Sleep -Seconds 1 }
+          if (Test-Path "$app\$exe") { Fail 'Qupil.exe still there after uninstalling' }
+          if (Test-Path $key) { Fail 'still listed under installed apps after uninstalling' }
+          Write-Host 'Install, update and uninstall OK'
+
       - uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.artifact }}
@@ -186,5 +247,6 @@ jobs:
           bash .github/scripts/publish-nightly.sh \
             'artifacts/qupil-linux-x86_64/*.tar.gz=Qupil-Linux-x86_64*.tar.gz' \
             'artifacts/qupil-windows-x64/*.zip=Qupil-Windows-x64.zip' \
+            'artifacts/qupil-windows-x64/Qupil-Windows-x64-Setup-*.exe=Qupil-Windows-x64-Setup-*.exe' \
             'artifacts/qupil-macos-universal/*.zip=Qupil-macOS-universal.zip' \
             'artifacts/qupil-screenshots/*.zip=Qupil-Screenshots.zip'

@@ -43,7 +43,7 @@ Every push and pull request is built on GitHub Actions:
 
 | Workflow | What it does | Download |
 |---|---|---|
-| **Desktop** | Linux, Windows, macOS (universal): build, unit tests, QML smoke test (loads the UI, switches all languages and colour schemes, fails on any QML warning), package with Qt runtime | `.tar.gz` / `.zip` per platform |
+| **Desktop** | Linux, Windows, macOS (universal): build, unit tests, QML smoke test (loads the UI, switches all languages and colour schemes, fails on any QML warning), package with Qt runtime; Windows installer, checked by installing, updating and uninstalling it | `.tar.gz` / `.zip` per platform, Windows `Setup.exe` (a newer one updates the installed Qupil) |
 | **Mobile** | Android arm64 APK signed with a public test key (installs as an update over older test builds); iOS device build without signing | test APK, unsigned IPA |
 | **TestFlight** | Started by hand: iOS App Store archive with Xcode 26, checks (bundle ID, build number, icon, launch screen, privacy manifest), signed in Apple's cloud and uploaded to TestFlight; needs the App Store Connect secrets listed in `testflight.yml` | – (TestFlight app) |
 | **Translations** | TS files match the catalog, placeholders and plurals consistent, every string translated | – |
