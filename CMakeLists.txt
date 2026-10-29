@@ -111,6 +111,10 @@ endif()
 # Linux: alert sounds through the system's player, in a process of its own
 if(UNIX AND NOT APPLE AND NOT ANDROID)
     target_sources(qupil PRIVATE src/app/AlertPlayer.h src/app/AlertPlayer.cpp)
+    # Light or dark from the desktop portal (SystemScheme.cpp)
+    find_package(Qt6 REQUIRED COMPONENTS DBus)
+    target_link_libraries(qupil PRIVATE Qt6::DBus)
+    target_compile_definitions(qupil PRIVATE QUPIL_DBUS)
 endif()
 # iOS has its own pickers: "Save to Files" for backups (Qt's dialog cannot save there) and
 # one for opening files of other apps as a copy (Qt's dialog gives paths Qupil may not read)
@@ -357,6 +361,8 @@ qt_add_qml_module(qupil
         src/app/ArchiveFormat.cpp
         src/app/Metronome.h
         src/app/Metronome.cpp
+        src/app/SystemScheme.h
+        src/app/SystemScheme.cpp
         src/app/TextFormatter.h
         src/app/TextFormatter.cpp
         src/app/WebDavFolder.h

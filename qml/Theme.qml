@@ -3,8 +3,9 @@
 //
 // Qupil 2 colour theme with light and dark mode.
 //
-// mode "system" follows the operating system (Qt.styleHints.colorScheme, Qt >= 6.5)
-// and switches live when the user changes it in the OS settings.
+// mode "system" follows the operating system (Qt.styleHints.colorScheme, Qt >= 6.5;
+// on Linux the desktop portal first, see SystemScheme.h) and switches live when the
+// user changes it in the OS settings.
 // mode "light" / "dark" force a scheme; with Qt >= 6.8 the native parts
 // (window title bar, file dialogs) are switched as well.
 //
@@ -15,6 +16,7 @@
 pragma Singleton
 import QtQuick
 import QtCore
+import Qupil
 
 QtObject {
     id: theme
@@ -22,7 +24,8 @@ QtObject {
     // "system" | "light" | "dark" – stored per device, not synced
     property string mode: "system"
 
-    readonly property bool systemDark: Qt.styleHints.colorScheme === Qt.ColorScheme.Dark
+    readonly property bool systemDark: SystemScheme.preference !== 0 ? SystemScheme.preference === 1
+                                                                      : Qt.styleHints.colorScheme === Qt.ColorScheme.Dark
     readonly property bool dark: mode === "dark" || (mode === "system" && systemDark)
 
     // ---------------------------------------------------------------- your two colours
