@@ -15,7 +15,8 @@ Item {
     property bool showBack: true
     property string backText: qsTrId("common.back")
     readonly property var lesson: { if (Data.revision < 0) return undefined; return Data.lesson(lessonId) }
-    readonly property string lessonName: lesson.name || ""
+    // Without a name of its own: the students (an ensemble: its kind), else day and time
+    readonly property string lessonName: lesson.title || ""
 
     signal back()
     signal studentClicked(string studentId, string membershipId)
@@ -62,7 +63,8 @@ Item {
                         wrapMode: Text.WordWrap
                         text: {
                             const l = detail.lesson
-                            const parts = [Labels.lessonKind(l.kind || 1)]
+                            // The kind is already the title of an ensemble without a name
+                            const parts = (l.name || "").trim() || l.kind !== 3 ? [Labels.lessonKind(l.kind || 1)] : []
                             if (l.irregular === 1)
                                 parts.push(qsTrId("common.irregular"))
                             else if (l.start_time)

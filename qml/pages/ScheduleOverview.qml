@@ -267,7 +267,7 @@ Item {
                         implicitHeight: heroHeadColumn.implicitHeight
                         focusPolicy: Qt.StrongFocus
                         Accessible.role: Accessible.Button
-                        Accessible.name: overview.running ? overview.running.name : ""
+                        Accessible.name: overview.running ? overview.running.title : ""
                         onClicked: if (overview.running) overview.lessonClicked(overview.running.id)
                         background: Rectangle {
                             color: "transparent"
@@ -314,7 +314,8 @@ Item {
                                 Text {
                                     Layout.fillWidth: true
                                     elide: Text.ElideRight
-                                    text: overview.running ? overview.running.name + " · " + overview.kindLabel(overview.running.kind) : ""
+                                    text: overview.running ? [(overview.running.name || "").trim(), overview.kindLabel(overview.running.kind)]
+                                                             .filter(Boolean).join(" · ") : ""
                                     color: Theme.textOnAccent
                                     opacity: 0.85
                                     font.family: Theme.fontFamily
@@ -751,7 +752,9 @@ Item {
         hoverEnabled: true
         opacity: past ? 0.6 : 1
         Accessible.role: Accessible.Button
-        Accessible.name: (lesson.start_time || "") + " " + (lesson.name || "")
+        // A lesson without a name of its own: the students in bold, its kind below
+        readonly property bool unnamed: !(lesson.name || "").trim()
+        Accessible.name: (lesson.start_time || "") + " " + (lesson.title || "")
         background: Item {
             Rectangle {
                 visible: row.divider
@@ -795,7 +798,7 @@ Item {
                 Text {
                     Layout.fillWidth: true
                     elide: Text.ElideRight
-                    text: row.lesson.name || ""
+                    text: row.lesson.title || ""
                     color: Theme.text
                     font.family: Theme.fontFamily
                     font.pixelSize: 15
@@ -805,8 +808,10 @@ Item {
                     Layout.fillWidth: true
                     elide: Text.ElideRight
                     text: row.lesson.kind === 3
-                          ? [qsTrId("lesson.type.ensemble"), row.lesson.location, qsTrId("summary.students", row.lesson.studentCount)].filter(Boolean).join(" · ")
-                          : row.lesson.studentNames
+                          ? [row.unnamed ? "" : qsTrId("lesson.type.ensemble"), row.lesson.location,
+                             qsTrId("summary.students", row.lesson.studentCount)].filter(Boolean).join(" · ")
+                          : row.unnamed ? [Labels.lessonKind(row.lesson.kind), row.lesson.location].filter(Boolean).join(" · ")
+                                        : row.lesson.studentNames
                     color: Theme.textMuted
                     font.family: Theme.fontFamily
                     font.pixelSize: 13
@@ -860,7 +865,7 @@ Item {
                 focusPolicy: Qt.StrongFocus
                 hoverEnabled: true
                 Accessible.role: Accessible.Button
-                Accessible.name: lessonCard.lesson.name || ""
+                Accessible.name: lessonCard.lesson.title || ""
                 onClicked: lessonCard.lessonClicked()
                 background: Item {
                     Rectangle {
@@ -887,7 +892,8 @@ Item {
                     Text {
                         Layout.fillWidth: true
                         elide: Text.ElideRight
-                        text: lessonCard.lesson.name || ""
+                        // Without a name of its own: nothing (the students follow below), an ensemble its kind
+                        text: (lessonCard.lesson.name || "").trim() || (lessonCard.lesson.kind === 3 ? lessonCard.lesson.title : "")
                         color: Theme.text
                         font.family: Theme.fontFamily
                         font.pixelSize: 14

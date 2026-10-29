@@ -705,7 +705,8 @@ QString DocumentService::studentArchiveHtml(const QString &studentId) const
     // Lessons with their notes and pieces: first the ended ones, then the ongoing
     const QString today = m_data->today();
     const QVariantList memberships = m_data->rows(
-        u"SELECT m.*, l.name AS lesson_name FROM membership m LEFT JOIN lesson l ON l.id = m.lesson_id "
+        u"SELECT m.*, l.name AS lesson_name, l.weekday, l.start_time, l.irregular "
+        u"FROM membership m LEFT JOIN lesson l ON l.id = m.lesson_id "
         u"WHERE m.deleted = 0 AND m.student_id = ? "
         u"ORDER BY CASE WHEN m.end_date <> '' AND m.end_date <= ? THEN 0 ELSE 1 END, m.start_date"_s,
         { studentId, today });
@@ -719,7 +720,10 @@ QString DocumentService::studentArchiveHtml(const QString &studentId) const
             const bool ended = !end.isEmpty() && end <= today;
             const QString lessonName = ended && !m.value(u"previous_name"_s).toString().isEmpty()
                                            ? m.value(u"previous_name"_s).toString()
-                                           : m.value(u"lesson_name"_s).toString();
+                                           : m_data->lessonLabel({ { u"name"_s, m.value(u"lesson_name"_s) },
+                                                                    { u"weekday"_s, m.value(u"weekday"_s) },
+                                                                    { u"start_time"_s, m.value(u"start_time"_s) },
+                                                                    { u"irregular"_s, m.value(u"irregular"_s) } });
             const QString period = ended ? qtTrId("common.from_to").arg(m_data->formatDate(m.value(u"start_date"_s).toString()),
                                                                          m_data->formatDate(end))
                                          : qtTrId("common.since").arg(m_data->formatDate(m.value(u"start_date"_s).toString()));

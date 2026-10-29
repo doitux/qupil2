@@ -2240,10 +2240,10 @@ Veuillez contacter l’auteur à l’adresse %4 pour résoudre ce problème.</tr
         <source>Own name</source>
         <translation>Nom libre</translation>
     </message>
-    <message id="lesson.name.required">
-        <source>Please enter a name or choose “Automatic”.</source>
-        <extracomment>Under the empty name field of a lesson; “Automatic” is lesson.name.auto_short</extracomment>
-        <translation>Veuillez saisir un nom ou choisir « Automatique ».</translation>
+    <message id="lesson.name.empty_hint">
+        <source>Without a name, Qupil shows the students or the day and time instead.</source>
+        <extracomment>Under the empty “Own name” field of a lesson: leaving it empty is allowed</extracomment>
+        <translation>Sans nom, Qupil affiche à la place les élèves ou le jour et l’heure.</translation>
     </message>
     <message id="lesson.no_students">
         <source>No students in this lesson yet.</source>

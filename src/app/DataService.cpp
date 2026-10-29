@@ -355,7 +355,7 @@ QVariantMap DataService::membershipInfo(const QString &membershipId) const
     if (m.isEmpty())
         return {};
     const QVariantMap lesson = m_store->get(u"lesson"_s, m.value(u"lesson_id"_s).toString());
-    m.insert(u"lessonName"_s, lesson.value(u"name"_s));
+    m.insert(u"lessonName"_s, lessonLabel(lesson));
     m.insert(u"kind"_s, lesson.value(u"kind"_s, 1));
     const QVariantList members = activeMembers(m.value(u"lesson_id"_s).toString());
     m.insert(u"students"_s, members);
@@ -413,6 +413,13 @@ QVariantMap DataService::lessonSummary(const QVariantMap &row, bool withDetails)
     m.insert(u"students"_s, members);
     m.insert(u"studentNames"_s, names.join(u", "_s));
     m.insert(u"studentCount"_s, members.size());
+    // Lessons without a name of their own: the students (an ensemble: its kind), else day and time
+    QString title = row.value(u"name"_s).toString().trimmed();
+    if (title.isEmpty())
+        title = row.value(u"kind"_s).toInt() == 3 ? qtTrId("lesson.type.ensemble") : names.join(u", "_s);
+    if (title.isEmpty())
+        title = lessonLabel(row);
+    m.insert(u"title"_s, title);
     m.insert(u"minutes"_s, minutesBetween(row.value(u"start_time"_s).toString(), row.value(u"end_time"_s).toString()));
 
     // Reminders for every lesson (mode 1) or for one of its students (mode 2)
@@ -493,6 +500,20 @@ QVariantMap DataService::lesson(const QString &id) const
     return r.isEmpty() ? QVariantMap() : lessonSummary(r.first().toMap(), true);
 }
 
+QString DataService::lessonLabel(const QVariantMap &lesson) const
+{
+    const QString name = lesson.value(u"name"_s).toString().trimmed();
+    if (!name.isEmpty())
+        return name;
+    if (lesson.value(u"irregular"_s).toInt() != 0)
+        return qtTrId("common.irregular");
+    const QString start = lesson.value(u"start_time"_s).toString();
+    if (start.isEmpty())
+        return {};
+    const int weekday = std::clamp(lesson.value(u"weekday"_s).toInt(), 0, 6);
+    return uiLocale().dayName(weekday + 1, QLocale::ShortFormat).remove(u'.') + u' ' + start;
+}
+
 QString DataService::autoLessonName(int kind, bool irregular, const QString &start, const QString &end,
                                     const QString &location, const QStringList &studentIds) const
 {
@@ -570,7 +591,7 @@ QString DataService::saveLesson(const QString &id, const QVariantMap &input, con
         lessonId = m_store->create(u"lesson"_s, fields);
         ok = !lessonId.isEmpty();
     } else {
-        oldName = m_store->get(u"lesson"_s, lessonId).value(u"name"_s).toString();
+        oldName = lessonLabel(m_store->get(u"lesson"_s, lessonId));
         ok = m_store->update(u"lesson"_s, lessonId, fields);
     }
 
@@ -580,7 +601,7 @@ QString DataService::saveLesson(const QString &id, const QVariantMap &input, con
         const QVariantMap m = v.toMap();
         const QString student = m.value(u"id"_s).toString();
         if (!wanted.remove(student) && ok)
-            ok = endMembership(m.value(u"membership_id"_s).toString(), oldName.isEmpty() ? fields.value(u"name"_s).toString() : oldName);
+            ok = endMembership(m.value(u"membership_id"_s).toString(), oldName.isEmpty() ? lessonLabel(fields) : oldName);
     }
     for (const QString &student : studentIds) {
         if (!wanted.contains(student) || !ok)
@@ -595,7 +616,7 @@ QString DataService::saveLesson(const QString &id, const QVariantMap &input, con
 
 bool DataService::deleteLesson(const QString &id)
 {
-    const QString name = m_store->get(u"lesson"_s, id).value(u"name"_s).toString();
+    const QString name = lessonLabel(m_store->get(u"lesson"_s, id));
     m_store->beginBatch();
     bool ok = true;
     for (const QVariant &v : activeMembers(id))
@@ -612,11 +633,12 @@ QVariantList DataService::students(const QString &filter) const
 {
     // Active lessons per student
     QHash<QString, QStringList> lessons;
-    for (const QVariant &v : rows(u"SELECT m.student_id, l.name FROM membership m JOIN lesson l ON l.id = m.lesson_id "
+    for (const QVariant &v : rows(u"SELECT m.student_id, l.name, l.weekday, l.start_time, l.irregular "
+                                  u"FROM membership m JOIN lesson l ON l.id = m.lesson_id "
                                   u"WHERE m.deleted = 0 AND l.deleted = 0 AND l.active = 1 AND (m.end_date = '' OR m.end_date > ?) "
                                   u"ORDER BY l.weekday, l.start_time"_s, { todayIso() })) {
         const QVariantMap m = v.toMap();
-        lessons[m.value(u"student_id"_s).toString()] << m.value(u"name"_s).toString();
+        lessons[m.value(u"student_id"_s).toString()] << lessonLabel(m);
     }
 
     const QString needle = filter.trimmed().toLower();
@@ -670,7 +692,7 @@ QVariantMap DataService::student(const QString &id) const
 
     QVariantList memberships;
     for (const QVariant &v : rows(u"SELECT m.id, m.lesson_id, m.start_date, m.end_date, m.previous_name, "
-                                  u"l.name AS lesson_name, l.kind, l.active AS lesson_active "
+                                  u"l.name AS lesson_name, l.kind, l.active AS lesson_active, l.weekday, l.start_time, l.irregular "
                                   u"FROM membership m LEFT JOIN lesson l ON l.id = m.lesson_id "
                                   u"WHERE m.deleted = 0 AND m.student_id = ? "
                                   u"ORDER BY (m.end_date = '' OR m.end_date > ?) DESC, m.start_date DESC"_s,
@@ -678,7 +700,10 @@ QVariantMap DataService::student(const QString &id) const
         QVariantMap ms = v.toMap();
         const QString end = ms.value(u"end_date"_s).toString();
         const bool active = end.isEmpty() || end > todayIso();
-        QString name = ms.value(u"lesson_name"_s).toString();
+        // A lesson without a name of its own: by day and time (the student is known here)
+        QString name = lessonLabel({ { u"name"_s, ms.value(u"lesson_name"_s) }, { u"weekday"_s, ms.value(u"weekday"_s) },
+                                     { u"start_time"_s, ms.value(u"start_time"_s) },
+                                     { u"irregular"_s, ms.value(u"irregular"_s) } });
         if (!active && !ms.value(u"previous_name"_s).toString().isEmpty())
             name = ms.value(u"previous_name"_s).toString();
         ms.insert(u"active"_s, active);

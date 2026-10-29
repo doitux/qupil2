@@ -225,10 +225,8 @@ void LessonEndAlert::apply()
             const QVariantList list = m_data->lessonsOn(day);
             for (const QVariant &v : list) {
                 const QVariantMap lesson = v.toMap();
-                QString name = lesson.value(u"name"_s).toString();
-                if (name.isEmpty())
-                    name = lesson.value(u"studentNames"_s).toString();
-                lessons.append({ day, lesson.value(u"end_time"_s).toString(), name });
+                // Without a name of its own: the students
+                lessons.append({ day, lesson.value(u"end_time"_s).toString(), lesson.value(u"title"_s).toString() });
             }
         }
         m_alerts = LessonAlerts::weekly(lessons, minutes());

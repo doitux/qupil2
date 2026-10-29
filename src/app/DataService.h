@@ -54,6 +54,13 @@ public:
     //! Number of lessons per weekday, Monday first
     Q_INVOKABLE QVariantList lessonCountPerWeekday() const;
     Q_INVOKABLE QVariantMap lesson(const QString &id) const;
+    /*!
+        The lesson's own name; a lesson without one (an own name left empty, as many
+        did in Qupil 1.x) by weekday and start time, e.g. "Di 15:30". Where the
+        students are not shown anyway, lesson lists use \c title instead: the name,
+        else the students.
+    */
+    Q_INVOKABLE QString lessonLabel(const QVariantMap &lesson) const;
     //! Name generated from type, time, location and students (Qupil 1.x rule)
     Q_INVOKABLE QString autoLessonName(int kind, bool irregular, const QString &start, const QString &end,
                                        const QString &location, const QStringList &studentIds) const;

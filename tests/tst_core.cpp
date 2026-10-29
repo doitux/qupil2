@@ -657,7 +657,8 @@ private slots:
         QCOMPARE(odd.first().value(u"start_time"_s).toString(), QString());
         QCOMPARE(odd.first().value(u"end_time"_s).toString(), QString());
         QCOMPARE(odd.first().value(u"active"_s).toInt(), 1);
-        QCOMPARE(odd.first().value(u"auto_name"_s).toInt(), 1);   // empty own name: automatic name
+        QCOMPARE(odd.first().value(u"auto_name"_s).toInt(), 0);   // an own name left empty stays so
+        QCOMPARE(odd.first().value(u"name"_s).toString(), QString());
 
         const auto noComposer = store.select(u"piece"_s, u"title = ?"_s, { u"Ohne Komponist"_s });
         QCOMPARE(noComposer.first().value(u"composer"_s).toString(), QString());

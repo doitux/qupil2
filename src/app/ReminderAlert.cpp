@@ -186,7 +186,7 @@ void ReminderAlert::check()
         const QVariantList items = itemsFor(lesson, reminders);
         if (!items.isEmpty()) {
             const QString when = lesson.value(u"start_time"_s).toString() + u" – "_s + lesson.value(u"end_time"_s).toString();
-            add(heading(), lesson.value(u"name"_s).toString() + u" · "_s + when, items);
+            add(heading(), lesson.value(u"title"_s).toString() + u" · "_s + when, items);
         }
     }
 }
@@ -259,7 +259,7 @@ void ReminderAlert::apply()
             if (withSound && sound.isEmpty())
                 sound = m_sound->file();
             SystemAlerts::Alert &alert = byTime[at];
-            const QString name = lesson.value(u"name"_s).toString();
+            const QString name = lesson.value(u"title"_s).toString();   // without a name: the students
             if (alert.title.isEmpty()) {
                 alert.kind = QString::fromLatin1(SystemAlerts::kReminder);
                 alert.at = at;

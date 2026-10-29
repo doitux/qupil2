@@ -2241,10 +2241,10 @@ Bitte wenden Sie sich an den Programm-Autor: %4 um dieses Problem zu beheben!</t
         <source>Own name</source>
         <translation>Eigener Name</translation>
     </message>
-    <message id="lesson.name.required">
-        <source>Please enter a name or choose “Automatic”.</source>
-        <extracomment>Under the empty name field of a lesson; “Automatic” is lesson.name.auto_short</extracomment>
-        <translation>Bitte geben Sie einen Namen ein oder wählen Sie „Automatisch“.</translation>
+    <message id="lesson.name.empty_hint">
+        <source>Without a name, Qupil shows the students or the day and time instead.</source>
+        <extracomment>Under the empty “Own name” field of a lesson: leaving it empty is allowed</extracomment>
+        <translation>Ohne Namen zeigt Qupil stattdessen die Schüler oder Tag und Uhrzeit.</translation>
     </message>
     <message id="lesson.no_students">
         <source>No students in this lesson yet.</source>
