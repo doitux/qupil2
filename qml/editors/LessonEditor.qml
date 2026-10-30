@@ -16,6 +16,10 @@ Sheet {
     property var draft: ({})
     property var members: []
     property string error
+    //! "Own name" chosen, but the field is empty: saving is not possible
+    readonly property bool nameMissing: draft.auto_name === 0 && (draft.name || "").trim() === ""
+    //! Marked once the field is left empty or saving was tried (not while typing)
+    property bool nameChecked: false
 
     readonly property var locations: { if (Data.revision < 0) return undefined; return Data.listSetting("locations") }
     readonly property var allStudents: { if (Data.revision < 0) return undefined; return Data.students("") }
@@ -25,6 +29,7 @@ Sheet {
     function edit(id, weekday) {
         lessonId = id
         error = ""
+        nameChecked = false
         if (id) {
             const l = Data.lesson(id)
             // An own name left empty (e.g. from Qupil 1.x) would block saving: use the automatic name
@@ -62,8 +67,15 @@ Sheet {
     }
 
     title: lessonId ? qsTrId("lesson.edit") : qsTrId("schedule.new_lesson")
-    // Only an own name that is empty blocks saving (the hint under the field says so)
-    canAccept: draft.auto_name !== 0 || (draft.name || "").trim() !== ""
+    // Only an own name that is empty blocks saving. Save stays tappable: it scrolls to the
+    // field, marks it and says why (instead of a grey button without a reason)
+    canAccept: !nameMissing
+    problem: nameMissing ? nameBlock : null
+    onAcceptRefused: {
+        nameChecked = true
+        nameField.forceActiveFocus()
+        shake.restart()
+    }
     onAccepted: {
         const fields = {
             kind: draft.kind, auto_name: draft.auto_name, name: (draft.name || "").trim(), irregular: draft.irregular,
@@ -162,19 +174,51 @@ Sheet {
             font.pixelSize: 16
             font.weight: Font.Bold
         }
-        InputField {
+        ColumnLayout {
+            id: nameBlock
+            readonly property bool marked: editor.nameMissing && (editor.nameChecked || !nameField.editing)
             visible: editor.draft.auto_name === 0
-            text: editor.draft.name || ""
-            onEdited: (value) => editor.set("name", value)
-        }
-        Text {
-            visible: editor.draft.auto_name === 0 && (editor.draft.name || "").trim() === ""
             Layout.fillWidth: true
-            wrapMode: Text.WordWrap
-            text: qsTrId("lesson.name.required")
-            color: Theme.danger
-            font.family: Theme.fontFamily
-            font.pixelSize: 13
+            spacing: 6
+            transform: Translate { id: shakeShift }
+            InputField {
+                id: nameField
+                text: editor.draft.name || ""
+                invalid: nameBlock.marked
+                onEdited: (value) => editor.set("name", value)
+                onEditingChanged: if (!editing && editor.nameMissing) editor.nameChecked = true
+            }
+            RowLayout {
+                visible: nameBlock.marked
+                Layout.fillWidth: true
+                spacing: 6
+                Icon {
+                    Layout.alignment: Qt.AlignTop
+                    Layout.preferredWidth: 18
+                    Layout.preferredHeight: 18
+                    name: "warning"
+                    color: Theme.danger
+                    strokeWidth: 2
+                }
+                Text {
+                    Layout.fillWidth: true
+                    wrapMode: Text.WordWrap
+                    text: qsTrId("lesson.name.required")
+                    color: Theme.danger
+                    font.family: Theme.fontFamily
+                    font.pixelSize: 14
+                    font.weight: Font.DemiBold
+                }
+            }
+            // A short shake when Save was tapped without a name
+            SequentialAnimation {
+                id: shake
+                PauseAnimation { duration: 180 }   // after scrolling there
+                NumberAnimation { target: shakeShift; property: "x"; to: -8; duration: 50 }
+                NumberAnimation { target: shakeShift; property: "x"; to: 8; duration: 70 }
+                NumberAnimation { target: shakeShift; property: "x"; to: -5; duration: 60 }
+                NumberAnimation { target: shakeShift; property: "x"; to: 0; duration: 50 }
+            }
         }
     }
 

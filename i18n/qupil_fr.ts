@@ -2241,9 +2241,9 @@ Veuillez contacter l’auteur à l’adresse %4 pour résoudre ce problème.</tr
         <translation>Nom libre</translation>
     </message>
     <message id="lesson.name.required">
-        <source>Please enter a name or choose “Automatic”.</source>
-        <extracomment>Under the empty name field of a lesson; “Automatic” is lesson.name.auto_short</extracomment>
-        <translation>Veuillez saisir un nom ou choisir « Automatique ».</translation>
+        <source>Without a name the lesson cannot be saved. Please enter one or choose “Automatic”.</source>
+        <extracomment>Under the empty “Own name” field of a lesson; “Automatic” is lesson.name.auto_short</extracomment>
+        <translation>Sans nom, le cours ne peut pas être enregistré. Veuillez saisir un nom ou choisir « Automatique ».</translation>
     </message>
     <message id="lesson.no_students">
         <source>No students in this lesson yet.</source>

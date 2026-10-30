@@ -1265,10 +1265,11 @@ E("student.edit_data", en="Edit student", de="Schülerdaten bearbeiten", fr="Mod
 E("lesson.duration", en="%1 minutes", de="%1 Minuten", fr="%1 minutes", es="%1 minutos", c="%1 = lesson length")
 E("lesson.name.auto_short", en="Automatic", de="Automatisch", fr="Automatique", es="Automático")
 E("lesson.name.manual_short", en="Own name", de="Eigener Name", fr="Nom libre", es="Nombre propio")
-E("lesson.name.required", en="Please enter a name or choose “Automatic”.",
-  de="Bitte geben Sie einen Namen ein oder wählen Sie „Automatisch“.",
-  fr="Veuillez saisir un nom ou choisir « Automatique ».", es="Introduzca un nombre o elija «Automático».",
-  c="Under the empty name field of a lesson; “Automatic” is lesson.name.auto_short")
+E("lesson.name.required", en="Without a name the lesson cannot be saved. Please enter one or choose “Automatic”.",
+  de="Ohne Namen lässt sich der Unterricht nicht speichern. Bitte geben Sie einen Namen ein oder wählen Sie „Automatisch“.",
+  fr="Sans nom, le cours ne peut pas être enregistré. Veuillez saisir un nom ou choisir « Automatique ».",
+  es="Sin nombre, la clase no se puede guardar. Introduzca un nombre o elija «Automático».",
+  c="Under the empty “Own name” field of a lesson; “Automatic” is lesson.name.auto_short")
 E("lesson.no_students", en="No students in this lesson yet.", de="Noch keine Schüler in diesem Unterricht.",
   fr="Aucun élève dans ce cours pour l’instant.", es="Todavía no hay alumnos en esta clase.")
 E("lesson.note_for_all", en="Note for everybody", de="Notiz für alle", fr="Note pour tous", es="Nota para todos")

@@ -17,6 +17,9 @@ Popup {
     property string acceptText: qsTrId("common.save")
     property string rejectText: qsTrId("common.cancel")
     property bool canAccept: true
+    //! Why saving is not possible yet: the item that needs attention. Save then stays
+    //! tappable and, instead of saving, scrolls there (acceptRefused: the editor marks it)
+    property Item problem: null
     property bool showAccept: true
     //! Big button at the bottom instead of the text button in the header (phones)
     property bool bottomButton: compact
@@ -26,12 +29,30 @@ Popup {
 
     signal accepted()
     signal rejected()
+    signal acceptRefused()
 
     function accept() {
-        if (!canAccept)
+        if (!canAccept) {
+            if (problem) {
+                reveal(problem)
+                acceptRefused()
+            }
             return
+        }
         accepted()
         close()
+    }
+    //! Scrolls the editor so that item is in view
+    function reveal(item) {
+        const top = item.mapToItem(flick.contentItem, 0, 0).y - 24
+        const bottom = top + item.height + 48
+        let y = flick.contentY
+        if (top < y)
+            y = top
+        else if (bottom > y + flick.height)
+            y = bottom - flick.height
+        scroll.to = Math.max(0, Math.min(y, flick.contentHeight - flick.height))
+        scroll.restart()
     }
     function reject() {
         rejected()
@@ -122,7 +143,7 @@ Popup {
                 visible: sheet.showAccept && !sheet.bottomButton
                 kind: "quiet"
                 text: sheet.acceptText
-                enabled: sheet.canAccept
+                enabled: sheet.canAccept || sheet.problem !== null
                 onClicked: sheet.accept()
             }
             // keeps the title centred when the save button is at the bottom, as far
@@ -143,6 +164,14 @@ Popup {
             boundsBehavior: Flickable.StopAtBounds
             ScrollBar.vertical: ScrollBar {}
 
+            NumberAnimation {
+                id: scroll
+                target: flick
+                property: "contentY"
+                duration: 250
+                easing.type: Easing.OutCubic
+            }
+
             ColumnLayout {
                 id: column
                 x: 20
@@ -162,7 +191,7 @@ Popup {
             Layout.preferredHeight: 54
             kind: "primary"
             text: sheet.acceptText
-            enabled: sheet.canAccept
+            enabled: sheet.canAccept || sheet.problem !== null
             font.pixelSize: 17
             font.weight: Font.ExtraBold
             onClicked: sheet.accept()

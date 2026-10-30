@@ -2242,9 +2242,9 @@ Bitte wenden Sie sich an den Programm-Autor: %4 um dieses Problem zu beheben!</t
         <translation>Eigener Name</translation>
     </message>
     <message id="lesson.name.required">
-        <source>Please enter a name or choose “Automatic”.</source>
-        <extracomment>Under the empty name field of a lesson; “Automatic” is lesson.name.auto_short</extracomment>
-        <translation>Bitte geben Sie einen Namen ein oder wählen Sie „Automatisch“.</translation>
+        <source>Without a name the lesson cannot be saved. Please enter one or choose “Automatic”.</source>
+        <extracomment>Under the empty “Own name” field of a lesson; “Automatic” is lesson.name.auto_short</extracomment>
+        <translation>Ohne Namen lässt sich der Unterricht nicht speichern. Bitte geben Sie einen Namen ein oder wählen Sie „Automatisch“.</translation>
     </message>
     <message id="lesson.no_students">
         <source>No students in this lesson yet.</source>

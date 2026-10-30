@@ -17,6 +17,9 @@ ColumnLayout {
     property int echoMode: TextInput.Normal
     property bool multiline: false
     property var completions: []          // suggestions while typing (e.g. composers)
+    //! Marked as needing attention (red frame); the editor says why below the field
+    property bool invalid: false
+    readonly property bool editing: input.activeFocus || area.activeFocus
 
     //! The user changed the text (the field does not change "text" itself)
     signal edited(string value)
@@ -64,8 +67,8 @@ ColumnLayout {
         background: Rectangle {
             radius: 12
             color: Theme.surface
-            border.width: input.activeFocus ? 2 : 1
-            border.color: input.activeFocus ? Theme.accent : Theme.border
+            border.width: input.activeFocus || field.invalid ? 2 : 1
+            border.color: field.invalid ? Theme.danger : input.activeFocus ? Theme.accent : Theme.border
         }
 
         Popup {
@@ -120,8 +123,8 @@ ColumnLayout {
         background: Rectangle {
             radius: 12
             color: Theme.surface
-            border.width: area.activeFocus ? 2 : 1
-            border.color: area.activeFocus ? Theme.accent : Theme.border
+            border.width: area.activeFocus || field.invalid ? 2 : 1
+            border.color: field.invalid ? Theme.danger : area.activeFocus ? Theme.accent : Theme.border
         }
     }
 }
