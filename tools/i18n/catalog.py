@@ -291,6 +291,10 @@ E("common.more_actions", en="More actions", de="Weitere Aktionen", fr="Plus d’
 E("common.done", en="Done", de="Fertig", fr="Terminé", es="Listo")
 E("common.back", en="Back", de="Zurück", fr="Retour", es="Atrás")
 E("common.close", en="Close", de="Schließen", fr="Fermer", es="Cerrar")
+E("common.show_more", en="Show more", de="Mehr anzeigen", fr="Afficher plus", es="Mostrar más",
+  c="Below a long note or plan that is shown shortened")
+E("common.show_less", en="Show less", de="Weniger anzeigen", fr="Afficher moins", es="Mostrar menos",
+  c="Below a long note or plan that is unfolded")
 E("common.share", en="Share", de="Teilen", fr="Partager", es="Compartir")
 E("common.undo", en="Undo", de="Rückgängig", fr="Annuler", es="Deshacer")
 E("common.search", en="Search", de="Suchen", fr="Rechercher", es="Buscar")
@@ -469,6 +473,12 @@ E("plan.lesson_over", en="What did you cover? That becomes the note of this less
   fr="Qu'avez-vous travaillé ? Cela devient la note du cours.",
   es="¿Qué se trabajó? Eso pasa a ser la nota de la clase.",
   c="Plan card once the lesson has begun (also while it is still running)")
+E("plan.more_points", src="+ %n more point(s)",
+  en=["+ %n more point", "+ %n more points"],
+  de=["+ %n weiterer Punkt", "+ %n weitere Punkte"],
+  fr=["+ %n autre point", "+ %n autres points"],
+  es=["+ %n punto más", "+ %n puntos más"],
+  c="Running lesson: a long plan shows its first 4 points, then this")
 E("plan.make_note", en="Turn into a note", de="Notiz daraus machen", fr="En faire une note", es="Convertir en nota")
 E("plan.postpone", en="Move to the next lesson", de="Auf nächste Stunde schieben", fr="Reporter au cours suivant",
   es="Pasar a la próxima clase")

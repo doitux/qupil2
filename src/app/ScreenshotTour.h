@@ -44,12 +44,14 @@ private:
     void addDetails(const QString &prefix);
     void pickExamples();
     void addSamplePlans();
+    void addLongNote();
     void writeDocuments();
 
     QPointer<QQuickWindow> m_window;
     QPointer<QObject> m_theme;
     QPointer<QObject> m_nav;
     QString m_student, m_membership, m_lesson, m_piece, m_event, m_note, m_plan;
+    QString m_longStudent, m_longMembership;   // a student with a long note
     AppController *m_app;
     QString m_folder;
     QList<Step> m_steps;

@@ -81,6 +81,7 @@ ScreenshotTour::ScreenshotTour(QQuickWindow *window, QObject *theme, QObject *na
             << snap(u"03-imported-light"_s)
             << Step { [this] { m_app->finishSetup(); }, [this] { return m_app->phase() == AppController::Ready; } }
             << Step { [this] { addSamplePlans(); }, {} }
+            << Step { [this] { addLongNote(); }, {} }
             << Step { [this] { writeDocuments(); }, {} };
     addPages(u"1-desktop-light"_s);
     addDetails(u"1-desktop-light"_s);
@@ -155,6 +156,12 @@ void ScreenshotTour::addDetails(const QString &prefix)
             << snap(prefix + u"-6c-plan-finish"_s) << close
             << Step { [this, nav] { nav("editPiece", m_membership, m_piece).action(); }, {} }
             << snap(prefix + u"-7-piece-editor"_s) << close
+            // A long note: shortened with "Show more", then unfolded
+            << Step { [this, nav] { nav("showStudent", m_longStudent, m_longMembership).action(); }, {} }
+            << snap(prefix + u"-7b-long-note"_s)
+            << Step { [this] { callAll("unfoldNotes()"); }, {} }
+            << snap(prefix + u"-7c-long-note-open"_s)
+            << Step { [this] { callAll("foldNotes()"); }, {} }
             << Step { [this, nav] { nav("showEvent", m_event).action(); }, {} }
             << snap(prefix + u"-8-event"_s)
             << Step { [this] {
@@ -234,6 +241,78 @@ void ScreenshotTour::addSamplePlans()
                                        : u"Warm-up: rhythm canon in 6/8\nShifting 1st–3rd position: check\n"
                                          u"Duet “Spring”: entries and dynamics"_s,
                                     true);
+        }
+    }
+}
+
+// One of the long notes some teachers write (a whole practice programme), for a violin or
+// viola student with a lesson of their own a few days ago: it shows shortened ("Show more")
+void ScreenshotTour::addLongNote()
+{
+    DataService *data = DataService::instance();
+    if (!data)
+        return;
+    const bool de = LanguageManager::instance() && LanguageManager::instance()->effectiveLanguage().startsWith(u"de"_s);
+    const QDate today = Qupil::Clock::today();
+    for (int back = 1; back < 7 && m_longMembership.isEmpty(); ++back) {
+        const QDate day = today.addDays(-back);
+        for (const QVariant &v : data->lessonsOn(day.dayOfWeek() - 1)) {
+            const QVariantList students = v.toMap().value(u"students"_s).toList();
+            if (students.size() != 1)
+                continue;
+            const QString membership = students.first().toMap().value(u"membership_id"_s).toString();
+            const QString student = data->membershipInfo(membership).value(u"student_id"_s).toString();
+            if (!data->student(student).value(u"instrument"_s).toString().startsWith(u"Viol"_s))
+                continue;   // the note is about violin or viola
+            m_longMembership = membership;
+            m_longStudent = student;
+            data->addNote(membership, day.toString(Qt::ISODate),
+                          de ? u"**Haltung:**\n"
+                               u"Instrument locker ablegen, nicht mit der Schulter festhalten\n"
+                               u"Schultern unten lassen – kein Hochziehen beim Lagenwechsel\n"
+                               u"Noten auf Augenhöhe, dafür ruhig einen Schritt zurück\n"
+                               u"\n"
+                               u"**Jeden Tag (etwa 20 Minuten):**\n"
+                               u"- Tonleiter D-Dur über zwei Oktaven: erst ganze Bögen, dann Achtel, mit Metronom (60)\n"
+                               u"- Wohlfahrt op. 45 Nr. 8: Zeile 1–4, saubere Saitenwechsel\n"
+                               u"- Lange Töne auf leeren Saiten, vom Frosch bis zur Spitze gleich laut\n"
+                               u"- Einmal pro Woche: Tonleiter in Terzen\n"
+                               u"\n"
+                               u"**Vivaldi a-Moll, 1. Satz:**\n"
+                               u"- Takt 1–24 auswendig\n"
+                               u"- Sechzehntel locker aus dem Handgelenk, nicht aus dem Arm\n"
+                               u"- ==Dynamik deutlicher: forte wirklich laut, piano trotzdem tragend==\n"
+                               u"- Kopie für die Klavierbegleitung mitbringen\n"
+                               u"\n"
+                               u"**Vorspiel im November:**\n"
+                               u"- Das Stück zweimal am Stück vor der Familie spielen\n"
+                               u"- Auftritt und Verbeugung üben\n"
+                               u"\n"
+                               u"*Viel selbst zuhören – nicht nur Noten spielen, sondern Musik machen!*"_s
+                             : u"**Posture:**\n"
+                               u"Let the instrument rest, don't hold it with the shoulder\n"
+                               u"Keep the shoulders down – no lifting when shifting\n"
+                               u"Music at eye level, step back a little for it\n"
+                               u"\n"
+                               u"**Every day (about 20 minutes):**\n"
+                               u"- D major scale over two octaves: whole bows first, then quavers, with metronome (60)\n"
+                               u"- Wohlfahrt op. 45 no. 8: lines 1–4, clean string crossings\n"
+                               u"- Long notes on open strings, equally loud from frog to tip\n"
+                               u"- Once a week: scale in thirds\n"
+                               u"\n"
+                               u"**Vivaldi A minor, 1st movement:**\n"
+                               u"- Bars 1–24 by heart\n"
+                               u"- Semiquavers loosely from the wrist, not from the arm\n"
+                               u"- ==Clearer dynamics: forte really loud, piano still carrying==\n"
+                               u"- Bring a copy for the piano accompaniment\n"
+                               u"\n"
+                               u"**Recital in November:**\n"
+                               u"- Play the piece twice in a row for the family\n"
+                               u"- Practise walking on and bowing\n"
+                               u"\n"
+                               u"*Listen a lot – don't just play notes, make music!*"_s,
+                          false);
+            break;
         }
     }
 }

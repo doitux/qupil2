@@ -539,6 +539,16 @@
         <source>Close</source>
         <translation>Close</translation>
     </message>
+    <message id="common.show_more">
+        <source>Show more</source>
+        <extracomment>Below a long note or plan that is shown shortened</extracomment>
+        <translation>Show more</translation>
+    </message>
+    <message id="common.show_less">
+        <source>Show less</source>
+        <extracomment>Below a long note or plan that is unfolded</extracomment>
+        <translation>Show less</translation>
+    </message>
     <message id="common.share">
         <source>Share</source>
         <translation>Share</translation>
@@ -885,6 +895,14 @@
         <source>What did you cover? That becomes the note of this lesson.</source>
         <extracomment>Plan card once the lesson has begun (also while it is still running)</extracomment>
         <translation>What did you cover? That becomes the note of this lesson.</translation>
+    </message>
+    <message id="plan.more_points" numerus="yes">
+        <source>+ %n more point(s)</source>
+        <extracomment>Running lesson: a long plan shows its first 4 points, then this</extracomment>
+        <translation>
+            <numerusform>+ %n more point</numerusform>
+            <numerusform>+ %n more points</numerusform>
+        </translation>
     </message>
     <message id="plan.make_note">
         <source>Turn into a note</source>

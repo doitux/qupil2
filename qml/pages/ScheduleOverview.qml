@@ -388,18 +388,30 @@ Item {
                                             font.weight: Font.ExtraBold
                                         }
                                     }
+                                    // The first points; a long plan does not push the lesson off the screen
                                     Repeater {
-                                        model: heroStudent.plan ? heroStudent.plan.points : []
+                                        model: heroStudent.plan ? heroStudent.plan.points.slice(0, 4) : []
                                         delegate: Text {
                                             required property string modelData
                                             Layout.fillWidth: true
                                             wrapMode: Text.Wrap
+                                            maximumLineCount: 3
+                                            elide: Text.ElideRight
                                             text: "•  " + Data.plainText(modelData)
                                             color: Theme.heroText
                                             opacity: 0.92
                                             font.family: Theme.fontFamily
                                             font.pixelSize: 14
                                         }
+                                    }
+                                    Text {
+                                        visible: heroStudent.plan !== undefined && heroStudent.plan.points.length > 4
+                                        text: heroStudent.plan ? qsTrId("plan.more_points", heroStudent.plan.points.length - 4) : ""
+                                        color: Theme.heroText
+                                        opacity: 0.75
+                                        font.family: Theme.fontFamily
+                                        font.pixelSize: 13
+                                        font.weight: Font.DemiBold
                                     }
                                 }
                                 leftPadding: 14

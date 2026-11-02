@@ -8,7 +8,6 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import QtQuick.Shapes
 import Qupil
 
 Item {
@@ -68,7 +67,44 @@ Item {
     onStudentIdChanged: {
         tab = 0
         pieceFilter = -1
+        unfolded = ({})
     }
+
+    // ---------------------------------------------------------------- long notes
+    //! Notes and plans unfolded with "Show more" (id → true); kept here, not in the
+    //! cards, so they stay open when the list is built anew (e.g. after a sync)
+    property var unfolded: ({})
+    //! One line of note text (15 px, line height 1.15, a little for the paragraph gaps)
+    readonly property real noteLine: Math.ceil(noteMetrics.lineSpacing * 1.15) + 2
+    FontMetrics {
+        id: noteMetrics
+        font.family: Theme.fontFamily
+        font.pixelSize: 15
+    }
+    function toggleFold(id, card) {
+        const open = unfolded[id] !== true
+        const u = Object.assign({}, unfolded)
+        if (open)
+            u[id] = true
+        else
+            delete u[id]
+        unfolded = u
+        // "Show less" at the end of a long note: the note shrinks above the finger, so the
+        // page goes back to its beginning instead of leaving the reader somewhere further down
+        if (!open) {
+            const top = card.mapToItem(flick.contentItem, 0, 0).y
+            if (top < flick.contentY)
+                flick.contentY = Math.max(0, top - 12)
+        }
+    }
+    //! For the screenshots: all notes of the student unfolded, and folded again
+    function unfoldNotes() {
+        const u = {}
+        for (const n of notes || [])
+            u[n.id] = true
+        unfolded = u
+    }
+    function foldNotes() { unfolded = ({}) }
 
     // ---------------------------------------------------------------- one piece in view
     //! Piece to show (e.g. tapped in the pieces ready to perform): the pieces open with
@@ -703,15 +739,24 @@ Item {
                                 font.pixelSize: 12
                             }
                         }
-                        Text {
+                        // A long note shows its first lines and "Show more"
+                        Foldable {
                             Layout.fillWidth: true
-                            textFormat: Text.RichText
-                            wrapMode: Text.Wrap
-                            text: Data.noteHtml(noteCard.modelData.content, Theme.noteMark)
-                            color: Theme.text
-                            font.family: Theme.fontFamily
-                            font.pixelSize: 15
-                            lineHeight: 1.15
+                            lineHeight: detail.noteLine
+                            fadeColor: tap.pressed ? Qt.tint(Theme.surface, Qt.rgba(Theme.text.r, Theme.text.g, Theme.text.b, 0.06))
+                                                   : Theme.surface
+                            expanded: detail.unfolded[noteCard.modelData.id] === true
+                            onToggled: detail.toggleFold(noteCard.modelData.id, noteCard)
+                            Text {
+                                width: parent.width
+                                textFormat: Text.RichText
+                                wrapMode: Text.Wrap
+                                text: Data.noteHtml(noteCard.modelData.content, Theme.noteMark)
+                                color: Theme.text
+                                font.family: Theme.fontFamily
+                                font.pixelSize: 15
+                                lineHeight: 1.15
+                            }
                         }
                     }
                     leftPadding: 16
@@ -1146,26 +1191,35 @@ Item {
             onTapped: Nav.editPlan(detail.currentMembership, card.plan.id)
         }
 
+        // Dashed frame: one rounded rectangle on a canvas, painted again when the card
+        // changes its size or colours (crisp on high-density screens as well)
         background: Item {
-            Shape {
+            Rectangle {
                 anchors.fill: parent
-                layer.enabled: true
-                layer.samples: 4
-                ShapePath {
-                    strokeColor: card.visualFocus ? Theme.accent : Theme.accentText
-                    strokeWidth: card.visualFocus ? 2.5 : 1.6
-                    strokeStyle: ShapePath.DashLine
-                    dashPattern: [3, 2.5]
-                    fillColor: cardTap.pressed ? Theme.surfaceAlt : Theme.surface
-                    PathSvg {
-                        readonly property real r: Theme.radius
-                        readonly property real w: card.width - 1
-                        readonly property real h: card.height - 1
-                        path: "M " + (r + 0.5) + " 0.5 H " + (w - r) + " A " + r + " " + r + " 0 0 1 " + w + " " + (r + 0.5)
-                              + " V " + (h - r) + " A " + r + " " + r + " 0 0 1 " + (w - r) + " " + h
-                              + " H " + (r + 0.5) + " A " + r + " " + r + " 0 0 1 0.5 " + (h - r)
-                              + " V " + (r + 0.5) + " A " + r + " " + r + " 0 0 1 " + (r + 0.5) + " 0.5 Z"
-                    }
+                radius: Theme.radius
+                color: cardTap.pressed ? Theme.surfaceAlt : Theme.surface
+            }
+            Canvas {
+                id: frame
+                anchors.fill: parent
+                readonly property color stroke: card.visualFocus ? Theme.accent : Theme.accentText
+                readonly property real lineWidth: card.visualFocus ? 2.5 : 1.6
+                readonly property real radius: Theme.radius
+                onStrokeChanged: requestPaint()
+                onLineWidthChanged: requestPaint()
+                onRadiusChanged: requestPaint()
+                onWidthChanged: requestPaint()
+                onHeightChanged: requestPaint()
+                onPaint: {
+                    const ctx = getContext("2d")
+                    ctx.reset()
+                    const w = lineWidth
+                    ctx.lineWidth = w
+                    ctx.strokeStyle = stroke
+                    ctx.setLineDash([3, 2.5])
+                    ctx.beginPath()
+                    ctx.roundedRect(w / 2, w / 2, width - w, height - w, radius - w / 2, radius - w / 2)
+                    ctx.stroke()
                 }
             }
         }
@@ -1209,34 +1263,46 @@ Item {
                     onClicked: planMenu.popup(planMore, planMore.width - planMenu.width, planMore.height)
                 }
             }
-            Repeater {
-                model: card.plan.points || []
-                // A plain Item, not a RowLayout: a wrapped rich text in a row layout keeps the
-                // height it had at a narrower width and leaves gaps between the points
-                delegate: Item {
-                    required property string modelData
-                    Layout.fillWidth: true
-                    implicitHeight: pointText.implicitHeight
-                    Rectangle {
-                        y: 6
-                        width: 8
-                        height: 8
-                        radius: 4
-                        color: "transparent"
-                        border.width: 1.6
-                        border.color: Theme.accentText
-                    }
-                    Text {
-                        id: pointText
-                        x: 18
-                        width: parent.width - x - 8
-                        wrapMode: Text.Wrap
-                        textFormat: Text.RichText
-                        text: Data.noteHtml(modelData, Theme.noteMark)
-                        color: Theme.text
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 15
-                        lineHeight: 1.15
+            // A long plan shows its first points and "Show more", like a long note
+            Foldable {
+                Layout.fillWidth: true
+                lineHeight: detail.noteLine + 4
+                fadeColor: cardTap.pressed ? Theme.surfaceAlt : Theme.surface
+                expanded: detail.unfolded[card.plan.id] === true
+                onToggled: detail.toggleFold(card.plan.id, card)
+                Column {
+                    width: parent.width
+                    spacing: 8
+                    Repeater {
+                        model: card.plan.points || []
+                        // Plain items, not a RowLayout: a wrapped rich text in a row layout keeps
+                        // the height it had at a narrower width and leaves gaps between the points
+                        delegate: Item {
+                            required property string modelData
+                            width: parent ? parent.width : 0
+                            implicitHeight: pointText.implicitHeight
+                            Rectangle {
+                                y: 6
+                                width: 8
+                                height: 8
+                                radius: 4
+                                color: "transparent"
+                                border.width: 1.6
+                                border.color: Theme.accentText
+                            }
+                            Text {
+                                id: pointText
+                                x: 18
+                                width: parent.width - x - 8
+                                wrapMode: Text.Wrap
+                                textFormat: Text.RichText
+                                text: Data.noteHtml(modelData, Theme.noteMark)
+                                color: Theme.text
+                                font.family: Theme.fontFamily
+                                font.pixelSize: 15
+                                lineHeight: 1.15
+                            }
+                        }
                     }
                 }
             }
