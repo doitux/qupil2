@@ -8,6 +8,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import QtQuick.Shapes
 import Qupil
 
 Item {
@@ -37,6 +38,7 @@ Item {
     readonly property string currentLessonId: membership && membership.lesson_id ? membership.lesson_id : ""
     readonly property int inactiveCount: memberships.filter(m => !m.active).length
     readonly property var notes: { if (Data.revision < 0) return undefined; return currentMembership ? Data.notes(currentMembership) : [] }
+    readonly property var plans: { if (Data.revision < 0) return undefined; return currentMembership ? Data.plans(currentMembership) : [] }
     readonly property var pieces: { if (Data.revision < 0) return undefined; return currentMembership ? Data.pieces(currentMembership, pieceFilter) : [] }
     readonly property var pieceCounts: { if (Data.revision < 0) return undefined; return currentMembership ? Data.pieceCounts(currentMembership) : [0, 0, 0, 0, 0, 0] }
     readonly property var activities: { if (Data.revision < 0) return undefined; return studentId ? Data.activities(studentId) : [] }
@@ -377,7 +379,20 @@ Item {
         }
     }
 
+    // A plan for the next lesson, above "+ Note"
     Fab {
+        visible: detail.tab === 0 && detail.currentMembership !== "" && detail.membership && detail.membership.active
+        anchors.right: parent.right
+        anchors.bottom: noteFab.top
+        anchors.rightMargin: 20
+        anchors.bottomMargin: 12
+        outlined: true
+        iconName: "plan"
+        text: qsTrId("plan.label")
+        onClicked: Nav.editPlan(detail.currentMembership, "")
+    }
+    Fab {
+        id: noteFab
         visible: (detail.tab === 0 || detail.tab === 1) && detail.currentMembership !== ""
                  && detail.membership && detail.membership.active
         anchors.right: parent.right
@@ -504,6 +519,22 @@ Item {
     }
 
     AppDialog {
+        id: discardPlan
+        property var plan: ({})
+        function ask(p) {
+            plan = p
+            text = qsTrId("plan.discard.confirm").arg((p.when || ""))
+            open()
+        }
+        iconName: "trash"
+        destructive: true
+        title: qsTrId("plan.discard")
+        rejectText: qsTrId("common.cancel")
+        acceptText: qsTrId("plan.discard")
+        onAccepted: Data.deletePlan(plan.id, (plan.shared || 1) > 1)
+    }
+
+    AppDialog {
         id: deleteStudent
         iconName: "trash"
         destructive: true
@@ -522,8 +553,17 @@ Item {
         id: notesTab
         ColumnLayout {
             spacing: 10
+            // Plans first: what is planned for the next lessons (not notes yet)
+            Repeater {
+                model: detail.plans
+                delegate: PlanCard {
+                    required property var modelData
+                    Layout.fillWidth: true
+                    plan: modelData
+                }
+            }
             EmptyHint {
-                visible: detail.notes.length === 0
+                visible: detail.notes.length === 0 && detail.plans.length === 0
                 text: detail.memberships.length === 0 ? qsTrId("student.no_lesson") : qsTrId("notes.empty")
             }
             Repeater {
@@ -1077,6 +1117,178 @@ Item {
                         }
                     }
                 }
+            }
+        }
+    }
+
+    // ================================================================ plans
+    //! A plan: dashed frame (not a note yet), its points; once the lesson has begun,
+    //! "Turn into a note". Tap: change it. "…": change, move to the next lesson, discard.
+    component PlanCard: Control {
+        id: card
+        property var plan: ({})
+        readonly property bool shared: (plan.shared || 1) > 1
+        implicitHeight: planColumn.implicitHeight + topPadding + bottomPadding
+        topPadding: 10
+        bottomPadding: 16
+        leftPadding: 16
+        rightPadding: 8
+        focusPolicy: Qt.StrongFocus
+        hoverEnabled: true
+        Accessible.role: Accessible.Button
+        Accessible.name: qsTrId("plan.title_for").arg((plan.when || "")) + ": " + (plan.points || []).join(", ")
+        Accessible.onPressAction: Nav.editPlan(detail.currentMembership, plan.id)
+        Keys.onReturnPressed: Nav.editPlan(detail.currentMembership, plan.id)
+        Keys.onSpacePressed: Nav.editPlan(detail.currentMembership, plan.id)
+
+        TapHandler {
+            id: cardTap
+            onTapped: Nav.editPlan(detail.currentMembership, card.plan.id)
+        }
+
+        background: Item {
+            Shape {
+                anchors.fill: parent
+                layer.enabled: true
+                layer.samples: 4
+                ShapePath {
+                    strokeColor: card.visualFocus ? Theme.accent : Theme.accentText
+                    strokeWidth: card.visualFocus ? 2.5 : 1.6
+                    strokeStyle: ShapePath.DashLine
+                    dashPattern: [3, 2.5]
+                    fillColor: cardTap.pressed ? Theme.surfaceAlt : Theme.surface
+                    PathSvg {
+                        readonly property real r: Theme.radius
+                        readonly property real w: card.width - 1
+                        readonly property real h: card.height - 1
+                        path: "M " + (r + 0.5) + " 0.5 H " + (w - r) + " A " + r + " " + r + " 0 0 1 " + w + " " + (r + 0.5)
+                              + " V " + (h - r) + " A " + r + " " + r + " 0 0 1 " + (w - r) + " " + h
+                              + " H " + (r + 0.5) + " A " + r + " " + r + " 0 0 1 0.5 " + (h - r)
+                              + " V " + (r + 0.5) + " A " + r + " " + r + " 0 0 1 " + (r + 0.5) + " 0.5 Z"
+                    }
+                }
+            }
+        }
+
+        contentItem: ColumnLayout {
+            id: planColumn
+            spacing: 8
+            RowLayout {
+                Layout.fillWidth: true
+                spacing: 6
+                Icon {
+                    Layout.preferredWidth: 18
+                    Layout.preferredHeight: 18
+                    name: "plan"
+                    color: Theme.accentText
+                    strokeWidth: 2
+                }
+                Text {
+                    Layout.fillWidth: true
+                    elide: Text.ElideRight
+                    text: qsTrId("plan.title_for").arg((card.plan.when || ""))
+                    color: Theme.accentText
+                    font.family: Theme.fontFamily
+                    font.pixelSize: 13
+                    font.weight: Font.ExtraBold
+                }
+                Icon {
+                    visible: card.shared
+                    Layout.preferredWidth: 16
+                    Layout.preferredHeight: 16
+                    name: "students"
+                    color: Theme.textMuted
+                }
+                IconButton {
+                    id: planMore
+                    size: 36
+                    iconName: "more"
+                    text: qsTrId("common.more_actions")
+                    fill: "transparent"
+                    tint: Theme.textMuted
+                    onClicked: planMenu.popup(planMore, planMore.width - planMenu.width, planMore.height)
+                }
+            }
+            Repeater {
+                model: card.plan.points || []
+                // A plain Item, not a RowLayout: a wrapped rich text in a row layout keeps the
+                // height it had at a narrower width and leaves gaps between the points
+                delegate: Item {
+                    required property string modelData
+                    Layout.fillWidth: true
+                    implicitHeight: pointText.implicitHeight
+                    Rectangle {
+                        y: 6
+                        width: 8
+                        height: 8
+                        radius: 4
+                        color: "transparent"
+                        border.width: 1.6
+                        border.color: Theme.accentText
+                    }
+                    Text {
+                        id: pointText
+                        x: 18
+                        width: parent.width - x - 8
+                        wrapMode: Text.Wrap
+                        textFormat: Text.RichText
+                        text: Data.noteHtml(modelData, Theme.noteMark)
+                        color: Theme.text
+                        font.family: Theme.fontFamily
+                        font.pixelSize: 15
+                        lineHeight: 1.15
+                    }
+                }
+            }
+            // Once the lesson has begun: what becomes of it
+            Rectangle {
+                visible: card.plan.due === true
+                Layout.fillWidth: true
+                Layout.rightMargin: 8
+                Layout.topMargin: 4
+                implicitHeight: 1
+                color: Theme.divider
+            }
+            Text {
+                visible: card.plan.due === true
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+                text: qsTrId("plan.lesson_over")
+                color: Theme.textMuted
+                font.family: Theme.fontFamily
+                font.pixelSize: 13
+            }
+            ActionButton {
+                visible: card.plan.due === true
+                kind: "primary"
+                iconName: "file"
+                text: qsTrId("plan.make_note")
+                onClicked: Nav.finishPlan(detail.currentMembership, card.plan.id)
+            }
+        }
+
+        AppMenu {
+            id: planMenu
+            AppMenuItem {
+                iconName: "edit"
+                text: qsTrId("plan.edit")
+                onTriggered: Nav.editPlan(detail.currentMembership, card.plan.id)
+            }
+            AppMenuItem {
+                iconName: "calendar"
+                text: qsTrId("plan.postpone")
+                onTriggered: {
+                    const date = Data.postponePlan(card.plan.id, card.shared)
+                    if (date)
+                        Nav.toast(qsTrId("plan.postponed").arg(Data.formatDate(date, true)))
+                }
+            }
+            AppMenuSeparator {}
+            AppMenuItem {
+                iconName: "trash"
+                destructive: true
+                text: qsTrId("plan.discard")
+                onTriggered: discardPlan.ask(card.plan)
             }
         }
     }

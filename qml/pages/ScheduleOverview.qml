@@ -31,6 +31,8 @@ Item {
     readonly property var lessons: { if (Data.revision < 0) return undefined; return Data.lessonsOn(day) }
     readonly property var counts: { if (Data.revision < 0) return undefined; return Data.lessonCountPerWeekday() }
     readonly property var irregular: { if (Data.revision < 0) return undefined; return Data.irregularLessons() }
+    //! Memberships with a plan for the day shown (a symbol at the lesson or student)
+    readonly property var planned: { if (Data.revision < 0) return undefined; return Data.plannedOn(Qt.formatDate(dateOf(day), "yyyy-MM-dd")) }
     readonly property var running: {
         if (!isToday)
             return null
@@ -334,11 +336,77 @@ Item {
 
                     Repeater {
                         model: overview.running ? overview.running.students.slice(0, 3) : []
-                        delegate: StudentCard {
+                        delegate: ColumnLayout {
+                            id: heroStudent
                             required property var modelData
+                            // What is planned for this lesson
+                            readonly property var plan: {
+                                if (Data.revision < 0)
+                                    return undefined
+                                return Data.plans(modelData.membership_id).find(p => p.today)
+                            }
                             Layout.fillWidth: true
-                            student: modelData
-                            onClicked: overview.studentClicked(modelData.id, modelData.membership_id)
+                            spacing: 8
+                            StudentCard {
+                                Layout.fillWidth: true
+                                student: heroStudent.modelData
+                                onClicked: overview.studentClicked(heroStudent.modelData.id, heroStudent.modelData.membership_id)
+                            }
+                            AbstractButton {
+                                id: heroPlan
+                                visible: heroStudent.plan !== undefined
+                                Layout.fillWidth: true
+                                implicitHeight: heroPlanColumn.implicitHeight + 24
+                                focusPolicy: Qt.StrongFocus
+                                Accessible.role: Accessible.Button
+                                Accessible.name: qsTrId("plan.planned_today") + ": "
+                                                 + (heroStudent.plan ? heroStudent.plan.points.join(", ") : "")
+                                onClicked: overview.studentClicked(heroStudent.modelData.id, heroStudent.modelData.membership_id)
+                                background: Rectangle {
+                                    radius: 14
+                                    color: Qt.rgba(1, 1, 1, heroPlan.down ? 0.16 : 0.10)
+                                    border.width: heroPlan.visualFocus ? 2 : 1
+                                    border.color: heroPlan.visualFocus ? Theme.lime : Qt.rgba(1, 1, 1, 0.22)
+                                }
+                                contentItem: ColumnLayout {
+                                    id: heroPlanColumn
+                                    spacing: 6
+                                    RowLayout {
+                                        spacing: 6
+                                        Icon {
+                                            Layout.preferredWidth: 17
+                                            Layout.preferredHeight: 17
+                                            name: "plan"
+                                            color: Theme.lime
+                                            strokeWidth: 2
+                                        }
+                                        Text {
+                                            text: qsTrId("plan.planned_today")
+                                            color: Theme.heroText
+                                            font.family: Theme.fontFamily
+                                            font.pixelSize: 13
+                                            font.weight: Font.ExtraBold
+                                        }
+                                    }
+                                    Repeater {
+                                        model: heroStudent.plan ? heroStudent.plan.points : []
+                                        delegate: Text {
+                                            required property string modelData
+                                            Layout.fillWidth: true
+                                            wrapMode: Text.Wrap
+                                            text: "•  " + Data.plainText(modelData)
+                                            color: Theme.heroText
+                                            opacity: 0.92
+                                            font.family: Theme.fontFamily
+                                            font.pixelSize: 14
+                                        }
+                                    }
+                                }
+                                leftPadding: 14
+                                rightPadding: 14
+                                topPadding: 12
+                                bottomPadding: 12
+                            }
                         }
                     }
                     Text {
@@ -444,6 +512,7 @@ Item {
                                 required property int index
                                 Layout.fillWidth: true
                                 lesson: modelData
+                                planned: overview.planned
                                 past: overview.isToday && modelData.end_time <= overview.nowTime
                                 divider: index > 0
                                 onClicked: overview.openLesson(modelData)
@@ -466,6 +535,7 @@ Item {
                         minutesLeft: running ? overview.minutesLeft(modelData) : 0
                         selectedMembership: overview.selectedMembership
                         selectedLesson: overview.selectedLesson
+                        planned: overview.planned
                         onLessonClicked: overview.lessonClicked(modelData.id)
                         onStudentClicked: (studentId, membershipId) => overview.studentClicked(studentId, membershipId)
                     }
@@ -485,6 +555,7 @@ Item {
                         lesson: modelData
                         selectedMembership: overview.selectedMembership
                         selectedLesson: overview.selectedLesson
+                        planned: overview.planned
                         onLessonClicked: overview.lessonClicked(modelData.id)
                         onStudentClicked: (studentId, membershipId) => overview.studentClicked(studentId, membershipId)
                     }
@@ -748,6 +819,7 @@ Item {
         property var lesson: ({})
         property bool past: false
         property bool divider: false
+        property var planned: []
         implicitHeight: implicitContentHeight + topPadding + bottomPadding
         topPadding: 14
         bottomPadding: 14
@@ -817,6 +889,16 @@ Item {
                 }
             }
             Icon {
+                visible: (row.lesson.students || []).some(s => row.planned.indexOf(s.membership_id) >= 0)
+                Layout.preferredWidth: 18
+                Layout.preferredHeight: 18
+                name: "plan"
+                color: Theme.accentText
+                strokeWidth: 2
+                Accessible.role: Accessible.Graphic
+                Accessible.name: qsTrId("plan.planned")
+            }
+            Icon {
                 visible: row.lesson.reminderCount > 0
                 Layout.preferredWidth: 18
                 Layout.preferredHeight: 18
@@ -843,6 +925,7 @@ Item {
         property int minutesLeft: 0
         property string selectedMembership
         property string selectedLesson
+        property var planned: []
         readonly property bool lessonSelected: selectedLesson !== "" && selectedLesson === lesson.id
         signal lessonClicked()
         signal studentClicked(string studentId, string membershipId)
@@ -975,14 +1058,28 @@ Item {
                             border.color: studentRow.selected ? Theme.textOnAccent : Theme.accentText
                         }
                     }
-                    contentItem: Text {
-                        text: studentRow.modelData.listName
-                        verticalAlignment: Text.AlignVCenter
-                        elide: Text.ElideRight
-                        color: studentRow.selected ? Theme.textOnAccent : Theme.text
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 14
-                        font.weight: studentRow.selected ? Font.Bold : Font.Normal
+                    contentItem: RowLayout {
+                        spacing: 8
+                        Text {
+                            Layout.fillWidth: true
+                            text: studentRow.modelData.listName
+                            verticalAlignment: Text.AlignVCenter
+                            elide: Text.ElideRight
+                            color: studentRow.selected ? Theme.textOnAccent : Theme.text
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 14
+                            font.weight: studentRow.selected ? Font.Bold : Font.Normal
+                        }
+                        Icon {
+                            visible: lessonCard.planned.indexOf(studentRow.modelData.membership_id) >= 0
+                            Layout.preferredWidth: 17
+                            Layout.preferredHeight: 17
+                            name: "plan"
+                            color: studentRow.selected ? Theme.textOnAccent : Theme.accentText
+                            strokeWidth: 2
+                            Accessible.role: Accessible.Graphic
+                            Accessible.name: qsTrId("plan.planned")
+                        }
                     }
                     leftPadding: lessonCard.lesson.irregular ? 12 : 118
                     rightPadding: 12

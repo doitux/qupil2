@@ -77,6 +77,13 @@ public:
     bool endBatch(bool commit = true);
 
     // ------------------------------------------------------------- sync
+    /*!
+        After an update that added entities: applies the changes for them that the
+        change log already holds (received while this device was older and did not
+        know them). Runs once; returns the number of records written, -1 on error.
+    */
+    int catchUp();
+
     VersionVector versionVector() const;
     //! Changes the other side has not seen yet, oldest first
     QList<Change> changesSince(const VersionVector &known, int limit = 5000) const;
@@ -112,6 +119,8 @@ private:
     bool isNewer(const Clock &a, const Clock &b) const;
     //! Clocks of a record: field '' is the record's own
     QHash<QString, Clock> clocks(const QString &entity, const QString &id) const;
+    //! Writes the fields of a change that are newer than ours: 1 written, 0 nothing newer, -1 error
+    int merge(const EntityDef *def, const Change &c, int origin);
     bool setClocks(const EntityDef *def, const QString &id, const QStringList &written, bool complete,
                    const QHash<QString, Clock> &before, const Clock &clock);
     bool writeFields(const EntityDef *def, const QString &id, const QVariantMap &fields);

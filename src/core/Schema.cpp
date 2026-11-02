@@ -80,6 +80,13 @@ QList<EntityDef> buildEntities()
         text("membership_id"), text("group_key"), text("date"), text("content"),
     }, { QStringLiteral("membership_id"), QStringLiteral("group_key") } };
 
+    // Lesson plans: written before a lesson, for its date, one point per line. After the lesson
+    // they become a note (DataService::planToNote); what was not covered stays a plan.
+    // group_key links the copies of a plan for all students of a group lesson.
+    list << EntityDef{ QStringLiteral("plan"), {
+        text("membership_id"), text("group_key"), text("date"), text("content"),
+    }, { QStringLiteral("membership_id"), QStringLiteral("group_key") } };
+
     // Activities outside lessons: continuous (weekly, e.g. orchestra) or single (e.g. a recital)
     list << EntityDef{ QStringLiteral("activity"), {
         text("student_id"), integer("continuous"), text("description"), integer("weekday"), text("time"),
@@ -166,6 +173,12 @@ QVariantMap currentFields(const QString &entity, const QVariantMap &fields)
             out.insert(r.to, value);
     }
     return out;
+}
+
+const QList<AddedEntity> &addedEntities()
+{
+    static const QList<AddedEntity> list { { QStringLiteral("plan"), 5 } };
+    return list;
 }
 
 QStringList createStatements()

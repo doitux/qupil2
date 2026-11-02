@@ -1593,6 +1593,52 @@ private slots:
         QCOMPARE(sf.get(u"student"_s, id), store.get(u"student"_s, id));
     }
 
+    void catchesUpNewEntities()
+    {
+        // Schema 4 knew no lesson plans: changes for them from a newer device stayed in the
+        // log. After the update to 5 the table is there and catchUp() applies them once.
+        const QString path = file(u"v4-plans.db"_s);
+        const QString newer = u"0190a0b0-0000-7000-8000-00000000000d"_s;
+        const QString id = u"0190a0b0-3333-7000-8000-000000000001"_s;
+        const qint64 t0 = HybridClock::make(1'800'000'000'000, 0);
+        const qint64 t1 = HybridClock::make(1'800'000'060'000, 0);
+        {
+            Database db;
+            QVERIFY(db.open(path));
+            QSqlQuery q(db.connection());
+            QVERIFY(q.exec(u"DROP TABLE plan"_s));
+            QVERIFY(db.setMeta(u"schema_version"_s, u"4"_s));
+            const int origin = db.originNumber(newer);
+            const auto log = [&](qint64 seq, qint64 time, const QVariantMap &data) {
+                q.prepare(u"INSERT INTO change_log VALUES (?, ?, ?, 'plan', ?, ?)"_s);
+                for (const QVariant &v : { QVariant(origin), QVariant(seq), QVariant(time), QVariant(id),
+                                           QVariant(Store::encodeFields(data)) })
+                    q.addBindValue(v);
+                QVERIFY(q.exec());
+            };
+            log(1, t0, { { u"membership_id"_s, u"m1"_s }, { u"group_key"_s, u"g1"_s }, { u"date"_s, u"2026-11-03"_s },
+                         { u"content"_s, u"Tonleiter"_s }, { u"deleted"_s, 0 } });
+            log(2, t1, { { u"content"_s, u"Tonleiter\nEtüde"_s } });
+        }
+
+        Database db;
+        QString error;
+        QVERIFY2(db.open(path, &error), qPrintable(error));
+        QCOMPARE(db.meta(u"schema_version"_s).toInt(), Schema::Version);
+        QCOMPARE(db.meta(u"catch_up"_s), u"plan"_s);
+        Store store(&db);
+        QCOMPARE(store.catchUp(), 2);
+        QCOMPARE(store.catchUp(), 0);   // once
+        const QVariantMap plan = store.get(u"plan"_s, id);
+        QCOMPARE(plan.value(u"membership_id"_s).toString(), u"m1"_s);
+        QCOMPARE(plan.value(u"content"_s).toString(), u"Tonleiter\nEtüde"_s);
+        // Clocks are there: an older change does not win, a newer one does
+        QCOMPARE(store.applyRemote({ { newer, 3, t0 + 1, u"plan"_s, id, { { u"content"_s, u"alt"_s } } } }), 0);
+        QCOMPARE(store.get(u"plan"_s, id).value(u"content"_s).toString(), u"Tonleiter\nEtüde"_s);
+        QCOMPARE(store.applyRemote({ { newer, 4, t1 + 1, u"plan"_s, id, { { u"date"_s, u"2026-11-10"_s } } } }), 1);
+        QCOMPARE(store.get(u"plan"_s, id).value(u"date"_s).toString(), u"2026-11-10"_s);
+    }
+
     void syncFormats()
     {
         const Change c { u"dev-a"_s, 42, HybridClock::make(1'800'000'000'123, 7), u"note"_s, u"n1"_s,

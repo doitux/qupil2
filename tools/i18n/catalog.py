@@ -446,6 +446,66 @@ E("note.delete.for_all", src="Delete for all %n students of the group",
   fr=["Supprimer pour %n élève", "Supprimer pour les %n élèves du groupe"],
   es=["Eliminar para %n alumno", "Eliminar para los %n alumnos del grupo"],
   c="Check box when deleting a note of a group lesson.")
+E("plan.label", en="Plan", de="Planung", fr="Préparation", es="Planificación",
+  c="Lesson plan: what the teacher plans before a lesson (button, field label)")
+E("plan.new", en="New plan", de="Neue Planung", fr="Nouvelle préparation", es="Nueva planificación")
+E("plan.edit", en="Change plan", de="Planung ändern", fr="Modifier la préparation", es="Cambiar planificación")
+E("plan.save", en="Save plan", de="Planung speichern", fr="Enregistrer la préparation", es="Guardar planificación")
+E("plan.for_lesson", en="For the lesson on", de="Für die Stunde am", fr="Pour le cours du", es="Para la clase del",
+  c="Label above the date of a plan")
+E("plan.placeholder", en="What do you plan for the lesson? One point per line.",
+  de="Was nehmen Sie sich für die Stunde vor? Ein Punkt pro Zeile.",
+  fr="Que prévoyez-vous pour le cours ? Un point par ligne.",
+  es="¿Qué planea para la clase? Un punto por línea.")
+E("plan.hint", en="Each line is a point. A plan is not a note yet: after the lesson you turn it into the note, and what was not covered stays planned for the next lesson.",
+  de="Jede Zeile ist ein Punkt. Die Planung ist noch keine Notiz: Nach der Stunde machen Sie daraus die Notiz, was nicht dran war, bleibt für die nächste Stunde.",
+  fr="Chaque ligne est un point. La préparation n’est pas encore une note : après le cours, vous en faites la note, et ce qui n’a pas été fait reste prévu pour le cours suivant.",
+  es="Cada línea es un punto. La planificación aún no es una nota: después de la clase la convierte en nota, y lo que no se trabajó queda planificado para la próxima clase.")
+E("plan.title_for", en="Plan for %1", de="Planung für %1", fr="Préparation pour %1", es="Planificación para %1",
+  c="%1 = plan.today_at or a date with weekday")
+E("plan.today_at", en="today, %1", de="heute, %1", fr="aujourd’hui, %1", es="hoy, %1", c="%1 = time of the lesson")
+E("plan.lesson_over", en="What did you cover? That becomes the note of this lesson.",
+  de="Was davon war dran? Daraus wird die Notiz zur Stunde.",
+  fr="Qu'avez-vous travaillé ? Cela devient la note du cours.",
+  es="¿Qué se trabajó? Eso pasa a ser la nota de la clase.",
+  c="Plan card once the lesson has begun (also while it is still running)")
+E("plan.make_note", en="Turn into a note", de="Notiz daraus machen", fr="En faire une note", es="Convertir en nota")
+E("plan.postpone", en="Move to the next lesson", de="Auf nächste Stunde schieben", fr="Reporter au cours suivant",
+  es="Pasar a la próxima clase")
+E("plan.postponed", en="Moved to %1", de="Verschoben auf %1", fr="Reporté au %1", es="Pasado al %1", c="%1 = date")
+E("plan.discard", en="Discard plan", de="Planung verwerfen", fr="Supprimer la préparation", es="Descartar planificación")
+E("plan.discard.confirm", en="The plan for %1 will be deleted.", de="Die Planung für %1 wird gelöscht.",
+  fr="La préparation pour %1 sera supprimée.", es="Se eliminará la planificación para %1.", c="%1 = date")
+E("plan.finish.title", en="What did you cover?", de="Was war dran?", fr="Qu’avez-vous fait ?", es="¿Qué se trabajó?",
+  c="Title: the points of a plan to tick after the lesson")
+E("plan.finish.info", en="The ticked points become the note of %1 – what was not covered stays planned for the next lesson (%2).",
+  de="Die angehakten Punkte werden zur Notiz vom %1 – was nicht dran war, bleibt als Planung für die nächste Stunde (%2).",
+  fr="Les points cochés deviennent la note du %1 – ce qui n’a pas été fait reste prévu pour le cours suivant (%2).",
+  es="Los puntos marcados se convierten en la nota del %1; lo que no se trabajó queda planificado para la próxima clase (%2).",
+  c="%1 = date of the lesson, %2 = date of the next lesson")
+E("plan.finish.none", en="Nothing ticked: to keep the whole plan, choose “Move to the next lesson” under “…”.",
+  de="Nichts angehakt: Um die ganze Planung zu behalten, wählen Sie unter „…“ „Auf nächste Stunde schieben“.",
+  fr="Rien de coché : pour garder toute la préparation, choisissez « Reporter au cours suivant » sous « … ».",
+  es="Nada marcado: para conservar toda la planificación, elija «Pasar a la próxima clase» en «…».")
+E("plan.finish.save", en="Save as note", de="Als Notiz speichern", fr="Enregistrer comme note", es="Guardar como nota")
+E("plan.finish.edit", en="Edit before saving", de="Vor dem Speichern noch bearbeiten", fr="Modifier avant d’enregistrer",
+  es="Editar antes de guardar")
+E("plan.from", src="From the plan of %1 · %n point(s) stay(s) planned for the next lesson.",
+  en=["From the plan of %1 · %n point stays planned for the next lesson.",
+      "From the plan of %1 · %n points stay planned for the next lesson."],
+  de=["Aus der Planung vom %1 · %n Punkt bleibt für die nächste Stunde geplant.",
+      "Aus der Planung vom %1 · %n Punkte bleiben für die nächste Stunde geplant."],
+  fr=["De la préparation du %1 · %n point reste prévu pour le cours suivant.",
+      "De la préparation du %1 · %n points restent prévus pour le cours suivant."],
+  es=["De la planificación del %1 · %n punto queda planificado para la próxima clase.",
+      "De la planificación del %1 · %n puntos quedan planificados para la próxima clase."],
+  c="%1 = date of the lesson; above a note made from a plan")
+E("plan.from_all", en="From the plan of %1.", de="Aus der Planung vom %1.", fr="De la préparation du %1.",
+  es="De la planificación del %1.", c="%1 = date of the lesson; above a note made from a whole plan")
+E("plan.planned_today", en="Planned for today", de="Geplant für heute", fr="Prévu pour aujourd’hui",
+  es="Planificado para hoy")
+E("plan.planned", en="Planned", de="Geplant", fr="Prévu", es="Planificado",
+  c="Symbol on a lesson or student with a plan (for screen readers), and before the first point")
 E("note.new", en="New note", de="Neue Notiz", fr="Nouvelle note", es="Nueva nota")
 E("note.save", en="Save note", de="Notiz speichern", fr="Enregistrer la note", es="Guardar nota")
 E("note.save_for_all", src="Save for all %n students",

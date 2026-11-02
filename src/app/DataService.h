@@ -82,6 +82,34 @@ public:
     Q_INVOKABLE bool updateNote(const QString &id, const QString &date, const QString &content, bool forAll);
     Q_INVOKABLE bool deleteNote(const QString &id, bool forAll);
 
+    // ------------------------------------------------------------ lesson plans
+    /*!
+        Plans of a membership, earliest first: notes written before a lesson for its date,
+        one point per line. Each with "points" (the lines), "shared" (copies in the group),
+        "time" (the lesson's start), "when" (e.g. "heute, 14:00"), "today" and "due" (the lesson has begun or is past:
+        time to turn the plan into a note).
+    */
+    Q_INVOKABLE QVariantList plans(const QString &membershipId) const;
+    //! Memberships with a plan for that day (yyyy-MM-dd)
+    Q_INVOKABLE QStringList plannedOn(const QString &date) const;
+    /*!
+        Date of the next lesson of a membership (yyyy-MM-dd): after \a after if given, never
+        before today, and not today once today's lesson has begun.
+    */
+    Q_INVOKABLE QString nextLessonDate(const QString &membershipId, const QString &after = {}) const;
+    //! New plan (empty id; added to one that exists for that date) or changed one; returns its id
+    Q_INVOKABLE QString savePlan(const QString &membershipId, const QString &id, const QString &date,
+                                 const QString &content, bool forAll);
+    Q_INVOKABLE bool deletePlan(const QString &id, bool forAll);
+    //! Moves a plan to the next lesson (added to a plan there); returns the new date, empty on error
+    Q_INVOKABLE QString postponePlan(const QString &id, bool forAll);
+    /*!
+        After the lesson: \a noteContent becomes the note of the plan's date (for all
+        students if \a forAll), \a rest (what was not covered) stays a plan for the next
+        lesson; nothing left: the plan is gone. Returns the note's id, empty on error.
+    */
+    Q_INVOKABLE QString planToNote(const QString &planId, const QString &noteContent, const QString &rest, bool forAll);
+
     //! stateFilter -1 = all
     Q_INVOKABLE QVariantList pieces(const QString &membershipId, int stateFilter = -1) const;
     //! Count per state (index = state) plus "all" at index 5

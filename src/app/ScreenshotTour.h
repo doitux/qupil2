@@ -43,12 +43,13 @@ private:
     void addPages(const QString &prefix);
     void addDetails(const QString &prefix);
     void pickExamples();
+    void addSamplePlans();
     void writeDocuments();
 
     QPointer<QQuickWindow> m_window;
     QPointer<QObject> m_theme;
     QPointer<QObject> m_nav;
-    QString m_student, m_membership, m_lesson, m_piece, m_event, m_note;
+    QString m_student, m_membership, m_lesson, m_piece, m_event, m_note, m_plan;
     AppController *m_app;
     QString m_folder;
     QList<Step> m_steps;

@@ -11,6 +11,8 @@ AbstractButton {
     id: fab
 
     property string iconName: "plus"
+    //! Outlined, for a second button above the main one
+    property bool outlined: false
 
     implicitHeight: 56
     implicitWidth: row.implicitWidth + 40
@@ -32,9 +34,9 @@ AbstractButton {
         Rectangle {
             anchors.fill: parent
             radius: height / 2
-            color: Theme.accent
-            border.width: fab.visualFocus ? 2 : 0
-            border.color: Theme.lime
+            color: fab.outlined ? Theme.surface : Theme.accent
+            border.width: fab.outlined || fab.visualFocus ? 2 : 0
+            border.color: fab.outlined && !fab.visualFocus ? Theme.accentText : Theme.lime
             Rectangle {
                 anchors.fill: parent
                 radius: parent.radius
@@ -52,12 +54,12 @@ AbstractButton {
                 Layout.preferredWidth: 22
                 Layout.preferredHeight: 22
                 name: fab.iconName
-                color: Theme.textOnAccent
+                color: fab.outlined ? Theme.accentText : Theme.textOnAccent
                 strokeWidth: 2.4
             }
             Text {
                 text: fab.text
-                color: Theme.textOnAccent
+                color: fab.outlined ? Theme.accentText : Theme.textOnAccent
                 font.family: Theme.fontFamily
                 font.pixelSize: 16
                 font.weight: Font.ExtraBold

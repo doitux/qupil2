@@ -841,6 +841,117 @@
             <numerusform>Eliminar para los %n alumnos del grupo</numerusform>
         </translation>
     </message>
+    <message id="plan.label">
+        <source>Plan</source>
+        <extracomment>Lesson plan: what the teacher plans before a lesson (button, field label)</extracomment>
+        <translation>Planificación</translation>
+    </message>
+    <message id="plan.new">
+        <source>New plan</source>
+        <translation>Nueva planificación</translation>
+    </message>
+    <message id="plan.edit">
+        <source>Change plan</source>
+        <translation>Cambiar planificación</translation>
+    </message>
+    <message id="plan.save">
+        <source>Save plan</source>
+        <translation>Guardar planificación</translation>
+    </message>
+    <message id="plan.for_lesson">
+        <source>For the lesson on</source>
+        <extracomment>Label above the date of a plan</extracomment>
+        <translation>Para la clase del</translation>
+    </message>
+    <message id="plan.placeholder">
+        <source>What do you plan for the lesson? One point per line.</source>
+        <translation>¿Qué planea para la clase? Un punto por línea.</translation>
+    </message>
+    <message id="plan.hint">
+        <source>Each line is a point. A plan is not a note yet: after the lesson you turn it into the note, and what was not covered stays planned for the next lesson.</source>
+        <translation>Cada línea es un punto. La planificación aún no es una nota: después de la clase la convierte en nota, y lo que no se trabajó queda planificado para la próxima clase.</translation>
+    </message>
+    <message id="plan.title_for">
+        <source>Plan for %1</source>
+        <extracomment>%1 = plan.today_at or a date with weekday</extracomment>
+        <translation>Planificación para %1</translation>
+    </message>
+    <message id="plan.today_at">
+        <source>today, %1</source>
+        <extracomment>%1 = time of the lesson</extracomment>
+        <translation>hoy, %1</translation>
+    </message>
+    <message id="plan.lesson_over">
+        <source>What did you cover? That becomes the note of this lesson.</source>
+        <extracomment>Plan card once the lesson has begun (also while it is still running)</extracomment>
+        <translation>¿Qué se trabajó? Eso pasa a ser la nota de la clase.</translation>
+    </message>
+    <message id="plan.make_note">
+        <source>Turn into a note</source>
+        <translation>Convertir en nota</translation>
+    </message>
+    <message id="plan.postpone">
+        <source>Move to the next lesson</source>
+        <translation>Pasar a la próxima clase</translation>
+    </message>
+    <message id="plan.postponed">
+        <source>Moved to %1</source>
+        <extracomment>%1 = date</extracomment>
+        <translation>Pasado al %1</translation>
+    </message>
+    <message id="plan.discard">
+        <source>Discard plan</source>
+        <translation>Descartar planificación</translation>
+    </message>
+    <message id="plan.discard.confirm">
+        <source>The plan for %1 will be deleted.</source>
+        <extracomment>%1 = date</extracomment>
+        <translation>Se eliminará la planificación para %1.</translation>
+    </message>
+    <message id="plan.finish.title">
+        <source>What did you cover?</source>
+        <extracomment>Title: the points of a plan to tick after the lesson</extracomment>
+        <translation>¿Qué se trabajó?</translation>
+    </message>
+    <message id="plan.finish.info">
+        <source>The ticked points become the note of %1 – what was not covered stays planned for the next lesson (%2).</source>
+        <extracomment>%1 = date of the lesson, %2 = date of the next lesson</extracomment>
+        <translation>Los puntos marcados se convierten en la nota del %1; lo que no se trabajó queda planificado para la próxima clase (%2).</translation>
+    </message>
+    <message id="plan.finish.none">
+        <source>Nothing ticked: to keep the whole plan, choose “Move to the next lesson” under “…”.</source>
+        <translation>Nada marcado: para conservar toda la planificación, elija «Pasar a la próxima clase» en «…».</translation>
+    </message>
+    <message id="plan.finish.save">
+        <source>Save as note</source>
+        <translation>Guardar como nota</translation>
+    </message>
+    <message id="plan.finish.edit">
+        <source>Edit before saving</source>
+        <translation>Editar antes de guardar</translation>
+    </message>
+    <message id="plan.from" numerus="yes">
+        <source>From the plan of %1 · %n point(s) stay(s) planned for the next lesson.</source>
+        <extracomment>%1 = date of the lesson; above a note made from a plan</extracomment>
+        <translation>
+            <numerusform>De la planificación del %1 · %n punto queda planificado para la próxima clase.</numerusform>
+            <numerusform>De la planificación del %1 · %n puntos quedan planificados para la próxima clase.</numerusform>
+        </translation>
+    </message>
+    <message id="plan.from_all">
+        <source>From the plan of %1.</source>
+        <extracomment>%1 = date of the lesson; above a note made from a whole plan</extracomment>
+        <translation>De la planificación del %1.</translation>
+    </message>
+    <message id="plan.planned_today">
+        <source>Planned for today</source>
+        <translation>Planificado para hoy</translation>
+    </message>
+    <message id="plan.planned">
+        <source>Planned</source>
+        <extracomment>Symbol on a lesson or student with a plan (for screen readers), and before the first point</extracomment>
+        <translation>Planificado</translation>
+    </message>
     <message id="note.new">
         <source>New note</source>
         <translation>Nueva nota</translation>

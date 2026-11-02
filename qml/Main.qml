@@ -313,13 +313,18 @@ ApplicationWindow {
 
     //! Closes all editor sheets (used by the screenshot tour)
     function closeEditors() {
-        for (const sheet of [noteEditor, pieceEditor, newStudent, lessonEditor, activityEditor, reminderEditor,
+        for (const sheet of [noteEditor, planFinish, pieceEditor, newStudent, lessonEditor, activityEditor, reminderEditor,
                              pairingSheet, reminderDialog])
             sheet.close()
     }
 
     // ---------------------------------------------------------------- editors used from every page
     NoteEditor { id: noteEditor }
+    PlanFinish {
+        id: planFinish
+        onEditRequested: (membership, plan, content, rest, restCount) =>
+                         noteEditor.fromPlan(membership, plan, content, rest, restCount)
+    }
     PieceEditor { id: pieceEditor }
     NewStudent { id: newStudent }
     LessonEditor { id: lessonEditor }
@@ -368,6 +373,8 @@ ApplicationWindow {
         function onEditLesson(id, weekday) { lessonEditor.edit(id, weekday) }
         function onEditNote(membership, note) { noteEditor.edit(membership, note) }
         function onNewNoteFrom(membership, note) { noteEditor.copy(membership, note) }
+        function onEditPlan(membership, plan) { noteEditor.editPlan(membership, plan) }
+        function onFinishPlan(membership, plan) { planFinish.start(membership, plan) }
         function onEditPiece(membership, piece) { pieceEditor.edit(membership, piece) }
         function onEditActivity(student, activity, continuous) { activityEditor.edit(student, activity, continuous) }
         function onEditReminder(reminder, student) { reminderEditor.edit(reminder, student) }

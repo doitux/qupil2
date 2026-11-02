@@ -17,6 +17,7 @@
 #include "ReminderAlert.h"
 #include "DataService.h"
 #include "DocumentService.h"
+#include "LanguageManager.h"
 
 using namespace Qt::StringLiterals;
 
@@ -79,6 +80,7 @@ ScreenshotTour::ScreenshotTour(QQuickWindow *window, QObject *theme, QObject *na
                       [this] { return !m_app->busy() && !m_app->lastTakeOver().isEmpty(); } }
             << snap(u"03-imported-light"_s)
             << Step { [this] { m_app->finishSetup(); }, [this] { return m_app->phase() == AppController::Ready; } }
+            << Step { [this] { addSamplePlans(); }, {} }
             << Step { [this] { writeDocuments(); }, {} };
     addPages(u"1-desktop-light"_s);
     addDetails(u"1-desktop-light"_s);
@@ -147,6 +149,10 @@ void ScreenshotTour::addDetails(const QString &prefix)
             << snap(prefix + u"-5c-note-copy"_s) << close
             << Step { [this, nav] { nav("editNote", m_membership, u""_s).action(); }, {} }
             << snap(prefix + u"-6-note-editor"_s) << close
+            << Step { [this, nav] { nav("editPlan", m_membership, u""_s).action(); }, {} }
+            << snap(prefix + u"-6b-plan-editor"_s) << close
+            << Step { [this, nav] { nav("finishPlan", m_membership, m_plan).action(); }, {} }
+            << snap(prefix + u"-6c-plan-finish"_s) << close
             << Step { [this, nav] { nav("editPiece", m_membership, m_piece).action(); }, {} }
             << snap(prefix + u"-7-piece-editor"_s) << close
             << Step { [this, nav] { nav("showEvent", m_event).action(); }, {} }
@@ -198,6 +204,38 @@ void ScreenshotTour::addDetails(const QString &prefix)
                           m_window->setProperty("currentPage", 0);
                       },
                       {} };
+}
+
+// Plans for today: the running lesson (time to make the note) and the group later on
+void ScreenshotTour::addSamplePlans()
+{
+    DataService *data = DataService::instance();
+    if (!data)
+        return;
+    const bool de = LanguageManager::instance() && LanguageManager::instance()->effectiveLanguage().startsWith(u"de"_s);
+    const QString today = Qupil::Clock::today().toString(Qt::ISODate);
+    for (const QVariant &v : data->lessonsOn(Qupil::Clock::today().dayOfWeek() - 1)) {
+        const QVariantMap lesson = v.toMap();
+        const QVariantList students = lesson.value(u"students"_s).toList();
+        if (students.isEmpty())
+            continue;
+        const QString membership = students.first().toMap().value(u"membership_id"_s).toString();
+        if (lesson.value(u"start_time"_s).toString() == u"14:00"_s) {
+            data->savePlan(membership, {}, today,
+                           de ? u"**G-Dur-Tonleiter** über zwei Oktaven, langsam mit Metronom (60)\nBourrée: Takt 9–16 auswendig\n"
+                                u"Neues Stück aussuchen: Gavotte oder Menuett"_s
+                              : u"**G major scale** over two octaves, slowly with metronome (60)\nBourrée: bars 9–16 by heart\n"
+                                u"Choose a new piece: gavotte or minuet"_s,
+                           false);
+        } else if (lesson.value(u"kind"_s).toInt() == 2) {
+            m_plan = data->savePlan(membership, {}, today,
+                                    de ? u"Aufwärmen: Rhythmus-Kanon im 6/8-Takt\nLagenwechsel 1.–3. Lage: abhören\n"
+                                         u"Duett „Frühling“: Einsätze und Dynamik"_s
+                                       : u"Warm-up: rhythm canon in 6/8\nShifting 1st–3rd position: check\n"
+                                         u"Duet “Spring”: entries and dynamics"_s,
+                                    true);
+        }
+    }
 }
 
 // The PDF documents with the sample data, next to the screenshots

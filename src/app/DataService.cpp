@@ -534,8 +534,13 @@ bool DataService::endMembership(const QString &membershipId, const QString &less
         const bool hasContent = scalar(u"SELECT (SELECT COUNT(*) FROM note WHERE deleted = 0 AND membership_id = ?) + "
                                        u"(SELECT COUNT(*) FROM piece WHERE deleted = 0 AND membership_id = ?)"_s,
                                        { membershipId, membershipId }).toInt() > 0;
-        if (!hasContent)
-            return m_store->remove(u"membership"_s, membershipId);
+        if (!hasContent) {
+            // Its plans go with it (they are not kept like notes and pieces)
+            bool ok = true;
+            for (const QVariant &p : rows(u"SELECT id FROM plan WHERE deleted = 0 AND membership_id = ?"_s, { membershipId }))
+                ok = ok && m_store->remove(u"plan"_s, p.toMap().value(u"id"_s).toString());
+            return ok && m_store->remove(u"membership"_s, membershipId);
+        }
     }
     return m_store->update(u"membership"_s, membershipId, { { u"end_date"_s, todayIso() }, { u"previous_name"_s, lessonName } });
 }
@@ -711,7 +716,7 @@ bool DataService::deleteStudent(const QString &id)
     bool ok = true;
     for (const QVariant &v : rows(u"SELECT id FROM membership WHERE deleted = 0 AND student_id = ?"_s, { id })) {
         const QString membership = v.toMap().value(u"id"_s).toString();
-        for (const char *table : { "note", "piece" })
+        for (const char *table : { "note", "piece", "plan" })
             for (const QVariant &c : rows(u"SELECT id FROM %1 WHERE deleted = 0 AND membership_id = ?"_s.arg(QLatin1StringView(table)), { membership }))
                 ok = ok && m_store->remove(QLatin1StringView(table), c.toMap().value(u"id"_s).toString());
         ok = ok && m_store->remove(u"membership"_s, membership);
@@ -802,6 +807,177 @@ bool DataService::deleteNote(const QString &id, bool forAll)
     for (const QString &copy : forAll ? groupCopies(u"note"_s, id) : QStringList { id })
         ok = ok && m_store->remove(u"note"_s, copy);
     return m_store->endBatch(ok) && ok;
+}
+
+// ---------------------------------------------------------------------------- lesson plans
+
+QVariantList DataService::plans(const QString &membershipId) const
+{
+    const QVariantMap membership = m_store->get(u"membership"_s, membershipId);
+    const QVariantMap lesson = m_store->get(u"lesson"_s, membership.value(u"lesson_id"_s).toString());
+    const bool irregular = lesson.value(u"irregular"_s).toInt() != 0;
+    const QString start = irregular ? QString() : lesson.value(u"start_time"_s).toString();
+    const QTime startTime = QTime::fromString(start, u"hh:mm"_s);
+    const QDateTime now = Qupil::Clock::now();
+    const QDate today = now.date();
+    QVariantList out;
+    for (const QVariant &v : rows(u"SELECT * FROM plan WHERE deleted = 0 AND membership_id = ? ORDER BY date, id"_s,
+                                  { membershipId })) {
+        QVariantMap p = v.toMap();
+        const QString key = p.value(u"group_key"_s).toString();
+        p.insert(u"shared"_s, key.isEmpty() ? 1 : scalar(u"SELECT COUNT(*) FROM plan WHERE deleted = 0 AND group_key = ?"_s, { key }).toInt());
+        QStringList points;
+        for (const QString &line : p.value(u"content"_s).toString().split(u'\n')) {
+            if (!line.trimmed().isEmpty())
+                points << line;
+        }
+        p.insert(u"points"_s, points);
+        p.insert(u"time"_s, start);
+        const QDate date = QDate::fromString(p.value(u"date"_s).toString(), Qt::ISODate);
+        p.insert(u"today"_s, date == today);
+        // "heute, 14:00" or "Di, 03.11.2026, 14:00": the lesson it is for
+        //: %1 = time of the lesson
+        p.insert(u"when"_s, date == today && !start.isEmpty() ? qtTrId("plan.today_at").arg(start)
+                            : formatDate(p.value(u"date"_s).toString(), true) + (start.isEmpty() ? QString() : u", "_s + start));
+        p.insert(u"due"_s, date.isValid() && (date < today || (date == today && (!startTime.isValid() || now.time() >= startTime))));
+        out << p;
+    }
+    return out;
+}
+
+QStringList DataService::plannedOn(const QString &date) const
+{
+    QStringList out;
+    for (const QVariant &v : rows(u"SELECT DISTINCT membership_id FROM plan WHERE deleted = 0 AND date = ?"_s, { date }))
+        out << v.toMap().value(u"membership_id"_s).toString();
+    return out;
+}
+
+QString DataService::nextLessonDate(const QString &membershipId, const QString &after) const
+{
+    const QVariantMap membership = m_store->get(u"membership"_s, membershipId);
+    const QVariantMap lesson = m_store->get(u"lesson"_s, membership.value(u"lesson_id"_s).toString());
+    const QDateTime now = Qupil::Clock::now();
+    QDate date = now.date();
+    const QDate from = QDate::fromString(after, Qt::ISODate);
+    if (from.isValid() && from.addDays(1) > date)
+        date = from.addDays(1);
+    if (lesson.isEmpty() || lesson.value(u"irregular"_s).toInt() != 0)
+        return date.toString(Qt::ISODate);
+    // Today's lesson has begun: the next one
+    const QTime start = QTime::fromString(lesson.value(u"start_time"_s).toString(), u"hh:mm"_s);
+    if (date == now.date() && (!start.isValid() || now.time() >= start))
+        date = date.addDays(1);
+    const int weekday = std::clamp(lesson.value(u"weekday"_s).toInt(), 0, 6) + 1;
+    while (date.dayOfWeek() != weekday)
+        date = date.addDays(1);
+    return date.toString(Qt::ISODate);
+}
+
+namespace {
+
+//! The text of a plan with more lines added (no empty lines in between)
+QString joinedLines(const QString &a, const QString &b)
+{
+    QStringList lines;
+    for (const QString &text : { a, b }) {
+        for (const QString &line : text.split(u'\n')) {
+            if (!line.trimmed().isEmpty())
+                lines << line;
+        }
+    }
+    return lines.join(u'\n');
+}
+
+} // namespace
+
+QString DataService::savePlan(const QString &membershipId, const QString &id, const QString &date,
+                              const QString &content, bool forAll)
+{
+    const QString text = NoteFormat::normalized(content);
+    if (!id.isEmpty()) {
+        m_store->beginBatch();
+        bool ok = true;
+        for (const QString &copy : forAll ? groupCopies(u"plan"_s, id) : QStringList { id })
+            ok = ok && m_store->update(u"plan"_s, copy, { { u"date"_s, date }, { u"content"_s, text } });
+        return m_store->endBatch(ok) && ok ? id : QString();
+    }
+    // One plan per lesson: a new one for a date that has one already goes into it
+    const QVariantList existing = rows(u"SELECT id, content FROM plan WHERE deleted = 0 AND membership_id = ? AND date = ? LIMIT 1"_s,
+                                       { membershipId, date });
+    if (!existing.isEmpty()) {
+        const QVariantMap e = existing.first().toMap();
+        const QString existingId = e.value(u"id"_s).toString();
+        return savePlan(membershipId, existingId, date, joinedLines(e.value(u"content"_s).toString(), text), forAll);
+    }
+    const QString key = newId();
+    const QStringList targets = forAll ? activeMembershipsOfSameLesson(membershipId) : QStringList { membershipId };
+    m_store->beginBatch();
+    QString first;
+    for (const QString &m : targets) {
+        const QString created = m_store->create(u"plan"_s, { { u"membership_id"_s, m }, { u"group_key"_s, key },
+                                                             { u"date"_s, date }, { u"content"_s, text } });
+        if (m == membershipId)
+            first = created;
+    }
+    m_store->endBatch(!first.isEmpty());
+    return first;
+}
+
+bool DataService::deletePlan(const QString &id, bool forAll)
+{
+    m_store->beginBatch();
+    bool ok = true;
+    for (const QString &copy : forAll ? groupCopies(u"plan"_s, id) : QStringList { id })
+        ok = ok && m_store->remove(u"plan"_s, copy);
+    return m_store->endBatch(ok) && ok;
+}
+
+QString DataService::postponePlan(const QString &id, bool forAll)
+{
+    const QVariantMap plan = m_store->get(u"plan"_s, id);
+    if (plan.isEmpty())
+        return {};
+    const QString target = nextLessonDate(plan.value(u"membership_id"_s).toString(), plan.value(u"date"_s).toString());
+    m_store->beginBatch();
+    bool ok = true;
+    for (const QString &copy : forAll ? groupCopies(u"plan"_s, id) : QStringList { id }) {
+        const QVariantMap p = m_store->get(u"plan"_s, copy);
+        // A plan for that lesson already: the points go there
+        const QVariantList there = rows(u"SELECT id, content FROM plan WHERE deleted = 0 AND membership_id = ? AND date = ? AND id <> ? LIMIT 1"_s,
+                                        { p.value(u"membership_id"_s), target, copy });
+        if (there.isEmpty()) {
+            ok = ok && m_store->update(u"plan"_s, copy, { { u"date"_s, target } });
+        } else {
+            const QVariantMap t = there.first().toMap();
+            ok = ok && m_store->update(u"plan"_s, t.value(u"id"_s).toString(),
+                                       { { u"content"_s, joinedLines(t.value(u"content"_s).toString(), p.value(u"content"_s).toString()) } })
+                 && m_store->remove(u"plan"_s, copy);
+        }
+    }
+    return m_store->endBatch(ok) && ok ? target : QString();
+}
+
+QString DataService::planToNote(const QString &planId, const QString &noteContent, const QString &rest, bool forAll)
+{
+    const QVariantMap plan = m_store->get(u"plan"_s, planId);
+    if (plan.isEmpty() || NoteFormat::normalized(noteContent).trimmed().isEmpty())
+        return {};
+    const QStringList copies = forAll ? groupCopies(u"plan"_s, planId) : QStringList { planId };
+    m_store->beginBatch();
+    const QString note = addNote(plan.value(u"membership_id"_s).toString(), plan.value(u"date"_s).toString(), noteContent,
+                                 forAll && copies.size() > 1);
+    bool ok = !note.isEmpty();
+    const QString left = NoteFormat::normalized(rest);
+    if (left.trimmed().isEmpty()) {
+        for (const QString &copy : copies)
+            ok = ok && m_store->remove(u"plan"_s, copy);
+    } else {
+        for (const QString &copy : copies)
+            ok = ok && m_store->update(u"plan"_s, copy, { { u"content"_s, left } });
+        ok = ok && !postponePlan(planId, forAll).isEmpty();
+    }
+    return m_store->endBatch(ok) && ok ? note : QString();
 }
 
 QVariantList DataService::pieces(const QString &membershipId, int stateFilter) const

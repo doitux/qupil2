@@ -141,6 +141,8 @@ bool AppController::openDatabase(QString *error)
     if (QFileInfo::exists(backup))
         rotate(u"before-update-"_s, kKeepSafetyBackups);
     if (opened) {
+        // Changes for data this device did not know before the update (e.g. lesson plans)
+        m_store->catchUp();
         // Compact notes and archives of older versions, then give the space back
         if (upgradeNotes() + upgradeArchives() > 0)
             QSqlQuery(m_db->connection()).exec(u"VACUUM"_s);

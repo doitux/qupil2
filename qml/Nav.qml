@@ -32,6 +32,10 @@ QtObject {
     //! where tapping a note copied it into the field for the next one
     signal newNoteFrom(string membershipId, string noteId)
     signal editPiece(string membershipId, string pieceId)
+    //! The plan of a lesson (empty id: the one for the next lesson, new if there is none)
+    signal editPlan(string membershipId, string planId)
+    //! After the lesson: tick what was covered, the rest stays planned
+    signal finishPlan(string membershipId, string planId)
     signal editEvent(string eventId)
     signal editActivity(string studentId, string activityId, bool continuous)
     signal editReminder(string reminderId, string studentId)

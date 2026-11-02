@@ -279,6 +279,7 @@ set(QUPIL_QML_FILES
     qml/editors/LessonEditor.qml
     qml/editors/NewStudent.qml
     qml/editors/NoteEditor.qml
+    qml/editors/PlanFinish.qml
     qml/editors/PieceEditor.qml
     qml/editors/ReadyPiecesPicker.qml
     qml/editors/ReminderEditor.qml

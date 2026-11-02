@@ -451,6 +451,58 @@ QList<Change> Store::changesOf(const QString &origin, qint64 afterSeq, int limit
     return out;
 }
 
+int Store::merge(const EntityDef *def, const Change &c, int origin)
+{
+    // Field by field: only what is newer than our value
+    const Clock clock { c.time, origin };
+    const QHash<QString, Clock> before = clocks(c.entity, c.rowId);
+    const Clock record = before.value(QString());
+    QVariantMap newer;
+    for (auto it = c.fields.cbegin(); it != c.fields.cend(); ++it) {
+        if (def->hasField(it.key()) && isNewer(clock, before.value(it.key(), record)))
+            newer.insert(it.key(), it.value());
+    }
+    if (newer.isEmpty())
+        return 0;
+    if (!writeFields(def, c.rowId, newer) || !setClocks(def, c.rowId, newer.keys(), isComplete(def, c.fields), before, clock))
+        return -1;
+    touched(c.entity);
+    return 1;
+}
+
+int Store::catchUp()
+{
+    const QStringList entities = m_db->meta(u"catch_up"_s).split(u',', Qt::SkipEmptyParts);
+    if (entities.isEmpty())
+        return 0;
+    int applied = 0;
+    bool ok = true;
+    beginBatch();
+    for (const QString &entity : entities) {
+        const EntityDef *def = Schema::entity(entity);
+        if (!def)
+            continue;
+        QSqlQuery q(m_db->connection());
+        q.prepare(u"SELECT origin, seq, time, row_id, data FROM change_log WHERE entity = ? ORDER BY time"_s);
+        q.addBindValue(entity);
+        if (!(ok = q.exec()))
+            break;
+        while (ok && q.next()) {
+            const int origin = q.value(0).toInt();
+            const Change c { m_db->originId(origin), q.value(1).toLongLong(), q.value(2).toLongLong(), entity,
+                             q.value(3).toString(), Schema::currentFields(entity, decodeFields(q.value(4).toString())) };
+            if (c.rowId.isEmpty())
+                continue;
+            const int result = merge(def, c, origin);
+            ok = result >= 0;
+            applied += std::max(result, 0);
+        }
+    }
+    ok = ok && m_db->setMeta(u"catch_up"_s, QString());
+    endBatch(ok);
+    return ok ? applied : -1;
+}
+
 int Store::applyRemote(const QList<Change> &changes)
 {
     QList<Change> sorted = changes;
@@ -479,24 +531,11 @@ int Store::applyRemote(const QList<Change> &changes)
             break;
         const EntityDef *def = Schema::entity(c.entity);
         if (!def || c.rowId.isEmpty())
-            continue;   // from a newer version: kept in the log for relaying, ignored here
-
-        // Field by field: only what is newer than our value
-        const Clock clock { c.time, origin };
-        const QHash<QString, Clock> before = clocks(c.entity, c.rowId);
-        const Clock record = before.value(QString());
-        QVariantMap newer;
-        for (auto it = c.fields.cbegin(); it != c.fields.cend(); ++it) {
-            if (def->hasField(it.key()) && isNewer(clock, before.value(it.key(), record)))
-                newer.insert(it.key(), it.value());
-        }
-        if (newer.isEmpty())
-            continue;
-        if (!(ok = writeFields(def, c.rowId, newer)
-                   && setClocks(def, c.rowId, newer.keys(), isComplete(def, c.fields), before, clock)))
+            continue;   // from a newer version: kept in the log for relaying, catchUp() after an update
+        const int result = merge(def, c, origin);
+        if (!(ok = result >= 0))
             break;
-        touched(c.entity);
-        ++applied;
+        applied += result;
     }
     endBatch(ok);
     return ok ? applied : -1;

@@ -172,6 +172,35 @@ Item {
                                         font.family: Theme.fontFamily
                                         font.pixelSize: 13
                                     }
+                                    // Planned for today's lesson
+                                    RowLayout {
+                                        readonly property var plan: {
+                                            if (Data.revision < 0)
+                                                return undefined
+                                            return Data.plans(row.modelData.membership_id).find(p => p.today)
+                                        }
+                                        visible: plan !== undefined
+                                        Layout.fillWidth: true
+                                        Layout.topMargin: 2
+                                        spacing: 5
+                                        Icon {
+                                            Layout.preferredWidth: 15
+                                            Layout.preferredHeight: 15
+                                            name: "plan"
+                                            color: Theme.accentText
+                                            strokeWidth: 2
+                                        }
+                                        Text {
+                                            Layout.fillWidth: true
+                                            elide: Text.ElideRight
+                                            text: parent.plan ? qsTrId("plan.planned") + ": "
+                                                                + parent.plan.points.map(p => Data.plainText(p)).join(" · ") : ""
+                                            color: Theme.accentText
+                                            font.family: Theme.fontFamily
+                                            font.pixelSize: 13
+                                            font.weight: Font.DemiBold
+                                        }
+                                    }
                                 }
                                 Icon {
                                     Layout.preferredWidth: 20

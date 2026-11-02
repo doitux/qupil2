@@ -37,7 +37,17 @@ namespace Schema {
 //! 2: library_item.number
 //! 3: compact sync bookkeeping (device numbers, integer clock, one change per record and write)
 //! 4: student.mother_note and father_note instead of mother_job and father_job (renamedFields())
-constexpr int Version = 4;
+//! 5: plan (lesson plans: notes made before a lesson)
+constexpr int Version = 5;
+
+//! Entities added after the first version of the sync: an older device kept their changes
+//! in its log without applying them (Store::catchUp() does after the update)
+struct AddedEntity
+{
+    QString entity;
+    int version;   // schema version that added it
+};
+const QList<AddedEntity> &addedEntities();
 
 const QList<EntityDef> &entities();
 const EntityDef *entity(const QString &name);

@@ -60,6 +60,17 @@ name and are applied as the note (`Schema::currentFields()`). An older build
 ignores the note (it keeps it in its log for relaying); once updated, it applies
 the notes it received meanwhile where they are the newest.
 
+Schema 5 added lesson plans (`plan`: what is planned for a lesson, one point per
+line, copies per student of a group with a shared `group_key` like notes). A new
+kind of record gets its own entity rather than new fields on an old one: an
+older build drops unknown fields of a known entity, but keeps changes of an
+unknown entity in its log and passes them on without applying them. When an
+older database is opened, the new tables are created and the entities are noted
+(`Schema::addedEntities()`, meta `catch_up`); `Store::catchUp()` then applies
+the plans that arrived in the log meanwhile, field by field where they are the
+newest, exactly like changes from another device. Older builds keep syncing;
+they just don't show the plans.
+
 Archive entries (`student_archive`, `event_archive`) keep their `content`
 compressed (`qz1:` + base64 of zlib, see `TextPack`). Entries taken over from
 Qupil 1.x are converted to a compact layout in the background (`ArchiveFormat`).

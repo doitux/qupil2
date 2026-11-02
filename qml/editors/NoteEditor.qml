@@ -4,6 +4,7 @@
 // New or changed lesson note with bold, italic, underline and marking (colour
 // chosen under Appearance).
 // In group lessons it can be saved for all students of the lesson.
+// Also the plan of a lesson (editPlan) and a note made from a plan (fromPlan).
 
 import QtQuick
 import QtQuick.Controls
@@ -20,6 +21,14 @@ Sheet {
     property var info: ({})
     //! Date of the note whose text a new note started with ("" if none)
     property string copiedFrom
+    //! The line above the text instead of the one for a copied note
+    property string copiedText
+    //! A lesson plan instead of a note (planId: the plan changed, "" for a new one)
+    property bool plan: false
+    property string planId
+    //! A note made from a plan: the plan, and what stays planned (one point per line)
+    property string fromPlanId
+    property string rest
 
     readonly property int groupSize: info.groupSize || 1
 
@@ -27,6 +36,11 @@ Sheet {
         membershipId = membership
         noteId = note
         copiedFrom = ""
+        copiedText = ""
+        plan = false
+        planId = ""
+        fromPlanId = ""
+        rest = ""
         info = Data.membershipInfo(membership)
         const defaultForAll = Data.setting("save_for_all_students", 1) !== 0
         if (note) {
@@ -53,13 +67,51 @@ Sheet {
         noteText.cursorPosition = noteText.length
     }
 
-    title: noteId ? qsTrId("note.edit") : qsTrId("note.new")
-    acceptText: qsTrId("note.save")
+    //! The plan for a lesson: \a id, or (empty) the one for the next lesson, new if there is none
+    function editPlan(membership, id) {
+        edit(membership, "")
+        plan = true
+        const plans = Data.plans(membership)
+        let p = id ? plans.find(x => x.id === id) : undefined
+        if (!p) {
+            date = Data.nextLessonDate(membership, "")
+            p = plans.find(x => x.date === date)      // one plan per lesson
+        }
+        if (p) {
+            planId = p.id
+            date = p.date
+            noteText.text = Data.noteHtml(p.content || "", Theme.noteMark)
+            forAll = Data.setting("save_for_all_students", 1) !== 0 && p.shared > 1
+        }
+        noteText.cursorPosition = noteText.length
+    }
+
+    //! The note made from the ticked points of a plan, to adjust before saving
+    function fromPlan(membership, id, content, restContent, restCount) {
+        edit(membership, "")
+        const p = Data.plans(membership).find(x => x.id === id) || {}
+        fromPlanId = id
+        rest = restContent
+        date = p.date || Data.today()
+        forAll = (p.shared || 1) > 1
+        copiedFrom = date
+        copiedText = restCount > 0 ? qsTrId("plan.from", restCount).arg(Data.formatDate(date))
+                                   : qsTrId("plan.from_all").arg(Data.formatDate(date))
+        noteText.text = Data.noteHtml(content, Theme.noteMark)
+        noteText.cursorPosition = noteText.length
+    }
+
+    title: plan ? (planId ? qsTrId("plan.edit") : qsTrId("plan.new")) : noteId ? qsTrId("note.edit") : qsTrId("note.new")
+    acceptText: plan ? qsTrId("plan.save") : qsTrId("note.save")
     canAccept: noteText.length > 0
     onAccepted: {
         // Stored compactly: **bold**, *italic*, ++underlined++, ==marked==
         const content = formatter.markup()
-        if (noteId)
+        if (plan)
+            Data.savePlan(membershipId, planId, date, content, forAll && groupSize > 1)
+        else if (fromPlanId)
+            Data.planToNote(fromPlanId, content, rest, forAll && groupSize > 1)
+        else if (noteId)
             Data.updateNote(noteId, date, content, forAll && groupSize > 1)
         else
             Data.addNote(membershipId, date, content, forAll && groupSize > 1)
@@ -118,7 +170,7 @@ Sheet {
     }
 
     DateField {
-        label: qsTrId("common.date")
+        label: editor.plan ? qsTrId("plan.for_lesson") : qsTrId("common.date")
         date: editor.date
         onPicked: (value) => editor.date = value || Data.today()
     }
@@ -153,7 +205,8 @@ Sheet {
             Text {
                 Layout.fillWidth: true
                 wrapMode: Text.WordWrap
-                text: qsTrId("note.copied_from").arg(Data.formatDate(copiedBar.from))
+                text: editor.copiedText !== "" ? editor.copiedText
+                                               : qsTrId("note.copied_from").arg(Data.formatDate(copiedBar.from))
                 color: Theme.textMuted
                 font.family: Theme.fontFamily
                 font.pixelSize: 13
@@ -179,7 +232,7 @@ Sheet {
     ColumnLayout {
         Layout.fillWidth: true
         spacing: 8
-        FieldLabel { label: qsTrId("common.note") }
+        FieldLabel { label: editor.plan ? qsTrId("plan.label") : qsTrId("common.note") }
         RowLayout {
             spacing: 6
             FormatButton {
@@ -223,7 +276,7 @@ Sheet {
             textFormat: TextEdit.RichText
             wrapMode: TextEdit.Wrap
             padding: 14
-            placeholderText: qsTrId("note.placeholder")
+            placeholderText: editor.plan ? qsTrId("plan.placeholder") : qsTrId("note.placeholder")
             placeholderTextColor: Theme.textMuted
             color: Theme.text
             selectedTextColor: Theme.textOnAccent
@@ -239,6 +292,15 @@ Sheet {
                 border.width: 2
                 border.color: noteText.activeFocus ? Theme.accent : Theme.border
             }
+        }
+        Text {
+            visible: editor.plan
+            Layout.fillWidth: true
+            wrapMode: Text.WordWrap
+            text: qsTrId("plan.hint")
+            color: Theme.textMuted
+            font.family: Theme.fontFamily
+            font.pixelSize: 13
         }
         TextFormatter {
             id: formatter
@@ -258,13 +320,16 @@ Sheet {
     }
 
     ActionButton {
-        visible: editor.noteId !== ""
+        visible: editor.plan ? editor.planId !== "" : editor.noteId !== ""
         Layout.alignment: Qt.AlignLeft
         kind: "quiet"
         iconName: "trash"
-        text: qsTrId("note.delete")
+        text: editor.plan ? qsTrId("plan.discard") : qsTrId("note.delete")
         onClicked: {
-            Data.deleteNote(editor.noteId, editor.forAll && editor.groupSize > 1)
+            if (editor.plan)
+                Data.deletePlan(editor.planId, editor.forAll && editor.groupSize > 1)
+            else
+                Data.deleteNote(editor.noteId, editor.forAll && editor.groupSize > 1)
             editor.close()
         }
     }

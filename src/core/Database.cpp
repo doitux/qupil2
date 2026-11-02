@@ -179,6 +179,30 @@ bool Database::migrate(int from, QString *error)
         rollback();
         return false;
     }
+    // New entities: their tables, and the changes the log may already hold for them
+    // (received while this device was older) are applied by Store::catchUp()
+    QStringList catchUp;
+    for (const Schema::AddedEntity &added : Schema::addedEntities()) {
+        if (from >= added.version)
+            continue;
+        for (const QString &sql : Schema::createStatements()) {
+            if (sql.startsWith(u"CREATE TABLE "_s + added.entity + u" ("_s)
+                || sql.startsWith(u"CREATE INDEX idx_"_s + added.entity + u'_')) {
+                QString create = sql;
+                create.replace(u"CREATE TABLE "_s, u"CREATE TABLE IF NOT EXISTS "_s)
+                    .replace(u"CREATE INDEX "_s, u"CREATE INDEX IF NOT EXISTS "_s);
+                if (!exec(create, error)) {
+                    rollback();
+                    return false;
+                }
+            }
+        }
+        catchUp << added.entity;
+    }
+    if (!catchUp.isEmpty() && !setMeta(u"catch_up"_s, catchUp.join(u','))) {
+        rollback();
+        return false;
+    }
     if (!setMeta(u"schema_version"_s, QString::number(Schema::Version)) || !commit()) {
         if (error)
             *error = connection().lastError().text();
