@@ -18,6 +18,8 @@ Item {
     property bool columnMode: false
     property int day: todayIndex
     property string selectedMembership: ""
+    //! The lesson shown next to the column (tablet, desktop): its card head is marked
+    property string selectedLesson: ""
     property date now: Data.now()
 
     signal studentClicked(string studentId, string membershipId)
@@ -463,6 +465,7 @@ Item {
                         past: overview.isToday && modelData.end_time <= overview.nowTime
                         minutesLeft: running ? overview.minutesLeft(modelData) : 0
                         selectedMembership: overview.selectedMembership
+                        selectedLesson: overview.selectedLesson
                         onLessonClicked: overview.lessonClicked(modelData.id)
                         onStudentClicked: (studentId, membershipId) => overview.studentClicked(studentId, membershipId)
                     }
@@ -481,6 +484,7 @@ Item {
                         Layout.fillWidth: true
                         lesson: modelData
                         selectedMembership: overview.selectedMembership
+                        selectedLesson: overview.selectedLesson
                         onLessonClicked: overview.lessonClicked(modelData.id)
                         onStudentClicked: (studentId, membershipId) => overview.studentClicked(studentId, membershipId)
                     }
@@ -838,6 +842,8 @@ Item {
         property bool past: false
         property int minutesLeft: 0
         property string selectedMembership
+        property string selectedLesson
+        readonly property bool lessonSelected: selectedLesson !== "" && selectedLesson === lesson.id
         signal lessonClicked()
         signal studentClicked(string studentId, string membershipId)
 
@@ -868,9 +874,11 @@ Item {
                         anchors.margins: 4
                         anchors.bottomMargin: 2
                         radius: Theme.radius - 4
-                        color: lessonHead.down ? Theme.surfaceAlt : lessonHead.hovered ? Theme.surfaceSunken : "transparent"
+                        // Selected like a student row: accent colour, inset and rounded
+                        color: lessonCard.lessonSelected ? Theme.accent
+                               : lessonHead.down ? Theme.surfaceAlt : lessonHead.hovered ? Theme.surfaceSunken : "transparent"
                         border.width: lessonHead.visualFocus ? 2 : 0
-                        border.color: Theme.accentText
+                        border.color: lessonCard.lessonSelected ? Theme.textOnAccent : Theme.accentText
                     }
                 }
                 contentItem: RowLayout {
@@ -879,7 +887,7 @@ Item {
                         visible: !lessonCard.lesson.irregular
                         Layout.preferredWidth: 96
                         text: (lessonCard.lesson.start_time || "") + " – " + (lessonCard.lesson.end_time || "")
-                        color: Theme.text
+                        color: lessonCard.lessonSelected ? Theme.textOnAccent : Theme.text
                         font.family: Theme.fontFamily
                         font.pixelSize: 14
                         font.weight: Font.Bold
@@ -888,10 +896,10 @@ Item {
                         Layout.fillWidth: true
                         elide: Text.ElideRight
                         text: lessonCard.lesson.name || ""
-                        color: Theme.text
+                        color: lessonCard.lessonSelected ? Theme.textOnAccent : Theme.text
                         font.family: Theme.fontFamily
                         font.pixelSize: 14
-                        font.weight: Font.DemiBold
+                        font.weight: lessonCard.lessonSelected ? Font.Bold : Font.DemiBold
                     }
                     Rectangle {
                         visible: lessonCard.running
@@ -914,12 +922,12 @@ Item {
                         Layout.preferredWidth: 18
                         Layout.preferredHeight: 18
                         name: "bell"
-                        color: Theme.accentText
+                        color: lessonCard.lessonSelected ? Theme.textOnAccent : Theme.accentText
                     }
                     Text {
                         visible: lessonCard.lesson.kind === 3
                         text: qsTrId("summary.students", lessonCard.lesson.studentCount || 0)
-                        color: Theme.textMuted
+                        color: lessonCard.lessonSelected ? Theme.textOnAccent : Theme.textMuted
                         font.family: Theme.fontFamily
                         font.pixelSize: 12
                     }
@@ -944,11 +952,13 @@ Item {
                     Accessible.name: modelData.name
                     onClicked: lessonCard.studentClicked(modelData.id, modelData.membership_id)
                     background: Item {
+                        // Inside the card's frame: across it, it cut the lime frame of the running lesson
                         Rectangle {
-                            width: parent.width
+                            x: lessonCard.border.width
+                            width: parent.width - 2 * lessonCard.border.width
                             height: 1
                             color: Theme.divider
-                            visible: !studentRow.selected
+                            visible: !studentRow.selected && !(studentRow.index === 0 && lessonCard.lessonSelected)
                         }
                         // Inset and rounded, so it follows the corners of the card
                         Rectangle {

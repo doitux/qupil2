@@ -73,6 +73,7 @@ Item {
                 Layout.fillHeight: true
                 columnMode: true
                 selectedMembership: page.membershipId
+                selectedLesson: page.lessonId
                 onStudentClicked: (studentId, membershipId) => {
                     page.lessonId = ""
                     page.studentId = studentId
