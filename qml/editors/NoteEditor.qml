@@ -276,8 +276,6 @@ Sheet {
             textFormat: TextEdit.RichText
             wrapMode: TextEdit.Wrap
             padding: 14
-            placeholderText: editor.plan ? qsTrId("plan.placeholder") : qsTrId("note.placeholder")
-            placeholderTextColor: Theme.textMuted
             color: Theme.text
             selectedTextColor: Theme.textOnAccent
             selectionColor: Theme.accent
@@ -292,12 +290,26 @@ Sheet {
                 border.width: 2
                 border.color: noteText.activeFocus ? Theme.accent : Theme.border
             }
+            // Own placeholder: it wraps (the built-in one is cut off after one line on a phone)
+            Text {
+                x: noteText.leftPadding
+                y: noteText.topPadding
+                width: noteText.width - noteText.leftPadding - noteText.rightPadding
+                visible: noteText.length === 0 && noteText.preeditText === ""
+                wrapMode: Text.WordWrap
+                text: editor.plan ? qsTrId("plan.placeholder") : qsTrId("note.placeholder")
+                color: Theme.textMuted
+                font: noteText.font
+                Accessible.ignored: true
+            }
+            Accessible.description: noteText.length === 0 ? (editor.plan ? qsTrId("plan.placeholder") : qsTrId("note.placeholder")) : ""
         }
         Text {
             visible: editor.plan
             Layout.fillWidth: true
             wrapMode: Text.WordWrap
-            text: qsTrId("plan.hint")
+            // How lines and blocks work: in the empty field itself, below it once there is text
+            text: (noteText.length > 0 ? qsTrId("plan.hint.lines") + " " : "") + qsTrId("plan.hint")
             color: Theme.textMuted
             font.family: Theme.fontFamily
             font.pixelSize: 13

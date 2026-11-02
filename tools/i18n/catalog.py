@@ -457,14 +457,20 @@ E("plan.edit", en="Change plan", de="Planung ändern", fr="Modifier la préparat
 E("plan.save", en="Save plan", de="Planung speichern", fr="Enregistrer la préparation", es="Guardar planificación")
 E("plan.for_lesson", en="For the lesson on", de="Für die Stunde am", fr="Pour le cours du", es="Para la clase del",
   c="Label above the date of a plan")
-E("plan.placeholder", en="What do you plan for the lesson? One point per line.",
-  de="Was nehmen Sie sich für die Stunde vor? Ein Punkt pro Zeile.",
-  fr="Que prévoyez-vous pour le cours ? Un point par ligne.",
-  es="¿Qué planea para la clase? Un punto por línea.")
-E("plan.hint", en="Each line is a point; after an empty line a block begins, its first line is the heading. A plan is not a note yet: after the lesson you turn it into the note, and what was not covered stays planned for the next lesson.",
-  de="Jede Zeile ist ein Punkt; nach einer Leerzeile beginnt ein Block, seine erste Zeile ist die Überschrift. Die Planung ist noch keine Notiz: Nach der Stunde machen Sie daraus die Notiz, was nicht dran war, bleibt für die nächste Stunde.",
-  fr="Chaque ligne est un point ; après une ligne vide commence un bloc, sa première ligne en est le titre. La préparation n’est pas encore une note : après le cours, vous en faites la note, et ce qui n’a pas été fait reste prévu pour le cours suivant.",
-  es="Cada línea es un punto; tras una línea vacía empieza un bloque, su primera línea es el título. La planificación aún no es una nota: después de la clase la convierte en nota, y lo que no se trabajó queda planificado para la próxima clase.")
+E("plan.placeholder", en="What do you plan for the lesson? One point per line; after an empty line a block with a heading begins.",
+  de="Was nehmen Sie sich für die Stunde vor? Ein Punkt pro Zeile; nach einer Leerzeile beginnt ein Block mit Überschrift.",
+  fr="Que prévoyez-vous pour le cours ? Un point par ligne ; après une ligne vide commence un bloc avec un titre.",
+  es="¿Qué planea para la clase? Un punto por línea; tras una línea vacía empieza un bloque con título.",
+  c="Placeholder of the plan field, may take several lines")
+E("plan.hint.lines", en="Each line is a point; after an empty line a block begins, its first line is the heading.",
+  de="Jede Zeile ist ein Punkt; nach einer Leerzeile beginnt ein Block, seine erste Zeile ist die Überschrift.",
+  fr="Chaque ligne est un point ; après une ligne vide commence un bloc, sa première ligne en est le titre.",
+  es="Cada línea es un punto; tras una línea vacía empieza un bloque, su primera línea es el título.",
+  c="Below the plan field once it has text (the empty field says the same)")
+E("plan.hint", en="A plan is not a note yet: after the lesson you turn it into the note, and what was not covered stays planned for the next lesson.",
+  de="Die Planung ist noch keine Notiz: Nach der Stunde machen Sie daraus die Notiz, was nicht dran war, bleibt für die nächste Stunde.",
+  fr="La préparation n’est pas encore une note : après le cours, vous en faites la note, et ce qui n’a pas été fait reste prévu pour le cours suivant.",
+  es="La planificación aún no es una nota: después de la clase la convierte en nota, y lo que no se trabajó queda planificado para la próxima clase.")
 E("plan.title_for", en="Plan for %1", de="Planung für %1", fr="Préparation pour %1", es="Planificación para %1",
   c="%1 = plan.today_at or a date with weekday")
 E("plan.today_at", en="today, %1", de="heute, %1", fr="aujourd’hui, %1", es="hoy, %1", c="%1 = time of the lesson")

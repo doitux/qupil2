@@ -874,12 +874,18 @@
         <translation>Para la clase del</translation>
     </message>
     <message id="plan.placeholder">
-        <source>What do you plan for the lesson? One point per line.</source>
-        <translation>¿Qué planea para la clase? Un punto por línea.</translation>
+        <source>What do you plan for the lesson? One point per line; after an empty line a block with a heading begins.</source>
+        <extracomment>Placeholder of the plan field, may take several lines</extracomment>
+        <translation>¿Qué planea para la clase? Un punto por línea; tras una línea vacía empieza un bloque con título.</translation>
+    </message>
+    <message id="plan.hint.lines">
+        <source>Each line is a point; after an empty line a block begins, its first line is the heading.</source>
+        <extracomment>Below the plan field once it has text (the empty field says the same)</extracomment>
+        <translation>Cada línea es un punto; tras una línea vacía empieza un bloque, su primera línea es el título.</translation>
     </message>
     <message id="plan.hint">
-        <source>Each line is a point; after an empty line a block begins, its first line is the heading. A plan is not a note yet: after the lesson you turn it into the note, and what was not covered stays planned for the next lesson.</source>
-        <translation>Cada línea es un punto; tras una línea vacía empieza un bloque, su primera línea es el título. La planificación aún no es una nota: después de la clase la convierte en nota, y lo que no se trabajó queda planificado para la próxima clase.</translation>
+        <source>A plan is not a note yet: after the lesson you turn it into the note, and what was not covered stays planned for the next lesson.</source>
+        <translation>La planificación aún no es una nota: después de la clase la convierte en nota, y lo que no se trabajó queda planificado para la próxima clase.</translation>
     </message>
     <message id="plan.title_for">
         <source>Plan for %1</source>

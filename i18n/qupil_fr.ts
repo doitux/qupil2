@@ -874,12 +874,18 @@
         <translation>Pour le cours du</translation>
     </message>
     <message id="plan.placeholder">
-        <source>What do you plan for the lesson? One point per line.</source>
-        <translation>Que prévoyez-vous pour le cours ? Un point par ligne.</translation>
+        <source>What do you plan for the lesson? One point per line; after an empty line a block with a heading begins.</source>
+        <extracomment>Placeholder of the plan field, may take several lines</extracomment>
+        <translation>Que prévoyez-vous pour le cours ? Un point par ligne ; après une ligne vide commence un bloc avec un titre.</translation>
+    </message>
+    <message id="plan.hint.lines">
+        <source>Each line is a point; after an empty line a block begins, its first line is the heading.</source>
+        <extracomment>Below the plan field once it has text (the empty field says the same)</extracomment>
+        <translation>Chaque ligne est un point ; après une ligne vide commence un bloc, sa première ligne en est le titre.</translation>
     </message>
     <message id="plan.hint">
-        <source>Each line is a point; after an empty line a block begins, its first line is the heading. A plan is not a note yet: after the lesson you turn it into the note, and what was not covered stays planned for the next lesson.</source>
-        <translation>Chaque ligne est un point ; après une ligne vide commence un bloc, sa première ligne en est le titre. La préparation n’est pas encore une note : après le cours, vous en faites la note, et ce qui n’a pas été fait reste prévu pour le cours suivant.</translation>
+        <source>A plan is not a note yet: after the lesson you turn it into the note, and what was not covered stays planned for the next lesson.</source>
+        <translation>La préparation n’est pas encore une note : après le cours, vous en faites la note, et ce qui n’a pas été fait reste prévu pour le cours suivant.</translation>
     </message>
     <message id="plan.title_for">
         <source>Plan for %1</source>

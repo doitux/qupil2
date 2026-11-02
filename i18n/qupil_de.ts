@@ -875,12 +875,18 @@ Bitte ändern Sie die Schüleranzahl um zu speichern!</translation>
         <translation>Für die Stunde am</translation>
     </message>
     <message id="plan.placeholder">
-        <source>What do you plan for the lesson? One point per line.</source>
-        <translation>Was nehmen Sie sich für die Stunde vor? Ein Punkt pro Zeile.</translation>
+        <source>What do you plan for the lesson? One point per line; after an empty line a block with a heading begins.</source>
+        <extracomment>Placeholder of the plan field, may take several lines</extracomment>
+        <translation>Was nehmen Sie sich für die Stunde vor? Ein Punkt pro Zeile; nach einer Leerzeile beginnt ein Block mit Überschrift.</translation>
+    </message>
+    <message id="plan.hint.lines">
+        <source>Each line is a point; after an empty line a block begins, its first line is the heading.</source>
+        <extracomment>Below the plan field once it has text (the empty field says the same)</extracomment>
+        <translation>Jede Zeile ist ein Punkt; nach einer Leerzeile beginnt ein Block, seine erste Zeile ist die Überschrift.</translation>
     </message>
     <message id="plan.hint">
-        <source>Each line is a point; after an empty line a block begins, its first line is the heading. A plan is not a note yet: after the lesson you turn it into the note, and what was not covered stays planned for the next lesson.</source>
-        <translation>Jede Zeile ist ein Punkt; nach einer Leerzeile beginnt ein Block, seine erste Zeile ist die Überschrift. Die Planung ist noch keine Notiz: Nach der Stunde machen Sie daraus die Notiz, was nicht dran war, bleibt für die nächste Stunde.</translation>
+        <source>A plan is not a note yet: after the lesson you turn it into the note, and what was not covered stays planned for the next lesson.</source>
+        <translation>Die Planung ist noch keine Notiz: Nach der Stunde machen Sie daraus die Notiz, was nicht dran war, bleibt für die nächste Stunde.</translation>
     </message>
     <message id="plan.title_for">
         <source>Plan for %1</source>
