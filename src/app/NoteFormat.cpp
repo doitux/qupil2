@@ -11,6 +11,8 @@
 #include <QTextDocumentFragment>
 #include <QTextList>
 
+#include <algorithm>
+
 using namespace Qt::StringLiterals;
 
 namespace NoteFormat {
@@ -314,6 +316,67 @@ QString toPlainText(const QString &note)
         out << text;
     }
     return out.join(u'\n');
+}
+
+QString Block::text() const
+{
+    return (QStringList { title } + lines).join(u'\n');
+}
+
+QList<Block> blocks(const QString &note)
+{
+    const QStringList lines = normalized(note).split(u'\n');
+    const auto blank = [](const QString &line) { return line.trimmed().isEmpty(); };
+    // Blocks only when an empty line stands between two lines with text
+    bool grouped = false;
+    bool text = false;
+    bool gap = false;
+    for (const QString &line : lines) {
+        if (blank(line)) {
+            gap = text;
+        } else if (gap) {
+            grouped = true;
+            break;
+        } else {
+            text = true;
+        }
+    }
+    QList<Block> out;
+    Block current;
+    bool open = false;
+    for (const QString &line : lines) {
+        if (blank(line)) {
+            if (open)
+                out << current;
+            current = {};
+            open = false;
+        } else if (!grouped) {
+            out << Block { line, {} };
+        } else if (!open) {
+            current.title = line;
+            open = true;
+        } else {
+            current.lines << line;
+        }
+    }
+    if (open)
+        out << current;
+    return out;
+}
+
+bool hasBlocks(const QList<Block> &blocks)
+{
+    return std::any_of(blocks.begin(), blocks.end(), [](const Block &b) { return !b.lines.isEmpty(); });
+}
+
+QString joined(const QString &a, const QString &b)
+{
+    const QList<Block> first = blocks(a);
+    const QList<Block> second = blocks(b);
+    QStringList parts;
+    for (const Block &block : first + second)
+        parts << block.text();
+    return parts.join(hasBlocks(first) || hasBlocks(second) ? u"\n\n"_s : u"\n"_s);
 }
 
 } // namespace NoteFormat

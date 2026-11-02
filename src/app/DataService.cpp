@@ -826,11 +826,12 @@ QVariantList DataService::plans(const QString &membershipId) const
         QVariantMap p = v.toMap();
         const QString key = p.value(u"group_key"_s).toString();
         p.insert(u"shared"_s, key.isEmpty() ? 1 : scalar(u"SELECT COUNT(*) FROM plan WHERE deleted = 0 AND group_key = ?"_s, { key }).toInt());
+        // Blocks (heading and lines), or one per line; points: their headings as plain text
+        const QVariantList list = blocks(p.value(u"content"_s).toString());
         QStringList points;
-        for (const QString &line : p.value(u"content"_s).toString().split(u'\n')) {
-            if (!line.trimmed().isEmpty())
-                points << line;
-        }
+        for (const QVariant &b : list)
+            points << b.toMap().value(u"heading"_s).toString();
+        p.insert(u"blocks"_s, list);
         p.insert(u"points"_s, points);
         p.insert(u"time"_s, start);
         const QDate date = QDate::fromString(p.value(u"date"_s).toString(), Qt::ISODate);
@@ -841,6 +842,34 @@ QVariantList DataService::plans(const QString &membershipId) const
                             : formatDate(p.value(u"date"_s).toString(), true) + (start.isEmpty() ? QString() : u", "_s + start));
         p.insert(u"due"_s, date.isValid() && (date < today || (date == today && (!startTime.isValid() || now.time() >= startTime))));
         out << p;
+    }
+    return out;
+}
+
+namespace {
+
+//! A block's heading on one line: plain text, without the colon of "Bach Solo:"
+QString heading(const QString &title, bool grouped)
+{
+    QString h = NoteFormat::toPlainText(title).trimmed();
+    if (grouped && h.endsWith(u':'))
+        h.chop(1);
+    return h;
+}
+
+} // namespace
+
+QVariantList DataService::blocks(const QString &content) const
+{
+    QVariantList out;
+    const QList<NoteFormat::Block> list = NoteFormat::blocks(content);
+    const bool grouped = NoteFormat::hasBlocks(list);
+    for (const NoteFormat::Block &b : list) {
+        out << QVariantMap { { u"title"_s, b.title },
+                             { u"heading"_s, heading(b.title, grouped) },
+                             { u"body"_s, b.lines.join(u'\n') },
+                             { u"more"_s, int(b.lines.size()) },
+                             { u"text"_s, b.text() } };
     }
     return out;
 }
@@ -874,23 +903,6 @@ QString DataService::nextLessonDate(const QString &membershipId, const QString &
     return date.toString(Qt::ISODate);
 }
 
-namespace {
-
-//! The text of a plan with more lines added (no empty lines in between)
-QString joinedLines(const QString &a, const QString &b)
-{
-    QStringList lines;
-    for (const QString &text : { a, b }) {
-        for (const QString &line : text.split(u'\n')) {
-            if (!line.trimmed().isEmpty())
-                lines << line;
-        }
-    }
-    return lines.join(u'\n');
-}
-
-} // namespace
-
 QString DataService::savePlan(const QString &membershipId, const QString &id, const QString &date,
                               const QString &content, bool forAll)
 {
@@ -908,7 +920,7 @@ QString DataService::savePlan(const QString &membershipId, const QString &id, co
     if (!existing.isEmpty()) {
         const QVariantMap e = existing.first().toMap();
         const QString existingId = e.value(u"id"_s).toString();
-        return savePlan(membershipId, existingId, date, joinedLines(e.value(u"content"_s).toString(), text), forAll);
+        return savePlan(membershipId, existingId, date, NoteFormat::joined(e.value(u"content"_s).toString(), text), forAll);
     }
     const QString key = newId();
     const QStringList targets = forAll ? activeMembershipsOfSameLesson(membershipId) : QStringList { membershipId };
@@ -951,7 +963,7 @@ QString DataService::postponePlan(const QString &id, bool forAll)
         } else {
             const QVariantMap t = there.first().toMap();
             ok = ok && m_store->update(u"plan"_s, t.value(u"id"_s).toString(),
-                                       { { u"content"_s, joinedLines(t.value(u"content"_s).toString(), p.value(u"content"_s).toString()) } })
+                                       { { u"content"_s, NoteFormat::joined(t.value(u"content"_s).toString(), p.value(u"content"_s).toString()) } })
                  && m_store->remove(u"plan"_s, copy);
         }
     }

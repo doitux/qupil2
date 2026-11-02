@@ -159,9 +159,20 @@ void ScreenshotTour::addDetails(const QString &prefix)
             // A long note: shortened with "Show more", then unfolded
             << Step { [this, nav] { nav("showStudent", m_longStudent, m_longMembership).action(); }, {} }
             << snap(prefix + u"-7b-long-note"_s)
-            << Step { [this] { callAll("unfoldNotes()"); }, {} }
+            << Step { [this] { setAll("unfolded", QVariantMap { { m_longNote + u"/1"_s, true } }); }, {} }
             << snap(prefix + u"-7c-long-note-open"_s)
-            << Step { [this] { callAll("foldNotes()"); }, {} }
+            << Step { [this] { setAll("unfolded", QVariantMap()); }, {} }
+            // Blocks: what was covered (one looked into), then blocks of the note for the next lesson
+            << Step { [this, nav] { nav("finishPlan", m_longMembership, m_longPlan).action(); }, {} }
+            << Step { [this] {
+                          setAll("checks", QVariantList { true, false, true });
+                          setAll("peeked", QVariantList { false, true, false });
+                      },
+                      {} }
+            << snap(prefix + u"-7d-plan-finish-blocks"_s) << close
+            << Step { [this, nav] { nav("planFromNote", m_longMembership, m_longNote).action(); }, {} }
+            << Step { [this] { setAll("checks", QVariantList { false, false, true, false, false }); }, {} }
+            << snap(prefix + u"-7e-plan-from-note"_s) << close
             << Step { [this, nav] { nav("showEvent", m_event).action(); }, {} }
             << snap(prefix + u"-8-event"_s)
             << Step { [this] {
@@ -266,7 +277,7 @@ void ScreenshotTour::addLongNote()
                 continue;   // the note is about violin or viola
             m_longMembership = membership;
             m_longStudent = student;
-            data->addNote(membership, day.toString(Qt::ISODate),
+            m_longNote = data->addNote(membership, day.toString(Qt::ISODate),
                           de ? u"**Haltung:**\n"
                                u"Instrument locker ablegen, nicht mit der Schulter festhalten\n"
                                u"Schultern unten lassen – kein Hochziehen beim Lagenwechsel\n"
@@ -312,8 +323,40 @@ void ScreenshotTour::addLongNote()
                                u"\n"
                                u"*Listen a lot – don't just play notes, make music!*"_s,
                           false);
+            // The next lesson is planned in blocks as well
+            m_longPlan = data->savePlan(membership, {}, data->nextLessonDate(membership, {}),
+                                        de ? u"**Vivaldi a-Moll, 1. Satz:**\n"
+                                             u"- Takt 25–48 dazunehmen\n"
+                                             u"- Sechzehntel weiter locker aus dem Handgelenk\n"
+                                             u"- Mit Begleitung: das Tempo halten\n"
+                                             u"\n"
+                                             u"**Etüde:**\n"
+                                             u"- Kayser Nr. 9 anfangen\n"
+                                             u"- Saitenwechsel erst langsam\n"
+                                             u"\n"
+                                             u"Vorspiel: Reihenfolge der Stücke festlegen"_s
+                                           : u"**Vivaldi A minor, 1st movement:**\n"
+                                             u"- Add bars 25–48\n"
+                                             u"- Semiquavers still loosely from the wrist\n"
+                                             u"- With accompaniment: keep the tempo\n"
+                                             u"\n"
+                                             u"**Study:**\n"
+                                             u"- Start Kayser no. 9\n"
+                                             u"- String crossings slowly first\n"
+                                             u"\n"
+                                             u"Recital: decide the order of the pieces"_s,
+                                        false);
             break;
         }
+    }
+}
+
+// Sets a property wherever it exists (e.g. "unfolded" of the student page)
+void ScreenshotTour::setAll(const char *property, const QVariant &value)
+{
+    for (QObject *o : m_window->findChildren<QObject *>()) {
+        if (o->property(property).isValid())
+            o->setProperty(property, value);
     }
 }
 

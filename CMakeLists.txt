@@ -250,6 +250,7 @@ set(QUPIL_QML_FILES
     qml/components/EmptyHint.qml
     qml/components/Fab.qml
     qml/components/Foldable.qml
+    qml/components/MoreBadge.qml
     qml/components/FieldLabel.qml
     qml/components/IconButton.qml
     qml/components/ListRow.qml

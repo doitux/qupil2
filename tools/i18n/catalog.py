@@ -461,10 +461,10 @@ E("plan.placeholder", en="What do you plan for the lesson? One point per line.",
   de="Was nehmen Sie sich für die Stunde vor? Ein Punkt pro Zeile.",
   fr="Que prévoyez-vous pour le cours ? Un point par ligne.",
   es="¿Qué planea para la clase? Un punto por línea.")
-E("plan.hint", en="Each line is a point. A plan is not a note yet: after the lesson you turn it into the note, and what was not covered stays planned for the next lesson.",
-  de="Jede Zeile ist ein Punkt. Die Planung ist noch keine Notiz: Nach der Stunde machen Sie daraus die Notiz, was nicht dran war, bleibt für die nächste Stunde.",
-  fr="Chaque ligne est un point. La préparation n’est pas encore une note : après le cours, vous en faites la note, et ce qui n’a pas été fait reste prévu pour le cours suivant.",
-  es="Cada línea es un punto. La planificación aún no es una nota: después de la clase la convierte en nota, y lo que no se trabajó queda planificado para la próxima clase.")
+E("plan.hint", en="Each line is a point; after an empty line a block begins, its first line is the heading. A plan is not a note yet: after the lesson you turn it into the note, and what was not covered stays planned for the next lesson.",
+  de="Jede Zeile ist ein Punkt; nach einer Leerzeile beginnt ein Block, seine erste Zeile ist die Überschrift. Die Planung ist noch keine Notiz: Nach der Stunde machen Sie daraus die Notiz, was nicht dran war, bleibt für die nächste Stunde.",
+  fr="Chaque ligne est un point ; après une ligne vide commence un bloc, sa première ligne en est le titre. La préparation n’est pas encore une note : après le cours, vous en faites la note, et ce qui n’a pas été fait reste prévu pour le cours suivant.",
+  es="Cada línea es un punto; tras una línea vacía empieza un bloque, su primera línea es el título. La planificación aún no es una nota: después de la clase la convierte en nota, y lo que no se trabajó queda planificado para la próxima clase.")
 E("plan.title_for", en="Plan for %1", de="Planung für %1", fr="Préparation pour %1", es="Planificación para %1",
   c="%1 = plan.today_at or a date with weekday")
 E("plan.today_at", en="today, %1", de="heute, %1", fr="aujourd’hui, %1", es="hoy, %1", c="%1 = time of the lesson")
@@ -493,6 +493,43 @@ E("plan.finish.info", en="The ticked points become the note of %1 – what was n
   fr="Les points cochés deviennent la note du %1 – ce qui n’a pas été fait reste prévu pour le cours suivant (%2).",
   es="Los puntos marcados se convierten en la nota del %1; lo que no se trabajó queda planificado para la próxima clase (%2).",
   c="%1 = date of the lesson, %2 = date of the next lesson")
+E("plan.finish.blocks", en="The ticked blocks become the note of %1.", de="Die angehakten Blöcke werden zur Notiz vom %1.",
+  fr="Les blocs cochés deviennent la note du %1.", es="Los bloques marcados se convierten en la nota del %1.",
+  c="%1 = date of the lesson; plan.finish.blocks_left may follow")
+E("plan.finish.blocks_left", en="Still planned for the next lesson (%2), with all lines: %1.",
+  de="Weiter geplant für die nächste Stunde (%2), mit allen Zeilen: %1.",
+  fr="Reste prévu pour le cours suivant (%2), avec toutes les lignes : %1.",
+  es="Sigue planificado para la próxima clase (%2), con todas las líneas: %1.",
+  c="%1 = headings of the blocks not ticked (block.quoted, block.and), %2 = date of the next lesson")
+E("plan.from_note", en="Plan for the next lesson", de="Für die nächste Stunde planen", fr="Prévoir pour le cours suivant",
+  es="Planificar para la próxima clase", c="Button next to edit and delete of a note")
+E("plan.from_note.title", en="Plan the next lesson", de="Nächste Stunde planen", fr="Préparer le cours suivant",
+  es="Planificar la próxima clase")
+E("plan.from_note.save", en="Plan", de="Planen", fr="Prévoir", es="Planificar")
+E("plan.from_note.source", en="From the note of %1", de="Aus der Notiz vom %1", fr="De la note du %1", es="De la nota del %1",
+  c="%1 = date with weekday")
+E("plan.from_note.none", en="Tick what should come up again in the next lesson.",
+  de="Haken Sie an, was in der nächsten Stunde noch einmal dran sein soll.",
+  fr="Cochez ce qui doit revenir au cours suivant.", es="Marque lo que debe volver a trabajarse en la próxima clase.")
+E("plan.from_note.add", en="Added to the plan for %2: %1. The note stays as it is.",
+  de="Neu in der Planung für %2: %1. Die Notiz bleibt, wie sie ist.",
+  fr="Ajouté à la préparation du %2 : %1. La note reste telle quelle.",
+  es="Se añade a la planificación del %2: %1. La nota queda como está.",
+  c="%1 = headings of the ticked blocks, %2 = date of the next lesson, which has a plan already")
+E("plan.from_note.new", en="Plan for %2: %1. The note stays as it is.",
+  de="Planung für %2: %1. Die Notiz bleibt, wie sie ist.",
+  fr="Préparation du %2 : %1. La note reste telle quelle.",
+  es="Planificación del %2: %1. La nota queda como está.",
+  c="%1 = headings of the ticked blocks, %2 = date of the next lesson")
+E("plan.from_note.done", en="Planned for %1", de="Geplant für %1", fr="Prévu pour le %1", es="Planificado para el %1",
+  c="Toast, %1 = date with weekday")
+E("block.quoted", en="“%1”", de="„%1“", fr="« %1 »", es="«%1»", c="The heading of a block in a sentence")
+E("block.and", en="%1 and %2", de="%1 und %2", fr="%1 et %2", es="%1 y %2",
+  c="%1 = several quoted headings with commas, %2 = the last one")
+E("block.more_lines", src="%n more line(s)",
+  en=["%n more line", "%n more lines"], de=["noch %n Zeile", "noch %n Zeilen"],
+  fr=["encore %n ligne", "encore %n lignes"], es=["%n línea más", "%n líneas más"],
+  c="Screen readers: a block of a note or plan, its heading comes first")
 E("plan.finish.none", en="Nothing ticked: to keep the whole plan, choose “Move to the next lesson” under “…”.",
   de="Nichts angehakt: Um die ganze Planung zu behalten, wählen Sie unter „…“ „Auf nächste Stunde schieben“.",
   fr="Rien de coché : pour garder toute la préparation, choisissez « Reporter au cours suivant » sous « … ».",

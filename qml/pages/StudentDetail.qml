@@ -97,14 +97,6 @@ Item {
                 flick.contentY = Math.max(0, top - 12)
         }
     }
-    //! For the screenshots: all notes of the student unfolded, and folded again
-    function unfoldNotes() {
-        const u = {}
-        for (const n of notes || [])
-            u[n.id] = true
-        unfolded = u
-    }
-    function foldNotes() { unfolded = ({}) }
 
     // ---------------------------------------------------------------- one piece in view
     //! Piece to show (e.g. tapped in the pieces ready to perform): the pieces open with
@@ -612,6 +604,9 @@ Item {
                 delegate: Control {
                     id: noteCard
                     required property var modelData
+                    // A note with blocks (Haltung, Technik, Mozart …): one line per block
+                    readonly property var noteBlocks: Data.blocks(modelData.content)
+                    readonly property bool asBlocks: noteBlocks.some(b => b.more > 0)
                     readonly property bool revealed: detail.revealedNote === modelData.id
                     // A finger moves the buttons sideways: they follow it, nothing else moves them
                     property bool dragging: false
@@ -739,8 +734,16 @@ Item {
                                 font.pixelSize: 12
                             }
                         }
-                        // A long note shows its first lines and "Show more"
+                        // Blocks: one line each, a tap shows one of them
+                        BlockList {
+                            visible: noteCard.asBlocks
+                            Layout.fillWidth: true
+                            blocks: noteCard.asBlocks ? noteCard.noteBlocks : []
+                            keyPrefix: noteCard.modelData.id
+                        }
+                        // Otherwise a long note shows its first lines and "Show more"
                         Foldable {
+                            visible: !noteCard.asBlocks
                             Layout.fillWidth: true
                             lineHeight: detail.noteLine
                             fadeColor: tap.pressed ? Qt.tint(Theme.surface, Qt.rgba(Theme.text.r, Theme.text.g, Theme.text.b, 0.06))
@@ -808,6 +811,16 @@ Item {
                             anchors.right: parent.right
                             anchors.rightMargin: 14
                             spacing: 10
+                            IconButton {
+                                iconName: "plan"
+                                text: qsTrId("plan.from_note")
+                                fill: Theme.surfaceAlt
+                                tint: Theme.accentText
+                                onClicked: {
+                                    detail.revealedNote = ""
+                                    Nav.planFromNote(detail.currentMembership, noteCard.modelData.id)
+                                }
+                            }
                             IconButton {
                                 iconName: "edit"
                                 text: qsTrId("note.edit")
@@ -1269,41 +1282,13 @@ Item {
                 lineHeight: detail.noteLine + 4
                 fadeColor: cardTap.pressed ? Theme.surfaceAlt : Theme.surface
                 expanded: detail.unfolded[card.plan.id] === true
+                // Blocks are short already (one line each)
+                foldedLines: (card.plan.blocks || []).some(b => b.more > 0) ? 1000 : 7
                 onToggled: detail.toggleFold(card.plan.id, card)
-                Column {
+                BlockList {
                     width: parent.width
-                    spacing: 8
-                    Repeater {
-                        model: card.plan.points || []
-                        // Plain items, not a RowLayout: a wrapped rich text in a row layout keeps
-                        // the height it had at a narrower width and leaves gaps between the points
-                        delegate: Item {
-                            required property string modelData
-                            width: parent ? parent.width : 0
-                            implicitHeight: pointText.implicitHeight
-                            Rectangle {
-                                y: 6
-                                width: 8
-                                height: 8
-                                radius: 4
-                                color: "transparent"
-                                border.width: 1.6
-                                border.color: Theme.accentText
-                            }
-                            Text {
-                                id: pointText
-                                x: 18
-                                width: parent.width - x - 8
-                                wrapMode: Text.Wrap
-                                textFormat: Text.RichText
-                                text: Data.noteHtml(modelData, Theme.noteMark)
-                                color: Theme.text
-                                font.family: Theme.fontFamily
-                                font.pixelSize: 15
-                                lineHeight: 1.15
-                            }
-                        }
-                    }
+                    blocks: card.plan.blocks || []
+                    keyPrefix: card.plan.id
                 }
             }
             // Once the lesson has begun: what becomes of it
@@ -1355,6 +1340,118 @@ Item {
                 destructive: true
                 text: qsTrId("plan.discard")
                 onTriggered: discardPlan.ask(card.plan)
+            }
+        }
+    }
+
+    //! Blocks (heading and lines below it, after an empty line): one line each with "+4" for
+    //! the rest, a tap shows it. A single line is a plain point.
+    component BlockList: Column {
+        id: list
+        property var blocks: []
+        property string keyPrefix
+        spacing: 8
+        Repeater {
+            model: list.blocks
+            // A block (heading and lines below it, after an empty line) is one line
+            // with "+4" for the rest; a tap shows it. A single line is a plain point.
+            // Plain items, not a RowLayout: a wrapped rich text in a row layout keeps
+            // the height it had at a narrower width and leaves gaps between the points
+            delegate: Column {
+                id: block
+                required property var modelData
+                required property int index
+                readonly property bool hasMore: modelData.more > 0
+                readonly property string key: list.keyPrefix + "/" + index
+                readonly property bool open: detail.unfolded[key] === true
+                width: parent ? parent.width : 0
+                spacing: 2
+                Item {
+                    visible: !block.hasMore
+                    width: parent.width
+                    implicitHeight: pointText.implicitHeight
+                    Rectangle {
+                        y: 6
+                        width: 8
+                        height: 8
+                        radius: 4
+                        color: "transparent"
+                        border.width: 1.6
+                        border.color: Theme.accentText
+                    }
+                    Text {
+                        id: pointText
+                        x: 18
+                        width: parent.width - x - 8
+                        wrapMode: Text.Wrap
+                        textFormat: Text.RichText
+                        text: block.hasMore ? "" : Data.noteHtml(block.modelData.title, Theme.noteMark)
+                        color: Theme.text
+                        font.family: Theme.fontFamily
+                        font.pixelSize: 15
+                        lineHeight: 1.15
+                    }
+                }
+                AbstractButton {
+                    id: blockHead
+                    visible: block.hasMore
+                    width: parent.width
+                    height: 30
+                    focusPolicy: Qt.StrongFocus
+                    Accessible.role: Accessible.Button
+                    Accessible.name: block.modelData.heading + ", " + qsTrId("block.more_lines", block.modelData.more)
+                    onClicked: detail.toggleFold(block.key, block)
+                    background: Rectangle {
+                        x: -6
+                        width: parent.width + 6 - 4
+                        radius: 8
+                        color: Theme.accentText
+                        opacity: blockHead.down ? 0.10 : 0
+                        border.width: blockHead.visualFocus ? 2 : 0
+                        border.color: Theme.accentText
+                    }
+                    contentItem: Item {
+                        Rectangle {
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: 8
+                            height: 8
+                            radius: 4
+                            color: Theme.accentText
+                        }
+                        Text {
+                            x: 18
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: parent.width - x - moreBadge.width - 14
+                            elide: Text.ElideRight
+                            text: block.modelData.heading
+                            color: Theme.text
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 15
+                            font.weight: Font.Bold
+                        }
+                        MoreBadge {
+                            id: moreBadge
+                            anchors.right: parent.right
+                            anchors.rightMargin: 8
+                            anchors.verticalCenter: parent.verticalCenter
+                            count: block.modelData.more
+                            open: block.open
+                        }
+                    }
+                }
+                Text {
+                    visible: block.open
+                    x: 18
+                    width: parent.width - x - 8
+                    bottomPadding: 6
+                    wrapMode: Text.Wrap
+                    textFormat: Text.RichText
+                    text: block.open ? Data.noteHtml(block.modelData.body, Theme.noteMark) : ""
+                    color: Theme.text
+                    font.family: Theme.fontFamily
+                    font.pixelSize: 14
+                    lineHeight: 1.1
+                }
             }
         }
     }

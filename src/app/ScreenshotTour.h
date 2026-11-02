@@ -6,6 +6,7 @@
 #include <QObject>
 #include <QPointer>
 #include <QString>
+#include <QVariant>
 
 #include <functional>
 
@@ -40,6 +41,7 @@ private:
     //! Calls a QML function without arguments, e.g. "openMoreMenu()", wherever it exists
     void callAll(const char *method);
     void revealNote(const QString &noteId);
+    void setAll(const char *property, const QVariant &value);
     void addPages(const QString &prefix);
     void addDetails(const QString &prefix);
     void pickExamples();
@@ -51,7 +53,7 @@ private:
     QPointer<QObject> m_theme;
     QPointer<QObject> m_nav;
     QString m_student, m_membership, m_lesson, m_piece, m_event, m_note, m_plan;
-    QString m_longStudent, m_longMembership;   // a student with a long note
+    QString m_longStudent, m_longMembership, m_longNote, m_longPlan;   // a long note in blocks, a plan in blocks
     AppController *m_app;
     QString m_folder;
     QList<Step> m_steps;

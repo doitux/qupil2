@@ -878,8 +878,8 @@
         <translation>What do you plan for the lesson? One point per line.</translation>
     </message>
     <message id="plan.hint">
-        <source>Each line is a point. A plan is not a note yet: after the lesson you turn it into the note, and what was not covered stays planned for the next lesson.</source>
-        <translation>Each line is a point. A plan is not a note yet: after the lesson you turn it into the note, and what was not covered stays planned for the next lesson.</translation>
+        <source>Each line is a point; after an empty line a block begins, its first line is the heading. A plan is not a note yet: after the lesson you turn it into the note, and what was not covered stays planned for the next lesson.</source>
+        <translation>Each line is a point; after an empty line a block begins, its first line is the heading. A plan is not a note yet: after the lesson you turn it into the note, and what was not covered stays planned for the next lesson.</translation>
     </message>
     <message id="plan.title_for">
         <source>Plan for %1</source>
@@ -935,6 +935,71 @@
         <source>The ticked points become the note of %1 – what was not covered stays planned for the next lesson (%2).</source>
         <extracomment>%1 = date of the lesson, %2 = date of the next lesson</extracomment>
         <translation>The ticked points become the note of %1 – what was not covered stays planned for the next lesson (%2).</translation>
+    </message>
+    <message id="plan.finish.blocks">
+        <source>The ticked blocks become the note of %1.</source>
+        <extracomment>%1 = date of the lesson; plan.finish.blocks_left may follow</extracomment>
+        <translation>The ticked blocks become the note of %1.</translation>
+    </message>
+    <message id="plan.finish.blocks_left">
+        <source>Still planned for the next lesson (%2), with all lines: %1.</source>
+        <extracomment>%1 = headings of the blocks not ticked (block.quoted, block.and), %2 = date of the next lesson</extracomment>
+        <translation>Still planned for the next lesson (%2), with all lines: %1.</translation>
+    </message>
+    <message id="plan.from_note">
+        <source>Plan for the next lesson</source>
+        <extracomment>Button next to edit and delete of a note</extracomment>
+        <translation>Plan for the next lesson</translation>
+    </message>
+    <message id="plan.from_note.title">
+        <source>Plan the next lesson</source>
+        <translation>Plan the next lesson</translation>
+    </message>
+    <message id="plan.from_note.save">
+        <source>Plan</source>
+        <translation>Plan</translation>
+    </message>
+    <message id="plan.from_note.source">
+        <source>From the note of %1</source>
+        <extracomment>%1 = date with weekday</extracomment>
+        <translation>From the note of %1</translation>
+    </message>
+    <message id="plan.from_note.none">
+        <source>Tick what should come up again in the next lesson.</source>
+        <translation>Tick what should come up again in the next lesson.</translation>
+    </message>
+    <message id="plan.from_note.add">
+        <source>Added to the plan for %2: %1. The note stays as it is.</source>
+        <extracomment>%1 = headings of the ticked blocks, %2 = date of the next lesson, which has a plan already</extracomment>
+        <translation>Added to the plan for %2: %1. The note stays as it is.</translation>
+    </message>
+    <message id="plan.from_note.new">
+        <source>Plan for %2: %1. The note stays as it is.</source>
+        <extracomment>%1 = headings of the ticked blocks, %2 = date of the next lesson</extracomment>
+        <translation>Plan for %2: %1. The note stays as it is.</translation>
+    </message>
+    <message id="plan.from_note.done">
+        <source>Planned for %1</source>
+        <extracomment>Toast, %1 = date with weekday</extracomment>
+        <translation>Planned for %1</translation>
+    </message>
+    <message id="block.quoted">
+        <source>“%1”</source>
+        <extracomment>The heading of a block in a sentence</extracomment>
+        <translation>“%1”</translation>
+    </message>
+    <message id="block.and">
+        <source>%1 and %2</source>
+        <extracomment>%1 = several quoted headings with commas, %2 = the last one</extracomment>
+        <translation>%1 and %2</translation>
+    </message>
+    <message id="block.more_lines" numerus="yes">
+        <source>%n more line(s)</source>
+        <extracomment>Screen readers: a block of a note or plan, its heading comes first</extracomment>
+        <translation>
+            <numerusform>%n more line</numerusform>
+            <numerusform>%n more lines</numerusform>
+        </translation>
     </message>
     <message id="plan.finish.none">
         <source>Nothing ticked: to keep the whole plan, choose “Move to the next lesson” under “…”.</source>

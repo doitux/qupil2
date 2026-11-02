@@ -375,6 +375,7 @@ ApplicationWindow {
         function onNewNoteFrom(membership, note) { noteEditor.copy(membership, note) }
         function onEditPlan(membership, plan) { noteEditor.editPlan(membership, plan) }
         function onFinishPlan(membership, plan) { planFinish.start(membership, plan) }
+        function onPlanFromNote(membership, note) { planFinish.startFromNote(membership, note) }
         function onEditPiece(membership, piece) { pieceEditor.edit(membership, piece) }
         function onEditActivity(student, activity, continuous) { activityEditor.edit(student, activity, continuous) }
         function onEditReminder(reminder, student) { reminderEditor.edit(reminder, student) }

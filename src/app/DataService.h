@@ -92,6 +92,9 @@ public:
     Q_INVOKABLE QVariantList plans(const QString &membershipId) const;
     //! Memberships with a plan for that day (yyyy-MM-dd)
     Q_INVOKABLE QStringList plannedOn(const QString &date) const;
+    //! Blocks of a note or plan (NoteFormat::blocks): [{title, heading (one line, plain),
+    //! body (the lines below it), more (how many), text}]
+    Q_INVOKABLE QVariantList blocks(const QString &content) const;
     /*!
         Date of the next lesson of a membership (yyyy-MM-dd): after \a after if given, never
         before today, and not today once today's lesson has begun.

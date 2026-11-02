@@ -193,6 +193,33 @@ private slots:
         QVERIFY(converted.startsWith(u"==w0 w1 w2"_s));
         QVERIFY(converted.endsWith(u"w299=="_s));
     }
+
+    void blocks()
+    {
+        // Without empty lines: every line is a point
+        QList<NoteFormat::Block> list = NoteFormat::blocks(u"Tonleiter\n**Etüde** Nr. 8\n"_s);
+        QCOMPARE(list.size(), 2);
+        QCOMPARE(list.at(1).title, u"**Etüde** Nr. 8"_s);
+        QVERIFY(list.at(1).lines.isEmpty());
+        QVERIFY(!NoteFormat::hasBlocks(list));
+        // Empty lines only at the ends or doubled change nothing
+        QCOMPARE(NoteFormat::blocks(u"\n\na\nb\n\n"_s).size(), 2);
+
+        // With empty lines: heading and the lines below it; a single line stays a point
+        list = NoteFormat::blocks(u"Haltung:\nSchultern locker\nKopf frei\n\n\nBach Solo:\n- Basstöne\n\nNoten mitbringen"_s);
+        QCOMPARE(list.size(), 3);
+        QCOMPARE(list.at(0).title, u"Haltung:"_s);
+        QCOMPARE(list.at(0).lines, QStringList({ u"Schultern locker"_s, u"Kopf frei"_s }));
+        QCOMPARE(list.at(1).text(), u"Bach Solo:\n- Basstöne"_s);
+        QVERIFY(list.at(2).lines.isEmpty());
+        QVERIFY(NoteFormat::hasBlocks(list));
+
+        // Joined: line by line, or block by block (points of a plain list become points)
+        QCOMPARE(NoteFormat::joined(u"a\nb"_s, u"c"_s), u"a\nb\nc"_s);
+        QCOMPARE(NoteFormat::joined(u"a\nb"_s, u"Mozart\n- Triller"_s), u"a\nb\nMozart\n- Triller"_s);
+        QCOMPARE(NoteFormat::joined(u"a\nb"_s, u"Mozart\n- Triller\n\nJazz"_s), u"a\n\nb\n\nMozart\n- Triller\n\nJazz"_s);
+        QCOMPARE(NoteFormat::joined(u"Bach\n- Bass\n\nJazz"_s, QString()), u"Bach\n- Bass\n\nJazz"_s);
+    }
 };
 
 QTEST_MAIN(TestNotes)

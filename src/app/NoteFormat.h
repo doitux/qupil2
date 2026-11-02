@@ -2,7 +2,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 #pragma once
 
+#include <QList>
 #include <QString>
+#include <QStringList>
 
 class QTextDocument;
 
@@ -43,5 +45,24 @@ QString fromDocument(const QTextDocument &document);
 QString toHtml(const QString &note, const QString &markColor);
 //! The text without any mark-up
 QString toPlainText(const QString &note);
+
+//! A block of a note or plan: its heading and the lines below it (none for a plain point)
+struct Block
+{
+    QString title;
+    QStringList lines;
+    QString text() const;
+};
+
+/*!
+    The blocks of a note or plan. An empty line separates them, the first line is the
+    heading ("Bach, Partita" with the points below it). Without empty lines every line
+    is a block of its own, i.e. a plain list of points.
+*/
+QList<Block> blocks(const QString &note);
+//! True if one of the blocks has lines below its heading
+bool hasBlocks(const QList<Block> &blocks);
+//! Two notes or plans in one: line by line, or block by block when one of them has blocks
+QString joined(const QString &a, const QString &b);
 
 } // namespace NoteFormat

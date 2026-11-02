@@ -397,7 +397,7 @@ Item {
                                             wrapMode: Text.Wrap
                                             maximumLineCount: 3
                                             elide: Text.ElideRight
-                                            text: "•  " + Data.plainText(modelData)
+                                            text: "•  " + modelData
                                             color: Theme.heroText
                                             opacity: 0.92
                                             font.family: Theme.fontFamily

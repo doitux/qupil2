@@ -36,6 +36,8 @@ QtObject {
     signal editPlan(string membershipId, string planId)
     //! After the lesson: tick what was covered, the rest stays planned
     signal finishPlan(string membershipId, string planId)
+    //! Blocks of a note into the plan of the next lesson
+    signal planFromNote(string membershipId, string noteId)
     signal editEvent(string eventId)
     signal editActivity(string studentId, string activityId, bool continuous)
     signal editReminder(string reminderId, string studentId)

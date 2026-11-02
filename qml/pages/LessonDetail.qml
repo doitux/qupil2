@@ -194,7 +194,7 @@ Item {
                                             Layout.fillWidth: true
                                             elide: Text.ElideRight
                                             text: parent.plan ? qsTrId("plan.planned") + ": "
-                                                                + parent.plan.points.map(p => Data.plainText(p)).join(" · ") : ""
+                                                                + parent.plan.points.join(" · ") : ""
                                             color: Theme.accentText
                                             font.family: Theme.fontFamily
                                             font.pixelSize: 13
