@@ -11,10 +11,17 @@
 #   ASC_KEY_P8         Contents of the downloaded AuthKey_<KEY ID>.p8 file
 # Without the secrets the archive is built and checked, but not uploaded.
 # Runs started by a push only check the archive; uploads happen only when started by hand.
+# "What to Test" (whats_new): set on the build through the App Store Connect API once Apple
+# lists it, e.g.  gh workflow run testflight.yml -f whats_new="$(cat text.txt)"
 name: TestFlight
 
 on:
   workflow_dispatch:
+    inputs:
+      whats_new:
+        description: 'What to Test (shown to testers in TestFlight); empty: not set'
+        required: false
+        default: ''
   # Check the archive (without upload) when the iOS packaging changes
   push:
     branches: [main]
@@ -157,3 +164,27 @@ jobs:
             echo '```'
           } >> "$GITHUB_STEP_SUMMARY"
           [ $status -eq 0 ] || exit $status
+
+      # Testers see it in the TestFlight app; the build need not be processed yet
+      - name: Set "What to Test"
+        if: github.event_name == 'workflow_dispatch' && inputs.whats_new != ''
+        continue-on-error: true
+        timeout-minutes: 55
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+          ASC_APP_ID: '6827543764'
+          WHATS_NEW: ${{ inputs.whats_new }}
+        run: |
+          if [ -z "$ASC_KEY_ID" ] || [ -z "$ASC_ISSUER_ID" ] || [ -z "$ASC_KEY_P8" ]; then
+            echo "::notice::What to Test not set: the App Store Connect secrets are missing."
+            exit 0
+          fi
+          keydir="$RUNNER_TEMP/asc-notes"
+          mkdir -p "$keydir"
+          trap 'rm -rf "$keydir"' EXIT
+          printf '%s\n' "$ASC_KEY_P8" > "$keydir/key.p8"
+          printf '%s\n' "$WHATS_NEW" > "$keydir/whats-new.txt"
+          ASC_KEY_FILE="$keydir/key.p8" python3 .github/scripts/asc-whats-new.py "$GITHUB_RUN_NUMBER" "$keydir/whats-new.txt"
+          echo "What to Test set for build $GITHUB_RUN_NUMBER." >> "$GITHUB_STEP_SUMMARY"
