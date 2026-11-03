@@ -41,6 +41,34 @@ Item {
                 return l
         return null
     }
+    //! Column (tablet, desktop): today it starts at the running or next lesson; the lessons
+    //! that are over stay above it, a swipe away (with a sliver showing)
+    readonly property string focusLesson: {
+        if (!columnMode || !isToday || !lessons)
+            return ""
+        const next = lessons.find(l => l.end_time > nowTime)
+        return next ? next.id : ""
+    }
+    onFocusLessonChanged: focusTimer.restart()
+    Component.onCompleted: focusTimer.restart()
+    // Once the cards are laid out
+    Timer {
+        id: focusTimer
+        interval: 60
+        onTriggered: overview.scrollToFocus()
+    }
+    function scrollToFocus() {
+        if (focusLesson === "" || scroller.dragging || scroller.flicking)
+            return
+        for (let i = 0; i < columnCards.count; ++i) {
+            const card = columnCards.itemAt(i)
+            if (!card || card.lesson.id !== focusLesson)
+                continue
+            const y = i === 0 ? 0 : card.mapToItem(scroller.contentItem, 0, 0).y - 30
+            scroller.contentY = Math.max(0, Math.min(y, scroller.contentHeight - scroller.height))
+            return
+        }
+    }
     readonly property var startReminders: { if (Data.revision < 0) return undefined; return isToday ? Data.reminders().filter(r => r.mode === 0) : [] }
     // Only what has no other place in the day: birthdays show at the lesson and the student,
     // recital candidates are looked up when needed
@@ -723,7 +751,9 @@ Item {
 
                 SectionLabel {
                     Layout.leftMargin: overview.columnMode ? 8 : 0
-                    text: overview.isToday && overview.running ? qsTrId("today.later") : qsTrId("schedule.day_lessons")
+                    // "Later today" only under the running lesson of the phone; the column lists the whole day
+                    text: overview.isToday && overview.running && !overview.columnMode ? qsTrId("today.later")
+                                                                                         : qsTrId("schedule.day_lessons")
                 }
 
                 Rectangle {
@@ -778,6 +808,7 @@ Item {
 
                 // Tablet/desktop column: card per lesson with its students
                 Repeater {
+                    id: columnCards
                     model: overview.columnMode ? overview.lessons : []
                     delegate: LessonCard {
                         required property var modelData
