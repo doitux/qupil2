@@ -680,7 +680,7 @@ Item {
                             Nav.newNoteFrom(detail.currentMembership, modelData.id)
                     }
                     Layout.fillWidth: true
-                    implicitHeight: Math.max(implicitContentHeight + topPadding + bottomPadding, actionRow.implicitHeight + 20)
+                    implicitHeight: Math.max(implicitContentHeight + topPadding + bottomPadding, Theme.touchTarget + 20)
                     topPadding: 16
                     bottomPadding: 16
                     clip: true
@@ -825,12 +825,13 @@ Item {
                     leftPadding: 16
                     rightPadding: 16
 
-                    // Edit and delete, rolled in from the right edge over the text
+                    // Plan, edit and delete, rolled in from the right edge over the text
                     Rectangle {
                         id: actions
                         z: 2
                         y: 0
-                        width: actionRow.implicitWidth + 28
+                        // Three round buttons (built only while rolled in, see actionRow)
+                        width: 3 * Theme.touchTarget + 2 * 10 + 28
                         height: noteCard.height
                         // How far it is rolled in (0 … width): set by the finger or by slideTo().
                         // Only this value moves, so a new layout (another student) moves nothing.
@@ -865,38 +866,47 @@ Item {
                                 GradientStop { position: 1; color: Theme.surface }
                             }
                         }
-                        Row {
+                        // Most notes never show their buttons: they are made when a finger or
+                        // the mouse rolls them in, not for every note when the student opens
+                        Loader {
                             id: actionRow
                             anchors.verticalCenter: parent.verticalCenter
                             anchors.right: parent.right
                             anchors.rightMargin: 14
-                            spacing: 10
-                            IconButton {
-                                iconName: "plan"
-                                text: qsTrId("plan.from_note")
-                                fill: Theme.surfaceAlt
-                                tint: Theme.accentText
-                                onClicked: {
-                                    detail.revealedNote = ""
-                                    Nav.planFromNote(detail.currentMembership, noteCard.modelData.id)
+                            active: actions.visible
+                            sourceComponent: actionButtons
+                        }
+                        Component {
+                            id: actionButtons
+                            Row {
+                                spacing: 10
+                                IconButton {
+                                    iconName: "plan"
+                                    text: qsTrId("plan.from_note")
+                                    fill: Theme.surfaceAlt
+                                    tint: Theme.accentText
+                                    onClicked: {
+                                        detail.revealedNote = ""
+                                        Nav.planFromNote(detail.currentMembership, noteCard.modelData.id)
+                                    }
                                 }
-                            }
-                            IconButton {
-                                iconName: "edit"
-                                text: qsTrId("note.edit")
-                                fill: Theme.accent
-                                tint: Theme.textOnAccent
-                                onClicked: {
-                                    detail.revealedNote = ""
-                                    Nav.editNote(detail.currentMembership, noteCard.modelData.id)
+                                IconButton {
+                                    iconName: "edit"
+                                    text: qsTrId("note.edit")
+                                    fill: Theme.accent
+                                    tint: Theme.textOnAccent
+                                    onClicked: {
+                                        detail.revealedNote = ""
+                                        Nav.editNote(detail.currentMembership, noteCard.modelData.id)
+                                    }
                                 }
-                            }
-                            IconButton {
-                                iconName: "trash"
-                                text: qsTrId("note.delete")
-                                fill: Theme.dangerFill
-                                tint: Theme.textOnAccent
-                                onClicked: deleteNoteDialog.ask(noteCard.modelData)
+                                IconButton {
+                                    iconName: "trash"
+                                    text: qsTrId("note.delete")
+                                    fill: Theme.dangerFill
+                                    tint: Theme.textOnAccent
+                                    onClicked: deleteNoteDialog.ask(noteCard.modelData)
+                                }
                             }
                         }
                     }
