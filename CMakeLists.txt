@@ -45,6 +45,8 @@ qt_add_library(qupilcore STATIC
     src/core/Ids.cpp
     src/core/Clock.h
     src/core/Clock.cpp
+    src/core/Birthday.h
+    src/core/Birthday.cpp
     src/core/Schema.h
     src/core/Schema.cpp
     src/core/Database.h
@@ -250,6 +252,7 @@ set(QUPIL_QML_FILES
     qml/components/EmptyHint.qml
     qml/components/Fab.qml
     qml/components/Foldable.qml
+    qml/components/BirthdayTag.qml
     qml/components/MoreBadge.qml
     qml/components/FieldLabel.qml
     qml/components/IconButton.qml

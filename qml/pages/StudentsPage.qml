@@ -230,6 +230,8 @@ Item {
                             size: 40
                             text: row.modelData.initials
                             seed: row.modelData.name
+                            // Birthday today or since the last lesson: a small cake
+                            birthday: { if (Data.revision < 0) return null; return Data.birthdayNote(row.modelData.id) }
                         }
                         ColumnLayout {
                             Layout.fillWidth: true

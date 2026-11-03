@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2006-2026 Felix Hammer
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 //
-// The day: week strip, notices (birthdays, reminders, recital candidates),
+// The day: week strip, notices (reminders "at start"),
 // the running lesson and the lessons of the selected weekday.
 // Used alone on phones and as the left column on tablets/desktop.
 
@@ -41,13 +41,33 @@ Item {
                 return l
         return null
     }
-    readonly property var birthdays: {
-        if (Data.revision < 0) return undefined
-        return isToday && Data.setting("birthday_reminder", 1) !== 0 ? Data.birthdays(6) : []
-    }
     readonly property var startReminders: { if (Data.revision < 0) return undefined; return isToday ? Data.reminders().filter(r => r.mode === 0) : [] }
-    readonly property int candidateCount: { if (Data.revision < 0) return undefined; return isToday ? Data.recitalCandidates().length : 0 }
-    readonly property bool hasNotices: birthdays.length + startReminders.length + (candidateCount > 0 ? 1 : 0) > 0
+    // Only what has no other place in the day: birthdays show at the lesson and the student,
+    // recital candidates are looked up when needed
+    readonly property bool hasNotices: startReminders.length > 0
+    //! Birthdays today or since the last lesson among these students (Data.birthdayNote), today first
+    function birthdaysOf(students) {
+        const out = []
+        for (const st of students || []) {
+            const n = Data.birthdayNote(st.id)
+            if (n.kind === "today" || n.kind === "past") {
+                n.id = st.id
+                out.push(n)
+            }
+        }
+        return out.sort((a, b) => a.days - b.days)
+    }
+    readonly property var runningBirthdays: { if (Data.revision < 0) return undefined; return running ? birthdaysOf(running.students) : [] }
+    //! What counts now for a student of the running lesson: today's plan, otherwise the
+    //! last note. key: the same for copies saved for everybody of a group
+    function focusOf(student) {
+        const plan = Data.plans(student.membership_id).find(p => p.today)
+        if (plan)
+            return { kind: "plan", key: plan.group_key || plan.id, points: plan.points }
+        if (student.lastNote)
+            return { kind: "note", key: student.lastNoteDate + "\n" + student.lastNote, date: student.lastNoteDate, text: student.lastNote }
+        return null
+    }
     property bool showIrregular: false
 
     function dateOf(index) {
@@ -334,8 +354,235 @@ Item {
                         }
                     }
 
+                    // Birthdays of this lesson: one lime band, the tick puts them away
+                    Rectangle {
+                        id: heroBirthdays
+                        readonly property var list: overview.runningBirthdays || []
+                        readonly property var first: list.length > 0 ? list[0] : ({})
+                        visible: list.length > 0
+                        Layout.fillWidth: true
+                        implicitHeight: heroBirthdayRow.implicitHeight + 18
+                        radius: 14
+                        color: Theme.lime
+                        RowLayout {
+                            id: heroBirthdayRow
+                            anchors.fill: parent
+                            anchors.leftMargin: 14
+                            anchors.rightMargin: 6
+                            spacing: 10
+                            Icon {
+                                Layout.preferredWidth: 22
+                                Layout.preferredHeight: 22
+                                name: "cake"
+                                color: Theme.textOnLime
+                                strokeWidth: 2.2
+                            }
+                            ColumnLayout {
+                                Layout.fillWidth: true
+                                spacing: 0
+                                Text {
+                                    Layout.fillWidth: true
+                                    elide: Text.ElideRight
+                                    text: heroBirthdays.list.length > 1 ? qsTrId("birthday.several")
+                                          : heroBirthdays.first.kind === "today" ? qsTrId("birthday.today") : qsTrId("birthday.past")
+                                    color: Theme.textOnLime
+                                    font.family: Theme.fontFamily
+                                    font.pixelSize: 15
+                                    font.weight: Font.ExtraBold
+                                }
+                                Text {
+                                    Layout.fillWidth: true
+                                    wrapMode: Text.WordWrap
+                                    text: {
+                                        const l = heroBirthdays.list
+                                        if (l.length === 0)
+                                            return ""
+                                        if (l.length === 1)
+                                            return l[0].kind === "today" ? qsTrId("today.birthday_turns").arg(l[0].forename).arg(l[0].turns)
+                                                                         : qsTrId("birthday.past_short").arg(l[0].forename).arg(l[0].when).arg(l[0].turns)
+                                        const named = n => n.forename + " (" + n.turns + ")"
+                                        const today = l.filter(n => n.kind === "today").map(named)
+                                        const past = l.filter(n => n.kind !== "today").map(named)
+                                        return [today.length ? qsTrId("birthday.several_today").arg(today.join(", ")) : "",
+                                                past.length ? qsTrId("birthday.several_past").arg(past.join(", ")) : ""].filter(Boolean).join(" · ")
+                                    }
+                                    color: Theme.textOnLime
+                                    font.family: Theme.fontFamily
+                                    font.pixelSize: 13
+                                    font.weight: Font.DemiBold
+                                }
+                            }
+                            IconButton {
+                                iconName: "check"
+                                text: qsTrId("birthday.greeted")
+                                size: 36
+                                fill: Theme.textOnLime
+                                tint: Theme.lime
+                                onClicked: {
+                                    for (const n of heroBirthdays.list)
+                                        Data.greetBirthday(n.id)
+                                }
+                            }
+                        }
+                    }
+
+                    // Group or ensemble: the students as small chips; what they share once,
+                    // otherwise one line each
+                    Rectangle {
+                        id: heroGroup
+                        readonly property var students: overview.running ? overview.running.students : []
+                        readonly property var foci: { if (Data.revision < 0) return undefined; return students.map(st => overview.focusOf(st)) }
+                        readonly property bool shared: foci.length > 1 && !!foci[0]
+                                                       && foci.every(f => !!f && f.kind === foci[0].kind && f.key === foci[0].key)
+                        visible: students.length > 1
+                        Layout.fillWidth: true
+                        implicitHeight: heroGroupColumn.implicitHeight + 24
+                        radius: Theme.radius
+                        color: Theme.surface
+                        ColumnLayout {
+                            id: heroGroupColumn
+                            x: 12
+                            y: 12
+                            width: parent.width - 24
+                            spacing: 10
+                            Flow {
+                                Layout.fillWidth: true
+                                spacing: 6
+                                Repeater {
+                                    model: heroGroup.students
+                                    delegate: AbstractButton {
+                                        id: chip
+                                        required property var modelData
+                                        readonly property var birthday: { if (Data.revision < 0) return undefined; return Data.birthdayNote(modelData.id) }
+                                        implicitWidth: chipRow.implicitWidth + 18
+                                        implicitHeight: 38
+                                        focusPolicy: Qt.StrongFocus
+                                        Accessible.role: Accessible.Button
+                                        Accessible.name: modelData.name
+                                        onClicked: overview.studentClicked(modelData.id, modelData.membership_id)
+                                        background: Rectangle {
+                                            radius: 19
+                                            color: chip.down ? Theme.surfaceAlt : Theme.surfaceSunken
+                                            border.width: chip.visualFocus ? 2 : 0
+                                            border.color: Theme.accentText
+                                        }
+                                        contentItem: Item {
+                                            Row {
+                                                id: chipRow
+                                                x: 5
+                                                anchors.verticalCenter: parent.verticalCenter
+                                                spacing: 7
+                                                Avatar {
+                                                    anchors.verticalCenter: parent.verticalCenter
+                                                    soft: true
+                                                    size: 28
+                                                    text: chip.modelData.initials
+                                                    birthday: chip.birthday
+                                                }
+                                                Text {
+                                                    anchors.verticalCenter: parent.verticalCenter
+                                                    text: chip.modelData.forename
+                                                    color: Theme.text
+                                                    font.family: Theme.fontFamily
+                                                    font.pixelSize: 14
+                                                    font.weight: Font.DemiBold
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            // Shared: today's plan or the last note, once "for everybody"
+                            ColumnLayout {
+                                visible: heroGroup.shared
+                                Layout.fillWidth: true
+                                spacing: 3
+                                RowLayout {
+                                    visible: heroGroup.shared && heroGroup.foci[0].kind === "plan"
+                                    spacing: 6
+                                    Icon {
+                                        Layout.preferredWidth: 16
+                                        Layout.preferredHeight: 16
+                                        name: "plan"
+                                        color: Theme.accentText
+                                        strokeWidth: 2
+                                    }
+                                    Text {
+                                        text: qsTrId("plan.planned_today_all")
+                                        color: Theme.accentText
+                                        font.family: Theme.fontFamily
+                                        font.pixelSize: 13
+                                        font.weight: Font.ExtraBold
+                                    }
+                                }
+                                Repeater {
+                                    model: heroGroup.shared && heroGroup.foci[0].kind === "plan" ? heroGroup.foci[0].points.slice(0, 3) : []
+                                    delegate: Text {
+                                        required property string modelData
+                                        Layout.fillWidth: true
+                                        elide: Text.ElideRight
+                                        text: "•  " + modelData
+                                        color: Theme.text
+                                        font.family: Theme.fontFamily
+                                        font.pixelSize: 14
+                                    }
+                                }
+                                Text {
+                                    visible: heroGroup.shared && heroGroup.foci[0].kind === "plan" && heroGroup.foci[0].points.length > 3
+                                    text: visible ? qsTrId("plan.more_points", heroGroup.foci[0].points.length - 3) : ""
+                                    color: Theme.textMuted
+                                    font.family: Theme.fontFamily
+                                    font.pixelSize: 13
+                                }
+                                Text {
+                                    visible: heroGroup.shared && heroGroup.foci[0].kind === "note"
+                                    Layout.fillWidth: true
+                                    wrapMode: Text.WordWrap
+                                    maximumLineCount: 2
+                                    elide: Text.ElideRight
+                                    text: visible ? qsTrId("lesson.for_all").arg(Data.formatDate(heroGroup.foci[0].date)).arg(heroGroup.foci[0].text) : ""
+                                    color: Theme.textSecondary
+                                    font.family: Theme.fontFamily
+                                    font.pixelSize: 13
+                                }
+                            }
+                            // Different: one line each (plan or last note)
+                            Repeater {
+                                model: heroGroup.shared ? [] : heroGroup.students.slice(0, 4)
+                                delegate: RowLayout {
+                                    id: focusRow
+                                    required property var modelData
+                                    required property int index
+                                    readonly property var studentFocus: heroGroup.foci[index]
+                                    visible: !!studentFocus
+                                    Layout.fillWidth: true
+                                    spacing: 6
+                                    Icon {
+                                        visible: !!focusRow.studentFocus && focusRow.studentFocus.kind === "plan"
+                                        Layout.preferredWidth: 15
+                                        Layout.preferredHeight: 15
+                                        name: "plan"
+                                        color: Theme.accentText
+                                        strokeWidth: 2
+                                    }
+                                    Text {
+                                        Layout.fillWidth: true
+                                        elide: Text.ElideRight
+                                        text: !focusRow.studentFocus ? ""
+                                              : focusRow.modelData.forename + ": "
+                                                + (focusRow.studentFocus.kind === "plan" ? focusRow.studentFocus.points.join(" · ") : focusRow.studentFocus.text)
+                                        color: Theme.textSecondary
+                                        font.family: Theme.fontFamily
+                                        font.pixelSize: 13
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // A single student: the card, then the plan (or, without one, the last note in the card)
                     Repeater {
-                        model: overview.running ? overview.running.students.slice(0, 3) : []
+                        model: overview.running && overview.running.students.length === 1 ? overview.running.students : []
                         delegate: ColumnLayout {
                             id: heroStudent
                             required property var modelData
@@ -350,6 +597,8 @@ Item {
                             StudentCard {
                                 Layout.fillWidth: true
                                 student: heroStudent.modelData
+                                // The plan is what counts now; without one, the last note
+                                showLastNote: heroStudent.plan === undefined
                                 onClicked: overview.studentClicked(heroStudent.modelData.id, heroStudent.modelData.membership_id)
                             }
                             AbstractButton {
@@ -390,7 +639,7 @@ Item {
                                     }
                                     // The first points; a long plan does not push the lesson off the screen
                                     Repeater {
-                                        model: heroStudent.plan ? heroStudent.plan.points.slice(0, 4) : []
+                                        model: heroStudent.plan ? heroStudent.plan.points.slice(0, 3) : []
                                         delegate: Text {
                                             required property string modelData
                                             Layout.fillWidth: true
@@ -405,8 +654,8 @@ Item {
                                         }
                                     }
                                     Text {
-                                        visible: heroStudent.plan !== undefined && heroStudent.plan.points.length > 4
-                                        text: heroStudent.plan ? qsTrId("plan.more_points", heroStudent.plan.points.length - 4) : ""
+                                        visible: heroStudent.plan !== undefined && heroStudent.plan.points.length > 3
+                                        text: heroStudent.plan ? qsTrId("plan.more_points", heroStudent.plan.points.length - 3) : ""
                                         color: Theme.heroText
                                         opacity: 0.75
                                         font.family: Theme.fontFamily
@@ -420,14 +669,6 @@ Item {
                                 bottomPadding: 12
                             }
                         }
-                    }
-                    Text {
-                        visible: overview.running !== null && overview.running.students.length > 3
-                        text: overview.running ? "+ " + qsTrId("summary.students", overview.running.students.length - 3) : ""
-                        color: Theme.textOnAccent
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 13
-                        font.weight: Font.DemiBold
                     }
 
                     Repeater {
@@ -587,7 +828,7 @@ Item {
     }
 
     // ------------------------------------------------------------ notices
-    // (birthdays, reminders, recital candidates; today only)
+    // (reminders "at start"; today only)
     Component {
         id: noticesComponent
         ColumnLayout {
@@ -604,18 +845,6 @@ Item {
                     id: noticeRow
                     spacing: 10
                     Repeater {
-                        model: overview.birthdays
-                        delegate: NoticeCard {
-                            required property var modelData
-                            iconName: "cake"
-                            tile: Theme.tile.orange
-                            caption: modelData.days === 0 ? qsTrId("today.birthday")
-                                                          : qsTrId("today.birthday_on").arg(Labels.weekday((new Date(modelData.date + "T12:00:00").getDay() + 6) % 7))
-                            title: qsTrId("today.birthday_turns").arg(modelData.name).arg(modelData.turns)
-                            onClicked: overview.studentClicked(modelData.id, "")
-                        }
-                    }
-                    Repeater {
                         model: overview.startReminders
                         delegate: NoticeCard {
                             required property var modelData
@@ -630,14 +859,6 @@ Item {
                                 reminderDone.open()
                             }
                         }
-                    }
-                    NoticeCard {
-                        visible: overview.candidateCount > 0
-                        iconName: "star"
-                        tile: Theme.tile.blue
-                        caption: qsTrId("candidates.recital.title")
-                        title: qsTrId("today.overdue", overview.candidateCount)
-                        onClicked: Nav.showPage(4)
                     }
                 }
             }
@@ -755,6 +976,7 @@ Item {
     component StudentCard: AbstractButton {
         id: card
         property var student: ({})
+        property bool showLastNote: true
         implicitHeight: implicitContentHeight + topPadding + bottomPadding
         topPadding: 12
         bottomPadding: 12
@@ -806,7 +1028,7 @@ Item {
                     font.pixelSize: 13
                 }
                 Text {
-                    visible: !!card.student.lastNote
+                    visible: card.showLastNote && !!card.student.lastNote
                     Layout.fillWidth: true
                     elide: Text.ElideRight
                     text: card.student.lastNote ? Data.formatDate(card.student.lastNoteDate) + ": " + card.student.lastNote : ""
@@ -900,8 +1122,16 @@ Item {
                     font.pixelSize: 13
                 }
             }
+            // One sign per row: birthday, else reminder, else plan
+            BirthdayTag {
+                id: rowBirthday
+                readonly property var list: { if (Data.revision < 0) return undefined; return overview.birthdaysOf(row.lesson.students) }
+                note: list.length > 0 ? list[0] : ({})
+                count: list.length
+            }
             Icon {
-                visible: (row.lesson.students || []).some(s => row.planned.indexOf(s.membership_id) >= 0)
+                visible: !rowBirthday.visible && row.lesson.reminderCount === 0
+                         && (row.lesson.students || []).some(s => row.planned.indexOf(s.membership_id) >= 0)
                 Layout.preferredWidth: 18
                 Layout.preferredHeight: 18
                 name: "plan"
@@ -911,7 +1141,7 @@ Item {
                 Accessible.name: qsTrId("plan.planned")
             }
             Icon {
-                visible: row.lesson.reminderCount > 0
+                visible: !rowBirthday.visible && row.lesson.reminderCount > 0
                 Layout.preferredWidth: 18
                 Layout.preferredHeight: 18
                 name: "bell"
@@ -1019,8 +1249,15 @@ Item {
                         name: "bell"
                         color: lessonCard.lessonSelected ? Theme.textOnAccent : Theme.accentText
                     }
+                    // Ensembles list no students here: the cake with how many, else how many students
+                    BirthdayTag {
+                        id: headBirthday
+                        readonly property var list: { if (Data.revision < 0) return undefined; return lessonCard.lesson.kind === 3 ? overview.birthdaysOf(lessonCard.lesson.students) : [] }
+                        note: list.length > 0 ? list[0] : ({})
+                        count: list.length
+                    }
                     Text {
-                        visible: lessonCard.lesson.kind === 3
+                        visible: lessonCard.lesson.kind === 3 && !headBirthday.visible
                         text: qsTrId("summary.students", lessonCard.lesson.studentCount || 0)
                         color: lessonCard.lessonSelected ? Theme.textOnAccent : Theme.textMuted
                         font.family: Theme.fontFamily
@@ -1082,8 +1319,12 @@ Item {
                             font.pixelSize: 14
                             font.weight: studentRow.selected ? Font.Bold : Font.Normal
                         }
+                        BirthdayTag {
+                            id: rowBirthday
+                            note: { if (Data.revision < 0) return ({}); return Data.birthdayNote(studentRow.modelData.id) }
+                        }
                         Icon {
-                            visible: lessonCard.planned.indexOf(studentRow.modelData.membership_id) >= 0
+                            visible: !rowBirthday.visible && lessonCard.planned.indexOf(studentRow.modelData.membership_id) >= 0
                             Layout.preferredWidth: 17
                             Layout.preferredHeight: 17
                             name: "plan"

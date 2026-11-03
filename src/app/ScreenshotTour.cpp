@@ -5,6 +5,7 @@
 #include <QCoreApplication>
 #include <QDateTime>
 #include <QDir>
+#include <QHash>
 #include <QImage>
 #include <QQuickWindow>
 #include <QTimer>
@@ -82,6 +83,7 @@ ScreenshotTour::ScreenshotTour(QQuickWindow *window, QObject *theme, QObject *na
             << Step { [this] { m_app->finishSetup(); }, [this] { return m_app->phase() == AppController::Ready; } }
             << Step { [this] { addSamplePlans(); }, {} }
             << Step { [this] { addLongNote(); }, {} }
+            << Step { [this] { addSampleBirthdays(); }, {} }
             << Step { [this] { writeDocuments(); }, {} };
     addPages(u"1-desktop-light"_s);
     addDetails(u"1-desktop-light"_s);
@@ -138,6 +140,22 @@ void ScreenshotTour::addDetails(const QString &prefix)
     };
 
     m_steps << Step { [this] { pickExamples(); }, {} };
+    // The ensemble in the evening: several birthdays, the students as chips
+    m_steps << Step { [this] {
+                          m_window->setProperty("currentPage", 0);
+                          for (QObject *o : m_window->findChildren<QObject *>(u"scheduleOverview"_s))
+                              o->setProperty("now", QDateTime(Qupil::Clock::today(), QTime(17, 20)));
+                      },
+                      {} }
+            << snap(prefix + u"-0b-today-ensemble"_s)
+            << Step { [this] {
+                          for (QObject *o : m_window->findChildren<QObject *>(u"scheduleOverview"_s))
+                              o->setProperty("now", Qupil::Clock::now());
+                      },
+                      {} }
+            // A student with a birthday today: the lime band
+            << Step { [this, nav] { nav("showStudent", m_birthdayStudent, u""_s).action(); }, {} }
+            << snap(prefix + u"-5e-student-birthday"_s);
     m_steps << Step { [this, nav] { nav("showStudent", m_student, m_membership).action(); }, {} }
             << snap(prefix + u"-5-student"_s)
             << Step { [this] { revealNote(m_note); }, {} }
@@ -357,6 +375,30 @@ void ScreenshotTour::setAll(const char *property, const QVariant &value)
     for (QObject *o : m_window->findChildren<QObject *>()) {
         if (o->property(property).isValid())
             o->setProperty(property, value);
+    }
+}
+
+// Birthdays: Lena (running lesson) today, Sophie and two of the string ensemble since the
+// last lesson
+void ScreenshotTour::addSampleBirthdays()
+{
+    DataService *data = DataService::instance();
+    if (!data)
+        return;
+    const QDate today = Qupil::Clock::today();
+    const QDate saturday = Qupil::Clock::lastWeekday(today, 6);
+    const QHash<QString, QDate> days { { u"Lena"_s, today.addYears(-11) },
+                                       { u"Sophie"_s, saturday.addYears(-12) },
+                                       { u"Paul"_s, saturday.addYears(-14) },
+                                       { u"Hannah"_s, today.addDays(-5).addYears(-13) } };
+    for (const QVariant &v : data->students()) {
+        const QVariantMap s = v.toMap();
+        const QDate d = days.value(s.value(u"forename"_s).toString());
+        if (!d.isValid())
+            continue;
+        data->updateStudent(s.value(u"id"_s).toString(), { { u"birthday"_s, d.toString(Qt::ISODate) } });
+        if (d.month() == today.month() && d.day() == today.day())
+            m_birthdayStudent = s.value(u"id"_s).toString();
     }
 }
 

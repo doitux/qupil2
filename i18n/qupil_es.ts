@@ -1602,6 +1602,61 @@ Good job!</source>
         <source>Reminder set up</source>
         <translation>Recordatorio creado</translation>
     </message>
+    <message id="birthday.today">
+        <source>Birthday today</source>
+        <extracomment>Band at the student and in the running lesson</extracomment>
+        <translation>Cumpleaños hoy</translation>
+    </message>
+    <message id="birthday.past">
+        <source>Had a birthday</source>
+        <extracomment>Since the last lesson; neutral, not “congratulate!”</extracomment>
+        <translation>Ha cumplido años</translation>
+    </message>
+    <message id="birthday.today_text">
+        <source>%1 turns %2 today.</source>
+        <extracomment>%1 = forename, %2 = age</extracomment>
+        <translation>%1 cumple %2 años hoy.</translation>
+    </message>
+    <message id="birthday.past_text">
+        <source>%1 had a birthday on %2 and turned %3.</source>
+        <extracomment>%1 = forename, %2 = weekday (last week) or date, %3 = age</extracomment>
+        <translation>%1 cumplió %3 años el %2.</translation>
+    </message>
+    <message id="birthday.past_short">
+        <source>%1 turned %3 on %2</source>
+        <extracomment>Running lesson; %1 = forename, %2 = weekday or date, %3 = age</extracomment>
+        <translation>%1 cumplió %3 el %2</translation>
+    </message>
+    <message id="birthday.several">
+        <source>Birthdays</source>
+        <extracomment>Running lesson with several birthdays</extracomment>
+        <translation>Cumpleaños</translation>
+    </message>
+    <message id="birthday.several_today">
+        <source>today %1</source>
+        <extracomment>%1 = forenames with age: Lena (11)</extracomment>
+        <translation>hoy %1</translation>
+    </message>
+    <message id="birthday.several_past">
+        <source>since the last lesson: %1</source>
+        <extracomment>Running lesson, title birthday.several; %1 = forenames with age: Paul (14), Hannah (13)</extracomment>
+        <translation>desde la última clase: %1</translation>
+    </message>
+    <message id="birthday.row_today">
+        <source>Birthday today · turns %1</source>
+        <extracomment>Lesson view, under the name</extracomment>
+        <translation>Cumpleaños hoy · cumple %1</translation>
+    </message>
+    <message id="birthday.row_past">
+        <source>Had a birthday · turned %2 on %1</source>
+        <extracomment>Lesson view; %1 = weekday or date, %2 = age</extracomment>
+        <translation>Ha cumplido años · %2 el %1</translation>
+    </message>
+    <message id="birthday.greeted">
+        <source>Congratulated</source>
+        <extracomment>Tick: the birthday note is put away until the next birthday</extracomment>
+        <translation>Felicitado</translation>
+    </message>
     <message id="birthday.title">
         <source>Birthdays</source>
         <translation>Cumpleaños</translation>
@@ -2448,6 +2503,20 @@ Póngase en contacto con el autor en %4 para resolver el problema.</translation>
     <message id="lesson.no_students">
         <source>No students in this lesson yet.</source>
         <translation>Todavía no hay alumnos en esta clase.</translation>
+    </message>
+    <message id="lesson.last_note_all">
+        <source>Last note · for everybody</source>
+        <extracomment>Group or ensemble: the same note for all, shown once</extracomment>
+        <translation>Última nota · para todos</translation>
+    </message>
+    <message id="lesson.for_all">
+        <source>%1 · for everybody: %2</source>
+        <extracomment>Running lesson of a group; %1 = date, %2 = the note</extracomment>
+        <translation>%1 · para todos: %2</translation>
+    </message>
+    <message id="plan.planned_today_all">
+        <source>Planned for today · for everybody</source>
+        <translation>Planificado para hoy · para todos</translation>
     </message>
     <message id="lesson.note_for_all">
         <source>Note for everybody</source>

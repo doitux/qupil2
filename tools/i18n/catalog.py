@@ -896,6 +896,31 @@ E("reminder.created", old="Reminder set up", en="Reminder set up", fr="Rappel cr
   es="Recordatorio creado")
 
 # ---------------------------------------------------------------- birthdays
+E("birthday.today", en="Birthday today", de="Heute Geburtstag", fr="Anniversaire aujourd’hui", es="Cumpleaños hoy",
+  c="Band at the student and in the running lesson")
+E("birthday.past", en="Had a birthday", de="Hatte Geburtstag", fr="A eu son anniversaire", es="Ha cumplido años",
+  c="Since the last lesson; neutral, not “congratulate!”")
+E("birthday.today_text", en="%1 turns %2 today.", de="%1 wird heute %2 Jahre alt.",
+  fr="%1 fête ses %2 ans aujourd’hui.", es="%1 cumple %2 años hoy.", c="%1 = forename, %2 = age")
+E("birthday.past_text", en="%1 had a birthday on %2 and turned %3.", de="%1 hatte am %2 Geburtstag und ist %3 geworden.",
+  fr="%1 a eu %3 ans le %2.", es="%1 cumplió %3 años el %2.",
+  c="%1 = forename, %2 = weekday (last week) or date, %3 = age")
+E("birthday.past_short", en="%1 turned %3 on %2", de="%1 ist am %2 %3 geworden", fr="%1 a eu %3 ans le %2",
+  es="%1 cumplió %3 el %2", c="Running lesson; %1 = forename, %2 = weekday or date, %3 = age")
+E("birthday.several", en="Birthdays", de="Geburtstage", fr="Anniversaires", es="Cumpleaños",
+  c="Running lesson with several birthdays")
+E("birthday.several_today", en="today %1", de="heute %1", fr="aujourd’hui %1", es="hoy %1",
+  c="%1 = forenames with age: Lena (11)")
+E("birthday.several_past", en="since the last lesson: %1", de="seit der letzten Stunde: %1",
+  fr="depuis le dernier cours : %1", es="desde la última clase: %1",
+  c="Running lesson, title birthday.several; %1 = forenames with age: Paul (14), Hannah (13)")
+E("birthday.row_today", en="Birthday today · turns %1", de="Heute Geburtstag · wird %1",
+  fr="Anniversaire aujourd’hui · %1 ans", es="Cumpleaños hoy · cumple %1", c="Lesson view, under the name")
+E("birthday.row_past", en="Had a birthday · turned %2 on %1", de="Hatte Geburtstag · am %1 %2 geworden",
+  fr="A eu son anniversaire · %2 ans le %1", es="Ha cumplido años · %2 el %1",
+  c="Lesson view; %1 = weekday or date, %2 = age")
+E("birthday.greeted", en="Congratulated", de="Gratuliert", fr="Félicité", es="Felicitado",
+  c="Tick: the birthday note is put away until the next birthday")
 E("birthday.title", old="Birthdays - Qupil", en="Birthdays", fr="Anniversaires", es="Cumpleaños")
 E("birthday.today_one", old="The following student has his birthday today:",
   en="This student has a birthday today:", fr="Cet élève fête son anniversaire aujourd’hui :",
@@ -1385,6 +1410,12 @@ E("lesson.name.required", en="Without a name the lesson cannot be saved. Please 
   c="Under the empty “Own name” field of a lesson; “Automatic” is lesson.name.auto_short")
 E("lesson.no_students", en="No students in this lesson yet.", de="Noch keine Schüler in diesem Unterricht.",
   fr="Aucun élève dans ce cours pour l’instant.", es="Todavía no hay alumnos en esta clase.")
+E("lesson.last_note_all", en="Last note · for everybody", de="Letzte Notiz · für alle", fr="Dernière note · pour tous",
+  es="Última nota · para todos", c="Group or ensemble: the same note for all, shown once")
+E("lesson.for_all", en="%1 · for everybody: %2", de="%1 · für alle: %2", fr="%1 · pour tous : %2", es="%1 · para todos: %2",
+  c="Running lesson of a group; %1 = date, %2 = the note")
+E("plan.planned_today_all", en="Planned for today · for everybody", de="Geplant für heute · für alle",
+  fr="Prévu pour aujourd’hui · pour tous", es="Planificado para hoy · para todos")
 E("lesson.note_for_all", en="Note for everybody", de="Notiz für alle", fr="Note pour tous", es="Nota para todos")
 E("events.empty", en="No events yet.", de="Noch keine Veranstaltungen.", fr="Aucun événement pour l’instant.",
   es="Todavía no hay eventos.")

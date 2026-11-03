@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <iterator>
 
+#include "Birthday.h"
 #include "Clock.h"
 #include "Database.h"
 #include "Ids.h"
@@ -1370,6 +1371,57 @@ QVariantList DataService::birthdays(int daysAhead) const
     for (const QVariantMap &m : list)
         out << m;
     return out;
+}
+
+QVariantMap DataService::birthdayNote(const QString &studentId) const
+{
+    if (studentId.isEmpty() || setting(u"birthday_reminder"_s, 1).toInt() == 0)
+        return {};
+    const QVariantMap s = m_store->get(u"student"_s, studentId);
+    const QDate birth = QDate::fromString(s.value(u"birthday"_s).toString(), Qt::ISODate);
+    if (!birth.isValid() || s.value(u"deleted"_s).toInt() != 0)
+        return {};
+    const QDate today = Qupil::Clock::today();
+    // Most birthdays are far away: no need to look for the last note
+    const QDate thisYear = Qupil::Birthday::inYear(birth, today.year());
+    const QDate last = thisYear <= today ? thisYear : Qupil::Birthday::inYear(birth, today.year() - 1);
+    if (last.daysTo(today) > Qupil::Birthday::MaxDays)
+        return {};
+    const QDate lastNote = QDate::fromString(
+        scalar(u"SELECT MAX(n.date) FROM note n JOIN membership m ON m.id = n.membership_id "
+               u"WHERE n.deleted = 0 AND m.deleted = 0 AND m.student_id = ? AND n.date < ?"_s,
+               { studentId, today.toString(Qt::ISODate) }).toString(), Qt::ISODate);
+    const Qupil::Birthday::Note note = Qupil::Birthday::noteFor(birth, today, lastNote);
+    if (note.kind == Qupil::Birthday::Kind::None)
+        return {};
+    const QString date = note.date.toString(Qt::ISODate);
+    if (setting(u"birthday_greeted:"_s + studentId, QString()).toString() == date)
+        return {};
+    // "Samstag" within the last week, otherwise the date
+    static const char *const weekdays[] = { "weekday.monday", "weekday.tuesday", "weekday.wednesday", "weekday.thursday",
+                                            "weekday.friday", "weekday.saturday", "weekday.sunday" };
+    QString when = formatDate(date, false);
+    if (note.days <= 6) {
+        when = qtTrId(weekdays[note.date.dayOfWeek() - 1]);
+        const QLocale::Language language = uiLocale().language();
+        if (language == QLocale::French || language == QLocale::Spanish)
+            when = when.toLower();   // in the middle of a sentence
+    }
+    return { { u"kind"_s, note.kind == Qupil::Birthday::Kind::Today ? u"today"_s : u"past"_s },
+             { u"date"_s, date },
+             { u"when"_s, when },
+             { u"turns"_s, note.turns },
+             { u"days"_s, note.days },
+             { u"forename"_s, s.value(u"forename"_s) },
+             { u"name"_s, fullName(s.value(u"forename"_s).toString(), s.value(u"surname"_s).toString()) } };
+}
+
+void DataService::greetBirthday(const QString &studentId)
+{
+    // The date of the birthday: next year's birthday shows again
+    const QString date = birthdayNote(studentId).value(u"date"_s).toString();
+    if (!date.isEmpty())
+        setSetting(u"birthday_greeted:"_s + studentId, date);
 }
 
 QVariantList DataService::reminders() const

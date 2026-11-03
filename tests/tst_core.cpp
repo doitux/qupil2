@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <memory>
 
+#include "Birthday.h"
 #include "Clock.h"
 #include "Crypto.h"
 #include "Csv.h"
@@ -1591,6 +1592,39 @@ private slots:
         Store sf(&fresh);
         QVERIFY(sf.applyRemote(store.changesSince({})) > 0);
         QCOMPARE(sf.get(u"student"_s, id), store.get(u"student"_s, id));
+    }
+
+    void birthdays()
+    {
+        using namespace Qupil::Birthday;
+        const QDate tuesday(2026, 11, 3);
+        // Today, also 29 February in other years (1 March)
+        Note n = noteFor(QDate(2015, 11, 3), tuesday, QDate(2026, 10, 27));
+        QCOMPARE(int(n.kind), int(Kind::Today));
+        QCOMPARE(n.turns, 11);
+        QCOMPARE(int(noteFor(QDate(2012, 2, 29), QDate(2026, 3, 1), {}).kind), int(Kind::Today));
+        // Saturday after last week's lesson
+        n = noteFor(QDate(2014, 10, 31), tuesday, QDate(2026, 10, 27));
+        QCOMPARE(int(n.kind), int(Kind::Past));
+        QCOMPARE(n.date, QDate(2026, 10, 31));
+        QCOMPARE(n.turns, 12);
+        QCOMPARE(n.days, 3);
+        // On the day of the last lesson or before it: already seen
+        QCOMPARE(int(noteFor(QDate(2014, 10, 20), tuesday, QDate(2026, 10, 27)).kind), int(Kind::None));
+        // At least the last week: last note yesterday, or none at all
+        QCOMPARE(int(noteFor(QDate(2014, 10, 29), tuesday, QDate(2026, 11, 2)).kind), int(Kind::Past));
+        QCOMPARE(int(noteFor(QDate(2014, 10, 29), tuesday, {}).kind), int(Kind::Past));
+        QCOMPARE(int(noteFor(QDate(2014, 10, 20), tuesday, {}).kind), int(Kind::None));
+        // Holidays: back to the last note, seven weeks of summer holidays included …
+        const QDate afterSummer(2026, 9, 1);
+        n = noteFor(QDate(2013, 7, 16), afterSummer, QDate(2026, 7, 14));
+        QCOMPARE(int(n.kind), int(Kind::Past));
+        QCOMPARE(n.days, 47);
+        // … but not further than eight weeks
+        QCOMPARE(int(noteFor(QDate(2013, 7, 5), afterSummer, QDate(2026, 6, 30)).kind), int(Kind::None));
+        // Coming birthdays and unknown ones are not shown here
+        QCOMPARE(int(noteFor(QDate(2014, 11, 6), tuesday, QDate(2026, 10, 27)).kind), int(Kind::None));
+        QCOMPARE(int(noteFor(QDate(), tuesday, {}).kind), int(Kind::None));
     }
 
     void catchesUpNewEntities()

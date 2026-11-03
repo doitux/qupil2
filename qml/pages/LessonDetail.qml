@@ -16,6 +16,22 @@ Item {
     property string backText: qsTrId("common.back")
     readonly property var lesson: { if (Data.revision < 0) return undefined; return Data.lesson(lessonId) }
     readonly property string lessonName: lesson.name || ""
+    //! Group or ensemble with the same plan for today or the same last note for everybody
+    //! (saved for all): shown once above the students, not under each of them
+    readonly property var shared: {
+        if (Data.revision < 0)
+            return undefined
+        const st = lesson.students || []
+        if (st.length < 2)
+            return null
+        const plans = st.map(x => Data.plans(x.membership_id).find(p => p.today))
+        if (plans.every(p => !!p && !!p.group_key && p.group_key === plans[0].group_key))
+            return { kind: "plan", points: plans[0].points }
+        if (plans.every(p => !p) && !!st[0].lastNote
+                && st.every(x => x.lastNote === st[0].lastNote && x.lastNoteDate === st[0].lastNoteDate))
+            return { kind: "note", date: st[0].lastNoteDate, text: st[0].lastNote }
+        return null
+    }
 
     signal back()
     signal studentClicked(string studentId, string membershipId)
@@ -100,6 +116,43 @@ Item {
                 }
             }
 
+            SectionLabel {
+                visible: !!detail.shared
+                text: !detail.shared ? "" : detail.shared.kind === "plan" ? qsTrId("plan.planned_today_all") : qsTrId("lesson.last_note_all")
+            }
+            Rectangle {
+                visible: !!detail.shared
+                Layout.fillWidth: true
+                implicitHeight: sharedColumn.implicitHeight + 28
+                radius: Theme.radius
+                color: Theme.surface
+                ColumnLayout {
+                    id: sharedColumn
+                    x: 16
+                    y: 14
+                    width: parent.width - 32
+                    spacing: 4
+                    Text {
+                        visible: !!detail.shared && detail.shared.kind === "note"
+                        text: visible ? Data.formatDate(detail.shared.date, true) : ""
+                        color: Theme.accentText
+                        font.family: Theme.fontFamily
+                        font.pixelSize: 13
+                        font.weight: Font.ExtraBold
+                    }
+                    Text {
+                        Layout.fillWidth: true
+                        wrapMode: Text.WordWrap
+                        text: !detail.shared ? "" : detail.shared.kind === "note" ? detail.shared.text
+                                                  : detail.shared.points.map(p => "•  " + p).join("\n")
+                        color: Theme.text
+                        font.family: Theme.fontFamily
+                        font.pixelSize: 15
+                        lineHeight: 1.15
+                    }
+                }
+            }
+
             SectionLabel { text: qsTrId("lesson.label.students") + " · " + (detail.lesson.studentCount || 0) }
 
             EmptyHint {
@@ -124,6 +177,9 @@ Item {
                             id: row
                             required property var modelData
                             required property int index
+                            readonly property var birthday: { if (Data.revision < 0) return undefined; return Data.birthdayNote(modelData.id) }
+                            readonly property bool hasBirthday: !!birthday && (birthday.kind === "today" || birthday.kind === "past")
+                            readonly property var plan: { if (Data.revision < 0) return undefined; return Data.plans(modelData.membership_id).find(p => p.today) }
                             Layout.fillWidth: true
                             implicitHeight: implicitContentHeight + topPadding + bottomPadding
                             topPadding: 12
@@ -149,6 +205,7 @@ Item {
                                     size: 40
                                     text: row.modelData.initials
                                     seed: row.modelData.name
+                                    birthday: row.birthday
                                 }
                                 ColumnLayout {
                                     Layout.fillWidth: true
@@ -162,24 +219,26 @@ Item {
                                         font.pixelSize: 15
                                         font.weight: Font.Bold
                                     }
+                                    // One line: the birthday, else the own last note (unless shared or
+                                    // there is a plan, shown below), else the instrument
                                     Text {
                                         Layout.fillWidth: true
                                         elide: Text.ElideRight
-                                        text: row.modelData.lastNote
+                                        text: row.hasBirthday
+                                              ? (row.birthday.kind === "today" ? qsTrId("birthday.row_today").arg(row.birthday.turns)
+                                                                               : qsTrId("birthday.row_past").arg(row.birthday.when).arg(row.birthday.turns))
+                                              : row.modelData.lastNote && !detail.shared && row.plan === undefined
                                               ? Data.formatDate(row.modelData.lastNoteDate) + ": " + row.modelData.lastNote
                                               : [row.modelData.instrument, row.modelData.instrument_size].filter(Boolean).join(" ")
-                                        color: Theme.textMuted
+                                        font.weight: row.hasBirthday ? Font.Bold : Font.Normal
+                                        color: row.hasBirthday ? Theme.accentText : Theme.textMuted
                                         font.family: Theme.fontFamily
                                         font.pixelSize: 13
                                     }
                                     // Planned for today's lesson
                                     RowLayout {
-                                        readonly property var plan: {
-                                            if (Data.revision < 0)
-                                                return undefined
-                                            return Data.plans(row.modelData.membership_id).find(p => p.today)
-                                        }
-                                        visible: plan !== undefined
+                                        readonly property var plan: row.plan
+                                        visible: plan !== undefined && !detail.shared
                                         Layout.fillWidth: true
                                         Layout.topMargin: 2
                                         spacing: 5

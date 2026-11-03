@@ -47,6 +47,8 @@ Item {
         if (Data.revision < 0) return undefined
         return studentId ? Data.reminders().filter(r => r.mode === 2 && r.student_id === studentId) : []
     }
+    //! Birthday today or since the last lesson (gone once ticked off)
+    readonly property var birthday: { if (Data.revision < 0) return undefined; return studentId ? Data.birthdayNote(studentId) : ({}) }
     readonly property int groupSize: { if (Data.revision < 0) return undefined; return currentMembership ? Data.groupSize(currentMembership) : 1 }
 
     function relative(iso) {
@@ -212,6 +214,64 @@ Item {
                     iconName: "more"
                     text: qsTrId("common.more_actions")
                     onClicked: detail.openMoreMenu()
+                }
+            }
+
+            // ------------------------------------------------------------ birthday
+            // Lime band: today, or had a birthday since the last lesson. The tick puts it away
+            // (on every device) until the next birthday.
+            Rectangle {
+                id: birthdayBand
+                readonly property bool today: !!detail.birthday && detail.birthday.kind === "today"
+                visible: !!detail.birthday && (detail.birthday.kind === "today" || detail.birthday.kind === "past")
+                Layout.fillWidth: true
+                implicitHeight: birthdayRow.implicitHeight + 24
+                radius: 18
+                color: Theme.lime
+                RowLayout {
+                    id: birthdayRow
+                    anchors.fill: parent
+                    anchors.leftMargin: 16
+                    anchors.rightMargin: 8
+                    spacing: 12
+                    Icon {
+                        Layout.preferredWidth: 28
+                        Layout.preferredHeight: 28
+                        name: "cake"
+                        color: Theme.textOnLime
+                        strokeWidth: 2.2
+                    }
+                    ColumnLayout {
+                        Layout.fillWidth: true
+                        spacing: 1
+                        Text {
+                            Layout.fillWidth: true
+                            wrapMode: Text.WordWrap
+                            text: birthdayBand.today ? qsTrId("birthday.today") : qsTrId("birthday.past")
+                            color: Theme.textOnLime
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 18
+                            font.weight: Font.ExtraBold
+                        }
+                        Text {
+                            Layout.fillWidth: true
+                            wrapMode: Text.WordWrap
+                            text: !birthdayBand.visible ? ""
+                                  : birthdayBand.today ? qsTrId("birthday.today_text").arg(detail.birthday.forename).arg(detail.birthday.turns)
+                                  : qsTrId("birthday.past_text").arg(detail.birthday.forename).arg(detail.birthday.when).arg(detail.birthday.turns)
+                            color: Theme.textOnLime
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 14
+                            font.weight: Font.DemiBold
+                        }
+                    }
+                    IconButton {
+                        iconName: "check"
+                        text: qsTrId("birthday.greeted")
+                        fill: Theme.textOnLime
+                        tint: Theme.lime
+                        onClicked: Data.greetBirthday(detail.studentId)
+                    }
                 }
             }
 

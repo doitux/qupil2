@@ -47,6 +47,7 @@ private:
     void pickExamples();
     void addSamplePlans();
     void addLongNote();
+    void addSampleBirthdays();
     void writeDocuments();
 
     QPointer<QQuickWindow> m_window;
@@ -54,6 +55,7 @@ private:
     QPointer<QObject> m_nav;
     QString m_student, m_membership, m_lesson, m_piece, m_event, m_note, m_plan;
     QString m_longStudent, m_longMembership, m_longNote, m_longPlan;   // a long note in blocks, a plan in blocks
+    QString m_birthdayStudent;   // birthday today
     AppController *m_app;
     QString m_folder;
     QList<Step> m_steps;

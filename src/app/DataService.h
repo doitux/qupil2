@@ -150,6 +150,14 @@ public:
     // ------------------------------------------------------------ notices
     //! Birthdays from today on (days ahead), with age and days until
     Q_INVOKABLE QVariantList birthdays(int daysAhead) const;
+    /*!
+        A student's birthday as it matters for the lesson (Qupil::Birthday): kind "today" or
+        "past" (since the last lesson), with date, turns, days and forename; empty when
+        there is none, when it was ticked off (greetBirthday) or birthdays are switched off.
+    */
+    Q_INVOKABLE QVariantMap birthdayNote(const QString &studentId) const;
+    //! "Congratulated": the birthday note of the student is gone until the next birthday
+    Q_INVOKABLE void greetBirthday(const QString &studentId);
     //! mode 0: shown on the start page; 1: every lesson; 2: lessons of one student
     Q_INVOKABLE QVariantList reminders() const;
     Q_INVOKABLE QVariantList recitalCandidates() const;
