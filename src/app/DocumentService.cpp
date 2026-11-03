@@ -85,7 +85,7 @@ QString page(const QString &title, const QString &body, bool footer = true)
            + body
            + (footer ? u"<p class=\"muted\"><i>Qupil "_s + QCoreApplication::applicationVersion().section(u'.', 0, 1)
                            + u" – © 2006–"_s + QString::number(Qupil::Clock::today().year())
-                           + u" Felix Hammer – qupil.de</i></p>"_s
+                           + u" qupil.de</i></p>"_s
                      : QString())
            + u"</body></html>"_s;
 }
@@ -333,14 +333,14 @@ QString DocumentService::archiveHtml(const QString &entity, const QString &id)
     const QString stored = m_data->get(entity, id).value(u"content"_s).toString();
     const QString html = TextPack::unpack(stored);
     if (!ArchiveFormat::isLegacy(html))
-        return html;
+        return ArchiveFormat::withoutAuthor(html);
     // Opening it takes as long as converting it: convert, and keep that (after this call,
     // so a view that shows it is not changed while it asks)
     const QString compact = compactLegacyArchive(html);
     QTimer::singleShot(0, this, [this, entity, id, stored, compact] {
         m_data->m_store->rewrite(entity, id, u"content"_s, stored, TextPack::pack(compact));
     });
-    return compact;
+    return ArchiveFormat::withoutAuthor(compact);
 }
 
 void DocumentService::setArchiveUpkeep(bool on)

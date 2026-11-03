@@ -3,6 +3,7 @@
 #include "ArchiveFormat.h"
 
 #include <QColor>
+#include <QRegularExpression>
 #include <QTextBlock>
 #include <QTextDocument>
 #include <QTextFrame>
@@ -209,6 +210,23 @@ QString compactBody(const QString &legacyHtml, QString *title)
     writer.frame(document.rootFrame()->begin(), out);
     if (title)
         *title = writer.title;
+    return out;
+}
+
+QString withoutAuthor(const QString &html)
+{
+    // "<i>Qupil 1.4.1 - ©2006-2026 - Felix Hammer - qupil.de</i>" (1.x),
+    // "<i>Qupil 2.0 – © 2006–2026 Felix Hammer – qupil.de</i>" (2.0 until November 2026)
+    static const QRegularExpression credit(
+        uR"((<i>Qupil [^<]*?©[^<]*?)( [-–])? Felix Hammer [-–] qupil\.de</i>)"_s);
+    QList<QRegularExpressionMatch> matches;
+    for (auto it = credit.globalMatch(html); it.hasNext();)
+        matches << it.next();
+    if (matches.isEmpty())
+        return html;
+    QString out = html;
+    for (auto m = matches.crbegin(); m != matches.crend(); ++m)
+        out.replace(m->capturedStart(), m->capturedLength(), m->captured(1) + m->captured(2) + u" qupil.de</i>"_s);
     return out;
 }
 

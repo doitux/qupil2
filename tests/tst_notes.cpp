@@ -157,6 +157,15 @@ private slots:
         for (const char *gone : { "font-size", "font-family", "DOCTYPE", "qrichtext", "margin-left" })
             QVERIFY2(!body.contains(QLatin1StringView(gone)), gone);
         QVERIFY(body.contains(u"<p><i>Qupil 1.4.1 - ©2006-2026 - Felix Hammer - qupil.de</i></p>"_s));
+        // Shown and printed without the name; other text stays as it is
+        const QString shown = ArchiveFormat::withoutAuthor(body);
+        QVERIFY(shown.contains(u"<p><i>Qupil 1.4.1 - ©2006-2026 - qupil.de</i></p>"_s));
+        QVERIFY(!shown.contains(u"Hammer"_s));
+        QCOMPARE(shown.size(), body.size() - qsizetype(u"Felix Hammer - "_s.size()));
+        QCOMPARE(ArchiveFormat::withoutAuthor(u"<p class=\"muted\"><i>Qupil 2.0 – © 2006–2026 Felix Hammer – qupil.de</i></p>"_s),
+                 u"<p class=\"muted\"><i>Qupil 2.0 – © 2006–2026 qupil.de</i></p>"_s);
+        QCOMPARE(ArchiveFormat::withoutAuthor(u"<p><i>Felix Hammer – qupil.de</i></p>"_s),
+                 u"<p><i>Felix Hammer – qupil.de</i></p>"_s);
         QVERIFY2(body.size() * 3 < kLegacyArchive.size(), qPrintable(u"%1 of %2"_s.arg(body.size()).arg(kLegacyArchive.size())));
     }
 

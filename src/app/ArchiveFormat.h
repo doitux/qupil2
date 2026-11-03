@@ -23,4 +23,12 @@ bool isLegacy(const QString &html);
 */
 QString compactBody(const QString &legacyHtml, QString *title = nullptr);
 
+/*!
+    The credit line at the end of an entry without the author's name, as the
+    documents print it now: "Qupil 1.4.1 - ©2006-2026 - qupil.de" (Qupil 1.x),
+    "Qupil 2.0 – © 2006–2026 qupil.de" (entries archived with Qupil 2.0).
+    The stored entry stays as it is.
+*/
+QString withoutAuthor(const QString &html);
+
 } // namespace ArchiveFormat
