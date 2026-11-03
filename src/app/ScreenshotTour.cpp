@@ -76,6 +76,11 @@ ScreenshotTour::ScreenshotTour(QQuickWindow *window, QObject *theme, QObject *na
             << mode("dark") << snap(u"02-setup-dark"_s) << mode("light")
             << size(390, 844) << snap(u"01-setup-phone"_s) << scroll(600) << snap(u"01-setup-phone-2"_s)
             << size(1180, 800);
+    // An older copy started on data of a newer Qupil
+    m_steps << scroll(0) << Step { [this] { m_app->simulateNewerData(true); }, {} } << snap(u"01-older-copy-light"_s)
+            << mode("dark") << snap(u"02-older-copy-dark"_s) << mode("light")
+            << size(390, 844) << snap(u"01-older-copy-phone"_s) << size(1180, 800)
+            << Step { [this] { m_app->simulateNewerData(false); }, {} };
     // Sample data through the real 1.x import
     m_steps << Step { [this] { m_app->loadDemo(); },
                       [this] { return !m_app->busy() && !m_app->lastTakeOver().isEmpty(); } }

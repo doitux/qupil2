@@ -40,6 +40,12 @@ class AppController : public QObject
     Q_PROPERTY(Phase phase READ phase NOTIFY phaseChanged FINAL)
     //! Why the existing data could not be opened (shown on the setup screen)
     Q_PROPERTY(QString startupError READ startupError NOTIFY phaseChanged FINAL)
+    //! The data was saved by a newer Qupil: an older copy was started (old shortcut, old folder)
+    Q_PROPERTY(bool dataTooNew READ dataTooNew NOTIFY phaseChanged FINAL)
+    //! Folder this Qupil was started from (desktop), e.g. an old unpacked ZIP
+    Q_PROPERTY(QString appFolder READ appFolder CONSTANT FINAL)
+    //! Qupil installed with the Windows setup when this is another copy: { path, version }, else empty
+    Q_PROPERTY(QVariantMap installedApp READ installedApp CONSTANT FINAL)
     Q_PROPERTY(bool busy READ busy NOTIFY busyChanged FINAL)
     Q_PROPERTY(int progress READ progress NOTIFY progressChanged FINAL)
     //! Step key of a running import: lookup, students, lessons, pieces, notes, …
@@ -79,6 +85,13 @@ public:
 
     Phase phase() const { return m_phase; }
     QString startupError() const { return m_startupError; }
+    bool dataTooNew() const;
+    QString appFolder() const;
+    QVariantMap installedApp() const;
+    //! Starts the installed Qupil (installedApp) and closes this copy
+    Q_INVOKABLE bool startInstalled();
+    //! Screenshot tour only: show the setup screen as if the data came from a newer Qupil
+    void simulateNewerData(bool on);
     bool busy() const { return m_busy; }
     int progress() const { return m_progress; }
     QString progressStep() const { return m_progressStep; }
@@ -203,6 +216,7 @@ private:
     std::unique_ptr<Qupil::Store> m_store;
     Phase m_phase = Setup;
     QString m_startupError;
+    int m_dataVersion = 0;   //!< schema version of a file that could not be opened
     bool m_busy = false;
     int m_progress = 0;
     QString m_progressStep;

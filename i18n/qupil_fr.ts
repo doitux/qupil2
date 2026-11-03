@@ -2086,6 +2086,48 @@ Veuillez contacter l’auteur à l’adresse %4 pour résoudre ce problème.</tr
         <source>The existing file is kept in the backup folder when you restore a backup or start from scratch.</source>
         <translation>Le fichier existant est conservé dans le dossier des sauvegardes si vous restaurez une sauvegarde ou commencez à zéro.</translation>
     </message>
+    <message id="setup.too_new.title">
+        <source>This is an older Qupil</source>
+        <translation>Ceci est une version plus ancienne de Qupil</translation>
+    </message>
+    <message id="setup.too_new.text">
+        <source>Your data has already been opened with a newer Qupil. It is all there and unchanged; this older version just cannot open it.</source>
+        <translation>Vos données ont déjà été ouvertes avec une version plus récente de Qupil. Elles sont complètes et intactes ; seule cette ancienne version ne peut pas les ouvrir.</translation>
+    </message>
+    <message id="setup.too_new.this_copy">
+        <source>Started: Qupil %1 from %2</source>
+        <extracomment>%1 = version and build, %2 = folder the program was started from</extracomment>
+        <translation>Démarré : Qupil %1 depuis %2</translation>
+    </message>
+    <message id="setup.too_new.installed">
+        <source>Installed: Qupil %1 in %2</source>
+        <extracomment>%1 = version of the installed Qupil, %2 = its program file</extracomment>
+        <translation>Installé : Qupil %1 dans %2</translation>
+    </message>
+    <message id="setup.too_new.start_installed">
+        <source>Start the installed Qupil</source>
+        <translation>Démarrer le Qupil installé</translation>
+    </message>
+    <message id="setup.too_new.desktop_hint">
+        <source>You probably started it from an old shortcut or an old folder. Please start Qupil from the start menu or your usual launcher, or download the latest version.</source>
+        <translation>Il a probablement été démarré depuis un ancien raccourci ou un ancien dossier. Veuillez démarrer Qupil depuis le menu Démarrer ou votre lanceur habituel, ou télécharger la dernière version.</translation>
+    </message>
+    <message id="setup.too_new.cleanup">
+        <source>You can then delete the old shortcut and the old folder; your data is not stored there.</source>
+        <translation>Vous pourrez ensuite supprimer l’ancien raccourci et l’ancien dossier ; vos données n’y sont pas.</translation>
+    </message>
+    <message id="setup.too_new.download">
+        <source>Download the latest version</source>
+        <translation>Télécharger la dernière version</translation>
+    </message>
+    <message id="setup.too_new.mobile_hint">
+        <source>Please update Qupil (TestFlight, App Store or the latest Android file). Afterwards your data opens as usual.</source>
+        <translation>Veuillez mettre Qupil à jour (TestFlight, App Store ou le dernier fichier Android). Vos données s’ouvriront ensuite comme d’habitude.</translation>
+    </message>
+    <message id="setup.too_new.other_choices">
+        <source>Show other options</source>
+        <translation>Afficher les autres possibilités</translation>
+    </message>
     <message id="setup.error.no_data">
         <source>No Qupil 1.x data was found in “%1”.</source>
         <extracomment>%1 = folder</extracomment>
