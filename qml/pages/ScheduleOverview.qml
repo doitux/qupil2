@@ -1194,16 +1194,17 @@ Item {
                 Accessible.name: lessonCard.lesson.name || ""
                 onClicked: lessonCard.lessonClicked()
                 background: Item {
-                    Rectangle {
+                    // Selected like a student row: accent colour, inset, rounded at the top
+                    // with the card and square towards the students below
+                    CardRowHighlight {
                         anchors.fill: parent
                         anchors.margins: 4
                         anchors.bottomMargin: 2
-                        radius: Theme.radius - 4
-                        // Selected like a student row: accent colour, inset and rounded
+                        roundBottom: studentRows.count === 0
                         color: lessonCard.lessonSelected ? Theme.accent
                                : lessonHead.down ? Theme.surfaceAlt : lessonHead.hovered ? Theme.surfaceSunken : "transparent"
-                        border.width: lessonHead.visualFocus ? 2 : 0
-                        border.color: lessonCard.lessonSelected ? Theme.textOnAccent : Theme.accentText
+                        focusFrame: lessonHead.visualFocus
+                        frameColor: lessonCard.lessonSelected ? Theme.textOnAccent : Theme.accentText
                     }
                 }
                 contentItem: RowLayout {
@@ -1292,19 +1293,21 @@ Item {
                             color: Theme.divider
                             visible: !studentRow.selected && !(studentRow.index === 0 && lessonCard.lessonSelected)
                         }
-                        // Inset and rounded, so it follows the corners of the card
-                        Rectangle {
+                        // Inset; rounded only where it meets the card's corners (the last row
+                        // at the bottom), square towards the head and the other rows
+                        CardRowHighlight {
                             anchors.fill: parent
                             anchors.leftMargin: 4
                             anchors.rightMargin: 4
                             anchors.topMargin: 2
                             anchors.bottomMargin: studentRow.last ? 4 : 2
-                            radius: Theme.radius - 4
+                            roundTop: false
+                            roundBottom: studentRow.last
                             color: studentRow.selected ? Theme.accent
                                    : studentRow.down ? Theme.surfaceAlt
                                    : studentRow.hovered ? Theme.surfaceSunken : "transparent"
-                            border.width: studentRow.visualFocus ? 2 : 0
-                            border.color: studentRow.selected ? Theme.textOnAccent : Theme.accentText
+                            focusFrame: studentRow.visualFocus
+                            frameColor: studentRow.selected ? Theme.textOnAccent : Theme.accentText
                         }
                     }
                     contentItem: RowLayout {

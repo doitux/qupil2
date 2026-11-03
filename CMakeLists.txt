@@ -252,6 +252,7 @@ set(QUPIL_QML_FILES
     qml/components/EmptyHint.qml
     qml/components/Fab.qml
     qml/components/Foldable.qml
+    qml/components/CardRowHighlight.qml
     qml/components/BirthdayTag.qml
     qml/components/MoreBadge.qml
     qml/components/FieldLabel.qml
