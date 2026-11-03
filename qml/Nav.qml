@@ -7,6 +7,10 @@ pragma Singleton
 import QtQuick
 
 QtObject {
+    //! Height taken at the bottom right by the running metronome (Main.qml): floating
+    //! buttons of a page ("+ Note") sit above it instead of under it
+    property real playerInset: 0
+
     /*!
         One step back in a StackView of pages (system back button): the page on top
         closes the way its own back arrow does (it may tidy up first), otherwise

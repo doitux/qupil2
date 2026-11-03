@@ -485,7 +485,10 @@ Item {
                  && detail.membership && detail.membership.active
         anchors.right: parent.right
         anchors.bottom: parent.bottom
-        anchors.margins: 20
+        anchors.rightMargin: 20
+        // Above the running metronome at the bottom right, not under it
+        anchors.bottomMargin: 20 + Nav.playerInset
+        Behavior on anchors.bottomMargin { NumberAnimation { duration: 180; easing.type: Easing.OutCubic } }
         text: detail.tab === 0 ? qsTrId("common.note") : qsTrId("common.piece")
         onClicked: detail.tab === 0 ? Nav.editNote(detail.currentMembership, "") : Nav.editPiece(detail.currentMembership, "")
     }

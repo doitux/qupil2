@@ -496,6 +496,11 @@ ApplicationWindow {
         }
         TapHandler { onTapped: window.currentPage = 3 }
     }
+    Binding {
+        target: Nav
+        property: "playerInset"
+        value: miniPlayer.visible ? miniPlayer.height + miniPlayer.anchors.bottomMargin - 8 : 0
+    }
 
     // ---------------------------------------------------------------- short messages
     Rectangle {
