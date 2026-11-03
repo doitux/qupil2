@@ -73,7 +73,51 @@ Item {
     readonly property var startReminders: { if (Data.revision < 0) return undefined; return isToday ? Data.reminders().filter(r => r.mode === 0) : [] }
     // Only what has no other place in the day: birthdays show at the lesson and the student,
     // recital candidates are looked up when needed
-    readonly property bool hasNotices: startReminders.length > 0
+    readonly property bool hasNotices: startReminders.length > 0 || todayBirthdays.length > 0
+    //! Birthdays of students who still come today: not in the running lesson (its band shows
+    //! them), not in a lesson that is over. Today's birthdays first, then by the time they come
+    readonly property var todayBirthdays: {
+        if (Data.revision < 0) return undefined
+        if (!isToday || !lessons) return []
+        const seen = {}
+        for (const st of running ? running.students || [] : [])
+            seen[st.id] = true
+        const out = []
+        for (const l of lessons) {
+            if (l.end_time <= nowTime || (running && running.id === l.id))
+                continue
+            for (const n of birthdaysOf(l.students)) {
+                if (seen[n.id])
+                    continue
+                seen[n.id] = true
+                n.time = l.irregular ? "" : (l.start_time || "")
+                out.push(n)
+            }
+        }
+        return out.sort((a, b) => ((a.kind === "today" ? 0 : 1) - (b.kind === "today" ? 0 : 1)) || a.time.localeCompare(b.time))
+    }
+    //! The notices as lines: birthdays today one each, those since the last lesson together
+    //! (one alone with its day), then the reminders; at most 4 lines until opened
+    property bool noticesOpen: false
+    onDayChanged: noticesOpen = false
+    readonly property var noticeRows: {
+        const rows = []
+        const past = todayBirthdays.filter(n => n.kind !== "today")
+        for (const n of todayBirthdays.filter(n => n.kind === "today"))
+            rows.push({ kind: "today", note: n })
+        if (past.length === 1)
+            rows.push({ kind: "past", note: past[0] })
+        else if (past.length > 1)
+            rows.push({ kind: "several", notes: past })
+        for (const r of startReminders)
+            rows.push({ kind: "reminder", reminder: r })
+        if (!noticesOpen && rows.length > 4) {
+            const shown = rows.slice(0, 3)
+            shown.push({ kind: "more", count: rows.length - 3 })
+            return shown
+        }
+        return rows
+    }
     //! Birthdays today or since the last lesson among these students (Data.birthdayNote), today first
     function birthdaysOf(students) {
         const out = []
@@ -866,29 +910,49 @@ Item {
         ColumnLayout {
             spacing: 8
             SectionLabel { text: qsTrId("today.notices") }
-            Flickable {
+            // One card, a line each: nothing hides behind a swipe
+            Rectangle {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 64
-                contentWidth: noticeRow.implicitWidth
-                flickableDirection: Flickable.HorizontalFlick
-                boundsBehavior: Flickable.StopAtBounds
-                clip: true
-                Row {
-                    id: noticeRow
-                    spacing: 10
+                implicitHeight: noticeList.implicitHeight + 8
+                radius: Theme.radius
+                color: Theme.surface
+                Column {
+                    id: noticeList
+                    y: 4
+                    width: parent.width
                     Repeater {
-                        model: overview.startReminders
-                        delegate: NoticeCard {
+                        model: overview.noticeRows
+                        delegate: NoticeLine {
                             required property var modelData
-                            iconName: "bell"
-                            tile: Theme.tile.plum
-                            caption: modelData.studentName !== "" ? qsTrId("today.reminder") + " · " + modelData.studentName
-                                                                  : qsTrId("today.reminder")
-                            title: modelData.text
+                            required property int index
+                            readonly property var n: modelData.note || ({})
+                            width: noticeList.width
+                            divider: index > 0
+                            iconName: modelData.kind === "reminder" ? "bell" : modelData.kind === "more" ? "chevronDown" : "cake"
+                            lime: modelData.kind === "today"
+                            link: modelData.kind === "more"
+                            text: modelData.kind === "reminder" ? (modelData.reminder.studentName !== ""
+                                                                   ? modelData.reminder.studentName + ": " + modelData.reminder.text
+                                                                   : modelData.reminder.text)
+                                  : modelData.kind === "more" ? qsTrId("notice.more", modelData.count)
+                                  : modelData.kind === "several" ? qsTrId("notice.birthday_several").arg(modelData.notes.map(x => x.forename).join(", "))
+                                  : modelData.kind === "today" ? qsTrId("notice.birthday_today").arg(n.forename).arg(n.turns)
+                                  : qsTrId("notice.birthday_one").arg(n.forename).arg(n.when).arg(n.turns)
+                            trailing: modelData.kind === "today" || modelData.kind === "past" ? (n.time || "") : ""
                             onClicked: {
-                                reminderDone.reminderId = modelData.id
-                                reminderDone.text = modelData.text
-                                reminderDone.open()
+                                if (modelData.kind === "more") {
+                                    overview.noticesOpen = true
+                                } else if (modelData.kind === "several") {
+                                    // All of them on the birthday list, pointed out there
+                                    Nav.birthdayFocus = modelData.notes.map(x => x.id)
+                                    Nav.showMore("birthdays")
+                                } else if (modelData.kind === "reminder") {
+                                    reminderDone.reminderId = modelData.reminder.id
+                                    reminderDone.text = modelData.reminder.text
+                                    reminderDone.open()
+                                } else {
+                                    overview.studentClicked(n.id, "")
+                                }
                             }
                         }
                     }
@@ -909,63 +973,75 @@ Item {
 
     // ------------------------------------------------------------ pieces of this page
 
-    component NoticeCard: AbstractButton {
-        id: notice
+    //! A notice: one line with its symbol, a time on the right
+    component NoticeLine: AbstractButton {
+        id: line
         property string iconName
-        property var tile
-        property string caption
-        property string title
-        width: 230
-        height: 64
+        property bool lime: false
+        //! "+ N more": in the accent colour
+        property bool link: false
+        property bool divider: false
+        property string trailing
+        implicitHeight: 46
         focusPolicy: Qt.StrongFocus
+        hoverEnabled: true
         Accessible.role: Accessible.Button
-        Accessible.name: caption + " " + title
-        background: Rectangle {
-            radius: Theme.radius
-            color: Theme.surface
-            border.width: notice.visualFocus ? 2 : 0
-            border.color: Theme.accentText
+        Accessible.name: text + (trailing !== "" ? " " + trailing : "")
+        background: Item {
+            Rectangle {
+                visible: line.divider
+                x: 56
+                width: parent.width - x - 12
+                height: 1
+                color: Theme.divider
+            }
+            Rectangle {
+                anchors.fill: parent
+                anchors.leftMargin: 4
+                anchors.rightMargin: 4
+                anchors.topMargin: 1
+                anchors.bottomMargin: 1
+                radius: Theme.radius - 4
+                color: line.down ? Theme.surfaceAlt : line.hovered ? Theme.surfaceSunken : "transparent"
+                border.width: line.visualFocus ? 2 : 0
+                border.color: Theme.accentText
+            }
         }
         contentItem: RowLayout {
             spacing: 10
             Rectangle {
-                implicitWidth: 40
-                implicitHeight: 40
-                radius: 12
-                color: notice.tile.bg
+                implicitWidth: 30
+                implicitHeight: 30
+                radius: 9
+                color: line.lime ? Theme.lime : Theme.tile.plum.bg
                 Icon {
                     anchors.centerIn: parent
-                    width: 22
-                    height: 22
-                    name: notice.iconName
-                    color: notice.tile.fg
+                    width: 18
+                    height: 18
+                    name: line.iconName
+                    color: line.lime ? Theme.textOnLime : Theme.tile.plum.fg
                 }
             }
-            ColumnLayout {
+            Text {
                 Layout.fillWidth: true
-                spacing: 1
-                Text {
-                    Layout.fillWidth: true
-                    elide: Text.ElideRight
-                    text: notice.caption
-                    color: Theme.textMuted
-                    font.family: Theme.fontFamily
-                    font.pixelSize: 12
-                    font.weight: Font.DemiBold
-                }
-                Text {
-                    Layout.fillWidth: true
-                    elide: Text.ElideRight
-                    text: notice.title
-                    color: Theme.text
-                    font.family: Theme.fontFamily
-                    font.pixelSize: 14
-                    font.weight: Font.Bold
-                }
+                elide: Text.ElideRight
+                text: line.text
+                color: line.link ? Theme.accentText : Theme.text
+                font.family: Theme.fontFamily
+                font.pixelSize: 14
+                font.weight: line.lime || line.link ? Font.Bold : Font.DemiBold
+            }
+            Text {
+                visible: line.trailing !== ""
+                text: line.trailing
+                color: Theme.textMuted
+                font.family: Theme.fontFamily
+                font.pixelSize: 13
+                font.weight: Font.DemiBold
             }
         }
-        leftPadding: 12
-        rightPadding: 12
+        leftPadding: 14
+        rightPadding: 14
     }
 
     component HeroButton: AbstractButton {

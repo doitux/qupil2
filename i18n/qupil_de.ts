@@ -475,6 +475,25 @@
         <source>Notices</source>
         <translation>Hinweise</translation>
     </message>
+    <message id="notice.birthday_today">
+        <source>Birthday today: %1 turns %2</source>
+        <translation>Heute Geburtstag: %1 wird %2</translation>
+    </message>
+    <message id="notice.birthday_one">
+        <source>Birthday: %1 (%2, %3)</source>
+        <translation>Geburtstag: %1 (%2, %3)</translation>
+    </message>
+    <message id="notice.birthday_several">
+        <source>Had birthdays: %1</source>
+        <translation>Hatten Geburtstag: %1</translation>
+    </message>
+    <message id="notice.more" numerus="yes">
+        <source>+ %n more notice(s)</source>
+        <translation>
+            <numerusform>+ %n weiterer Hinweis</numerusform>
+            <numerusform>+ %n weitere Hinweise</numerusform>
+        </translation>
+    </message>
     <message id="today.later">
         <source>Later today</source>
         <translation>Später heute</translation>
@@ -1661,6 +1680,26 @@ Gute Arbeit!</translation>
         <source>Congratulated</source>
         <extracomment>Tick: the birthday note is put away until the next birthday</extracomment>
         <translation>Gratuliert</translation>
+    </message>
+    <message id="birthday.section_past">
+        <source>Had their birthday</source>
+        <translation>Hatten Geburtstag</translation>
+    </message>
+    <message id="birthday.section_soon">
+        <source>Coming up</source>
+        <translation>Demnächst</translation>
+    </message>
+    <message id="birthday.turned_short">
+        <source>turned %1</source>
+        <translation>%1 geworden</translation>
+    </message>
+    <message id="birthday.turns_short">
+        <source>turns %1</source>
+        <translation>wird %1</translation>
+    </message>
+    <message id="birthday.lesson_today">
+        <source>today %1</source>
+        <translation>heute %1</translation>
     </message>
     <message id="birthday.title">
         <source>Birthdays</source>

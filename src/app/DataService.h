@@ -149,7 +149,12 @@ public:
 
     // ------------------------------------------------------------ notices
     //! Birthdays from today on (days ahead), with age and days until
-    Q_INVOKABLE QVariantList birthdays(int daysAhead) const;
+    /*!
+        Birthdays from daysBack days ago to daysAhead days ahead, in order of the date:
+        days < 0 had their birthday, 0 today, > 0 coming. greeted: "Gratuliert" was ticked
+        for that birthday.
+    */
+    Q_INVOKABLE QVariantList birthdays(int daysAhead, int daysBack = 0) const;
     /*!
         A student's birthday as it matters for the lesson (Qupil::Birthday): kind "today" or
         "past" (since the last lesson), with date, turns, days and forename; empty when

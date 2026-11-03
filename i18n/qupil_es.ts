@@ -475,6 +475,25 @@
         <source>Notices</source>
         <translation>Avisos</translation>
     </message>
+    <message id="notice.birthday_today">
+        <source>Birthday today: %1 turns %2</source>
+        <translation>Cumpleaños hoy: %1 cumple %2</translation>
+    </message>
+    <message id="notice.birthday_one">
+        <source>Birthday: %1 (%2, %3)</source>
+        <translation>Cumpleaños: %1 (%2, %3)</translation>
+    </message>
+    <message id="notice.birthday_several">
+        <source>Had birthdays: %1</source>
+        <translation>Cumplieron años: %1</translation>
+    </message>
+    <message id="notice.more" numerus="yes">
+        <source>+ %n more notice(s)</source>
+        <translation>
+            <numerusform>+ %n aviso más</numerusform>
+            <numerusform>+ %n avisos más</numerusform>
+        </translation>
+    </message>
     <message id="today.later">
         <source>Later today</source>
         <translation>Más tarde hoy</translation>
@@ -1660,6 +1679,26 @@ Good job!</source>
         <source>Congratulated</source>
         <extracomment>Tick: the birthday note is put away until the next birthday</extracomment>
         <translation>Felicitado</translation>
+    </message>
+    <message id="birthday.section_past">
+        <source>Had their birthday</source>
+        <translation>Cumplieron años</translation>
+    </message>
+    <message id="birthday.section_soon">
+        <source>Coming up</source>
+        <translation>Próximamente</translation>
+    </message>
+    <message id="birthday.turned_short">
+        <source>turned %1</source>
+        <translation>cumplió %1</translation>
+    </message>
+    <message id="birthday.turns_short">
+        <source>turns %1</source>
+        <translation>cumple %1</translation>
+    </message>
+    <message id="birthday.lesson_today">
+        <source>today %1</source>
+        <translation>hoy %1</translation>
     </message>
     <message id="birthday.title">
         <source>Birthdays</source>

@@ -1340,29 +1340,38 @@ bool DataService::setEventState(const QString &id, int state, bool addActivities
 
 // ---------------------------------------------------------------------------- notices
 
-QVariantList DataService::birthdays(int daysAhead) const
+QVariantList DataService::birthdays(int daysAhead, int daysBack) const
 {
     const QDate today = Qupil::Clock::today();
     QList<QVariantMap> list;
     for (const QVariant &v : rows(u"SELECT id, forename, surname, birthday FROM student WHERE deleted = 0 AND birthday <> ''"_s)) {
-        QVariantMap m = v.toMap();
-        const QDate b = QDate::fromString(m.value(u"birthday"_s).toString(), Qt::ISODate);
+        const QVariantMap row = v.toMap();
+        const QDate b = QDate::fromString(row.value(u"birthday"_s).toString(), Qt::ISODate);
         if (!b.isValid())
             continue;
-        QDate next(today.year(), b.month(), b.day());
-        if (!next.isValid())   // 29 February
-            next = QDate(today.year(), 3, 1);
+        // The coming one (or today), and the last one if it lies within daysBack
+        QDate next = Qupil::Birthday::inYear(b, today.year());
         if (next < today)
-            next = next.addYears(1);
-        const int days = int(today.daysTo(next));
-        if (days > daysAhead)
-            continue;
-        m.insert(u"name"_s, fullName(m.value(u"forename"_s).toString(), m.value(u"surname"_s).toString()));
-        m.insert(u"initials"_s, initials(m.value(u"forename"_s).toString(), m.value(u"surname"_s).toString()));
-        m.insert(u"days"_s, days);
-        m.insert(u"date"_s, next.toString(Qt::ISODate));
-        m.insert(u"turns"_s, next.year() - b.year());
-        list << m;
+            next = Qupil::Birthday::inYear(b, today.year() + 1);
+        QDate last = Qupil::Birthday::inYear(b, today.year());
+        if (last >= today)
+            last = Qupil::Birthday::inYear(b, today.year() - 1);
+        QList<QDate> dates;
+        if (daysBack > 0 && last.daysTo(today) <= daysBack && last > b)
+            dates << last;
+        if (today.daysTo(next) <= daysAhead)
+            dates << next;
+        for (const QDate &date : dates) {
+            QVariantMap m = row;
+            const QString id = m.value(u"id"_s).toString();
+            m.insert(u"name"_s, fullName(m.value(u"forename"_s).toString(), m.value(u"surname"_s).toString()));
+            m.insert(u"initials"_s, initials(m.value(u"forename"_s).toString(), m.value(u"surname"_s).toString()));
+            m.insert(u"days"_s, int(today.daysTo(date)));
+            m.insert(u"date"_s, date.toString(Qt::ISODate));
+            m.insert(u"turns"_s, date.year() - b.year());
+            m.insert(u"greeted"_s, setting(u"birthday_greeted:"_s + id, QString()).toString() == date.toString(Qt::ISODate));
+            list << m;
+        }
     }
     std::sort(list.begin(), list.end(), [](const QVariantMap &a, const QVariantMap &b) {
         return a.value(u"days"_s).toInt() < b.value(u"days"_s).toInt();

@@ -264,6 +264,15 @@ E("app.under_construction", en="This area is being built for Qupil 2.",
 
 # ---------------------------------------------------------------- today (new)
 E("today.notices", en="Notices", de="Hinweise", fr="À noter", es="Avisos")
+E("notice.birthday_today", en="Birthday today: %1 turns %2", de="Heute Geburtstag: %1 wird %2",
+  fr="Anniversaire aujourd’hui : %1 fête ses %2 ans", es="Cumpleaños hoy: %1 cumple %2")
+E("notice.birthday_one", en="Birthday: %1 (%2, %3)", de="Geburtstag: %1 (%2, %3)",
+  fr="Anniversaire : %1 (%2, %3 ans)", es="Cumpleaños: %1 (%2, %3)")
+E("notice.birthday_several", en="Had birthdays: %1", de="Hatten Geburtstag: %1",
+  fr="Ont eu leur anniversaire : %1", es="Cumplieron años: %1")
+E("notice.more", src="+ %n more notice(s)", en=["+ %n more notice", "+ %n more notices"],
+  de=["+ %n weiterer Hinweis", "+ %n weitere Hinweise"], fr=["+ %n autre avis", "+ %n autres avis"],
+  es=["+ %n aviso más", "+ %n avisos más"])
 E("today.later", en="Later today", de="Später heute", fr="Plus tard aujourd’hui", es="Más tarde hoy")
 E("today.remaining", src="%n min left",
   en=["%n min left", "%n min left"], de=["noch %n Min.", "noch %n Min."],
@@ -927,6 +936,12 @@ E("birthday.row_past", en="Had a birthday · turned %2 on %1", de="Hatte Geburts
   c="Lesson view; %1 = weekday or date, %2 = age")
 E("birthday.greeted", en="Congratulated", de="Gratuliert", fr="Félicité", es="Felicitado",
   c="Tick: the birthday note is put away until the next birthday")
+E("birthday.section_past", en="Had their birthday", de="Hatten Geburtstag", fr="Ont eu leur anniversaire",
+  es="Cumplieron años")
+E("birthday.section_soon", en="Coming up", de="Demnächst", fr="Prochainement", es="Próximamente")
+E("birthday.turned_short", en="turned %1", de="%1 geworden", fr="a eu %1 ans", es="cumplió %1")
+E("birthday.turns_short", en="turns %1", de="wird %1", fr="aura %1 ans", es="cumple %1")
+E("birthday.lesson_today", en="today %1", de="heute %1", fr="aujourd’hui %1", es="hoy %1")
 E("birthday.title", old="Birthdays - Qupil", en="Birthdays", fr="Anniversaires", es="Cumpleaños")
 E("birthday.today_one", old="The following student has his birthday today:",
   en="This student has a birthday today:", fr="Cet élève fête son anniversaire aujourd’hui :",

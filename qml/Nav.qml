@@ -10,6 +10,8 @@ QtObject {
     //! Height taken at the bottom right by the running metronome (Main.qml): floating
     //! buttons of a page ("+ Note") sit above it instead of under it
     property real playerInset: 0
+    //! Students to point out once on More › Birthdays (from "Hatten Geburtstag: …" in the notices)
+    property var birthdayFocus: []
 
     /*!
         One step back in a StackView of pages (system back button): the page on top

@@ -475,6 +475,25 @@
         <source>Notices</source>
         <translation>Notices</translation>
     </message>
+    <message id="notice.birthday_today">
+        <source>Birthday today: %1 turns %2</source>
+        <translation>Birthday today: %1 turns %2</translation>
+    </message>
+    <message id="notice.birthday_one">
+        <source>Birthday: %1 (%2, %3)</source>
+        <translation>Birthday: %1 (%2, %3)</translation>
+    </message>
+    <message id="notice.birthday_several">
+        <source>Had birthdays: %1</source>
+        <translation>Had birthdays: %1</translation>
+    </message>
+    <message id="notice.more" numerus="yes">
+        <source>+ %n more notice(s)</source>
+        <translation>
+            <numerusform>+ %n more notice</numerusform>
+            <numerusform>+ %n more notices</numerusform>
+        </translation>
+    </message>
     <message id="today.later">
         <source>Later today</source>
         <translation>Later today</translation>
@@ -1660,6 +1679,26 @@ Good job!</translation>
         <source>Congratulated</source>
         <extracomment>Tick: the birthday note is put away until the next birthday</extracomment>
         <translation>Congratulated</translation>
+    </message>
+    <message id="birthday.section_past">
+        <source>Had their birthday</source>
+        <translation>Had their birthday</translation>
+    </message>
+    <message id="birthday.section_soon">
+        <source>Coming up</source>
+        <translation>Coming up</translation>
+    </message>
+    <message id="birthday.turned_short">
+        <source>turned %1</source>
+        <translation>turned %1</translation>
+    </message>
+    <message id="birthday.turns_short">
+        <source>turns %1</source>
+        <translation>turns %1</translation>
+    </message>
+    <message id="birthday.lesson_today">
+        <source>today %1</source>
+        <translation>today %1</translation>
     </message>
     <message id="birthday.title">
         <source>Birthdays</source>
