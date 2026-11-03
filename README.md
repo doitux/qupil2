@@ -43,12 +43,12 @@ Every push and pull request is built on GitHub Actions:
 
 | Workflow | What it does | Download |
 |---|---|---|
-| **Desktop** | Linux, Windows, macOS (universal): build, unit tests, QML smoke test (loads the UI, switches all languages and colour schemes, fails on any QML warning), package with Qt runtime; Windows installer, checked by installing, updating and uninstalling it | `.tar.gz` / `.zip` per platform, Windows `Setup.exe` (a newer one updates the installed Qupil) |
+| **Desktop** | Linux, Windows, macOS (universal): build, unit tests, QML smoke test (loads the UI, switches all languages and colour schemes, fails on any QML warning), package with Qt runtime; Windows installer, checked by installing, updating and uninstalling it; for tags and on request the Windows program and installer are code-signed (see below) | Linux `.tar.gz`, macOS `.zip`, Windows `Setup.exe` (a newer one updates the installed Qupil) |
 | **Mobile** | Android arm64 APK signed with a public test key (installs as an update over older test builds); iOS device build without signing | test APK, unsigned IPA |
 | **TestFlight** | Started by hand: iOS App Store archive with Xcode 26, checks (bundle ID, build number, icon, launch screen, privacy manifest), signed in Apple's cloud and uploaded to TestFlight; needs the App Store Connect secrets listed in `testflight.yml` | – (TestFlight app) |
 | **Translations** | TS files match the catalog, placeholders and plurals consistent, every string translated | – |
 
-Downloads are on the run's page under *Artifacts* and are kept for 30 days. The desktop builds are not code-signed yet, so Windows SmartScreen and macOS Gatekeeper will warn.
+Downloads are on the run's page under *Artifacts* and are kept for 30 days. macOS builds and unsigned Windows builds make Gatekeeper and SmartScreen warn.
 
 ## Project layout
 
@@ -76,6 +76,17 @@ Copyright © 2006–2026 Felix Hammer.
 Qupil is free software under the [GNU General Public License v3.0 or later](LICENSE) with an [additional permission for app stores](LICENSES/LicenseRef-Qupil-AppStore-exception.txt) (GPLv3 section 7): anyone may distribute Qupil through app stores as long as the complete source code stays freely available.
 
 The Figtree font is © The Figtree Project Authors, [SIL Open Font License 1.1](LICENSES/OFL-1.1.txt). Qt is used under the LGPLv3.
+
+## Code signing policy
+
+Free code signing provided by [SignPath.io](https://about.signpath.io), certificate by [SignPath Foundation](https://signpath.org).
+
+Signed are the Windows program (`Qupil.exe`) and the Windows installer, built by the [Desktop workflow](.github/workflows/desktop.yml) on GitHub-hosted runners from this repository: for release tags and for builds started by hand with *sign*. Every signing request is approved by hand. Qt and the other libraries that come with Qupil are signed by their makers or not at all; they are not signed under this certificate.
+
+- Committers and reviewers: [@doitux](https://github.com/doitux)
+- Approvers: [@doitux](https://github.com/doitux)
+
+**Privacy:** Qupil does not transfer any information to other networked systems unless you ask for it: the synchronisation, when you set it up, goes only to your own Nextcloud or to your own devices in the same network, end-to-end encrypted.
 
 ## Contributing
 

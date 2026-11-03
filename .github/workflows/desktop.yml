@@ -9,6 +9,11 @@ on:
   pull_request:
     paths-ignore: ['**.md', 'docs/**', 'LICENSES/**', '.github/dependabot.yml']
   workflow_dispatch:
+    inputs:
+      sign:
+        description: 'Sign the Windows setup (SignPath; each signing request has to be approved there)'
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -19,6 +24,11 @@ concurrency:
 
 env:
   QT_VERSION: '6.8.3'
+  # Code signing for Windows by the SignPath Foundation (README › Code signing policy).
+  # Runs for tags (v*) and for "Run workflow" with "sign", once the secret SIGNPATH_API_TOKEN
+  # and the variable SIGNPATH_ORGANIZATION_ID exist; otherwise nothing is signed.
+  SIGNPATH_PROJECT: qupil
+  SIGNPATH_POLICY: release-signing
 
 jobs:
   build:
@@ -137,6 +147,74 @@ jobs:
         # Qt's deploy step needs an absolute prefix
         run: bash .github/scripts/run-logged.sh cmake --install build --prefix "${GITHUB_WORKSPACE}/dist"
 
+      # Code signing (Windows): Qupil.exe first, so the installer contains the signed one;
+      # the installer itself after it is built (further below)
+      - name: Sign or not (Windows)
+        id: signing
+        if: runner.os == 'Windows'
+        shell: bash
+        env:
+          TOKEN_SET: ${{ secrets.SIGNPATH_API_TOKEN != '' }}
+          ORG_SET: ${{ vars.SIGNPATH_ORGANIZATION_ID != '' }}
+          WANTED: ${{ github.ref_type == 'tag' || (github.event_name == 'workflow_dispatch' && inputs.sign) }}
+        run: |
+          sign=false
+          if [ "$WANTED" = true ]; then
+            if [ "$TOKEN_SET" = true ] && [ "$ORG_SET" = true ]; then
+              sign=true
+              echo "::notice title=Signing::Qupil.exe and the setup go to SignPath – please approve both signing requests there."
+            else
+              echo "::warning title=Signing::Signing wanted, but SIGNPATH_API_TOKEN (secret) or SIGNPATH_ORGANIZATION_ID (variable) is missing: not signed."
+            fi
+          fi
+          echo "sign=$sign" >> "$GITHUB_OUTPUT"
+          version=$(sed -nE 's/^[[:space:]]*VERSION ([0-9]+\.[0-9]+\.[0-9]+).*/\1/p' CMakeLists.txt | head -n 1)
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
+      - name: Program for signing (Windows)
+        if: steps.signing.outputs.sign == 'true'
+        shell: bash
+        run: |
+          mkdir -p sign/exe
+          cp dist/bin/Qupil.exe sign/exe/
+
+      - name: Upload Qupil.exe for signing (Windows)
+        id: unsigned-exe
+        if: steps.signing.outputs.sign == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: qupil-windows-exe-unsigned
+          path: sign/exe/Qupil.exe
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Sign Qupil.exe (Windows, SignPath)
+        if: steps.signing.outputs.sign == 'true'
+        uses: signpath/github-action-submit-signing-request@f6d04783b4569d051e0c80105fe66e82819d0092 # v3.0
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ env.SIGNPATH_PROJECT }}
+          signing-policy-slug: ${{ env.SIGNPATH_POLICY }}
+          artifact-configuration-slug: qupil-exe
+          github-artifact-id: ${{ steps.unsigned-exe.outputs.artifact-id }}
+          parameters: |
+            version: "${{ steps.signing.outputs.version }}"
+          wait-for-completion: true
+          # Waits for the approval in SignPath
+          wait-for-completion-timeout-in-seconds: 3600
+          output-artifact-directory: sign/exe-signed
+
+      - name: Use signed Qupil.exe (Windows)
+        if: steps.signing.outputs.sign == 'true'
+        shell: pwsh
+        run: |
+          $signed = 'sign\exe-signed\Qupil.exe'
+          $sig = Get-AuthenticodeSignature $signed
+          if ($sig.Status -ne 'Valid') { Write-Host "::error::Qupil.exe from SignPath: signature $($sig.Status)"; exit 1 }
+          Write-Host "Qupil.exe signed by $($sig.SignerCertificate.Subject)"
+          Copy-Item $signed dist\bin\Qupil.exe -Force
+
       - name: Pack
         shell: bash
         run: |
@@ -152,7 +230,9 @@ jobs:
               if [ "$GITHUB_REF_TYPE" = tag ]; then build="${GITHUB_REF_NAME}"; fi
               tar --transform="s,^\\.,Qupil-$build," -C dist -czf "package/Qupil-Linux-x86_64-$build.tar.gz" . ;;
             macOS)   ditto -c -k --keepParent dist/Qupil.app "package/${{ matrix.artifact }}.zip" ;;
-            Windows) 7z a "package/${{ matrix.artifact }}.zip" ./dist/* > /dev/null ;;
+            # Windows: only the installer (below). A ZIP next to it led to parallel copies
+            # that were started instead of the installed Qupil.
+            Windows) ;;
           esac
           ls -l package
 
@@ -176,10 +256,55 @@ jobs:
             if ($LASTEXITCODE -ne 0) { exit 1 }
           }
           & $iscc /Q "/DSourceDir=$dist" "/DAppExe=$exe" "/DAppVersion=$appVersion" `
-            "/DFileVersion=$version.$($env:GITHUB_RUN_NUMBER)" "/DOutputDir=$package" `
+            "/DFileVersion=$version.$($env:GITHUB_RUN_NUMBER)" "/DProductVersion=$version" "/DOutputDir=$package" `
             "/DOutputName=Qupil-Windows-x64-Setup-$build" platform\windows\qupil.iss
           if ($LASTEXITCODE -ne 0) { Write-Host "::error::Inno Setup failed ($LASTEXITCODE)"; exit 1 }
           Get-ChildItem $package | Format-Table Name, Length
+
+      # Under a fixed name, so the SignPath artifact configuration knows the file
+      - name: Setup for signing (Windows)
+        if: steps.signing.outputs.sign == 'true'
+        shell: bash
+        run: |
+          mkdir -p sign/setup
+          cp package/Qupil-Windows-x64-Setup-*.exe sign/setup/Qupil-Setup.exe
+
+      - name: Upload setup for signing (Windows)
+        id: unsigned-setup
+        if: steps.signing.outputs.sign == 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: qupil-windows-setup-unsigned
+          path: sign/setup/Qupil-Setup.exe
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Sign setup (Windows, SignPath)
+        if: steps.signing.outputs.sign == 'true'
+        uses: signpath/github-action-submit-signing-request@f6d04783b4569d051e0c80105fe66e82819d0092 # v3.0
+        with:
+          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+          project-slug: ${{ env.SIGNPATH_PROJECT }}
+          signing-policy-slug: ${{ env.SIGNPATH_POLICY }}
+          artifact-configuration-slug: qupil-setup
+          github-artifact-id: ${{ steps.unsigned-setup.outputs.artifact-id }}
+          parameters: |
+            version: "${{ steps.signing.outputs.version }}"
+          wait-for-completion: true
+          wait-for-completion-timeout-in-seconds: 3600
+          output-artifact-directory: sign/setup-signed
+
+      - name: Use signed setup (Windows)
+        if: steps.signing.outputs.sign == 'true'
+        shell: pwsh
+        run: |
+          $signed = 'sign\setup-signed\Qupil-Setup.exe'
+          $sig = Get-AuthenticodeSignature $signed
+          if ($sig.Status -ne 'Valid') { Write-Host "::error::setup from SignPath: signature $($sig.Status)"; exit 1 }
+          Write-Host "Setup signed by $($sig.SignerCertificate.Subject)"
+          $target = (Get-ChildItem package -Filter 'Qupil-Windows-x64-Setup-*.exe' | Select-Object -First 1).FullName
+          Copy-Item $signed $target -Force
 
       # Install, update over it (a file of the old build must go), uninstall – all for the current user
       - name: Check installer (Windows)
@@ -207,6 +332,13 @@ jobs:
           Run-Setup 'qupil-setup-2.log'
           if (-not (Test-Path "$app\$exe")) { Fail "no $exe after updating" }
           if ($folder -and (Test-Path "$app\$($folder.Name)\left-from-old-build.txt")) { Fail 'a file of the old build is still there' }
+          if ('${{ steps.signing.outputs.sign }}' -eq 'true') {
+            foreach ($f in @($setup, "$app\$exe")) {
+              $sig = Get-AuthenticodeSignature $f
+              if ($sig.Status -ne 'Valid') { Fail "$f is not signed ($($sig.Status))" }
+            }
+            Write-Host 'Setup and installed Qupil.exe are signed'
+          }
           $entries = @(Get-ChildItem 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall' | Where-Object { $_.PSChildName -like '*70C98A36-44FC-4D45-9D00-3B795E3A8E87*' })
           if ($entries.Count -ne 1) { Fail "$($entries.Count) entries under installed apps instead of 1" }
           Write-Host "Installed: $((Get-ItemProperty $key).DisplayName) $((Get-ItemProperty $key).DisplayVersion) in $app"
@@ -226,7 +358,8 @@ jobs:
 
   publish:
     name: Publish to "nightly" release
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # Also "Run workflow" on main (e.g. with "sign"): the nightly then gets that build
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-24.04
     permissions:
@@ -246,7 +379,7 @@ jobs:
         run: |
           bash .github/scripts/publish-nightly.sh \
             'artifacts/qupil-linux-x86_64/*.tar.gz=Qupil-Linux-x86_64*.tar.gz' \
-            'artifacts/qupil-windows-x64/*.zip=Qupil-Windows-x64.zip' \
             'artifacts/qupil-windows-x64/Qupil-Windows-x64-Setup-*.exe=Qupil-Windows-x64-Setup-*.exe' \
             'artifacts/qupil-macos-universal/*.zip=Qupil-macOS-universal.zip' \
-            'artifacts/qupil-screenshots/*.zip=Qupil-Screenshots.zip'
+            'artifacts/qupil-screenshots/*.zip=Qupil-Screenshots.zip' \
+            '-Qupil-Windows-x64.zip'

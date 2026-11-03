@@ -3,7 +3,7 @@
 ;
 ; Windows installer (Inno Setup 6), built in CI from the deployed folder (cmake --install):
 ;   ISCC /DSourceDir=<dist> /DAppExe=bin\Qupil.exe "/DAppVersion=2.0.0 (nightly-abc1234)"
-;        /DFileVersion=2.0.0.123 /DOutputDir=<package> /DOutputName=Qupil-Windows-x64-Setup-... qupil.iss
+;        /DFileVersion=2.0.0.123 /DProductVersion=2.0.0 /DOutputDir=<package> /DOutputName=Qupil-Windows-x64-Setup-... qupil.iss
 ;
 ; Always the same AppId: a newer installer finds the installed Qupil and updates it in place
 ; (same folder, same start menu entry, one entry under "Installed apps") instead of putting
@@ -23,6 +23,10 @@
 #endif
 #ifndef FileVersion
   #define FileVersion "2.0.0.0"
+#endif
+; Product version without build number: the same in every build (code signing checks it)
+#ifndef ProductVersion
+  #define ProductVersion "2.0.0"
 #endif
 #ifndef OutputDir
   #define OutputDir "."
@@ -48,6 +52,8 @@ AppUpdatesURL=https://github.com/doitux/qupil2/releases
 AppCopyright=© 2006–2026 Felix Hammer
 VersionInfoVersion={#FileVersion}
 VersionInfoProductName=Qupil
+VersionInfoProductVersion={#ProductVersion}
+VersionInfoProductTextVersion={#ProductVersion}
 VersionInfoDescription=Qupil Setup
 DefaultDirName={autopf}\Qupil
 DefaultGroupName=Qupil

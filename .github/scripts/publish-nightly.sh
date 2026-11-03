@@ -6,6 +6,7 @@
 # Usage: bash .github/scripts/publish-nightly.sh 'path/glob*.ipa=Asset-Name.ipa' ...
 #   An asset name with * keeps the file's own name (e.g. with the build number)
 #   and replaces the older assets matching it.
+#   '-Asset-Name' removes an asset that is no longer built (if it is still there).
 # Needs GH_TOKEN with contents: write, GITHUB_REPOSITORY and GITHUB_SHA.
 set -euo pipefail
 
@@ -22,6 +23,13 @@ bash "$log" gh api -X PATCH "repos/$repo/git/refs/tags/$tag" -f sha="$GITHUB_SHA
 
 staging="$(mktemp -d)"
 for pair in "$@"; do
+    if [[ "$pair" == -* ]]; then
+        gone="${pair#-}"
+        if gh release view "$tag" --repo "$repo" --json assets -q '.assets[].name' | grep -qxF "$gone"; then
+            gh release delete-asset "$tag" "$gone" --repo "$repo" -y && echo "Removed $gone (no longer built)"
+        fi
+        continue
+    fi
     pattern="${pair%%=*}"
     name="${pair##*=}"
     file="$(compgen -G "$pattern" | head -n 1 || true)"
@@ -60,14 +68,14 @@ done
 
 gh release edit "$tag" --repo "$repo" --prerelease --title "Nightly test builds" --notes "$(cat <<EOF
 Automatic test builds of the newest commit on \`main\` (last update: ${GITHUB_SHA::7}, $(date -u '+%Y-%m-%d %H:%M UTC')).
-They are **not signed** and only meant for testing.
+They are only meant for testing and **not signed** – except the Windows setup when the build was started with *sign* (publisher: SignPath Foundation, see [Code signing policy](${GITHUB_SERVER_URL}/${repo}#code-signing-policy)).
 
 | File | How to install |
 |---|---|
 | \`Qupil-iOS-unsigned.ipa\` | iPad / iPhone: sideload with AltStore, SideStore or Sideloadly, which sign it with your Apple ID. Needs iOS 16 or later. |
 | \`Qupil-Android-arm64-test-<build>-<commit>.apk\` | Android: open the file and allow installing from this source. Play Protect warns about an unknown developer: tap *More details* › *Install anyway* (the big *OK* cancels the installation). Signed with a public test key, so a newer nightly installs as an update and keeps the data (builds before Oct 15, 2026 used a different key: uninstall those once). The commit in the file name is shown on the first screen and under More › About; Android's app info shows the build number. |
 | \`Qupil-macOS-universal.zip\` | macOS 12+: unzip, then right-click Qupil → Open the first time. |
-| \`Qupil-Windows-x64.zip\` | Windows 10/11: unzip and start \`bin\\Qupil.exe\`; SmartScreen → More info → Run anyway. |
+| \`Qupil-Windows-x64-Setup-nightly-<commit>.exe\` | Windows 10/11: run it. Without admin rights Qupil is installed for the current user; a newer setup updates the installed Qupil in place and keeps the data. If the setup is not signed: Edge holds the download back (… › *Keep* › *Show more* › *Keep anyway*), and SmartScreen asks once (*More info* › *Run anyway*). |
 | \`Qupil-Linux-x86_64-nightly-<commit>.tar.gz\` | Linux: unpacks into a folder \`Qupil-nightly-<commit>\`; start \`qupil.sh\` in it (works through a link, too). Run \`install-launcher.sh\` in it once to get Qupil with its icon in the application menu and on the desktop (\`--remove\` takes both away); they start the newest Qupil folder in the same place, so later nightlies just need to be unpacked next to it. Needs \`libxcb-cursor0\` (\`sudo apt install libxcb-cursor0\`). |
 | \`Qupil-Screenshots.zip\` | Every screen of this build with sample data (German and English, light and dark, desktop and phone size). |
 
