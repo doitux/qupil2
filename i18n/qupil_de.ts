@@ -1063,8 +1063,12 @@ Bitte ändern Sie die Schüleranzahl um zu speichern!</translation>
         <translation>Voreinstellung in den Einstellungen</translation>
     </message>
     <message id="note.placeholder">
-        <source>Note for today’s lesson…</source>
-        <translation>Notiz zur heutigen Stunde …</translation>
+        <source>Note for today’s lesson. After an empty line a block begins; its first line is the heading.</source>
+        <translation>Notiz zur heutigen Stunde. Nach einer Leerzeile beginnt ein Block; seine erste Zeile ist die Überschrift.</translation>
+    </message>
+    <message id="note.hint.blocks">
+        <source>After an empty line a block begins; its first line is the heading, and the note shows each block as one line to unfold.</source>
+        <translation>Nach einer Leerzeile beginnt ein Block; seine erste Zeile ist die Überschrift, und die Notiz zeigt jeden Block als eine Zeile zum Aufklappen.</translation>
     </message>
     <message id="format.bold">
         <source>Bold</source>

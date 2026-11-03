@@ -1062,8 +1062,12 @@
         <translation>Valeur par défaut modifiable dans les paramètres</translation>
     </message>
     <message id="note.placeholder">
-        <source>Note for today’s lesson…</source>
-        <translation>Note pour le cours d’aujourd’hui…</translation>
+        <source>Note for today’s lesson. After an empty line a block begins; its first line is the heading.</source>
+        <translation>Note pour le cours d’aujourd’hui. Après une ligne vide commence un bloc ; sa première ligne en est le titre.</translation>
+    </message>
+    <message id="note.hint.blocks">
+        <source>After an empty line a block begins; its first line is the heading, and the note shows each block as one line to unfold.</source>
+        <translation>Après une ligne vide commence un bloc ; sa première ligne en est le titre, et la note affiche chaque bloc sur une ligne à déplier.</translation>
     </message>
     <message id="format.bold">
         <source>Bold</source>

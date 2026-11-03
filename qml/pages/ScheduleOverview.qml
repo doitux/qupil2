@@ -41,8 +41,9 @@ Item {
                 return l
         return null
     }
-    //! Column (tablet, desktop): today it starts at the running or next lesson; the lessons
-    //! that are over stay above it, a swipe away (with a sliver showing)
+    //! Column (tablet, desktop): the running or next lesson stands in the middle while the list
+    //! can scroll that far; the lessons that are over move up out of sight. Near the end of the
+    //! day the list stays scrolled to the bottom
     readonly property string focusLesson: {
         if (!columnMode || !isToday || !lessons)
             return ""
@@ -64,8 +65,8 @@ Item {
             const card = columnCards.itemAt(i)
             if (!card || card.lesson.id !== focusLesson)
                 continue
-            const y = i === 0 ? 0 : card.mapToItem(scroller.contentItem, 0, 0).y - 30
-            scroller.contentY = Math.max(0, Math.min(y, scroller.contentHeight - scroller.height))
+            const middle = card.mapToItem(scroller.contentItem, 0, card.height / 2).y - scroller.height / 2
+            scroller.contentY = Math.max(0, Math.min(middle, scroller.contentHeight - scroller.height))
             return
         }
     }

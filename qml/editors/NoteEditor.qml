@@ -305,11 +305,12 @@ Sheet {
             Accessible.description: noteText.length === 0 ? (editor.plan ? qsTrId("plan.placeholder") : qsTrId("note.placeholder")) : ""
         }
         Text {
-            visible: editor.plan
+            visible: editor.plan || noteText.length > 0
             Layout.fillWidth: true
             wrapMode: Text.WordWrap
             // How lines and blocks work: in the empty field itself, below it once there is text
-            text: (noteText.length > 0 ? qsTrId("plan.hint.lines") + " " : "") + qsTrId("plan.hint")
+            text: editor.plan ? (noteText.length > 0 ? qsTrId("plan.hint.lines") + " " : "") + qsTrId("plan.hint")
+                              : qsTrId("note.hint.blocks")
             color: Theme.textMuted
             font.family: Theme.fontFamily
             font.pixelSize: 13

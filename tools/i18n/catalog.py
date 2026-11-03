@@ -570,8 +570,14 @@ E("note.save_for_all", src="Save for all %n students",
 E("note.save_for_all_hint", en="The default can be changed in the settings",
   de="Voreinstellung in den Einstellungen", fr="Valeur par défaut modifiable dans les paramètres",
   es="El valor predeterminado se puede cambiar en los ajustes")
-E("note.placeholder", en="Note for today’s lesson…", de="Notiz zur heutigen Stunde ...",
-  fr="Note pour le cours d’aujourd’hui…", es="Nota para la clase de hoy…")
+E("note.placeholder", en="Note for today’s lesson. After an empty line a block begins; its first line is the heading.",
+  de="Notiz zur heutigen Stunde. Nach einer Leerzeile beginnt ein Block; seine erste Zeile ist die Überschrift.",
+  fr="Note pour le cours d’aujourd’hui. Après une ligne vide commence un bloc ; sa première ligne en est le titre.",
+  es="Nota para la clase de hoy. Tras una línea vacía empieza un bloque; su primera línea es el título.")
+E("note.hint.blocks", en="After an empty line a block begins; its first line is the heading, and the note shows each block as one line to unfold.",
+  de="Nach einer Leerzeile beginnt ein Block; seine erste Zeile ist die Überschrift, und die Notiz zeigt jeden Block als eine Zeile zum Aufklappen.",
+  fr="Après une ligne vide commence un bloc ; sa première ligne en est le titre, et la note affiche chaque bloc sur une ligne à déplier.",
+  es="Tras una línea vacía empieza un bloque; su primera línea es el título, y la nota muestra cada bloque en una línea para desplegar.")
 E("format.bold", en="Bold", de="Fett", fr="Gras", es="Negrita")
 E("format.italic", en="Italic", de="Kursiv", fr="Italique", es="Cursiva")
 E("format.underline", en="Underline", de="Unterstrichen", fr="Souligné", es="Subrayado")

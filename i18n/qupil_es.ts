@@ -1062,8 +1062,12 @@
         <translation>El valor predeterminado se puede cambiar en los ajustes</translation>
     </message>
     <message id="note.placeholder">
-        <source>Note for today’s lesson…</source>
-        <translation>Nota para la clase de hoy…</translation>
+        <source>Note for today’s lesson. After an empty line a block begins; its first line is the heading.</source>
+        <translation>Nota para la clase de hoy. Tras una línea vacía empieza un bloque; su primera línea es el título.</translation>
+    </message>
+    <message id="note.hint.blocks">
+        <source>After an empty line a block begins; its first line is the heading, and the note shows each block as one line to unfold.</source>
+        <translation>Tras una línea vacía empieza un bloque; su primera línea es el título, y la nota muestra cada bloque en una línea para desplegar.</translation>
     </message>
     <message id="format.bold">
         <source>Bold</source>

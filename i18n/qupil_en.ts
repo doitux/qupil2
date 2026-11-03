@@ -1062,8 +1062,12 @@
         <translation>The default can be changed in the settings</translation>
     </message>
     <message id="note.placeholder">
-        <source>Note for today’s lesson…</source>
-        <translation>Note for today’s lesson…</translation>
+        <source>Note for today’s lesson. After an empty line a block begins; its first line is the heading.</source>
+        <translation>Note for today’s lesson. After an empty line a block begins; its first line is the heading.</translation>
+    </message>
+    <message id="note.hint.blocks">
+        <source>After an empty line a block begins; its first line is the heading, and the note shows each block as one line to unfold.</source>
+        <translation>After an empty line a block begins; its first line is the heading, and the note shows each block as one line to unfold.</translation>
     </message>
     <message id="format.bold">
         <source>Bold</source>
