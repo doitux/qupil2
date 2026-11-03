@@ -1177,6 +1177,40 @@ E("setup.error.kept",
   de="Die vorhandene Datei bleibt im Backup-Ordner erhalten, wenn Sie ein Backup zurückspielen oder neu beginnen.",
   fr="Le fichier existant est conservé dans le dossier des sauvegardes si vous restaurez une sauvegarde ou commencez à zéro.",
   es="El archivo existente se conserva en la carpeta de copias si restaura una copia de seguridad o empieza desde cero.")
+E("setup.too_new.title", en="This is an older Qupil", de="Hier läuft eine ältere Qupil-Version",
+  fr="Ceci est une version plus ancienne de Qupil", es="Esta es una versión anterior de Qupil")
+E("setup.too_new.text",
+  en="Your data has already been opened with a newer Qupil. It is all there and unchanged; this older version just cannot open it.",
+  de="Ihre Daten wurden schon mit einer neueren Qupil-Version geöffnet. Sie sind vollständig und unverändert da, nur diese ältere Version kann sie nicht öffnen.",
+  fr="Vos données ont déjà été ouvertes avec une version plus récente de Qupil. Elles sont complètes et intactes ; seule cette ancienne version ne peut pas les ouvrir.",
+  es="Sus datos ya se abrieron con una versión más reciente de Qupil. Están completos y sin cambios; solo esta versión anterior no puede abrirlos.")
+E("setup.too_new.this_copy", en="Started: Qupil %1 from %2", de="Gestartet wurde Qupil %1 aus %2",
+  fr="Démarré : Qupil %1 depuis %2", es="Iniciado: Qupil %1 desde %2",
+  c="%1 = version and build, %2 = folder the program was started from")
+E("setup.too_new.installed", en="Installed: Qupil %1 in %2", de="Installiert ist Qupil %1 in %2",
+  fr="Installé : Qupil %1 dans %2", es="Instalado: Qupil %1 en %2",
+  c="%1 = version of the installed Qupil, %2 = its program file")
+E("setup.too_new.start_installed", en="Start the installed Qupil", de="Installiertes Qupil starten",
+  fr="Démarrer le Qupil installé", es="Iniciar el Qupil instalado")
+E("setup.too_new.desktop_hint",
+  en="You probably started it from an old shortcut or an old folder. Please start Qupil from the start menu or your usual launcher, or download the latest version.",
+  de="Vermutlich wurde es über eine alte Verknüpfung oder einen alten Ordner gestartet. Bitte starten Sie Qupil über das Startmenü bzw. Ihren gewohnten Starter oder laden Sie die neueste Version herunter.",
+  fr="Il a probablement été démarré depuis un ancien raccourci ou un ancien dossier. Veuillez démarrer Qupil depuis le menu Démarrer ou votre lanceur habituel, ou télécharger la dernière version.",
+  es="Probablemente se inició desde un acceso directo o una carpeta antiguos. Inicie Qupil desde el menú Inicio o su lanzador habitual, o descargue la versión más reciente.")
+E("setup.too_new.cleanup",
+  en="You can then delete the old shortcut and the old folder; your data is not stored there.",
+  de="Die alte Verknüpfung und den alten Ordner können Sie danach löschen, Ihre Daten liegen nicht darin.",
+  fr="Vous pourrez ensuite supprimer l’ancien raccourci et l’ancien dossier ; vos données n’y sont pas.",
+  es="Después puede borrar el acceso directo y la carpeta antiguos; sus datos no están ahí.")
+E("setup.too_new.download", en="Download the latest version", de="Neueste Version herunterladen",
+  fr="Télécharger la dernière version", es="Descargar la versión más reciente")
+E("setup.too_new.mobile_hint",
+  en="Please update Qupil (TestFlight, App Store or the latest Android file). Afterwards your data opens as usual.",
+  de="Bitte aktualisieren Sie Qupil (TestFlight, App Store oder die neueste Android-Datei). Danach öffnen sich Ihre Daten wie gewohnt.",
+  fr="Veuillez mettre Qupil à jour (TestFlight, App Store ou le dernier fichier Android). Vos données s’ouvriront ensuite comme d’habitude.",
+  es="Actualice Qupil (TestFlight, App Store o el archivo de Android más reciente). Después sus datos se abrirán como siempre.")
+E("setup.too_new.other_choices", en="Show other options", de="Andere Möglichkeiten anzeigen",
+  fr="Afficher les autres possibilités", es="Mostrar otras opciones")
 E("setup.error.no_data", en="No Qupil 1.x data was found in “%1”.",
   de="In „%1“ wurden keine Qupil-1.x-Daten gefunden.", fr="Aucune donnée Qupil 1.x n’a été trouvée dans « %1 ».",
   es="No se han encontrado datos de Qupil 1.x en “%1”.", c="%1 = folder")

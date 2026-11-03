@@ -3,6 +3,8 @@
 //
 // First start: take over Qupil 1.x data, restore a backup or start empty.
 // Also shown when the existing data cannot be opened (App.startupError).
+// Data of a newer Qupil (an old copy was started): only how to get to the
+// newer one; the choices that would replace the data stay folded away.
 // After a take-over the summary replaces the choices until "Continue".
 
 import QtQuick
@@ -19,6 +21,10 @@ Flickable {
     ScrollBar.vertical: ScrollBar {}
 
     readonly property bool done: App.lastTakeOver.kind !== undefined
+    // Data of a newer Qupil: point to the newer one instead of offering to replace the data
+    property bool showChoices: false
+    readonly property bool tooNew: App.dataTooNew && !page.done && !page.showChoices
+    readonly property bool choices: !page.done && !page.tooNew
 
     TakeOverActions { id: actions }
 
@@ -53,6 +59,7 @@ Flickable {
                 text: page.done ? (App.lastTakeOver.kind === "backup" ? qsTrId("summary.title.backup")
                                    : App.lastTakeOver.kind === "demo" ? qsTrId("summary.title.demo")
                                    : qsTrId("summary.title.legacy"))
+                                : page.tooNew ? qsTrId("setup.too_new.title")
                                 : qsTrId("setup.welcome")
                 color: Theme.text
                 font.family: Theme.fontFamily
@@ -62,16 +69,86 @@ Flickable {
             Text {
                 Layout.fillWidth: true
                 wrapMode: Text.WordWrap
-                text: page.done ? qsTrId("summary.check_hint") : qsTrId("setup.question")
+                text: page.done ? qsTrId("summary.check_hint")
+                                : page.tooNew ? qsTrId("setup.too_new.text")
+                                : qsTrId("setup.question")
                 color: Theme.textMuted
                 font.family: Theme.fontFamily
                 font.pixelSize: 16
             }
         }
 
+        // ------------------------------------------------------------ data of a newer Qupil
+        Card {
+            visible: page.tooNew
+            Layout.fillWidth: true
+
+            // Which copy runs, and the installed one if that is another (Windows)
+            Text {
+                visible: App.desktop
+                Layout.fillWidth: true
+                wrapMode: Text.WrapAnywhere
+                text: qsTrId("setup.too_new.this_copy").arg(App.versionText).arg(App.appFolder)
+                color: Theme.textMuted
+                font.family: Theme.fontFamily
+                font.pixelSize: 14
+            }
+            Text {
+                visible: App.installedApp.path !== undefined
+                Layout.fillWidth: true
+                wrapMode: Text.WrapAnywhere
+                text: qsTrId("setup.too_new.installed").arg(App.installedApp.version || "")
+                                                       .arg(App.installedApp.path || "")
+                color: Theme.text
+                font.family: Theme.fontFamily
+                font.pixelSize: 14
+                font.weight: Font.DemiBold
+            }
+            ActionButton {
+                visible: App.installedApp.path !== undefined
+                kind: "primary"
+                iconName: "play"
+                text: qsTrId("setup.too_new.start_installed")
+                onClicked: App.startInstalled()
+            }
+
+            Text {
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+                text: App.desktop ? qsTrId("setup.too_new.desktop_hint") : qsTrId("setup.too_new.mobile_hint")
+                color: Theme.textSecondary
+                font.family: Theme.fontFamily
+                font.pixelSize: 14
+                lineHeight: 1.1
+            }
+            ActionButton {
+                visible: App.desktop
+                kind: App.installedApp.path !== undefined ? "secondary" : "primary"
+                iconName: "import"
+                text: qsTrId("setup.too_new.download")
+                onClicked: Qt.openUrlExternally("https://github.com/doitux/qupil2/releases/tag/nightly")
+            }
+            Text {
+                visible: App.desktop
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+                text: qsTrId("setup.too_new.cleanup")
+                color: Theme.textMuted
+                font.family: Theme.fontFamily
+                font.pixelSize: 13
+            }
+        }
+        ActionButton {
+            visible: page.tooNew
+            Layout.alignment: Qt.AlignHCenter
+            kind: "quiet"
+            text: qsTrId("setup.too_new.other_choices")
+            onClicked: page.showChoices = true
+        }
+
         // ------------------------------------------------------------ unreadable data
         Rectangle {
-            visible: App.startupError !== "" && !page.done
+            visible: App.startupError !== "" && page.choices
             Layout.fillWidth: true
             implicitHeight: errorColumn.implicitHeight + 28
             radius: Theme.radius
@@ -132,7 +209,7 @@ Flickable {
 
         // ------------------------------------------------------------ 1. Qupil 1.x
         Card {
-            visible: !page.done
+            visible: page.choices
             Layout.fillWidth: true
 
             ChoiceHeader {
@@ -283,7 +360,7 @@ Flickable {
 
         // ------------------------------------------------------------ 2. backup
         Card {
-            visible: !page.done
+            visible: page.choices
             Layout.fillWidth: true
             ChoiceHeader {
                 iconName: "restore"
@@ -301,7 +378,7 @@ Flickable {
 
         // ------------------------------------------------------------ 3. another device
         Card {
-            visible: !page.done
+            visible: page.choices
             Layout.fillWidth: true
             ChoiceHeader {
                 iconName: "sync"
@@ -323,7 +400,7 @@ Flickable {
 
         // ------------------------------------------------------------ 4. empty
         Card {
-            visible: !page.done
+            visible: page.choices
             Layout.fillWidth: true
             ChoiceHeader {
                 iconName: "plus"
@@ -340,7 +417,7 @@ Flickable {
 
         // ------------------------------------------------------------ try it out
         ActionButton {
-            visible: !page.done
+            visible: page.choices
             Layout.alignment: Qt.AlignHCenter
             kind: "quiet"
             text: qsTrId("setup.demo.action")

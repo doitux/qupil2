@@ -21,6 +21,10 @@
 #include <QThread>
 #include <QTimer>
 #include <QUuid>
+#ifdef Q_OS_WIN
+#include <QProcess>
+#include <QSettings>
+#endif
 
 #include <algorithm>
 #include <tuple>
@@ -149,6 +153,7 @@ bool AppController::openDatabase(QString *error)
         return true;
     }
     const int version = Database::schemaVersionOf(path);
+    m_dataVersion = version;
     if (version > Qupil::Schema::Version) {
         //: %1 = data version number
         *error = qtTrId("db.newer_version").arg(version);
@@ -342,6 +347,81 @@ void AppController::refreshLegacyFolders()
         m_legacyFolders = found;
         emit legacyFoldersChanged();
     }
+}
+
+bool AppController::dataTooNew() const
+{
+    return !m_startupError.isEmpty() && m_dataVersion > Qupil::Schema::Version;
+}
+
+QString AppController::appFolder() const
+{
+    if (!desktop())
+        return {};
+    QDir dir(QCoreApplication::applicationDirPath());
+#ifdef Q_OS_MACOS
+    dir.cd(u"../.."_s);   // Qupil.app/Contents/MacOS → Qupil.app
+#else
+    if (dir.dirName().compare(u"bin"_s, Qt::CaseInsensitive) == 0)
+        dir.cdUp();       // <folder>/bin/qupil → <folder>
+#endif
+    return QDir::toNativeSeparators(dir.absolutePath());
+}
+
+/*!
+    The Windows setup always uses the same AppId (platform/windows/qupil.iss) and
+    records where it installed Qupil. When this Qupil runs from somewhere else (an
+    old ZIP folder, an old shortcut), the installed one is offered instead.
+*/
+QVariantMap AppController::installedApp() const
+{
+#ifdef Q_OS_WIN
+    const QString key = u"\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\"
+                        u"{70C98A36-44FC-4D45-9D00-3B795E3A8E87}_is1"_s;
+    const QString self = QFileInfo(QCoreApplication::applicationFilePath()).canonicalFilePath();
+    for (const QString &root : { u"HKEY_CURRENT_USER"_s, u"HKEY_LOCAL_MACHINE"_s }) {
+        const QSettings reg(root + key, QSettings::Registry64Format);
+        // DisplayIcon is the setup's {app}\<exe>; InstallLocation the folder
+        QString icon = reg.value(u"DisplayIcon"_s).toString().remove(u'"');
+        icon.remove(QRegularExpression(u",-?\\d+$"_s));
+        QStringList candidates { icon };
+        if (const QString folder = reg.value(u"InstallLocation"_s).toString(); !folder.isEmpty())
+            candidates << QDir(folder).filePath(u"bin/Qupil.exe"_s) << QDir(folder).filePath(u"Qupil.exe"_s);
+        QString exe;
+        for (const QString &candidate : std::as_const(candidates)) {
+            const QFileInfo file(candidate);
+            if (!candidate.isEmpty() && file.isAbsolute() && file.isFile()) {
+                exe = file.canonicalFilePath();
+                break;
+            }
+        }
+        if (exe.isEmpty() || exe.compare(self, Qt::CaseInsensitive) == 0)
+            continue;
+        return { { u"path"_s, QDir::toNativeSeparators(exe) },
+                 { u"version"_s, reg.value(u"DisplayVersion"_s).toString() } };
+    }
+#endif
+    return {};
+}
+
+void AppController::simulateNewerData(bool on)
+{
+    m_dataVersion = on ? Qupil::Schema::Version + 1 : 0;
+    m_startupError = on ? qtTrId("db.newer_version").arg(m_dataVersion) : QString();
+    emit phaseChanged();
+}
+
+bool AppController::startInstalled()
+{
+#ifdef Q_OS_WIN
+    const QString exe = installedApp().value(u"path"_s).toString();
+    if (exe.isEmpty() || !QProcess::startDetached(exe, {}, QFileInfo(exe).absolutePath()))
+        return false;
+    QTimer::singleShot(0, qApp, &QCoreApplication::quit);
+    return true;
+#else
+    return false;
+#endif
 }
 
 bool AppController::desktop() const
