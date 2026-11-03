@@ -1,6 +1,7 @@
 // SPDX-FileCopyrightText: 2006-2026 Felix Hammer
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 #include "Metronome.h"
+#include "ScreenAwake.h"
 
 #include <QAudioDevice>
 #include <QAudioFormat>
@@ -187,6 +188,11 @@ Metronome::Metronome(QObject *parent)
     m_idleTimer.setSingleShot(true);
     m_idleTimer.setInterval(10000);
     connect(&m_idleTimer, &QTimer::timeout, this, &Metronome::releaseAudioIfIdle);
+    // Phones and tablets: the screen stays on while it plays (on Android the sound
+    // stopped when the screen went off)
+    const auto keepAwake = [this] { ScreenAwake::set(m_running || m_tonePlaying); };
+    connect(this, &Metronome::runningChanged, this, keepAwake);
+    connect(this, &Metronome::tonePlayingChanged, this, keepAwake);
 }
 
 Metronome::~Metronome()
