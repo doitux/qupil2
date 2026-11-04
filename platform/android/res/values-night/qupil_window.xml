@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Dark mode of the system: Qupil's dark background (Theme.qml: bg) -->
+<resources>
+    <color name="qupil_window">#121014</color>
+</resources>

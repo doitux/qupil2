@@ -6,6 +6,9 @@
 #include <QFontDatabase>
 #include <QGuiApplication>
 #include <QIcon>
+#ifdef Q_OS_ANDROID
+#include <QJniObject>
+#endif
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
 #include <QQuickStyle>
@@ -241,6 +244,15 @@ int main(int argc, char *argv[])
                          if (!window)
                              return;
                          new BackKey(window);
+#ifdef Q_OS_ANDROID
+                         // Android's launch screen stays until the first frame with the
+                         // interface (QupilActivity.java), then goes straight to it
+                         auto ready = std::make_shared<QMetaObject::Connection>();
+                         *ready = QObject::connect(window, &QQuickWindow::frameSwapped, qApp, [ready] {
+                             QObject::disconnect(*ready);
+                             QJniObject::callStaticMethod<void>("de/qupil/app/QupilActivity", "contentReady", "()V");
+                         }, Qt::QueuedConnection);
+#endif
                          if (desktop && !smokeTest && !screenshots)
                              placeWindow(window);
                          else

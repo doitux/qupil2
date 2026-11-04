@@ -6,6 +6,8 @@
     - lesson-end alerts (LessonAlarms.java): notifications, an exact alarm for
       the next alert, set again after a restart or an update
     - launcher icon (res/mipmap-*: adaptive on Android 8+, themed on 13+)
+    - QupilActivity: Qt's activity, holding the launch screen until the interface is
+      drawn; window in Qupil's background colour (res/values*/qupil_*.xml)
     - no Android cloud backup: student data stays on the device (Qupil has its
       own backups and the end-to-end encrypted sync)
 -->
@@ -39,7 +41,8 @@
         android:allowBackup="false"
         android:fullBackupOnly="false">
         <activity
-            android:name="org.qtproject.qt.android.bindings.QtActivity"
+            android:name="de.qupil.app.QupilActivity"
+            android:theme="@style/QupilTheme"
             android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density"
             android:launchMode="singleTop"
             android:screenOrientation="unspecified"

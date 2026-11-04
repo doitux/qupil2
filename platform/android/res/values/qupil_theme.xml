@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The activity's window in Qupil's background colour (Theme.qml: bg), so nothing white
+     or black shows before the interface. Android's launch screen takes this colour too. -->
+<resources>
+    <color name="qupil_window">#F4F3F6</color>
+    <!-- Android 9 (Qt's theme there); 10+: values-v29 -->
+    <style name="QupilTheme" parent="@android:style/Theme.Holo.Light">
+        <item name="android:windowBackground">@color/qupil_window</item>
+    </style>
+</resources>

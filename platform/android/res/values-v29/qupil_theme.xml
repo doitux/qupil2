@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 10+: Qt's own theme (light or dark with the system), Qupil's background -->
+<resources>
+    <style name="QupilTheme" parent="@android:style/Theme.DeviceDefault.DayNight">
+        <item name="android:windowBackground">@color/qupil_window</item>
+    </style>
+</resources>
