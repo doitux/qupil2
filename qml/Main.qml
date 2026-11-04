@@ -105,9 +105,11 @@ ApplicationWindow {
         }
     }
 
-    // First start (or unreadable data): setup screen, otherwise the app. Made after the
-    // window's first frame: it shows in its background colour at once, not black
-    property bool firstFrame: false
+    // First start (or unreadable data): setup screen, otherwise the app. Desktop: made after
+    // the window's first frame, so it shows in its background colour at once, not black.
+    // Phones and tablets show their launch screen until the first frame: it has to have the
+    // content, an empty one ends the launch screen early and the content flickers in after it
+    property bool firstFrame: !App.desktop
     onFrameSwapped: if (!firstFrame) Qt.callLater(() => window.firstFrame = true)
     Loader {
         anchors.fill: parent
