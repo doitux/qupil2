@@ -856,6 +856,11 @@
         <source>New note with the text of %1. To change or delete the old note, right-click it.</source>
         <translation>Nouvelle note avec le texte du %1. Pour modifier ou supprimer l’ancienne note, faites un clic droit dessus.</translation>
     </message>
+    <message id="note.copied_short">
+        <source>Text of %1 taken over</source>
+        <extracomment>Note editor on phones, after tapping an older note; %1 = its date</extracomment>
+        <translation>Texte du %1 repris</translation>
+    </message>
     <message id="note.clear">
         <source>Clear</source>
         <extracomment>Empties the note editor</extracomment>

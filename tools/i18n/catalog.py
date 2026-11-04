@@ -455,6 +455,8 @@ E("note.copied_from_desktop",
   de="Neue Notiz mit dem Text vom %1. Um die alte Notiz zu ändern oder zu löschen, klicken Sie sie mit der rechten Maustaste an.",
   fr="Nouvelle note avec le texte du %1. Pour modifier ou supprimer l’ancienne note, faites un clic droit dessus.",
   es="Nueva nota con el texto del %1. Para cambiar o eliminar la nota anterior, haga clic derecho sobre ella.")
+E("note.copied_short", en="Text of %1 taken over", de="Text vom %1 übernommen", fr="Texte du %1 repris",
+  es="Texto del %1 copiado", c="Note editor on phones, after tapping an older note; %1 = its date")
 E("note.clear", en="Clear", de="Leeren", fr="Vider", es="Vaciar", c="Empties the note editor")
 E("note.delete.confirm", en="The note of %1 will be deleted.", de="Die Notiz vom %1 wird gelöscht.",
   fr="La note du %1 sera supprimée.", es="Se eliminará la nota del %1.", c="%1 = date of the note")

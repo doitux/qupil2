@@ -22,7 +22,11 @@ Popup {
     property Item problem: null
     property bool showAccept: true
     //! Big button at the bottom instead of the text button in the header (phones)
-    property bool bottomButton: compact
+    //! (while the on-screen keyboard is open, the text button in the header: the big one
+    //! would take room from what is being typed)
+    property bool bottomButton: compact && !keyboardShown
+    //! The on-screen keyboard is open (phones, tablets)
+    readonly property bool keyboardShown: Qt.inputMethod.visible
     default property alias content: column.data
 
     readonly property bool compact: parent ? parent.width < 720 : true

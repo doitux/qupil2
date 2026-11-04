@@ -117,8 +117,45 @@ Sheet {
             Data.addNote(membershipId, date, content, forAll && groupSize > 1)
     }
 
+    //! Phones: lesson and date in one line, the shorter hint, no "Note" label, so the
+    //! text has room above the keyboard
+    readonly property bool tight: editor.compact
+    // Phones: lesson and date in one line
+    RowLayout {
+        visible: editor.tight
+        Layout.fillWidth: true
+        spacing: 10
+        Row {
+            spacing: -10
+            Repeater {
+                model: (editor.info.students || []).slice(0, 3)
+                delegate: Avatar {
+                    required property var modelData
+                    size: 28
+                    text: modelData.initials
+                    seed: modelData.name
+                    ring: Theme.surface
+                }
+            }
+        }
+        Text {
+            Layout.fillWidth: true
+            elide: Text.ElideRight
+            text: editor.info.lessonName || ""
+            color: Theme.text
+            font.family: Theme.fontFamily
+            font.pixelSize: 15
+            font.weight: Font.Bold
+        }
+        DateField {
+            Layout.preferredWidth: 168
+            date: editor.date
+            onPicked: (value) => editor.date = value || Data.today()
+        }
+    }
     // Lesson and students the note is for
     Rectangle {
+        visible: !editor.tight
         Layout.fillWidth: true
         implicitHeight: lessonRow.implicitHeight + 20
         radius: 14
@@ -170,6 +207,7 @@ Sheet {
     }
 
     DateField {
+        visible: !editor.tight
         label: editor.plan ? qsTrId("plan.for_lesson") : qsTrId("common.date")
         date: editor.date
         onPicked: (value) => editor.date = value || Data.today()
@@ -206,6 +244,7 @@ Sheet {
                 Layout.fillWidth: true
                 wrapMode: Text.WordWrap
                 text: editor.copiedText !== "" ? editor.copiedText
+                      : editor.tight ? qsTrId("note.copied_short").arg(Data.formatDate(copiedBar.from))
                                                // Desktop: right click; phones and tablets: press and hold
                                                : (App.desktop ? qsTrId("note.copied_from_desktop") : qsTrId("note.copied_from"))
                                                      .arg(Data.formatDate(copiedBar.from))
@@ -234,7 +273,7 @@ Sheet {
     ColumnLayout {
         Layout.fillWidth: true
         spacing: 8
-        FieldLabel { label: editor.plan ? qsTrId("plan.label") : qsTrId("common.note") }
+        FieldLabel { visible: !editor.tight; label: editor.plan ? qsTrId("plan.label") : qsTrId("common.note") }
         RowLayout {
             spacing: 6
             FormatButton {
