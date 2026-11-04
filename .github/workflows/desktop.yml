@@ -266,6 +266,10 @@ jobs:
           $config = Join-Path $env:RUNNER_TEMP 'priconfig.xml'
           & $makepri createconfig /cf $config /dq de-DE_en-US_fr-FR_es-ES /pv 10.0.0 /o | Out-Null
           if ($LASTEXITCODE -ne 0) { Write-Host '::error::makepri createconfig failed'; exit 1 }
+          # One resources.pri: split files per scale are only for bundles
+          $xml = [xml](Get-Content $config -Raw)
+          foreach ($node in @($xml.SelectNodes('//packaging'))) { $node.ParentNode.RemoveChild($node) | Out-Null }
+          $xml.Save($config)
           & $makepri new /pr $pri /cf $config /mn "$pri\AppxManifest.xml" /of "$stage\resources.pri" /o
           if ($LASTEXITCODE -ne 0) { Write-Host '::error::makepri new failed'; exit 1 }
 
@@ -279,7 +283,8 @@ jobs:
       # there after uninstalling
       - name: Check Store package (Windows)
         if: runner.os == 'Windows'
-        shell: pwsh
+        # Windows PowerShell: the Appx module does not load in PowerShell 7 on the runner
+        shell: powershell
         run: |
           function Fail($message) { Write-Host "::error::Store package: $message"; exit 1 }
           $msix = (Get-ChildItem store -Filter '*.msix' | Select-Object -First 1).FullName
