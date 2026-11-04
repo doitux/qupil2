@@ -49,12 +49,29 @@ ApplicationWindow {
     //! A tab of the navigation was clicked: "More" always opens on its first level,
     //! whatever page of it was open before
     function selectPage(index) {
-        const more = index === 4 && pageLayout ? pageLayout.children[4] : null
+        const more = index === 4 ? loadedPage(4) : null
         if (more)
             more.home()
         currentPage = index
     }
     property Item pageLayout: null
+    //! The page of a tab if it was made already (pages other than the schedule are made on
+    //! their first visit: a faster start); null otherwise
+    function loadedPage(index) {
+        const loader = pageLayout ? pageLayout.children[index] : null
+        return loader && loader.item ? loader.item : null
+    }
+    //! The page of a tab, made now if needed. fresh: it did not exist yet, so it missed
+    //! the Nav signal that asked for it and has to be told directly
+    function makePage(index) {
+        const loader = pageLayout ? pageLayout.children[index] : null
+        if (!loader)
+            return { item: null, fresh: false }
+        const fresh = !loader.active
+        loader.active = true
+        return { item: loader.item, fresh: fresh }
+    }
+    onCurrentPageChanged: makePage(currentPage)
 
     /*!
         System back button (Android), called from C++ (BackKey): one step back in
@@ -64,7 +81,7 @@ ApplicationWindow {
     function goBack() {
         if (App.phase !== App.Ready || !pageLayout)
             return false
-        const page = pageLayout.children[currentPage]
+        const page = loadedPage(currentPage)
         if (page && typeof page.back === "function" && page.back())
             return true
         if (currentPage !== 0) {
@@ -88,9 +105,13 @@ ApplicationWindow {
         }
     }
 
-    // First start (or unreadable data): setup screen, otherwise the app
+    // First start (or unreadable data): setup screen, otherwise the app. Made after the
+    // window's first frame: it shows in its background colour at once, not black
+    property bool firstFrame: false
+    onFrameSwapped: if (!firstFrame) Qt.callLater(() => window.firstFrame = true)
     Loader {
         anchors.fill: parent
+        active: window.firstFrame
         sourceComponent: App.phase === App.Ready ? mainUi : setupUi
     }
 
@@ -168,11 +189,12 @@ ApplicationWindow {
                 currentIndex: window.currentPage
                 Component.onCompleted: window.pageLayout = this
 
-                SchedulePage {}
-                StudentsPage {}
-                EventsPage {}
-                MetronomePage {}
-                MorePage {}
+                // The schedule at once, the others on their first visit (they stay then)
+                Loader { sourceComponent: Component { SchedulePage {} } }
+                Loader { active: false; sourceComponent: Component { StudentsPage {} } }
+                Loader { active: false; sourceComponent: Component { EventsPage {} } }
+                Loader { active: false; sourceComponent: Component { MetronomePage {} } }
+                Loader { active: false; sourceComponent: Component { MorePage {} } }
             }
         }
     }
@@ -342,24 +364,37 @@ ApplicationWindow {
 
     //! Closes all editor sheets (used by the screenshot tour)
     function closeEditors() {
-        for (const sheet of [noteEditor, planFinish, pieceEditor, newStudent, lessonEditor, activityEditor, reminderEditor,
-                             pairingSheet, reminderDialog])
-            sheet.close()
+        for (const name in sheets)
+            sheets[name].close()
+        reminderDialog.close()
     }
 
     // ---------------------------------------------------------------- editors used from every page
-    NoteEditor { id: noteEditor }
-    PlanFinish {
-        id: planFinish
-        onEditRequested: (membership, plan, content, rest, restCount) =>
-                         noteEditor.fromPlan(membership, plan, content, rest, restCount)
+    // Made on first use, not at the start (a faster start); they stay then
+    property var sheets: ({})
+    function sheet(name) {
+        if (!sheets[name]) {
+            const components = { note: noteEditor, planFinish: planFinish, piece: pieceEditor, student: newStudent,
+                                 lesson: lessonEditor, activity: activityEditor, reminder: reminderEditor,
+                                 pairing: pairingSheet }
+            sheets[name] = components[name].createObject(window.contentItem)
+        }
+        return sheets[name]
     }
-    PieceEditor { id: pieceEditor }
-    NewStudent { id: newStudent }
-    LessonEditor { id: lessonEditor }
-    ActivityEditor { id: activityEditor }
-    ReminderEditor { id: reminderEditor }
-    PairingSheet { id: pairingSheet }
+    Component { id: noteEditor; NoteEditor {} }
+    Component {
+        id: planFinish
+        PlanFinish {
+            onEditRequested: (membership, plan, content, rest, restCount) =>
+                             window.sheet("note").fromPlan(membership, plan, content, rest, restCount)
+        }
+    }
+    Component { id: pieceEditor; PieceEditor {} }
+    Component { id: newStudent; NewStudent {} }
+    Component { id: lessonEditor; LessonEditor {} }
+    Component { id: activityEditor; ActivityEditor {} }
+    Component { id: reminderEditor; ReminderEditor {} }
+    Component { id: pairingSheet; PairingSheet {} }
 
     // Both devices had data when they were paired (or the data here was replaced)
     AppDialog {
@@ -398,23 +433,49 @@ ApplicationWindow {
 
     Connections {
         target: Nav
-        function onNewStudent() { newStudent.start() }
-        function onEditLesson(id, weekday) { lessonEditor.edit(id, weekday) }
-        function onEditNote(membership, note) { noteEditor.edit(membership, note) }
-        function onNewNoteFrom(membership, note) { noteEditor.copy(membership, note) }
-        function onEditPlan(membership, plan) { noteEditor.editPlan(membership, plan) }
-        function onFinishPlan(membership, plan) { planFinish.start(membership, plan) }
-        function onPlanFromNote(membership, note) { planFinish.startFromNote(membership, note) }
-        function onEditPiece(membership, piece) { pieceEditor.edit(membership, piece) }
-        function onEditActivity(student, activity, continuous) { activityEditor.edit(student, activity, continuous) }
-        function onEditReminder(reminder, student) { reminderEditor.edit(reminder, student) }
+        function onNewStudent() { window.sheet("student").start() }
+        function onEditLesson(id, weekday) { window.sheet("lesson").edit(id, weekday) }
+        function onEditNote(membership, note) { window.sheet("note").edit(membership, note) }
+        function onNewNoteFrom(membership, note) { window.sheet("note").copy(membership, note) }
+        function onEditPlan(membership, plan) { window.sheet("note").editPlan(membership, plan) }
+        function onFinishPlan(membership, plan) { window.sheet("planFinish").start(membership, plan) }
+        function onPlanFromNote(membership, note) { window.sheet("planFinish").startFromNote(membership, note) }
+        function onEditPiece(membership, piece) { window.sheet("piece").edit(membership, piece) }
+        function onEditActivity(student, activity, continuous) { window.sheet("activity").edit(student, activity, continuous) }
+        function onEditReminder(reminder, student) { window.sheet("reminder").edit(reminder, student) }
         function onShowPage(index) { window.currentPage = index }
-        function onShowStudent(id, membership) { window.currentPage = 1 }
-        function onShowPiece(id, membership, piece) { window.currentPage = 1 }
-        function onShowEvent(id) { window.currentPage = 2 }
-        function onShowSync() { window.currentPage = 4 }
-        function onShowMore(name) { window.currentPage = 4 }
-        function onPairDevice() { pairingSheet.start() }
+        // A page made just now missed the request: it is told directly
+        function onShowStudent(id, membership) {
+            const p = window.makePage(1)
+            window.currentPage = 1
+            if (p.fresh && p.item)
+                p.item.show(id, membership, "")
+        }
+        function onShowPiece(id, membership, piece) {
+            const p = window.makePage(1)
+            window.currentPage = 1
+            if (p.fresh && p.item)
+                p.item.show(id, membership, piece)
+        }
+        function onShowEvent(id) {
+            const p = window.makePage(2)
+            window.currentPage = 2
+            if (p.fresh && p.item)
+                p.item.open(id)
+        }
+        function onShowSync() {
+            const p = window.makePage(4)
+            window.currentPage = 4
+            if (p.fresh && p.item)
+                p.item.openSettings("sync")
+        }
+        function onShowMore(name) {
+            const p = window.makePage(4)
+            window.currentPage = 4
+            if (p.fresh && p.item)
+                p.item.showSubPage(name)
+        }
+        function onPairDevice() { window.sheet("pairing").start() }
         function onDecideJoin(id, name) { joinDialog.ask(id, name) }
         function onToast(message) {
             toast.text = message

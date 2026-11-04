@@ -284,7 +284,18 @@ int main(int argc, char *argv[])
                                      std::fprintf(stderr, "smoke test: could not create a database\n");
                                      ++s_qmlProblems;
                                  }
-                                 QTimer::singleShot(300, qApp, [exercise] {
+                                 QTimer::singleShot(300, qApp, [exercise, &engine] {
+                                     // Pages and editors are made on first use: make them all,
+                                     // so their QML is checked too
+                                     if (QObject *window = engine.rootObjects().value(0)) {
+                                         for (int page = 4; page >= 0; --page) {
+                                             window->setProperty("currentPage", page);
+                                             QCoreApplication::processEvents();
+                                         }
+                                         for (const char *sheet : { "note", "planFinish", "piece", "student", "lesson",
+                                                                    "activity", "reminder", "pairing" })
+                                             QMetaObject::invokeMethod(window, "sheet", Q_ARG(QVariant, QString::fromLatin1(sheet)));
+                                     }
                                      exercise();
                                      QTimer::singleShot(200, qApp, [] {
                                          std::fprintf(stderr, "smoke test: %d QML problem(s)\n", s_qmlProblems);
