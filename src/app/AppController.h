@@ -46,6 +46,10 @@ class AppController : public QObject
     Q_PROPERTY(QString appFolder READ appFolder CONSTANT FINAL)
     //! Qupil installed with the Windows setup when this is another copy: { path, version }, else empty
     Q_PROPERTY(QVariantMap installedApp READ installedApp CONSTANT FINAL)
+    //! Runs from the Microsoft Store package (MSIX), not from the setup or a folder
+    Q_PROPERTY(bool storePackage READ storePackage CONSTANT FINAL)
+    //! Store package only: Qupil from the Windows setup is still installed: { version }, else empty
+    Q_PROPERTY(QVariantMap setupInstallation READ setupInstallation NOTIFY setupInstallationChanged FINAL)
     Q_PROPERTY(bool busy READ busy NOTIFY busyChanged FINAL)
     Q_PROPERTY(int progress READ progress NOTIFY progressChanged FINAL)
     //! Step key of a running import: lookup, students, lessons, pieces, notes, …
@@ -90,6 +94,10 @@ public:
     QVariantMap installedApp() const;
     //! Starts the installed Qupil (installedApp) and closes this copy
     Q_INVOKABLE bool startInstalled();
+    bool storePackage() const;
+    QVariantMap setupInstallation() const;
+    //! Runs the uninstaller of the setup version (its data stays); setupRemoval tells the outcome
+    Q_INVOKABLE bool removeSetupInstallation();
     //! Screenshot tour only: show the setup screen as if the data came from a newer Qupil
     void simulateNewerData(bool on);
     bool busy() const { return m_busy; }
@@ -185,6 +193,9 @@ public:
 
 signals:
     void phaseChanged();
+    void setupInstallationChanged();
+    //! After removeSetupInstallation: the setup version is gone (true) or still there (false)
+    void setupRemoval(bool removed);
     void busyChanged();
     void progressChanged();
     void legacyFoldersChanged();

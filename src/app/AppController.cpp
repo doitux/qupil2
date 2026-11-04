@@ -24,9 +24,13 @@
 #ifdef Q_OS_WIN
 #include <QProcess>
 #include <QSettings>
+#include <qt_windows.h>
+#include <appmodel.h>
+#include <shellapi.h>
 #endif
 
 #include <algorithm>
+#include <memory>
 #include <tuple>
 
 #include "Database.h"
@@ -402,6 +406,96 @@ QVariantMap AppController::installedApp() const
     }
 #endif
     return {};
+}
+
+/*!
+    True inside the Microsoft Store package (platform/windows/msix). The package sees
+    the same data as the setup version (%APPDATA%\Qupil, HKCU\Software\Qupil).
+*/
+bool AppController::storePackage() const
+{
+#ifdef Q_OS_WIN
+    UINT32 length = 0;
+    return GetCurrentPackageFullName(&length, nullptr) != APPMODEL_ERROR_NO_PACKAGE;
+#else
+    return false;
+#endif
+}
+
+namespace {
+#ifdef Q_OS_WIN
+// Uninstall entry of the Windows setup (platform/windows/qupil.iss, fixed AppId)
+const QString kSetupUninstallKey = u"\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\"
+                                   u"{70C98A36-44FC-4D45-9D00-3B795E3A8E87}_is1"_s;
+
+// { version, uninstaller, allUsers } of the setup version, empty if it is not installed
+QVariantMap setupEntry()
+{
+    for (const QString &root : { u"HKEY_CURRENT_USER"_s, u"HKEY_LOCAL_MACHINE"_s }) {
+        const QSettings reg(root + kSetupUninstallKey, QSettings::Registry64Format);
+        QString uninstaller = reg.value(u"UninstallString"_s).toString().trimmed();
+        if (uninstaller.startsWith(u'"'))
+            uninstaller = uninstaller.section(u'"', 1, 1);
+        if (uninstaller.isEmpty() || !QFileInfo::exists(uninstaller))
+            continue;
+        return { { u"version"_s, reg.value(u"DisplayVersion"_s).toString() },
+                 { u"uninstaller"_s, uninstaller },
+                 { u"allUsers"_s, root == u"HKEY_LOCAL_MACHINE"_s } };
+    }
+    return {};
+}
+#endif
+} // namespace
+
+QVariantMap AppController::setupInstallation() const
+{
+#ifdef Q_OS_WIN
+    if (!storePackage())
+        return {};
+    QVariantMap entry = setupEntry();
+    entry.remove(u"uninstaller"_s);
+    return entry;
+#else
+    return {};
+#endif
+}
+
+bool AppController::removeSetupInstallation()
+{
+#ifdef Q_OS_WIN
+    const QVariantMap entry = storePackage() ? setupEntry() : QVariantMap();
+    const QString uninstaller = entry.value(u"uninstaller"_s).toString();
+    if (uninstaller.isEmpty())
+        return false;
+    // ShellExecute: an installation for all users asks for admin rights (UAC) itself.
+    // The uninstaller never touches Qupil's data (qupil.iss).
+    const std::wstring file = QDir::toNativeSeparators(uninstaller).toStdWString();
+    const std::wstring params = L"/VERYSILENT /SUPPRESSMSGBOXES /NORESTART";
+    SHELLEXECUTEINFOW info {};
+    info.cbSize = sizeof(info);
+    info.fMask = SEE_MASK_NOASYNC;
+    info.lpVerb = L"open";
+    info.lpFile = file.c_str();
+    info.lpParameters = params.c_str();
+    info.nShow = SW_HIDE;
+    if (!ShellExecuteExW(&info))
+        return false;
+    // It hands over to a copy of itself in TEMP: watch the uninstall entry (up to 2 minutes)
+    auto *timer = new QTimer(this);
+    auto ticks = std::make_shared<int>(0);
+    connect(timer, &QTimer::timeout, this, [this, timer, ticks] {
+        const bool gone = setupEntry().isEmpty();
+        if (gone || ++*ticks >= 120) {
+            timer->deleteLater();
+            emit setupInstallationChanged();
+            emit setupRemoval(gone);
+        }
+    });
+    timer->start(1000);
+    return true;
+#else
+    return false;
+#endif
 }
 
 void AppController::simulateNewerData(bool on)

@@ -1917,6 +1917,26 @@ E("settings.summary", en="Sync, appearance, data", de="Sync, Darstellung, Daten"
 E("settings.lesson_end.hint", en="A sound and a message while Qupil is open.",
   de="Ein Klang und eine Meldung, solange Qupil geöffnet ist.",
   fr="Un son et un message tant que Qupil est ouvert.", es="Un sonido y un mensaje mientras Qupil está abierto.")
+E("app.old_setup.title", en="Older Qupil still installed", de="Ältere Qupil-Version gefunden",
+  fr="Une ancienne version de Qupil est encore installée", es="Todavía hay una versión anterior de Qupil instalada")
+E("app.old_setup.text",
+  en="Qupil %1, installed with a setup program, is still on this computer. You now use Qupil from the Microsoft Store, which updates itself. Remove the older version so that there is only one Qupil in the Start menu? Your data stays as it is.",
+  de="Auf diesem Computer ist noch Qupil %1 installiert, das mit einem Setup-Programm eingerichtet wurde. Sie verwenden jetzt Qupil aus dem Microsoft Store, das sich selbst aktualisiert. Soll die ältere Version entfernt werden, damit nur noch ein Qupil im Startmenü steht? Ihre Daten bleiben unverändert erhalten.",
+  fr="Qupil %1, installé avec un programme d’installation, se trouve encore sur cet ordinateur. Vous utilisez maintenant Qupil du Microsoft Store, qui se met à jour tout seul. Supprimer l’ancienne version pour qu’il n’y ait plus qu’un seul Qupil dans le menu Démarrer ? Vos données restent telles quelles.",
+  es="Qupil %1, instalado con un programa de instalación, sigue en este equipo. Ahora usa Qupil de Microsoft Store, que se actualiza solo. ¿Quitar la versión anterior para que solo haya un Qupil en el menú Inicio? Sus datos se quedan como están.",
+  c="%1 = version of the Qupil installed with the setup, e.g. 2.0.0 (nightly-67ea0fa)")
+E("app.old_setup.remove", en="Remove older version", de="Ältere Version entfernen",
+  fr="Supprimer l’ancienne version", es="Quitar la versión anterior")
+E("app.old_setup.later", en="Later", de="Später", fr="Plus tard", es="Más tarde")
+E("app.old_setup.removed", en="The older Qupil has been removed. Your data is unchanged.",
+  de="Die ältere Qupil-Version wurde entfernt. Ihre Daten sind unverändert.",
+  fr="L’ancienne version de Qupil a été supprimée. Vos données sont inchangées.",
+  es="Se ha quitado la versión anterior de Qupil. Sus datos no han cambiado.")
+E("app.old_setup.failed",
+  en="The older Qupil could not be removed. You can remove it under Settings › Apps › Installed apps.",
+  de="Die ältere Qupil-Version konnte nicht entfernt werden. Sie können sie unter Einstellungen › Apps › Installierte Apps entfernen.",
+  fr="L’ancienne version de Qupil n’a pas pu être supprimée. Vous pouvez la supprimer dans Paramètres › Applications › Applications installées.",
+  es="No se pudo quitar la versión anterior de Qupil. Puede quitarla en Configuración › Aplicaciones › Aplicaciones instaladas.")
 E("app.build", en="Build %1", de="Build %1", fr="Build %1", es="Build %1", c="%1 = commit, e.g. 8828322")
 E("app.build_copied", en="Copied: Qupil %1", de="Kopiert: Qupil %1", fr="Copié : Qupil %1", es="Copiado: Qupil %1",
   c="%1 = version and commit")

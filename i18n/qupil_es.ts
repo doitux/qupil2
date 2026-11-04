@@ -3296,6 +3296,31 @@ Póngase en contacto con el autor en %4 para resolver el problema.</translation>
         <source>A sound and a message while Qupil is open.</source>
         <translation>Un sonido y un mensaje mientras Qupil está abierto.</translation>
     </message>
+    <message id="app.old_setup.title">
+        <source>Older Qupil still installed</source>
+        <translation>Todavía hay una versión anterior de Qupil instalada</translation>
+    </message>
+    <message id="app.old_setup.text">
+        <source>Qupil %1, installed with a setup program, is still on this computer. You now use Qupil from the Microsoft Store, which updates itself. Remove the older version so that there is only one Qupil in the Start menu? Your data stays as it is.</source>
+        <extracomment>%1 = version of the Qupil installed with the setup, e.g. 2.0.0 (nightly-67ea0fa)</extracomment>
+        <translation>Qupil %1, instalado con un programa de instalación, sigue en este equipo. Ahora usa Qupil de Microsoft Store, que se actualiza solo. ¿Quitar la versión anterior para que solo haya un Qupil en el menú Inicio? Sus datos se quedan como están.</translation>
+    </message>
+    <message id="app.old_setup.remove">
+        <source>Remove older version</source>
+        <translation>Quitar la versión anterior</translation>
+    </message>
+    <message id="app.old_setup.later">
+        <source>Later</source>
+        <translation>Más tarde</translation>
+    </message>
+    <message id="app.old_setup.removed">
+        <source>The older Qupil has been removed. Your data is unchanged.</source>
+        <translation>Se ha quitado la versión anterior de Qupil. Sus datos no han cambiado.</translation>
+    </message>
+    <message id="app.old_setup.failed">
+        <source>The older Qupil could not be removed. You can remove it under Settings › Apps › Installed apps.</source>
+        <translation>No se pudo quitar la versión anterior de Qupil. Puede quitarla en Configuración › Aplicaciones › Aplicaciones instaladas.</translation>
+    </message>
     <message id="app.build">
         <source>Build %1</source>
         <extracomment>%1 = commit, e.g. 8828322</extracomment>

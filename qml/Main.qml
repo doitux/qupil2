@@ -311,6 +311,35 @@ ApplicationWindow {
         }
     }
 
+    // Qupil from the Microsoft Store while the version from the setup is still installed:
+    // offer to remove it, so there is one Qupil in the Start menu (the data is shared and stays)
+    AppDialog {
+        id: oldSetupDialog
+        iconName: "backup"
+        title: qsTrId("app.old_setup.title")
+        text: qsTrId("app.old_setup.text").arg(App.setupInstallation.version || "")
+        acceptText: qsTrId("app.old_setup.remove")
+        rejectText: qsTrId("app.old_setup.later")
+        onAccepted: {
+            if (!App.removeSetupInstallation())
+                Nav.toast(qsTrId("app.old_setup.failed"))
+        }
+    }
+    Timer {
+        interval: 2500
+        running: App.storePackage && App.phase === App.Ready
+        onTriggered: {
+            if (App.setupInstallation.version === undefined)
+                return
+            // Not on top of the reminders at start or another question
+            if (reminderDialog.visible || summaryDialog.visible || joinDialog.visible) {
+                restart()
+                return
+            }
+            oldSetupDialog.open()
+        }
+    }
+
     //! Closes all editor sheets (used by the screenshot tour)
     function closeEditors() {
         for (const sheet of [noteEditor, planFinish, pieceEditor, newStudent, lessonEditor, activityEditor, reminderEditor,
@@ -663,6 +692,9 @@ ApplicationWindow {
         function onTakeOverFailed(message) {
             failedDialog.text = message
             failedDialog.open()
+        }
+        function onSetupRemoval(removed) {
+            Nav.toast(qsTrId(removed ? "app.old_setup.removed" : "app.old_setup.failed"))
         }
         function onLastTakeOverChanged() {
             if (App.phase === App.Ready && App.lastTakeOver.kind !== undefined)

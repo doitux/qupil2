@@ -3296,6 +3296,31 @@ Please contact the author at %4 to fix this problem.</translation>
         <source>A sound and a message while Qupil is open.</source>
         <translation>A sound and a message while Qupil is open.</translation>
     </message>
+    <message id="app.old_setup.title">
+        <source>Older Qupil still installed</source>
+        <translation>Older Qupil still installed</translation>
+    </message>
+    <message id="app.old_setup.text">
+        <source>Qupil %1, installed with a setup program, is still on this computer. You now use Qupil from the Microsoft Store, which updates itself. Remove the older version so that there is only one Qupil in the Start menu? Your data stays as it is.</source>
+        <extracomment>%1 = version of the Qupil installed with the setup, e.g. 2.0.0 (nightly-67ea0fa)</extracomment>
+        <translation>Qupil %1, installed with a setup program, is still on this computer. You now use Qupil from the Microsoft Store, which updates itself. Remove the older version so that there is only one Qupil in the Start menu? Your data stays as it is.</translation>
+    </message>
+    <message id="app.old_setup.remove">
+        <source>Remove older version</source>
+        <translation>Remove older version</translation>
+    </message>
+    <message id="app.old_setup.later">
+        <source>Later</source>
+        <translation>Later</translation>
+    </message>
+    <message id="app.old_setup.removed">
+        <source>The older Qupil has been removed. Your data is unchanged.</source>
+        <translation>The older Qupil has been removed. Your data is unchanged.</translation>
+    </message>
+    <message id="app.old_setup.failed">
+        <source>The older Qupil could not be removed. You can remove it under Settings › Apps › Installed apps.</source>
+        <translation>The older Qupil could not be removed. You can remove it under Settings › Apps › Installed apps.</translation>
+    </message>
     <message id="app.build">
         <source>Build %1</source>
         <extracomment>%1 = commit, e.g. 8828322</extracomment>

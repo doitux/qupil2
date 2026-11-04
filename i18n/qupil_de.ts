@@ -3297,6 +3297,31 @@ Bitte wenden Sie sich an den Programm-Autor: %4 um dieses Problem zu beheben!</t
         <source>A sound and a message while Qupil is open.</source>
         <translation>Ein Klang und eine Meldung, solange Qupil geöffnet ist.</translation>
     </message>
+    <message id="app.old_setup.title">
+        <source>Older Qupil still installed</source>
+        <translation>Ältere Qupil-Version gefunden</translation>
+    </message>
+    <message id="app.old_setup.text">
+        <source>Qupil %1, installed with a setup program, is still on this computer. You now use Qupil from the Microsoft Store, which updates itself. Remove the older version so that there is only one Qupil in the Start menu? Your data stays as it is.</source>
+        <extracomment>%1 = version of the Qupil installed with the setup, e.g. 2.0.0 (nightly-67ea0fa)</extracomment>
+        <translation>Auf diesem Computer ist noch Qupil %1 installiert, das mit einem Setup-Programm eingerichtet wurde. Sie verwenden jetzt Qupil aus dem Microsoft Store, das sich selbst aktualisiert. Soll die ältere Version entfernt werden, damit nur noch ein Qupil im Startmenü steht? Ihre Daten bleiben unverändert erhalten.</translation>
+    </message>
+    <message id="app.old_setup.remove">
+        <source>Remove older version</source>
+        <translation>Ältere Version entfernen</translation>
+    </message>
+    <message id="app.old_setup.later">
+        <source>Later</source>
+        <translation>Später</translation>
+    </message>
+    <message id="app.old_setup.removed">
+        <source>The older Qupil has been removed. Your data is unchanged.</source>
+        <translation>Die ältere Qupil-Version wurde entfernt. Ihre Daten sind unverändert.</translation>
+    </message>
+    <message id="app.old_setup.failed">
+        <source>The older Qupil could not be removed. You can remove it under Settings › Apps › Installed apps.</source>
+        <translation>Die ältere Qupil-Version konnte nicht entfernt werden. Sie können sie unter Einstellungen › Apps › Installierte Apps entfernen.</translation>
+    </message>
     <message id="app.build">
         <source>Build %1</source>
         <extracomment>%1 = commit, e.g. 8828322</extracomment>

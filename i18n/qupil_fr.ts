@@ -3296,6 +3296,31 @@ Veuillez contacter l’auteur à l’adresse %4 pour résoudre ce problème.</tr
         <source>A sound and a message while Qupil is open.</source>
         <translation>Un son et un message tant que Qupil est ouvert.</translation>
     </message>
+    <message id="app.old_setup.title">
+        <source>Older Qupil still installed</source>
+        <translation>Une ancienne version de Qupil est encore installée</translation>
+    </message>
+    <message id="app.old_setup.text">
+        <source>Qupil %1, installed with a setup program, is still on this computer. You now use Qupil from the Microsoft Store, which updates itself. Remove the older version so that there is only one Qupil in the Start menu? Your data stays as it is.</source>
+        <extracomment>%1 = version of the Qupil installed with the setup, e.g. 2.0.0 (nightly-67ea0fa)</extracomment>
+        <translation>Qupil %1, installé avec un programme d’installation, se trouve encore sur cet ordinateur. Vous utilisez maintenant Qupil du Microsoft Store, qui se met à jour tout seul. Supprimer l’ancienne version pour qu’il n’y ait plus qu’un seul Qupil dans le menu Démarrer ? Vos données restent telles quelles.</translation>
+    </message>
+    <message id="app.old_setup.remove">
+        <source>Remove older version</source>
+        <translation>Supprimer l’ancienne version</translation>
+    </message>
+    <message id="app.old_setup.later">
+        <source>Later</source>
+        <translation>Plus tard</translation>
+    </message>
+    <message id="app.old_setup.removed">
+        <source>The older Qupil has been removed. Your data is unchanged.</source>
+        <translation>L’ancienne version de Qupil a été supprimée. Vos données sont inchangées.</translation>
+    </message>
+    <message id="app.old_setup.failed">
+        <source>The older Qupil could not be removed. You can remove it under Settings › Apps › Installed apps.</source>
+        <translation>L’ancienne version de Qupil n’a pas pu être supprimée. Vous pouvez la supprimer dans Paramètres › Applications › Applications installées.</translation>
+    </message>
     <message id="app.build">
         <source>Build %1</source>
         <extracomment>%1 = commit, e.g. 8828322</extracomment>
