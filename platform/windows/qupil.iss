@@ -24,7 +24,7 @@
 #ifndef FileVersion
   #define FileVersion "2.0.0.0"
 #endif
-; Product version without build number: the same in every build (code signing checks it)
+; Product version without build number: the same in every build
 #ifndef ProductVersion
   #define ProductVersion "2.0.0"
 #endif

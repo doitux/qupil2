@@ -9,11 +9,6 @@ on:
   pull_request:
     paths-ignore: ['**.md', 'docs/**', 'LICENSES/**', '.github/dependabot.yml']
   workflow_dispatch:
-    inputs:
-      sign:
-        description: 'Sign the Windows setup (SignPath; each signing request has to be approved there)'
-        type: boolean
-        default: false
 
 permissions:
   contents: read
@@ -24,11 +19,6 @@ concurrency:
 
 env:
   QT_VERSION: '6.8.3'
-  # Code signing for Windows by the SignPath Foundation (README › Code signing policy).
-  # Runs for tags (v*) and for "Run workflow" with "sign", once the secret SIGNPATH_API_TOKEN
-  # and the variable SIGNPATH_ORGANIZATION_ID exist; otherwise nothing is signed.
-  SIGNPATH_PROJECT: qupil
-  SIGNPATH_POLICY: release-signing
 
 jobs:
   build:
@@ -147,74 +137,6 @@ jobs:
         # Qt's deploy step needs an absolute prefix
         run: bash .github/scripts/run-logged.sh cmake --install build --prefix "${GITHUB_WORKSPACE}/dist"
 
-      # Code signing (Windows): Qupil.exe first, so the installer contains the signed one;
-      # the installer itself after it is built (further below)
-      - name: Sign or not (Windows)
-        id: signing
-        if: runner.os == 'Windows'
-        shell: bash
-        env:
-          TOKEN_SET: ${{ secrets.SIGNPATH_API_TOKEN != '' }}
-          ORG_SET: ${{ vars.SIGNPATH_ORGANIZATION_ID != '' }}
-          WANTED: ${{ github.ref_type == 'tag' || (github.event_name == 'workflow_dispatch' && inputs.sign) }}
-        run: |
-          sign=false
-          if [ "$WANTED" = true ]; then
-            if [ "$TOKEN_SET" = true ] && [ "$ORG_SET" = true ]; then
-              sign=true
-              echo "::notice title=Signing::Qupil.exe and the setup go to SignPath – please approve both signing requests there."
-            else
-              echo "::warning title=Signing::Signing wanted, but SIGNPATH_API_TOKEN (secret) or SIGNPATH_ORGANIZATION_ID (variable) is missing: not signed."
-            fi
-          fi
-          echo "sign=$sign" >> "$GITHUB_OUTPUT"
-          version=$(sed -nE 's/^[[:space:]]*VERSION ([0-9]+\.[0-9]+\.[0-9]+).*/\1/p' CMakeLists.txt | head -n 1)
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-
-      - name: Program for signing (Windows)
-        if: steps.signing.outputs.sign == 'true'
-        shell: bash
-        run: |
-          mkdir -p sign/exe
-          cp dist/bin/Qupil.exe sign/exe/
-
-      - name: Upload Qupil.exe for signing (Windows)
-        id: unsigned-exe
-        if: steps.signing.outputs.sign == 'true'
-        uses: actions/upload-artifact@v7
-        with:
-          name: qupil-windows-exe-unsigned
-          path: sign/exe/Qupil.exe
-          if-no-files-found: error
-          retention-days: 1
-
-      - name: Sign Qupil.exe (Windows, SignPath)
-        if: steps.signing.outputs.sign == 'true'
-        uses: signpath/github-action-submit-signing-request@f6d04783b4569d051e0c80105fe66e82819d0092 # v3.0
-        with:
-          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
-          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
-          project-slug: ${{ env.SIGNPATH_PROJECT }}
-          signing-policy-slug: ${{ env.SIGNPATH_POLICY }}
-          artifact-configuration-slug: qupil-exe
-          github-artifact-id: ${{ steps.unsigned-exe.outputs.artifact-id }}
-          parameters: |
-            version: "${{ steps.signing.outputs.version }}"
-          wait-for-completion: true
-          # Waits for the approval in SignPath
-          wait-for-completion-timeout-in-seconds: 3600
-          output-artifact-directory: sign/exe-signed
-
-      - name: Use signed Qupil.exe (Windows)
-        if: steps.signing.outputs.sign == 'true'
-        shell: pwsh
-        run: |
-          $signed = 'sign\exe-signed\Qupil.exe'
-          $sig = Get-AuthenticodeSignature $signed
-          if ($sig.Status -ne 'Valid') { Write-Host "::error::Qupil.exe from SignPath: signature $($sig.Status)"; exit 1 }
-          Write-Host "Qupil.exe signed by $($sig.SignerCertificate.Subject)"
-          Copy-Item $signed dist\bin\Qupil.exe -Force
-
       - name: Pack
         shell: bash
         run: |
@@ -261,51 +183,6 @@ jobs:
           if ($LASTEXITCODE -ne 0) { Write-Host "::error::Inno Setup failed ($LASTEXITCODE)"; exit 1 }
           Get-ChildItem $package | Format-Table Name, Length
 
-      # Under a fixed name, so the SignPath artifact configuration knows the file
-      - name: Setup for signing (Windows)
-        if: steps.signing.outputs.sign == 'true'
-        shell: bash
-        run: |
-          mkdir -p sign/setup
-          cp package/Qupil-Windows-x64-Setup-*.exe sign/setup/Qupil-Setup.exe
-
-      - name: Upload setup for signing (Windows)
-        id: unsigned-setup
-        if: steps.signing.outputs.sign == 'true'
-        uses: actions/upload-artifact@v7
-        with:
-          name: qupil-windows-setup-unsigned
-          path: sign/setup/Qupil-Setup.exe
-          if-no-files-found: error
-          retention-days: 1
-
-      - name: Sign setup (Windows, SignPath)
-        if: steps.signing.outputs.sign == 'true'
-        uses: signpath/github-action-submit-signing-request@f6d04783b4569d051e0c80105fe66e82819d0092 # v3.0
-        with:
-          api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
-          organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
-          project-slug: ${{ env.SIGNPATH_PROJECT }}
-          signing-policy-slug: ${{ env.SIGNPATH_POLICY }}
-          artifact-configuration-slug: qupil-setup
-          github-artifact-id: ${{ steps.unsigned-setup.outputs.artifact-id }}
-          parameters: |
-            version: "${{ steps.signing.outputs.version }}"
-          wait-for-completion: true
-          wait-for-completion-timeout-in-seconds: 3600
-          output-artifact-directory: sign/setup-signed
-
-      - name: Use signed setup (Windows)
-        if: steps.signing.outputs.sign == 'true'
-        shell: pwsh
-        run: |
-          $signed = 'sign\setup-signed\Qupil-Setup.exe'
-          $sig = Get-AuthenticodeSignature $signed
-          if ($sig.Status -ne 'Valid') { Write-Host "::error::setup from SignPath: signature $($sig.Status)"; exit 1 }
-          Write-Host "Setup signed by $($sig.SignerCertificate.Subject)"
-          $target = (Get-ChildItem package -Filter 'Qupil-Windows-x64-Setup-*.exe' | Select-Object -First 1).FullName
-          Copy-Item $signed $target -Force
-
       # Install, update over it (a file of the old build must go), uninstall – all for the current user
       - name: Check installer (Windows)
         if: runner.os == 'Windows'
@@ -332,13 +209,6 @@ jobs:
           Run-Setup 'qupil-setup-2.log'
           if (-not (Test-Path "$app\$exe")) { Fail "no $exe after updating" }
           if ($folder -and (Test-Path "$app\$($folder.Name)\left-from-old-build.txt")) { Fail 'a file of the old build is still there' }
-          if ('${{ steps.signing.outputs.sign }}' -eq 'true') {
-            foreach ($f in @($setup, "$app\$exe")) {
-              $sig = Get-AuthenticodeSignature $f
-              if ($sig.Status -ne 'Valid') { Fail "$f is not signed ($($sig.Status))" }
-            }
-            Write-Host 'Setup and installed Qupil.exe are signed'
-          }
           $entries = @(Get-ChildItem 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall' | Where-Object { $_.PSChildName -like '*70C98A36-44FC-4D45-9D00-3B795E3A8E87*' })
           if ($entries.Count -ne 1) { Fail "$($entries.Count) entries under installed apps instead of 1" }
           Write-Host "Installed: $((Get-ItemProperty $key).DisplayName) $((Get-ItemProperty $key).DisplayVersion) in $app"
@@ -349,6 +219,111 @@ jobs:
           if (Test-Path $key) { Fail 'still listed under installed apps after uninstalling' }
           Write-Host 'Install, update and uninstall OK'
 
+      # Microsoft Store package (MSIX, platform/windows/msix): the Store signs it, so Windows
+      # does not warn. Uploaded by hand in Partner Center (docs/microsoft-store.md).
+      # Version: major.minor.<run number>.0 – every Store upload needs a higher one.
+      - name: Store package (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $version = (Select-String -Path CMakeLists.txt -Pattern '^\s*VERSION (\d+)\.(\d+)\.(\d+)' | Select-Object -First 1).Matches[0].Groups
+          $msixVersion = "$($version[1].Value).$($version[2].Value).$($env:GITHUB_RUN_NUMBER).0"
+          $build = "nightly-$($env:GITHUB_SHA.Substring(0, 7))"
+          if ($env:GITHUB_REF_TYPE -eq 'tag') { $build = $env:GITHUB_REF_NAME }
+          function Tool($name) {
+            $found = @()
+            if ($env:WindowsSdkVerBinPath) { $found += @(Get-Item "$($env:WindowsSdkVerBinPath)x64\$name" -ErrorAction SilentlyContinue) }
+            $found += @(Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin\*\x64\$name" -ErrorAction SilentlyContinue | Sort-Object FullName -Descending)
+            if (-not $found) { Write-Host "::error::$name not found (Windows SDK)"; exit 1 }
+            return $found[0].FullName
+          }
+          $makeappx = Tool 'makeappx.exe'
+          $makepri = Tool 'makepri.exe'
+          Write-Host "MSIX $msixVersion with $makeappx"
+
+          $stage = Join-Path $env:RUNNER_TEMP 'msix'
+          Remove-Item $stage -Recurse -Force -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory $stage | Out-Null
+          Copy-Item dist\* $stage -Recurse
+          if (-not (Test-Path "$stage\bin\Qupil.exe")) { Write-Host '::error::bin\Qupil.exe missing (Executable in AppxManifest.xml.in)'; exit 1 }
+          # The setup can rely on an installed MSVC runtime, a Store package must bring it along
+          if (-not (Test-Path "$stage\bin\vcruntime140.dll")) {
+            $crt = Get-ChildItem "$($env:VCToolsRedistDir)x64" -Directory -Filter 'Microsoft.VC*.CRT' | Select-Object -First 1
+            if (-not $crt) { Write-Host '::error::MSVC runtime (VCToolsRedistDir) not found'; exit 1 }
+            Copy-Item "$($crt.FullName)\*.dll" "$stage\bin\"
+            Write-Host "MSVC runtime from $($crt.FullName)"
+          }
+          Copy-Item platform\windows\msix\Assets "$stage\Assets" -Recurse
+          $manifest = (Get-Content platform\windows\msix\AppxManifest.xml.in -Raw).Replace('@MSIX_VERSION@', $msixVersion)
+          Set-Content "$stage\AppxManifest.xml" $manifest -Encoding utf8NoBOM -NoNewline
+
+          # resources.pri for the icons (indexed on their own: all of Qt is not needed in there)
+          $pri = Join-Path $env:RUNNER_TEMP 'msix-pri'
+          Remove-Item $pri -Recurse -Force -ErrorAction SilentlyContinue
+          New-Item -ItemType Directory $pri | Out-Null
+          Copy-Item "$stage\Assets" "$pri\Assets" -Recurse
+          Copy-Item "$stage\AppxManifest.xml" $pri
+          $config = Join-Path $env:RUNNER_TEMP 'priconfig.xml'
+          & $makepri createconfig /cf $config /dq de-DE_en-US_fr-FR_es-ES /pv 10.0.0 /o | Out-Null
+          if ($LASTEXITCODE -ne 0) { Write-Host '::error::makepri createconfig failed'; exit 1 }
+          & $makepri new /pr $pri /cf $config /mn "$pri\AppxManifest.xml" /of "$stage\resources.pri" /o
+          if ($LASTEXITCODE -ne 0) { Write-Host '::error::makepri new failed'; exit 1 }
+
+          New-Item -ItemType Directory store -Force | Out-Null
+          & $makeappx pack /d $stage /p "store\Qupil-Windows-x64-Store-$build.msix" /o
+          if ($LASTEXITCODE -ne 0) { Write-Host '::error::makeappx pack failed'; exit 1 }
+          Get-ChildItem store | Format-Table Name, Length
+
+      # Installed with a test certificate (same publisher name, trusted only on this runner),
+      # started in the package (smoke test), data must land in the real %APPDATA% and stay
+      # there after uninstalling
+      - name: Check Store package (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          function Fail($message) { Write-Host "::error::Store package: $message"; exit 1 }
+          $msix = (Get-ChildItem store -Filter '*.msix' | Select-Object -First 1).FullName
+          $signtool = @(Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\bin\*\x64\signtool.exe" | Sort-Object FullName -Descending)[0].FullName
+          $publisher = ([xml](Get-Content platform\windows\msix\AppxManifest.xml.in -Raw)).Package.Identity.Publisher
+          $cert = New-SelfSignedCertificate -Type Custom -Subject $publisher -KeyUsage DigitalSignature `
+            -FriendlyName 'Qupil CI test' -CertStoreLocation Cert:\CurrentUser\My `
+            -TextExtension @('2.5.29.37={text}1.3.6.1.5.5.7.3.3', '2.5.29.19={text}')
+          $password = ConvertTo-SecureString -String 'qupil-ci-test' -Force -AsPlainText
+          Export-PfxCertificate -Cert $cert -FilePath "$env:RUNNER_TEMP\qupil-test.pfx" -Password $password | Out-Null
+          Export-Certificate -Cert $cert -FilePath "$env:RUNNER_TEMP\qupil-test.cer" | Out-Null
+          Import-Certificate -FilePath "$env:RUNNER_TEMP\qupil-test.cer" -CertStoreLocation Cert:\LocalMachine\TrustedPeople | Out-Null
+          $signed = "$env:RUNNER_TEMP\qupil-test.msix"
+          Copy-Item $msix $signed -Force
+          & $signtool sign /q /fd SHA256 /f "$env:RUNNER_TEMP\qupil-test.pfx" /p qupil-ci-test $signed
+          if ($LASTEXITCODE -ne 0) { Fail 'signing the test copy failed' }
+
+          Add-AppxPackage -Path $signed
+          $package = Get-AppxPackage -Name FelixHammer.Qupil
+          if (-not $package) { Fail 'not installed' }
+          Write-Host "Installed $($package.PackageFullName)"
+
+          $data = Join-Path $env:APPDATA 'QupilStoreCheck'
+          Remove-Item $data -Recurse -Force -ErrorAction SilentlyContinue
+          $alias = Join-Path $env:LOCALAPPDATA 'Microsoft\WindowsApps\qupil.exe'
+          for ($i = 0; $i -lt 30 -and -not (Test-Path $alias); $i++) { Start-Sleep -Seconds 1 }
+          if (-not (Test-Path $alias)) { Fail 'no app execution alias qupil.exe' }
+          $p = Start-Process $alias -ArgumentList '--smoke-test', '--data-dir', $data -Wait -PassThru
+          if ($p.ExitCode -ne 0) { Fail "smoke test in the package: exit code $($p.ExitCode)" }
+          if (-not (Test-Path "$data\backups")) { Fail "data folder not in the real %APPDATA% (virtualised into the package?)" }
+
+          Remove-AppxPackage -Package $package.PackageFullName
+          if (Get-AppxPackage -Name FelixHammer.Qupil) { Fail 'still installed after uninstalling' }
+          if (-not (Test-Path "$data\backups")) { Fail 'data folder gone after uninstalling' }
+          Write-Host 'Install, start (smoke test), data outside the package, uninstall OK'
+
+      - uses: actions/upload-artifact@v7
+        if: runner.os == 'Windows'
+        with:
+          name: qupil-windows-store
+          path: store/*.msix
+          if-no-files-found: error
+          retention-days: 30
+
       - uses: actions/upload-artifact@v7
         with:
           name: ${{ matrix.artifact }}
@@ -358,7 +333,7 @@ jobs:
 
   publish:
     name: Publish to "nightly" release
-    # Also "Run workflow" on main (e.g. with "sign"): the nightly then gets that build
+    # Also "Run workflow" on main: the nightly then gets that build
     if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-24.04

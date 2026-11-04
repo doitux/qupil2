@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SPDX-FileCopyrightText: 2006-2026 Felix Hammer
+  SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
+
+  Microsoft Store package (MSIX), built in CI (.github/workflows/desktop.yml) around the
+  deployed folder (cmake install): @MSIX_VERSION@ is filled in there.
+  Identity: Partner Center › Qupil › Product identity (Store ID 9MW682SL4MMK). Never change it.
+  The Store signs the package itself; the CI only signs a copy with a test certificate
+  to install and check it.
+
+  Qupil's data stays where the setup keeps it (%APPDATA%\Qupil, settings under
+  HKCU\Software\Qupil): without the two "disabled" lines below Windows would put them into
+  a private folder of the package, which is deleted when the app is uninstalled. Needs the
+  restricted capability unvirtualizedResources (justification in the Store submission).
+-->
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"
+  xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10"
+  xmlns:desktop6="http://schemas.microsoft.com/appx/manifest/desktop/windows10/6"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  IgnorableNamespaces="uap uap3 desktop desktop6 rescap">
+
+  <Identity
+    Name="FelixHammer.Qupil"
+    Publisher="CN=8ECD378F-712C-47D5-879A-61B45647999D"
+    Version="@MSIX_VERSION@"
+    ProcessorArchitecture="x64" />
+
+  <Properties>
+    <DisplayName>Qupil</DisplayName>
+    <PublisherDisplayName>Felix Hammer</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+    <desktop6:FileSystemWriteVirtualization>disabled</desktop6:FileSystemWriteVirtualization>
+    <desktop6:RegistryWriteVirtualization>disabled</desktop6:RegistryWriteVirtualization>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.19041.0" MaxVersionTested="10.0.26100.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="de-DE" />
+    <Resource Language="en-US" />
+    <Resource Language="fr-FR" />
+    <Resource Language="es-ES" />
+  </Resources>
+
+  <Applications>
+    <Application Id="Qupil" Executable="bin\Qupil.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements
+        DisplayName="Qupil"
+        Description="Lesson management for music teachers"
+        BackgroundColor="transparent"
+        Square150x150Logo="Assets\Square150x150Logo.png"
+        Square44x44Logo="Assets\Square44x44Logo.png" />
+      <Extensions>
+        <!-- "qupil" in a terminal; the CI starts the installed package this way -->
+        <uap3:Extension Category="windows.appExecutionAlias" Executable="bin\Qupil.exe" EntryPoint="Windows.FullTrustApplication">
+          <uap3:AppExecutionAlias>
+            <desktop:ExecutionAlias Alias="qupil.exe" />
+          </uap3:AppExecutionAlias>
+        </uap3:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <rescap:Capability Name="runFullTrust" />
+    <rescap:Capability Name="unvirtualizedResources" />
+  </Capabilities>
+</Package>

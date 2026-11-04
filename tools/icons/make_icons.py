@@ -13,6 +13,10 @@ Sources (the logo of 19.10.2026: plum tile #6E3C5A, lime and white figures):
   qupil-android-foreground.svg  adaptive icon foreground (108 dp, background colour
                                 #6E3C5A in res/values/ic_launcher_background.xml)
   qupil-android-monochrome.svg  themed icon (Android 13+), white with the border cut out
+
+Windows Store package (MSIX, platform/windows/msix/Assets): app list and taskbar icons
+(Square44x44Logo, also as target sizes without the plate behind them), Start tile and
+Store logo, all from qupil.svg on a transparent background.
 """
 
 import io
@@ -90,6 +94,30 @@ def icns(svg: str) -> bytes:
     return b"icns" + struct.pack(">I", 8 + len(body)) + body
 
 
+def padded(svg: str, canvas: int, share: float) -> Image.Image:
+    """The icon centred on a transparent square, taking `share` of its width."""
+    inner = round(canvas * share)
+    out = Image.new("RGBA", (canvas, canvas), (0, 0, 0, 0))
+    out.paste(render(svg, inner), ((canvas - inner) // 2, (canvas - inner) // 2))
+    return out
+
+
+def msix(folder: Path) -> None:
+    """Images of the Store package; their names carry the qualifiers makepri indexes."""
+    for scale in (100, 125, 150, 200, 400):
+        write(folder / f"Square44x44Logo.scale-{scale}.png",
+              png_bytes(render("qupil.svg", round(44 * scale / 100))))
+        write(folder / f"Square150x150Logo.scale-{scale}.png",
+              png_bytes(padded("qupil.svg", round(150 * scale / 100), 0.6)))
+        write(folder / f"StoreLogo.scale-{scale}.png", png_bytes(render("qupil.svg", round(50 * scale / 100))))
+    # Taskbar, Start, Explorer: without these Windows puts the icon on a coloured plate
+    for size in (16, 20, 24, 30, 32, 36, 40, 48, 60, 64, 72, 80, 96, 256):
+        data = png_bytes(render("qupil.svg", size))
+        write(folder / f"Square44x44Logo.targetsize-{size}.png", data)
+        write(folder / f"Square44x44Logo.targetsize-{size}_altform-unplated.png", data)
+        write(folder / f"Square44x44Logo.targetsize-{size}_altform-lightunplated.png", data)
+
+
 def main() -> None:
     # Window icon, About page, Linux (hicolor)
     for size in (16, 24, 32, 48, 64, 128, 256, 512):
@@ -98,6 +126,8 @@ def main() -> None:
     write(ROOT / "platform" / "windows" / "qupil.ico",
           ico("qupil.svg", [16, 20, 24, 32, 40, 48, 64, 96, 128, 256]))
     write(SRC / "qupil.icns", icns("qupil-macos.svg"))
+
+    msix(ROOT / "platform" / "windows" / "msix" / "Assets")
 
     # iOS: one 1024 px image without transparency, Xcode makes the other sizes
     ios = render("qupil-square.svg", 1024)
