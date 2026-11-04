@@ -94,13 +94,14 @@ Sheet {
         }
     }
     ActionButton {
+        focusPolicy: Qt.TabFocus
         visible: editor.activityId !== ""
         kind: "quiet"
         iconName: "trash"
         text: qsTrId("common.delete")
         onClicked: {
             Data.remove("activity", editor.activityId)
-            editor.close()
+            editor.dismiss()
         }
     }
 }

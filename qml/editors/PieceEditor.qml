@@ -138,13 +138,14 @@ Sheet {
         onToggled: editor.forAll = checked
     }
     ActionButton {
+        focusPolicy: Qt.TabFocus
         visible: editor.pieceId !== ""
         kind: "quiet"
         iconName: "trash"
         text: qsTrId("piece.delete")
         onClicked: {
             Data.deletePiece(editor.pieceId, editor.forAll && editor.groupSize > 1)
-            editor.close()
+            editor.dismiss()
         }
     }
 }

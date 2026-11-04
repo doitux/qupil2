@@ -374,6 +374,7 @@ Sheet {
     }
 
     ActionButton {
+        focusPolicy: Qt.TabFocus
         visible: editor.plan ? editor.planId !== "" : editor.noteId !== ""
         Layout.alignment: Qt.AlignLeft
         kind: "quiet"
@@ -384,7 +385,7 @@ Sheet {
                 Data.deletePlan(editor.planId, editor.forAll && editor.groupSize > 1)
             else
                 Data.deleteNote(editor.noteId, editor.forAll && editor.groupSize > 1)
-            editor.close()
+            editor.dismiss()
         }
     }
 

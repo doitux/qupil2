@@ -79,13 +79,14 @@ Sheet {
         onToggled: editor.set("sound", checked ? 1 : 0)
     }
     ActionButton {
+        focusPolicy: Qt.TabFocus
         visible: editor.reminderId !== ""
         kind: "quiet"
         iconName: "trash"
         text: qsTrId("common.delete")
         onClicked: {
             Data.remove("reminder", editor.reminderId)
-            editor.close()
+            editor.dismiss()
         }
     }
 }
