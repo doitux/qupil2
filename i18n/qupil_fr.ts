@@ -852,6 +852,10 @@
         <extracomment>Note editor, after tapping an older note; %1 = date of that note</extracomment>
         <translation>Nouvelle note avec le texte du %1. Pour modifier ou supprimer l’ancienne note, maintenez-la appuyée.</translation>
     </message>
+    <message id="note.copied_from_desktop">
+        <source>New note with the text of %1. To change or delete the old note, right-click it.</source>
+        <translation>Nouvelle note avec le texte du %1. Pour modifier ou supprimer l’ancienne note, faites un clic droit dessus.</translation>
+    </message>
     <message id="note.clear">
         <source>Clear</source>
         <extracomment>Empties the note editor</extracomment>

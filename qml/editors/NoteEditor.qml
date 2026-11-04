@@ -206,7 +206,9 @@ Sheet {
                 Layout.fillWidth: true
                 wrapMode: Text.WordWrap
                 text: editor.copiedText !== "" ? editor.copiedText
-                                               : qsTrId("note.copied_from").arg(Data.formatDate(copiedBar.from))
+                                               // Desktop: right click; phones and tablets: press and hold
+                                               : (App.desktop ? qsTrId("note.copied_from_desktop") : qsTrId("note.copied_from"))
+                                                     .arg(Data.formatDate(copiedBar.from))
                 color: Theme.textMuted
                 font.family: Theme.fontFamily
                 font.pixelSize: 13

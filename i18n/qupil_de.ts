@@ -853,6 +853,10 @@ Bitte ändern Sie die Schüleranzahl um zu speichern!</translation>
         <extracomment>Note editor, after tapping an older note; %1 = date of that note</extracomment>
         <translation>Neue Notiz mit dem Text vom %1. Um die alte Notiz zu ändern oder zu löschen, halten Sie sie gedrückt.</translation>
     </message>
+    <message id="note.copied_from_desktop">
+        <source>New note with the text of %1. To change or delete the old note, right-click it.</source>
+        <translation>Neue Notiz mit dem Text vom %1. Um die alte Notiz zu ändern oder zu löschen, klicken Sie sie mit der rechten Maustaste an.</translation>
+    </message>
     <message id="note.clear">
         <source>Clear</source>
         <extracomment>Empties the note editor</extracomment>
