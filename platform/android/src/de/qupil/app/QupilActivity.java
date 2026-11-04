@@ -25,7 +25,7 @@ public class QupilActivity extends QtActivity
     private static volatile boolean s_contentReady = false;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
+    public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         if (s_contentReady)
