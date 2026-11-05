@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- The activity's window in Qupil's background colour (Theme.qml: bg), so nothing white
-     or black shows before the interface. Android's launch screen takes this colour too. -->
+     or black shows before the interface. Android's launch screen takes this colour too.
+     The status bar in the background colour, the navigation bar in the colour of the tab
+     bar (Theme.qml: surface), with dark symbols on light colours; QupilActivity sets them
+     again when Qupil's own light/dark choice differs from the system's. -->
 <resources>
     <color name="qupil_window">#F4F3F6</color>
+    <color name="qupil_bar_bottom">#FFFFFF</color>
+    <bool name="qupil_light_bars">true</bool>
     <!-- Android 9 (Qt's theme there); 10+: values-v29 -->
     <style name="QupilTheme" parent="@android:style/Theme.Holo.Light">
         <item name="android:windowBackground">@color/qupil_window</item>
+        <item name="android:statusBarColor">@color/qupil_window</item>
+        <item name="android:navigationBarColor">@color/qupil_bar_bottom</item>
+        <item name="android:windowLightStatusBar">@bool/qupil_light_bars</item>
+        <item name="android:windowLightNavigationBar">@bool/qupil_light_bars</item>
     </style>
 </resources>

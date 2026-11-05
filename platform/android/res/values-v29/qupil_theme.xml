@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Android 10+: Qt's own theme (light or dark with the system), Qupil's background -->
+<!-- Android 10+: Qt's own theme (light or dark with the system), Qupil's colours
+     (see values/qupil_theme.xml) -->
 <resources>
     <style name="QupilTheme" parent="@android:style/Theme.DeviceDefault.DayNight">
         <item name="android:windowBackground">@color/qupil_window</item>
+        <item name="android:statusBarColor">@color/qupil_window</item>
+        <item name="android:navigationBarColor">@color/qupil_bar_bottom</item>
+        <item name="android:windowLightStatusBar">@bool/qupil_light_bars</item>
+        <item name="android:windowLightNavigationBar">@bool/qupil_light_bars</item>
+        <item name="android:enforceNavigationBarContrast">false</item>
+        <item name="android:enforceStatusBarContrast">false</item>
     </style>
 </resources>

@@ -176,6 +176,14 @@ ApplicationWindow {
         function onOpenSheetsChanged() { App.holdViewForKeyboard(Nav.openSheets > 0) }
     }
 
+    // Android: the system's status bar in the background colour, its navigation bar in the
+    // colour of the tab bar (phones) or the background (tablets), with light or dark
+    // symbols. Qupil's own light/dark choice can differ from the system's.
+    readonly property color systemBarBottom: compact && App.phase === App.Ready ? Theme.surface : Theme.bg
+    readonly property string systemBars: Qt.platform.os === "android" ? Theme.bg + " " + systemBarBottom + " " + Theme.dark : ""
+    onSystemBarsChanged: if (systemBars !== "") App.setSystemBars(Theme.bg, systemBarBottom, Theme.dark)
+    Component.onCompleted: if (systemBars !== "") App.setSystemBars(Theme.bg, systemBarBottom, Theme.dark)
+
     Loader {
         anchors.fill: parent
         anchors.bottomMargin: window.pageKeyboardInset

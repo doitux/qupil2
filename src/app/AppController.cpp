@@ -35,6 +35,7 @@
 
 #include "Database.h"
 #include "DemoData.h"
+#include "SystemBars.h"
 #include "FileExport.h"
 #include "FileImport.h"
 #include "LanguageManager.h"
@@ -1119,4 +1120,9 @@ void AppController::rotate(const QString &prefix, int keep)
     QStringList files = dir.entryList({ prefix + u"*.db"_s }, QDir::Files, QDir::Name);
     while (files.size() > keep)
         dir.remove(files.takeFirst());   // names sort by date: oldest first
+}
+
+void AppController::setSystemBars(const QColor &top, const QColor &bottom, bool dark)
+{
+    SystemBars::set(top, bottom, dark);
 }

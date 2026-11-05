@@ -3,6 +3,7 @@
 package de.qupil.app;
 
 import android.content.res.Configuration;
+import android.os.Build;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -10,13 +11,15 @@ import android.os.SystemClock;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
+import android.view.WindowInsetsController;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
 
 import org.qtproject.qt.android.bindings.QtActivity;
 
 /*
-    Qt's activity, with two additions.
+    Qt's activity, with three additions.
 
     The launch screen is held until Qupil has drawn its interface. Android ends the launch
     screen (Qupil's icon) with the activity's first frame. Qt's first frame is its empty
@@ -31,6 +34,13 @@ import org.qtproject.qt.android.bindings.QtActivity;
     flicker. An invisible, zero-width popup window does resize with the keyboard; its
     visible height gives the keyboard's height, which goes to Qupil
     (keyboardHeightChanged, KeyboardHeight_android.cpp), and the interface makes room.
+
+    The system's bars take Qupil's colours (setSystemBars, SystemBars_android.cpp): the
+    status bar the background, the navigation bar the tab bar, with light or dark symbols.
+    Qupil can be dark while the system is light (or the other way round); the theme's
+    colours follow the system only, so the navigation bar stayed white under a dark Qupil.
+    Qt puts the theme's colours back when it shows the window: they are set again after
+    that, when the activity resumes and when it gets the focus.
 */
 public class QupilActivity extends QtActivity
 {
@@ -65,6 +75,67 @@ public class QupilActivity extends QtActivity
                 return true;
             }
         });
+    }
+
+    private volatile boolean m_barsSet = false;
+    private volatile int m_barTop;
+    private volatile int m_barBottom;
+    private volatile boolean m_barsDark;
+
+    //! Qupil's colours for the status bar (top) and the navigation bar (bottom), any thread
+    public void setSystemBars(int top, int bottom, boolean dark)
+    {
+        m_barTop = top;
+        m_barBottom = bottom;
+        m_barsDark = dark;
+        m_barsSet = true;
+        runOnUiThread(() -> {
+            applySystemBars();
+            // Once more after Qt has shown the window (it restores the theme's colours then)
+            getWindow().getDecorView().postDelayed(this::applySystemBars, 600);
+        });
+    }
+
+    private void applySystemBars()
+    {
+        if (!m_barsSet || isFinishing())
+            return;
+        final Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(m_barTop);
+        window.setNavigationBarColor(m_barBottom);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            window.setStatusBarContrastEnforced(false);
+            window.setNavigationBarContrastEnforced(false);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            final WindowInsetsController insets = window.getInsetsController();
+            if (insets != null) {
+                final int light = WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                                  | WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS;
+                insets.setSystemBarsAppearance(m_barsDark ? 0 : light, light);
+            }
+        } else {
+            final View decor = window.getDecorView();
+            final int light = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR | View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+            final int flags = decor.getSystemUiVisibility();
+            decor.setSystemUiVisibility(m_barsDark ? flags & ~light : flags | light);
+        }
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        applySystemBars();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus)
+    {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus)
+            applySystemBars();
     }
 
     @Override

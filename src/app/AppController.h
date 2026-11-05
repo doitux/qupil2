@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 #pragma once
 
+#include <QColor>
 #include <QObject>
 #include <QString>
 #include <QUrl>
@@ -215,6 +216,8 @@ public:
     Q_INVOKABLE void holdViewForKeyboard(bool hold) { if (m_holdView) m_holdView(hold); }
     //! iOS: undo a move of the view by the system now (after the cursor moved)
     Q_INVOKABLE void keepViewInPlace() { if (m_keepView) m_keepView(); }
+    //! Android: status bar (top) and navigation bar (bottom) in Qupil's colours; elsewhere nothing
+    Q_INVOKABLE void setSystemBars(const QColor &top, const QColor &bottom, bool dark);
     void setKeyboardViewHooks(std::function<void(bool)> hold, std::function<void()> keep)
     {
         m_holdView = std::move(hold);

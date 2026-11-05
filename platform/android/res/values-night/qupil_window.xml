@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Dark mode of the system: Qupil's dark background (Theme.qml: bg) -->
+<!-- Dark mode of the system: Qupil's dark colours (Theme.qml: bg, surface) -->
 <resources>
     <color name="qupil_window">#121014</color>
+    <color name="qupil_bar_bottom">#1D1A21</color>
+    <bool name="qupil_light_bars">false</bool>
 </resources>
