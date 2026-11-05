@@ -78,6 +78,14 @@ class AppController : public QObject
         changing window size flickered), and the interface makes room itself. Elsewhere 0.
     */
     Q_PROPERTY(qreal keyboardHeight READ keyboardHeight NOTIFY keyboardHeightChanged FINAL)
+    /*!
+        Test mode: invented sample data instead of the real data, e.g. for screen recordings
+        (More › About, tap the version seven times). The real database is not touched: the
+        sample data lives in a folder of its own (testmode/) and is gone when test mode ends.
+        Sync (Nextcloud, Wi-Fi) is off meanwhile, no backups are made. It ends when Qupil goes
+        to the background on phones and tablets, and is off after every start.
+    */
+    Q_PROPERTY(bool testMode READ testMode NOTIFY testModeChanged FINAL)
 
 public:
     enum Phase {
@@ -198,6 +206,9 @@ public:
     void joinDecided();
 
     qreal keyboardHeight() const { return m_keyboardHeight; }
+    bool testMode() const { return m_testMode; }
+    //! Switches to the sample data (in the background, App.busy) or back to the real data
+    Q_INVOKABLE void setTestMode(bool on);
     void setKeyboardHeight(qreal height);
     //! iOS: an editor is open and makes room for the keyboard itself, the system must not
     //! move the whole view (KeyboardHeight::holdView); elsewhere nothing
@@ -212,6 +223,7 @@ public:
 
 signals:
     void keyboardHeightChanged();
+    void testModeChanged();
     void phaseChanged();
     void setupInstallationChanged();
     //! After removeSetupInstallation: the setup version is gone (true) or still there (false)
@@ -257,6 +269,11 @@ private:
     QVariantList m_legacyFolders;
     QVariantMap m_lastTakeOver;
     bool m_demoPending = false;
+    bool m_testMode = false;
+    //! The sample data for test mode is being made (no summary, no "data replaced")
+    bool m_testPending = false;
+    QString testFolder() const;
+    void abandonTestMode();
     int m_syncRunning = 0;
     std::function<void()> m_afterSync;   // a take-over that waits for the sync to finish
 };

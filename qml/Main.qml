@@ -314,7 +314,7 @@ ApplicationWindow {
             Text {
                 Layout.fillWidth: true
                 wrapMode: Text.WordWrap
-                text: qsTrId("migration.importing")
+                text: App.testMode ? qsTrId("testmode.preparing") : qsTrId("migration.importing")
                 color: Theme.text
                 font.family: Theme.fontFamily
                 font.pixelSize: 17
@@ -588,6 +588,72 @@ ApplicationWindow {
         enabled: App.desktop
         sequence: "Ctrl+Q"
         onActivated: Qt.quit()
+    }
+
+    // ---------------------------------------------------------------- test mode (sample data)
+    // Unmistakable: an amber frame around everything and a label at the bottom left with
+    // the way back. Not at the top: the status bar of iOS lies over Qupil there.
+    readonly property color testColour: "#F2A531"
+    Rectangle {
+        anchors.fill: parent
+        visible: App.testMode
+        color: "transparent"
+        border.width: 3
+        border.color: window.testColour
+        z: 1000
+    }
+    Rectangle {
+        id: testLabel
+        visible: App.testMode && App.phase === App.Ready
+        z: 1000
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        anchors.leftMargin: 14
+        anchors.bottomMargin: 14
+        implicitWidth: testRow.implicitWidth + 12
+        implicitHeight: 40
+        radius: 20
+        color: window.testColour
+        RowLayout {
+            id: testRow
+            anchors.verticalCenter: parent.verticalCenter
+            x: 14
+            spacing: 6
+            Text {
+                text: qsTrId("testmode.badge")
+                color: "#1D1A22"
+                font.family: Theme.fontFamily
+                font.pixelSize: 14
+                font.weight: Font.ExtraBold
+            }
+            AbstractButton {
+                id: testEnd
+                implicitWidth: endText.implicitWidth + 20
+                implicitHeight: 30
+                focusPolicy: Qt.TabFocus
+                enabled: !App.busy
+                Accessible.role: Accessible.Button
+                Accessible.name: endText.text
+                onClicked: {
+                    Nav.toast(qsTrId("testmode.off"))
+                    App.setTestMode(false)
+                }
+                background: Rectangle {
+                    radius: 15
+                    color: testEnd.down ? "#33000000" : "#1F000000"
+                }
+                contentItem: Text {
+                    id: endText
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    text: qsTrId("testmode.end")
+                    color: "#1D1A22"
+                    font.family: Theme.fontFamily
+                    font.pixelSize: 14
+                    font.weight: Font.Bold
+                }
+            }
+        }
     }
 
     // ---------------------------------------------------------------- running metronome, everywhere else

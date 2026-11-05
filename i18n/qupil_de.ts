@@ -3332,6 +3332,45 @@ Bitte wenden Sie sich an den Programm-Autor: %4 um dieses Problem zu beheben!</t
         <extracomment>%1 = commit, e.g. 8828322</extracomment>
         <translation>Build %1</translation>
     </message>
+    <message id="testmode.badge">
+        <source>Sample data</source>
+        <extracomment>Test mode label: invented data instead of the real data</extracomment>
+        <translation>Testdaten</translation>
+    </message>
+    <message id="testmode.end">
+        <source>End</source>
+        <translation>Beenden</translation>
+    </message>
+    <message id="testmode.on">
+        <source>Sample data: your real data stays untouched</source>
+        <translation>Testdaten: Ihre echten Daten bleiben unberührt</translation>
+    </message>
+    <message id="testmode.off">
+        <source>Your real data again</source>
+        <translation>Wieder Ihre echten Daten</translation>
+    </message>
+    <message id="testmode.taps_on" numerus="yes">
+        <source>%n more tap(s) for sample data</source>
+        <translation>
+            <numerusform>Noch %n× tippen für Testdaten</numerusform>
+            <numerusform>Noch %n× tippen für Testdaten</numerusform>
+        </translation>
+    </message>
+    <message id="testmode.taps_off" numerus="yes">
+        <source>%n more tap(s) for your real data</source>
+        <translation>
+            <numerusform>Noch %n× tippen für Ihre echten Daten</numerusform>
+            <numerusform>Noch %n× tippen für Ihre echten Daten</numerusform>
+        </translation>
+    </message>
+    <message id="testmode.preparing">
+        <source>Preparing sample data</source>
+        <translation>Testdaten werden angelegt</translation>
+    </message>
+    <message id="testmode.sync_off">
+        <source>Sample data: syncing is off, nothing goes to your other devices or Nextcloud.</source>
+        <translation>Testdaten: Der Abgleich ist aus, nichts geht an Ihre anderen Geräte oder die Nextcloud.</translation>
+    </message>
     <message id="app.build_copied">
         <source>Copied: Qupil %1</source>
         <extracomment>%1 = version and commit</extracomment>

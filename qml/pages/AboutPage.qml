@@ -54,10 +54,27 @@ SubPage {
                     focusPolicy: Qt.StrongFocus
                     Accessible.role: Accessible.Button
                     Accessible.name: versionText.text
-                    // A tap copies version and commit (for bug reports)
+                    // A tap copies version and commit (for bug reports). Seven quick taps switch
+                    // to the sample data and back (test mode, App.testMode)
+                    property int taps: 0
+                    Timer {
+                        id: tapWindow
+                        interval: 1500
+                        onTriggered: version.taps = 0
+                    }
                     onClicked: {
-                        App.copyText("Qupil " + App.versionText)
-                        Nav.toast(qsTrId("app.build_copied").arg(App.versionText))
+                        taps += 1
+                        tapWindow.restart()
+                        if (taps >= 7) {
+                            taps = 0
+                            Nav.toast(qsTrId(App.testMode ? "testmode.off" : "testmode.on"))
+                            App.setTestMode(!App.testMode)
+                        } else if (taps >= 4) {
+                            Nav.toast(qsTrId(App.testMode ? "testmode.taps_off" : "testmode.taps_on", 7 - taps))
+                        } else if (taps === 1) {
+                            App.copyText("Qupil " + App.versionText)
+                            Nav.toast(qsTrId("app.build_copied").arg(App.versionText))
+                        }
                     }
                     contentItem: Text {
                         id: versionText

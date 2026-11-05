@@ -97,7 +97,14 @@ SyncController::SyncController(AppController *app, QObject *parent)
     });
     // After an import or restore the data on this device is a different one:
     // pause until the user decides how it goes together with the folder
+    connect(app, &AppController::testModeChanged, this, [this] {
+        m_soon.stop();
+        if (!m_app->testMode() && m_autoSync)
+            QTimer::singleShot(3000, this, &SyncController::syncNow);
+    });
     connect(app, &AppController::dataReplaced, this, [this] {
+        if (m_app->testMode())
+            return;   // a backup put into the sample data: the real data is the same
         if (!m_replacingData && connected() && !m_key.isEmpty())
             forgetKey(qtTrId("sync.paused_after_replace"));
     });
@@ -208,7 +215,7 @@ void SyncController::setError(const QString &error)
 
 void SyncController::scheduleSoon()
 {
-    if (connected() && !m_key.isEmpty())
+    if (connected() && !m_key.isEmpty() && !m_app->testMode())
         m_soon.start();
 }
 
@@ -364,7 +371,7 @@ bool SyncController::sharesData() const
 
 void SyncController::checkFolder()
 {
-    if (!connected())
+    if (!connected() || m_app->testMode())
         return;
     const Account account { m_server, m_loginName, m_userId, m_appPassword };
     struct Result { std::optional<bool> exists; QStringList origins; QString error; int http = 0; };
@@ -396,7 +403,7 @@ void SyncController::checkFolder()
 
 void SyncController::setPassword(const QString &password, JoinMode joinMode)
 {
-    if (!connected() || password.isEmpty() || m_busy)
+    if (!connected() || password.isEmpty() || m_busy || m_app->testMode())
         return;
     const Account account { m_server, m_loginName, m_userId, m_appPassword };
     struct Result { QByteArray key; FolderSync::Status status = FolderSync::Status::Failed; QString error; bool existed = false; int http = 0; };
@@ -446,7 +453,8 @@ void SyncController::setPassword(const QString &password, JoinMode joinMode)
 
 void SyncController::syncNow()
 {
-    if (!connected() || m_key.isEmpty() || m_app->phase() != AppController::Ready)
+    // Test mode: sample data, never into the Nextcloud folder
+    if (!connected() || m_key.isEmpty() || m_app->phase() != AppController::Ready || m_app->testMode())
         return;
     if (m_busy || m_app->busy()) {
         m_syncAgain = true;   // after the running sync or the import

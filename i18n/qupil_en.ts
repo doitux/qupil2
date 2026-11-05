@@ -3331,6 +3331,45 @@ Please contact the author at %4 to fix this problem.</translation>
         <extracomment>%1 = commit, e.g. 8828322</extracomment>
         <translation>Build %1</translation>
     </message>
+    <message id="testmode.badge">
+        <source>Sample data</source>
+        <extracomment>Test mode label: invented data instead of the real data</extracomment>
+        <translation>Sample data</translation>
+    </message>
+    <message id="testmode.end">
+        <source>End</source>
+        <translation>End</translation>
+    </message>
+    <message id="testmode.on">
+        <source>Sample data: your real data stays untouched</source>
+        <translation>Sample data: your real data stays untouched</translation>
+    </message>
+    <message id="testmode.off">
+        <source>Your real data again</source>
+        <translation>Your real data again</translation>
+    </message>
+    <message id="testmode.taps_on" numerus="yes">
+        <source>%n more tap(s) for sample data</source>
+        <translation>
+            <numerusform>%n more tap for sample data</numerusform>
+            <numerusform>%n more taps for sample data</numerusform>
+        </translation>
+    </message>
+    <message id="testmode.taps_off" numerus="yes">
+        <source>%n more tap(s) for your real data</source>
+        <translation>
+            <numerusform>%n more tap for your real data</numerusform>
+            <numerusform>%n more taps for your real data</numerusform>
+        </translation>
+    </message>
+    <message id="testmode.preparing">
+        <source>Preparing sample data</source>
+        <translation>Preparing sample data</translation>
+    </message>
+    <message id="testmode.sync_off">
+        <source>Sample data: syncing is off, nothing goes to your other devices or Nextcloud.</source>
+        <translation>Sample data: syncing is off, nothing goes to your other devices or Nextcloud.</translation>
+    </message>
     <message id="app.build_copied">
         <source>Copied: Qupil %1</source>
         <extracomment>%1 = version and commit</extracomment>

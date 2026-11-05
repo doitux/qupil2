@@ -96,8 +96,13 @@ WifiController::WifiController(AppController *app, SyncController *sync, QObject
             QTimer::singleShot(3000, this, &WifiController::syncAll);
     });
     // After an import or restore the data here is a different one: ask before syncing it
+    connect(app, &AppController::testModeChanged, this, [this] {
+        updateRunning();
+        if (!m_app->testMode())
+            QTimer::singleShot(3000, this, &WifiController::syncAll);
+    });
     connect(app, &AppController::dataReplaced, this, [this] {
-        if (m_replacingData)
+        if (m_replacingData || m_app->testMode())
             return;
         for (PeerInfo &p : m_peers)
             p.paused = true;
@@ -213,7 +218,9 @@ void WifiController::setEnabled(bool on)
 
 void WifiController::updateRunning()
 {
-    const bool run = m_enabled && m_app->phase() == AppController::Ready && (pairing() || !m_peers.isEmpty());
+    // Test mode: sample data, not seen by and not given to the other devices
+    const bool run = m_enabled && m_app->phase() == AppController::Ready && !m_app->testMode()
+                     && (pairing() || !m_peers.isEmpty());
     if (run == active())
         return;
     if (run) {
@@ -382,6 +389,8 @@ void WifiController::endWork()
 
 void WifiController::startPairing()
 {
+    if (m_app->testMode())
+        return;
     if (!m_enabled) {
         m_enabled = true;
         saveSettings();
@@ -437,6 +446,8 @@ void WifiController::pairWithAddress(const QString &address, const QString &code
 
 void WifiController::pairAt(const QString &host, quint16 port, const QString &code)
 {
+    if (m_app->testMode())
+        return;
     if (m_connecting)
         return;
     ensureIdentity();
@@ -580,7 +591,8 @@ void WifiController::syncAll()
 void WifiController::syncWith(const QString &peerId)
 {
     PeerInfo *p = peer(peerId);
-    if (!p || p->paused || p->syncing || !m_enabled || m_app->phase() != AppController::Ready || m_app->busy())
+    if (!p || p->paused || p->syncing || !m_enabled || m_app->phase() != AppController::Ready || m_app->busy()
+        || m_app->testMode())
         return;
     if (p->host.isEmpty() || p->port == 0)
         return;
@@ -636,7 +648,7 @@ void WifiController::syncWith(const QString &peerId)
 
 void WifiController::accept(qintptr socketDescriptor)
 {
-    if (m_app->phase() != AppController::Ready || m_app->busy()) {
+    if (m_app->phase() != AppController::Ready || m_app->busy() || m_app->testMode()) {
         QTcpSocket socket;
         socket.setSocketDescriptor(socketDescriptor);
         socket.abort();

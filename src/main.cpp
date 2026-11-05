@@ -205,6 +205,7 @@ int main(int argc, char *argv[])
             data.ensureDefaults();
     });
     QObject::connect(&controller, &AppController::dataReplaced, &data, &DataService::ensureDefaults);
+    QObject::connect(&controller, &AppController::testModeChanged, &data, &DataService::ensureDefaults);
     if (controller.phase() == AppController::Ready)
         data.ensureDefaults();
     SyncController sync(&controller, nullptr);

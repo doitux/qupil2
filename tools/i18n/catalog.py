@@ -1940,6 +1940,27 @@ E("app.old_setup.failed",
   fr="L’ancienne version de Qupil n’a pas pu être supprimée. Vous pouvez la supprimer dans Paramètres › Applications › Applications installées.",
   es="No se pudo quitar la versión anterior de Qupil. Puede quitarla en Configuración › Aplicaciones › Aplicaciones instaladas.")
 E("app.build", en="Build %1", de="Build %1", fr="Build %1", es="Build %1", c="%1 = commit, e.g. 8828322")
+E("testmode.badge", en="Sample data", de="Testdaten", fr="Données d'essai", es="Datos de prueba",
+  c="Test mode label: invented data instead of the real data")
+E("testmode.end", en="End", de="Beenden", fr="Quitter", es="Salir")
+E("testmode.on", en="Sample data: your real data stays untouched", de="Testdaten: Ihre echten Daten bleiben unberührt",
+  fr="Données d'essai : vos vraies données restent intactes", es="Datos de prueba: sus datos reales no se tocan")
+E("testmode.off", en="Your real data again", de="Wieder Ihre echten Daten", fr="De nouveau vos vraies données",
+  es="De nuevo sus datos reales")
+E("testmode.taps_on", src="%n more tap(s) for sample data", en=["%n more tap for sample data", "%n more taps for sample data"],
+  de=["Noch %n× tippen für Testdaten", "Noch %n× tippen für Testdaten"],
+  fr=["Encore %n appui pour les données d'essai", "Encore %n appuis pour les données d'essai"],
+  es=["%n toque más para datos de prueba", "%n toques más para datos de prueba"])
+E("testmode.taps_off", src="%n more tap(s) for your real data", en=["%n more tap for your real data", "%n more taps for your real data"],
+  de=["Noch %n× tippen für Ihre echten Daten", "Noch %n× tippen für Ihre echten Daten"],
+  fr=["Encore %n appui pour vos vraies données", "Encore %n appuis pour vos vraies données"],
+  es=["%n toque más para sus datos reales", "%n toques más para sus datos reales"])
+E("testmode.preparing", en="Preparing sample data …", de="Testdaten werden angelegt …", fr="Préparation des données d'essai …",
+  es="Preparando datos de prueba …")
+E("testmode.sync_off", en="Sample data: syncing is off, nothing goes to your other devices or Nextcloud.",
+  de="Testdaten: Der Abgleich ist aus, nichts geht an Ihre anderen Geräte oder die Nextcloud.",
+  fr="Données d'essai : la synchronisation est désactivée, rien ne va à vos autres appareils ni à Nextcloud.",
+  es="Datos de prueba: la sincronización está desactivada, nada va a sus otros dispositivos ni a Nextcloud.")
 E("app.build_copied", en="Copied: Qupil %1", de="Kopiert: Qupil %1", fr="Copié : Qupil %1", es="Copiado: Qupil %1",
   c="%1 = version and commit")
 E("setup.sync.title", en="Data from another device", de="Daten von einem anderen Gerät",

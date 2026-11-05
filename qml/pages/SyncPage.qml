@@ -70,6 +70,12 @@ SubPage {
     }
 
     Banner {
+        visible: App.testMode
+        iconName: "info"
+        text: qsTrId("testmode.sync_off")
+    }
+
+    Banner {
         visible: App.info.awaitingSync === true
         iconName: "info"
         text: qsTrId("sync.waiting_for_data")
@@ -114,7 +120,7 @@ SubPage {
                 kind: "primary"
                 iconName: "cloud"
                 text: qsTrId("sync.nextcloud.connect")
-                enabled: page.serverAddress.trim() !== ""
+                enabled: page.serverAddress.trim() !== "" && !App.testMode
                 onClicked: Sync.connectNextcloud(page.serverAddress)
             }
         }
@@ -391,7 +397,7 @@ SubPage {
                 kind: "primary"
                 iconName: "sync"
                 text: qsTrId("sync.now")
-                enabled: !Sync.busy
+                enabled: !Sync.busy && !App.testMode
                 onClicked: Sync.syncNow()
             }
             BusyIndicator {
@@ -461,13 +467,14 @@ SubPage {
                 kind: Wifi.peers.length === 0 ? "primary" : "secondary"
                 iconName: "wifi"
                 text: qsTrId("sync.pair")
+                enabled: !App.testMode
                 onClicked: Nav.pairDevice()
             }
             ActionButton {
                 visible: Wifi.peers.length > 0
                 iconName: "sync"
                 text: qsTrId("sync.now")
-                enabled: !Wifi.busy && Wifi.enabled
+                enabled: !Wifi.busy && Wifi.enabled && !App.testMode
                 onClicked: Wifi.syncNow()
             }
             BusyIndicator {

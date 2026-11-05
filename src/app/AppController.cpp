@@ -96,6 +96,8 @@ AppController::AppController(const QString &dataDir, QObject *parent)
     s_instance = this;
     QDir().mkpath(m_dataDir);
     QDir().mkpath(QDir(m_dataDir).filePath(u"backups"_s));
+    // Test mode never survives a start
+    QDir(testFolder()).removeRecursively();
 
     if (QFileInfo(databasePath()).size() > 0) {
         QString error;
@@ -110,6 +112,14 @@ AppController::AppController(const QString &dataDir, QObject *parent)
         refreshLegacyFolders();
 
     connect(m_store.get(), &Store::dataChanged, this, &AppController::infoChanged);
+    // Phones and tablets: test mode ends when Qupil goes to the background (the real data is
+    // there again for the lesson, and for the reminders scheduled meanwhile)
+    if (qGuiApp) {
+        connect(qGuiApp, &QGuiApplication::applicationStateChanged, this, [this](Qt::ApplicationState state) {
+            if (m_testMode && !desktop() && (state == Qt::ApplicationSuspended || state == Qt::ApplicationHidden))
+                setTestMode(false);
+        });
+    }
 }
 
 AppController::~AppController()
@@ -134,19 +144,70 @@ AppController *AppController::create(QQmlEngine *, QJSEngine *)
 
 QString AppController::databasePath() const
 {
-    return QDir(m_dataDir).filePath(u"qupil.db"_s);
+    return QDir(m_testMode ? testFolder() : m_dataDir).filePath(u"qupil.db"_s);
+}
+
+QString AppController::testFolder() const
+{
+    return QDir(m_dataDir).filePath(u"testmode"_s);
+}
+
+void AppController::setTestMode(bool on)
+{
+    if (on == m_testMode || m_busy || m_phase != Ready || m_syncRunning > 0)
+        return;
+    if (on) {
+        // From here on sync stops and nothing is backed up; the real data stays open (and
+        // untouched) until the sample data is ready, then Qupil switches to that
+        m_testMode = true;
+        QDir(testFolder()).removeRecursively();
+        QDir().mkpath(testFolder());
+        m_testPending = true;
+        emit testModeChanged();
+        loadDemo();
+        if (!m_busy)
+            abandonTestMode();
+        return;
+    }
+    m_db->close();
+    m_testMode = false;
+    QString error;
+    if (!openDatabase(&error))
+        qWarning("Test mode: cannot open the data again: %s", qPrintable(error));
+    QDir(testFolder()).removeRecursively();
+    m_store->notifyReset();
+    emit testModeChanged();
+    emit infoChanged();
+}
+
+void AppController::abandonTestMode()
+{
+    m_testPending = false;
+    if (!m_testMode)
+        return;
+    m_testMode = false;
+    if (!m_db->isOpen()) {
+        QString error;
+        if (!openDatabase(&error))
+            qWarning("Test mode: cannot open the data again: %s", qPrintable(error));
+        m_store->notifyReset();
+    }
+    QDir(testFolder()).removeRecursively();
+    emit testModeChanged();
 }
 
 bool AppController::openDatabase(QString *error)
 {
     const QString path = databasePath();
-    // An older layout is updated when opened: keep a copy of it first
-    const QString backup = QDir(m_dataDir).filePath(u"backups/before-update-%1.db"_s.arg(timestamp()));
-    QDir().mkpath(QFileInfo(backup).absolutePath());
+    // An older layout is updated when opened: keep a copy of it first (not of sample data)
+    const QString backup = m_testMode ? QString()
+                                      : QDir(m_dataDir).filePath(u"backups/before-update-%1.db"_s.arg(timestamp()));
+    if (!backup.isEmpty())
+        QDir().mkpath(QFileInfo(backup).absolutePath());
     m_db->setMigrationBackup(backup);
     const bool opened = m_db->open(path, error);
     m_db->setMigrationBackup({});
-    if (QFileInfo::exists(backup))
+    if (!backup.isEmpty() && QFileInfo::exists(backup))
         rotate(u"before-update-"_s, kKeepSafetyBackups);
     if (opened) {
         // Changes for data this device did not know before the update (e.g. lesson plans)
@@ -733,6 +794,8 @@ void AppController::finishTakeOver(const Qupil::TakeOver::Outcome &o)
     }
     if (!o.ok) {
         m_demoPending = false;
+        if (m_testPending)
+            abandonTestMode();
         setBusy(false);
         QDir(QDir(m_dataDir).filePath(u"work"_s)).removeRecursively();
         QDir(importFolder()).removeRecursively();
@@ -741,7 +804,7 @@ void AppController::finishTakeOver(const Qupil::TakeOver::Outcome &o)
     }
 
     // Keep what was there before, then swap the files
-    if (m_db->isOpen() && !m_db->isEmpty())
+    if (m_db->isOpen() && !m_db->isEmpty() && !m_testPending)
         safetyBackup(o.kind == u"legacy"_s ? u"before-import"_s : u"before-restore"_s);
     if (o.kind == u"legacy"_s)
         rotate(u"qupil1-"_s, kKeepLegacyCopies);
@@ -753,13 +816,30 @@ void AppController::finishTakeOver(const Qupil::TakeOver::Outcome &o)
     }
     removeDatabaseFiles(live);
     QString error;
+    if (m_testPending)
+        QDir().mkpath(QFileInfo(live).absolutePath());
     if (!renameWithRetry(o.newDatabase, live) || !openDatabase(&error)) {
+        if (m_testPending)
+            abandonTestMode();
         setBusy(false);
         emit takeOverFailed(error.isEmpty() ? qtTrId("setup.error.failed").arg(live) : error);
         return;
     }
     QDir(QDir(m_dataDir).filePath(u"work"_s)).removeRecursively();
     QDir(importFolder()).removeRecursively();   // a picked copy (iOS)
+
+    if (m_testPending) {
+        // Test mode: the sample data is open; no summary, and for sync nothing was replaced
+        m_testPending = false;
+        m_demoPending = false;
+        m_db->setMeta(u"demo"_s, u"1"_s);
+        QDir(QDir(m_dataDir).filePath(u"demo-source"_s)).removeRecursively();
+        setBusy(false);
+        m_store->notifyReset();
+        emit infoChanged();
+        emit testModeChanged();   // ready (default lists, alerts)
+        return;
+    }
 
     QVariantMap summary = o.summary;
     summary.insert(u"kind"_s, o.kind);
@@ -1005,6 +1085,8 @@ void AppController::exportBackup()
 
 bool AppController::safetyBackup(const QString &reason)
 {
+    if (m_testMode)
+        return true;   // sample data: nothing to keep
     const QString file = QDir(m_dataDir).filePath(u"backups/%1-%2.db"_s.arg(reason, timestamp()));
     const bool ok = m_db->backupTo(file);
     rotate(reason + u"-"_s, kKeepSafetyBackups);
@@ -1013,7 +1095,7 @@ bool AppController::safetyBackup(const QString &reason)
 
 bool AppController::autoBackupIfDue()
 {
-    if (!m_db->isOpen() || m_db->isEmpty())
+    if (m_testMode || !m_db->isOpen() || m_db->isEmpty())
         return false;
     const QDateTime last = QDateTime::fromString(m_db->meta(u"last_auto_backup"_s), Qt::ISODate);
     if (last.isValid() && last.secsTo(QDateTime::currentDateTimeUtc()) < 20 * 3600)

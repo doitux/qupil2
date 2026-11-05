@@ -3331,6 +3331,45 @@ Póngase en contacto con el autor en %4 para resolver el problema.</translation>
         <extracomment>%1 = commit, e.g. 8828322</extracomment>
         <translation>Build %1</translation>
     </message>
+    <message id="testmode.badge">
+        <source>Sample data</source>
+        <extracomment>Test mode label: invented data instead of the real data</extracomment>
+        <translation>Datos de prueba</translation>
+    </message>
+    <message id="testmode.end">
+        <source>End</source>
+        <translation>Salir</translation>
+    </message>
+    <message id="testmode.on">
+        <source>Sample data: your real data stays untouched</source>
+        <translation>Datos de prueba: sus datos reales no se tocan</translation>
+    </message>
+    <message id="testmode.off">
+        <source>Your real data again</source>
+        <translation>De nuevo sus datos reales</translation>
+    </message>
+    <message id="testmode.taps_on" numerus="yes">
+        <source>%n more tap(s) for sample data</source>
+        <translation>
+            <numerusform>%n toque más para datos de prueba</numerusform>
+            <numerusform>%n toques más para datos de prueba</numerusform>
+        </translation>
+    </message>
+    <message id="testmode.taps_off" numerus="yes">
+        <source>%n more tap(s) for your real data</source>
+        <translation>
+            <numerusform>%n toque más para sus datos reales</numerusform>
+            <numerusform>%n toques más para sus datos reales</numerusform>
+        </translation>
+    </message>
+    <message id="testmode.preparing">
+        <source>Preparing sample data</source>
+        <translation>Preparando datos de prueba</translation>
+    </message>
+    <message id="testmode.sync_off">
+        <source>Sample data: syncing is off, nothing goes to your other devices or Nextcloud.</source>
+        <translation>Datos de prueba: la sincronización está desactivada, nada va a sus otros dispositivos ni a Nextcloud.</translation>
+    </message>
     <message id="app.build_copied">
         <source>Copied: Qupil %1</source>
         <extracomment>%1 = version and commit</extracomment>
