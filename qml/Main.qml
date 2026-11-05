@@ -112,11 +112,36 @@ ApplicationWindow {
     property bool firstFrame: !App.desktop
     onFrameSwapped: if (!firstFrame) Qt.callLater(() => window.firstFrame = true)
 
-    // Android: the window keeps its size with the on-screen keyboard (App.keyboardHeight);
-    // the room for it grows and shrinks with the keyboard. Editors (sheets) make room
+    // Room for the on-screen keyboard (Nav.keyboardInset). Editors (sheets) make room
     // themselves, the pages only when typing in a field on the page (search, settings).
-    property real keyboardInset: App.keyboardHeight
+    // - Android: the window keeps its size (App.keyboardHeight, measured by QupilActivity);
+    //   the room grows and shrinks with the keyboard.
+    // - iOS: the keyboard's height from Qt, at once. Otherwise iOS moves the whole view up
+    //   to show the cursor, and on the iPad an editor's header with Save went off the top.
+    //   An editor that opens for typing makes room before the keyboard comes (its height
+    //   last time, Nav.expectKeyboard), so the cursor is already in view and nothing moves.
+    readonly property bool ios: Qt.platform.os === "ios"
+    readonly property real iosKeyboard: {
+        if (!ios || !Qt.inputMethod.visible)
+            return 0
+        const r = Qt.inputMethod.keyboardRectangle
+        return r.width >= width - 1 ? r.height : 0      // docked (a floating one on the iPad: no room)
+    }
+    property real keyboardPortrait: 0
+    property real keyboardLandscape: 0
+    onIosKeyboardChanged: {
+        if (iosKeyboard <= 0)
+            return
+        if (width > height)
+            keyboardLandscape = iosKeyboard
+        else
+            keyboardPortrait = iosKeyboard
+    }
+    readonly property real expectedKeyboard: Nav.expectKeyboard && iosKeyboard === 0
+                                             ? (width > height ? keyboardLandscape : keyboardPortrait) : 0
+    property real keyboardInset: ios ? Math.max(iosKeyboard, expectedKeyboard) : App.keyboardHeight
     Behavior on keyboardInset {
+        enabled: !window.ios
         NumberAnimation { duration: 250; easing.type: Easing.OutCubic }
     }
     Binding {

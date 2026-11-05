@@ -10,9 +10,10 @@ QtObject {
     //! Height taken at the bottom right by the running metronome (Main.qml): floating
     //! buttons of a page ("+ Note") sit above it instead of under it
     property real playerInset: 0
-    //! Android: height of the on-screen keyboard over the window, following it as it moves
-    //! (set by Main.qml; 0 elsewhere: there the system makes room)
+    //! Height of the on-screen keyboard over the window (set by Main.qml): Android and iOS
     property real keyboardInset: 0
+    //! iOS: an editor opened for typing, the keyboard is about to come (Main.qml makes room)
+    property bool expectKeyboard: false
     //! Students to point out once on More › Birthdays (from "Hatten Geburtstag: …" in the notices)
     property var birthdayFocus: []
 

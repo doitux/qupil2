@@ -34,8 +34,8 @@ Popup {
         - while open: follows the keyboard (gone only after a moment: it may just be moving
           from one field to the next), Save moves over smoothly
         - closing: stays as it is (dismiss)
-        Android: the window keeps its size, the sheet ends above the keyboard
-        (Nav.keyboardInset, following it as it moves).
+        The sheet ends above the keyboard (Nav.keyboardInset), and the cursor stays in view
+        (revealCursor).
     */
     property bool typing: false
     //! Closing, waiting for the keyboard to go down first (dismiss)
@@ -92,6 +92,8 @@ Popup {
             close()
             return
         }
+        heldHeight = height
+        heldY = y
         leaving = true
         Qt.inputMethod.hide()
         leaveAtLatest.restart()
@@ -100,7 +102,12 @@ Popup {
     Timer {
         id: keyboardGone
         interval: 400
-        onTriggered: if (sheet.opened && !sheet.leaving && !sheet.keyboardShown) sheet.typing = false
+        onTriggered: {
+            if (sheet.opened && !sheet.leaving && !sheet.keyboardShown) {
+                sheet.typing = false
+                Nav.expectKeyboard = false
+            }
+        }
     }
     onKeyboardShownChanged: {
         if (leaving) {
@@ -113,6 +120,7 @@ Popup {
         if (keyboardShown) {
             keyboardGone.stop()
             typing = true
+            Nav.expectKeyboard = false
         } else {
             keyboardGone.restart()
         }
@@ -127,6 +135,39 @@ Popup {
         interval: 450
         onTriggered: if (sheet.leaving) sheet.close()
     }
+    /*!
+        Keeps the cursor of the field being typed in visible in the sheet, above the keyboard
+        (when the sheet gets smaller for the keyboard, and while typing). iOS would otherwise
+        move the whole view, Android would leave it under the keyboard.
+    */
+    function revealCursor() {
+        if (!typing || !visible)
+            return
+        const item = contentItem.Window.activeFocusItem
+        if (!item || item.cursorRectangle === undefined)
+            return
+        let p = item
+        while (p && p !== flick.contentItem)
+            p = p.parent
+        if (!p)
+            return
+        const r = item.cursorRectangle
+        const top = item.mapToItem(flick.contentItem, r.x, r.y).y - 16
+        const bottom = top + r.height + 32
+        let y = flick.contentY
+        if (top < y)
+            y = top
+        else if (bottom > y + flick.height)
+            y = bottom - flick.height
+        y = Math.max(0, Math.min(y, flick.contentHeight - flick.height))
+        if (Math.abs(y - flick.contentY) > 0.5)
+            flick.contentY = y
+    }
+    Connections {
+        target: sheet.typing ? sheet.contentItem.Window.activeFocusItem : null
+        ignoreUnknownSignals: true
+        function onCursorRectangleChanged() { sheet.revealCursor() }
+    }
     //! The field with the cursor, if the focus is in one
     function typingField() {
         const item = contentItem.Window.activeFocusItem
@@ -138,8 +179,11 @@ Popup {
         typing = false
         // The editor puts the cursor in a field right after open(): the keyboard comes
         Qt.callLater(() => {
-            if (!App.desktop && sheet.visible && !sheet.closing && sheet.typingField())
+            if (!App.desktop && sheet.visible && !sheet.closing && sheet.typingField()) {
                 sheet.typing = true
+                if (!sheet.keyboardShown)
+                    Nav.expectKeyboard = true
+            }
         })
     }
     onOpened: {
@@ -148,15 +192,19 @@ Popup {
         else if (typing)
             keyboardGone.restart()
     }
-    // While it fades out, the sheet keeps its place and size (the window may still change)
+    // While it fades out (or waits for the keyboard to go down), the sheet keeps its place
+    // and size
     property bool closing: false
     property real heldHeight: 0
     property real heldY: 0
     onAboutToHide: {
-        heldHeight = height
-        heldY = y
+        if (!leaving) {
+            heldHeight = height
+            heldY = y
+        }
         closing = true
         leaving = false
+        Nav.expectKeyboard = false
         leaveSettled.stop()
         leaveAtLatest.stop()
         keyboardGone.stop()
@@ -165,14 +213,14 @@ Popup {
         target: sheet
         property: "height"
         value: sheet.heldHeight
-        when: sheet.closing
+        when: sheet.closing || sheet.leaving
         restoreMode: Binding.RestoreBinding
     }
     Binding {
         target: sheet
         property: "y"
         value: sheet.heldY
-        when: sheet.closing
+        when: sheet.closing || sheet.leaving
         restoreMode: Binding.RestoreBinding
     }
 
@@ -298,6 +346,7 @@ Popup {
             clip: true
             contentHeight: column.implicitHeight + 32
             boundsBehavior: Flickable.StopAtBounds
+            onHeightChanged: sheet.revealCursor()
             ScrollBar.vertical: ScrollBar {}
 
             NumberAnimation {
