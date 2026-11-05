@@ -105,6 +105,8 @@ Popup {
         onTriggered: {
             if (sheet.opened && !sheet.leaving && !sheet.keyboardShown) {
                 sheet.typing = false
+                if (Nav.expectKeyboard)
+                    Nav.keyboardStayedAway()
                 Nav.expectKeyboard = false
             }
         }

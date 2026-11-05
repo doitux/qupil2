@@ -139,6 +139,18 @@ ApplicationWindow {
         else
             keyboardPortrait = iosKeyboard
     }
+    // A hardware keyboard on the iPad: the on-screen one does not come (or only its small
+    // shortcut bar, floating: no room needed). Then no room in advance any more until the
+    // on-screen keyboard is seen again; otherwise each editor would shrink and grow back.
+    Connections {
+        target: Nav
+        function onKeyboardStayedAway() {
+            if (window.width > window.height)
+                window.keyboardLandscape = 0
+            else
+                window.keyboardPortrait = 0
+        }
+    }
     readonly property real expectedKeyboard: Nav.expectKeyboard && iosKeyboard === 0
                                              ? (width > height ? keyboardLandscape : keyboardPortrait) : 0
     property real keyboardInset: ios ? Math.max(iosKeyboard, expectedKeyboard) : App.keyboardHeight

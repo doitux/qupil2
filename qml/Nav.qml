@@ -16,6 +16,9 @@ QtObject {
     property bool expectKeyboard: false
     //! Editors (sheets) open: they make room for the keyboard themselves
     property int openSheets: 0
+    //! iOS: an editor expected the on-screen keyboard and it did not come (a hardware keyboard
+    //! on the iPad): Main.qml stops making room in advance
+    signal keyboardStayedAway()
     //! Students to point out once on More › Birthdays (from "Hatten Geburtstag: …" in the notices)
     property var birthdayFocus: []
 
