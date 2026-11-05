@@ -62,7 +62,12 @@ public class QupilActivity extends QtActivity
     public void onCreate(Bundle savedInstanceState)
     {
         Log.i(TAG, "activity: create, saved state " + (savedInstanceState != null) + ", content ready " + s_contentReady);
-        super.onCreate(savedInstanceState);
+        // Always a fresh start. Android hands over a saved state when it brings back an
+        // activity it had destroyed (to save memory, or "Don't keep activities"); Qt 6.8
+        // has ended the whole process then (QtActivityBase.onDestroy). With that state the
+        // new process said "qt started", but Qupil's main() was never called, and the
+        // window stayed black (logs from a phone, 05.11.2026). Qupil keeps nothing in it.
+        super.onCreate(null);
         startKeyboardProbe();
         if (s_contentReady)
             return;   // made again while Qupil runs (Qt keeps its interface)
@@ -129,6 +134,14 @@ public class QupilActivity extends QtActivity
             final int flags = decor.getSystemUiVisibility();
             decor.setSystemUiVisibility(m_barsDark ? flags & ~light : flags | light);
         }
+    }
+
+    //! Nothing to restore (see onCreate); Qt itself only restores after a configuration
+    //! change, which Qupil handles without a new activity (configChanges in the manifest)
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState)
+    {
+        Log.i(TAG, "activity: saved state not restored");
     }
 
     @Override

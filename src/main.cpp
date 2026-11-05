@@ -281,7 +281,9 @@ int main(int argc, char *argv[])
                          // interface (QupilActivity.java), then goes straight to it
                          auto ready = std::make_shared<QMetaObject::Connection>();
                          *ready = QObject::connect(window, &QQuickWindow::frameSwapped, qApp, [ready] {
-                             QObject::disconnect(*ready);
+                             // Queued: several frames can be on their way before the disconnect
+                             if (!QObject::disconnect(*ready))
+                                 return;
                              QUPIL_BOOT("main: first frame");
                              QJniObject::callStaticMethod<void>("de/qupil/app/QupilActivity", "contentReady", "()V");
                          }, Qt::QueuedConnection);
