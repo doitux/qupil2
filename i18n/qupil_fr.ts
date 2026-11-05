@@ -861,6 +861,11 @@
         <extracomment>Note editor on phones, after tapping an older note; %1 = its date</extracomment>
         <translation>Texte du %1 repris</translation>
     </message>
+    <message id="note.draft_restored">
+        <source>Not saved yet – draft of %1, %2</source>
+        <extracomment>Note editor opened again at the start with text that was not saved when Qupil was closed; %1 = date, %2 = time</extracomment>
+        <translation>Pas encore enregistré – brouillon du %1, %2</translation>
+    </message>
     <message id="note.clear">
         <source>Clear</source>
         <extracomment>Empties the note editor</extracomment>

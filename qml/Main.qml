@@ -438,6 +438,14 @@ ApplicationWindow {
         }
     }
 
+    //! Screenshot tour: the note editor as it comes back with a draft (the latest note's text)
+    function showDraftExample(membership) {
+        const notes = Data.notes(membership)
+        window.sheet("note").restoreDraft({ membershipId: membership, date: Data.today(), forAll: true,
+                                            content: notes.length > 0 ? notes[0].content : "",
+                                            savedOn: Data.today(), savedAt: "14:12" })
+    }
+
     //! Closes all editor sheets (used by the screenshot tour)
     function closeEditors() {
         for (const name in sheets)
@@ -458,6 +466,25 @@ ApplicationWindow {
         return sheets[name]
     }
     Component { id: noteEditor; NoteEditor {} }
+
+    // A note or plan kept as a draft when Qupil went to the background or quit (Nav,
+    // NoteEditor): its editor opens again once the data is there
+    property bool draftChecked: false
+    Timer {
+        interval: 500
+        running: App.phase === App.Ready && !window.draftChecked
+        onTriggered: {
+            window.draftChecked = true
+            const d = Nav.noteDraft()
+            if (!d || App.testMode)
+                return
+            if (!Data.get("membership", d.membershipId).id) {
+                Nav.clearNoteDraft()   // the student or lesson is gone (sync, deleted)
+                return
+            }
+            window.sheet("note").restoreDraft(d)
+        }
+    }
     Component {
         id: planFinish
         PlanFinish {

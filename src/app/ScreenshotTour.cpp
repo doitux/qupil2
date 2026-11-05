@@ -179,6 +179,9 @@ void ScreenshotTour::addDetails(const QString &prefix)
             << snap(prefix + u"-6b-plan-editor"_s) << close
             << Step { [this, nav] { nav("finishPlan", m_membership, m_plan).action(); }, {} }
             << snap(prefix + u"-6c-plan-finish"_s) << close
+            // A note that was not saved when Qupil was ended in the background, back as a draft
+            << Step { [this] { QMetaObject::invokeMethod(m_window, "showDraftExample", Q_ARG(QVariant, m_membership)); }, {} }
+            << snap(prefix + u"-6d-note-draft"_s) << close
             << Step { [this, nav] { nav("editPiece", m_membership, m_piece).action(); }, {} }
             << snap(prefix + u"-7-piece-editor"_s) << close
             // A long note: shortened with "Show more", then unfolded

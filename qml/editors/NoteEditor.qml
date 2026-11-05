@@ -31,6 +31,8 @@ Sheet {
     property string rest
 
     readonly property int groupSize: info.groupSize || 1
+    //! Qupil is quitting: the editor closing then keeps its draft
+    property bool quitting: false
 
     function edit(membership, note) {
         membershipId = membership
@@ -100,6 +102,47 @@ Sheet {
         noteText.text = Data.noteHtml(content, Theme.noteMark)
         noteText.cursorPosition = noteText.length
     }
+
+    //! Opens the editor again with a draft kept by Nav.saveNoteDraft (Main.qml, at the start)
+    function restoreDraft(d) {
+        edit(d.membershipId, d.noteId && Data.get("note", d.noteId).id ? d.noteId : "")
+        plan = !!d.plan
+        planId = plan && d.planId && Data.plans(d.membershipId).some(x => x.id === d.planId) ? d.planId : ""
+        fromPlanId = !plan && d.fromPlanId && Data.plans(d.membershipId).some(x => x.id === d.fromPlanId) ? d.fromPlanId : ""
+        rest = fromPlanId ? (d.rest || "") : ""
+        date = d.date || Data.today()
+        forAll = !!d.forAll
+        noteText.text = Data.noteHtml(d.content || "", Theme.noteMark)
+        noteText.cursorPosition = noteText.length
+        // The line above the text (as for a note started from an older one), with "Clear"
+        copiedText = qsTrId("note.draft_restored").arg(d.savedOn ? Data.formatDate(d.savedOn) : "").arg(d.savedAt || "")
+        copiedFrom = date
+    }
+    function keepDraft() {
+        if (!opened || leaving || noteText.length === 0 || App.testMode)
+            return
+        const now = new Date()
+        Nav.saveNoteDraft({
+            membershipId: membershipId, noteId: noteId, date: date, forAll: forAll,
+            plan: plan, planId: planId, fromPlanId: fromPlanId, rest: rest,
+            content: formatter.markup(),
+            savedOn: Qt.formatDate(now, "yyyy-MM-dd"), savedAt: Qt.formatTime(now, "hh:mm")
+        })
+    }
+    // Android and iOS may end Qupil in the background: the text is kept as a draft
+    Connections {
+        target: Qt.application
+        function onStateChanged() {
+            if (Qt.application.state !== Qt.ApplicationActive)
+                editor.keepDraft()
+        }
+        function onAboutToQuit() {
+            editor.keepDraft()
+            editor.quitting = true
+        }
+    }
+    // Saved, cancelled or closed: no draft any more
+    onClosed: if (!quitting) Nav.clearNoteDraft()
 
     title: plan ? (planId ? qsTrId("plan.edit") : qsTrId("plan.new")) : noteId ? qsTrId("note.edit") : qsTrId("note.new")
     acceptText: plan ? qsTrId("plan.save") : qsTrId("note.save")

@@ -862,6 +862,11 @@ Bitte ändern Sie die Schüleranzahl um zu speichern!</translation>
         <extracomment>Note editor on phones, after tapping an older note; %1 = its date</extracomment>
         <translation>Text vom %1 übernommen</translation>
     </message>
+    <message id="note.draft_restored">
+        <source>Not saved yet – draft of %1, %2</source>
+        <extracomment>Note editor opened again at the start with text that was not saved when Qupil was closed; %1 = date, %2 = time</extracomment>
+        <translation>Noch nicht gespeichert – Entwurf vom %1, %2</translation>
+    </message>
     <message id="note.clear">
         <source>Clear</source>
         <extracomment>Empties the note editor</extracomment>

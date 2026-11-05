@@ -4,6 +4,7 @@
 // App-wide requests between pages and the editors that live in Main.qml.
 //   Nav.editNote(membershipId, "")   → Main.qml opens the note editor
 pragma Singleton
+import QtCore
 import QtQuick
 
 QtObject {
@@ -21,6 +22,32 @@ QtObject {
     signal keyboardStayedAway()
     //! Students to point out once on More › Birthdays (from "Hatten Geburtstag: …" in the notices)
     property var birthdayFocus: []
+
+    // ---------------------------------------------------------------- note draft
+    // The text of an open note or plan editor, kept when Qupil goes to the background or
+    // quits: Android and iOS may end Qupil there (Qt then ends the whole process), and the
+    // editor comes back with it at the next start (Main.qml). Only on this device, never
+    // synced, not in the test mode.
+    property Settings _drafts: Settings {
+        category: "draft"
+        property string note: ""
+    }
+    function saveNoteDraft(draft) {
+        _drafts.note = JSON.stringify(draft)
+        try { _drafts.sync() } catch (e) {}
+    }
+    function clearNoteDraft() {
+        if (_drafts.note === "")
+            return
+        _drafts.note = ""
+        try { _drafts.sync() } catch (e) {}
+    }
+    //! The kept draft, or null
+    function noteDraft() {
+        if (_drafts.note === "")
+            return null
+        try { return JSON.parse(_drafts.note) } catch (e) { return null }
+    }
 
     /*!
         One step back in a StackView of pages (system back button): the page on top

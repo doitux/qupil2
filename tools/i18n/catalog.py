@@ -457,6 +457,9 @@ E("note.copied_from_desktop",
   es="Nueva nota con el texto del %1. Para cambiar o eliminar la nota anterior, haga clic derecho sobre ella.")
 E("note.copied_short", en="Text of %1 taken over", de="Text vom %1 übernommen", fr="Texte du %1 repris",
   es="Texto del %1 copiado", c="Note editor on phones, after tapping an older note; %1 = its date")
+E("note.draft_restored", en="Not saved yet – draft of %1, %2", de="Noch nicht gespeichert – Entwurf vom %1, %2",
+  fr="Pas encore enregistré – brouillon du %1, %2", es="Aún no guardado – borrador del %1, %2",
+  c="Note editor opened again at the start with text that was not saved when Qupil was closed; %1 = date, %2 = time")
 E("note.clear", en="Clear", de="Leeren", fr="Vider", es="Vaciar", c="Empties the note editor")
 E("note.delete.confirm", en="The note of %1 will be deleted.", de="Die Notiz vom %1 wird gelöscht.",
   fr="La note du %1 sera supprimée.", es="Se eliminará la nota del %1.", c="%1 = date of the note")
