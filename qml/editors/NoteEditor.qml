@@ -33,10 +33,13 @@ Sheet {
     readonly property int groupSize: info.groupSize || 1
     //! Qupil is quitting: the editor closing then keeps its draft
     property bool quitting: false
+    //! Opened again with a draft: the line above the text has no "Clear" ("Cancel" drops it)
+    property bool draft: false
 
     function edit(membership, note) {
         membershipId = membership
         noteId = note
+        draft = false
         copiedFrom = ""
         copiedText = ""
         plan = false
@@ -106,6 +109,7 @@ Sheet {
     //! Opens the editor again with a draft kept by Nav.saveNoteDraft (Main.qml, at the start)
     function restoreDraft(d) {
         edit(d.membershipId, d.noteId && Data.get("note", d.noteId).id ? d.noteId : "")
+        draft = true
         plan = !!d.plan
         planId = plan && d.planId && Data.plans(d.membershipId).some(x => x.id === d.planId) ? d.planId : ""
         fromPlanId = !plan && d.fromPlanId && Data.plans(d.membershipId).some(x => x.id === d.fromPlanId) ? d.fromPlanId : ""
@@ -296,6 +300,7 @@ Sheet {
                 font.pixelSize: 13
             }
             ActionButton {
+                visible: !editor.draft
                 kind: "quiet"
                 iconName: "close"
                 text: qsTrId("note.clear")
