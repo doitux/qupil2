@@ -8,6 +8,8 @@
     - launcher icon (res/mipmap-*: adaptive on Android 8+, themed on 13+)
     - QupilActivity: Qt's activity, holding the launch screen until the interface is
       drawn; window in Qupil's background colour (res/values*/qupil_*.xml)
+    - adjustNothing: the window keeps its size with the on-screen keyboard (resizing it
+      flickered); QupilActivity measures the keyboard, the interface makes room itself
     - no Android cloud backup: student data stays on the device (Qupil has its
       own backups and the end-to-end encrypted sync)
 -->
@@ -46,7 +48,7 @@
             android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density"
             android:launchMode="singleTop"
             android:screenOrientation="unspecified"
-            android:windowSoftInputMode="adjustResize"
+            android:windowSoftInputMode="adjustNothing"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

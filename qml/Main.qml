@@ -111,8 +111,30 @@ ApplicationWindow {
     // content, an empty one ends the launch screen early and the content flickers in after it
     property bool firstFrame: !App.desktop
     onFrameSwapped: if (!firstFrame) Qt.callLater(() => window.firstFrame = true)
+
+    // Android: the window keeps its size with the on-screen keyboard (App.keyboardHeight);
+    // the room for it grows and shrinks with the keyboard. Editors (sheets) make room
+    // themselves, the pages only when typing in a field on the page (search, settings).
+    property real keyboardInset: App.keyboardHeight
+    Behavior on keyboardInset {
+        NumberAnimation { duration: 250; easing.type: Easing.OutCubic }
+    }
+    Binding {
+        target: Nav
+        property: "keyboardInset"
+        value: window.keyboardInset
+    }
+    function inPopup(item) {
+        for (let p = item; p; p = p.parent)
+            if (p === Overlay.overlay)
+                return true
+        return false
+    }
+    readonly property real pageKeyboardInset: activeFocusItem && !inPopup(activeFocusItem) ? keyboardInset : 0
+
     Loader {
         anchors.fill: parent
+        anchors.bottomMargin: window.pageKeyboardInset
         active: window.firstFrame
         sourceComponent: App.phase === App.Ready ? mainUi : setupUi
     }

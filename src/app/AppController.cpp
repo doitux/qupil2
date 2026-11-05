@@ -518,6 +518,15 @@ bool AppController::startInstalled()
 #endif
 }
 
+void AppController::setKeyboardHeight(qreal height)
+{
+    height = qMax<qreal>(0, height);
+    if (qFuzzyCompare(height + 1, m_keyboardHeight + 1))
+        return;
+    m_keyboardHeight = height;
+    emit keyboardHeightChanged();
+}
+
 bool AppController::desktop() const
 {
 #if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)

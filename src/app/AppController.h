@@ -72,6 +72,12 @@ class AppController : public QObject
     //! The system's own picker opens files as a copy (iOS): use pickFile instead of Qt's file dialog
     Q_PROPERTY(bool importPickerAvailable READ importPickerAvailable CONSTANT FINAL)
     Q_PROPERTY(QUrl backupFolder READ backupFolder CONSTANT FINAL)
+    /*!
+        Height of the on-screen keyboard over the window (device-independent pixels, 0 when
+        closed). Android only: there the window keeps its size when the keyboard comes (a
+        changing window size flickered), and the interface makes room itself. Elsewhere 0.
+    */
+    Q_PROPERTY(qreal keyboardHeight READ keyboardHeight NOTIFY keyboardHeightChanged FINAL)
 
 public:
     enum Phase {
@@ -191,7 +197,11 @@ public:
     //! The user decided how the data here goes together with another device or the folder
     void joinDecided();
 
+    qreal keyboardHeight() const { return m_keyboardHeight; }
+    void setKeyboardHeight(qreal height);
+
 signals:
+    void keyboardHeightChanged();
     void phaseChanged();
     void setupInstallationChanged();
     //! After removeSetupInstallation: the setup version is gone (true) or still there (false)
@@ -223,6 +233,7 @@ private:
     void setProgress(int percent, const QString &step);
 
     QString m_dataDir;
+    qreal m_keyboardHeight = 0;
     std::unique_ptr<Qupil::Database> m_db;
     std::unique_ptr<Qupil::Store> m_store;
     Phase m_phase = Setup;

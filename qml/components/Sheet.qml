@@ -26,16 +26,16 @@ Popup {
     //! while typing: then Save is in the header, the big button would take room from the text
     property bool bottomButton: compact && !typing
     //! The on-screen keyboard is open (phones, tablets)
-    readonly property bool keyboardShown: Qt.inputMethod.visible
+    readonly property bool keyboardShown: Qt.inputMethod.visible || App.keyboardHeight > 0
     /*!
         Laid out for the on-screen keyboard. Nothing may change places while the sheet slides
-        in or out (it flickered: the keyboard comes and goes at the same time, and on
-        Android the window changes its height with it):
+        in or out (it flickered: the keyboard comes and goes at the same time):
         - opening with the cursor in a field (the keyboard comes): laid out for it at once
         - while open: follows the keyboard (gone only after a moment: it may just be moving
           from one field to the next), Save moves over smoothly
-        - closing: stays as it is, and with the keyboard open the sheet waits until the
-          keyboard is gone before it fades out (dismiss)
+        - closing: stays as it is (dismiss)
+        Android: the window keeps its size, the sheet ends above the keyboard
+        (Nav.keyboardInset, following it as it moves).
     */
     property bool typing: false
     //! Closing, waiting for the keyboard to go down first (dismiss)
@@ -80,14 +80,15 @@ Popup {
         dismiss()
     }
     /*!
-        Closes the sheet. With the on-screen keyboard open, it goes down first while the sheet
-        stays (on Android the window grows back meanwhile, the pages under it with it), then
-        the sheet fades out over the finished page.
+        Closes the sheet. iOS, with the on-screen keyboard open: it goes down first while the
+        sheet stays (Qupil's view moves back down with it), then the sheet fades out. Android:
+        at once, the keyboard goes down while the sheet fades (the page under it keeps its
+        size there).
     */
     function dismiss() {
         if (leaving || !visible)
             return
-        if (App.desktop || !keyboardShown) {
+        if (App.desktop || Qt.platform.os === "android" || !keyboardShown) {
             close()
             return
         }
@@ -103,8 +104,7 @@ Popup {
     }
     onKeyboardShownChanged: {
         if (leaving) {
-            // Android: the window only grows back after the keyboard has gone (below)
-            if (!keyboardShown && Qt.platform.os !== "android")
+            if (!keyboardShown)
                 leaveSettled.restart()
             return
         }
@@ -116,13 +116,6 @@ Popup {
         } else {
             keyboardGone.restart()
         }
-    }
-    // Android: the window grows back when the keyboard has gone; the sheet fades out once
-    // the pages under it have their full height again
-    Connections {
-        target: sheet.parent
-        enabled: sheet.leaving
-        function onHeightChanged() { leaveSettled.restart() }
     }
     Timer {
         id: leaveSettled
@@ -190,11 +183,13 @@ Popup {
     padding: 0
 
     width: compact ? parent.width : Math.min(620, parent.width - 48)
-    height: compact ? parent.height - 24
-                    : Math.min(parent.height - 48, header.implicitHeight + column.implicitHeight + 40
-                                                   + (sheet.bottomButton ? 76 : 0))
+    //! Room taken at the bottom by the on-screen keyboard (Android)
+    readonly property real keyboardInset: Nav.keyboardInset
+    height: compact ? parent.height - 24 - keyboardInset
+                    : Math.min(parent.height - 48 - keyboardInset, header.implicitHeight + column.implicitHeight + 40
+                                                                   + (sheet.bottomButton ? 76 : 0))
     x: compact ? 0 : Math.round((parent.width - width) / 2)
-    y: compact ? parent.height - height : Math.round((parent.height - height) / 2)
+    y: compact ? parent.height - keyboardInset - height : Math.round((parent.height - keyboardInset - height) / 2)
 
     Overlay.modal: Rectangle { color: Theme.overlay }
 
@@ -202,7 +197,7 @@ Popup {
         NumberAnimation {
             property: sheet.compact ? "y" : "opacity"
             from: sheet.compact ? sheet.parent.height : 0
-            to: sheet.compact ? sheet.parent.height - sheet.height : 1
+            to: sheet.compact ? sheet.parent.height - sheet.keyboardInset - sheet.height : 1
             duration: 220
             easing.type: Easing.OutCubic
         }

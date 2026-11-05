@@ -146,6 +146,7 @@ ColumnLayout {
         id: popup
         width: picker.width
         margins: 12
+        bottomMargin: 12 + Nav.keyboardInset   // above the keyboard (Android)
         padding: 10
         modal: false
         focus: true

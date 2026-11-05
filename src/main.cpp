@@ -8,6 +8,7 @@
 #include <QIcon>
 #ifdef Q_OS_ANDROID
 #include <QJniObject>
+#include "KeyboardHeight.h"
 #endif
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
@@ -188,6 +189,9 @@ int main(int argc, char *argv[])
     if (args.isSet(langOption))
         languages.setLanguage(args.value(langOption));
     AppController controller(dataDir, nullptr);
+#ifdef Q_OS_ANDROID
+    KeyboardHeight::watch([&controller](qreal height) { controller.setKeyboardHeight(height); });
+#endif
     DataService data(controller.store(), nullptr);
     DocumentService docs(&data, nullptr);
     // Default lists (styles, locations, instruments) in the UI language for new data
