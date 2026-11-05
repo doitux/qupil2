@@ -199,6 +199,16 @@ public:
 
     qreal keyboardHeight() const { return m_keyboardHeight; }
     void setKeyboardHeight(qreal height);
+    //! iOS: an editor is open and makes room for the keyboard itself, the system must not
+    //! move the whole view (KeyboardHeight::holdView); elsewhere nothing
+    Q_INVOKABLE void holdViewForKeyboard(bool hold) { if (m_holdView) m_holdView(hold); }
+    //! iOS: undo a move of the view by the system now (after the cursor moved)
+    Q_INVOKABLE void keepViewInPlace() { if (m_keepView) m_keepView(); }
+    void setKeyboardViewHooks(std::function<void(bool)> hold, std::function<void()> keep)
+    {
+        m_holdView = std::move(hold);
+        m_keepView = std::move(keep);
+    }
 
 signals:
     void keyboardHeightChanged();
@@ -234,6 +244,8 @@ private:
 
     QString m_dataDir;
     qreal m_keyboardHeight = 0;
+    std::function<void(bool)> m_holdView;
+    std::function<void()> m_keepView;
     std::unique_ptr<Qupil::Database> m_db;
     std::unique_ptr<Qupil::Store> m_store;
     Phase m_phase = Setup;

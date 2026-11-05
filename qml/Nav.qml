@@ -14,6 +14,8 @@ QtObject {
     property real keyboardInset: 0
     //! iOS: an editor opened for typing, the keyboard is about to come (Main.qml makes room)
     property bool expectKeyboard: false
+    //! Editors (sheets) open: they make room for the keyboard themselves
+    property int openSheets: 0
     //! Students to point out once on More › Birthdays (from "Hatten Geburtstag: …" in the notices)
     property var birthdayFocus: []
 

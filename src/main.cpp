@@ -8,6 +8,8 @@
 #include <QIcon>
 #ifdef Q_OS_ANDROID
 #include <QJniObject>
+#endif
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
 #include "KeyboardHeight.h"
 #endif
 #include <QQmlApplicationEngine>
@@ -191,6 +193,9 @@ int main(int argc, char *argv[])
     AppController controller(dataDir, nullptr);
 #ifdef Q_OS_ANDROID
     KeyboardHeight::watch([&controller](qreal height) { controller.setKeyboardHeight(height); });
+#endif
+#ifdef Q_OS_IOS
+    controller.setKeyboardViewHooks(KeyboardHeight::holdView, KeyboardHeight::keepViewInPlace);
 #endif
     DataService data(controller.store(), nullptr);
     DocumentService docs(&data, nullptr);

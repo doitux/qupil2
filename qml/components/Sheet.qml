@@ -152,8 +152,9 @@ Popup {
         if (!p)
             return
         const r = item.cursorRectangle
+        // Room below for the next line (iOS checks the cursor with a margin of its own)
         const top = item.mapToItem(flick.contentItem, r.x, r.y).y - 16
-        const bottom = top + r.height + 32
+        const bottom = top + r.height + 16 + 48
         let y = flick.contentY
         if (top < y)
             y = top
@@ -162,12 +163,18 @@ Popup {
         y = Math.max(0, Math.min(y, flick.contentHeight - flick.height))
         if (Math.abs(y - flick.contentY) > 0.5)
             flick.contentY = y
+        Qt.callLater(keepView)
     }
     Connections {
         target: sheet.typing ? sheet.contentItem.Window.activeFocusItem : null
         ignoreUnknownSignals: true
         function onCursorRectangleChanged() { sheet.revealCursor() }
     }
+    //! iOS moves the whole view when the cursor seems hidden: not while an editor is open
+    function keepView() {
+        App.keepViewInPlace()
+    }
+    onVisibleChanged: Nav.openSheets = Math.max(0, Nav.openSheets + (visible ? 1 : -1))
     //! The field with the cursor, if the focus is in one
     function typingField() {
         const item = contentItem.Window.activeFocusItem

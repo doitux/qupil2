@@ -119,7 +119,9 @@ ApplicationWindow {
     // - iOS: the keyboard's height from Qt, at once. Otherwise iOS moves the whole view up
     //   to show the cursor, and on the iPad an editor's header with Save went off the top.
     //   An editor that opens for typing makes room before the keyboard comes (its height
-    //   last time, Nav.expectKeyboard), so the cursor is already in view and nothing moves.
+    //   last time, Nav.expectKeyboard). While editors are open, iOS's own moving of the
+    //   view is undone (App.holdViewForKeyboard): both together took the editor off the
+    //   top. Pages keep iOS's way (they do not make room themselves there).
     readonly property bool ios: Qt.platform.os === "ios"
     readonly property real iosKeyboard: {
         if (!ios || !Qt.inputMethod.visible)
@@ -155,7 +157,12 @@ ApplicationWindow {
                 return true
         return false
     }
-    readonly property real pageKeyboardInset: activeFocusItem && !inPopup(activeFocusItem) ? keyboardInset : 0
+    readonly property real pageKeyboardInset: !ios && activeFocusItem && !inPopup(activeFocusItem) ? keyboardInset : 0
+    Connections {
+        target: Nav
+        enabled: window.ios
+        function onOpenSheetsChanged() { App.holdViewForKeyboard(Nav.openSheets > 0) }
+    }
 
     Loader {
         anchors.fill: parent
