@@ -5,6 +5,9 @@
 #include <QDirIterator>
 #include <QFontDatabase>
 #include <QGuiApplication>
+#ifdef Q_OS_ANDROID
+#include <android/log.h>
+#endif
 #include <QIcon>
 #ifdef Q_OS_ANDROID
 #include <QJniObject>
@@ -114,9 +117,24 @@ void placeWindow(QQuickWindow *window)
 
 } // namespace
 
+#ifdef Q_OS_ANDROID
+// Milestones of the start in Android's log (adb logcat -s Qupil): a window stayed black
+// after Android had recreated the activity; these show how far Qupil got
+#define QUPIL_BOOT(...) __android_log_print(ANDROID_LOG_INFO, "Qupil", __VA_ARGS__)
+#else
+#define QUPIL_BOOT(...) do {} while (false)
+#endif
+
 int main(int argc, char *argv[])
 {
+    QUPIL_BOOT("main: start");
     QGuiApplication app(argc, argv);
+    QUPIL_BOOT("main: application created");
+#ifdef Q_OS_ANDROID
+    QObject::connect(&app, &QGuiApplication::applicationStateChanged, &app, [](Qt::ApplicationState state) {
+        QUPIL_BOOT("main: application state %d", int(state));
+    });
+#endif
     QGuiApplication::setOrganizationName(u"Qupil"_s);
     QGuiApplication::setOrganizationDomain(u"qupil.de"_s);
     QGuiApplication::setApplicationName(u"Qupil"_s);
@@ -190,7 +208,9 @@ int main(int argc, char *argv[])
     LanguageManager languages(nullptr);  // translators are installed before any UI exists
     if (args.isSet(langOption))
         languages.setLanguage(args.value(langOption));
+    QUPIL_BOOT("main: opening data");
     AppController controller(dataDir, nullptr);
+    QUPIL_BOOT("main: data open, phase %d", int(controller.phase()));
 #ifdef Q_OS_ANDROID
     KeyboardHeight::watch([&controller](qreal height) { controller.setKeyboardHeight(height); });
 #endif
@@ -236,6 +256,7 @@ int main(int argc, char *argv[])
     // (also after an import, a restore or a sync that brought such entries)
     if (!smokeTest && !screenshots)
         docs.setArchiveUpkeep(true);
+    QUPIL_BOOT("main: services ready");
     QQmlApplicationEngine engine;
     languages.setEngine(&engine);   // retranslate() on a language switch
 
@@ -251,6 +272,7 @@ int main(int argc, char *argv[])
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app,
                      [desktop, smokeTest, screenshots](QObject *object, const QUrl &) {
                          auto *window = qobject_cast<QQuickWindow *>(object);
+                         QUPIL_BOOT("main: interface created, window %s", window ? "yes" : "no");
                          if (!window)
                              return;
                          new BackKey(window);
@@ -260,8 +282,15 @@ int main(int argc, char *argv[])
                          auto ready = std::make_shared<QMetaObject::Connection>();
                          *ready = QObject::connect(window, &QQuickWindow::frameSwapped, qApp, [ready] {
                              QObject::disconnect(*ready);
+                             QUPIL_BOOT("main: first frame");
                              QJniObject::callStaticMethod<void>("de/qupil/app/QupilActivity", "contentReady", "()V");
                          }, Qt::QueuedConnection);
+                         QObject::connect(window, &QQuickWindow::sceneGraphInitialized, window, [] {
+                             QUPIL_BOOT("main: graphics ready");
+                         }, Qt::DirectConnection);
+                         QObject::connect(window, &QWindow::visibleChanged, window, [window](bool visible) {
+                             QUPIL_BOOT("main: window visible %d, exposed %d", int(visible), int(window->isExposed()));
+                         });
 #endif
                          if (desktop && !smokeTest && !screenshots)
                              placeWindow(window);
@@ -343,6 +372,10 @@ int main(int argc, char *argv[])
                          });
     }
 
+    QUPIL_BOOT("main: loading interface");
     engine.loadFromModule("Qupil", "Main");
-    return app.exec();
+    QUPIL_BOOT("main: event loop");
+    const int code = app.exec();
+    QUPIL_BOOT("main: end %d", code);
+    return code;
 }

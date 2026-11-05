@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -53,9 +54,14 @@ public class QupilActivity extends QtActivity
     //! Bottom of the visible area without a keyboard
     private int m_probeBottom = 0;
 
+    // The steps of the activity in Android's log (adb logcat -s Qupil), with main.cpp's
+    // milestones: a window stayed black after Android had recreated the activity
+    private static final String TAG = "Qupil";
+
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
+        Log.i(TAG, "activity: create, saved state " + (savedInstanceState != null) + ", content ready " + s_contentReady);
         super.onCreate(savedInstanceState);
         startKeyboardProbe();
         if (s_contentReady)
@@ -71,6 +77,8 @@ public class QupilActivity extends QtActivity
                 // Not drawn yet: Android tries again with the next frame
                 if (!s_contentReady && SystemClock.uptimeMillis() - since < LONGEST_WAIT_MS)
                     return false;
+                if (!s_contentReady)
+                    Log.w(TAG, "activity: no frame with the interface after " + LONGEST_WAIT_MS + " ms");
                 content.getViewTreeObserver().removeOnPreDrawListener(this);
                 return true;
             }
@@ -124,15 +132,31 @@ public class QupilActivity extends QtActivity
     }
 
     @Override
+    protected void onStart()
+    {
+        Log.i(TAG, "activity: start");
+        super.onStart();
+    }
+
+    @Override
     protected void onResume()
     {
+        Log.i(TAG, "activity: resume, content ready " + s_contentReady);
         super.onResume();
         applySystemBars();
     }
 
     @Override
+    protected void onStop()
+    {
+        Log.i(TAG, "activity: stop");
+        super.onStop();
+    }
+
+    @Override
     public void onWindowFocusChanged(boolean hasFocus)
     {
+        Log.i(TAG, "activity: focus " + hasFocus);
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus)
             applySystemBars();
@@ -148,6 +172,7 @@ public class QupilActivity extends QtActivity
     @Override
     protected void onDestroy()
     {
+        Log.i(TAG, "activity: destroy, finishing " + isFinishing() + ", changing configurations " + isChangingConfigurations());
         if (m_keyboardProbe != null) {
             m_keyboardProbe.dismiss();
             m_keyboardProbe = null;
@@ -158,6 +183,7 @@ public class QupilActivity extends QtActivity
     //! Called from main.cpp after Qupil's first frame with its interface (any thread)
     public static void contentReady()
     {
+        Log.i(TAG, "activity: content ready");
         s_contentReady = true;
         if (s_keyboardPx > 0)
             report(s_keyboardPx);
