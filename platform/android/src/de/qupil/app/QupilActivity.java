@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 package de.qupil.app;
 
+import android.content.ComponentName;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.graphics.Rect;
@@ -62,12 +64,18 @@ public class QupilActivity extends QtActivity
     public void onCreate(Bundle savedInstanceState)
     {
         Log.i(TAG, "activity: create, saved state " + (savedInstanceState != null) + ", content ready " + s_contentReady);
-        // Always a fresh start. Android hands over a saved state when it brings back an
-        // activity it had destroyed (to save memory, or "Don't keep activities"); Qt 6.8
-        // has ended the whole process then (QtActivityBase.onDestroy). With that state the
-        // new process said "qt started", but Qupil's main() was never called, and the
-        // window stayed black (logs from a phone, 05.11.2026). Qupil keeps nothing in it.
+        // Brought back by Android after it had ended Qupil (to save memory, or "Don't keep
+        // activities"): Qt 6.8 ends the whole process when the activity goes
+        // (QtActivityBase.onDestroy), and the activity Android then recreates with its saved
+        // state never got Qupil going: "qt started", but main() was not called and the
+        // window stayed black (logs from a phone, 05.11.2026). Passing no state did not help
+        // (19079e6). A start from the launcher always works, so this becomes one: a new task
+        // for Qupil, this process ends (as Qt's own restartApplication does).
         super.onCreate(null);
+        if (savedInstanceState != null) {
+            restartFresh();
+            return;
+        }
         startKeyboardProbe();
         if (s_contentReady)
             return;   // made again while Qupil runs (Qt keeps its interface)
@@ -134,6 +142,17 @@ public class QupilActivity extends QtActivity
             final int flags = decor.getSystemUiVisibility();
             decor.setSystemUiVisibility(m_barsDark ? flags & ~light : flags | light);
         }
+    }
+
+    //! Starts Qupil as from the launcher and ends this process (see onCreate)
+    private void restartFresh()
+    {
+        Log.i(TAG, "activity: brought back with a saved state, starting afresh");
+        Intent launch = getPackageManager().getLaunchIntentForPackage(getPackageName());
+        ComponentName component = launch != null ? launch.getComponent() : new ComponentName(this, QupilActivity.class);
+        startActivity(Intent.makeRestartActivityTask(component));
+        finish();
+        Runtime.getRuntime().exit(0);
     }
 
     //! Nothing to restore (see onCreate); Qt itself only restores after a configuration
