@@ -332,7 +332,8 @@ Popup {
                 anchors.right: parent.right
                 anchors.verticalCenter: parent.verticalCenter
                 visible: sheet.showAccept && !sheet.bottomButton
-                kind: "quiet"
+                // Filled like the big button at the bottom: where to save is clear at a glance
+                kind: "primary"
                 text: sheet.acceptText
                 enabled: sheet.canAccept || sheet.problem !== null
                 focusPolicy: Qt.TabFocus
