@@ -833,6 +833,7 @@ void AppController::finishTakeOver(const Qupil::TakeOver::Outcome &o)
         m_testPending = false;
         m_demoPending = false;
         m_db->setMeta(u"demo"_s, u"1"_s);
+        Qupil::DemoData::addPlans(QDir(m_dataDir).filePath(u"demo-source"_s), m_store.get());
         QDir(QDir(m_dataDir).filePath(u"demo-source"_s)).removeRecursively();
         setBusy(false);
         m_store->notifyReset();
@@ -849,6 +850,7 @@ void AppController::finishTakeOver(const Qupil::TakeOver::Outcome &o)
         m_db->setMeta(u"demo"_s, u"1"_s);
         m_db->setMeta(u"imported_from"_s, QString());
         m_db->setMeta(u"imported_at"_s, QString());
+        Qupil::DemoData::addPlans(QDir(m_dataDir).filePath(u"demo-source"_s), m_store.get());
         QDir(QDir(m_dataDir).filePath(u"demo-source"_s)).removeRecursively();
         summary.insert(u"kind"_s, u"demo"_s);
         summary.insert(u"source"_s, QString());

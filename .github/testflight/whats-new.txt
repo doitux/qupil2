@@ -1,0 +1,16 @@
+Neu seit Build 26:
+- Schnellerer Start: Beim Start entsteht nur der Stundenplan, die anderen Seiten und Eingabefenster beim ersten Öffnen.
+- Hinweise oben im Stundenplan als kurze Liste: Geburtstage der Schüler, die heute noch kommen, und Erinnerungen für einen Schüler mit der Uhrzeit seiner Stunde, bis sie beginnt.
+- Mehr › Geburtstage zeigt auch die letzten 8 Wochen (zum Nachgratulieren).
+- iPhone: Beim Schreiben einer Notiz oder Planung stehen Unterricht und Datum in einer Zeile, "Speichern" sitzt bei offener Tastatur oben. So bleibt mehr Platz für den Text.
+- Eingabefenster mit Tastatur öffnen und schließen ruhig, ohne Flackern: Beim Speichern geht erst die Tastatur weg, dann das Fenster.
+- iPad und iPhone: Bei offener Tastatur bleibt das Eingabefenster mit "Speichern" ganz sichtbar über der Tastatur, der Cursor bleibt im Blick.
+- Testdaten für Bildschirmaufnahmen: Mehr › Über, 7× schnell auf die Versionsnummer tippen. Qupil zeigt dann erfundene Beispieldaten (oranger Rahmen), Ihre echten Daten bleiben unberührt, der Abgleich ist aus. Zurück mit "Beenden" unten links. Die Beispieldaten sind jetzt eine volle Woche: Streicherklassen, Einzel- und Gruppenunterricht bis zum Abend, Notizen von einer Zeile bis zum ganzen Übeprogramm, Planungen und Erinnerungen.
+
+Bitte grundsätzlich ausprobieren:
+- Daten übernehmen: Backup zurückspielen oder die Qupil-1.x-Datenbank (qupil.db) übernehmen. Stimmen Schüler, Unterrichte, Notizen und Werke?
+- Unterrichtsalltag: Notizen schreiben, Werke pflegen, Stundenplan, Erinnerungen, Hinweis vor Unterrichtsende.
+- Sync zwischen eigenen Geräten (WLAN oder Nextcloud), falls genutzt.
+- iPad hoch und quer, iPhone, hell und dunkel.
+
+Rückmeldung: In der TestFlight-App "Feedback senden" oder einen Screenshot machen und teilen. Bitte auf Screenshots keine echten Schülerdaten zeigen oder diese vorher schwärzen.

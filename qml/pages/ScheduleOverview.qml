@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2006-2026 Felix Hammer
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 //
-// The day: week strip, notices (reminders "at start"),
+// The day: week strip, notices (what is still to come today, reminders "at start"),
 // the running lesson and the lessons of the selected weekday.
 // Used alone on phones and as the left column on tablets/desktop.
 
@@ -71,9 +71,28 @@ Item {
         }
     }
     readonly property var startReminders: { if (Data.revision < 0) return undefined; return isToday ? Data.reminders().filter(r => r.mode === 0) : [] }
+    //! Reminders for a student whose lesson is still to come today (they pop up when it begins),
+    //! by the time of the lesson
+    readonly property var lessonReminders: {
+        if (Data.revision < 0) return undefined
+        if (!isToday || !lessons) return []
+        const out = []
+        const seen = {}
+        for (const l of lessons) {
+            if (l.start_time <= nowTime)
+                continue
+            for (const r of l.reminders || []) {
+                if (r.mode !== 2 || seen[r.id])
+                    continue
+                seen[r.id] = true
+                out.push({ reminder: r, time: l.start_time })
+            }
+        }
+        return out
+    }
     // Only what has no other place in the day: birthdays show at the lesson and the student,
     // recital candidates are looked up when needed
-    readonly property bool hasNotices: startReminders.length > 0 || todayBirthdays.length > 0
+    readonly property bool hasNotices: startReminders.length > 0 || todayBirthdays.length > 0 || lessonReminders.length > 0
     //! Birthdays of students who still come today: not in the running lesson (its band shows
     //! them), not in a lesson that is over. Today's birthdays first, then by the time they come
     readonly property var todayBirthdays: {
@@ -109,6 +128,8 @@ Item {
             rows.push({ kind: "past", note: past[0] })
         else if (past.length > 1)
             rows.push({ kind: "several", notes: past })
+        for (const lr of lessonReminders)
+            rows.push({ kind: "lessonReminder", reminder: lr.reminder, time: lr.time })
         for (const r of startReminders)
             rows.push({ kind: "reminder", reminder: r })
         if (!noticesOpen && rows.length > 4) {
@@ -904,7 +925,7 @@ Item {
     }
 
     // ------------------------------------------------------------ notices
-    // (reminders "at start"; today only)
+    // (today only: birthdays and reminders of students who still come, reminders "at start")
     Component {
         id: noticesComponent
         ColumnLayout {
@@ -928,17 +949,21 @@ Item {
                             readonly property var n: modelData.note || ({})
                             width: noticeList.width
                             divider: index > 0
-                            iconName: modelData.kind === "reminder" ? "bell" : modelData.kind === "more" ? "chevronDown" : "cake"
+                            iconName: modelData.kind === "reminder" || modelData.kind === "lessonReminder" ? "bell"
+                                    : modelData.kind === "more" ? "chevronDown" : "cake"
                             lime: modelData.kind === "today"
                             link: modelData.kind === "more"
-                            text: modelData.kind === "reminder" ? (modelData.reminder.studentName !== ""
+                            text: modelData.kind === "lessonReminder" ? (modelData.reminder.forename || modelData.reminder.studentName)
+                                                                         + ": " + modelData.reminder.text
+                                  : modelData.kind === "reminder" ? (modelData.reminder.studentName !== ""
                                                                    ? modelData.reminder.studentName + ": " + modelData.reminder.text
                                                                    : modelData.reminder.text)
                                   : modelData.kind === "more" ? qsTrId("notice.more", modelData.count)
                                   : modelData.kind === "several" ? qsTrId("notice.birthday_several").arg(modelData.notes.map(x => x.forename).join(", "))
                                   : modelData.kind === "today" ? qsTrId("notice.birthday_today").arg(n.forename).arg(n.turns)
                                   : qsTrId("notice.birthday_one").arg(n.forename).arg(n.when).arg(n.turns)
-                            trailing: modelData.kind === "today" || modelData.kind === "past" ? (n.time || "") : ""
+                            trailing: modelData.kind === "today" || modelData.kind === "past" ? (n.time || "")
+                                      : modelData.kind === "lessonReminder" ? modelData.time : ""
                             onClicked: {
                                 if (modelData.kind === "more") {
                                     overview.noticesOpen = true
@@ -946,6 +971,9 @@ Item {
                                     // All of them on the birthday list, pointed out there
                                     Nav.birthdayFocus = modelData.notes.map(x => x.id)
                                     Nav.showMore("birthdays")
+                                } else if (modelData.kind === "lessonReminder") {
+                                    // At the student it stands above the tabs (edit it, tick it off)
+                                    overview.studentClicked(modelData.reminder.student_id, "")
                                 } else if (modelData.kind === "reminder") {
                                     reminderDone.reminderId = modelData.reminder.id
                                     reminderDone.text = modelData.reminder.text

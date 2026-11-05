@@ -856,9 +856,10 @@ private slots:
         LegacyImporter importer;
         const LegacyImporter::Result r = importer.run(legacy, &store, LegacyImporter::findConfig(legacy));
         QVERIFY2(r.ok, qPrintable(r.error));
-        QCOMPARE(r.students, 9);
-        QCOMPARE(r.lessons, 10);
-        QVERIFY(r.notes > 20);
+        // The full week of a teacher (string classes, single lessons, groups, ensembles)
+        QVERIFY(r.students > 60);
+        QVERIFY(r.lessons > 40);
+        QVERIFY(r.notes > 200);
         QVERIFY(r.pieces > 15);
         QCOMPARE(r.events, 2);
         QCOMPARE(r.libraryItems, 6);
@@ -874,7 +875,25 @@ private slots:
             days.insert(l.value(u"weekday"_s).toInt());
         }
         QVERIFY(days == (QSet<int> { 0, 1, 2, 3, 4 }));
-        QVERIFY(store.select(u"lesson"_s, u"active = 1 AND irregular = 0 AND weekday = 1"_s).size() >= 4);
+        for (int day = 0; day < 5; ++day)
+            QVERIFY(store.select(u"lesson"_s, u"active = 1 AND irregular = 0 AND weekday = ?"_s, { day }).size() >= 8);
+        // Tuesday (the day of the screenshots) still has Lena's lesson at 14:00
+        QCOMPARE(store.select(u"lesson"_s, u"active = 1 AND weekday = 1 AND start_time = '14:00'"_s).size(), 1);
+
+        // Notes of every kind: one line, blocks, a long practice programme; reminders at
+        // the start and at students; plans for coming lessons
+        const auto notes = store.select(u"note"_s);
+        QVERIFY(std::any_of(notes.cbegin(), notes.cend(), [](const QVariantMap &n) {
+            return !n.value(u"content"_s).toString().contains(u'\n'); }));
+        QVERIFY(std::any_of(notes.cbegin(), notes.cend(), [](const QVariantMap &n) {
+            return n.value(u"content"_s).toString().contains(u"\n\n"_s); }));
+        QVERIFY(std::any_of(notes.cbegin(), notes.cend(), [](const QVariantMap &n) {
+            return n.value(u"content"_s).toString().count(u'\n') > 20; }));
+        QVERIFY(store.select(u"reminder"_s, u"mode = 0"_s).size() >= 3);
+        QVERIFY(store.select(u"reminder"_s, u"mode = 2"_s).size() >= 10);
+        const int plans = DemoData::addPlans(folder, &store);
+        QCOMPARE(plans, store.select(u"plan"_s).size());
+        QVERIFY(plans >= 12);
         for (const auto &a : store.select(u"activity"_s, u"continuous = 1"_s))
             QVERIFY(a.value(u"weekday"_s).toInt() <= 4);
         for (const auto &n : store.select(u"note"_s)) {
@@ -900,7 +919,7 @@ private slots:
         QVERIFY(DemoData::writeLegacyFolder(en, u"en"_s));
         QString count;
         QCOMPARE(Database::detectFormat(LegacyImporter::findDatabase(en), &count), 1);
-        QCOMPARE(count, u"9"_s);
+        QCOMPARE(count.toInt(), r.students);
     }
 
     void crypto()

@@ -2,6 +2,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 #include "ScreenshotTour.h"
 
+#include <algorithm>
+
 #include <QCoreApplication>
 #include <QDateTime>
 #include <QDir>
@@ -296,8 +298,13 @@ void ScreenshotTour::addLongNote()
                 continue;
             const QString membership = students.first().toMap().value(u"membership_id"_s).toString();
             const QString student = data->membershipInfo(membership).value(u"student_id"_s).toString();
-            if (!data->student(student).value(u"instrument"_s).toString().startsWith(u"Viol"_s))
-                continue;   // the note is about violin or viola
+            const QVariantMap info = data->student(student);
+            if (!info.value(u"instrument"_s).toString().startsWith(u"Viol"_s) || info.value(u"age"_s).toInt() < 12)
+                continue;   // the note is about violin or viola, for an older student
+            const QVariantList notes = data->notes(membership);
+            if (std::any_of(notes.cbegin(), notes.cend(), [](const QVariant &n) {
+                    return n.toMap().value(u"content"_s).toString().contains(u"\n\n"_s); }))
+                continue;   // notes in blocks already (sample data)
             m_longMembership = membership;
             m_longStudent = student;
             m_longNote = data->addNote(membership, day.toString(Qt::ISODate),
