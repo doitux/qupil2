@@ -1,0 +1,66 @@
+{
+  "mode": "dry-run",
+  "started_at": "2026-11-06T07:22:42+01:00",
+  "slot": "2026-11-06 07:22 (von Hand, dry-run)",
+  "since": "0d57e5ecfc4834f11434109f9beccd46e0a3f70e",
+  "since_build": 37,
+  "main": "6434c2f3517cdcf91e670df7af505dbabcc4b3a1",
+  "commits": [
+    {
+      "sha": "ee70b62",
+      "subject": "Android: status and navigation bar in Qupil's colours"
+    },
+    {
+      "sha": "0c37910",
+      "subject": "Android: log the steps of the start and of the activity (black window)"
+    },
+    {
+      "sha": "19079e6",
+      "subject": "Android: always start fresh, never from a saved state (black window)"
+    },
+    {
+      "sha": "9871496",
+      "subject": "Android: restart afresh when brought back with a saved state (black window)"
+    },
+    {
+      "sha": "f4ec077",
+      "subject": "CI: unsigned iOS build on macos-15 (macos-14 no longer accepted)"
+    },
+    {
+      "sha": "75b3899",
+      "subject": "CI: publish the Android test build without waiting for the iOS job"
+    },
+    {
+      "sha": "5570480",
+      "subject": "Note editor: keep unsaved text as a draft, open it again at the start"
+    },
+    {
+      "sha": "7ae2ea1",
+      "subject": "Note editor: no \"Clear\" next to the line of a restored draft"
+    },
+    {
+      "sha": "6434c2f",
+      "subject": "CI: collected TestFlight builds by GitHub itself (13:05 and 22:05)"
+    }
+  ],
+  "relevant_files": [
+    "CMakeLists.txt",
+    "i18n/qupil_de.ts",
+    "i18n/qupil_en.ts",
+    "i18n/qupil_es.ts",
+    "i18n/qupil_fr.ts",
+    "qml/Main.qml",
+    "qml/Nav.qml",
+    "qml/editors/NoteEditor.qml",
+    "src/app/AppController.cpp",
+    "src/app/AppController.h",
+    "src/app/ScreenshotTour.cpp",
+    "src/app/SystemBars.h",
+    "src/main.cpp",
+    "tools/i18n/catalog.py"
+  ],
+  "result": "would_build",
+  "note": "14 Dateien für iOS geändert; im Probelauf wird nichts gestartet.",
+  "written": "2026-11-06T07:22:45+01:00",
+  "headline": "Probelauf: würde bauen"
+}
