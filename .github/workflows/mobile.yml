@@ -4,7 +4,8 @@ name: Mobile
 
 on:
   push:
-    branches: [main]
+    # fix/…: a fix is checked here before it goes to main (docs/testing.md)
+    branches: [main, 'fix/**']
     tags: ['v*']
     paths-ignore: ['**.md', 'docs/**', 'LICENSES/**', '.github/dependabot.yml']
   pull_request:

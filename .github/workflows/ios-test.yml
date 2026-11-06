@@ -7,6 +7,9 @@
 name: iOS test
 
 on:
+  # Every night on main (02:30 UTC)
+  schedule:
+    - cron: '30 2 * * *'
   workflow_dispatch:
     inputs:
       tour:

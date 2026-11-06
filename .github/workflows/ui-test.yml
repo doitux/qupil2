@@ -1,11 +1,15 @@
 # UI test on real desktops: Qupil's own UI test (--ui-test, src/app/UiTest.h) and the
 # screenshot tour with each system's own window, fonts and scaling – Linux (X11), Windows
 # and macOS. (Every push already runs the UI test without a screen, in ctest.)
-# Started by hand; the results go to the branch "ui-test-desktop" (desktop/<system>/, only the
-# latest run). Sample data only.
+# Every night and by hand; the results go to the branch "ui-test-desktop" (desktop/<system>/, only
+# the latest run), with the screens that changed since the run before (visual-diff.md).
+# Sample data only.
 name: UI test (desktop)
 
 on:
+  # Every night on main (02:00 UTC), with the tour on Linux, compared with the night before
+  schedule:
+    - cron: '0 2 * * *'
   workflow_dispatch:
     inputs:
       tour:
@@ -79,7 +83,7 @@ jobs:
       - name: UI test and tour
         shell: bash
         env:
-          QUPIL_TOUR: ${{ inputs.tour && '1' || '0' }}
+          QUPIL_TOUR: ${{ (inputs.tour || (github.event_name == 'schedule' && matrix.name == 'linux')) && '1' || '0' }}
         run: bash .github/scripts/ui-test-desktop.sh "${{ matrix.name }}" "out/${{ matrix.name }}"
 
       - uses: actions/upload-artifact@v7
@@ -97,20 +101,31 @@ jobs:
     permissions:
       contents: write
     steps:
+      - uses: actions/checkout@v7
+        with:
+          sparse-checkout: .github
       - uses: actions/download-artifact@v7
         with:
           pattern: ui-test-*
           merge-multiple: true
           path: results/desktop
+      # The screens that look different from the last run (ImageMagick)
+      - name: Compare with the run before
+        run: |
+          sudo apt-get install -y -qq imagemagick > /dev/null
+          git clone -q --depth 1 --branch ui-test-desktop "https://github.com/${GITHUB_REPOSITORY}.git" previous 2> /dev/null || true
+          bash .github/scripts/visual-diff.sh previous results
       - name: Results to the branch ui-test-desktop
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: |
           cd results
+          rm -rf ../previous
           {
             echo "# Desktop UI test run ${GITHUB_RUN_NUMBER} (${GITHUB_SHA::7})"
             echo
             for f in desktop/*/summary.md; do [ -f "$f" ] && cat "$f" && echo; done
+            [ -f visual-diff.md ] && cat visual-diff.md
           } > README.md
           git init -q
           git checkout -q -b ui-test-desktop
