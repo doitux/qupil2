@@ -6,10 +6,10 @@ everything collected since the last upload, so testers are not notified for each
 
 At each slot:
   - a TestFlight run that is still going: nothing to do
-  - the last run failed because no macOS runner was free: run it again
-  - otherwise: if something that ends up in the iOS app changed since the last successful
-    upload, start the TestFlight workflow with .github/testflight/whats-new.txt
-then wait for the run (re-run once if no runner was free) and write the result to the
+  - otherwise a build is started only if something that ends up in the iOS app changed since
+    the last build that really reached TestFlight (upload step succeeded); checked once more
+    right before starting, with .github/testflight/whats-new.txt as test text
+then wait for that run (re-run once if no macOS runner was free) and write the result to the
 branch "testflight-status" (status.json, status.md). That branch can be read with a plain
 git clone, without signing in.
 
@@ -240,6 +240,8 @@ def write_status(status):
         md.append(f"- Seit Build {status.get('since_build')} (Commit {status['since'][:7]})")
     if status.get("commits"):
         md += ["", "Commits:"] + [f"- {c['sha']} {c['subject']}" for c in status["commits"]]
+    if status.get("relevant_files"):
+        md += ["", "Für iOS relevante Dateien:"] + [f"- {f}" for f in status["relevant_files"]]
     md_text = "\n".join(md) + "\n"
     log(md_text)
     log(json.dumps(status, indent=2, ensure_ascii=False))
@@ -295,19 +297,15 @@ def main():
         write_status(status)
         return
 
-    # Last run failed for lack of a runner: run it again (keeps number and test text)
-    if runs and not_acquired(runs[0]) and MODE != "dry-run":
-        run = runs[0]
-        log(f"Last run {run['run_number']} got no macOS runner: running it again")
-        api("POST", f"/repos/{REPO}/actions/runs/{run['id']}/rerun")
-        status["note"] = f"Build {run['run_number']} hatte keinen freien Mac-Runner und wurde neu gestartet."
-        finish(status, run["id"], rerun_done=True)
-        return
-
+    # Compared with the last build that really reached TestFlight (upload step succeeded);
+    # failed, cancelled or check-only runs do not count. Old failed runs are not run again:
+    # if their changes are still missing, the new build below contains them.
     base = next((r for r in runs if uploaded(r)), None)
     if base is None:
         raise RuntimeError("no successful TestFlight upload found to compare with")
     cmp, relevant, commits = changes_since(base["head_sha"])
+    if cmp.get("status") not in ("ahead",) or not cmp.get("commits"):
+        relevant = []          # main is the uploaded commit (or not after it): nothing new
     status["since"] = base["head_sha"]
     status["since_build"] = base["run_number"]
     status["main"] = cmp["commits"][-1]["sha"] if cmp.get("commits") else base["head_sha"]
@@ -326,6 +324,12 @@ def main():
         status["note"] = f"{len(relevant)} Dateien für iOS geändert; im Probelauf wird nichts gestartet."
         write_status(status)
         return
+
+    # Once more right before starting: nothing running, nothing newer uploaded meanwhile
+    runs = dispatch_runs()
+    if any(r["status"] != "completed" for r in runs) or \
+            next((r for r in runs if uploaded(r)), base)["id"] != base["id"]:
+        raise RuntimeError("another TestFlight run appeared meanwhile; nothing started")
 
     with open(WHATS_NEW_FILE, encoding="utf-8") as f:
         whats_new = f.read().strip()
