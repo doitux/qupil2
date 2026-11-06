@@ -482,6 +482,7 @@ ApplicationWindow {
                 Nav.clearNoteDraft()   // the student or lesson is gone (sync, deleted)
                 return
             }
+            console.info("Draft: note editor opened again")
             window.sheet("note").restoreDraft(d)
         }
     }

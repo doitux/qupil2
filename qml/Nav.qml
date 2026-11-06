@@ -4,8 +4,8 @@
 // App-wide requests between pages and the editors that live in Main.qml.
 //   Nav.editNote(membershipId, "")   → Main.qml opens the note editor
 pragma Singleton
-import QtCore
 import QtQuick
+import Qupil
 
 QtObject {
     //! Height taken at the bottom right by the running metronome (Main.qml): floating
@@ -28,25 +28,20 @@ QtObject {
     // quits: Android and iOS may end Qupil there (Qt then ends the whole process), and the
     // editor comes back with it at the next start (Main.qml). Only on this device, never
     // synced, not in the test mode.
-    property Settings _drafts: Settings {
-        category: "draft"
-        property string note: ""
-    }
+    // Written at once (App.keepDraft, QSettings + sync): Qt's Settings type writes half a second
+    // later, and Android may end Qupil in the background before that (seen in the emulator test)
     function saveNoteDraft(draft) {
-        _drafts.note = JSON.stringify(draft)
-        try { _drafts.sync() } catch (e) {}
+        App.keepDraft("note", JSON.stringify(draft))
     }
     function clearNoteDraft() {
-        if (_drafts.note === "")
-            return
-        _drafts.note = ""
-        try { _drafts.sync() } catch (e) {}
+        App.keepDraft("note", "")
     }
     //! The kept draft, or null
     function noteDraft() {
-        if (_drafts.note === "")
+        const text = App.keptDraft("note")
+        if (text === "")
             return null
-        try { return JSON.parse(_drafts.note) } catch (e) { return null }
+        try { return JSON.parse(text) } catch (e) { return null }
     }
 
     /*!

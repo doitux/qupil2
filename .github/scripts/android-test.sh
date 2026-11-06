@@ -69,7 +69,7 @@ notes() {
     say "- top: \`$(adb shell dumpsys activity activities | grep -m1 -E 'topResumedActivity|mResumedActivity' | sed 's/^ *//' | tr -d '\r')\`"
     say ''
     say '```'
-    since | grep -E ' Qupil *:|FATAL|F DEBUG|F libc|ANR in' | cut -c 7- | tail -n 40 | tee -a "$SUMMARY" > /dev/null
+    since | grep -E ' (Qupil|qml|js|default) *:|FATAL|F DEBUG|F libc|ANR in' | cut -c 7- | tail -n 40 | tee -a "$SUMMARY" > /dev/null
     say '```'
     say ''
 }
@@ -127,6 +127,9 @@ sleep 4
 shot back
 notes
 
+# Also stands for "Don't keep activities": Qt ends the whole process when Android closes
+# its window (QtActivityBase.onDestroy), so both come back as a new start. (Android only
+# reads that developer option when its system starts, which a test cannot switch.)
 step "Android ends Qupil in the background, then back"
 home
 sleep 3
@@ -209,40 +212,6 @@ sleep 4
 shot portrait-again
 notes
 
-# Android reads the developer option at the start of the system only: restart it
-step "Developer option \"Don't keep activities\": background and back"
-adb shell settings put global always_finish_activities 1
-adb shell stop
-sleep 2
-adb shell start
-for ((i = 0; i < 180; i++)); do
-    [ "$(adb shell getprop init.svc.bootanim | tr -d '\r')" = stopped ] && adb shell pm path android > /dev/null 2>&1 && break
-    sleep 1
-done
-sleep 25
-adb shell am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS > /dev/null 2>&1
-mark
-launcher
-wait_for "main: first frame" 120
-sleep 5
-tap '^OK$' && sleep 1
-tap '^Schüler$'
-sleep 3
-shot dka-students
-home
-sleep 4
-launcher
-wait_for "activity: resume" 60
-sleep 6
-shot dka-back
-if since | grep -q "activity: destroy, finishing false"; then
-    say "- Android closed the window in the background (as wanted for this step)"
-else
-    say "- **Android kept the window: the option did not take effect**"
-fi
-notes
-adb shell settings put global always_finish_activities 0
-
 if [ "${QUPIL_TOUR:-0}" = 1 ]; then
     step "Screenshot tour on the emulator"
     adb shell am force-stop $PKG
@@ -265,7 +234,7 @@ else
 fi
 
 kill $LOGCAT 2> /dev/null
-grep -E ' Qupil *:| AndroidRuntime| DEBUG +:|F libc|ANR in|de\.qupil' "$LOG" > "$OUT/logcat-qupil.txt"
+grep -E ' (Qupil|qml|js|default) *:|FATAL|F DEBUG|F libc|ANR in|de\.qupil' "$LOG" > "$OUT/logcat-qupil.txt"
 say ''
 say "Result: $([ $FAILED = 0 ] && echo 'all steps ran' || echo 'something failed, see above')"
 exit $FAILED

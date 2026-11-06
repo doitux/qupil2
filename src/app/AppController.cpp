@@ -17,13 +17,13 @@
 #include <QRegularExpression>
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QSettings>
 #include <QStandardPaths>
 #include <QThread>
 #include <QTimer>
 #include <QUuid>
 #ifdef Q_OS_WIN
 #include <QProcess>
-#include <QSettings>
 #include <qt_windows.h>
 #include <appmodel.h>
 #include <shellapi.h>
@@ -1125,4 +1125,25 @@ void AppController::rotate(const QString &prefix, int keep)
 void AppController::setSystemBars(const QColor &top, const QColor &bottom, bool dark)
 {
     SystemBars::set(top, bottom, dark);
+}
+
+void AppController::keepDraft(const QString &name, const QString &text)
+{
+    QSettings settings;
+    const QString key = u"draft/"_s + name;
+    if (text.isEmpty()) {
+        if (!settings.contains(key))
+            return;
+        settings.remove(key);
+    } else {
+        settings.setValue(key, text);
+    }
+    // At once: Android and iOS may end Qupil soon after it went to the background
+    settings.sync();
+    qInfo("Draft %s: %s", qPrintable(name), text.isEmpty() ? "removed" : qPrintable(u"kept, %1 characters"_s.arg(text.size())));
+}
+
+QString AppController::keptDraft(const QString &name) const
+{
+    return QSettings().value(u"draft/"_s + name).toString();
 }

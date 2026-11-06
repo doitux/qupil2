@@ -218,6 +218,10 @@ public:
     Q_INVOKABLE void keepViewInPlace() { if (m_keepView) m_keepView(); }
     //! Android: status bar (top) and navigation bar (bottom) in Qupil's colours; elsewhere nothing
     Q_INVOKABLE void setSystemBars(const QColor &top, const QColor &bottom, bool dark);
+    //! Device-local draft (Nav.qml: the text of an open note editor), written to disk at once;
+    //! an empty text removes it
+    Q_INVOKABLE void keepDraft(const QString &name, const QString &text);
+    Q_INVOKABLE QString keptDraft(const QString &name) const;
     void setKeyboardViewHooks(std::function<void(bool)> hold, std::function<void()> keep)
     {
         m_holdView = std::move(hold);
