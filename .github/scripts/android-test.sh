@@ -223,7 +223,15 @@ for phase in first restart; do
     [ $phase = restart ] && extra="--ui-test-phase restart"
     mark
     adb shell "am start -W -n $ACT --es applicationArguments '--ui-test $uidir/$phase --lang de --data-dir $uidir/data $extra'" > /dev/null
-    wait_for "ui test: [0-9]* of [0-9]* cases passed" 900
+    if ! wait_for "ui test: [0-9]* of [0-9]* cases passed" 900; then
+        # Hanging: where every thread of Qupil stands (native and Java)
+        pid=$(adb shell pidof $PKG | tr -d '\r')
+        if [ -n "$pid" ]; then
+            adb shell debuggerd -b "$pid" > "$OUT/hang-$phase-native.txt" 2>&1
+            adb shell debuggerd -j "$pid" > "$OUT/hang-$phase-java.txt" 2>&1
+            say "- stacks of the hanging process: \`hang-$phase-native.txt\`, \`hang-$phase-java.txt\`"
+        fi
+    fi
     sleep 3
     adb shell am force-stop $PKG
 done
