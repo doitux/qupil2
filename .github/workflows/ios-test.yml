@@ -58,10 +58,12 @@ jobs:
           bash .github/scripts/run-logged.sh "$QT_ROOT_DIR/bin/qt-cmake" -S . -B build -G Xcode \
             -DQT_HOST_PATH="$RUNNER_WORKSPACE/Qt/$QT_VERSION/macos"
 
+      # Qt's iOS libraries hold the simulator as x86_64 only (arm64 is the device): the app
+      # runs in the simulator through Rosetta
       - name: Build for the simulator
         run: |
           bash .github/scripts/run-logged.sh cmake --build build --config Release -- \
-            -sdk iphonesimulator -arch arm64 CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""
+            -sdk iphonesimulator ARCHS=x86_64 ONLY_ACTIVE_ARCH=NO CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""
 
       - name: Install idb
         run: |

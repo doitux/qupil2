@@ -51,7 +51,8 @@ run() {
 }
 
 run phone 390x844
-run wide 1280x800
+# The runners' screens are about 1024 × 768: a wide window that still fits
+run wide 1000x660
 
 if [ "${QUPIL_TOUR:-0}" = 1 ]; then
     "$APP" --screenshots "$OUT/tour" --lang de > "$OUT/tour.log" 2>&1 \

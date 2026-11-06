@@ -77,8 +77,8 @@ UiTest::UiTest(QQuickWindow *window, QObject *theme, QObject *nav, QObject *metr
     QDir().mkpath(m_folder);
     s_test = this;
     s_previous = qInstallMessageHandler(messageHandler);
-    // Qt Quick hands its items to the accessibility tree only while it is active
-    QAccessible::setActive(true);
+    // No QAccessible::setActive(): the items' accessible names are read directly (nodes()),
+    // and on Android switching it on calls into Android's thread while it waits for Qupil
 }
 
 UiTest::~UiTest()
@@ -92,7 +92,8 @@ UiTest::~UiTest()
 void UiTest::messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &message)
 {
     const bool fromQml = (context.file && QByteArray(context.file).endsWith(".qml")) || message.contains(u".qml:"_s);
-    if (type >= QtWarningMsg && fromQml)
+    // (QtInfoMsg comes after QtFatalMsg in the enum: console.info is no warning)
+    if ((type == QtWarningMsg || type == QtCriticalMsg || type == QtFatalMsg) && fromQml)
         s_warnings << message;
     if (s_previous)
         s_previous(type, context, message);
@@ -120,10 +121,14 @@ QList<UiTest::Node> UiTest::nodes() const
     if (!m_window)
         return list;
     const QRectF bounds(QPointF(0, 0), QSizeF(m_window->size()));
-    std::function<void(QQuickItem *, QRectF, int)> walk = [&](QQuickItem *item, QRectF clip, int depth) {
+    std::function<void(QQuickItem *, QRectF, int, bool)> walk = [&](QQuickItem *item, QRectF clip, int depth,
+                                                                    bool scrolled) {
         if (!item || depth > 80 || !item->isVisible() || item->opacity() < 0.01)
             return;
         const QRectF rect = item->mapRectToScene(QRectF(0, 0, item->width(), item->height()));
+        // Inside a Flickable whose own frame is on the screen: may be scrolled to
+        if (item->inherits("QQuickFlickable") && rect.intersected(clip).height() > 1)
+            scrolled = true;
         if (item->clip())
             clip = clip.intersected(rect);
         QAccessibleInterface *iface = QAccessible::queryAccessibleInterface(item);
@@ -135,16 +140,18 @@ QList<UiTest::Node> UiTest::nodes() const
                 name = item->property("text").toString().simplified();
             const QRectF shown = rect.intersected(clip);
             const bool hidden = iface && iface->state().invisible;
-            if (!name.isEmpty() && !hidden && shown.width() > 1 && shown.height() > 1)
-                list << Node { name, iface ? roleName(iface->role()) : u"button"_s, shown,
+            const bool onScreen = shown.width() > 1 && shown.height() > 1;
+            // Scrolled out of sight (a smaller window): still there, a tap scrolls to it first
+            if (!name.isEmpty() && !hidden && (onScreen || scrolled))
+                list << Node { name, iface ? roleName(iface->role()) : u"button"_s, onScreen ? shown : QRectF(),
                                QByteArray(item->metaObject()->className()).startsWith("NavButton"), item, rect };
         }
         QList<QQuickItem *> children = item->childItems();
         std::stable_sort(children.begin(), children.end(), [](QQuickItem *a, QQuickItem *b) { return a->z() < b->z(); });
         for (QQuickItem *child : children)
-            walk(child, clip, depth + 1);
+            walk(child, clip, depth + 1, scrolled);
     };
-    walk(m_window->contentItem(), bounds, 0);
+    walk(m_window->contentItem(), bounds, 0, false);
     return list;
 }
 
@@ -162,13 +169,18 @@ bool UiTest::find(const QString &pattern, Node *found) const
     const QRegularExpression regex(text);
     const QList<Node> all = nodes();
     // The last match is on top (editors and dialogs come after the page in the tree)
-    for (auto it = all.crbegin(); it != all.crend(); ++it) {
-        // The navigation's tabs only by "tab:…" (a page's back button has the name of its page)
-        const bool roleOk = role == u"tab"_s ? it->tab : !it->tab && (role.isEmpty() || it->role == role);
-        if (roleOk && regex.match(it->name).hasMatch()) {
-            if (found)
-                *found = *it;
-            return true;
+    // On the screen first, then scrolled out of sight
+    for (const bool onScreen : { true, false }) {
+        for (auto it = all.crbegin(); it != all.crend(); ++it) {
+            if (onScreen == it->rect.isEmpty())
+                continue;
+            // The navigation's tabs only by "tab:…" (a page's back button has the name of its page)
+            const bool roleOk = role == u"tab"_s ? it->tab : !it->tab && (role.isEmpty() || it->role == role);
+            if (roleOk && regex.match(it->name).hasMatch()) {
+                if (found)
+                    *found = *it;
+                return true;
+            }
         }
     }
     return false;
@@ -177,11 +189,13 @@ bool UiTest::find(const QString &pattern, Node *found) const
 QString UiTest::dump() const
 {
     QString text;
-    for (const Node &n : nodes())
-        text += u"%1 %2 %3 %4 %5  %6\n"_s.arg(n.tab ? u"tab"_s : n.role, -9)
-                    .arg(int(n.rect.x()), 5).arg(int(n.rect.y()), 5)
-                    .arg(int(n.rect.width()), 5).arg(int(n.rect.height()), 5)
-                    .arg(n.name);
+    for (const Node &n : nodes()) {
+        const QRectF r = n.rect.isEmpty() ? n.full : n.rect;
+        text += u"%1 %2 %3 %4 %5  %6%7\n"_s.arg(n.tab ? u"tab"_s : n.role, -9)
+                    .arg(int(r.x()), 5).arg(int(r.y()), 5)
+                    .arg(int(r.width()), 5).arg(int(r.height()), 5)
+                    .arg(n.name, n.rect.isEmpty() ? u"  (scrolled out of sight)"_s : QString());
+    }
     return text;
 }
 
@@ -308,7 +322,9 @@ UiTest::Step UiTest::tap(const QString &pattern, const QString &what)
                       if (busy() || !find(pattern, &node))
                           return false;
                       // Partly out of sight: scrolled into view first, as a person would
-                      if (node.rect.height() < node.full.height() - 1 && scrollIntoView(node))
+                      if ((node.rect.isEmpty() || node.rect.height() < node.full.height() - 1) && scrollIntoView(node))
+                          return false;
+                      if (node.rect.isEmpty())
                           return false;
                       click(node.rect.center());
                       return true;
@@ -340,6 +356,19 @@ UiTest::Step UiTest::tapIfThere(const QString &pattern, int withinMs, const QStr
                       return false;
                   },
                   withinMs + 2000 };
+}
+
+UiTest::Step UiTest::backIfThere(const QString &pattern)
+{
+    // The back button of a page carries the name of the page it goes back to
+    return Step { u"back (\"%1\") if the page has one"_s.arg(pattern), [this, pattern] {
+                      if (busy())
+                          return false;
+                      Node node;
+                      if (find(pattern, &node) && !node.rect.isEmpty())
+                          click(node.rect.center());
+                      return true;
+                  } };
 }
 
 UiTest::Step UiTest::see(const QString &pattern)
@@ -633,11 +662,8 @@ void UiTest::addCases()
                 << snap(u"student-search"_s)
                 << tap(u"^Lena Muster$"_s) << see(u"^Unterricht wählen$"_s)
                 << snap(u"student-page"_s);
-        // Phone: the student page instead of the list, with a way back; wider: side by side
-        if (compact())
-            c.steps << tap(u"^Schüler$"_s, u"back to the list"_s) << see(u"edit:^Schüler suchen$"_s);
-        else
-            c.steps << see(u"edit:^Schüler suchen$"_s);
+        // Narrow: the student page instead of the list, with a way back; wide: side by side
+        c.steps << backIfThere(u"^Schüler$"_s) << see(u"edit:^Schüler suchen$"_s);
     }
     // A new student
     {
@@ -654,10 +680,7 @@ void UiTest::addCases()
         Case &c = add(u"event-open"_s, u"open an event and go back"_s);
         c.steps << tab(u"Veranstaltungen"_s) << tap(u"^Herbstvorspiel$"_s) << see(u"^Veranstaltung bearbeiten$"_s)
                 << snap(u"event-page"_s);
-        if (compact())
-            c.steps << tap(u"^Veranstaltungen$"_s, u"back to the list"_s) << see(u"^Herbstvorspiel$"_s);
-        else
-            c.steps << see(u"^Sommervorspiel$"_s);
+        c.steps << backIfThere(u"^Veranstaltungen$"_s) << see(u"^Herbstvorspiel$"_s);
     }
     // Metronome: start and stop
     {
