@@ -63,6 +63,15 @@ seen() {
     dump
     python3 -I "$HERE/android-ui.py" "$OUT/ui/now.xml" "$1" > /dev/null
 }
+# dismiss: closes every reminder dialog shown at the start (there can be several in a row)
+dismiss() {
+    local i
+    for ((i = 0; i < 4; i++)); do
+        seen '^OK$' || return 0
+        tap '^OK$' > /dev/null
+        sleep 2
+    done
+}
 # notes: process, top activity and Qupil's log lines since the mark
 notes() {
     say "- process: \`$(adb shell pidof $PKG | tr -d '\r')\`"
@@ -268,7 +277,7 @@ adb shell am force-stop $PKG
 launcher
 wait_for "main: first frame" 90
 sleep 4
-tap '^OK$' && sleep 2
+dismiss
 tap '^Mehr$' && sleep 2
 tap '^Einstellungen$' && sleep 2
 tap '^Darstellung' && sleep 2
@@ -285,7 +294,7 @@ fi
 sleep 4
 shot light-start
 notes
-tap '^OK$' && sleep 2
+dismiss
 tap '^Mehr$' && sleep 2
 tap '^Einstellungen$' && sleep 2
 tap '^Darstellung' && sleep 2

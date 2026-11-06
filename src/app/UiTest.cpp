@@ -415,6 +415,10 @@ UiTest::Step UiTest::gone(const QString &pattern)
 UiTest::Step UiTest::type(const QString &text)
 {
     return Step { u"type \"%1\""_s.arg(text), [this, text] {
+                      // Only into a field that has the focus (a tap on it may still be on its way)
+                      QQuickItem *focus = m_window ? m_window->activeFocusItem() : nullptr;
+                      if (!focus || !(focus->inherits("QQuickTextInput") || focus->inherits("QQuickTextEdit")))
+                          return false;
                       for (const QChar c : text) {
                           if (c == u'\n')
                               sendKey(Qt::Key_Return, u"\r"_s);
