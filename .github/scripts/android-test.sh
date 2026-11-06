@@ -130,6 +130,10 @@ say "- date on the device: $(adb shell date | tr -d '\r')"
 adb install -r -g "$APK" > /dev/null || { say "- **install failed**"; exit 1; }
 adb shell appops set $PKG SCHEDULE_EXACT_ALARM allow > /dev/null 2>&1
 adb shell settings put global always_finish_activities 0
+# Right after an install Android still sends package events; one of them changed the
+# resources and made Android recreate the window in the middle of the UI test (a
+# configuration change Qupil cannot declare, Qupil then starts afresh). Let them pass.
+sleep 40
 
 adb logcat -c
 adb logcat -v threadtime > "$LOG" 2>&1 &
