@@ -414,18 +414,49 @@ UiTest::Step UiTest::gone(const QString &pattern)
 
 UiTest::Step UiTest::type(const QString &text)
 {
-    return Step { u"type \"%1\""_s.arg(text), [this, text] {
-                      // Only into a field that has the focus (a tap on it may still be on its way)
+    // Into a field that has the focus (a tap on it may still be on its way). On phones and
+    // tablets the on-screen keyboard comes first: once it is there it may reset what it
+    // thinks the field holds, and keys typed before would be lost. Then the field must hold
+    // the text; if not, it is typed once more.
+    auto since = std::make_shared<QElapsedTimer>();
+    auto tries = std::make_shared<int>(0);
+    return Step { u"type \"%1\""_s.arg(text), [this, text, since, tries] {
                       QQuickItem *focus = m_window ? m_window->activeFocusItem() : nullptr;
                       if (!focus || !(focus->inherits("QQuickTextInput") || focus->inherits("QQuickTextEdit")))
                           return false;
+                      if (!since->isValid())
+                          since->start();
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
+                      if (*tries == 0 && !QGuiApplication::inputMethod()->isVisible() && since->elapsed() < 3000)
+                          return false;
+                      if (*tries == 0 && since->elapsed() < 800)
+                          return false;   // the keyboard settles
+#endif
+                      const QString plain = text;
+                      const auto holds = [focus, plain] {
+                          QString value = focus->property("text").toString();
+                          // Rich text: compare without the markup
+                          value.remove(QRegularExpression(u"<[^>]*>"_s));
+                          return value.contains(plain);
+                      };
+                      if (*tries > 0) {
+                          if (holds()) {
+                              *tries = 0;
+                              since->invalidate();
+                              return true;
+                          }
+                          if (since->elapsed() < 1000 || *tries >= 2)
+                              return false;
+                      }
                       for (const QChar c : text) {
                           if (c == u'\n')
                               sendKey(Qt::Key_Return, u"\r"_s);
                           else
                               sendKey(0, QString(c));
                       }
-                      return true;
+                      ++*tries;
+                      since->restart();
+                      return false;
                   } };
 }
 
@@ -778,6 +809,7 @@ void UiTest::addCases()
         for (int i = 0; i < 7; ++i)
             c.steps << tap(u"^Version "_s, u"tap the version (%1)"_s.arg(i + 1));
         c.steps << check(u"test mode on"_s, [this] { return m_app->testMode(); }, 15000)
+                << check(u"sample data of the test mode ready"_s, [this] { return !m_app->busy(); }, 30000)
                 << snap(u"test-mode"_s)
                 << act(u"test mode off"_s, [this] { m_app->setTestMode(false); })
                 << check(u"test mode off"_s, [this] { return !m_app->testMode(); }, 15000);
