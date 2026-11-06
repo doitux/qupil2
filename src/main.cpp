@@ -227,12 +227,6 @@ int main(int argc, char *argv[])
 
     // Our own look on every platform; the colours come from Theme.qml
     QQuickStyle::setStyle(u"Basic"_s);
-#if defined(Q_OS_ANDROID) && defined(QUPIL_ANDROID_TEST_ARGS)
-    // Emulator test build: Qt Quick draws in software. The emulator's GL pipe to the host
-    // stalls after a while (render thread stuck in glGetProgramiv, the process growing to
-    // gigabytes until the emulator goes down); devices are not affected
-    QQuickWindow::setGraphicsApi(QSGRendererInterface::Software);
-#endif
 
     LanguageManager languages(nullptr);  // translators are installed before any UI exists
     if (args.isSet(langOption))
