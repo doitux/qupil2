@@ -3,10 +3,10 @@
 # directly (also on an iPad or phone) without logging in to GitHub.
 # The tag "nightly" is moved to the commit that was built.
 #
-# Usage: bash .github/scripts/publish-nightly.sh 'path/glob*.ipa=Asset-Name.ipa' ...
+# Usage: bash .github/scripts/publish-nightly.sh 'path/glob*.apk=Asset-Name.apk' ...
 #   An asset name with * keeps the file's own name (e.g. with the build number)
 #   and replaces the older assets matching it.
-#   '-Asset-Name' removes an asset that is no longer built (if it is still there).
+#   '-Asset-Name' removes an asset that is no longer built (if it is still there; * allowed).
 # Needs GH_TOKEN with contents: write, GITHUB_REPOSITORY and GITHUB_SHA.
 set -euo pipefail
 
@@ -25,9 +25,11 @@ staging="$(mktemp -d)"
 for pair in "$@"; do
     if [[ "$pair" == -* ]]; then
         gone="${pair#-}"
-        if gh release view "$tag" --repo "$repo" --json assets -q '.assets[].name' | grep -qxF "$gone"; then
-            gh release delete-asset "$tag" "$gone" --repo "$repo" -y && echo "Removed $gone (no longer built)"
-        fi
+        gh release view "$tag" --repo "$repo" --json assets -q '.assets[].name' | while read -r asset; do
+            if [[ "$asset" == $gone ]]; then
+                gh release delete-asset "$tag" "$asset" --repo "$repo" -y && echo "Removed $asset (no longer built)"
+            fi
+        done
         continue
     fi
     pattern="${pair%%=*}"
@@ -68,11 +70,10 @@ done
 
 gh release edit "$tag" --repo "$repo" --prerelease --title "Nightly test builds" --notes "$(cat <<EOF
 Automatic test builds of the newest commit on \`main\`; every file name ends in nightly-<commit> (last update: ${GITHUB_SHA::7}, $(date -u '+%Y-%m-%d %H:%M UTC')).
-They are **not signed** and only meant for testing.
+They are **not signed** and only meant for testing. iPad and iPhone: through TestFlight.
 
 | File | How to install |
 |---|---|
-| \`Qupil-iOS-unsigned-nightly-<commit>.ipa\` | iPad / iPhone: sideload with AltStore, SideStore or Sideloadly, which sign it with your Apple ID. Needs iOS 16 or later. |
 | \`Qupil-Android-arm64-nightly-<commit>.apk\` | Android: open the file and allow installing from this source. Play Protect warns about an unknown developer: tap *More details* › *Install anyway* (the big *OK* cancels the installation). Signed with a public test key, so a newer nightly installs as an update and keeps the data (builds before Oct 15, 2026 used a different key: uninstall those once). The commit in the file name is shown on the first screen and under More › About. |
 | \`Qupil-macOS-universal-nightly-<commit>.zip\` | macOS 12+: unzip, then right-click Qupil → Open the first time. |
 | \`Qupil-Windows-x64-Setup-nightly-<commit>.exe\` | Windows 10/11: run it. Without admin rights Qupil is installed for the current user; a newer setup updates the installed Qupil in place and keeps the data. Edge holds the download back (… › *Keep* › *Show more* › *Keep anyway*), and SmartScreen asks once (*More info* › *Run anyway*). |
