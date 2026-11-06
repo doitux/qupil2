@@ -223,20 +223,22 @@ for phase in first restart; do
     [ $phase = restart ] && extra="--ui-test-phase restart"
     mark
     adb shell "am start -W -n $ACT --es applicationArguments '--ui-test $uidir/$phase --lang de --data-dir $uidir/data $extra'" > /dev/null
-    if ! wait_for "ui test: [0-9]* of [0-9]* cases passed" 900; then
-        # Hanging: where every thread of Qupil stands (native and Java)
+    # Started within 40 s (the first case begins), otherwise: where every thread stands
+    if ! wait_for "ui test: [a-z]" 40; then
         pid=$(adb shell pidof $PKG | tr -d '\r')
+        say "- memory of the process: $(adb shell dumpsys meminfo $PKG 2> /dev/null | grep -m1 'TOTAL' | tr -s ' ')"
         if [ -n "$pid" ]; then
             adb shell debuggerd -b "$pid" > "$OUT/hang-$phase-native.txt" 2>&1
             adb shell debuggerd -j "$pid" > "$OUT/hang-$phase-java.txt" 2>&1
             say "- stacks of the hanging process: \`hang-$phase-native.txt\`, \`hang-$phase-java.txt\`"
         fi
     fi
+    [ -n "$(adb shell pidof $PKG | tr -d '\r')" ] && wait_for "ui test: [0-9]* of [0-9]* cases passed" 900
     sleep 3
     adb shell am force-stop $PKG
 done
 adb pull "$uidir" "$OUT/ui-test" > /dev/null 2>&1
-rm -rf "$OUT/ui-test/data"
+# (the data folder stays: sample data only, to start the restart half elsewhere)
 for phase in first restart; do
     if [ -f "$OUT/ui-test/$phase/results.md" ]; then
         sed -e '1,/^$/d' "$OUT/ui-test/$phase/results.md" >> "$SUMMARY"
