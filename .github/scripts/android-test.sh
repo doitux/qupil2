@@ -63,6 +63,18 @@ seen() {
     dump
     python3 -I "$HERE/android-ui.py" "$OUT/ui/now.xml" "$1" > /dev/null
 }
+# tap_until <pattern> <expected>: taps until the expected element is there (at most 3 times;
+# a reminder dialog that comes up late takes the first tap)
+tap_until() {
+    local i
+    for ((i = 0; i < 3; i++)); do
+        tap "$1" > /dev/null || true
+        sleep 2
+        seen "$2" && { say "- tapped \`$1\`, \`$2\` is there"; return 0; }
+    done
+    say "- **\`$2\` did not come after tapping \`$1\`**"
+    return 1
+}
 # dismiss: closes every reminder dialog shown at the start (there can be several in a row)
 dismiss() {
     local i
@@ -289,9 +301,9 @@ launcher
 wait_for "main: first frame" 90
 sleep 4
 dismiss
-tap '^Mehr$' && sleep 2
-tap '^Einstellungen$' && sleep 2
-tap '^Darstellung' && sleep 2
+tap_until '^Mehr$' '^Einstellungen$'
+tap_until '^Einstellungen$' '^Darstellung'
+tap_until '^Darstellung' '^Hell$'
 tap '^Hell$' && sleep 2
 shot light-chosen
 adb shell am force-stop $PKG
@@ -306,9 +318,9 @@ sleep 4
 shot light-start
 notes
 dismiss
-tap '^Mehr$' && sleep 2
-tap '^Einstellungen$' && sleep 2
-tap '^Darstellung' && sleep 2
+tap_until '^Mehr$' '^Einstellungen$'
+tap_until '^Einstellungen$' '^Darstellung'
+tap_until '^Darstellung' '^System$'
 tap '^System$' && sleep 2
 adb shell am force-stop $PKG
 
