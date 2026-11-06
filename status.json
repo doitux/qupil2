@@ -1,9 +1,82 @@
 {
-  "mode": "schedule",
-  "started_at": "2026-11-06T19:58:47+01:00",
-  "slot": "2026-11-06 13:05",
-  "result": "late",
-  "note": "GitHub hat den Lauf erst um 19:58 gestartet (geplant 13:05); die Änderungen kommen in den nächsten Sammel-Lauf.",
-  "written": "2026-11-06T19:58:47+01:00",
-  "headline": "Verspätet gestartet, kein Build"
+  "mode": "dry-run",
+  "started_at": "2026-11-06T23:48:32+01:00",
+  "slot": "2026-11-06 23:48 (von Hand, dry-run)",
+  "since": "af8bae206dda5a90bd1c1fec568ebd9bf696731f",
+  "since_build": 39,
+  "main": "6b0a159afca79307d80e96e0af1ae254c2d5a5de",
+  "commits": [
+    {
+      "sha": "500fc50",
+      "subject": "Android test: end a start that hangs before it takes the emulator down"
+    },
+    {
+      "sha": "f408d90",
+      "subject": "Merge branch 'main' into fix/android-ui-restart"
+    },
+    {
+      "sha": "65f56ca",
+      "subject": "Android test: UI test first; emulator graphics stalls named as such"
+    },
+    {
+      "sha": "9487581",
+      "subject": "Android emulator test build: draw in software"
+    },
+    {
+      "sha": "6d5f731",
+      "subject": "UI test: type only into a focused field; Android test closes all start dialogs"
+    },
+    {
+      "sha": "69919fc",
+      "subject": "UI test: typing waits for the on-screen keyboard and checks the field"
+    },
+    {
+      "sha": "260fae0",
+      "subject": "Android test: let the package events after the install pass first"
+    },
+    {
+      "sha": "8f20841",
+      "subject": "Android test: back to GL drawing, SwiftShader instead of ANGLE"
+    },
+    {
+      "sha": "859d6c6",
+      "subject": "UI test: run a chosen set of cases; Android emulator runs it in four starts"
+    },
+    {
+      "sha": "8ee1185",
+      "subject": "Android test: time limit for the Qt downloads"
+    },
+    {
+      "sha": "589d911",
+      "subject": "Students list: rows without Layouts; Android test on an ATD image"
+    },
+    {
+      "sha": "f820a32",
+      "subject": "Android emulator: no shader binary cache (the GL pipe stalls); UI test parts fixed"
+    },
+    {
+      "sha": "c974e63",
+      "subject": "UI test: cases independent of each other and of the start reminders"
+    },
+    {
+      "sha": "7f136e2",
+      "subject": "Android test: the light-mode step taps until each page is there"
+    },
+    {
+      "sha": "6b0a159",
+      "subject": "TestFlight collect: a late evening run may build until 06:30, midday only on time"
+    }
+  ],
+  "relevant_files": [
+    ".github/scripts/android-test.sh",
+    ".github/workflows/android-test.yml",
+    "qml/pages/StudentsPage.qml",
+    "src/app/UiTest.cpp",
+    "src/app/UiTest.h",
+    "src/main.cpp"
+  ],
+  "result": "would_build",
+  "note": "6 Dateien für iOS geändert; im Probelauf wird nichts gestartet.",
+  "written": "2026-11-06T23:48:35+01:00",
+  "headline": "Probelauf: würde bauen"
 }
