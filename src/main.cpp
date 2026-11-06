@@ -129,6 +129,13 @@ void placeWindow(QQuickWindow *window)
 
 int main(int argc, char *argv[])
 {
+#if defined(Q_OS_ANDROID) && defined(QUPIL_ANDROID_TEST_ARGS)
+    // Emulator test build: no shader binary cache. Reading the compiled programs back
+    // (glGetProgramBinary) goes through the emulator's GL pipe to the host and stalled
+    // there, the process growing until the emulator went down; devices are not affected
+    qputenv("QT_DISABLE_SHADER_DISK_CACHE", "1");
+    qputenv("QSG_RHI_DISABLE_DISK_CACHE", "1");
+#endif
     QUPIL_BOOT("main: start");
     QGuiApplication app(argc, argv);
     QUPIL_BOOT("main: application created");

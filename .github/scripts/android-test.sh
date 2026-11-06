@@ -152,7 +152,7 @@ PARTS="1:pages,today,note-save,note-cancel,student-search,student-new
 2:event-open,metronome,appearance,language,reminders,test-mode
 3:plan-save,piece-new,lesson-new,reminder-new,more-pages,restart-prepare
 restart:"
-while IFS= read -r part; do
+while IFS= read -r part <&3; do
     name=${part%%:*}
     cases=${part#*:}
     if [ "$name" = restart ]; then phase=restart; else phase="only:$cases"; fi
@@ -165,7 +165,7 @@ while IFS= read -r part; do
     sleep 3
     adb shell am force-stop $PKG
     sleep 2
-done <<< "$PARTS"
+done 3<<< "$PARTS"   # (on fd 3: adb reads stdin and would eat the list)
 adb pull "$uidir" "$OUT/ui-test" > /dev/null 2>&1
 # (the data folder stays: sample data only, to start the restart half elsewhere)
 for name in 1 2 3 restart; do
