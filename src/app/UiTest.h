@@ -35,6 +35,10 @@ class QQuickWindow;
     --ui-test-phase restart: the second half of the restart case (after the first
     run quit with an unsaved note): the editor has to come back with the text.
     Needs the same --data-dir as the first run.
+
+    --ui-test-phase draft: only types an unsaved note and stays open, for a test run
+    that sends Qupil to the background and lets the system end it (iOS simulator);
+    the restart half then checks the note as above.
 */
 class UiTest : public QObject
 {
@@ -87,6 +91,7 @@ private:
     // ---- the cases
     void addCases();
     void addRestartPhase();
+    void addDraftPhase();
     Case &add(const QString &name, const QString &title);
 
     // ---- steps

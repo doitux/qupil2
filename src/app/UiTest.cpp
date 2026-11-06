@@ -105,6 +105,8 @@ void UiTest::start()
     QTimer::singleShot(600, this, [this] {
         if (m_phase == u"restart"_s)
             addRestartPhase();
+        else if (m_phase == u"draft"_s)
+            addDraftPhase();
         else
             addCases();
         next();
@@ -545,7 +547,9 @@ void UiTest::report()
         text.write(md.toUtf8());
     qInfo("ui test: %lld of %lld cases passed (%s)", qlonglong(m_results.size() - failed),
           qlonglong(m_results.size()), qPrintable(QDir::toNativeSeparators(m_folder)));
-    QCoreApplication::exit(failed == 0 ? EXIT_SUCCESS : 1);
+    // "draft": Qupil stays open with the unsaved note, the system ends it from outside
+    if (m_phase != u"draft"_s)
+        QCoreApplication::exit(failed == 0 ? EXIT_SUCCESS : 1);
 }
 
 // ------------------------------------------------------------------------ the cases
@@ -599,6 +603,15 @@ void UiTest::addRestartPhase()
             << tap(u"^Abbrechen$"_s)
             << gone(u"^Notiz speichern$"_s)
             << check(u"the draft is gone after cancelling"_s, [this] { return m_app->keptDraft(u"note"_s).isEmpty(); });
+}
+
+void UiTest::addDraftPhase()
+{
+    Case &c = add(u"draft-prepare"_s, u"an unsaved note, then the system ends Qupil (from outside)"_s);
+    c.keepScreen = true;
+    c.steps << tapIfThere(u"^OK$"_s, 3000, u"close the reminders shown at the start (if any)"_s)
+            << tap(u"^Notiz$"_s) << see(u"^Notiz speichern$"_s)
+            << tap(u"edit:^Notiz$"_s) << type(u"Vor dem Neustart getippt"_s);
 }
 
 void UiTest::addCases()

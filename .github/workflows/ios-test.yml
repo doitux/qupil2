@@ -68,12 +68,15 @@ jobs:
           bash .github/scripts/run-logged.sh cmake --build build --config Release -- \
             -sdk iphonesimulator ARCHS=x86_64 ONLY_ACTIVE_ARCH=NO CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""
 
+      # Optional: without it the run skips only the taps from outside
       - name: Install idb
+        continue-on-error: true
         run: |
           brew tap facebook/fb > /dev/null
           brew trust facebook/fb > /dev/null 2>&1 || true
-          brew install idb-companion > /dev/null
-          python3 -m pip install --break-system-packages --quiet fb-idb || python3 -m pip install --user --quiet fb-idb
+          bash .github/scripts/run-logged.sh brew install idb-companion
+          bash .github/scripts/run-logged.sh python3 -m pip install --break-system-packages --quiet fb-idb \
+            || python3 -m pip install --user --quiet fb-idb
           echo "$(python3 -m site --user-base)/bin" >> "$GITHUB_PATH"
 
       - name: Run the scenarios

@@ -129,35 +129,61 @@ device_run() {
     mkdir -p "$dir/ui-test"
     cp -R "$data/Documents/ui-test/." "$dir/ui-test/" 2> /dev/null
 
-    # --- 2. From outside: start, a note, background, ended, back
-    say '### Background and restart (from outside, idb)'
+    # --- 2. From outside: a note typed (by Qupil's draft phase), Settings in front,
+    #        Qupil ended by the system, started again – the note has to be back
+    say '### Background and ended by the system'
     say ''
     xcrun simctl terminate "$udid" $BUNDLE > /dev/null 2>&1
-    launch --load-demo --lang de
-    sleep 6
-    shot start
-    tap '^OK$' && sleep 2
-    if tap '^Notiz$'; then
-        sleep 3
-        idb ui text --udid "$udid" "Entwurf aus dem Simulator"
+    local ddir=$data/Library/draft-data
+    rm -rf "$data/Documents/draft"
+    xcrun simctl launch --console-pty --terminate-running-process "$udid" $BUNDLE \
+        --ui-test "$data/Documents/draft/prepare" --ui-test-phase draft --lang de --data-dir "$ddir" \
+        >> "$dir/qupil.log" 2>&1 &
+    for ((i = 0; i < 120; i++)); do
+        [ -f "$data/Documents/draft/prepare/results.md" ] && break
         sleep 2
-        shot editor-typing
-    fi
+    done
+    sleep 2
+    shot editor-typing
     xcrun simctl launch "$udid" com.apple.Preferences > /dev/null
-    sleep 4
+    sleep 5
     shot background
     xcrun simctl terminate "$udid" $BUNDLE > /dev/null 2>&1
     sleep 2
-    launch
-    sleep 4
-    shot draft-back
-    if seen '^Notiz speichern$'; then
-        say "- the editor is open again with the draft (see the screenshot)"
+    run_for 300 xcrun simctl launch --console-pty --terminate-running-process "$udid" $BUNDLE \
+        --ui-test "$data/Documents/draft/back" --ui-test-phase restart --lang de --data-dir "$ddir" \
+        > "$dir/draft-back.log" 2>&1
+    if grep -q '✅' "$data/Documents/draft/back/results.md" 2> /dev/null; then
+        say "- the editor came back with the unsaved note"
     else
-        say "- **the editor did not come back**"
+        say "- **the note did not come back** (draft-back.log)"
         FAILED=1
     fi
-    tap '^Abbrechen$' && sleep 2
+    mkdir -p "$dir/draft"
+    cp -R "$data/Documents/draft/." "$dir/draft/" 2> /dev/null
+
+    # --- idb (when it installed): what the system's accessibility sees, a tap from outside
+    if command -v idb > /dev/null 2>&1; then
+        say ''
+        say '### idb'
+        say ''
+        launch --load-demo --lang de
+        sleep 6
+        shot start
+        tap '^OK$' && sleep 2
+        if tap '^Notiz$'; then
+            sleep 3
+            idb ui text --udid "$udid" "Mit idb getippt"
+            sleep 2
+            shot idb-typing
+            tap '^Abbrechen$' && sleep 2
+        fi
+        xcrun simctl terminate "$udid" $BUNDLE > /dev/null 2>&1
+    else
+        say '- (idb not installed: no taps from outside)'
+    fi
+    launch --load-demo --lang de
+    sleep 6
 
     # --- 3. Dark mode while running and at the start
     say ''
