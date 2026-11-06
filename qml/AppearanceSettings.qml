@@ -49,6 +49,7 @@ ColumnLayout {
                     checked: selected
                     text: root.modeLabel(modelData)
                     Accessible.role: Accessible.RadioButton
+                    Accessible.name: text
                     Accessible.checked: selected
                     onClicked: Theme.mode = modelData
 

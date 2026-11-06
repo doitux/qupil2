@@ -82,7 +82,8 @@ target_link_libraries(qupilcore PUBLIC Qt6::Core Qt6::Sql)
 
 # ---------------------------------------------------------------------------- app
 
-qt_add_executable(qupil src/main.cpp src/app/ScreenshotTour.h src/app/ScreenshotTour.cpp)
+qt_add_executable(qupil src/main.cpp src/app/ScreenshotTour.h src/app/ScreenshotTour.cpp
+    src/app/UiTest.h src/app/UiTest.cpp)
 
 target_compile_definitions(qupil PRIVATE QUPIL_VERSION="${PROJECT_VERSION}")
 # Which build this is (shown under "About"): the commit on CI, "dev" otherwise
@@ -526,5 +527,16 @@ if(QUPIL_BUILD_TESTS AND NOT ANDROID AND NOT IOS)
 
     # Loads the whole QML UI once and fails on any QML warning
     add_test(NAME qml_smoke COMMAND qupil --smoke-test)
-    set_tests_properties(languagemanager core notes qml_smoke PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+    # Goes through the important flows by tapping and typing, phone and wide layout
+    foreach(layout phone wide)
+        set(_size 390x844)
+        if(layout STREQUAL "wide")
+            set(_size 1280x800)
+        endif()
+        add_test(NAME ui_test_${layout}
+                 COMMAND ${CMAKE_COMMAND} -DQUPIL=$<TARGET_FILE:qupil> -DSIZE=${_size}
+                         -DOUT=${CMAKE_BINARY_DIR}/ui-test/${layout} -P ${CMAKE_CURRENT_SOURCE_DIR}/tests/ui-test.cmake)
+    endforeach()
+    set_tests_properties(languagemanager core notes qml_smoke ui_test_phone ui_test_wide
+                         PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
 endif()

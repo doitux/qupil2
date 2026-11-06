@@ -164,7 +164,9 @@ launcher
 wait_for "main: first frame" 90
 sleep 6
 shot draft-back
-if seen 'Entwurf aus dem Emulator'; then
+# Qt does not hand the text of the field to Android: the editor is open and Qupil says it
+# opened it again with the draft (Main.qml), the screenshot shows the text
+if seen '^Notiz speichern$' && since | grep -q "Draft: note editor opened again"; then
     say "- the draft is back in the editor"
 else
     say "- **the draft is not on the screen**"

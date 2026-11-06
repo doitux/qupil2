@@ -34,9 +34,11 @@
 #include "DocumentService.h"
 #include "LanguageManager.h"
 #include "LessonEndAlert.h"
+#include "Metronome.h"
 #include "ReminderAlert.h"
 #include "ScreenshotTour.h"
 #include "SyncController.h"
+#include "UiTest.h"
 #include "WifiController.h"
 
 using namespace Qt::StringLiterals;
@@ -166,10 +168,19 @@ int main(int argc, char *argv[])
     args.addOption(langOption);
     args.addOption(smokeOption);
     args.addOption(screenshotsOption);
+    const QCommandLineOption uiTestOption(
+        u"ui-test"_s, u"Go through the important flows with sample data, results into a folder."_s, u"folder"_s);
+    const QCommandLineOption uiPhaseOption(
+        u"ui-test-phase"_s, u"Second half of the UI test after a restart (restart)."_s, u"phase"_s);
+    const QCommandLineOption uiSizeOption(
+        u"ui-test-size"_s, u"Desktop: window size for the UI test (e.g. 390x844)."_s, u"WxH"_s);
     const QCommandLineOption demoOption(
         u"load-demo"_s, u"Start with the sample data when there is no data yet (tests)."_s);
     args.addOption(dateOption);
     args.addOption(demoOption);
+    args.addOption(uiTestOption);
+    args.addOption(uiPhaseOption);
+    args.addOption(uiSizeOption);
 #if defined(Q_OS_ANDROID) && !defined(QUPIL_ANDROID_TEST_ARGS)
     // Android hands the extra "applicationArguments" of any intent to the app, and other apps
     // can start Qupil: only the emulator test build (android-test.yml) takes arguments
@@ -180,6 +191,7 @@ int main(int argc, char *argv[])
 
     const bool smokeTest = args.isSet(smokeOption);
     const bool screenshots = args.isSet(screenshotsOption);
+    const bool uiTest = args.isSet(uiTestOption);
     // The day shown as "today". Screenshots: a Tuesday (lessons, never a weekend),
     // at 14:20 while the first lesson of the day runs
     QDate shownDate;
@@ -188,20 +200,22 @@ int main(int argc, char *argv[])
         if (!shownDate.isValid())
             qWarning("--date: not a date (yyyy-mm-dd): %s", qPrintable(args.value(dateOption)));
     }
-    if (screenshots)
+    if (screenshots || uiTest)
         Qupil::Clock::pretend(shownDate.isValid() ? shownDate : Qupil::Clock::lastWeekday(QDate::currentDate(), 2),
                               QTime(14, 20));
     else if (shownDate.isValid())
         Qupil::Clock::pretend(shownDate);
     QTemporaryDir scratchDir;
-    if (smokeTest || screenshots) {
+    if (smokeTest || screenshots || uiTest) {
         // Keep the user's real settings and data untouched
-        QGuiApplication::setOrganizationName(smokeTest ? u"QupilSmokeTest"_s : u"QupilScreenshots"_s);
+        QGuiApplication::setOrganizationName(smokeTest ? u"QupilSmokeTest"_s
+                                             : uiTest  ? u"QupilUiTest"_s
+                                                       : u"QupilScreenshots"_s);
     }
     if (smokeTest)
         s_previousHandler = qInstallMessageHandler(smokeTestHandler);
     const QString dataDir = args.isSet(dataDirOption) ? args.value(dataDirOption)
-                            : (smokeTest || screenshots) ? scratchDir.path()
+                            : (smokeTest || screenshots || uiTest) ? scratchDir.path()
                                                          : QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
 
     // Figtree in four weights, bundled so the app looks the same everywhere
@@ -238,7 +252,7 @@ int main(int argc, char *argv[])
     if (controller.phase() == AppController::Ready)
         data.ensureDefaults();
     // Tests: sample data as on the welcome screen ("Try with sample data"), then straight on
-    if (args.isSet(demoOption) && controller.phase() == AppController::Setup && !smokeTest && !screenshots) {
+    if ((args.isSet(demoOption) || uiTest) && controller.phase() == AppController::Setup && !smokeTest && !screenshots) {
         QObject::connect(&controller, &AppController::dataReplaced, &controller, [&controller] {
             QUPIL_BOOT("main: sample data loaded");
             controller.finishSetup();
@@ -287,7 +301,7 @@ int main(int argc, char *argv[])
     const bool desktop = true;
 #endif
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app,
-                     [desktop, smokeTest, screenshots](QObject *object, const QUrl &) {
+                     [desktop, smokeTest, screenshots, uiTest](QObject *object, const QUrl &) {
                          auto *window = qobject_cast<QQuickWindow *>(object);
                          QUPIL_BOOT("main: interface created, window %s", window ? "yes" : "no");
                          if (!window)
@@ -311,7 +325,7 @@ int main(int argc, char *argv[])
                              QUPIL_BOOT("main: window visible %d, exposed %d", int(visible), int(window->isExposed()));
                          });
 #endif
-                         if (desktop && !smokeTest && !screenshots)
+                         if (desktop && !smokeTest && !screenshots && !uiTest)
                              placeWindow(window);
                          else
                              window->show();
@@ -388,6 +402,34 @@ int main(int argc, char *argv[])
                              tour = std::make_unique<ScreenshotTour>(window, theme, nav, &controller,
                                                                      args.value(screenshotsOption));
                              tour->start();
+                         });
+    }
+
+    std::unique_ptr<UiTest> ui;
+    if (uiTest) {
+        QObject::connect(&engine, &QQmlApplicationEngine::objectCreated, &app,
+                         [&engine, &controller, &data, &languages, &ui, &args, &uiTestOption, &uiPhaseOption,
+                          &uiSizeOption](QObject *object, const QUrl &) {
+                             auto *window = qobject_cast<QQuickWindow *>(object);
+                             if (!window)
+                                 return;
+                             const QStringList size = args.value(uiSizeOption).split(u'x');
+                             if (size.size() == 2 && size[0].toInt() > 0 && size[1].toInt() > 0)
+                                 window->resize(size[0].toInt(), size[1].toInt());
+                             QObject *theme = engine.singletonInstance<QObject *>("Qupil", "Theme");
+                             QObject *nav = engine.singletonInstance<QObject *>("Qupil", "Nav");
+                             QObject *metronome = engine.singletonInstance<Metronome *>("Qupil", "Metronome");
+                             ui = std::make_unique<UiTest>(window, theme, nav, metronome, &controller, &data, &languages,
+                                                           args.value(uiTestOption), args.value(uiPhaseOption));
+                             // With the sample data in place
+                             const auto go = [&ui] { if (ui) ui->start(); };
+                             if (controller.phase() == AppController::Ready)
+                                 go();
+                             else
+                                 QObject::connect(&controller, &AppController::phaseChanged, ui.get(), [&controller, go] {
+                                     if (controller.phase() == AppController::Ready)
+                                         go();
+                                 }, Qt::SingleShotConnection);
                          });
     }
 

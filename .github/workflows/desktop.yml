@@ -112,6 +112,26 @@ jobs:
             fi
           done
 
+      # UI test (ctest ui_test_*): the failed cases as annotations, the screens of the failures
+      - name: Show failed UI test cases
+        if: failure()
+        shell: bash
+        run: |
+          for f in build/ui-test/*/*/results.md; do
+            [ -f "$f" ] || continue
+            rows=$(grep '❌' "$f" || true)
+            [ -n "$rows" ] || continue
+            where=${f#build/ui-test/}
+            msg=$(echo "$rows" | sed -e 's/%/%25/g' -e 's/\r//g' | awk 'BEGIN { ORS = "%0A" } { print }')
+            echo "::error title=UI test ${{ matrix.name }} ${where%/results.md}::${msg}"
+          done
+      - uses: actions/upload-artifact@v7
+        if: failure()
+        with:
+          name: ui-test-${{ matrix.name }}
+          path: build/ui-test/
+          if-no-files-found: ignore
+
       # Every screen with sample data, light/dark, desktop/phone size – published with the nightly build
       - name: Screenshots (Linux)
         if: runner.os == 'Linux'

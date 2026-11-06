@@ -63,7 +63,7 @@ ColumnLayout {
         color: Theme.text
         placeholderTextColor: Theme.textMuted
         selectByMouse: true
-        Accessible.name: field.label
+        Accessible.name: field.label !== "" ? field.label : field.placeholder
         background: Rectangle {
             radius: 12
             color: Theme.surface
@@ -119,7 +119,7 @@ ColumnLayout {
         color: Theme.text
         placeholderTextColor: Theme.textMuted
         selectByMouse: true
-        Accessible.name: field.label
+        Accessible.name: field.label !== "" ? field.label : field.placeholder
         background: Rectangle {
             radius: 12
             color: Theme.surface

@@ -5,7 +5,6 @@
 //   Nav.editNote(membershipId, "")   → Main.qml opens the note editor
 pragma Singleton
 import QtQuick
-import Qupil
 
 QtObject {
     //! Height taken at the bottom right by the running metronome (Main.qml): floating
