@@ -1,12 +1,6 @@
-Neu seit Build 26:
-- Schnellerer Start: Beim Start entsteht nur der Stundenplan, die anderen Seiten und Eingabefenster beim ersten Öffnen.
-- Hinweise oben im Stundenplan als kurze Liste: Geburtstage der Schüler, die heute noch kommen, und Erinnerungen für einen Schüler mit der Uhrzeit seiner Stunde, bis sie beginnt.
-- Mehr › Geburtstage zeigt auch die letzten 8 Wochen (zum Nachgratulieren).
-- iPhone: Beim Schreiben einer Notiz oder Planung stehen Unterricht und Datum in einer Zeile, "Speichern" sitzt bei offener Tastatur oben. So bleibt mehr Platz für den Text.
-- Eingabefenster mit Tastatur öffnen und schließen ruhig, ohne Flackern: Beim Speichern geht erst die Tastatur weg, dann das Fenster.
-- iPad und iPhone: Bei offener Tastatur bleibt das Eingabefenster mit "Speichern" ganz sichtbar über der Tastatur, der Cursor bleibt im Blick.
-- Notizen und Planungen, die beim Wechsel in eine andere App noch nicht gespeichert waren, gehen nicht mehr verloren: Beendet das System Qupil im Hintergrund, öffnet Qupil beim nächsten Start den Editor mit dem Text wieder ("Noch nicht gespeichert – Entwurf vom …").
-- Testdaten für Bildschirmaufnahmen: Mehr › Über, 7× schnell auf die Versionsnummer tippen. Qupil zeigt dann erfundene Beispieldaten (oranger Rahmen), Ihre echten Daten bleiben unberührt, der Abgleich ist aus. Zurück mit "Beenden" unten links. Die Beispieldaten sind jetzt eine volle Woche: Streicherklassen, Einzel- und Gruppenunterricht bis zum Abend, Notizen von einer Zeile bis zum ganzen Übeprogramm, Planungen und Erinnerungen.
+Neu seit Build 37:
+- Notizen und Planungen, die beim Wechsel in eine andere App noch nicht gespeichert waren, gehen nicht mehr verloren: Beendet das System Qupil im Hintergrund, öffnet Qupil beim nächsten Start den Editor mit dem Text wieder ("Noch nicht gespeichert – Entwurf vom …"). Bitte ausprobieren: Notiz anfangen, in eine andere App wechseln, Qupil in der App-Übersicht wegwischen, Qupil wieder öffnen.
+- iPhone: Unter der laufenden Stunde heißt die Liste "Unterricht" statt "Später heute", wenn auch frühere Stunden des Tages darin stehen.
 
 Bitte grundsätzlich ausprobieren:
 - Daten übernehmen: Backup zurückspielen oder die Qupil-1.x-Datenbank (qupil.db) übernehmen. Stimmen Schüler, Unterrichte, Notizen und Werke?
