@@ -360,6 +360,35 @@ UiTest::Step UiTest::tapIfThere(const QString &pattern, int withinMs, const QStr
                   withinMs + 2000 };
 }
 
+UiTest::Step UiTest::tapUntil(const QString &pattern, const QString &expect)
+{
+    // Taps again when nothing happened (at most three times) and notes it: a tap that
+    // only closed the keyboard, for example, is worth knowing about
+    auto taps = std::make_shared<int>(0);
+    auto since = std::make_shared<QElapsedTimer>();
+    return Step { u"tap \"%1\" until \"%2\""_s.arg(pattern, expect), [this, pattern, expect, taps, since] {
+                      if (*taps > 0 && find(expect)) {
+                          if (*taps > 1)
+                              m_results.last().note += u"%1 taps needed for \"%2\". "_s.arg(*taps).arg(pattern);
+                          *taps = 0;
+                          since->invalidate();
+                          return true;
+                      }
+                      if (*taps > 0 && since->isValid() && since->elapsed() < 2000)
+                          return false;
+                      if (*taps >= 3 || busy())
+                          return false;
+                      Node node;
+                      if (!find(pattern, &node) || node.rect.isEmpty())
+                          return false;
+                      click(node.rect.center());
+                      ++*taps;
+                      since->start();
+                      return false;
+                  },
+                  10000 };
+}
+
 UiTest::Step UiTest::backIfThere(const QString &pattern)
 {
     // The back button of a page carries the name of the page it goes back to
@@ -673,7 +702,7 @@ void UiTest::addCases()
         c.steps << tab(u"Schüler"_s) << tap(u"edit:^Schüler suchen$"_s) << type(u"Lena"_s)
                 << see(u"^Lena Muster$"_s) << gone(u"^Jonas Becker$"_s)
                 << snap(u"student-search"_s)
-                << tap(u"^Lena Muster$"_s) << see(u"^Unterricht wählen$"_s)
+                << tapUntil(u"^Lena Muster$"_s, u"^Unterricht wählen$"_s)
                 << snap(u"student-page"_s);
         // Narrow: the student page instead of the list, with a way back; wide: side by side
         c.steps << backIfThere(u"^Schüler$"_s) << see(u"edit:^Schüler suchen$"_s);

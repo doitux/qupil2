@@ -99,6 +99,7 @@ private:
     Step tapAt(std::function<QPointF()> where, const QString &what);
     Step see(const QString &pattern);
     Step backIfThere(const QString &pattern);
+    Step tapUntil(const QString &pattern, const QString &expect);
     Step tapIfThere(const QString &pattern, int withinMs, const QString &what);
     Step gone(const QString &pattern);
     Step type(const QString &text);

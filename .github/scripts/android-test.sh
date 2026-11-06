@@ -214,6 +214,35 @@ sleep 4
 shot portrait-again
 notes
 
+step "Light chosen in Qupil (not the system's), then a new start"
+adb shell am force-stop $PKG
+launcher
+wait_for "main: first frame" 90
+sleep 4
+tap '^OK$' && sleep 2
+tap '^Mehr$' && sleep 2
+tap '^Einstellungen$' && sleep 2
+tap '^Darstellung' && sleep 2
+tap '^Hell$' && sleep 2
+shot light-chosen
+adb shell am force-stop $PKG
+mark
+launcher
+if wait_for "main: first frame" 60; then
+    say "- Qupil starts with its own light mode"
+else
+    say "- memory of the process: $(adb shell dumpsys meminfo $PKG 2> /dev/null | grep -m1 'TOTAL' | tr -s ' ')"
+fi
+sleep 4
+shot light-start
+notes
+tap '^OK$' && sleep 2
+tap '^Mehr$' && sleep 2
+tap '^Einstellungen$' && sleep 2
+tap '^Darstellung' && sleep 2
+tap '^System$' && sleep 2
+adb shell am force-stop $PKG
+
 step "Qupil's own UI test (inside the app) and its restart half"
 adb shell am force-stop $PKG
 uidir=/data/data/$PKG/files/ui-test

@@ -11,6 +11,7 @@
 #include <algorithm>
 
 #include "AlertSound.h"
+#include "Clock.h"
 #include "DataService.h"
 #include "SystemAlerts.h"
 
@@ -163,7 +164,9 @@ void ReminderAlert::check()
     // iOS, Android in the background: the system notification comes instead
     if (SystemAlerts::available() && QGuiApplication::applicationState() != Qt::ApplicationActive)
         return;
-    const QDateTime now = QDateTime::currentDateTime();
+    // The app's clock: real, or the day and time pretended by --date, the screenshot tour
+    // and the UI test (otherwise reminders of lessons starting in real time pop up there)
+    const QDateTime now = Qupil::Clock::now();
     const int minute = now.time().hour() * 60 + now.time().minute();
     const QString today = now.date().toString(Qt::ISODate);
     QVariantList reminders;
