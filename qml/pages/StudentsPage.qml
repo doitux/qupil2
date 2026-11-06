@@ -223,21 +223,29 @@ Item {
                         border.width: row.visualFocus ? 2 : 0
                         border.color: Theme.accentText
                     }
-                    contentItem: RowLayout {
-                        spacing: 12
+                    // Plain Row/Column, no Layouts: rows come and go with every letter typed
+                    // in the search, and a Layout destroyed with its row crashed Qt on
+                    // Android (polish scheduled on an item being destroyed)
+                    contentItem: Item {
+                        implicitHeight: 40
                         opacity: row.modelData.active ? 1 : 0.6
                         Avatar {
+                            id: rowAvatar
+                            anchors.verticalCenter: parent.verticalCenter
                             size: 40
                             text: row.modelData.initials
                             seed: row.modelData.name
                             // Birthday today or since the last lesson: a small cake
                             birthday: { if (Data.revision < 0) return null; return Data.birthdayNote(row.modelData.id) }
                         }
-                        ColumnLayout {
-                            Layout.fillWidth: true
+                        Column {
+                            anchors.left: rowAvatar.right
+                            anchors.leftMargin: 12
+                            anchors.right: parent.right
+                            anchors.verticalCenter: parent.verticalCenter
                             spacing: 1
                             Text {
-                                Layout.fillWidth: true
+                                width: parent.width
                                 elide: Text.ElideRight
                                 text: row.modelData.listName
                                 color: row.isSelected ? Theme.accentText : Theme.text
@@ -246,7 +254,7 @@ Item {
                                 font.weight: Font.Bold
                             }
                             Text {
-                                Layout.fillWidth: true
+                                width: parent.width
                                 elide: Text.ElideRight
                                 text: [row.modelData.instrument, row.modelData.lessons || qsTrId("students.no_lesson_short")]
                                       .filter(Boolean).join(" · ")

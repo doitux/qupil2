@@ -123,12 +123,15 @@ jobs:
         env:
           QUPIL_TOUR: ${{ inputs.tour && '1' || '0' }}
         with:
-          api-level: 34
-          target: google_apis
+          # Automated Test Device image: made for headless CI, draws in the guest
+          # (no GL pipe to the host, which stalled with the other images)
+          api-level: 33
+          target: aosp_atd
+          channel: canary
           arch: x86_64
           profile: pixel_6
           disable-animations: true
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+          emulator-options: -no-window -gpu guest -no-snapshot -noaudio -no-boot-anim
           script: bash .github/scripts/android-test.sh qupil-x86_64.apk android-test-out
 
       - name: Device log (artifact)
