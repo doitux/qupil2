@@ -1,10 +1,10 @@
 {
-  "mode": "dry-run",
-  "started_at": "2026-11-06T07:24:04+01:00",
-  "slot": "2026-11-06 07:24 (von Hand, dry-run)",
+  "mode": "now",
+  "started_at": "2026-11-06T14:47:03+01:00",
+  "slot": "2026-11-06 14:47 (von Hand, now)",
   "since": "0d57e5ecfc4834f11434109f9beccd46e0a3f70e",
   "since_build": 37,
-  "main": "be1cd528a82a9aaf11299ca0782f2bc9ef8b94d8",
+  "main": "a75f8e0daae6de3e14ba63469336b058d9ef5b66",
   "commits": [
     {
       "sha": "ee70b62",
@@ -45,26 +45,130 @@
     {
       "sha": "be1cd52",
       "subject": "CI: collect builds only what is not on TestFlight yet"
+    },
+    {
+      "sha": "b98c689",
+      "subject": "Nightly files named alike: Qupil-<platform>-nightly-<commit>"
+    },
+    {
+      "sha": "3d3ee13",
+      "subject": "CI: macOS desktop build on macos-15 (macos-14 no longer accepted)"
+    },
+    {
+      "sha": "1e09dcb",
+      "subject": "Nightly: no unsigned iOS file any more (iPad and iPhone via TestFlight)"
+    },
+    {
+      "sha": "eb87940",
+      "subject": "CI: Mobile publish downloads the Android artifact into its folder"
+    },
+    {
+      "sha": "827b1b0",
+      "subject": "CI: Android test run on an emulator"
+    },
+    {
+      "sha": "d7e41fd",
+      "subject": "Today: \"Later today\" only when no lesson of the list was earlier"
+    },
+    {
+      "sha": "797f3b8",
+      "subject": "Android test: drafts, \"Don't keep activities\" for real, cleaner screens"
+    },
+    {
+      "sha": "c94acc6",
+      "subject": "Note draft: write it to disk at once (Android emulator: draft was lost)"
+    },
+    {
+      "sha": "e08dbfc",
+      "subject": "UI test: go through the important flows by tapping and typing (--ui-test)"
+    },
+    {
+      "sha": "ac1f258",
+      "subject": "CI: UI test runs on real desktops, in the iOS simulator and on Android"
+    },
+    {
+      "sha": "a1af107",
+      "subject": "UI test: smaller windows, layouts in between, Android restart half, iOS simulator build"
+    },
+    {
+      "sha": "d4aba78",
+      "subject": "docs: how Qupil is tested (unit tests, UI test, platform runs)"
+    },
+    {
+      "sha": "81de258",
+      "subject": "Test runs: stacks of a hanging Android start, idb tap trusted"
+    },
+    {
+      "sha": "b868345",
+      "subject": "CI: platform tests every night, screens compared with the night before, fix branches"
+    },
+    {
+      "sha": "43a9524",
+      "subject": "Android test: catch the restart half while it hangs, keep its data"
+    },
+    {
+      "sha": "1f892a5",
+      "subject": "iOS test: background and ended by the system without idb; idb optional"
+    },
+    {
+      "sha": "0517b33",
+      "subject": "Tests: no notification permission dialog over the window; idb with Xcode 26"
+    },
+    {
+      "sha": "cb5e360",
+      "subject": "docs: nightly platform runs, visual diff, fixes on fix/ branches"
+    },
+    {
+      "sha": "a75f8e0",
+      "subject": "Reminders follow the app's clock; UI test taps again when a tap did nothing"
     }
   ],
   "relevant_files": [
+    ".github/scripts/android-test.sh",
+    ".github/scripts/android-ui.py",
+    ".github/scripts/ios-test.sh",
+    ".github/scripts/ios-ui.py",
+    ".github/scripts/publish-nightly.sh",
+    ".github/scripts/ui-test-desktop.sh",
+    ".github/scripts/visual-diff.sh",
+    ".github/workflows/android-test.yml",
+    ".github/workflows/ios-test.yml",
+    ".github/workflows/ui-test.yml",
     "CMakeLists.txt",
     "i18n/qupil_de.ts",
     "i18n/qupil_en.ts",
     "i18n/qupil_es.ts",
     "i18n/qupil_fr.ts",
+    "qml/AppearanceSettings.qml",
     "qml/Main.qml",
     "qml/Nav.qml",
+    "qml/components/InputField.qml",
     "qml/editors/NoteEditor.qml",
+    "qml/pages/ScheduleOverview.qml",
     "src/app/AppController.cpp",
     "src/app/AppController.h",
+    "src/app/LessonEndAlert.cpp",
+    "src/app/LessonEndAlert.h",
+    "src/app/ReminderAlert.cpp",
     "src/app/ScreenshotTour.cpp",
     "src/app/SystemBars.h",
+    "src/app/UiTest.cpp",
+    "src/app/UiTest.h",
     "src/main.cpp",
+    "tests/ui-test.cmake",
     "tools/i18n/catalog.py"
   ],
-  "result": "would_build",
-  "note": "14 Dateien für iOS geändert; im Probelauf wird nichts gestartet.",
-  "written": "2026-11-06T07:24:07+01:00",
-  "headline": "Probelauf: würde bauen"
+  "result": "started",
+  "build": {
+    "number": 38,
+    "run_id": 42228296968,
+    "sha": "a75f8e0daae6de3e14ba63469336b058d9ef5b66",
+    "url": "https://github.com/doitux/qupil2/actions/runs/42228296968",
+    "created": "2026-11-06T13:47:08Z",
+    "status": "in_progress",
+    "conclusion": null,
+    "attempt": 1
+  },
+  "written": "2026-11-06T14:47:19+01:00",
+  "headline": "Build 38 gestartet"
 }
