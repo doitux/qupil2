@@ -186,7 +186,8 @@ jobs:
 
       - uses: actions/download-artifact@v7
         with:
-          path: artifacts
+          name: qupil-android-arm64-test
+          path: artifacts/qupil-android-arm64-test
 
       - name: Update the nightly pre-release
         env:
