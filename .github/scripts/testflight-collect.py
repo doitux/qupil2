@@ -43,8 +43,11 @@ UPLOAD_STEP = "Sign and upload to TestFlight"
 WHATS_NEW_STEP = 'Set "What to Test"'
 WAIT_MINUTES = 110
 
-# Slots in German time and the latest start for each (later: the next slot takes it)
-SLOTS = {(13, 5): (13, 30), (22, 5): (23, 59)}
+# Slots in German time and the latest start for each (later: the next slot takes it).
+# GitHub starts scheduled runs late, sometimes by hours. Midday: only on time, so the
+# build is at TestFlight before the afternoon. Evening: until 06:30 the next morning
+# (the night is free; a build takes about half an hour, Apple's processing comes on top).
+SLOTS = {(13, 5): (13, 10), (22, 5): (6, 30)}
 
 # Changes that do not end up in the iOS app
 IGNORE = [re.compile(p) for p in (
@@ -116,7 +119,10 @@ def slot_for_schedule():
 
 def deadline(slot):
     h, m = SLOTS[(slot.hour, slot.minute)]
-    return slot.replace(hour=h, minute=m, second=59)
+    end = slot.replace(hour=h, minute=m, second=59)
+    if end < slot:                          # the latest start is on the next morning
+        end += dt.timedelta(days=1)
+    return end
 
 
 # --------------------------------------------------------------------------- runs
