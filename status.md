@@ -1,9 +1,9 @@
-# TestFlight-Sammellauf 2026-11-06 14:47 (von Hand, now)
+# TestFlight-Sammellauf 2026-11-06 14:48 (von Hand, now)
 
-**Build 38 gestartet**
+**Build 39 gestartet**
 
-- Build 38 (Commit a75f8e0): in_progress, Upload: -, Testtext: -
-- https://github.com/doitux/qupil2/actions/runs/42228296968
+- Build 39 (Commit af8bae2): queued, Upload: -, Testtext: -
+- https://github.com/doitux/qupil2/actions/runs/42228521008
 - Seit Build 37 (Commit 0d57e5e)
 
 Commits:
@@ -36,6 +36,7 @@ Commits:
 - 0517b33 Tests: no notification permission dialog over the window; idb with Xcode 26
 - cb5e360 docs: nightly platform runs, visual diff, fixes on fix/ branches
 - a75f8e0 Reminders follow the app's clock; UI test taps again when a tap did nothing
+- af8bae2 TestFlight text: new since build 37 (now with the external testers)
 
 Für iOS relevante Dateien:
 - .github/scripts/android-test.sh
