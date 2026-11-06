@@ -1,0 +1,51 @@
+# Collected TestFlight builds: at about 13:05 and 22:05 German time, a TestFlight build with
+# everything that changed for iOS since the last upload (nothing when nothing changed).
+# Testers are not notified for every small change; pushes can happen at any time.
+# The result goes to the branch "testflight-status" (status.json, status.md).
+# By hand: Actions › TestFlight (collect) › Run workflow – "dry-run" only checks,
+# "now" builds right away when something changed.
+# Details: .github/scripts/testflight-collect.py
+name: TestFlight (collect)
+
+on:
+  schedule:
+    # UTC: one cron for winter and one for summer time per slot; the script keeps the one
+    # that falls on 13:05 / 22:05 German time today
+    - cron: '5 11 * * *'
+    - cron: '5 12 * * *'
+    - cron: '5 20 * * *'
+    - cron: '5 21 * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'dry-run: only check · now: build now if something changed'
+        type: choice
+        options: [dry-run, now]
+        default: dry-run
+
+permissions:
+  actions: write     # start and re-run the TestFlight workflow
+  contents: write    # write the branch testflight-status
+  checks: read       # annotations ("not acquired by Runner")
+
+concurrency:
+  group: testflight-collect
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    if: github.repository == 'doitux/qupil2'
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          sparse-checkout: |
+            .github
+      - name: Collect and start TestFlight
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          COLLECT_MODE: ${{ github.event_name == 'schedule' && 'schedule' || inputs.mode }}
+          CRON: ${{ github.event.schedule }}
+        run: python3 .github/scripts/testflight-collect.py
