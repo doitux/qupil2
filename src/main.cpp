@@ -166,8 +166,17 @@ int main(int argc, char *argv[])
     args.addOption(langOption);
     args.addOption(smokeOption);
     args.addOption(screenshotsOption);
+    const QCommandLineOption demoOption(
+        u"load-demo"_s, u"Start with the sample data when there is no data yet (tests)."_s);
     args.addOption(dateOption);
+    args.addOption(demoOption);
+#if defined(Q_OS_ANDROID) && !defined(QUPIL_ANDROID_TEST_ARGS)
+    // Android hands the extra "applicationArguments" of any intent to the app, and other apps
+    // can start Qupil: only the emulator test build (android-test.yml) takes arguments
+    args.process(QStringList { app.arguments().value(0) });
+#else
     args.process(app);
+#endif
 
     const bool smokeTest = args.isSet(smokeOption);
     const bool screenshots = args.isSet(screenshotsOption);
@@ -228,6 +237,14 @@ int main(int argc, char *argv[])
     QObject::connect(&controller, &AppController::testModeChanged, &data, &DataService::ensureDefaults);
     if (controller.phase() == AppController::Ready)
         data.ensureDefaults();
+    // Tests: sample data as on the welcome screen ("Try with sample data"), then straight on
+    if (args.isSet(demoOption) && controller.phase() == AppController::Setup && !smokeTest && !screenshots) {
+        QObject::connect(&controller, &AppController::dataReplaced, &controller, [&controller] {
+            QUPIL_BOOT("main: sample data loaded");
+            controller.finishSetup();
+        }, Qt::SingleShotConnection);
+        controller.loadDemo();
+    }
     SyncController sync(&controller, nullptr);
     QObject::connect(&sync, &SyncController::firstSyncDone, &data, &DataService::ensureDefaults);
     WifiController wifi(&controller, &sync, nullptr);

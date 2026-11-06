@@ -223,6 +223,11 @@ if(ANDROID)
     endif()
     # HTTPS (the Nextcloud sync) needs OpenSSL, which Qt does not bring for Android:
     # the prebuilt libraries of https://github.com/KDAB/android_openssl go into the APK
+    # Emulator test build (android-test.yml): takes command line arguments from the intent
+    option(QUPIL_ANDROID_TEST_ARGS "Android: accept arguments from the launching intent (test builds only)" OFF)
+    if(QUPIL_ANDROID_TEST_ARGS)
+        target_compile_definitions(qupil PRIVATE QUPIL_ANDROID_TEST_ARGS)
+    endif()
     set(QUPIL_ANDROID_OPENSSL "" CACHE PATH "Checkout of KDAB/android_openssl (HTTPS on Android)")
     set(_ssl "${QUPIL_ANDROID_OPENSSL}/ssl_3/${CMAKE_ANDROID_ARCH_ABI}")
     if(QUPIL_ANDROID_OPENSSL AND EXISTS "${_ssl}/libssl_3.so" AND EXISTS "${_ssl}/libcrypto_3.so")
