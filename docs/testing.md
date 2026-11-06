@@ -42,7 +42,7 @@ c.steps << tab(u"Schüler"_s) << tap(u"^Lena Muster$"_s) << tap(u"^Werk$"_s)
   where the layout has one; elements scrolled out of sight are scrolled to.
 - A case that changes data the later cases rely on puts it back (see `lesson-new`).
 
-## Platform runs (started by hand, results on a branch)
+## Platform runs (every night on main, and by hand; results on a branch)
 
 | Workflow | Where | Branch |
 |---|---|---|
@@ -50,6 +50,19 @@ c.steps << tab(u"Schüler"_s) << tap(u"^Lena Muster$"_s) << tap(u"^Werk$"_s)
 | iOS test – `ios-test.yml` | iPhone and iPad simulator: the UI test inside the app, then with idb from outside: background, ended, started again (draft), dark mode | `ios-test` |
 | Android test – `android-test.yml` | Android 14 emulator: start with sample data, background, process ended, draft, dark mode, landscape, the UI test | `android-test` |
 
+They run every night on main (Android 01:30, desktop 02:00 with the screenshot tour on
+Linux, iOS 02:30 UTC). The desktop run compares every screenshot with the run before
+(`visual-diff.sh`): screens that changed are listed in `visual-diff.md` with a
+"before | after | difference" picture.
+
 Each branch holds only the latest run (screenshots, screen dumps, a summary). Start with
 `gh workflow run <workflow> -R doitux/qupil2 --ref main`, read with
 `git fetch origin <branch>` and the branch's `summary.md` (desktop: `README.md`).
+
+## Fixes
+
+A fix goes to a branch `fix/<topic>` first, with a UI test case that shows the problem.
+Pushes to `fix/**` run the Desktop and Mobile CI (unit tests, UI test on three systems,
+Android build); the platform runs are started on the branch with
+`gh workflow run <workflow> --ref fix/<topic>`. Only when everything is green does the
+fix go to main (nightly builds and TestFlight are made from main only).
