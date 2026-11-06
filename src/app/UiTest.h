@@ -36,6 +36,9 @@ class QQuickWindow;
     run quit with an unsaved note): the editor has to come back with the text.
     Needs the same --data-dir as the first run.
 
+    --ui-test-phase only:pages,today,…: just these cases (one long run split into several
+    starts, e.g. in the Android emulator).
+
     --ui-test-phase draft: only types an unsaved note and stays open, for a test run
     that sends Qupil to the background and lets the system end it (iOS simulator);
     the restart half then checks the note as above.

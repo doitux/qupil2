@@ -109,6 +109,11 @@ void UiTest::start()
             addDraftPhase();
         else
             addCases();
+        // "only:a,b,c": just these cases (a long run split into several starts)
+        if (m_phase.startsWith(u"only:"_s)) {
+            const QStringList keep = m_phase.mid(5).split(u',', Qt::SkipEmptyParts);
+            m_cases.removeIf([&keep](const Case &c) { return !keep.contains(c.name); });
+        }
         next();
     });
 }

@@ -143,31 +143,38 @@ sleep 1
 # The UI test first, on a fresh emulator: after many starts the emulator's graphics
 # (the GL pipe to the host) can stall, and later starts hang in shader setup
 step "Qupil's own UI test (inside the app) and its restart half"
+# In three starts of six cases each, then the restart half: a long run in one start
+# wore out the emulator's graphics (a stall in its GL pipe)
 adb shell am force-stop $PKG
 uidir=/data/data/$PKG/files/ui-test
 adb shell rm -rf "$uidir"
-for phase in first restart; do
-    extra=""
-    [ $phase = restart ] && extra="--ui-test-phase restart"
+PARTS="1:pages,today,note-save,note-cancel,student-search,student-new
+2:event-open,metronome,appearance,language,reminders,test-mode
+3:plan-save,piece-new,lesson-new,reminder-new,more-pages,restart-prepare
+restart:"
+while IFS= read -r part; do
+    name=${part%%:*}
+    cases=${part#*:}
+    if [ "$name" = restart ]; then phase=restart; else phase="only:$cases"; fi
     mark
-    adb shell "am start -W -n $ACT --es applicationArguments '--ui-test $uidir/$phase --lang de --data-dir $uidir/data $extra'" > /dev/null
-    # Started within 40 s (the first case begins), otherwise: where every thread stands
+    adb shell "am start -W -n $ACT --es applicationArguments '--ui-test $uidir/$name --lang de --data-dir $uidir/data --ui-test-phase $phase'" > /dev/null
     if ! wait_for "ui test: [a-z]" 30; then
-        catch "ui-test-$phase"
+        catch "ui-test-$name"
     fi
-    [ -n "$(adb shell pidof $PKG | tr -d '\r')" ] && wait_for "ui test: [0-9]* of [0-9]* cases passed" 900
+    [ -n "$(adb shell pidof $PKG | tr -d '\r')" ] && wait_for "ui test: [0-9]* of [0-9]* cases passed" 600
     sleep 3
     adb shell am force-stop $PKG
-done
+    sleep 2
+done <<< "$PARTS"
 adb pull "$uidir" "$OUT/ui-test" > /dev/null 2>&1
 # (the data folder stays: sample data only, to start the restart half elsewhere)
-for phase in first restart; do
-    if [ -f "$OUT/ui-test/$phase/results.md" ]; then
-        sed -e '1,/^$/d' "$OUT/ui-test/$phase/results.md" >> "$SUMMARY"
+for name in 1 2 3 restart; do
+    if [ -f "$OUT/ui-test/$name/results.md" ]; then
+        sed -e '1,/^$/d' "$OUT/ui-test/$name/results.md" >> "$SUMMARY"
         say ''
-        grep -q '❌' "$OUT/ui-test/$phase/results.md" && FAILED=1
+        grep -q '❌' "$OUT/ui-test/$name/results.md" && FAILED=1
     else
-        say "- **$phase: no result**"
+        say "- **part $name: no result**"
         FAILED=1
     fi
 done
