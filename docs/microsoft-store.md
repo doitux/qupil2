@@ -42,7 +42,7 @@ The workflow signs a copy of the package with a throwaway certificate that has t
    - Under *Product declarations*, leave everything else at the default.
 5. **Age ratings:** fill in the questionnaire. Qupil has no user-to-user communication, no purchases and no ads.
 6. **Packages:** upload the `.msix`. Partner Center asks why the restricted capabilities are needed; paste the justification below.
-7. **Store listings:** German and English descriptions and screenshots. The screenshots are in `Qupil-Screenshots.zip` on the nightly release (desktop size).
+7. **Store listings:** German and English descriptions and screenshots. The screenshots are in `Qupil-Screenshots-nightly-<commit>.zip` on the nightly release (desktop size).
 8. *Submit to the Store.* Certification usually takes a few hours up to a few days.
 
 Every later update repeats steps 1, 2 and 6 (upload the new package, keep everything else).

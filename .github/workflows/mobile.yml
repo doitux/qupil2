@@ -98,10 +98,10 @@ jobs:
         run: bash .github/scripts/run-logged.sh cmake --build build --target apk --parallel
 
       # Always the same (public) test key: a newer nightly installs over an older one.
-      # The file name carries build number and commit, so downloads never mix up.
+      # The file name says nightly and commit (like every nightly file), so downloads never mix up.
       - name: Sign with the test key
         run: |
-          out="package/Qupil-Android-arm64-test-${GITHUB_RUN_NUMBER}-${GITHUB_SHA::7}.apk"
+          out="package/Qupil-Android-arm64-nightly-${GITHUB_SHA::7}.apk"
           apk=$(find build -name '*.apk' -path '*release*' | head -n 1)
           if [ -z "$apk" ]; then apk=$(find build -name '*.apk' | head -n 1); fi
           echo "Built: $apk"
@@ -172,7 +172,7 @@ jobs:
           ls "$app" | grep lproj || true
           mkdir -p ipa/Payload package
           cp -R "$app" ipa/Payload/
-          (cd ipa && zip -qry "../package/Qupil-${GITHUB_SHA::7}-unsigned.ipa" Payload)
+          (cd ipa && zip -qry "../package/Qupil-iOS-unsigned-nightly-${GITHUB_SHA::7}.ipa" Payload)
           ls -l package
 
       - uses: actions/upload-artifact@v7
@@ -205,9 +205,9 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           IOS_RESULT: ${{ needs.ios.result }}
         run: |
-          files=('artifacts/qupil-android-arm64-test/*.apk=Qupil-Android-arm64-test*.apk')
+          files=('artifacts/qupil-android-arm64-test/*.apk=Qupil-Android-arm64*.apk')
           if [ "$IOS_RESULT" = success ]; then
-            files+=('artifacts/qupil-ios-unsigned-ipa/*.ipa=Qupil-iOS-unsigned.ipa')
+            files+=('artifacts/qupil-ios-unsigned-ipa/*.ipa=Qupil-iOS-unsigned*.ipa')
           else
             echo "::warning::No unsigned iOS build this time ($IOS_RESULT); the one on the release stays"
           fi
