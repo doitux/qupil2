@@ -74,6 +74,20 @@ notes() {
     say ''
 }
 step() { say ''; say "## $*"; say ''; mark; }
+# catch <name>: Qupil has not shown its first frame: memory, stacks of all threads, then
+# end it (a process growing without end takes the whole emulator down)
+catch() {
+    local pid
+    pid=$(adb shell pidof $PKG | tr -d '\r')
+    say "- **no first frame** – memory: $(adb shell dumpsys meminfo $PKG 2> /dev/null | grep -m1 'TOTAL' | tr -s ' ')"
+    if [ -n "$pid" ]; then
+        adb shell debuggerd -b "$pid" > "$OUT/hang-$1-native.txt" 2>&1
+        adb shell debuggerd -j "$pid" > "$OUT/hang-$1-java.txt" 2>&1
+        say "- stacks: \`hang-$1-native.txt\`, \`hang-$1-java.txt\`"
+        adb shell kill -9 "$pid"
+    fi
+    FAILED=1
+}
 home() { adb shell input keyevent KEYCODE_HOME; }
 # Like tapping the icon: brings the running app (or its task) back to the front
 launcher() { adb shell monkey -p $PKG -c android.intent.category.LAUNCHER 1 > /dev/null 2>&1; }
@@ -228,10 +242,10 @@ shot light-chosen
 adb shell am force-stop $PKG
 mark
 launcher
-if wait_for "main: first frame" 60; then
+if wait_for "main: first frame" 25; then
     say "- Qupil starts with its own light mode"
 else
-    say "- memory of the process: $(adb shell dumpsys meminfo $PKG 2> /dev/null | grep -m1 'TOTAL' | tr -s ' ')"
+    catch light-start
 fi
 sleep 4
 shot light-start
@@ -253,14 +267,8 @@ for phase in first restart; do
     mark
     adb shell "am start -W -n $ACT --es applicationArguments '--ui-test $uidir/$phase --lang de --data-dir $uidir/data $extra'" > /dev/null
     # Started within 40 s (the first case begins), otherwise: where every thread stands
-    if ! wait_for "ui test: [a-z]" 40; then
-        pid=$(adb shell pidof $PKG | tr -d '\r')
-        say "- memory of the process: $(adb shell dumpsys meminfo $PKG 2> /dev/null | grep -m1 'TOTAL' | tr -s ' ')"
-        if [ -n "$pid" ]; then
-            adb shell debuggerd -b "$pid" > "$OUT/hang-$phase-native.txt" 2>&1
-            adb shell debuggerd -j "$pid" > "$OUT/hang-$phase-java.txt" 2>&1
-            say "- stacks of the hanging process: \`hang-$phase-native.txt\`, \`hang-$phase-java.txt\`"
-        fi
+    if ! wait_for "ui test: [a-z]" 30; then
+        catch "ui-test-$phase"
     fi
     [ -n "$(adb shell pidof $PKG | tr -d '\r')" ] && wait_for "ui test: [0-9]* of [0-9]* cases passed" 900
     sleep 3
