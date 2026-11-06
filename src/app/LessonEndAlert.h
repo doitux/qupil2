@@ -79,6 +79,9 @@ public:
     //! Plays the sound as it will sound
     Q_INVOKABLE void test();
     Q_INVOKABLE void requestPermission();
+    //! Tests: never ask for the permission by itself (the system's dialog would cover the
+    //! window and take the taps)
+    void setAutoAsk(bool on) { m_autoAsk = on; }
     //! exactAlarms: Android's "Alarms & reminders" instead of the notification settings
     Q_INVOKABLE void openSystemSettings(bool exactAlarms = false);
 
@@ -117,4 +120,5 @@ private:
     bool m_stateKnown = false;
     bool m_quiet = false;
     QVariantList m_notified;   //!< enabled, minutes, volume as last announced
+    bool m_autoAsk = true;
 };

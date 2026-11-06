@@ -72,6 +72,9 @@ jobs:
       - name: Install idb
         continue-on-error: true
         run: |
+          # idb-companion is built with Xcode 26 (the app itself with the runner's default Xcode)
+          x=$(ls -d /Applications/Xcode_26*.app 2> /dev/null | sort -V | tail -n 1)
+          [ -n "$x" ] && export DEVELOPER_DIR="$x/Contents/Developer" && echo "idb with $x"
           brew tap facebook/fb > /dev/null
           brew trust facebook/fb > /dev/null 2>&1 || true
           bash .github/scripts/run-logged.sh brew install idb-companion

@@ -265,6 +265,10 @@ int main(int argc, char *argv[])
     QObject::connect(&wifi, &WifiController::firstSyncDone, &data, &DataService::ensureDefaults);
     // Sound and message shortly before a lesson ends (texts in the UI language)
     LessonEndAlert lessonEnd(&data, nullptr);
+    // Test runs (UI test, sample data from the command line): no permission dialog of the
+    // system over the window
+    if (uiTest || args.isSet(demoOption))
+        lessonEnd.setAutoAsk(false);
     QObject::connect(&languages, &LanguageManager::languageChanged, &lessonEnd, &LessonEndAlert::reschedule);
     QObject::connect(&controller, &AppController::phaseChanged, &lessonEnd, &LessonEndAlert::reschedule);
     QObject::connect(&controller, &AppController::dataReplaced, &lessonEnd, &LessonEndAlert::reschedule);

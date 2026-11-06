@@ -296,7 +296,8 @@ void LessonEndAlert::refreshState()
 void LessonEndAlert::askOnce()
 {
     // Asked once by itself, as soon as there are lessons; later only with the button
-    if (!background() || !m_stateKnown || m_alerts.isEmpty() || m_state.permission != SystemAlerts::Permission::NotAsked)
+    if (!m_autoAsk || !background() || !m_stateKnown || m_alerts.isEmpty()
+        || m_state.permission != SystemAlerts::Permission::NotAsked)
         return;
     if (stored(u"asked"_s).toBool())
         return;
