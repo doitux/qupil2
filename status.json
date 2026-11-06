@@ -162,17 +162,20 @@
     "tests/ui-test.cmake",
     "tools/i18n/catalog.py"
   ],
-  "result": "started",
+  "result": "uploaded",
   "build": {
     "number": 39,
     "run_id": 42228521008,
     "sha": "af8bae206dda5a90bd1c1fec568ebd9bf696731f",
     "url": "https://github.com/doitux/qupil2/actions/runs/42228521008",
     "created": "2026-11-06T13:48:49Z",
-    "status": "queued",
-    "conclusion": null,
-    "attempt": 1
+    "status": "completed",
+    "conclusion": "success",
+    "attempt": 1,
+    "rerun": false,
+    "upload": "success",
+    "whats_new": "success"
   },
-  "written": "2026-11-06T14:49:00+01:00",
-  "headline": "Build 39 gestartet"
+  "written": "2026-11-06T14:58:05+01:00",
+  "headline": "Build 39 hochgeladen"
 }

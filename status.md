@@ -1,8 +1,8 @@
 # TestFlight-Sammellauf 2026-11-06 14:48 (von Hand, now)
 
-**Build 39 gestartet**
+**Build 39 hochgeladen**
 
-- Build 39 (Commit af8bae2): queued, Upload: -, Testtext: -
+- Build 39 (Commit af8bae2): success, Upload: success, Testtext: success
 - https://github.com/doitux/qupil2/actions/runs/42228521008
 - Seit Build 37 (Commit 0d57e5e)
 
