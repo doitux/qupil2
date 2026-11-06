@@ -1,0 +1,98 @@
+# iOS test run in the simulator (iPhone and iPad): Qupil's own UI test (--ui-test, see
+# src/app/UiTest.h) and, from outside with idb (Meta's tool for driving simulators), what
+# only the system can do – sending Qupil to the background, ending it, starting it again
+# (the unsaved note has to come back), dark mode, the on-screen keyboard. Optionally the
+# screenshot tour. Started by hand; the results go to the branch "ios-test" (only the
+# latest run). Sample data only.
+name: iOS test
+
+on:
+  workflow_dispatch:
+    inputs:
+      tour:
+        description: 'Also the screenshot tour on both simulators'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write    # write the branch ios-test
+
+concurrency:
+  group: ios-test
+  cancel-in-progress: true
+
+env:
+  QT_VERSION: '6.8.3'
+
+jobs:
+  simulator:
+    if: github.repository == 'doitux/qupil2'
+    runs-on: macos-15
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install Qt for macOS (host tools)
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: mac
+          target: desktop
+          arch: clang_64
+          modules: qtmultimedia
+          cache: true
+          set-env: false
+
+      - name: Install Qt for iOS
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: mac
+          target: ios
+          arch: ios
+          modules: qtmultimedia
+          cache: true
+
+      - name: Configure
+        run: |
+          bash .github/scripts/run-logged.sh "$QT_ROOT_DIR/bin/qt-cmake" -S . -B build -G Xcode \
+            -DQT_HOST_PATH="$RUNNER_WORKSPACE/Qt/$QT_VERSION/macos"
+
+      - name: Build for the simulator
+        run: |
+          bash .github/scripts/run-logged.sh cmake --build build --config Release -- \
+            -sdk iphonesimulator -arch arm64 CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""
+
+      - name: Install idb
+        run: |
+          brew tap facebook/fb > /dev/null
+          brew install idb-companion > /dev/null
+          python3 -m pip install --break-system-packages --quiet fb-idb || python3 -m pip install --user --quiet fb-idb
+          echo "$(python3 -m site --user-base)/bin" >> "$GITHUB_PATH"
+
+      - name: Run the scenarios
+        env:
+          QUPIL_TOUR: ${{ inputs.tour && '1' || '0' }}
+        run: bash .github/scripts/ios-test.sh ios-test-out
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: ios-test-${{ github.run_number }}
+          path: ios-test-out/
+          if-no-files-found: ignore
+
+      - name: Results to the branch ios-test
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          [ -d ios-test-out ] || exit 0
+          cd ios-test-out
+          find . -name '*.log' -size +2M -delete
+          git init -q
+          git checkout -q -b ios-test
+          git add -A
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -q -m "iOS test run ${GITHUB_RUN_NUMBER} (${GITHUB_SHA::7})"
+          git push -q -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ios-test

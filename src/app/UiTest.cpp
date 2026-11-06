@@ -422,7 +422,7 @@ void UiTest::next()
             report();
             return;
         }
-        std::fprintf(stderr, "ui test: %s\n", qPrintable(m_cases[m_case].name));
+        qInfo("ui test: %s", qPrintable(m_cases[m_case].name));
         // After a restart the editor is open with the draft: the first case starts from there
         if (m_case == 0 ? m_phase != u"restart"_s : !m_cases[m_case - 1].keepScreen)
             resetToToday();
@@ -473,8 +473,8 @@ void UiTest::finishCase()
         r.passed = false;
         r.failure = u"QML warnings"_s;
     }
-    std::fprintf(stderr, "ui test: %s %s%s\n", qPrintable(r.name), r.passed ? "passed" : "FAILED",
-                 r.passed ? "" : qPrintable(u" – "_s + r.failure));
+    qInfo("ui test: %s %s%s", qPrintable(r.name), r.passed ? "passed" : "FAILED",
+          r.passed ? "" : qPrintable(u" – "_s + r.failure));
 }
 
 void UiTest::report()
@@ -514,8 +514,8 @@ void UiTest::report()
     QFile text(QDir(m_folder).filePath(u"results.md"_s));
     if (text.open(QIODevice::WriteOnly | QIODevice::Text))
         text.write(md.toUtf8());
-    std::fprintf(stderr, "ui test: %lld of %lld cases passed (%s)\n", qlonglong(m_results.size() - failed),
-                 qlonglong(m_results.size()), qPrintable(QDir::toNativeSeparators(m_folder)));
+    qInfo("ui test: %lld of %lld cases passed (%s)", qlonglong(m_results.size() - failed),
+          qlonglong(m_results.size()), qPrintable(QDir::toNativeSeparators(m_folder)));
     QCoreApplication::exit(failed == 0 ? EXIT_SUCCESS : 1);
 }
 

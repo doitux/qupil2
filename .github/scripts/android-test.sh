@@ -214,6 +214,32 @@ sleep 4
 shot portrait-again
 notes
 
+step "Qupil's own UI test (inside the app) and its restart half"
+adb shell am force-stop $PKG
+uidir=/data/data/$PKG/files/ui-test
+adb shell rm -rf "$uidir"
+for phase in first restart; do
+    extra=""
+    [ $phase = restart ] && extra="--ui-test-phase restart"
+    mark
+    adb shell "am start -W -n $ACT --es applicationArguments '--ui-test $uidir/$phase --lang de --data-dir $uidir/data $extra'" > /dev/null
+    wait_for "ui test: [0-9]* of [0-9]* cases passed" 900
+    sleep 3
+    adb shell am force-stop $PKG
+done
+adb pull "$uidir" "$OUT/ui-test" > /dev/null 2>&1
+rm -rf "$OUT/ui-test/data"
+for phase in first restart; do
+    if [ -f "$OUT/ui-test/$phase/results.md" ]; then
+        sed -e '1,/^$/d' "$OUT/ui-test/$phase/results.md" >> "$SUMMARY"
+        say ''
+        grep -q '❌' "$OUT/ui-test/$phase/results.md" && FAILED=1
+    else
+        say "- **$phase: no result**"
+        FAILED=1
+    fi
+done
+
 if [ "${QUPIL_TOUR:-0}" = 1 ]; then
     step "Screenshot tour on the emulator"
     adb shell am force-stop $PKG

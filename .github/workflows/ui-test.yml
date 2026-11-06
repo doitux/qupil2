@@ -1,0 +1,120 @@
+# UI test on real desktops: Qupil's own UI test (--ui-test, src/app/UiTest.h) and the
+# screenshot tour with each system's own window, fonts and scaling – Linux (X11), Windows
+# and macOS. (Every push already runs the UI test without a screen, in ctest.)
+# Started by hand; the results go to the branch "ui-test-desktop" (desktop/<system>/, only the
+# latest run). Sample data only.
+name: UI test (desktop)
+
+on:
+  workflow_dispatch:
+    inputs:
+      tour:
+        description: 'Also the screenshot tour (all screens, light and dark)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ui-test-desktop
+  cancel-in-progress: true
+
+env:
+  QT_VERSION: '6.8.3'
+
+jobs:
+  run:
+    if: github.repository == 'doitux/qupil2'
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: linux
+            os: ubuntu-24.04
+            qt_arch: linux_gcc_64
+          - name: windows
+            os: windows-2022
+            qt_arch: win64_msvc2022_64
+          - name: macos
+            os: macos-15
+            qt_arch: clang_64
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install system packages (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build libgl1-mesa-dev libegl1 libxkbcommon-dev libxkbcommon-x11-0 \
+            libxcb-cursor0 libxcb-icccm4 libxcb-keysyms1 libxcb-shape0 libfontconfig1 libdbus-1-3 xvfb
+      - name: Install Ninja (macOS)
+        if: runner.os == 'macOS'
+        run: brew install ninja
+      - name: Install Ninja (Windows)
+        if: runner.os == 'Windows'
+        run: choco install ninja --no-progress -y
+
+      - name: Install Qt ${{ env.QT_VERSION }}
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          arch: ${{ matrix.qt_arch }}
+          modules: qtmultimedia
+          cache: true
+
+      - name: Set up MSVC (Windows)
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Build
+        shell: bash
+        run: |
+          bash .github/scripts/run-logged.sh cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DQUPIL_BUILD_TESTS=OFF
+          bash .github/scripts/run-logged.sh cmake --build build --parallel
+
+      - name: UI test and tour
+        shell: bash
+        env:
+          QUPIL_TOUR: ${{ inputs.tour && '1' || '0' }}
+        run: bash .github/scripts/ui-test-desktop.sh "${{ matrix.name }}" "out/${{ matrix.name }}"
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: ui-test-${{ matrix.name }}
+          path: out/
+          if-no-files-found: ignore
+
+  # One push for all systems (only the latest run, without history)
+  publish:
+    if: always() && github.repository == 'doitux/qupil2'
+    needs: run
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v7
+        with:
+          pattern: ui-test-*
+          merge-multiple: true
+          path: results/desktop
+      - name: Results to the branch ui-test-desktop
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          cd results
+          {
+            echo "# Desktop UI test run ${GITHUB_RUN_NUMBER} (${GITHUB_SHA::7})"
+            echo
+            for f in desktop/*/summary.md; do [ -f "$f" ] && cat "$f" && echo; done
+          } > README.md
+          git init -q
+          git checkout -q -b ui-test-desktop
+          git add -A
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -q -m "Desktop UI test run ${GITHUB_RUN_NUMBER} (${GITHUB_SHA::7})"
+          git push -q -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ui-test-desktop
