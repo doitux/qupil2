@@ -112,6 +112,8 @@ private:
     Step wait(int ms);
     Step snap(const QString &name);
     Step tab(const QString &name);
+    Step clearField();
+    QList<Step> openStudent(const QString &name);
 
     // ---- the screen
     QList<Node> nodes() const;

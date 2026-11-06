@@ -114,6 +114,14 @@ void UiTest::start()
             const QStringList keep = m_phase.mid(5).split(u',', Qt::SkipEmptyParts);
             m_cases.removeIf([&keep](const Case &c) { return !keep.contains(c.name); });
         }
+        // First the reminders Qupil shows at the start (a few seconds after it): closed
+        // as a person would, so they do not take the taps of the first cases
+        if (m_phase != u"restart"_s) {
+            Case start { u"start"_s, u"close the reminders shown at the start"_s, {} };
+            for (int i = 0; i < 3; ++i)
+                start.steps << tapIfThere(u"^OK$"_s, i == 0 ? 6000 : 1500, u"close a reminder (if any)"_s);
+            m_cases.prepend(start);
+        }
         next();
     });
 }
@@ -463,6 +471,27 @@ UiTest::Step UiTest::type(const QString &text)
                       since->restart();
                       return false;
                   } };
+}
+
+UiTest::Step UiTest::clearField()
+{
+    return Step { u"clear the field"_s, [this] {
+                      QQuickItem *focus = m_window ? m_window->activeFocusItem() : nullptr;
+                      if (!focus || !(focus->inherits("QQuickTextInput") || focus->inherits("QQuickTextEdit")))
+                          return false;
+                      for (int i = 0; i < 40 && !focus->property("text").toString().isEmpty(); ++i)
+                          sendKey(Qt::Key_Backspace);
+                      return focus->property("text").toString().isEmpty();
+                  } };
+}
+
+// Students page: search the student by name and open the page (independent of what an
+// earlier case left in the search field or how far the list is scrolled)
+QList<UiTest::Step> UiTest::openStudent(const QString &name)
+{
+    return { tab(u"Schüler"_s), tap(u"edit:^Schüler suchen$"_s), clearField(),
+             type(name.section(u' ', 0, 0)),
+             tapUntil(u"^%1$"_s.arg(QRegularExpression::escape(name)), u"^Unterricht wählen$"_s) };
 }
 
 UiTest::Step UiTest::key(int k, const QString &what)
@@ -826,11 +855,17 @@ void UiTest::addCases()
                        m_membership = runningMembership();
                        m_count = m_data->plans(m_membership).size();
                    })
-                << tab(u"Schüler"_s) << tap(u"^Lena Muster$"_s) << tap(u"^Planung$"_s)
+                << openStudent(u"Lena Muster"_s) << tap(u"^Planung$"_s)
                 << tap(u"edit:^Notiz$"_s) << type(u"UI-Test-Plan: Vibrato auf der A-Saite"_s)
                 << snap(u"plan-typed"_s)
                 << tap(u"speichern$"_s, u"tap save"_s) << gone(u"^Abbrechen$"_s)
-                << check(u"the plan is saved"_s, [this] { return m_data->plans(m_membership).size() == m_count + 1; });
+                << check(u"the plan is saved"_s, [this] {
+                       // (a plan for that lesson may exist already: then it holds the text too)
+                       for (const QVariant &p : m_data->plans(m_membership))
+                           if (m_data->plainText(p.toMap().value(u"content"_s).toString()).contains(u"Vibrato auf der A-Saite"_s))
+                               return true;
+                       return false;
+                   });
     }
     // A piece for a student
     {
@@ -839,7 +874,7 @@ void UiTest::addCases()
                        m_membership = runningMembership();
                        m_count = m_data->pieces(m_membership).size();
                    })
-                << tab(u"Schüler"_s) << tap(u"^Lena Muster$"_s) << tap(u"^Werke$"_s) << tap(u"^Werk$"_s)
+                << openStudent(u"Lena Muster"_s) << tap(u"^Werke$"_s) << tap(u"^Werk$"_s)
                 << act(u"dump"_s, [this] { writeDump(u"screen-piece"_s); })
                 << tap(u"edit:^Titel$"_s) << type(u"UI-Test-Menuett"_s)
                 << tap(u"edit:^Komponist"_s) << type(u"Testkomponist"_s)
