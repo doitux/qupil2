@@ -37,7 +37,7 @@ jobs:
             qt_arch: win64_msvc2022_64
             artifact: qupil-windows-x64
           - name: macOS
-            os: macos-14
+            os: macos-15
             qt_arch: clang_64
             artifact: qupil-macos-universal
 
