@@ -817,9 +817,11 @@ Item {
 
                 SectionLabel {
                     Layout.leftMargin: overview.columnMode ? 8 : 0
-                    // "Later today" only under the running lesson of the phone; the column lists the whole day
-                    text: overview.isToday && overview.running && !overview.columnMode ? qsTrId("today.later")
-                                                                                         : qsTrId("schedule.day_lessons")
+                    // "Later today" only under the running lesson of the phone, and only when no lesson
+                    // of the list was earlier (a class in the morning); the column lists the whole day
+                    text: overview.isToday && overview.running && !overview.columnMode
+                          && !overview.lessons.some(l => l.start_time < overview.running.start_time)
+                          ? qsTrId("today.later") : qsTrId("schedule.day_lessons")
                 }
 
                 Rectangle {
