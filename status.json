@@ -1,10 +1,10 @@
 {
   "mode": "dry-run",
-  "started_at": "2026-11-06T07:22:42+01:00",
-  "slot": "2026-11-06 07:22 (von Hand, dry-run)",
+  "started_at": "2026-11-06T07:24:04+01:00",
+  "slot": "2026-11-06 07:24 (von Hand, dry-run)",
   "since": "0d57e5ecfc4834f11434109f9beccd46e0a3f70e",
   "since_build": 37,
-  "main": "6434c2f3517cdcf91e670df7af505dbabcc4b3a1",
+  "main": "be1cd528a82a9aaf11299ca0782f2bc9ef8b94d8",
   "commits": [
     {
       "sha": "ee70b62",
@@ -41,6 +41,10 @@
     {
       "sha": "6434c2f",
       "subject": "CI: collected TestFlight builds by GitHub itself (13:05 and 22:05)"
+    },
+    {
+      "sha": "be1cd52",
+      "subject": "CI: collect builds only what is not on TestFlight yet"
     }
   ],
   "relevant_files": [
@@ -61,6 +65,6 @@
   ],
   "result": "would_build",
   "note": "14 Dateien für iOS geändert; im Probelauf wird nichts gestartet.",
-  "written": "2026-11-06T07:22:45+01:00",
+  "written": "2026-11-06T07:24:07+01:00",
   "headline": "Probelauf: würde bauen"
 }

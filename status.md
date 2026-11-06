@@ -1,4 +1,4 @@
-# TestFlight-Sammellauf 2026-11-06 07:22 (von Hand, dry-run)
+# TestFlight-Sammellauf 2026-11-06 07:24 (von Hand, dry-run)
 
 **Probelauf: würde bauen**
 
@@ -16,3 +16,20 @@ Commits:
 - 5570480 Note editor: keep unsaved text as a draft, open it again at the start
 - 7ae2ea1 Note editor: no "Clear" next to the line of a restored draft
 - 6434c2f CI: collected TestFlight builds by GitHub itself (13:05 and 22:05)
+- be1cd52 CI: collect builds only what is not on TestFlight yet
+
+Für iOS relevante Dateien:
+- CMakeLists.txt
+- i18n/qupil_de.ts
+- i18n/qupil_en.ts
+- i18n/qupil_es.ts
+- i18n/qupil_fr.ts
+- qml/Main.qml
+- qml/Nav.qml
+- qml/editors/NoteEditor.qml
+- src/app/AppController.cpp
+- src/app/AppController.h
+- src/app/ScreenshotTour.cpp
+- src/app/SystemBars.h
+- src/main.cpp
+- tools/i18n/catalog.py
