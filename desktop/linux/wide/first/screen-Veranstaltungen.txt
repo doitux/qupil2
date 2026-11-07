@@ -1,0 +1,10 @@
+button      936    28    44    44  Vorspiel hinzufügen
+button      236   108   744    80  Herbstvorspiel
+button      236   224   744    80  Sommervorspiel
+button      236   324   744    58  Archivierte Veranstaltungen, 1
+button       93    32   110    22  Qupil 2.0.0 (08413b7)
+tab          14    79   189    46  Stundenplan
+tab          14   129   189    46  Schüler
+tab          14   179   189    46  Veranstaltungen
+tab          14   229   189    46  Metronom
+tab          14   279   189    46  Mehr

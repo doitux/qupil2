@@ -1,0 +1,29 @@
+button       12    12    78    44  Mehr
+button      326    70    44    44  Hinzufügen
+button       20   128   350    78  Anmeldung Musizierfreizeit: alle Eltern informieren
+button       20   218   350    60  Noten für das Ensemble bestellen
+button       20   290   350    60  Sommerkonzert: abfragen, wer mitspielt
+button       20   362   350    78  Anmeldebogen Musizierfreizeit einsammeln
+button       20   452   350    78  Anmeldung zur Prüfung (Stufe 1) mitgeben
+button       20   542   350    47  Anmeldung „Jugend musiziert“ besprechen
+button       20   632   350    60  Duett-Stimmen kopieren  (scrolled out of sight)
+button       20   704   350    60  E-Saite wechseln  (scrolled out of sight)
+button       20   776   350    60  Elternbrief zum Vorspiel mitgeben  (scrolled out of sight)
+button       20   848   350    60  Fotos für den Wettbewerb machen  (scrolled out of sight)
+button       20   920   350    60  Geliehene Noten zurückgeben lassen  (scrolled out of sight)
+button       20   992   350    60  Größeres Cello ausprobieren (3/4)  (scrolled out of sight)
+button       20  1064   350    78  Leihinstrument zur Kontrolle mitbringen lassen  (scrolled out of sight)
+button       20  1154   350    78  Probe mit der Klavierbegleitung absprechen  (scrolled out of sight)
+button       20  1244   350    60  Übe-Tagebuch ansehen  (scrolled out of sight)
+tab           4   593    76    60  Stundenplan
+tab          80   593    77    60  Schüler
+tab         157   593    76    60  Veranstaltungen
+tab         233   593    77    60  Metronom
+tab         310   593    76    60  Mehr
+button        8    41   109    44  Abbrechen
+edit         20   118   350    96  Erinnerungstext
+button       20   251   350    52  Erinnerung nur bei Programmstart
+button       20   309   350    52  Am Anfang jeder Unterrichtseinheit erinnern
+button       20   367   350    52  Nur bei folgendem Schüler erinnern
+checkbox     20   435   350    60  Spiele Klangdatei beim Anzeigen der Erinnerung
+button       20   579   350    54  Speichern

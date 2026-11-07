@@ -1,0 +1,34 @@
+button       12    12    95    44  Schüler
+button      326    12    44    44  Weitere Aktionen
+combobox     20   142   350    54  Unterricht wählen
+tab          20   210    82    38  Notizen
+tab         110   210    73    38  Werke
+tab         191   210   102    38  Aktivitäten
+tab         302   210    70    38  Daten
+tab         380   210     9    38  Leihnoten
+checkbox     20   262    63    34  Alle · 3
+checkbox     89   262    92    34  In Arbeit · 2
+checkbox    187   262   107    34  Vorspielreif · 1
+button       20   306   350    99  J. S. Bach Bourrée (Suite Nr. 3)
+button       20   415   350    99  A. Vivaldi Konzert a-Moll, 1. Satz
+button       20   524   350    99  O. Rieding Concertino op. 35
+button      260   704   110    56  Werk
+tab           4   784    76    60  Stundenplan
+tab          80   784    77    60  Schüler
+tab         157   784    76    60  Veranstaltungen
+tab         233   784    77    60  Metronom
+tab         310   784    76    60  Mehr
+button        8    41   109    44  Abbrechen
+edit         20   118   350    48  Komponist
+edit         20   203   350    48  Titel
+combobox     20   288   350    48  Stil
+button       24   377    48    40  −
+button      318   377    48    40  +
+checkbox     20   458    70    34  Geplant
+checkbox     96   458    75    34  In Arbeit
+checkbox    178   458    58    34  Pause
+checkbox    243   458    92    34  Vorspielreif
+checkbox     20   498    73    34  Beendet
+button       20   569   350    48  Start Di, 03.11.2026
+button       20   654   350    48  Ende –
+button       20   770   350    54  Speichern

@@ -1,0 +1,53 @@
+button      228    12    78    44  Mehr
+button      250   134   652    44  Synchronisation, Aus – Ihre Daten sind nur auf diesem Gerät
+button      250   190   322    44  Einrichten
+button      580   190   322    44  Gerät koppeln
+button      236   294   680    58  Darstellung, Hell
+button      236   352   680    58  Hinweise und Klänge
+button      236   456   680    58  Unterricht und Veranstaltungen
+button      236   514   680    58  Listen
+button      236   618   680    38  Daten und Backups
+button      236   694   680    58  Über Qupil, 2.0.0 (08413b7)  (scrolled out of sight)
+button      228    12   138    44  Einstellungen
+text        254   166    78    18  Darstellung
+radio       258   198   256    40  System
+radio       518   198   137    40  Hell
+radio       659   198   235    40  Dunkel
+text        254   260    48    18  Farben
+radio       254   341    40    40  #6e3c5a
+radio       304   341    40    40  #a0305f
+radio       354   341    40    40  #8c1c3a
+radio       404   341    40    40  #7a4b1e
+radio       454   341    40    40  #2f6b3a
+radio       504   341    40    40  #0f6b6b
+radio       554   341    40    40  #1f4e8c
+radio       604   341    40    40  #5b3fa0
+radio       654   341    40    40  #3f4a5a
+radio       704   341    40    40  Eigene Farbe
+radio       254   418    40    40  #c9f36b
+radio       304   418    40    40  #ffe066
+radio       354   418    40    40  #ffb680
+radio       404   418    40    40  #ff8c7a
+radio       454   418    40    40  #ffadd2
+radio       504   418    40    40  #cdb8ff
+radio       554   418    40    40  #9fd8ff
+radio       604   418    40    40  #9ff0c8
+radio       654   418    40    40  #e3ded3
+radio       704   418    40    40  Eigene Farbe
+radio       254   495    40    40  #b3261e
+radio       304   495    40    40  #d84315
+radio       354   495    40    40  #b8860b
+radio       404   495    40    40  #2e7d32
+radio       454   495    40    40  #00838f
+radio       504   495    40    40  #1565c0
+radio       554   495    40    40  #6a1b9a
+radio       604   495    40    40  #ad1457
+radio       654   495    40    40  Eigene Farbe
+text        254   553    57    18  Sprache
+combobox    254   581   644    44  Sprache
+button       92    31   102    23  Qupil 2.0.0 (08413b7)
+tab          14    79   188    46  Stundenplan
+tab          14   129   188    46  Schüler
+tab          14   179   188    46  Veranstaltungen
+tab          14   229   188    46  Metronom
+tab          14   279   188    46  Mehr

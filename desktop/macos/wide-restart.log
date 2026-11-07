@@ -1,0 +1,6 @@
+qt.qpa.fonts: Populating font family aliases took 133 ms. Replace uses of missing font family "Monospace" with one that exists to avoid this cost. 
+ui test: restart-draft
+qml: Draft: note editor opened again
+Draft note: removed
+ui test: restart-draft passed
+ui test: 1 of 1 cases passed (out/macos/wide/restart)

@@ -1,0 +1,29 @@
+button       12    12    78    44  Mehr
+button      326    70    44    44  Hinzufügen
+button       20   128   350    77  Anmeldung Musizierfreizeit: alle Eltern informieren
+button       20   217   350    59  Noten für das Ensemble bestellen
+button       20   288   350    59  Sommerkonzert: abfragen, wer mitspielt
+button       20   359   350    77  Anmeldebogen Musizierfreizeit einsammeln
+button       20   448   350    77  Anmeldung zur Prüfung (Stufe 1) mitgeben
+button       20   537   350    77  Anmeldung „Jugend musiziert“ besprechen
+button       20   626   350    59  Duett-Stimmen kopieren
+button       20   697   350    59  E-Saite wechseln  (scrolled out of sight)
+button       20   768   350    59  Elternbrief zum Vorspiel mitgeben  (scrolled out of sight)
+button       20   839   350    59  Fotos für den Wettbewerb machen  (scrolled out of sight)
+button       20   910   350    77  Geliehene Noten zurückgeben lassen  (scrolled out of sight)
+button       20   999   350    59  Größeres Cello ausprobieren (3/4)  (scrolled out of sight)
+button       20  1070   350    77  Leihinstrument zur Kontrolle mitbringen lassen  (scrolled out of sight)
+button       20  1159   350    77  Probe mit der Klavierbegleitung absprechen  (scrolled out of sight)
+button       20  1248   350    59  Übe-Tagebuch ansehen  (scrolled out of sight)
+tab           4   689    76    60  Stundenplan
+tab          80   689    77    60  Schüler
+tab         157   689    76    60  Veranstaltungen
+tab         233   689    77    60  Metronom
+tab         310   689    76    60  Mehr
+button        8    41   109    44  Abbrechen
+edit         20   117   350    96  Erinnerungstext
+button       20   249   350    52  Erinnerung nur bei Programmstart
+button       20   307   350    52  Am Anfang jeder Unterrichtseinheit erinnern
+button       20   365   350    52  Nur bei folgendem Schüler erinnern
+checkbox     20   433   350    60  Spiele Klangdatei beim Anzeigen der Erinnerung
+button       20   675   350    54  Speichern

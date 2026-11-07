@@ -1,0 +1,33 @@
+button      326    54    44    44  Neu
+button       20   116    45    60  Montag
+button       71   116    45    60  Dienstag
+button      122   116    45    60  Mittwoch
+button      173   116    44    60  Donnerstag
+button      223   116    45    60  Freitag
+button      274   116    45    60  Samstag
+button      325   116    45    60  Sonntag
+button       20   221   350    46  Heute Geburtstag: Lina wird 15 18:30
+button       20   267   350    46  Geburtstag: Karl (Sonntag, 12) 16:30
+button       20   313   350    46  Karl: Probe mit der Klavierbegleitung absprechen 16:30
+button       20   359   350    46  + 4 weitere Hinweise
+button       36   443   318    52  EU-45-Rau-LenMus
+button       36   507   318    77  Lena Muster
+button       36   596   155    46  Notiz
+button      199   596   155    46  Metronom
+button       20   699   350    63  11:00 Streicherklasse 4a  (scrolled out of sight)
+button       20   762   350    63  13:30 EU-30-Rau-RomWer  (scrolled out of sight)
+button       20   825   350    63  14:45 EU-30-Rau-SopKle  (scrolled out of sight)
+button       20   888   350    63  15:30 GU-60-Rau-JM  (scrolled out of sight)
+button       20   951   350    63  16:30 EU-30-Rau-KarKöh  (scrolled out of sight)
+40          300   971    24    24  Hatte Geburtstag  (scrolled out of sight)
+button       20  1014   350    63  17:00 Streicherensemble  (scrolled out of sight)
+button       20  1077   350    63  18:30 EU-30-Rau-LinFuc  (scrolled out of sight)
+40          300  1097    24    24  Heute Geburtstag  (scrolled out of sight)
+button       20  1140   350    63  19:00 EU-30-Rau-MicHah  (scrolled out of sight)
+button       20  1203   350    63  19:30 EU-30-Rau-SabWin  (scrolled out of sight)
+button       20  1274   286    44  Unregelmäßige Termine (1) anzeigen  (scrolled out of sight)
+tab           4   689    76    60  Stundenplan
+tab          80   689    77    60  Schüler
+tab         157   689    76    60  Veranstaltungen
+tab         233   689    77    60  Metronom
+tab         310   689    76    60  Mehr

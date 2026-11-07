@@ -1,0 +1,47 @@
+qt.qpa.fonts: Populating font family aliases took 119 ms. Replace uses of missing font family "Monospace" with one that exists to avoid this cost. 
+ui test: start
+ui test: start passed
+ui test: pages
+ui test: pages passed
+ui test: today
+ui test: today passed
+ui test: note-save
+ui test: note-save passed
+ui test: note-cancel
+ui test: note-cancel passed
+ui test: student-search
+ui test: student-search passed
+ui test: student-new
+ui test: student-new passed
+ui test: event-open
+ui test: event-open passed
+ui test: metronome
+qt.multimedia.ffmpeg: Using Qt multimedia with FFmpeg version 7.1 LGPL version 2.1 or later
+ui test: metronome passed
+ui test: appearance
+ui test: appearance passed
+ui test: language
+ui test: language passed
+ui test: reminders
+Failed wait for getting sink drained; was draining: true
+ui test: reminders passed
+ui test: test-mode
+ui test: test-mode passed
+ui test: plan-save
+ui test: plan-save passed
+ui test: piece-new
+ui test: piece-new passed
+ui test: lesson-new
+ui test: lesson-new passed
+ui test: together
+ui test: together passed
+ui test: together-new
+ui test: together-new passed
+ui test: reminder-new
+ui test: reminder-new passed
+ui test: more-pages
+ui test: more-pages passed
+ui test: restart-prepare
+ui test: restart-prepare passed
+ui test: 21 of 21 cases passed (out/macos/wide/first)
+Draft note: kept, 230 characters
