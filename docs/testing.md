@@ -69,4 +69,6 @@ Pushes to `fix/**` run the Desktop and Mobile CI (unit tests, UI test on three s
 Android build); the platform runs are started on the branch with
 `gh workflow run <workflow> --ref fix/<topic>`. Only when everything is green does the
 fix go to main (nightly builds and TestFlight are made from main only). A bigger new
-feature goes the same way on `feature/<topic>`, with its UI test cases.
+feature goes the same way on `feature/<topic>`, with its UI test cases. After a push to
+main, `cleanup-branches.yml` deletes every `fix/…` and `feature/…` branch that is
+completely in main.

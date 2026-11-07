@@ -1,0 +1,51 @@
+# Deletes fix/… and feature/… branches that are completely in main.
+#
+# Fixes and bigger features are made on their own branch and go to main when every
+# test is green (docs/testing.md). The branch is not needed after that, and the Claude
+# sessions that make them cannot delete branches. So after every push to main this
+# deletes each fix/** and feature/** branch whose commits are all in main – merged, or
+# the same changes with other commit ids (rebased, cherry-picked). Nothing else is
+# touched: not main, the test result branches, legacy-1.4.1, empty-lesson-names,
+# dependabot/… or a branch with work that is not in main yet.
+name: Clean up branches
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cleanup-branches
+  cancel-in-progress: false
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Delete fix/ and feature/ branches that are in main
+        run: |
+          set -euo pipefail
+          git fetch --quiet --prune origin '+refs/heads/*:refs/remotes/origin/*'
+          deleted=0
+          kept=0
+          for ref in $(git for-each-ref --format='%(refname:strip=3)' refs/remotes/origin/fix refs/remotes/origin/feature); do
+            # In main: an ancestor of main, or every commit has an equivalent in main ("-" in git cherry)
+            if git merge-base --is-ancestor "origin/$ref" origin/main \
+               || ! git cherry origin/main "origin/$ref" | grep -q '^+'; then
+              echo "delete $ref ($(git log -1 --format='%h %s' "origin/$ref"))"
+              git push --quiet origin --delete "$ref"
+              deleted=$((deleted + 1))
+            else
+              echo "keep $ref: not all of it is in main"
+              kept=$((kept + 1))
+            fi
+          done
+          echo "### Branches: $deleted deleted, $kept kept (not all in main)" >> "$GITHUB_STEP_SUMMARY"
