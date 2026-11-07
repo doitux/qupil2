@@ -1,9 +1,9 @@
-# TestFlight-Sammellauf 2026-11-06 23:48 (von Hand, dry-run)
+# TestFlight-Sammellauf 2026-11-06 22:05
 
-**Probelauf: würde bauen**
+**Build 40 gestartet**
 
-6 Dateien für iOS geändert; im Probelauf wird nichts gestartet.
-
+- Build 40 (Commit 6b0a159): in_progress, Upload: -, Testtext: -
+- https://github.com/doitux/qupil2/actions/runs/42320681308
 - Seit Build 39 (Commit af8bae2)
 
 Commits:

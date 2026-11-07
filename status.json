@@ -1,7 +1,7 @@
 {
-  "mode": "dry-run",
-  "started_at": "2026-11-06T23:48:32+01:00",
-  "slot": "2026-11-06 23:48 (von Hand, dry-run)",
+  "mode": "schedule",
+  "started_at": "2026-11-07T01:50:34+01:00",
+  "slot": "2026-11-06 22:05",
   "since": "af8bae206dda5a90bd1c1fec568ebd9bf696731f",
   "since_build": 39,
   "main": "6b0a159afca79307d80e96e0af1ae254c2d5a5de",
@@ -75,8 +75,17 @@
     "src/app/UiTest.h",
     "src/main.cpp"
   ],
-  "result": "would_build",
-  "note": "6 Dateien für iOS geändert; im Probelauf wird nichts gestartet.",
-  "written": "2026-11-06T23:48:35+01:00",
-  "headline": "Probelauf: würde bauen"
+  "result": "started",
+  "build": {
+    "number": 40,
+    "run_id": 42320681308,
+    "sha": "6b0a159afca79307d80e96e0af1ae254c2d5a5de",
+    "url": "https://github.com/doitux/qupil2/actions/runs/42320681308",
+    "created": "2026-11-07T00:50:39Z",
+    "status": "in_progress",
+    "conclusion": null,
+    "attempt": 1
+  },
+  "written": "2026-11-07T01:50:50+01:00",
+  "headline": "Build 40 gestartet"
 }
