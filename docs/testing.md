@@ -42,16 +42,19 @@ c.steps << tab(u"Schüler"_s) << tap(u"^Lena Muster$"_s) << tap(u"^Werk$"_s)
   where the layout has one; elements scrolled out of sight are scrolled to.
 - A case that changes data the later cases rely on puts it back (see `lesson-new`).
 
-## Platform runs (every night on main, and by hand; results on a branch)
+## Platform runs (every evening on main when something changed, and by hand; results on a branch)
 
 | Workflow | Where | Branch |
 |---|---|---|
 | UI test (desktop) – `ui-test.yml` | Linux (X11), Windows, macOS with a real window; optional screenshot tour | `ui-test-desktop` |
 | iOS test – `ios-test.yml` | iPhone and iPad simulator: the UI test inside the app, then with idb from outside: background, ended, started again (draft), dark mode | `ios-test` |
-| Android test – `android-test.yml` | Android 14 emulator: start with sample data, background, process ended, draft, dark mode, landscape, the UI test | `android-test` |
+| Android test – `android-test.yml` | Android 13 emulator (ATD image): start with sample data, background, process ended, draft, dark mode, landscape, the UI test | `android-test` |
 
-They run every night on main (Android 01:30, desktop 02:00 with the screenshot tour on
-Linux, iOS 02:30 UTC). The desktop run compares every screenshot with the run before
+The TestFlight collect run at 22:05 German time starts them on main
+(`.github/scripts/testflight-collect.py`, `start_tests()`), each only when something it
+tests changed since the commit of its last run – no run without a change. GitHub's own
+schedules started them hours late or not at all, so they have none. The desktop run then
+has the input `nightly` (screenshot tour on Linux). The desktop run compares every screenshot with the run before
 (`visual-diff.sh`): screens that changed are listed in `visual-diff.md` with a
 "before | after | difference" picture.
 

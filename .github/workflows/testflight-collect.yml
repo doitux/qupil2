@@ -1,6 +1,8 @@
 # Collected TestFlight builds: at about 13:05 (Friday to Sunday) and 22:05 German time, a TestFlight build with
 # everything that changed for iOS since the last upload (nothing when nothing changed).
 # Testers are not notified for every small change; pushes can happen at any time.
+# At 22:05 it also starts the platform tests (android-test, ui-test, ios-test) – each only when
+# something it tests changed since its last run.
 # The result goes to the branch "testflight-status" (status.json, status.md).
 # By hand: Actions › TestFlight (collect) › Run workflow – "dry-run" only checks,
 # "now" builds right away when something changed.

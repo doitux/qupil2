@@ -7,9 +7,8 @@
 name: Android test
 
 on:
-  # Every night on main (01:30 UTC)
-  schedule:
-    - cron: '30 1 * * *'
+  # Every evening from the TestFlight collect run (22:05 German time), only when something
+  # it tests changed since its last run (.github/scripts/testflight-collect.py); and by hand
   workflow_dispatch:
     inputs:
       tour:

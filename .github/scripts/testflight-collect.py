@@ -4,6 +4,10 @@
 Builds are not started after every push but at about 13:05 and 22:05 German time, with
 everything collected since the last upload, so testers are not notified for each small change.
 
+In the evening slot also the nightly platform tests (Android emulator, desktop UI test, iOS
+simulator) are started – each only when something it tests changed since the commit of its
+last run (GitHub's own schedules for them fired hours late or not at all).
+
 At each slot:
   - a TestFlight run that is still going: nothing to do
   - otherwise a build is started only if something that ends up in the iOS app changed since
@@ -215,6 +219,81 @@ def changes_since(base):
     return cmp, relevant, commits
 
 
+# --------------------------------------------------------------------------- nightly tests
+
+# The platform tests started from the evening slot, with what does not concern them
+TEST_COMMON_IGNORE = (
+    r"^docs/", r"\.md$", r"^\.github/testflight/", r"^\.github/dependabot\.yml$",
+    r"^\.github/scripts/(testflight-collect|asc-whats-new)\.py$", r"^\.github/scripts/ios-check-archive\.sh$",
+    r"^\.github/scripts/publish-nightly\.sh$",
+    r"^\.github/workflows/(testflight|testflight-collect|translations|desktop|mobile)\.yml$",
+)
+TESTS = {
+    "android-test.yml": {"name": "Android", "inputs": {}, "ignore": (
+        r"^platform/(ios|linux|windows)/", r"^\.github/workflows/(ui-test|ios-test)\.yml$",
+        r"^\.github/scripts/(ui-test-desktop|visual-diff|ios-test)\.sh$", r"^\.github/scripts/ios-ui\.py$")},
+    "ui-test.yml": {"name": "Desktop", "inputs": {"nightly": True}, "ignore": (
+        r"^platform/(ios|android)/", r"_android\.(cpp|h|java)$", r"_ios\.(mm|h)$",
+        r"^\.github/workflows/(android-test|ios-test)\.yml$",
+        r"^\.github/scripts/(android-test|ios-test)\.sh$", r"^\.github/scripts/(android|ios)-ui\.py$")},
+    "ios-test.yml": {"name": "iOS", "inputs": {}, "ignore": (
+        r"^platform/(android|linux|windows)/", r"_android\.(cpp|h|java)$",
+        r"^\.github/workflows/(android-test|ui-test)\.yml$",
+        r"^\.github/scripts/(android-test|ui-test-desktop|visual-diff)\.sh$", r"^\.github/scripts/android-ui\.py$")},
+}
+
+
+def start_tests():
+    """Starts each platform test whose files changed since the commit of its last finished
+    run on main (cancelled runs do not count). Never raises: the TestFlight part goes on."""
+    out = {}
+    try:
+        main_sha = api("GET", f"/repos/{REPO}/commits/main")["sha"]
+    except Exception as e:
+        return {"error": str(e)[:200]}
+    for wf, t in TESTS.items():
+        entry = {"name": t["name"]}
+        out[wf] = entry
+        try:
+            runs = api("GET", f"/repos/{REPO}/actions/workflows/{wf}/runs?branch=main&per_page=20")["workflow_runs"]
+            if any(r["status"] != "completed" for r in runs):
+                entry["result"] = "running"
+                continue
+            last = next((r for r in runs if r["conclusion"] in ("success", "failure")), None)
+            if last is not None:
+                entry["since"] = last["head_sha"][:7]
+                entry["last"] = last["conclusion"]
+                if last["head_sha"] == main_sha:
+                    entry["result"] = "no_change"
+                    continue
+                cmp = api("GET", f"/repos/{REPO}/compare/{last['head_sha']}...{main_sha}")
+                files = [f["filename"] for f in cmp.get("files") or []]
+                ignore = [re.compile(p) for p in TEST_COMMON_IGNORE + t["ignore"]]
+                relevant = [f for f in files if not any(p.search(f) for p in ignore)]
+                if len(files) >= 300:
+                    relevant = relevant or files
+                if cmp.get("status") != "ahead" or not relevant:
+                    entry["result"] = "no_change"
+                    continue
+                entry["files"] = len(relevant)
+            if MODE == "dry-run":
+                entry["result"] = "would_start"
+                continue
+            api("POST", f"/repos/{REPO}/actions/workflows/{wf}/dispatches",
+                {"ref": "main", "inputs": t["inputs"]})
+            entry["result"] = "started"
+        except Exception as e:
+            entry["result"] = "error"
+            entry["error"] = str(e)[:200]
+        log(f"Test {wf}: {entry}")
+    return out
+
+
+TEST_RESULT_DE = {
+    "started": "gestartet", "no_change": "nichts Neues, nicht gestartet", "running": "lief noch",
+    "would_start": "Probelauf: würde starten", "error": "Fehler beim Starten",
+}
+
 # --------------------------------------------------------------------------- status
 
 
@@ -252,6 +331,16 @@ def write_status(status):
         md += ["", "Commits:"] + [f"- {c['sha']} {c['subject']}" for c in status["commits"]]
     if status.get("relevant_files"):
         md += ["", "Für iOS relevante Dateien:"] + [f"- {f}" for f in status["relevant_files"]]
+    tests = status.get("tests")
+    if tests:
+        md += ["", "Nächtliche Tests:"]
+        if "error" in tests and len(tests) == 1:
+            md.append(f"- Fehler: {tests['error']}")
+        for e in tests.values():
+            if isinstance(e, dict):
+                extra = f" (seit {e['since']}, letzter Lauf: {e.get('last')})" if e.get("since") else ""
+                md.append(f"- {e['name']}: {TEST_RESULT_DE.get(e.get('result'), e.get('result'))}{extra}"
+                          + (f" – {e['error']}" if e.get("error") else ""))
     md_text = "\n".join(md) + "\n"
     log(md_text)
     log(json.dumps(status, indent=2, ensure_ascii=False))
@@ -289,6 +378,9 @@ def main():
             log(f"Cron {CRON!r} is not a slot in German time today ({t:%H:%M}); nothing to do")
             return
         status["slot"] = f"{slot:%Y-%m-%d %H:%M}"
+        if (slot.hour, slot.minute) == (22, 5):
+            # also when GitHub started the run late: the tests do not reach the testers
+            status["tests"] = start_tests()
         if (slot.hour, slot.minute) == (13, 5) and slot.weekday() not in MIDDAY_DAYS:
             status["result"] = "weekday_skip"
             status["note"] = "Montag bis Donnerstag kein Mittags-Build; die Änderungen kommen um 22:05."
@@ -302,6 +394,8 @@ def main():
             return
     else:
         status["slot"] = f"{t:%Y-%m-%d %H:%M} (von Hand, {MODE})"
+        if MODE == "dry-run":
+            status["tests"] = start_tests()   # only shows what would start
 
     runs = dispatch_runs()
     active = [r for r in runs if r["status"] != "completed"]

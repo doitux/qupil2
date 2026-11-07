@@ -1,19 +1,23 @@
 # UI test on real desktops: Qupil's own UI test (--ui-test, src/app/UiTest.h) and the
 # screenshot tour with each system's own window, fonts and scaling – Linux (X11), Windows
 # and macOS. (Every push already runs the UI test without a screen, in ctest.)
-# Every night and by hand; the results go to the branch "ui-test-desktop" (desktop/<system>/, only
+# Every evening (from the TestFlight collect run, when something changed) and by hand; the results go to the branch "ui-test-desktop" (desktop/<system>/, only
 # the latest run), with the screens that changed since the run before (visual-diff.md).
 # Sample data only.
 name: UI test (desktop)
 
 on:
-  # Every night on main (02:00 UTC), with the tour on Linux, compared with the night before
-  schedule:
-    - cron: '0 2 * * *'
+  # Every evening from the TestFlight collect run (22:05 German time, input "nightly": with the
+  # tour on Linux, compared with the run before), only when something it tests changed since
+  # its last run (.github/scripts/testflight-collect.py); and by hand
   workflow_dispatch:
     inputs:
       tour:
         description: 'Also the screenshot tour (all screens, light and dark)'
+        type: boolean
+        default: false
+      nightly:
+        description: 'Nightly run (tour on Linux only)'
         type: boolean
         default: false
 
@@ -83,7 +87,7 @@ jobs:
       - name: UI test and tour
         shell: bash
         env:
-          QUPIL_TOUR: ${{ (inputs.tour || (github.event_name == 'schedule' && matrix.name == 'linux')) && '1' || '0' }}
+          QUPIL_TOUR: ${{ (inputs.tour || (inputs.nightly && matrix.name == 'linux')) && '1' || '0' }}
         run: bash .github/scripts/ui-test-desktop.sh "${{ matrix.name }}" "out/${{ matrix.name }}"
 
       - uses: actions/upload-artifact@v7
