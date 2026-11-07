@@ -1,0 +1,21 @@
+stale focus object 0x0 , doing manual update
+ui test: start
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+ui test: start passed
+ui test: draft-prepare
+stale focus object 0x600003b1c3c0 , doing manual update
+stale focus object 0x60000020f100 , doing manual update
+stale focus object 0x600003a64c80 , doing manual update
+ui test: draft-prepare passed
+ui test: 2 of 2 cases passed (/Users/runner/Library/Developer/CoreSimulator/Devices/309F4F0C-F632-4F5C-BB25-BD783E57455C/data/Containers/Data/Application/CD3A8E3E-16F0-47FD-BFB2-03ABAD7829CD/Documents/draft/prepare)
+Draft note: kept, 230 characters
+Draft note: kept, 230 characters
+de.qupil.app: 24515
+stale focus object 0x0 , doing manual update
+de.qupil.app: 28850
+stale focus object 0x0 , doing manual update
+stale focus object 0x60000275ef60 , doing manual update
+de.qupil.app: 30110

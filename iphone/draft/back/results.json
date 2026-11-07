@@ -1,0 +1,18 @@
+{
+    "cases": [
+        {
+            "failure": "",
+            "ms": 3080,
+            "name": "restart-draft",
+            "note": "",
+            "passed": true,
+            "title": "after a restart the unsaved note is in the editor again",
+            "warnings": [
+            ]
+        }
+    ],
+    "failed": 0,
+    "platform": "iOS 26.2",
+    "qpa": "ios",
+    "qt": "6.8.3"
+}

@@ -1,0 +1,9 @@
+button      329    28    44    44  Vorspiel hinzufügen
+button       20   108   353    80  Herbstvorspiel
+button       20   224   353    80  Sommervorspiel
+button       20   324   353    58  Archivierte Veranstaltungen, 1
+tab           4   699    77    60  Stundenplan
+tab          81   699    77    60  Schüler
+tab         158   699    77    60  Veranstaltungen
+tab         235   699    77    60  Metronom
+tab         312   699    77    60  Mehr

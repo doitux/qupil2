@@ -1,0 +1,218 @@
+{
+    "cases": [
+        {
+            "failure": "",
+            "ms": 10779,
+            "name": "start",
+            "note": "",
+            "passed": true,
+            "title": "close the reminders shown at the start",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 8074,
+            "name": "pages",
+            "note": "",
+            "passed": true,
+            "title": "every page opens",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 2959,
+            "name": "today",
+            "note": "",
+            "passed": true,
+            "title": "today with the running lesson, switching days",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7270,
+            "name": "note-save",
+            "note": "",
+            "passed": true,
+            "title": "write and save a note for the running lesson",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6120,
+            "name": "note-cancel",
+            "note": "",
+            "passed": true,
+            "title": "cancel a note: nothing saved, no draft",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9299,
+            "name": "student-search",
+            "note": "2 taps needed for \"^Lena Muster$\". ",
+            "passed": true,
+            "title": "search a student, open and close the student page",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 10253,
+            "name": "student-new",
+            "note": "",
+            "passed": true,
+            "title": "add a student",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 2541,
+            "name": "event-open",
+            "note": "",
+            "passed": true,
+            "title": "open an event and go back",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7415,
+            "name": "metronome",
+            "note": "",
+            "passed": true,
+            "title": "start and stop the metronome",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 3569,
+            "name": "appearance",
+            "note": "",
+            "passed": true,
+            "title": "switch to dark and back to light",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 5225,
+            "name": "language",
+            "note": "",
+            "passed": true,
+            "title": "switch the language to English and back",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 2923,
+            "name": "reminders",
+            "note": "",
+            "passed": true,
+            "title": "open the reminders",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6497,
+            "name": "test-mode",
+            "note": "",
+            "passed": true,
+            "title": "switch the test mode on (7 taps on the version) and off",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 13237,
+            "name": "plan-save",
+            "note": "2 taps needed for \"^Lena\\ Muster$\". ",
+            "passed": true,
+            "title": "plan the next lesson of a student",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 17146,
+            "name": "piece-new",
+            "note": "2 taps needed for \"^Lena\\ Muster$\". ",
+            "passed": true,
+            "title": "add a piece for a student",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 4283,
+            "name": "lesson-new",
+            "note": "",
+            "passed": true,
+            "title": "add a lesson from the schedule",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 15526,
+            "name": "together",
+            "note": "2 taps needed for \"^Lena\\ Muster$\". ",
+            "passed": true,
+            "title": "two individual lessons of a student kept together",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 11546,
+            "name": "together-new",
+            "note": "2 taps needed for \"^Muster, Lena\". ",
+            "passed": true,
+            "title": "new lesson for a student who has one: kept together",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6836,
+            "name": "reminder-new",
+            "note": "",
+            "passed": true,
+            "title": "add a reminder",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 2589,
+            "name": "more-pages",
+            "note": "",
+            "passed": true,
+            "title": "birthdays and data pages open",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 4857,
+            "name": "restart-prepare",
+            "note": "",
+            "passed": true,
+            "title": "an unsaved note when Qupil quits",
+            "warnings": [
+            ]
+        }
+    ],
+    "failed": 0,
+    "platform": "iOS 26.2",
+    "qpa": "ios",
+    "qt": "6.8.3"
+}

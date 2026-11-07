@@ -1,0 +1,12 @@
+stale focus object 0x0 , doing manual update
+stale focus object 0x60000239da80 , doing manual update
+ui test: restart-draft
+qml: Draft: note editor opened again
+stale focus object 0x600002380300 , doing manual update
+stale focus object 0x6000023f6c80 , doing manual update
+stale focus object 0x600001a5fb80 , doing manual update
+stale focus object 0x60000239d620 , doing manual update
+Draft note: removed
+ui test: restart-draft passed
+ui test: 1 of 1 cases passed (/Users/runner/Library/Developer/CoreSimulator/Devices/EC963428-282D-4710-92F4-AF92774819A7/data/Containers/Data/Application/4267C09E-C129-408C-8CF0-9AA26272527D/Documents/draft/back)
+de.qupil.app: 49389

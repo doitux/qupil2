@@ -1,0 +1,28 @@
+{
+    "cases": [
+        {
+            "failure": "",
+            "ms": 10644,
+            "name": "start",
+            "note": "",
+            "passed": true,
+            "title": "close the reminders shown at the start",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 8400,
+            "name": "draft-prepare",
+            "note": "",
+            "passed": true,
+            "title": "an unsaved note, then the system ends Qupil (from outside)",
+            "warnings": [
+            ]
+        }
+    ],
+    "failed": 0,
+    "platform": "iOS 26.2",
+    "qpa": "ios",
+    "qt": "6.8.3"
+}
