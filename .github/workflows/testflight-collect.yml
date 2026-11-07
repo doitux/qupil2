@@ -1,4 +1,4 @@
-# Collected TestFlight builds: at about 13:05 and 22:05 German time, a TestFlight build with
+# Collected TestFlight builds: at about 13:05 (Friday to Sunday) and 22:05 German time, a TestFlight build with
 # everything that changed for iOS since the last upload (nothing when nothing changed).
 # Testers are not notified for every small change; pushes can happen at any time.
 # The result goes to the branch "testflight-status" (status.json, status.md).

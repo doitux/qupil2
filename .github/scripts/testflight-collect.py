@@ -48,6 +48,9 @@ WAIT_MINUTES = 110
 # build is at TestFlight before the afternoon. Evening: until 06:30 the next morning
 # (the night is free; a build takes about half an hour, Apple's processing comes on top).
 SLOTS = {(13, 5): (13, 10), (22, 5): (6, 30)}
+# The midday slot only Friday to Sunday: Monday to Thursday a build at 13:05 would reach
+# the testers (after Apple's processing) in the afternoon's working hours
+MIDDAY_DAYS = {4, 5, 6}   # Monday = 0
 
 # Changes that do not end up in the iOS app
 IGNORE = [re.compile(p) for p in (
@@ -223,6 +226,7 @@ RESULT_DE = {
     "running": "Build {n} lief noch, nichts gestartet",
     "no_change": "Kein Build nötig",
     "late": "Verspätet gestartet, kein Build",
+    "weekday_skip": "Mittags Mo–Do kein Build",
     "would_build": "Probelauf: würde bauen",
     "error": "Fehler im Sammel-Lauf",
 }
@@ -285,6 +289,11 @@ def main():
             log(f"Cron {CRON!r} is not a slot in German time today ({t:%H:%M}); nothing to do")
             return
         status["slot"] = f"{slot:%Y-%m-%d %H:%M}"
+        if (slot.hour, slot.minute) == (13, 5) and slot.weekday() not in MIDDAY_DAYS:
+            status["result"] = "weekday_skip"
+            status["note"] = "Montag bis Donnerstag kein Mittags-Build; die Änderungen kommen um 22:05."
+            write_status(status)
+            return
         if t > deadline(slot):
             status["result"] = "late"
             status["note"] = (f"GitHub hat den Lauf erst um {t:%H:%M} gestartet (geplant {slot:%H:%M}); "
