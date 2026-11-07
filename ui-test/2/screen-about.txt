@@ -1,0 +1,11 @@
+button       12    12   138    44  Einstellungen
+button      126   172   247    22  Version 2.0.0 (08413b7)
+button       20   383   371    58  Website, qupil.de
+button       20   441   371    58  Autor, Felix Hammer
+button       20   499   371    58  Quellcode, GitHub
+button       20   877   371    58  Lizenztext, GPL 3.0  (scrolled out of sight)
+tab           4   806    81    60  Stundenplan
+tab          85   806    80    60  Schüler
+tab         165   806    81    60  Veranstaltungen
+tab         246   806    80    60  Metronom
+tab         326   806    81    60  Mehr

@@ -1,0 +1,98 @@
+{
+    "cases": [
+        {
+            "failure": "",
+            "ms": 4588,
+            "name": "start",
+            "note": "",
+            "passed": true,
+            "title": "close the reminders shown at the start",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 11390,
+            "name": "plan-save",
+            "note": "",
+            "passed": true,
+            "title": "plan the next lesson of a student",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 14974,
+            "name": "piece-new",
+            "note": "",
+            "passed": true,
+            "title": "add a piece for a student",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 4262,
+            "name": "lesson-new",
+            "note": "",
+            "passed": true,
+            "title": "add a lesson from the schedule",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 12093,
+            "name": "together",
+            "note": "",
+            "passed": true,
+            "title": "two individual lessons of a student kept together",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9299,
+            "name": "together-new",
+            "note": "",
+            "passed": true,
+            "title": "new lesson for a student who has one: kept together",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7451,
+            "name": "reminder-new",
+            "note": "",
+            "passed": true,
+            "title": "add a reminder",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 4173,
+            "name": "more-pages",
+            "note": "",
+            "passed": true,
+            "title": "birthdays and data pages open",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 4986,
+            "name": "restart-prepare",
+            "note": "",
+            "passed": true,
+            "title": "an unsaved note when Qupil quits",
+            "warnings": [
+            ]
+        }
+    ],
+    "failed": 0,
+    "platform": "Android 13 (13.0)",
+    "qpa": "android",
+    "qt": "6.8.3"
+}

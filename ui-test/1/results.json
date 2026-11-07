@@ -1,0 +1,78 @@
+{
+    "cases": [
+        {
+            "failure": "",
+            "ms": 10627,
+            "name": "start",
+            "note": "",
+            "passed": true,
+            "title": "close the reminders shown at the start",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7418,
+            "name": "pages",
+            "note": "",
+            "passed": true,
+            "title": "every page opens",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 2537,
+            "name": "today",
+            "note": "",
+            "passed": true,
+            "title": "today with the running lesson, switching days",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6800,
+            "name": "note-save",
+            "note": "",
+            "passed": true,
+            "title": "write and save a note for the running lesson",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6174,
+            "name": "note-cancel",
+            "note": "",
+            "passed": true,
+            "title": "cancel a note: nothing saved, no draft",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7804,
+            "name": "student-search",
+            "note": "",
+            "passed": true,
+            "title": "search a student, open and close the student page",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 10136,
+            "name": "student-new",
+            "note": "",
+            "passed": true,
+            "title": "add a student",
+            "warnings": [
+            ]
+        }
+    ],
+    "failed": 0,
+    "platform": "Android 13 (13.0)",
+    "qpa": "android",
+    "qt": "6.8.3"
+}

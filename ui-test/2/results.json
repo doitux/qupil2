@@ -1,0 +1,78 @@
+{
+    "cases": [
+        {
+            "failure": "",
+            "ms": 4552,
+            "name": "start",
+            "note": "",
+            "passed": true,
+            "title": "close the reminders shown at the start",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 3067,
+            "name": "event-open",
+            "note": "",
+            "passed": true,
+            "title": "open an event and go back",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 2434,
+            "name": "metronome",
+            "note": "",
+            "passed": true,
+            "title": "start and stop the metronome",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 3949,
+            "name": "appearance",
+            "note": "",
+            "passed": true,
+            "title": "switch to dark and back to light",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 5386,
+            "name": "language",
+            "note": "",
+            "passed": true,
+            "title": "switch the language to English and back",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 3683,
+            "name": "reminders",
+            "note": "",
+            "passed": true,
+            "title": "open the reminders",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6315,
+            "name": "test-mode",
+            "note": "",
+            "passed": true,
+            "title": "switch the test mode on (7 taps on the version) and off",
+            "warnings": [
+            ]
+        }
+    ],
+    "failed": 0,
+    "platform": "Android 13 (13.0)",
+    "qpa": "android",
+    "qt": "6.8.3"
+}
