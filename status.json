@@ -75,17 +75,20 @@
     "src/app/UiTest.h",
     "src/main.cpp"
   ],
-  "result": "started",
+  "result": "uploaded",
   "build": {
     "number": 40,
     "run_id": 42320681308,
     "sha": "6b0a159afca79307d80e96e0af1ae254c2d5a5de",
     "url": "https://github.com/doitux/qupil2/actions/runs/42320681308",
     "created": "2026-11-07T00:50:39Z",
-    "status": "in_progress",
-    "conclusion": null,
-    "attempt": 1
+    "status": "completed",
+    "conclusion": "success",
+    "attempt": 1,
+    "rerun": false,
+    "upload": "success",
+    "whats_new": "success"
   },
-  "written": "2026-11-07T01:50:50+01:00",
-  "headline": "Build 40 gestartet"
+  "written": "2026-11-07T01:59:55+01:00",
+  "headline": "Build 40 hochgeladen"
 }

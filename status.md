@@ -1,8 +1,8 @@
 # TestFlight-Sammellauf 2026-11-06 22:05
 
-**Build 40 gestartet**
+**Build 40 hochgeladen**
 
-- Build 40 (Commit 6b0a159): in_progress, Upload: -, Testtext: -
+- Build 40 (Commit 6b0a159): success, Upload: success, Testtext: success
 - https://github.com/doitux/qupil2/actions/runs/42320681308
 - Seit Build 39 (Commit af8bae2)
 
