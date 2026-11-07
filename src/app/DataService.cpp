@@ -427,11 +427,14 @@ QVariantMap DataService::lessonSummary(const QVariantMap &row, bool withDetails)
         QVariantList detailed;
         for (const QVariant &s : members) {
             QVariantMap st = s.toMap();
-            const QString membership = st.value(u"membership_id"_s).toString();
-            st.insert(u"inProgress"_s, scalar(u"SELECT COUNT(*) FROM piece WHERE deleted = 0 AND membership_id = ? AND state = 1"_s, { membership }));
-            st.insert(u"ready"_s, scalar(u"SELECT COUNT(*) FROM piece WHERE deleted = 0 AND membership_id = ? AND state = 3"_s, { membership }));
-            const QVariantList last = rows(u"SELECT date, content FROM note WHERE deleted = 0 AND membership_id = ? "
-                                           u"ORDER BY date DESC LIMIT 1"_s, { membership });
+            // Lessons kept together: pieces and the last note of all of them
+            const QStringList all = together(st.value(u"membership_id"_s).toString());
+            const QVariantList ids(all.cbegin(), all.cend());
+            const QString in = placeholders(all.size());
+            st.insert(u"inProgress"_s, scalar(u"SELECT COUNT(*) FROM piece WHERE deleted = 0 AND membership_id IN (%1) AND state = 1"_s.arg(in), ids));
+            st.insert(u"ready"_s, scalar(u"SELECT COUNT(*) FROM piece WHERE deleted = 0 AND membership_id IN (%1) AND state = 3"_s.arg(in), ids));
+            const QVariantList last = rows(u"SELECT date, content FROM note WHERE deleted = 0 AND membership_id IN (%1) "
+                                           u"ORDER BY date DESC LIMIT 1"_s.arg(in), ids);
             if (!last.isEmpty()) {
                 const QVariantMap n = last.first().toMap();
                 st.insert(u"lastNoteDate"_s, n.value(u"date"_s));
@@ -549,6 +552,8 @@ bool DataService::endMembership(const QString &membershipId, const QString &less
 QString DataService::saveLesson(const QString &id, const QVariantMap &input, const QStringList &studentIds)
 {
     QVariantMap fields = input;
+    // A student's other individual lesson to keep together with this one (only a new student here)
+    const QString keepWith = fields.take(u"keep_together_with"_s).toString();
     const int kind = fields.value(u"kind"_s, 1).toInt();
     if (kind == 1 && studentIds.size() > 1)
         return qtTrId("lesson.individual_one_student");
@@ -591,8 +596,17 @@ QString DataService::saveLesson(const QString &id, const QVariantMap &input, con
     for (const QString &student : studentIds) {
         if (!wanted.contains(student) || !ok)
             continue;
-        ok = !m_store->create(u"membership"_s, { { u"lesson_id"_s, lessonId }, { u"student_id"_s, student },
-                                                 { u"start_date"_s, todayIso() } }).isEmpty();
+        const QString created = m_store->create(u"membership"_s, { { u"lesson_id"_s, lessonId }, { u"student_id"_s, student },
+                                                                    { u"start_date"_s, todayIso() } });
+        ok = !created.isEmpty();
+        if (ok && !keepWith.isEmpty() && kind == 1 && !irregular
+            && m_store->get(u"membership"_s, keepWith).value(u"student_id"_s).toString() == student)
+            ok = keepTogether({ keepWith, created }, true);
+    }
+    // Kept together only as weekly individual lessons: a group or irregular lesson leaves
+    if (ok && (kind != 1 || irregular)) {
+        for (const QVariant &v : rows(u"SELECT id FROM membership WHERE deleted = 0 AND lesson_id = ? AND shared_key <> ''"_s, { lessonId }))
+            ok = ok && m_store->update(u"membership"_s, v.toMap().value(u"id"_s).toString(), { { u"shared_key"_s, QString() } });
     }
     m_store->endBatch(ok);
     m_lastId = ok ? lessonId : QString();
@@ -635,7 +649,8 @@ QVariantList DataService::students(const QString &filter) const
         const QString instrument = m.value(u"instrument"_s).toString();
         if (!needle.isEmpty() && !(forename + u' ' + surname + u' ' + surname + u' ' + instrument).toLower().contains(needle))
             continue;
-        const QStringList ls = lessons.value(m.value(u"id"_s).toString());
+        QStringList ls = lessons.value(m.value(u"id"_s).toString());
+        ls.removeDuplicates();   // two individual lessons have the same automatic name
         m.insert(u"name"_s, fullName(forename, surname));
         m.insert(u"listName"_s, listName(forename, surname));
         m.insert(u"initials"_s, initials(forename, surname));
@@ -675,8 +690,9 @@ QVariantMap DataService::student(const QString &id) const
     m.insert(u"since"_s, first.isValid() ? first.year() : 0);
 
     QVariantList memberships;
-    for (const QVariant &v : rows(u"SELECT m.id, m.lesson_id, m.start_date, m.end_date, m.previous_name, "
-                                  u"l.name AS lesson_name, l.kind, l.active AS lesson_active "
+    for (const QVariant &v : rows(u"SELECT m.id, m.lesson_id, m.start_date, m.end_date, m.previous_name, m.shared_key, "
+                                  u"l.name AS lesson_name, l.kind, l.active AS lesson_active, l.weekday, l.irregular, "
+                                  u"l.start_time, l.end_time, l.location "
                                   u"FROM membership m LEFT JOIN lesson l ON l.id = m.lesson_id "
                                   u"WHERE m.deleted = 0 AND m.student_id = ? "
                                   u"ORDER BY (m.end_date = '' OR m.end_date > ?) DESC, m.start_date DESC"_s,
@@ -693,8 +709,102 @@ QVariantMap DataService::student(const QString &id) const
         memberships << ms;
     }
     m.insert(u"memberships"_s, memberships);
-    m.insert(u"activeLessons"_s, std::count_if(memberships.cbegin(), memberships.cend(),
-                                               [](const QVariant &v) { return v.toMap().value(u"active"_s).toBool(); }));
+    const int activeLessons = std::count_if(memberships.cbegin(), memberships.cend(),
+                                            [](const QVariant &v) { return v.toMap().value(u"active"_s).toBool(); });
+    m.insert(u"activeLessons"_s, activeLessons);
+
+    /*  The lesson chooser: one entry per lesson, lessons kept together as one ("ids": all of
+        them, "id": the first active one). With more than one active lesson each says its day
+        and time (two individual lessons have the same automatic name). */
+    QVariantList choices;
+    QHash<QString, int> byKey;
+    for (const QVariant &v : std::as_const(memberships)) {
+        const QVariantMap ms = v.toMap();
+        const QString key = ms.value(u"shared_key"_s).toString();
+        const bool weekly = ms.value(u"irregular"_s).toInt() == 0 && !ms.value(u"start_time"_s).toString().isEmpty();
+        const QString shortDay = weekly ? dayAndTime(ms.value(u"weekday"_s).toInt(), ms.value(u"start_time"_s).toString(), false) : QString();
+        if (!key.isEmpty() && byKey.contains(key)) {
+            QVariantMap c = choices.at(byKey.value(key)).toMap();
+            QStringList ids = c.value(u"ids"_s).toStringList();
+            ids << ms.value(u"id"_s).toString();
+            c.insert(u"ids"_s, ids);
+            if (ms.value(u"active"_s).toBool()) {
+                QStringList days = c.value(u"days"_s).toStringList();
+                days << shortDay;
+                c.insert(u"days"_s, days);
+                if (!c.value(u"active"_s).toBool()) {   // an active one leads
+                    c.insert(u"id"_s, ms.value(u"id"_s));
+                    c.insert(u"label"_s, ms.value(u"label"_s));
+                    c.insert(u"active"_s, true);
+                }
+            }
+            choices[byKey.value(key)] = c;
+            continue;
+        }
+        QVariantMap c { { u"id"_s, ms.value(u"id"_s) }, { u"ids"_s, QStringList { ms.value(u"id"_s).toString() } },
+                        { u"label"_s, ms.value(u"label"_s) }, { u"active"_s, ms.value(u"active"_s) },
+                        { u"lesson_id"_s, ms.value(u"lesson_id"_s) },
+                        { u"days"_s, ms.value(u"active"_s).toBool() ? QStringList { shortDay } : QStringList() },
+                        { u"day"_s, shortDay },
+                        { u"detail"_s, weekly ? dayAndTime(ms.value(u"weekday"_s).toInt(), {}, true) + u' '
+                                                    + ms.value(u"start_time"_s).toString() + u'–' + ms.value(u"end_time"_s).toString()
+                                                    + (ms.value(u"location"_s).toString().isEmpty() ? QString() : u" · "_s + ms.value(u"location"_s).toString())
+                                              : QString() } };
+        if (!key.isEmpty())
+            byKey.insert(key, choices.size());
+        choices << c;
+    }
+    for (QVariant &v : choices) {
+        QVariantMap c = v.toMap();
+        const QStringList days = c.value(u"days"_s).toStringList();
+        const bool kept = c.value(u"ids"_s).toStringList().size() > 1;
+        c.insert(u"together"_s, kept);
+        //: Under the lesson name when a student's lessons are kept together; %1 = "Mo 15:00 and Th 16:30"
+        c.insert(u"togetherText"_s, kept ? qtTrId("together.label").arg(joinedList(days)) : QString());
+        // Day and time behind the name when there is more than one lesson to choose
+        c.insert(u"suffix"_s, !kept && activeLessons > 1 && c.value(u"active"_s).toBool() ? c.value(u"day"_s) : QVariant(QString()));
+        v = c;
+    }
+    m.insert(u"choices"_s, choices);
+
+    // Individual lessons on more than one day that are not kept together: the offer (until "keep separate")
+    QStringList single;
+    QStringList dayNames;
+    for (const QVariant &v : togetherCandidates(id)) {
+        const QVariantMap c = v.toMap();
+        if (together(c.value(u"id"_s).toString()).size() > 1)
+            continue;
+        single << c.value(u"id"_s).toString();
+        dayNames << c.value(u"dayName"_s).toString();
+    }
+    QStringList sorted = single;
+    sorted.sort();
+    if (single.size() > 1 && setting(u"keep_separate:"_s + id, QString()).toString() != sorted.join(u',')) {
+        const QString forename = m.value(u"forename"_s).toString().isEmpty() ? m.value(u"name"_s).toString()
+                                                                               : m.value(u"forename"_s).toString();
+        m.insert(u"togetherOffer"_s, QVariantMap {
+            { u"ids"_s, single },
+            { u"title"_s, single.size() == 2 ? qtTrId("together.offer_title_two") : qtTrId("together.offer_title_more").arg(single.size()) },
+            //: %1 = first name, %2 = the days ("Monday and Thursday")
+            { u"text"_s, (single.size() == 2 ? qtTrId("together.offer_text_two") : qtTrId("together.offer_text_more"))
+                             .arg(forename, joinedList(dayNames)) } });
+    }
+    // The switch in the lesson menu: the student's weekly individual lessons (kept together or not)
+    QStringList candidates;
+    QStringList candidateDays;
+    for (const QVariant &v : togetherCandidates(id)) {
+        candidates << v.toMap().value(u"id"_s).toString();
+        candidateDays << v.toMap().value(u"dayName"_s).toString();
+    }
+    if (candidates.size() > 1) {
+        const QStringList kept = together(candidates.first());
+        m.insert(u"togetherSwitch"_s, QVariantMap {
+            { u"ids"_s, candidates },
+            { u"on"_s, std::all_of(candidates.cbegin(), candidates.cend(), [&](const QString &c) { return kept.contains(c); }) },
+            { u"title"_s, candidates.size() == 2 ? qtTrId("together.switch_two") : qtTrId("together.switch_more") },
+            //: %1 = the days ("Monday and Thursday")
+            { u"hint"_s, qtTrId("together.switch_hint").arg(joinedList(candidateDays)) } });
+    }
     return m;
 }
 
@@ -732,6 +842,111 @@ bool DataService::deleteStudent(const QString &id)
     return m_store->endBatch(ok) && ok;
 }
 
+// ---------------------------------------------------------------------------- single lessons kept together
+
+QString DataService::placeholders(qsizetype n)
+{
+    QStringList marks;
+    for (qsizetype i = 0; i < std::max<qsizetype>(n, 1); ++i)
+        marks << u"?"_s;
+    return marks.join(u", "_s);
+}
+
+QString DataService::dayAndTime(int weekday, const QString &time, bool longDay) const
+{
+    const QLocale locale = uiLocale();
+    QString day = locale.standaloneDayName(std::clamp(weekday, 0, 6) + 1, longDay ? QLocale::LongFormat : QLocale::ShortFormat);
+    day.remove(u'.');
+    if (time.isEmpty())
+        return day;
+    return longDay ? day + u", "_s + time : day + u' ' + time;
+}
+
+QString DataService::joinedList(const QStringList &items) const
+{
+    if (items.size() <= 1)
+        return items.value(0);
+    //: Two items of a list; %1 = all but the last (joined with ", "), %2 = the last one
+    return qtTrId("together.and").arg(items.mid(0, items.size() - 1).join(u", "_s), items.last());
+}
+
+QStringList DataService::together(const QString &membershipId) const
+{
+    const QVariantMap m = m_store->get(u"membership"_s, membershipId);
+    const QString key = m.value(u"shared_key"_s).toString();
+    if (key.isEmpty() || m.value(u"deleted"_s).toInt() != 0)
+        return { membershipId };
+    QStringList out { membershipId };
+    for (const QVariant &v : rows(u"SELECT m.id FROM membership m LEFT JOIN lesson l ON l.id = m.lesson_id "
+                                  u"WHERE m.deleted = 0 AND m.shared_key = ? AND m.student_id = ? AND m.id <> ? "
+                                  u"ORDER BY l.weekday, l.start_time"_s,
+                                  { key, m.value(u"student_id"_s), membershipId }))
+        out << v.toMap().value(u"id"_s).toString();
+    return out;
+}
+
+QString DataService::membershipOn(const QString &membershipId, const QString &date) const
+{
+    const QStringList all = together(membershipId);
+    const QDate d = QDate::fromString(date, Qt::ISODate);
+    if (all.size() < 2 || !d.isValid())
+        return membershipId;
+    const QVariantList r = rows(u"SELECT m.id FROM membership m JOIN lesson l ON l.id = m.lesson_id "
+                                u"WHERE m.id IN (%1) AND l.irregular = 0 AND l.weekday = ? "
+                                u"ORDER BY (m.end_date = '' OR m.end_date > ?) DESC LIMIT 1"_s.arg(placeholders(all.size())),
+                                QVariantList(all.cbegin(), all.cend()) << d.dayOfWeek() - 1 << date);
+    return r.isEmpty() ? membershipId : r.first().toMap().value(u"id"_s).toString();
+}
+
+QVariantList DataService::togetherCandidates(const QString &studentId, const QString &exceptLessonId) const
+{
+    QVariantList out;
+    for (const QVariant &v : rows(u"SELECT m.id, m.lesson_id, m.shared_key, l.weekday, l.start_time, l.end_time, l.location "
+                                  u"FROM membership m JOIN lesson l ON l.id = m.lesson_id "
+                                  u"WHERE m.deleted = 0 AND l.deleted = 0 AND l.active = 1 AND l.kind = 1 AND l.irregular = 0 "
+                                  u"AND m.student_id = ? AND m.lesson_id <> ? AND (m.end_date = '' OR m.end_date > ?) "
+                                  u"ORDER BY l.weekday, l.start_time"_s,
+                                  // (an empty QString would bind as NULL, and "<> NULL" matches nothing)
+                                  { studentId, exceptLessonId.isEmpty() ? u"-"_s : exceptLessonId, todayIso() })) {
+        QVariantMap c = v.toMap();
+        c.insert(u"day"_s, dayAndTime(c.value(u"weekday"_s).toInt(), c.value(u"start_time"_s).toString(), true));
+        c.insert(u"dayName"_s, dayAndTime(c.value(u"weekday"_s).toInt(), {}, true));
+        out << c;
+    }
+    return out;
+}
+
+bool DataService::keepTogether(const QStringList &membershipIds, bool on)
+{
+    if (membershipIds.isEmpty())
+        return false;
+    m_store->beginBatch();
+    bool ok = true;
+    if (on) {
+        // An existing key of one of them, so a third lesson joins the others
+        QString key;
+        for (const QString &id : membershipIds)
+            if (key.isEmpty())
+                key = m_store->get(u"membership"_s, id).value(u"shared_key"_s).toString();
+        if (key.isEmpty())
+            key = newId();
+        for (const QString &id : membershipIds)
+            if (m_store->get(u"membership"_s, id).value(u"shared_key"_s).toString() != key)
+                ok = ok && m_store->update(u"membership"_s, id, { { u"shared_key"_s, key } });
+    } else {
+        for (const QString &id : together(membershipIds.first()))
+            ok = ok && m_store->update(u"membership"_s, id, { { u"shared_key"_s, QString() } });
+    }
+    return m_store->endBatch(ok) && ok;
+}
+
+bool DataService::keepSeparate(const QString &studentId, const QStringList &membershipIds)
+{
+    QStringList sorted = membershipIds;
+    sorted.sort();
+    return setSetting(u"keep_separate:"_s + studentId, sorted.join(u','));
+}
+
 // ---------------------------------------------------------------------------- notes and pieces
 
 QStringList DataService::activeMembershipsOfSameLesson(const QString &membershipId) const
@@ -763,11 +978,13 @@ QStringList DataService::groupCopies(const QString &entity, const QString &id) c
 
 QVariantList DataService::notes(const QString &membershipId) const
 {
-    QString sql = u"SELECT * FROM note WHERE deleted = 0 AND membership_id = ? ORDER BY date DESC, id DESC"_s;
+    const QStringList all = together(membershipId);
+    QString sql = u"SELECT * FROM note WHERE deleted = 0 AND membership_id IN (%1) ORDER BY date DESC, id DESC"_s
+                      .arg(placeholders(all.size()));
     if (setting(u"limit_notes"_s, 0).toInt() != 0)
         sql += u" LIMIT %1"_s.arg(std::max(1, setting(u"limit_notes_count"_s, 30).toInt()));
     QVariantList out;
-    for (const QVariant &v : rows(sql, { membershipId })) {
+    for (const QVariant &v : rows(sql, QVariantList(all.cbegin(), all.cend()))) {
         QVariantMap m = v.toMap();
         const QString key = m.value(u"group_key"_s).toString();
         m.insert(u"shared"_s, key.isEmpty() ? 1 : scalar(u"SELECT COUNT(*) FROM note WHERE deleted = 0 AND group_key = ?"_s, { key }).toInt());
@@ -779,13 +996,15 @@ QVariantList DataService::notes(const QString &membershipId) const
 QString DataService::addNote(const QString &membershipId, const QString &date, const QString &content, bool forAll)
 {
     const QString key = newId();
-    const QStringList targets = forAll ? activeMembershipsOfSameLesson(membershipId) : QStringList { membershipId };
+    // Lessons kept together: the note belongs to the one on its weekday
+    const QString own = forAll ? membershipId : membershipOn(membershipId, date);
+    const QStringList targets = forAll ? activeMembershipsOfSameLesson(membershipId) : QStringList { own };
     m_store->beginBatch();
     QString first;
     for (const QString &m : targets) {
         const QString id = m_store->create(u"note"_s, { { u"membership_id"_s, m }, { u"group_key"_s, key },
                                                         { u"date"_s, date }, { u"content"_s, NoteFormat::normalized(content) } });
-        if (m == membershipId)
+        if (m == own)
             first = id;
     }
     m_store->endBatch(!first.isEmpty());
@@ -796,8 +1015,15 @@ bool DataService::updateNote(const QString &id, const QString &date, const QStri
 {
     m_store->beginBatch();
     bool ok = true;
-    for (const QString &copy : forAll ? groupCopies(u"note"_s, id) : QStringList { id })
-        ok = ok && m_store->update(u"note"_s, copy, { { u"date"_s, date }, { u"content"_s, NoteFormat::normalized(content) } });
+    for (const QString &copy : forAll ? groupCopies(u"note"_s, id) : QStringList { id }) {
+        QVariantMap fields { { u"date"_s, date }, { u"content"_s, NoteFormat::normalized(content) } };
+        // Lessons kept together: a new date can make it the note of the other lesson
+        const QString membership = m_store->get(u"note"_s, copy).value(u"membership_id"_s).toString();
+        const QString own = membershipOn(membership, date);
+        if (own != membership)
+            fields.insert(u"membership_id"_s, own);
+        ok = ok && m_store->update(u"note"_s, copy, fields);
+    }
     return m_store->endBatch(ok) && ok;
 }
 
@@ -814,17 +1040,25 @@ bool DataService::deleteNote(const QString &id, bool forAll)
 
 QVariantList DataService::plans(const QString &membershipId) const
 {
-    const QVariantMap membership = m_store->get(u"membership"_s, membershipId);
-    const QVariantMap lesson = m_store->get(u"lesson"_s, membership.value(u"lesson_id"_s).toString());
-    const bool irregular = lesson.value(u"irregular"_s).toInt() != 0;
-    const QString start = irregular ? QString() : lesson.value(u"start_time"_s).toString();
-    const QTime startTime = QTime::fromString(start, u"hh:mm"_s);
+    // Each plan with the start of its own lesson (lessons kept together: different days)
+    QHash<QString, QString> starts;
+    const auto startOf = [&](const QString &membership) {
+        if (!starts.contains(membership)) {
+            const QVariantMap lesson = m_store->get(u"lesson"_s, m_store->get(u"membership"_s, membership).value(u"lesson_id"_s).toString());
+            starts.insert(membership, lesson.value(u"irregular"_s).toInt() != 0 ? QString() : lesson.value(u"start_time"_s).toString());
+        }
+        return starts.value(membership);
+    };
     const QDateTime now = Qupil::Clock::now();
     const QDate today = now.date();
+    const QStringList all = together(membershipId);
     QVariantList out;
-    for (const QVariant &v : rows(u"SELECT * FROM plan WHERE deleted = 0 AND membership_id = ? ORDER BY date, id"_s,
-                                  { membershipId })) {
+    for (const QVariant &v : rows(u"SELECT * FROM plan WHERE deleted = 0 AND membership_id IN (%1) ORDER BY date, id"_s
+                                      .arg(placeholders(all.size())),
+                                  QVariantList(all.cbegin(), all.cend()))) {
         QVariantMap p = v.toMap();
+        const QString start = startOf(p.value(u"membership_id"_s).toString());
+        const QTime startTime = QTime::fromString(start, u"hh:mm"_s);
         const QString key = p.value(u"group_key"_s).toString();
         p.insert(u"shared"_s, key.isEmpty() ? 1 : scalar(u"SELECT COUNT(*) FROM plan WHERE deleted = 0 AND group_key = ?"_s, { key }).toInt());
         // Blocks (heading and lines), or one per line; points: their headings as plain text
@@ -879,11 +1113,28 @@ QStringList DataService::plannedOn(const QString &date) const
 {
     QStringList out;
     for (const QVariant &v : rows(u"SELECT DISTINCT membership_id FROM plan WHERE deleted = 0 AND date = ?"_s, { date }))
-        out << v.toMap().value(u"membership_id"_s).toString();
+        for (const QString &m : together(v.toMap().value(u"membership_id"_s).toString()))
+            if (!out.contains(m))
+                out << m;
     return out;
 }
 
 QString DataService::nextLessonDate(const QString &membershipId, const QString &after) const
+{
+    // Lessons kept together: whichever of them comes first (ended ones do not count)
+    QString next;
+    for (const QString &m : together(membershipId)) {
+        const QString end = m_store->get(u"membership"_s, m).value(u"end_date"_s).toString();
+        if (m != membershipId && !end.isEmpty() && end <= todayIso())
+            continue;
+        const QString date = nextDateOf(m, after);
+        if (next.isEmpty() || date < next)
+            next = date;
+    }
+    return next;
+}
+
+QString DataService::nextDateOf(const QString &membershipId, const QString &after) const
 {
     const QVariantMap membership = m_store->get(u"membership"_s, membershipId);
     const QVariantMap lesson = m_store->get(u"lesson"_s, membership.value(u"lesson_id"_s).toString());
@@ -911,26 +1162,35 @@ QString DataService::savePlan(const QString &membershipId, const QString &id, co
     if (!id.isEmpty()) {
         m_store->beginBatch();
         bool ok = true;
-        for (const QString &copy : forAll ? groupCopies(u"plan"_s, id) : QStringList { id })
-            ok = ok && m_store->update(u"plan"_s, copy, { { u"date"_s, date }, { u"content"_s, text } });
+        for (const QString &copy : forAll ? groupCopies(u"plan"_s, id) : QStringList { id }) {
+            QVariantMap fields { { u"date"_s, date }, { u"content"_s, text } };
+            const QString membership = m_store->get(u"plan"_s, copy).value(u"membership_id"_s).toString();
+            const QString own = membershipOn(membership, date);
+            if (own != membership)
+                fields.insert(u"membership_id"_s, own);
+            ok = ok && m_store->update(u"plan"_s, copy, fields);
+        }
         return m_store->endBatch(ok) && ok ? id : QString();
     }
     // One plan per lesson: a new one for a date that has one already goes into it
-    const QVariantList existing = rows(u"SELECT id, content FROM plan WHERE deleted = 0 AND membership_id = ? AND date = ? LIMIT 1"_s,
-                                       { membershipId, date });
+    const QStringList all = together(membershipId);
+    const QVariantList existing = rows(u"SELECT id, content FROM plan WHERE deleted = 0 AND membership_id IN (%1) AND date = ? LIMIT 1"_s
+                                           .arg(placeholders(all.size())),
+                                       QVariantList(all.cbegin(), all.cend()) << date);
     if (!existing.isEmpty()) {
         const QVariantMap e = existing.first().toMap();
         const QString existingId = e.value(u"id"_s).toString();
         return savePlan(membershipId, existingId, date, NoteFormat::joined(e.value(u"content"_s).toString(), text), forAll);
     }
     const QString key = newId();
-    const QStringList targets = forAll ? activeMembershipsOfSameLesson(membershipId) : QStringList { membershipId };
+    const QString own = forAll ? membershipId : membershipOn(membershipId, date);
+    const QStringList targets = forAll ? activeMembershipsOfSameLesson(membershipId) : QStringList { own };
     m_store->beginBatch();
     QString first;
     for (const QString &m : targets) {
         const QString created = m_store->create(u"plan"_s, { { u"membership_id"_s, m }, { u"group_key"_s, key },
                                                              { u"date"_s, date }, { u"content"_s, text } });
-        if (m == membershipId)
+        if (m == own)
             first = created;
     }
     m_store->endBatch(!first.isEmpty());
@@ -957,10 +1217,18 @@ QString DataService::postponePlan(const QString &id, bool forAll)
     for (const QString &copy : forAll ? groupCopies(u"plan"_s, id) : QStringList { id }) {
         const QVariantMap p = m_store->get(u"plan"_s, copy);
         // A plan for that lesson already: the points go there
-        const QVariantList there = rows(u"SELECT id, content FROM plan WHERE deleted = 0 AND membership_id = ? AND date = ? AND id <> ? LIMIT 1"_s,
-                                        { p.value(u"membership_id"_s), target, copy });
+        const QString membership = p.value(u"membership_id"_s).toString();
+        const QStringList all = together(membership);
+        const QVariantList there = rows(u"SELECT id, content FROM plan WHERE deleted = 0 AND membership_id IN (%1) AND date = ? AND id <> ? LIMIT 1"_s
+                                            .arg(placeholders(all.size())),
+                                        QVariantList(all.cbegin(), all.cend()) << target << copy);
         if (there.isEmpty()) {
-            ok = ok && m_store->update(u"plan"_s, copy, { { u"date"_s, target } });
+            // Lessons kept together: Monday's plan moved to Thursday is Thursday's
+            QVariantMap fields { { u"date"_s, target } };
+            const QString own = membershipOn(membership, target);
+            if (own != membership)
+                fields.insert(u"membership_id"_s, own);
+            ok = ok && m_store->update(u"plan"_s, copy, fields);
         } else {
             const QVariantMap t = there.first().toMap();
             ok = ok && m_store->update(u"plan"_s, t.value(u"id"_s).toString(),
@@ -995,8 +1263,9 @@ QString DataService::planToNote(const QString &planId, const QString &noteConten
 
 QVariantList DataService::pieces(const QString &membershipId, int stateFilter) const
 {
-    QString sql = u"SELECT * FROM piece WHERE deleted = 0 AND membership_id = ?"_s;
-    QVariantList binds { membershipId };
+    const QStringList all = together(membershipId);
+    QString sql = u"SELECT * FROM piece WHERE deleted = 0 AND membership_id IN (%1)"_s.arg(placeholders(all.size()));
+    QVariantList binds(all.cbegin(), all.cend());
     if (stateFilter >= 0) {
         sql += u" AND state = ?"_s;
         binds << stateFilter;
@@ -1019,8 +1288,10 @@ QVariantList DataService::pieceCounts(const QString &membershipId) const
 {
     QVariantList counts { 0, 0, 0, 0, 0, 0 };
     int all = 0;
-    for (const QVariant &v : rows(u"SELECT state, COUNT(*) AS n FROM piece WHERE deleted = 0 AND membership_id = ? GROUP BY state"_s,
-                                  { membershipId })) {
+    const QStringList kept = together(membershipId);
+    for (const QVariant &v : rows(u"SELECT state, COUNT(*) AS n FROM piece WHERE deleted = 0 AND membership_id IN (%1) GROUP BY state"_s
+                                      .arg(placeholders(kept.size())),
+                                  QVariantList(kept.cbegin(), kept.cend()))) {
         const QVariantMap m = v.toMap();
         const int state = m.value(u"state"_s).toInt();
         if (state >= 0 && state < 5)

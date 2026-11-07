@@ -159,4 +159,6 @@ private:
     QString m_membership;   // the running lesson's first student at 14:20 (sample data)
     int m_count = 0;
     QStringList m_lessons;
+    QString m_other;              // a second lesson of the same student (case "together")
+    QStringList m_cleanup;        // "entity:id" to remove at the end of a case
 };

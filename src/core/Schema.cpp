@@ -66,6 +66,7 @@ QList<EntityDef> buildEntities()
     // Student in a lesson for a period (1.x: pupilatlesson). Empty end_date = ongoing.
     list << EntityDef{ QStringLiteral("membership"), {
         text("lesson_id"), text("student_id"), text("start_date"), text("end_date"), text("previous_name"),
+        text("shared_key"),
     }, { QStringLiteral("lesson_id"), QStringLiteral("student_id") } };
 
     // Pieces. state: 0 planned, 1 in progress, 2 paused, 3 ready for recital, 4 finished.
@@ -178,6 +179,12 @@ QVariantMap currentFields(const QString &entity, const QVariantMap &fields)
 const QList<AddedEntity> &addedEntities()
 {
     static const QList<AddedEntity> list { { QStringLiteral("plan"), 5 } };
+    return list;
+}
+
+const QList<AddedField> &addedFields()
+{
+    static const QList<AddedField> list { { QStringLiteral("membership"), QStringLiteral("shared_key"), 6 } };
     return list;
 }
 

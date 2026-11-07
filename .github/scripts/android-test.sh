@@ -162,7 +162,7 @@ uidir=/data/data/$PKG/files/ui-test
 adb shell rm -rf "$uidir"
 PARTS="1:pages,today,note-save,note-cancel,student-search,student-new
 2:event-open,metronome,appearance,language,reminders,test-mode
-3:plan-save,piece-new,lesson-new,reminder-new,more-pages,restart-prepare
+3:plan-save,piece-new,lesson-new,together,together-new,reminder-new,more-pages,restart-prepare
 restart:"
 while IFS= read -r part <&3; do
     name=${part%%:*}

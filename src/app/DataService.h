@@ -76,6 +76,23 @@ public:
     //! Removes the student with lessons history, notes, pieces and activities
     Q_INVOKABLE bool deleteStudent(const QString &id);
 
+    // ------------------------------------------------------------ single lessons kept together
+    /*!
+        A student with individual lessons on two (or more) days can have them kept together:
+        the memberships share a key (membership.shared_key), and notes, plans and pieces of
+        any of them show for all. Nothing is copied or moved; a new note or plan belongs to
+        the membership whose weekday is its date. Only weekly individual lessons.
+    */
+    //! The memberships kept together with this one (same student and key), this one first
+    Q_INVOKABLE QStringList together(const QString &membershipId) const;
+    //! Active weekly individual lessons of a student not kept together yet (other than \a exceptLessonId):
+    //! membership id, lesson_id, weekday, start_time, end_time, location, day ("Monday, 15:00")
+    Q_INVOKABLE QVariantList togetherCandidates(const QString &studentId, const QString &exceptLessonId = {}) const;
+    //! Keeps these memberships together (on) or separate again (off: the whole group of the first)
+    Q_INVOKABLE bool keepTogether(const QStringList &membershipIds, bool on);
+    //! "Keep separate" on the student's page: the offer does not come again for these lessons
+    Q_INVOKABLE bool keepSeparate(const QString &studentId, const QStringList &membershipIds);
+
     // ------------------------------------------------------------ notes and pieces
     Q_INVOKABLE QVariantList notes(const QString &membershipId) const;
     Q_INVOKABLE QString addNote(const QString &membershipId, const QString &date, const QString &content, bool forAll);
@@ -253,6 +270,14 @@ private:
     QStringList activeMembershipsOfSameLesson(const QString &membershipId) const;
     QString performers(const QString &groupKey) const;
     bool endMembership(const QString &membershipId, const QString &lessonName);
+    //! The one of together(\a membershipId) whose lesson is on the weekday of \a date (else \a membershipId)
+    QString membershipOn(const QString &membershipId, const QString &date) const;
+    QString nextDateOf(const QString &membershipId, const QString &after) const;
+    //! "?, ?, ?" for an IN (…) with \a n values
+    static QString placeholders(qsizetype n);
+    //! "Mo 15:00" (short) or "Monday, 15:00"
+    QString dayAndTime(int weekday, const QString &time, bool longDay) const;
+    QString joinedList(const QStringList &items) const;
     void bump();
 
     Qupil::Store *m_store;

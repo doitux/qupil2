@@ -71,6 +71,17 @@ the plans that arrived in the log meanwhile, field by field where they are the
 newest, exactly like changes from another device. Older builds keep syncing;
 they just don't show the plans.
 
+Schema 6 added `membership.shared_key`: a student's weekly individual lessons on
+several days kept together (same key: notes, plans and pieces of all of them
+show for each; a new note or plan belongs to the lesson on its weekday). It is a
+field on an existing entity, so an older build drops it from changes it applies
+– but the changes stay in its log. When an older database is opened, the column
+is added and `membership.shared_key` is noted in meta `catch_up`
+(`Schema::addedFields()`); `Store::catchUp()` then replays the logged membership
+changes for that one field, compared only with the field's own clock (the
+record's clock may come from the very change that set the key). Older builds
+keep syncing and show the lessons separately.
+
 Archive entries (`student_archive`, `event_archive`) keep their `content`
 compressed (`qz1:` + base64 of zlib, see `TextPack`). Entries taken over from
 Qupil 1.x are converted to a compact layout in the background (`ArchiveFormat`).

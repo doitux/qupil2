@@ -119,8 +119,9 @@ private:
     bool isNewer(const Clock &a, const Clock &b) const;
     //! Clocks of a record: field '' is the record's own
     QHash<QString, Clock> clocks(const QString &entity, const QString &id) const;
-    //! Writes the fields of a change that are newer than ours: 1 written, 0 nothing newer, -1 error
-    int merge(const EntityDef *def, const Change &c, int origin);
+    //! Writes the fields of a change that are newer than ours: 1 written, 0 nothing newer, -1 error.
+    //! With \a onlyField: just that field, compared only with its own clock (catchUp() of a new field)
+    int merge(const EntityDef *def, const Change &c, int origin, const QString &onlyField = {});
     bool setClocks(const EntityDef *def, const QString &id, const QStringList &written, bool complete,
                    const QHash<QString, Clock> &before, const Clock &clock);
     bool writeFields(const EntityDef *def, const QString &id, const QVariantMap &fields);

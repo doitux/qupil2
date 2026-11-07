@@ -5,6 +5,7 @@
 // and borrowed sheet music. Notes and pieces belong to a lesson membership,
 // so the selector decides which ones are shown (also of earlier lessons).
 
+import QtQml
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
@@ -28,14 +29,25 @@ Item {
 
     readonly property var student: { if (Data.revision < 0) return undefined; return Data.student(studentId) }
     readonly property var memberships: student.memberships || []
+    //! One entry per lesson; lessons kept together are one entry (ids: all of them)
+    readonly property var choices: student.choices || []
+    readonly property var currentChoice: {
+        const given = membershipId !== "" ? choices.find(c => c.ids.indexOf(membershipId) >= 0) : undefined
+        return given || (choices.length > 0 ? choices[0] : null)
+    }
+    // Lessons kept together: the one asked for if it still runs, else the entry's first active one
     readonly property string currentMembership: {
-        if (membershipId !== "" && memberships.some(m => m.id === membershipId))
-            return membershipId
-        return memberships.length > 0 ? memberships[0].id : ""
+        if (!currentChoice)
+            return ""
+        const asked = memberships.find(m => m.id === membershipId)
+        return asked && asked.active && currentChoice.ids.indexOf(membershipId) >= 0 ? membershipId : currentChoice.id
     }
     readonly property var membership: memberships.find(m => m.id === currentMembership) || null
     readonly property string currentLessonId: membership && membership.lesson_id ? membership.lesson_id : ""
-    readonly property int inactiveCount: memberships.filter(m => !m.active).length
+    readonly property int inactiveCount: choices.filter(c => !c.active).length
+    //! Weekly individual lessons on several days: offer to keep them together / the switch in the menu
+    readonly property var togetherOffer: student.togetherOffer || null
+    readonly property var togetherSwitch: student.togetherSwitch || null
     readonly property var notes: { if (Data.revision < 0) return undefined; return currentMembership ? Data.notes(currentMembership) : [] }
     readonly property var plans: { if (Data.revision < 0) return undefined; return currentMembership ? Data.plans(currentMembership) : [] }
     readonly property var pieces: { if (Data.revision < 0) return undefined; return currentMembership ? Data.pieces(currentMembership, pieceFilter) : [] }
@@ -300,11 +312,33 @@ Item {
                         Text {
                             Layout.fillWidth: true
                             elide: Text.ElideRight
-                            text: detail.membership ? detail.membership.label : ""
+                            // Day and time behind the name when there are several lessons (same automatic names)
+                            text: !detail.currentChoice ? ""
+                                  : detail.currentChoice.label + (detail.currentChoice.suffix ? " · " + detail.currentChoice.suffix : "")
                             color: Theme.text
                             font.family: Theme.fontFamily
                             font.pixelSize: 15
                             font.weight: Font.Bold
+                        }
+                        RowLayout {
+                            visible: !!detail.currentChoice && detail.currentChoice.together
+                            Layout.fillWidth: true
+                            spacing: 5
+                            Icon {
+                                Layout.preferredWidth: 14
+                                Layout.preferredHeight: 14
+                                name: "link"
+                                color: Theme.accentText
+                                strokeWidth: 2.2
+                            }
+                            Text {
+                                Layout.fillWidth: true
+                                elide: Text.ElideRight
+                                text: detail.currentChoice ? detail.currentChoice.togetherText : ""
+                                color: Theme.textMuted
+                                font.family: Theme.fontFamily
+                                font.pixelSize: 13
+                            }
                         }
                     }
                     Rectangle {
@@ -336,15 +370,33 @@ Item {
                 AppMenu {
                     id: lessonMenu
                     width: Math.max(lessonSelector.width, implicitWidth)
-                    Repeater {
-                        model: detail.memberships
+                    // (Instantiator: a Repeater's rows would land after the rows below)
+                    Instantiator {
+                        model: detail.choices
+                        onObjectAdded: (index, object) => lessonMenu.insertItem(index, object)
+                        onObjectRemoved: (index, object) => lessonMenu.removeItem(object)
                         delegate: AppMenuItem {
                             required property var modelData
                             text: modelData.label
+                            // Several lessons: which day (lessons kept together: all their days)
+                            subtitle: modelData.together ? modelData.togetherText
+                                      : detail.choices.length > 1 ? modelData.detail : ""
                             checkable: true
-                            checked: modelData.id === detail.currentMembership
+                            checked: !!detail.currentChoice && modelData.id === detail.currentChoice.id
                             onTriggered: detail.membershipId = modelData.id
                         }
+                    }
+                    AppMenuSeparator {
+                        visible: !!detail.togetherSwitch
+                    }
+                    AppMenuItem {
+                        visible: !!detail.togetherSwitch
+                        text: detail.togetherSwitch ? detail.togetherSwitch.title : ""
+                        subtitle: detail.togetherSwitch ? detail.togetherSwitch.hint : ""
+                        checkable: true
+                        toggle: true
+                        checked: !!detail.togetherSwitch && detail.togetherSwitch.on
+                        onTriggered: Data.keepTogether(detail.togetherSwitch.ids, !detail.togetherSwitch.on)
                     }
                     AppMenuSeparator {
                         visible: detail.currentLessonId !== ""
@@ -354,6 +406,74 @@ Item {
                         iconName: "calendar"
                         text: qsTrId("lesson.edit")
                         onTriggered: Nav.editLesson(detail.currentLessonId, -1)
+                    }
+                }
+            }
+
+            // ------------------------------------------------------------ individual lessons on several days
+            // Once, until "Keep together" or "Keep separate"; the switch stays in the lesson menu
+            Rectangle {
+                id: togetherCard
+                visible: !!detail.togetherOffer
+                Layout.fillWidth: true
+                implicitHeight: togetherColumn.implicitHeight + 28
+                radius: 16
+                color: Theme.accentSoft
+                Accessible.role: Accessible.Grouping
+                Accessible.name: detail.togetherOffer ? detail.togetherOffer.title : ""
+                ColumnLayout {
+                    id: togetherColumn
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.margins: 14
+                    spacing: 6
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 8
+                        Icon {
+                            Layout.preferredWidth: 18
+                            Layout.preferredHeight: 18
+                            Layout.alignment: Qt.AlignTop
+                            Layout.topMargin: 1
+                            name: "link"
+                            color: Theme.accentText
+                            strokeWidth: 2.2
+                        }
+                        Text {
+                            Layout.fillWidth: true
+                            Layout.alignment: Qt.AlignTop
+                            wrapMode: Text.WordWrap
+                            text: detail.togetherOffer ? detail.togetherOffer.title : ""
+                            color: Theme.accentText
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 15
+                            font.weight: Font.ExtraBold
+                        }
+                    }
+                    Text {
+                        Layout.fillWidth: true
+                        wrapMode: Text.WordWrap
+                        text: detail.togetherOffer ? detail.togetherOffer.text : ""
+                        color: Theme.textSecondary
+                        font.family: Theme.fontFamily
+                        font.pixelSize: 14
+                        lineHeight: 1.1
+                    }
+                    Flow {
+                        Layout.fillWidth: true
+                        Layout.topMargin: 4
+                        spacing: 8
+                        ActionButton {
+                            kind: "primary"
+                            text: qsTrId("together.keep")
+                            onClicked: Data.keepTogether(detail.togetherOffer.ids, true)
+                        }
+                        ActionButton {
+                            kind: "quiet"
+                            text: qsTrId("together.separate")
+                            onClicked: Data.keepSeparate(detail.studentId, detail.togetherOffer.ids)
+                        }
                     }
                 }
             }

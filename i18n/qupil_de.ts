@@ -2600,6 +2600,71 @@ Bitte wenden Sie sich an den Programm-Autor: %4 um dieses Problem zu beheben!</t
         <extracomment>Under the empty “Own name” field of a lesson; “Automatic” is lesson.name.auto_short</extracomment>
         <translation>Ohne Namen lässt sich der Unterricht nicht speichern. Bitte geben Sie einen Namen ein oder wählen Sie „Automatisch“.</translation>
     </message>
+    <message id="together.and">
+        <source>%1 and %2</source>
+        <extracomment>End of a list; %1 = all but the last item (joined with a comma), %2 = the last item</extracomment>
+        <translation>%1 und %2</translation>
+    </message>
+    <message id="together.label">
+        <source>%1 · together</source>
+        <extracomment>Under the lesson name when a student&apos;s individual lessons are kept together; %1 = days and times, e.g. Mo 15:00 and Th 16:30</extracomment>
+        <translation>%1 · gemeinsam</translation>
+    </message>
+    <message id="together.offer_title_two">
+        <source>Two individual lessons a week</source>
+        <extracomment>Offer on the student&apos;s page when a student has individual lessons on two days</extracomment>
+        <translation>Zweimal Einzelunterricht pro Woche</translation>
+    </message>
+    <message id="together.offer_title_more">
+        <source>%1 individual lessons a week</source>
+        <extracomment>%1 = number of lessons (3 or more)</extracomment>
+        <translation>%1-mal Einzelunterricht pro Woche</translation>
+    </message>
+    <message id="together.offer_text_two">
+        <source>%1 has individual lessons on %2. Should both lessons show the same notes, plans and pieces?</source>
+        <extracomment>%1 = first name, %2 = the days, e.g. Monday and Thursday</extracomment>
+        <translation>%1 hat Einzelunterricht am %2. Sollen beide Stunden dieselben Notizen, Planungen und Werke zeigen?</translation>
+    </message>
+    <message id="together.offer_text_more">
+        <source>%1 has individual lessons on %2. Should all lessons show the same notes, plans and pieces?</source>
+        <extracomment>%1 = first name, %2 = the days, e.g. Monday, Wednesday and Friday</extracomment>
+        <translation>%1 hat Einzelunterricht am %2. Sollen alle Stunden dieselben Notizen, Planungen und Werke zeigen?</translation>
+    </message>
+    <message id="together.keep">
+        <source>Keep together</source>
+        <extracomment>Button: the student&apos;s individual lessons share notes, plans and pieces</extracomment>
+        <translation>Gemeinsam führen</translation>
+    </message>
+    <message id="together.separate">
+        <source>Keep separate</source>
+        <extracomment>Button: the offer to keep the lessons together does not come again</extracomment>
+        <translation>Getrennt lassen</translation>
+    </message>
+    <message id="together.switch_two">
+        <source>Keep both lessons together</source>
+        <extracomment>Switch in the lesson menu of the student&apos;s page</extracomment>
+        <translation>Beide Stunden gemeinsam führen</translation>
+    </message>
+    <message id="together.switch_more">
+        <source>Keep all lessons together</source>
+        <extracomment>Switch in the lesson menu (3 or more lessons)</extracomment>
+        <translation>Alle Stunden gemeinsam führen</translation>
+    </message>
+    <message id="together.switch_hint">
+        <source>%1 show the same notes, plans and pieces.</source>
+        <extracomment>%1 = the days, e.g. Monday and Thursday</extracomment>
+        <translation>%1 zeigen dieselben Notizen, Planungen und Werke.</translation>
+    </message>
+    <message id="together.with">
+        <source>Keep together with %1</source>
+        <extracomment>Switch in the lesson editor; %1 = weekday of the student&apos;s other individual lesson, e.g. Monday</extracomment>
+        <translation>Gemeinsam mit %1 führen</translation>
+    </message>
+    <message id="together.with_hint">
+        <source>%1 already has an individual lesson on %2 at %3. Both lessons then show the same notes, plans and pieces.</source>
+        <extracomment>%1 = first name, %2 = weekday, %3 = time of the other lesson</extracomment>
+        <translation>%1 hat schon Einzelunterricht am %2 um %3. Beide Stunden zeigen dann dieselben Notizen, Planungen und Werke.</translation>
+    </message>
     <message id="lesson.no_students">
         <source>No students in this lesson yet.</source>
         <translation>Noch keine Schüler in diesem Unterricht.</translation>

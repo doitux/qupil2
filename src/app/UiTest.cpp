@@ -23,6 +23,7 @@
 #include <cstdio>
 
 #include "AppController.h"
+#include "Clock.h"
 #include "DataService.h"
 #include "LanguageManager.h"
 
@@ -667,7 +668,7 @@ QString UiTest::runningMembership() const
 QStringList UiTest::allLessons() const
 {
     QStringList ids;
-    for (int day = 1; day <= 7; ++day)
+    for (int day = 0; day <= 6; ++day)   // 0 = Monday
         for (const QVariant &l : m_data->lessonsOn(day))
             ids << l.toMap().value(u"id"_s).toString();
     for (const QVariant &l : m_data->irregularLessons())
@@ -896,6 +897,118 @@ void UiTest::addCases()
                                m_data->deleteLesson(id);
                    })
                 << check(u"removed"_s, [this] { return allLessons().size() == m_lessons.size(); });
+    }
+    // Individual lessons on two days kept together: same notes, plans and pieces
+    {
+        Case &c = add(u"together"_s, u"two individual lessons of a student kept together"_s);
+        c.steps << act(u"a second individual lesson for the running student, on Monday, with a note and a piece"_s, [this] {
+                       m_membership = runningMembership();
+                       m_cleanup.clear();
+                       const QString student = m_data->get(u"membership"_s, m_membership).value(u"student_id"_s).toString();
+                       const QString runningLesson = m_data->get(u"membership"_s, m_membership).value(u"lesson_id"_s).toString();
+                       m_data->saveLesson({}, { { u"kind"_s, 1 }, { u"auto_name"_s, 1 }, { u"irregular"_s, false },
+                                                { u"weekday"_s, 0 }, { u"start_time"_s, u"15:00"_s }, { u"end_time"_s, u"15:45"_s },
+                                                { u"location"_s, u"Raum 20"_s } },
+                                          { student });
+                       const QString lesson = m_data->lastId();
+                       m_cleanup << u"lesson:"_s + lesson;
+                       m_other.clear();
+                       for (const QVariant &v : m_data->togetherCandidates(student, runningLesson))
+                           if (v.toMap().value(u"lesson_id"_s).toString() == lesson)
+                               m_other = v.toMap().value(u"id"_s).toString();
+                       const QString monday = Qupil::Clock::today().addDays(1 - Qupil::Clock::today().dayOfWeek()).toString(Qt::ISODate);
+                       m_cleanup << u"note:"_s + m_data->addNote(m_other, monday, u"UI-Test: Notiz vom Montag"_s, false);
+                       m_cleanup << u"piece:"_s + m_data->addPiece(m_other, { { u"title"_s, u"UI-Test-Werk vom Montag"_s },
+                                                                               { u"state"_s, 1 } }, false);
+                   })
+                << check(u"the second lesson is there, not kept together yet"_s, [this] {
+                       return !m_other.isEmpty() && m_data->together(m_membership).size() == 1;
+                   })
+                << openStudent(u"Lena Muster"_s)
+                << see(u"^Zweimal Einzelunterricht pro Woche$"_s) << snap(u"together-offer"_s)
+                << tap(u"button:^Gemeinsam führen$"_s)
+                << check(u"kept together"_s, [this] { return m_data->together(m_membership).size() == 2; })
+                << gone(u"^Zweimal Einzelunterricht pro Woche$"_s)
+                << check(u"one entry in the lesson chooser, \"… · gemeinsam\""_s, [this] {
+                       const QString student = m_data->get(u"membership"_s, m_membership).value(u"student_id"_s).toString();
+                       const QVariantList choices = m_data->student(student).value(u"choices"_s).toList();
+                       return std::any_of(choices.cbegin(), choices.cend(), [&](const QVariant &v) {
+                           const QVariantMap c = v.toMap();
+                           return c.value(u"ids"_s).toStringList().size() == 2 && c.value(u"togetherText"_s).toString().endsWith(u"gemeinsam"_s);
+                       });
+                   })
+                << check(u"Tuesday shows Monday's note and piece"_s, [this] {
+                       const auto has = [](const QVariantList &list, const QString &field, const QString &text) {
+                           return std::any_of(list.cbegin(), list.cend(),
+                                              [&](const QVariant &v) { return v.toMap().value(field).toString().contains(text); });
+                       };
+                       return has(m_data->notes(m_membership), u"content"_s, u"Notiz vom Montag"_s)
+                              && has(m_data->pieces(m_membership), u"title"_s, u"UI-Test-Werk vom Montag"_s);
+                   })
+                << see(u"Notiz vom Montag"_s) << snap(u"together-student"_s)
+                << check(u"the next lesson is Monday's; a plan for it belongs to Monday"_s, [this] {
+                       const QString next = m_data->nextLessonDate(m_membership);
+                       if (QDate::fromString(next, Qt::ISODate).dayOfWeek() != 1)
+                           return false;
+                       const QString plan = m_data->savePlan(m_membership, {}, next, u"UI-Test: Plan für Montag"_s, false);
+                       m_cleanup << u"plan:"_s + plan;
+                       return m_data->get(u"plan"_s, plan).value(u"membership_id"_s).toString() == m_other;
+                   })
+                << tap(u"^Unterricht wählen$"_s) << see(u"menuitem:^Beide Stunden gemeinsam führen$"_s)
+                << snap(u"together-menu"_s)
+                << tap(u"menuitem:^Beide Stunden gemeinsam führen$"_s)
+                << check(u"separate again"_s, [this] { return m_data->together(m_membership).size() == 1; })
+                << see(u"^Zweimal Einzelunterricht pro Woche$"_s)
+                << check(u"Monday's note is Monday's again"_s, [this] {
+                       const QVariantList notes = m_data->notes(m_membership);
+                       return std::none_of(notes.cbegin(), notes.cend(), [](const QVariant &v) {
+                           return v.toMap().value(u"content"_s).toString().contains(u"Notiz vom Montag"_s);
+                       });
+                   })
+                << act(u"remove the lesson again"_s, [this] {
+                       for (const QString &entry : std::as_const(m_cleanup)) {
+                           const QString entity = entry.section(u':', 0, 0);
+                           const QString id = entry.section(u':', 1);
+                           if (entity == u"note"_s)
+                               m_data->deleteNote(id, false);
+                           else if (entity == u"plan"_s)
+                               m_data->deletePlan(id, false);
+                           else if (entity == u"piece"_s)
+                               m_data->remove(u"piece"_s, id);
+                       }
+                       for (const QString &entry : std::as_const(m_cleanup))
+                           if (entry.startsWith(u"lesson:"_s))
+                               m_data->deleteLesson(entry.section(u':', 1));
+                       m_cleanup.clear();
+                   })
+                << check(u"the student has one lesson again"_s, [this] {
+                       const QString student = m_data->get(u"membership"_s, m_membership).value(u"student_id"_s).toString();
+                       return m_data->togetherCandidates(student, {}).size() == 1;
+                   });
+    }
+    // A second individual lesson for a student: the lesson editor offers to keep them together (on by default)
+    {
+        Case &c = add(u"together-new"_s, u"new lesson for a student who has one: kept together"_s);
+        c.steps << act(u"remember the lessons"_s, [this] {
+                       m_membership = runningMembership();
+                       m_lessons = allLessons();
+                   })
+                << tap(u"^Neu$"_s) << tap(u"menuitem:^Neuer Unterricht$"_s) << see(u"combobox:^Wochentag$"_s)
+                << tap(u"combobox:^Wochentag$"_s) << tap(u"^Montag$"_s)
+                << tap(u"^Schüler auswählen$"_s) << tap(u"edit:^Schüler suchen$"_s) << type(u"Lena"_s)
+                << tap(u"^Muster, Lena"_s)
+                << see(u"^Gemeinsam mit Montag führen$|^Gemeinsam mit Dienstag führen$"_s)
+                << act(u"dump"_s, [this] { writeDump(u"screen-together-new"_s); })
+                << snap(u"together-new"_s)
+                << tap(u"^Speichern$"_s) << gone(u"combobox:^Wochentag$"_s)
+                << check(u"kept together with the running lesson"_s, [this] { return m_data->together(m_membership).size() == 2; })
+                << act(u"remove it again"_s, [this] {
+                       for (const QString &id : allLessons())
+                           if (!m_lessons.contains(id))
+                               m_data->deleteLesson(id);
+                   })
+                << check(u"removed"_s, [this] { return allLessons().size() == m_lessons.size(); })
+                << check(u"the running lesson on its own again"_s, [this] { return m_data->together(m_membership).size() == 1; });
     }
     // A reminder
     {

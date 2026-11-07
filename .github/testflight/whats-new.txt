@@ -1,6 +1,7 @@
 Neu seit Build 37:
 - Notizen und Planungen, die beim Wechsel in eine andere App noch nicht gespeichert waren, gehen nicht mehr verloren: Beendet das System Qupil im Hintergrund, öffnet Qupil beim nächsten Start den Editor mit dem Text wieder ("Noch nicht gespeichert – Entwurf vom …"). Bitte ausprobieren: Notiz anfangen, in eine andere App wechseln, Qupil in der App-Übersicht wegwischen, Qupil wieder öffnen.
 - iPhone: Unter der laufenden Stunde heißt die Liste "Unterricht" statt "Später heute", wenn auch frühere Stunden des Tages darin stehen.
+- Zweimal Einzelunterricht pro Woche: Hat ein Schüler an zwei Tagen Einzelunterricht, bietet Qupil auf der Schülerseite an, beide Stunden gemeinsam zu führen – dann zeigen Montag und Donnerstag dieselben Notizen, Planungen und Werke. Umschalten im Unterrichtsmenü der Schülerseite; beim Anlegen des zweiten Unterrichts ist der Schalter gleich an. Wichtig: Diese Version stellt die Daten um. Geräte mit älteren Builds synchronisieren weiter, zeigen die beiden Stunden aber getrennt – bitte alle eigenen Geräte aktualisieren.
 
 Bitte grundsätzlich ausprobieren:
 - Daten übernehmen: Backup zurückspielen oder die Qupil-1.x-Datenbank (qupil.db) übernehmen. Stimmen Schüler, Unterrichte, Notizen und Werke?

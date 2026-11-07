@@ -199,6 +199,30 @@ bool Database::migrate(int from, QString *error)
         }
         catchUp << added.entity;
     }
+    // New fields of existing entities: the column, and (entity.field) the values the log
+    // already holds for them
+    for (const Schema::AddedField &added : Schema::addedFields()) {
+        if (from >= added.version)
+            continue;
+        const EntityDef *def = Schema::entity(added.entity);
+        const auto field = std::find_if(def->fields.cbegin(), def->fields.cend(),
+                                        [&](const FieldDef &f) { return f.name == added.field; });
+        if (field == def->fields.cend()) {
+            rollback();
+            return false;
+        }
+        QSqlQuery columns(connection());
+        bool there = false;
+        if (columns.exec(u"PRAGMA table_info(%1)"_s.arg(added.entity)))
+            while (columns.next())
+                there = there || columns.value(1).toString() == added.field;
+        if (!there && !exec(u"ALTER TABLE %1 ADD COLUMN %2 %3 NOT NULL DEFAULT %4"_s
+                                .arg(added.entity, field->name, field->type, field->defaultValue), error)) {
+            rollback();
+            return false;
+        }
+        catchUp << added.entity + u'.' + added.field;
+    }
     if (!catchUp.isEmpty() && !setMeta(u"catch_up"_s, catchUp.join(u','))) {
         rollback();
         return false;

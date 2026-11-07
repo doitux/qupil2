@@ -451,7 +451,7 @@ QList<Change> Store::changesOf(const QString &origin, qint64 afterSeq, int limit
     return out;
 }
 
-int Store::merge(const EntityDef *def, const Change &c, int origin)
+int Store::merge(const EntityDef *def, const Change &c, int origin, const QString &onlyField)
 {
     // Field by field: only what is newer than our value
     const Clock clock { c.time, origin };
@@ -459,12 +459,18 @@ int Store::merge(const EntityDef *def, const Change &c, int origin)
     const Clock record = before.value(QString());
     QVariantMap newer;
     for (auto it = c.fields.cbegin(); it != c.fields.cend(); ++it) {
+        if (!onlyField.isEmpty()) {
+            // A field this device did not know: the record's clock says nothing about it
+            if (it.key() == onlyField && isNewer(clock, before.value(it.key())))
+                newer.insert(it.key(), it.value());
+            continue;
+        }
         if (def->hasField(it.key()) && isNewer(clock, before.value(it.key(), record)))
             newer.insert(it.key(), it.value());
     }
     if (newer.isEmpty())
         return 0;
-    if (!writeFields(def, c.rowId, newer) || !setClocks(def, c.rowId, newer.keys(), isComplete(def, c.fields), before, clock))
+    if (!writeFields(def, c.rowId, newer) || !setClocks(def, c.rowId, newer.keys(), onlyField.isEmpty() && isComplete(def, c.fields), before, clock))
         return -1;
     touched(c.entity);
     return 1;
@@ -478,9 +484,12 @@ int Store::catchUp()
     int applied = 0;
     bool ok = true;
     beginBatch();
-    for (const QString &entity : entities) {
+    for (const QString &entry : entities) {
+        // "plan": a whole entity; "membership.shared_key": one field of it
+        const QString entity = entry.section(u'.', 0, 0);
+        const QString field = entry.section(u'.', 1);
         const EntityDef *def = Schema::entity(entity);
-        if (!def)
+        if (!def || (!field.isEmpty() && !def->hasField(field)))
             continue;
         QSqlQuery q(m_db->connection());
         q.prepare(u"SELECT origin, seq, time, row_id, data FROM change_log WHERE entity = ? ORDER BY time"_s);
@@ -493,7 +502,9 @@ int Store::catchUp()
                              q.value(3).toString(), Schema::currentFields(entity, decodeFields(q.value(4).toString())) };
             if (c.rowId.isEmpty())
                 continue;
-            const int result = merge(def, c, origin);
+            if (!field.isEmpty() && !c.fields.contains(field))
+                continue;
+            const int result = merge(def, c, origin, field);
             ok = result >= 0;
             applied += std::max(result, 0);
         }

@@ -476,9 +476,12 @@ QString DocumentService::dayOverviewHtml(const QString &dateIso, int notesPerLes
             QString list;
             for (const QVariant &s : whose) {
                 const QVariantMap student = s.toMap();
+                // Lessons kept together: the latest notes of all of them
+                const QStringList all = m_data->together(student.value(u"membership_id"_s).toString());
                 const QVariantList latest = m_data->rows(
-                    u"SELECT date, content FROM note WHERE deleted = 0 AND membership_id = ? ORDER BY date DESC LIMIT ?"_s,
-                    { student.value(u"membership_id"_s), notesPerLesson });
+                    u"SELECT date, content FROM note WHERE deleted = 0 AND membership_id IN (%1) ORDER BY date DESC LIMIT ?"_s
+                        .arg(DataService::placeholders(all.size())),
+                    QVariantList(all.cbegin(), all.cend()) << notesPerLesson);
                 for (const QVariant &n : latest) {
                     const QVariantMap note = n.toMap();
                     QString when = u"<u>"_s + esc(m_data->formatDate(note.value(u"date"_s).toString())) + u"</u>"_s;

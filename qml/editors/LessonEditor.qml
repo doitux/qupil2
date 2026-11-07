@@ -15,6 +15,10 @@ Sheet {
     property string lessonId
     property var draft: ({})
     property var members: []
+    //! The students the lesson had when the editor opened (a student new here can be kept together)
+    property var membersBefore: []
+    //! Keep the new student's other individual lesson together with this one (default: yes)
+    property bool keepTogether: true
     property string error
     //! "Own name" chosen, but the field is empty: saving is not possible
     readonly property bool nameMissing: draft.auto_name === 0 && (draft.name || "").trim() === ""
@@ -23,6 +27,18 @@ Sheet {
 
     readonly property var locations: { if (Data.revision < 0) return undefined; return Data.listSetting("locations") }
     readonly property var allStudents: { if (Data.revision < 0) return undefined; return Data.students("") }
+    //! A student new in this weekly individual lesson who has one on another day already
+    readonly property var togetherWith: {
+        if (Data.revision < 0 || (draft.kind || 1) !== 1 || !!draft.irregular || members.length !== 1
+            || membersBefore.indexOf(members[0]) >= 0)
+            return null
+        const other = Data.togetherCandidates(members[0], lessonId)
+        return other.length > 0 ? other[0] : null
+    }
+    readonly property string togetherName: {
+        const s = togetherWith ? (allStudents || []).find(x => x.id === members[0]) : null
+        return s ? (s.forename || s.name || "") : ""
+    }
     readonly property string generatedName: Data.autoLessonName(draft.kind || 1, !!draft.irregular, draft.start_time || "",
                                                                  draft.end_time || "", draft.location || "", members)
 
@@ -38,11 +54,14 @@ Sheet {
                       weekday: l.weekday, start_time: l.start_time || "14:00", end_time: l.end_time || "14:45",
                       location: l.location }
             members = (l.students || []).map(s => s.id)
+            membersBefore = members.slice()
         } else {
             draft = { kind: 1, auto_name: 1, name: "", irregular: false, weekday: weekday >= 0 ? weekday : 0,
                       start_time: "14:00", end_time: "14:45", location: locations.length > 0 ? locations[0] : "" }
             members = []
+            membersBefore = []
         }
+        keepTogether = true
         open()
     }
     function set(key, value) {
@@ -81,6 +100,8 @@ Sheet {
             kind: draft.kind, auto_name: draft.auto_name, name: (draft.name || "").trim(), irregular: draft.irregular,
             weekday: draft.weekday, start_time: draft.start_time, end_time: draft.end_time, location: draft.location || ""
         }
+        if (togetherWith && keepTogether)
+            fields.keep_together_with = togetherWith.id
         const result = Data.saveLesson(lessonId, fields, members)
         if (result !== "")
             Nav.toast(result)
@@ -228,6 +249,16 @@ Sheet {
         selected: editor.members
         single: (editor.draft.kind || 1) === 1
         onToggled: (id) => editor.toggleMember(id)
+    }
+
+    // The student has individual lessons on another day: same notes, plans and pieces?
+    SwitchRow {
+        visible: !!editor.togetherWith
+        text: editor.togetherWith ? qsTrId("together.with").arg(editor.togetherWith.dayName) : ""
+        hint: editor.togetherWith ? qsTrId("together.with_hint").arg(editor.togetherName).arg(editor.togetherWith.dayName)
+                                                               .arg(editor.togetherWith.start_time) : ""
+        checked: editor.keepTogether
+        onToggled: editor.keepTogether = checked
     }
 
     ActionButton {

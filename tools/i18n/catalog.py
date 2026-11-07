@@ -1473,6 +1473,43 @@ E("lesson.name.required", en="Without a name the lesson cannot be saved. Please 
   fr="Sans nom, le cours ne peut pas être enregistré. Veuillez saisir un nom ou choisir « Automatique ».",
   es="Sin nombre, la clase no se puede guardar. Introduzca un nombre o elija «Automático».",
   c="Under the empty “Own name” field of a lesson; “Automatic” is lesson.name.auto_short")
+E("together.and", en="%1 and %2", de="%1 und %2", fr="%1 et %2", es="%1 y %2",
+  c="End of a list; %1 = all but the last item (joined with a comma), %2 = the last item")
+E("together.label", en="%1 · together", de="%1 · gemeinsam", fr="%1 · regroupés", es="%1 · juntas",
+  c="Under the lesson name when a student's individual lessons are kept together; %1 = days and times, e.g. Mo 15:00 and Th 16:30")
+E("together.offer_title_two", en="Two individual lessons a week", de="Zweimal Einzelunterricht pro Woche",
+  fr="Deux cours individuels par semaine", es="Dos clases individuales por semana",
+  c="Offer on the student's page when a student has individual lessons on two days")
+E("together.offer_title_more", en="%1 individual lessons a week", de="%1-mal Einzelunterricht pro Woche",
+  fr="%1 cours individuels par semaine", es="%1 clases individuales por semana", c="%1 = number of lessons (3 or more)")
+E("together.offer_text_two", en="%1 has individual lessons on %2. Should both lessons show the same notes, plans and pieces?",
+  de="%1 hat Einzelunterricht am %2. Sollen beide Stunden dieselben Notizen, Planungen und Werke zeigen?",
+  fr="%1 a des cours individuels le %2. Les deux cours doivent-ils afficher les mêmes notes, préparations et morceaux ?",
+  es="%1 tiene clases individuales el %2. ¿Deben ambas clases mostrar las mismas notas, planificaciones y obras?",
+  c="%1 = first name, %2 = the days, e.g. Monday and Thursday")
+E("together.offer_text_more", en="%1 has individual lessons on %2. Should all lessons show the same notes, plans and pieces?",
+  de="%1 hat Einzelunterricht am %2. Sollen alle Stunden dieselben Notizen, Planungen und Werke zeigen?",
+  fr="%1 a des cours individuels le %2. Tous les cours doivent-ils afficher les mêmes notes, préparations et morceaux ?",
+  es="%1 tiene clases individuales el %2. ¿Deben todas las clases mostrar las mismas notas, planificaciones y obras?",
+  c="%1 = first name, %2 = the days, e.g. Monday, Wednesday and Friday")
+E("together.keep", en="Keep together", de="Gemeinsam führen", fr="Regrouper", es="Llevar juntas",
+  c="Button: the student's individual lessons share notes, plans and pieces")
+E("together.separate", en="Keep separate", de="Getrennt lassen", fr="Laisser séparés", es="Dejar separadas",
+  c="Button: the offer to keep the lessons together does not come again")
+E("together.switch_two", en="Keep both lessons together", de="Beide Stunden gemeinsam führen",
+  fr="Regrouper les deux cours", es="Llevar ambas clases juntas", c="Switch in the lesson menu of the student's page")
+E("together.switch_more", en="Keep all lessons together", de="Alle Stunden gemeinsam führen",
+  fr="Regrouper tous les cours", es="Llevar todas las clases juntas", c="Switch in the lesson menu (3 or more lessons)")
+E("together.switch_hint", en="%1 show the same notes, plans and pieces.", de="%1 zeigen dieselben Notizen, Planungen und Werke.",
+  fr="%1 affichent les mêmes notes, préparations et morceaux.", es="%1 muestran las mismas notas, planificaciones y obras.",
+  c="%1 = the days, e.g. Monday and Thursday")
+E("together.with", en="Keep together with %1", de="Gemeinsam mit %1 führen", fr="Regrouper avec le %1", es="Llevar junto con el %1",
+  c="Switch in the lesson editor; %1 = weekday of the student's other individual lesson, e.g. Monday")
+E("together.with_hint", en="%1 already has an individual lesson on %2 at %3. Both lessons then show the same notes, plans and pieces.",
+  de="%1 hat schon Einzelunterricht am %2 um %3. Beide Stunden zeigen dann dieselben Notizen, Planungen und Werke.",
+  fr="%1 a déjà un cours individuel le %2 à %3. Les deux cours affichent alors les mêmes notes, préparations et morceaux.",
+  es="%1 ya tiene clase individual el %2 a las %3. Ambas clases mostrarán entonces las mismas notas, planificaciones y obras.",
+  c="%1 = first name, %2 = weekday, %3 = time of the other lesson")
 E("lesson.no_students", en="No students in this lesson yet.", de="Noch keine Schüler in diesem Unterricht.",
   fr="Aucun élève dans ce cours pour l’instant.", es="Todavía no hay alumnos en esta clase.")
 E("lesson.last_note_all", en="Last note · for everybody", de="Letzte Notiz · für alle", fr="Dernière note · pour tous",

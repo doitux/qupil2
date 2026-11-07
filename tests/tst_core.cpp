@@ -1678,7 +1678,7 @@ private slots:
         QString error;
         QVERIFY2(db.open(path, &error), qPrintable(error));
         QCOMPARE(db.meta(u"schema_version"_s).toInt(), Schema::Version);
-        QCOMPARE(db.meta(u"catch_up"_s), u"plan"_s);
+        QCOMPARE(db.meta(u"catch_up"_s), u"plan,membership.shared_key"_s);
         Store store(&db);
         QCOMPARE(store.catchUp(), 2);
         QCOMPARE(store.catchUp(), 0);   // once
@@ -1690,6 +1690,70 @@ private slots:
         QCOMPARE(store.get(u"plan"_s, id).value(u"content"_s).toString(), u"Tonleiter\nEtüde"_s);
         QCOMPARE(store.applyRemote({ { newer, 4, t1 + 1, u"plan"_s, id, { { u"date"_s, u"2026-11-10"_s } } } }), 1);
         QCOMPARE(store.get(u"plan"_s, id).value(u"date"_s).toString(), u"2026-11-10"_s);
+    }
+
+    void catchesUpNewFields()
+    {
+        // Schema 5 had no membership.shared_key: an older device took the other fields of
+        // changes that set it and ignored the field (the change stayed in its log). After the
+        // update the column is there and catchUp() applies the field - also when the change
+        // that set it is the one the record's clock comes from.
+        const QString path = file(u"v5-shared.db"_s);
+        const QString newer = u"0190a0b0-0000-7000-8000-00000000000e"_s;
+        const QString a = u"0190a0b0-4444-7000-8000-000000000001"_s;   // created with the key
+        const QString b = u"0190a0b0-4444-7000-8000-000000000002"_s;   // key set later
+        const qint64 t0 = HybridClock::make(1'800'000'000'000, 0);
+        const qint64 t1 = HybridClock::make(1'800'000'060'000, 0);
+        {
+            Database db;
+            QVERIFY(db.open(path));
+            QSqlQuery q(db.connection());
+            QVERIFY(q.exec(u"ALTER TABLE membership DROP COLUMN shared_key"_s));
+            QVERIFY(db.setMeta(u"schema_version"_s, u"5"_s));
+            const int origin = db.originNumber(newer);
+            for (const QString &id : { a, b }) {
+                q.prepare(u"INSERT INTO membership (id, lesson_id, student_id, start_date) VALUES (?, 'l1', 's1', '2026-09-01')"_s);
+                q.addBindValue(id);
+                QVERIFY(q.exec());
+                q.prepare(u"INSERT INTO field_clock (entity, row_id, field, time, origin) VALUES ('membership', ?, '', ?, ?)"_s);
+                q.addBindValue(id);
+                q.addBindValue(t0);
+                q.addBindValue(origin);
+                QVERIFY(q.exec());
+            }
+            const auto log = [&](qint64 seq, qint64 time, const QString &id, const QVariantMap &data) {
+                q.prepare(u"INSERT INTO change_log VALUES (?, ?, ?, 'membership', ?, ?)"_s);
+                for (const QVariant &v : { QVariant(origin), QVariant(seq), QVariant(time), QVariant(id),
+                                           QVariant(Store::encodeFields(data)) })
+                    q.addBindValue(v);
+                QVERIFY(q.exec());
+            };
+            const QVariantMap created { { u"lesson_id"_s, u"l1"_s }, { u"student_id"_s, u"s1"_s },
+                                        { u"start_date"_s, u"2026-09-01"_s }, { u"end_date"_s, QString() },
+                                        { u"previous_name"_s, QString() }, { u"deleted"_s, 0 } };
+            QVariantMap withKey = created;
+            withKey.insert(u"shared_key"_s, u"k1"_s);
+            log(1, t0, a, withKey);
+            log(2, t0, b, created);
+            log(3, t1, b, { { u"shared_key"_s, u"k1"_s } });
+        }
+
+        Database db;
+        QString error;
+        QVERIFY2(db.open(path, &error), qPrintable(error));
+        QCOMPARE(db.meta(u"schema_version"_s).toInt(), Schema::Version);
+        QCOMPARE(db.meta(u"catch_up"_s), u"membership.shared_key"_s);
+        Store store(&db);
+        QCOMPARE(store.get(u"membership"_s, a).value(u"shared_key"_s).toString(), QString());
+        QCOMPARE(store.catchUp(), 2);
+        QCOMPARE(store.catchUp(), 0);   // once
+        QCOMPARE(store.get(u"membership"_s, a).value(u"shared_key"_s).toString(), u"k1"_s);
+        QCOMPARE(store.get(u"membership"_s, b).value(u"shared_key"_s).toString(), u"k1"_s);
+        QCOMPARE(store.get(u"membership"_s, b).value(u"lesson_id"_s).toString(), u"l1"_s);   // the rest untouched
+        // The field has its own clock now: an older change does not win, a newer one does
+        QCOMPARE(store.applyRemote({ { newer, 4, t0 + 1, u"membership"_s, b, { { u"shared_key"_s, u"old"_s } } } }), 0);
+        QCOMPARE(store.applyRemote({ { newer, 5, t1 + 1, u"membership"_s, b, { { u"shared_key"_s, QString() } } } }), 1);
+        QCOMPARE(store.get(u"membership"_s, b).value(u"shared_key"_s).toString(), QString());
     }
 
     void syncFormats()
