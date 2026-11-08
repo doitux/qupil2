@@ -1,9 +1,97 @@
 {
   "mode": "schedule",
-  "started_at": "2026-11-07T18:31:05+01:00",
-  "slot": "2026-11-07 13:05",
-  "result": "late",
-  "note": "GitHub hat den Lauf erst um 18:31 gestartet (geplant 13:05); die Änderungen kommen in den nächsten Sammel-Lauf.",
-  "written": "2026-11-07T18:31:05+01:00",
-  "headline": "Verspätet gestartet, kein Build"
+  "started_at": "2026-11-08T01:24:32+01:00",
+  "slot": "2026-11-07 22:05",
+  "tests": {
+    "android-test.yml": {
+      "name": "Android",
+      "since": "81de258",
+      "last": "failure",
+      "files": 28,
+      "result": "started"
+    },
+    "ui-test.yml": {
+      "name": "Desktop",
+      "since": "a1af107",
+      "last": "success",
+      "files": 28,
+      "result": "started"
+    },
+    "ios-test.yml": {
+      "name": "iOS",
+      "since": "81de258",
+      "last": "failure",
+      "files": 28,
+      "result": "started"
+    }
+  },
+  "since": "6b0a159afca79307d80e96e0af1ae254c2d5a5de",
+  "since_build": 40,
+  "main": "5c6dffac8091b4f215d4f3fd12121a07b5f121d9",
+  "commits": [
+    {
+      "sha": "827d074",
+      "subject": "TestFlight collect: no midday build Monday to Thursday"
+    },
+    {
+      "sha": "d7cc7a0",
+      "subject": "Start the nightly platform tests from the TestFlight collect run, only on changes"
+    },
+    {
+      "sha": "08413b7",
+      "subject": "Keep a student's individual lessons on several days together"
+    },
+    {
+      "sha": "6d89e15",
+      "subject": "UI test together-new: tap the student again when the first tap only closed the keyboard"
+    },
+    {
+      "sha": "5822cb9",
+      "subject": "Delete fix/ and feature/ branches once they are in main"
+    },
+    {
+      "sha": "5c6dffa",
+      "subject": "TestFlight text: new since build 39"
+    }
+  ],
+  "relevant_files": [
+    ".github/scripts/android-test.sh",
+    ".github/workflows/android-test.yml",
+    ".github/workflows/cleanup-branches.yml",
+    ".github/workflows/ios-test.yml",
+    ".github/workflows/ui-test.yml",
+    "i18n/qupil_de.ts",
+    "i18n/qupil_en.ts",
+    "i18n/qupil_es.ts",
+    "i18n/qupil_fr.ts",
+    "qml/Icon.qml",
+    "qml/components/AppMenuItem.qml",
+    "qml/editors/LessonEditor.qml",
+    "qml/pages/StudentDetail.qml",
+    "src/app/DataService.cpp",
+    "src/app/DataService.h",
+    "src/app/DocumentService.cpp",
+    "src/app/UiTest.cpp",
+    "src/app/UiTest.h",
+    "src/core/Database.cpp",
+    "src/core/Schema.cpp",
+    "src/core/Schema.h",
+    "src/core/Store.cpp",
+    "src/core/Store.h",
+    "tests/tst_core.cpp",
+    "tools/i18n/catalog.py"
+  ],
+  "result": "started",
+  "build": {
+    "number": 41,
+    "run_id": 42429624644,
+    "sha": "5c6dffac8091b4f215d4f3fd12121a07b5f121d9",
+    "url": "https://github.com/doitux/qupil2/actions/runs/42429624644",
+    "created": "2026-11-08T00:24:45Z",
+    "status": "in_progress",
+    "conclusion": null,
+    "attempt": 1
+  },
+  "written": "2026-11-08T01:24:56+01:00",
+  "headline": "Build 41 gestartet"
 }
