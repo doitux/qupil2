@@ -1,34 +1,71 @@
 {
-  "mode": "schedule",
-  "started_at": "2026-11-09T01:44:10+01:00",
-  "slot": "2026-11-08 22:05",
-  "tests": {
-    "android-test.yml": {
-      "name": "Android",
-      "since": "5c6dffa",
-      "last": "success",
-      "result": "no_change"
-    },
-    "ui-test.yml": {
-      "name": "Desktop",
-      "since": "5c6dffa",
-      "last": "success",
-      "result": "no_change"
-    },
-    "ios-test.yml": {
-      "name": "iOS",
-      "since": "5c6dffa",
-      "last": "success",
-      "result": "no_change"
-    }
-  },
+  "mode": "now",
+  "started_at": "2026-11-09T21:43:51+01:00",
+  "slot": "2026-11-09 21:43 (von Hand, now)",
   "since": "5c6dffac8091b4f215d4f3fd12121a07b5f121d9",
   "since_build": 41,
-  "main": "5c6dffac8091b4f215d4f3fd12121a07b5f121d9",
-  "commits": [],
-  "relevant_files": [],
-  "result": "no_change",
-  "note": "Seit dem letzten Upload nichts Neues.",
-  "written": "2026-11-09T01:44:14+01:00",
-  "headline": "Kein Build nötig"
+  "main": "7a9836f8882b530a360589caed77f5582af67af5",
+  "commits": [
+    {
+      "sha": "c6c761c",
+      "subject": "Reminders for one lesson"
+    },
+    {
+      "sha": "a1bcc2e",
+      "subject": "Lists of choices: readable entry under the finger; UI test checks contrast"
+    },
+    {
+      "sha": "e741dc5",
+      "subject": "UI test: open a list of choices until it is open (iOS)"
+    },
+    {
+      "sha": "b6d38d1",
+      "subject": "UI test readability: only texts mostly on the screen, at their visible middle"
+    },
+    {
+      "sha": "7a9836f",
+      "subject": "Add a searchable lesson picker and return loans from the student page"
+    }
+  ],
+  "relevant_files": [
+    ".github/scripts/android-test.sh",
+    "CMakeLists.txt",
+    "i18n/qupil_de.ts",
+    "i18n/qupil_en.ts",
+    "i18n/qupil_es.ts",
+    "i18n/qupil_fr.ts",
+    "qml/Labels.qml",
+    "qml/Main.qml",
+    "qml/Nav.qml",
+    "qml/components/ChoiceField.qml",
+    "qml/components/LessonBadge.qml",
+    "qml/components/LessonPicker.qml",
+    "qml/editors/ReminderEditor.qml",
+    "qml/pages/LessonDetail.qml",
+    "qml/pages/RemindersPage.qml",
+    "qml/pages/ScheduleOverview.qml",
+    "qml/pages/StudentDetail.qml",
+    "src/app/DataService.cpp",
+    "src/app/DataService.h",
+    "src/app/ReminderAlert.cpp",
+    "src/app/UiTest.cpp",
+    "src/app/UiTest.h",
+    "src/core/Schema.cpp",
+    "src/core/Schema.h",
+    "tests/tst_core.cpp",
+    "tools/i18n/catalog.py"
+  ],
+  "result": "started",
+  "build": {
+    "number": 42,
+    "run_id": 42695741266,
+    "sha": "7a9836f8882b530a360589caed77f5582af67af5",
+    "url": "https://github.com/doitux/qupil2/actions/runs/42695741266",
+    "created": "2026-11-09T20:43:56Z",
+    "status": "in_progress",
+    "conclusion": null,
+    "attempt": 1
+  },
+  "written": "2026-11-09T21:44:07+01:00",
+  "headline": "Build 42 gestartet"
 }
