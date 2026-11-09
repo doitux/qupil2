@@ -165,9 +165,8 @@ QColor topFilledAt(QQuickItem *root, const QPointF &point)
 
 //! What a text is painted on: going up from the text, whatever was painted before it at
 //! its middle – siblings below it (a control's background, a card) or the parent itself
-QColor backgroundOf(QQuickItem *item, const QColor &window)
+QColor backgroundOf(QQuickItem *item, const QPointF &middle, const QColor &window)
 {
-    const QPointF middle = item->mapToScene(QPointF(item->width() / 2, item->height() / 2));
     for (QQuickItem *child = item, *p = item->parentItem(); p; child = p, p = p->parentItem()) {
         QList<QQuickItem *> siblings = p->childItems();
         std::stable_sort(siblings.begin(), siblings.end(), [](QQuickItem *a, QQuickItem *b) { return a->z() < b->z(); });
@@ -210,8 +209,10 @@ QStringList UiTest::unreadable() const
             const QString text = item->property("text").toString().simplified();
             const QColor color = item->property("color").value<QColor>();
             const QRectF shown = rect.intersected(clip);
-            if (!text.isEmpty() && color.alphaF() >= 0.5 && shown.width() > 2 && shown.height() > 2) {
-                const QColor behind = backgroundOf(item, m_window->color());
+            // Only texts that are mostly on the screen (not one cut off at the edge of a list),
+            // looked at in the middle of what is shown
+            if (!text.isEmpty() && color.alphaF() >= 0.5 && shown.width() > 2 && shown.height() >= rect.height() * 0.6) {
+                const QColor behind = backgroundOf(item, shown.center(), m_window->color());
                 const double ratio = contrast(color, behind);
                 if (ratio < 2.0)
                     found << u"\"%1\" (%2 on %3, %4:1)"_s.arg(text.left(40), color.name(), behind.name())
