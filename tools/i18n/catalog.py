@@ -925,6 +925,17 @@ E("reminder.only_this_lesson", en="Only at this lesson", de="Nur bei diesem Unte
   es="Solo en esta clase", c="Under a reminder that belongs to one lesson")
 E("reminder.only_lesson_day", en="Only at the lesson on %1", de="Nur im Unterricht am %1", fr="Uniquement au cours du %1",
   es="Solo en la clase del %1", c="Above a reminder on the student's page; %1 = short day and time, e.g. Tu 14:00")
+E("lessonpick.search", en="Search students or lessons", de="Schüler oder Unterricht suchen",
+  fr="Chercher un élève ou un cours", es="Buscar alumno o clase", c="Search field in the list of lessons to choose from")
+E("lessonpick.today", en="Today · %1", de="Heute · %1", fr="Aujourd’hui · %1", es="Hoy · %1",
+  c="Heading of today's lessons in the list of lessons; %1 = weekday")
+E("lessonpick.minutes", en="%1 min", de="%1 Min", fr="%1 min", es="%1 min", c="Length of a lesson, e.g. 45 Min")
+E("lessonpick.with", en="with %1", de="mit %1", fr="avec %1", es="con %1",
+  c="In a search result: the student found in this group or ensemble")
+E("lessonpick.none", en="No lesson found.", de="Kein Unterricht gefunden.", fr="Aucun cours trouvé.", es="No se encontró ninguna clase.")
+E("loans.returned", en="“%1” is back in the library", de="„%1“ ist zurück in der Bibliothek",
+  fr="«\u00a0%1\u00a0» est de retour à la bibliothèque", es="“%1” ha vuelto a la biblioteca",
+  c="Message after tapping 'Returned' on a student's page; %1 = title of the sheet music")
 E("reminder.for_student", old="Reminder for the pupil ", en="Reminder for student “%1”:",
   de="Erinnerung für den Schüler \"%1\":", fr="Rappel pour l’élève « %1 » :",
   es="Recordatorio para el alumno “%1”:", c="%1 = student name",

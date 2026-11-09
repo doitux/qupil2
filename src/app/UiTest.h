@@ -106,6 +106,8 @@ private:
     Step tapIfThere(const QString &pattern, int withinMs, const QString &what);
     //! Opens the list of a ComboBox (taps again if a tap only closed the keyboard)
     Step openList(const QString &pattern);
+    //! Taps until \a pattern is gone (a list that closes on a tap; iOS: a tap may only close the keyboard)
+    Step tapUntilGone(const QString &pattern);
     Step gone(const QString &pattern);
     Step type(const QString &text);
     Step key(int key, const QString &what);

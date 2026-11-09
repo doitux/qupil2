@@ -1730,11 +1730,43 @@ QVariantList DataService::reminders() const
 QVariantList DataService::reminderLessons() const
 {
     QVariantList out;
-    for (const QVariant &v : rows(u"SELECT id, name, weekday, start_time, irregular FROM lesson WHERE deleted = 0 AND active = 1 "
+    // Who is in each active lesson (first names for groups, the full name for one student)
+    QHash<QString, QStringList> forenames, fullNames;
+    for (const QVariant &v : rows(u"SELECT m.lesson_id, s.forename, s.surname FROM membership m JOIN student s ON s.id = m.student_id "
+                                  u"WHERE m.deleted = 0 AND s.deleted = 0 AND (m.end_date = '' OR m.end_date > ?) "
+                                  u"ORDER BY s.forename COLLATE NOCASE, s.surname COLLATE NOCASE"_s, { todayIso() })) {
+        const QVariantMap r = v.toMap();
+        const QString lesson = r.value(u"lesson_id"_s).toString();
+        forenames[lesson] << r.value(u"forename"_s).toString();
+        fullNames[lesson] << fullName(r.value(u"forename"_s).toString(), r.value(u"surname"_s).toString());
+    }
+    for (const QVariant &v : rows(u"SELECT id, name, kind, auto_name, weekday, start_time, end_time, irregular FROM lesson "
+                                  u"WHERE deleted = 0 AND active = 1 "
                                   u"ORDER BY irregular, weekday, start_time, name COLLATE NOCASE"_s)) {
         QVariantMap l = v.toMap();
+        const QString id = l.value(u"id"_s).toString();
+        const int kind = l.value(u"kind"_s).toInt();
         const bool weekly = l.value(u"irregular"_s).toInt() == 0 && !l.value(u"start_time"_s).toString().isEmpty();
-        l.insert(u"label"_s, l.value(u"name"_s).toString() + u" · "_s
+        const QStringList names = fullNames.value(id);
+        // An automatic name says little ("EU-45-Rau-LenMus"): the student, or the first names of a group
+        QString title = l.value(u"name"_s).toString();
+        if (l.value(u"auto_name"_s).toInt() != 0 && kind == 1 && names.size() == 1)
+            title = names.first();
+        else if (l.value(u"auto_name"_s).toInt() != 0 && kind == 2 && !names.isEmpty() && names.size() <= 4)
+            title = forenames.value(id).join(u", "_s);
+        const QTime start = QTime::fromString(l.value(u"start_time"_s).toString(), u"hh:mm"_s);
+        const QTime end = QTime::fromString(l.value(u"end_time"_s).toString(), u"hh:mm"_s);
+        const int minutes = start.isValid() && end.isValid() ? start.secsTo(end) / 60 : 0;
+        l.insert(u"title"_s, title);
+        l.insert(u"students"_s, names);
+        l.insert(u"initials"_s, kind == 1 && names.size() == 1 ? names.first().split(u' ').first().left(1)
+                                                                    + names.first().split(u' ').last().left(1)
+                                                              : QString());
+        l.insert(u"minutes"_s, minutes);
+        l.insert(u"day"_s, weekly ? dayAndTime(l.value(u"weekday"_s).toInt(), {}, false) : QString());
+        l.insert(u"dayLong"_s, weekly ? dayAndTime(l.value(u"weekday"_s).toInt(), {}, true) : qtTrId("common.irregular"));
+        l.insert(u"time"_s, weekly ? l.value(u"start_time"_s).toString() : QString());
+        l.insert(u"label"_s, title + u" · "_s
                                  + (weekly ? dayAndTime(l.value(u"weekday"_s).toInt(), l.value(u"start_time"_s).toString(), false)
                                            : qtTrId("common.irregular")));
         out << l;
@@ -1879,9 +1911,10 @@ int DataService::lentCount() const
                   u"WHERE l.deleted = 0"_s).toInt();
 }
 
-bool DataService::lendLibraryItem(const QString &itemId, const QString &studentId)
+bool DataService::lendLibraryItem(const QString &itemId, const QString &studentId, const QString &since)
 {
-    return m_store->update(u"library_item"_s, itemId, { { u"lent_to"_s, studentId }, { u"lent_since"_s, todayIso() } });
+    return m_store->update(u"library_item"_s, itemId, { { u"lent_to"_s, studentId },
+                                                        { u"lent_since"_s, since.isEmpty() ? todayIso() : since } });
 }
 
 bool DataService::returnLibraryItem(const QString &itemId)

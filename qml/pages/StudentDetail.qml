@@ -1357,12 +1357,21 @@ Item {
             }
             Repeater {
                 model: detail.loans
-                delegate: Rectangle {
+                // A tap opens the edition as in the library; "Returned" gives it back right here
+                delegate: AbstractButton {
+                    id: loanCard
                     required property var modelData
                     Layout.fillWidth: true
                     implicitHeight: loanColumn.implicitHeight + 24
-                    radius: Theme.radius
-                    color: Theme.surface
+                    Accessible.name: modelData.title
+                    onClicked: {
+                        loanEditorLoader.active = true
+                        loanEditorLoader.item.edit(modelData.id)
+                    }
+                    background: Rectangle {
+                        radius: Theme.radius
+                        color: loanCard.pressed ? Theme.surfaceAlt : Theme.surface
+                    }
                     ColumnLayout {
                         id: loanColumn
                         anchors.left: parent.left
@@ -1382,15 +1391,38 @@ Item {
                         Text {
                             Layout.fillWidth: true
                             elide: Text.ElideRight
-                            text: [modelData.author, modelData.publisher,
+                            text: [modelData.number ? String(modelData.number).padStart(4, "0") : "", modelData.author,
+                                   modelData.publisher,
                                    modelData.lent_since ? qsTrId("common.since").arg(Data.formatDate(modelData.lent_since)) : ""]
                                   .filter(Boolean).join(" · ")
                             color: Theme.textMuted
                             font.family: Theme.fontFamily
                             font.pixelSize: 13
                         }
+                        ActionButton {
+                            Layout.topMargin: 8
+                            kind: "secondary"
+                            iconName: "check"
+                            text: qsTrId("library.return")
+                            Accessible.name: qsTrId("library.return") + ": " + loanCard.modelData.title
+                            onClicked: {
+                                const item = loanCard.modelData
+                                // Kept in plain values: the card is gone when "Undo" is tapped
+                                const id = item.id, student = item.lent_to, since = item.lent_since || ""
+                                if (!Data.returnLibraryItem(id))
+                                    return
+                                // Tapped by mistake: "Undo" lends it again from the same day
+                                Nav.toastUndo(qsTrId("loans.returned").arg(item.title),
+                                              () => Data.lendLibraryItem(id, student, since))
+                            }
+                        }
                     }
                 }
+            }
+            Loader {
+                id: loanEditorLoader
+                active: false
+                sourceComponent: LibraryItemEditor {}
             }
         }
     }

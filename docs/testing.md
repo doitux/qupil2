@@ -40,7 +40,12 @@ c.steps << tab(u"Schüler"_s) << tap(u"^Lena Muster$"_s) << tap(u"^Werk$"_s)
 - Give new controls an `Accessible.name` (screen readers need it as well).
 - Cases must not depend on the window size: `backIfThere()` taps a back button only
   where the layout has one; elements scrolled out of sight are scrolled to.
-- A case that changes data the later cases rely on puts it back (see `lesson-new`).
+- A case that changes data the later cases rely on puts it back (see `lesson-new`,
+  `loan-return`).
+- A popup that should close after a choice: `tapUntilGone(pattern)` taps until the
+  entry is gone (iOS: the first tap may only close the keyboard).
+- A toast is found by its text (its `Accessible.name`), its undo button by
+  "Rückgängig".
 
 ## Readable text
 

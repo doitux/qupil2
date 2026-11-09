@@ -182,7 +182,9 @@ public:
     Q_INVOKABLE void greetBirthday(const QString &studentId);
     //! mode 0: shown on the start page; 1: every lesson; 2: lessons of one student
     Q_INVOKABLE QVariantList reminders() const;
-    //! Active lessons to choose for a lesson reminder: id, name, label ("Streichquartett · Fr 16:00")
+    //! Active lessons to choose for a lesson reminder: id, name, kind, weekday, time, minutes,
+    //! title (the student for an individual lesson with an automatic name, the first names of a
+    //! small group, else the name), students (full names), initials, day ("Di"), dayLong, label
     Q_INVOKABLE QVariantList reminderLessons() const;
     Q_INVOKABLE QVariantList recitalCandidates() const;
     /*!
@@ -197,7 +199,8 @@ public:
     //! Index for new sheet music: one more than the highest
     Q_INVOKABLE int nextLibraryNumber() const;
     Q_INVOKABLE int lentCount() const;
-    Q_INVOKABLE bool lendLibraryItem(const QString &itemId, const QString &studentId);
+    //! \a since: the day it was lent (empty: today; undoing a return keeps the old day)
+    Q_INVOKABLE bool lendLibraryItem(const QString &itemId, const QString &studentId, const QString &since = {});
     Q_INVOKABLE bool returnLibraryItem(const QString &itemId);
     Q_INVOKABLE QStringList libraryAuthors() const;
     Q_INVOKABLE QStringList libraryPublishers() const;

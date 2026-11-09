@@ -2,6 +2,8 @@ Neu seit Build 39:
 - Zweimal Einzelunterricht pro Woche: Hat ein Schüler an zwei Tagen Einzelunterricht, bietet Qupil auf der Schülerseite an, beide Stunden gemeinsam zu führen – dann zeigen beide Tage dieselben Notizen, Planungen und Werke. Umschalten im Unterrichtsmenü der Schülerseite; beim Anlegen des zweiten Unterrichts ist der Schalter gleich an.
 - Hat ein Schüler mehrere Unterrichte, steht in der Auswahl auf der Schülerseite hinter dem Namen Tag und Uhrzeit. In der Schülerliste steht ein Unterrichtsname nur noch einmal.
 - Erinnerungen für einen Unterricht: In der Unterrichtsansicht (z. B. Streichquartett) gibt es "Erinnerung einrichten"; die Erinnerung kommt dann nur bei diesem Unterricht, nicht in den anderen Stunden der Schüler. Im Editor heißt die neue Art "Nur bei folgendem Unterricht erinnern". So lässt sich auch eine Erinnerung nur für den Einzelunterricht eines Schülers anlegen – sie steht dann auf seiner Schülerseite mit "Nur im Unterricht am …".
+- Neue Unterrichtsauswahl bei Erinnerungen: mit Suche (auch nach Schülern im Ensemble), Tagesauswahl und Überschriften je Tag; die Liste beginnt mit heute.
+- Leihnoten zurücknehmen: Auf der Schülerseite unter "Leihnoten" hat jedes ausgeliehene Heft den Knopf "Zurückgegeben" (mit "Rückgängig", falls versehentlich getippt). Ein Tipp auf das Heft öffnet es in der Notenbibliothek.
 - Wichtig: Diese Version stellt die Daten um. Geräte mit älteren Builds synchronisieren weiter, zeigen gemeinsam geführte Stunden getrennt und Erinnerungen für einen Unterricht gar nicht – bitte alle eigenen Geräte aktualisieren.
 
 Bitte grundsätzlich ausprobieren:

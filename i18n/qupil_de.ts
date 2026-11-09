@@ -1661,6 +1661,35 @@ Gute Arbeit!</translation>
         <extracomment>Above a reminder on the student&apos;s page; %1 = short day and time, e.g. Tu 14:00</extracomment>
         <translation>Nur im Unterricht am %1</translation>
     </message>
+    <message id="lessonpick.search">
+        <source>Search students or lessons</source>
+        <extracomment>Search field in the list of lessons to choose from</extracomment>
+        <translation>Schüler oder Unterricht suchen</translation>
+    </message>
+    <message id="lessonpick.today">
+        <source>Today · %1</source>
+        <extracomment>Heading of today&apos;s lessons in the list of lessons; %1 = weekday</extracomment>
+        <translation>Heute · %1</translation>
+    </message>
+    <message id="lessonpick.minutes">
+        <source>%1 min</source>
+        <extracomment>Length of a lesson, e.g. 45 Min</extracomment>
+        <translation>%1 Min</translation>
+    </message>
+    <message id="lessonpick.with">
+        <source>with %1</source>
+        <extracomment>In a search result: the student found in this group or ensemble</extracomment>
+        <translation>mit %1</translation>
+    </message>
+    <message id="lessonpick.none">
+        <source>No lesson found.</source>
+        <translation>Kein Unterricht gefunden.</translation>
+    </message>
+    <message id="loans.returned">
+        <source>“%1” is back in the library</source>
+        <extracomment>Message after tapping &apos;Returned&apos; on a student&apos;s page; %1 = title of the sheet music</extracomment>
+        <translation>„%1“ ist zurück in der Bibliothek</translation>
+    </message>
     <message id="reminder.for_student">
         <source>Reminder for student “%1”:</source>
         <extracomment>%1 = student name</extracomment>

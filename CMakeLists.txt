@@ -299,6 +299,8 @@ set(QUPIL_QML_FILES
     qml/components/Stepper.qml
     qml/components/SubPage.qml
     qml/components/StudentPicker.qml
+    qml/components/LessonPicker.qml
+    qml/components/LessonBadge.qml
     qml/components/SwitchRow.qml
     qml/components/SyncCard.qml
     qml/components/TimeField.qml

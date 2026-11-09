@@ -80,6 +80,12 @@ QtObject {
     signal editReminder(string reminderId, string studentId, string lessonId)
     //! Message at the bottom of the window ("Saved", errors)
     signal toast(string message)
+    //! A message with "Undo" (e.g. sheet music returned): \a undo runs when it is tapped
+    function toastUndo(message, undo) {
+        toastAction = undo
+        toast(message)
+    }
+    property var toastAction: null
 
     // ------------------------------------------------------------ navigation
     //! Switch the main tab: 0 schedule, 1 students, 2 events, 3 metronome, 4 more

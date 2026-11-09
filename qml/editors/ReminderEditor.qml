@@ -117,15 +117,12 @@ Sheet {
             editor.set("student_id", s ? s.id : "")
         }
     }
-    ChoiceField {
+    LessonPicker {
         visible: editor.draft.mode === 3
         label: qsTrId("common.lesson")
-        options: editor.lessons.map(l => l.label)
-        value: (editor.lessons.find(l => l.id === editor.draft.lesson_id) || {}).label || ""
-        onPicked: (value) => {
-            const l = editor.lessons.find(x => x.label === value)
-            editor.set("lesson_id", l ? l.id : "")
-        }
+        lessons: editor.lessons
+        lessonId: editor.draft.lesson_id || ""
+        onPicked: (id) => editor.set("lesson_id", id)
     }
     SwitchRow {
         text: qsTrId("reminder.play_sound")

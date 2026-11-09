@@ -373,6 +373,15 @@ bool UiTest::scrollIntoView(const Node &node)
         if (!content)
             return false;
         const QRectF r = node.item->mapRectToItem(content, QRectF(0, 0, node.item->width(), node.item->height()));
+        // A row that scrolls sideways (the tabs of the student page)
+        if (p->property("contentWidth").toReal() > p->width() + 1 && p->property("contentHeight").toReal() <= p->height() + 1) {
+            const qreal maxX = std::max<qreal>(0, p->property("contentWidth").toReal() - p->width());
+            const qreal x = std::clamp<qreal>(r.center().x() - p->width() / 2, 0, maxX);
+            if (qAbs(p->property("contentX").toReal() - x) < 1)
+                return false;
+            p->setProperty("contentX", x);
+            return true;
+        }
         const qreal maxY = std::max<qreal>(0, p->property("contentHeight").toReal() - p->height());
         const qreal y = std::clamp<qreal>(r.center().y() - p->height() / 2, 0, maxY);
         if (qAbs(p->property("contentY").toReal() - y) < 1)
@@ -436,7 +445,9 @@ UiTest::Step UiTest::tap(const QString &pattern, const QString &what)
                       if (busy() || !find(pattern, &node))
                           return false;
                       // Partly out of sight: scrolled into view first, as a person would
-                      if ((node.rect.isEmpty() || node.rect.height() < node.full.height() - 1) && scrollIntoView(node))
+                      if ((node.rect.isEmpty() || node.rect.height() < node.full.height() - 1
+                           || node.rect.width() < node.full.width() - 1)
+                          && scrollIntoView(node))
                           return false;
                       if (node.rect.isEmpty())
                           return false;
@@ -524,6 +535,28 @@ UiTest::Step UiTest::openList(const QString &pattern)
                       return false;
                   },
                   8000 };
+}
+
+UiTest::Step UiTest::tapUntilGone(const QString &pattern)
+{
+    auto taps = std::make_shared<int>(0);
+    auto since = std::make_shared<QElapsedTimer>();
+    return Step { u"tap \"%1\" until it is gone"_s.arg(pattern), [this, pattern, taps, since] {
+                      Node node;
+                      const bool there = find(pattern, &node);
+                      if (*taps > 0 && !there) {
+                          if (*taps > 1)
+                              m_results.last().note += u"%1 taps needed for \"%2\". "_s.arg(*taps).arg(pattern);
+                          return true;
+                      }
+                      if (!there || node.rect.isEmpty() || (*taps > 0 && since->elapsed() < 1500) || *taps >= 3 || busy())
+                          return false;
+                      click(node.rect.center());
+                      ++*taps;
+                      since->start();
+                      return false;
+                  },
+                  10000 };
 }
 
 UiTest::Step UiTest::backIfThere(const QString &pattern)
@@ -1173,9 +1206,14 @@ void UiTest::addCases()
                 << tap(u"^Erinnerung einrichten$"_s) << see(u"^Nur bei folgendem Unterricht erinnern$"_s)
                 << tap(u"edit:"_s, u"tap the first field"_s) << type(u"UI-Test: Vorspiel besprechen"_s)
                 << snap(u"lesson-reminder-editor"_s)
-                // The list of lessons: the entry under the finger has to stay readable
-                << openList(u"combobox:^Unterricht$"_s) << wait(300) << key(Qt::Key_Down, u"highlight the next lesson"_s)
-                << wait(200) << snap(u"lesson-reminder-choices"_s) << key(Qt::Key_Escape, u"close the list"_s) << wait(400)
+                // The page of lessons: by day, the bar of days, the search
+                << tapUntil(u"^Unterricht$"_s, u"edit:^Schüler oder Unterricht suchen$"_s) << wait(300)
+                << snap(u"lesson-picker"_s)
+                << tap(u"^Freitag$"_s) << wait(300) << snap(u"lesson-picker-friday"_s)
+                << tap(u"edit:^Schüler oder Unterricht suchen$"_s) << type(u"Lena"_s)
+                << see(u"^Lena Muster · Di 14:00$"_s) << snap(u"lesson-picker-search"_s)
+                << clearField() << type(u"Streicherensemble"_s)
+                << tapUntilGone(u"^Streicherensemble · Di 17:00$"_s)
                 << see(u"^Nur bei folgendem Unterricht erinnern$"_s)
                 << tap(u"^Speichern$"_s) << gone(u"^Speichern$"_s)
                 << check(u"saved for the ensemble (mode 3)"_s, [this] {
@@ -1216,6 +1254,38 @@ void UiTest::addCases()
                        m_cleanup.clear();
                    })
                 << check(u"removed"_s, [this] { return m_data->reminders().size() == m_count; });
+    }
+    // Sheet music lent to a student: returned on the student's page, and undone
+    {
+        Case &c = add(u"loan-return"_s, u"return sheet music from the student's page"_s);
+        c.steps << act(u"the running student's loan"_s, [this] {
+                       m_membership = runningMembership();
+                       const QString student = m_data->get(u"membership"_s, m_membership).value(u"student_id"_s).toString();
+                       const QVariantList loans = m_data->loans(student);
+                       m_other = loans.isEmpty() ? QString() : loans.first().toMap().value(u"id"_s).toString();
+                       m_lessons = { loans.isEmpty() ? QString() : loans.first().toMap().value(u"title"_s).toString(),
+                                     loans.isEmpty() ? QString() : loans.first().toMap().value(u"lent_since"_s).toString() };
+                   })
+                << check(u"the student has sheet music"_s, [this] { return !m_other.isEmpty(); })
+                << openStudent(u"Lena Muster"_s)
+                << tap(u"^Leihnoten$"_s)
+                << see(u"^Zurückgegeben: "_s) << snap(u"loans"_s)
+                << act(u"tap \"Zurückgegeben\" of the first one"_s, [this] {
+                       Node node;
+                       if (find(u"^Zurückgegeben: "_s + QRegularExpression::escape(m_lessons.value(0)) + u"$"_s, &node))
+                           click(node.rect.center());
+                   })
+                << check(u"back in the library"_s, [this] {
+                       return m_data->get(u"library_item"_s, m_other).value(u"lent_to"_s).toString().isEmpty();
+                   })
+                << see(u"ist zurück in der Bibliothek$"_s) << snap(u"loan-returned"_s)
+                << tap(u"^Rückgängig$"_s)
+                << check(u"lent again, from the same day"_s, [this] {
+                       const QVariantMap item = m_data->get(u"library_item"_s, m_other);
+                       const QString student = m_data->get(u"membership"_s, m_membership).value(u"student_id"_s).toString();
+                       return item.value(u"lent_to"_s).toString() == student && item.value(u"lent_since"_s).toString() == m_lessons.value(1);
+                   })
+                << see(u"^Zurückgegeben: "_s);
     }
     // Birthdays and the data page open
     {

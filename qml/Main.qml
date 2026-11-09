@@ -583,6 +583,8 @@ ApplicationWindow {
         function onDecideJoin(id, name) { joinDialog.ask(id, name) }
         function onToast(message) {
             toast.text = message
+            toast.undo = Nav.toastAction
+            Nav.toastAction = null
             toast.show = true
             toastTimer.restart()
         }
@@ -767,11 +769,15 @@ ApplicationWindow {
         id: toast
         property alias text: toastText.text
         property bool show: false
+        //! With a function: an "Undo" button that runs it
+        property var undo: null
+        Accessible.role: Accessible.AlertMessage
+        Accessible.name: toast.show ? toast.text : ""
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 24
-        width: Math.min(toastText.implicitWidth + 40, parent.width - 40)
-        height: toastText.implicitHeight + 24
+        width: Math.min(toastText.implicitWidth + 40 + (undoButton.visible ? undoButton.implicitWidth + 12 : 0), parent.width - 40)
+        height: Math.max(toastText.implicitHeight + 24, undoButton.visible ? 48 : 0)
         radius: 14
         color: Theme.inverse
         opacity: show ? 1 : 0
@@ -780,19 +786,52 @@ ApplicationWindow {
         Behavior on opacity { NumberAnimation { duration: 180 } }
         Text {
             id: toastText
-            anchors.centerIn: parent
-            width: Math.min(implicitWidth, toast.parent ? toast.parent.width - 80 : 400)
-            horizontalAlignment: Text.AlignHCenter
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            anchors.leftMargin: 20
+            width: Math.min(implicitWidth, toast.width - 40 - (undoButton.visible ? undoButton.implicitWidth + 12 : 0))
+            horizontalAlignment: undoButton.visible ? Text.AlignLeft : Text.AlignHCenter
             wrapMode: Text.WordWrap
             color: Theme.textOnInverse
             font.family: Theme.fontFamily
             font.pixelSize: 14
             font.weight: Font.DemiBold
         }
+        AbstractButton {
+            id: undoButton
+            visible: !!toast.undo
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.right: parent.right
+            anchors.rightMargin: 8
+            implicitHeight: 40
+            implicitWidth: undoText.implicitWidth + 24
+            text: qsTrId("common.undo")
+            Accessible.name: text
+            onClicked: {
+                const undo = toast.undo
+                toast.undo = null
+                toast.show = false
+                if (undo)
+                    undo()
+            }
+            contentItem: Text {
+                id: undoText
+                text: undoButton.text
+                // On the dark toast the highlight colour, on the light one (dark mode) the accent
+                color: Theme.dark ? "#6E3C5A" : Theme.lime
+                font.family: Theme.fontFamily
+                font.pixelSize: 14
+                font.weight: Font.Bold
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+            background: Item {}
+        }
         Timer {
             id: toastTimer
-            interval: Math.max(2800, toast.text.length * 60)   // time to read longer messages
-            onTriggered: toast.show = false
+            // time to read longer messages; with "Undo" a little longer
+            interval: Math.max(toast.undo ? 5000 : 2800, toast.text.length * 60)
+            onTriggered: { toast.show = false; toast.undo = null }
         }
     }
 
