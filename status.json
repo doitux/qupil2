@@ -1,9 +1,34 @@
 {
   "mode": "schedule",
-  "started_at": "2026-11-08T18:42:13+01:00",
-  "slot": "2026-11-08 13:05",
-  "result": "late",
-  "note": "GitHub hat den Lauf erst um 18:42 gestartet (geplant 13:05); die Änderungen kommen in den nächsten Sammel-Lauf.",
-  "written": "2026-11-08T18:42:13+01:00",
-  "headline": "Verspätet gestartet, kein Build"
+  "started_at": "2026-11-09T01:44:10+01:00",
+  "slot": "2026-11-08 22:05",
+  "tests": {
+    "android-test.yml": {
+      "name": "Android",
+      "since": "5c6dffa",
+      "last": "success",
+      "result": "no_change"
+    },
+    "ui-test.yml": {
+      "name": "Desktop",
+      "since": "5c6dffa",
+      "last": "success",
+      "result": "no_change"
+    },
+    "ios-test.yml": {
+      "name": "iOS",
+      "since": "5c6dffa",
+      "last": "success",
+      "result": "no_change"
+    }
+  },
+  "since": "5c6dffac8091b4f215d4f3fd12121a07b5f121d9",
+  "since_build": 41,
+  "main": "5c6dffac8091b4f215d4f3fd12121a07b5f121d9",
+  "commits": [],
+  "relevant_files": [],
+  "result": "no_change",
+  "note": "Seit dem letzten Upload nichts Neues.",
+  "written": "2026-11-09T01:44:14+01:00",
+  "headline": "Kein Build nötig"
 }

@@ -1,6 +1,12 @@
-# TestFlight-Sammellauf 2026-11-08 13:05
+# TestFlight-Sammellauf 2026-11-08 22:05
 
-**Verspätet gestartet, kein Build**
+**Kein Build nötig**
 
-GitHub hat den Lauf erst um 18:42 gestartet (geplant 13:05); die Änderungen kommen in den nächsten Sammel-Lauf.
+Seit dem letzten Upload nichts Neues.
 
+- Seit Build 41 (Commit 5c6dffa)
+
+Nächtliche Tests:
+- Android: nichts Neues, nicht gestartet (seit 5c6dffa, letzter Lauf: success)
+- Desktop: nichts Neues, nicht gestartet (seit 5c6dffa, letzter Lauf: success)
+- iOS: nichts Neues, nicht gestartet (seit 5c6dffa, letzter Lauf: success)
