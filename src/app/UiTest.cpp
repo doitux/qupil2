@@ -500,6 +500,31 @@ UiTest::Step UiTest::tapUntil(const QString &pattern, const QString &expect)
                   10000 };
 }
 
+UiTest::Step UiTest::openList(const QString &pattern)
+{
+    auto taps = std::make_shared<int>(0);
+    auto since = std::make_shared<QElapsedTimer>();
+    return Step { u"open the list of \"%1\""_s.arg(pattern), [this, pattern, taps, since] {
+                      Node node;
+                      if (!find(pattern, &node) || !node.item)
+                          return false;
+                      QObject *popup = node.item->property("popup").value<QObject *>();
+                      if (popup && popup->property("opened").toBool()) {
+                          if (*taps > 1)
+                              m_results.last().note += u"%1 taps needed for \"%2\". "_s.arg(*taps).arg(pattern);
+                          return true;
+                      }
+                      if ((*taps > 0 && since->isValid() && since->elapsed() < 1500) || *taps >= 3 || busy()
+                          || node.rect.isEmpty())
+                          return false;
+                      click(node.rect.center());
+                      ++*taps;
+                      since->start();
+                      return false;
+                  },
+                  8000 };
+}
+
 UiTest::Step UiTest::backIfThere(const QString &pattern)
 {
     // The back button of a page carries the name of the page it goes back to
@@ -1148,7 +1173,7 @@ void UiTest::addCases()
                 << tap(u"edit:"_s, u"tap the first field"_s) << type(u"UI-Test: Vorspiel besprechen"_s)
                 << snap(u"lesson-reminder-editor"_s)
                 // The list of lessons: the entry under the finger has to stay readable
-                << tap(u"combobox:^Unterricht$"_s) << wait(400) << key(Qt::Key_Down, u"highlight the next lesson"_s)
+                << openList(u"combobox:^Unterricht$"_s) << wait(300) << key(Qt::Key_Down, u"highlight the next lesson"_s)
                 << wait(200) << snap(u"lesson-reminder-choices"_s) << key(Qt::Key_Escape, u"close the list"_s) << wait(400)
                 << see(u"^Nur bei folgendem Unterricht erinnern$"_s)
                 << tap(u"^Speichern$"_s) << gone(u"^Speichern$"_s)
