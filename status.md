@@ -1,8 +1,8 @@
 # TestFlight-Sammellauf 2026-11-09 21:43 (von Hand, now)
 
-**Build 42 gestartet**
+**Build 42 hochgeladen**
 
-- Build 42 (Commit 7a9836f): in_progress, Upload: -, Testtext: -
+- Build 42 (Commit 7a9836f): success, Upload: success, Testtext: success
 - https://github.com/doitux/qupil2/actions/runs/42695741266
 - Seit Build 41 (Commit 5c6dffa)
 
