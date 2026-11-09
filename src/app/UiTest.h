@@ -121,6 +121,8 @@ private:
     void click(const QPointF &point);
     void sendKey(int key, const QString &text = {});
     QString dump() const;
+    //! Texts on the screen too faint to read on what is behind them (contrast ratio below 2:1)
+    QStringList unreadable() const;
     void writeDump(const QString &name) const;
     void shot(const QString &name);
     QVariant windowProperty(const char *name) const;
@@ -161,4 +163,5 @@ private:
     QStringList m_lessons;
     QString m_other;              // a second lesson of the same student (case "together")
     QStringList m_cleanup;        // "entity:id" to remove at the end of a case
+    QStringList m_unreadable;     // found at a snap or the end of the case
 };

@@ -57,15 +57,36 @@ ColumnLayout {
             border.width: box.activeFocus ? 2 : 1
             border.color: box.activeFocus ? Theme.accent : Theme.border
         }
+        // Own colours: the style's highlight drew white text on an almost white row, so the
+        // entry under the finger (Android) was invisible
         delegate: ItemDelegate {
+            id: choice
             required property string modelData
             required property int index
+            readonly property bool current: index === box.currentIndex
             width: ListView.view ? ListView.view.width : 200
             height: 44
             text: modelData === "" ? "–" : modelData
             highlighted: box.highlightedIndex === index
             font.family: Theme.fontFamily
             font.pixelSize: 15
+            font.weight: current ? Font.Bold : Font.Normal
+            contentItem: Text {
+                text: choice.text
+                font: choice.font
+                color: choice.current ? Theme.accentText : Theme.text
+                elide: Text.ElideRight
+                verticalAlignment: Text.AlignVCenter
+            }
+            background: Rectangle {
+                color: choice.pressed || choice.highlighted ? Theme.accentSoft : "transparent"
+            }
+        }
+        popup.background: Rectangle {
+            radius: 12
+            color: Theme.surface
+            border.width: 1
+            border.color: Theme.border
         }
     }
 }

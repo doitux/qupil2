@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 #include "UiTest.h"
 
+#include <cmath>
 #include <QAccessible>
 #include <QCoreApplication>
 #include <QDir>
@@ -128,6 +129,102 @@ void UiTest::start()
 }
 
 // ------------------------------------------------------------------------ the screen
+
+namespace {
+//! WCAG relative luminance and contrast ratio (1 … 21)
+double luminance(const QColor &c)
+{
+    const auto channel = [](double v) { return v <= 0.03928 ? v / 12.92 : std::pow((v + 0.055) / 1.055, 2.4); };
+    return 0.2126 * channel(c.redF()) + 0.7152 * channel(c.greenF()) + 0.0722 * channel(c.blueF());
+}
+double contrast(const QColor &a, const QColor &b)
+{
+    const double la = luminance(a), lb = luminance(b);
+    return (std::max(la, lb) + 0.05) / (std::min(la, lb) + 0.05);
+}
+//! The last painted, filled rectangle under \a point in this part of the scene
+QColor topFilledAt(QQuickItem *root, const QPointF &point)
+{
+    if (!root || !root->isVisible() || root->opacity() < 0.3 || root->inherits("QQuickText"))
+        return {};
+    QColor found;
+    if (root->inherits("QQuickRectangle") && root->width() >= 8 && root->height() >= 8) {
+        const QColor c = root->property("color").value<QColor>();
+        if (c.alphaF() >= 0.5 && root->mapRectToScene(QRectF(0, 0, root->width(), root->height())).contains(point))
+            found = c;
+    }
+    QList<QQuickItem *> children = root->childItems();
+    std::stable_sort(children.begin(), children.end(), [](QQuickItem *a, QQuickItem *b) { return a->z() < b->z(); });
+    for (QQuickItem *child : std::as_const(children)) {
+        const QColor c = topFilledAt(child, point);
+        if (c.isValid())
+            found = c;
+    }
+    return found;
+}
+
+//! What a text is painted on: going up from the text, whatever was painted before it at
+//! its middle – siblings below it (a control's background, a card) or the parent itself
+QColor backgroundOf(QQuickItem *item, const QColor &window)
+{
+    const QPointF middle = item->mapToScene(QPointF(item->width() / 2, item->height() / 2));
+    for (QQuickItem *child = item, *p = item->parentItem(); p; child = p, p = p->parentItem()) {
+        QList<QQuickItem *> siblings = p->childItems();
+        std::stable_sort(siblings.begin(), siblings.end(), [](QQuickItem *a, QQuickItem *b) { return a->z() < b->z(); });
+        QColor found;
+        for (QQuickItem *s : std::as_const(siblings)) {
+            if (s == child)
+                break;
+            const QColor c = topFilledAt(s, middle);
+            if (c.isValid())
+                found = c;
+        }
+        if (found.isValid())
+            return found;
+        if (p->inherits("QQuickRectangle") && p->isVisible() && p->opacity() >= 0.3) {
+            const QColor c = p->property("color").value<QColor>();
+            if (c.alphaF() >= 0.5)
+                return c;
+        }
+    }
+    return window;
+}
+} // namespace
+
+QStringList UiTest::unreadable() const
+{
+    QStringList found;
+    if (!m_window)
+        return found;
+    const QRectF bounds(QPointF(0, 0), QSizeF(m_window->size()));
+    std::function<void(QQuickItem *, QRectF, qreal, int)> walk = [&](QQuickItem *item, QRectF clip, qreal opacity, int depth) {
+        if (!item || depth > 80 || !item->isVisible())
+            return;
+        opacity *= item->opacity();
+        if (opacity < 0.5)   // fading in or out, or deliberately faint (disabled)
+            return;
+        const QRectF rect = item->mapRectToScene(QRectF(0, 0, item->width(), item->height()));
+        if (item->clip())
+            clip = clip.intersected(rect);
+        if (item->inherits("QQuickText")) {
+            const QString text = item->property("text").toString().simplified();
+            const QColor color = item->property("color").value<QColor>();
+            const QRectF shown = rect.intersected(clip);
+            if (!text.isEmpty() && color.alphaF() >= 0.5 && shown.width() > 2 && shown.height() > 2) {
+                const QColor behind = backgroundOf(item, m_window->color());
+                const double ratio = contrast(color, behind);
+                if (ratio < 2.0)
+                    found << u"\"%1\" (%2 on %3, %4:1)"_s.arg(text.left(40), color.name(), behind.name())
+                                 .arg(ratio, 0, 'f', 1);
+            }
+        }
+        for (QQuickItem *child : item->childItems())
+            walk(child, clip, opacity, depth + 1);
+    };
+    walk(m_window->contentItem(), bounds, 1.0, 0);
+    found.removeDuplicates();
+    return found;
+}
 
 QList<UiTest::Node> UiTest::nodes() const
 {
@@ -534,6 +631,10 @@ UiTest::Step UiTest::snap(const QString &name)
 {
     return Step { u"screenshot %1"_s.arg(name), [this, name] {
                       shot(name);
+                      // Every screenshot is also a check that all text on it can be read
+                      for (const QString &t : unreadable())
+                          if (!m_unreadable.contains(t))
+                              m_unreadable << t;
                       return true;
                   } };
 }
@@ -557,6 +658,7 @@ void UiTest::next()
         if (m_case == 0 ? m_phase != u"restart"_s : !m_cases[m_case - 1].keepScreen)
             resetToToday();
         s_warnings.clear();
+        m_unreadable.clear();
         m_results << Result { m_cases[m_case].name, m_cases[m_case].title };
         m_caseTimer.start();
         QTimer::singleShot(kSettleMs * 2, this, &UiTest::next);
@@ -596,6 +698,13 @@ void UiTest::finishCase()
     if (r.passed) {
         // What the screen looked like at the end (for comparing platforms)
         shot(u"case-%1"_s.arg(r.name));
+        for (const QString &t : unreadable())
+            if (!m_unreadable.contains(t))
+                m_unreadable << t;
+        if (!m_unreadable.isEmpty()) {
+            r.passed = false;
+            r.failure = u"text not readable: "_s + m_unreadable.join(u"; "_s);
+        }
     }
     r.ms = m_caseTimer.elapsed();
     r.warnings = s_warnings;
@@ -1038,6 +1147,10 @@ void UiTest::addCases()
                 << tap(u"^Erinnerung einrichten$"_s) << see(u"^Nur bei folgendem Unterricht erinnern$"_s)
                 << tap(u"edit:"_s, u"tap the first field"_s) << type(u"UI-Test: Vorspiel besprechen"_s)
                 << snap(u"lesson-reminder-editor"_s)
+                // The list of lessons: the entry under the finger has to stay readable
+                << tap(u"combobox:^Unterricht$"_s) << wait(400) << key(Qt::Key_Down, u"highlight the next lesson"_s)
+                << wait(200) << snap(u"lesson-reminder-choices"_s) << key(Qt::Key_Escape, u"close the list"_s) << wait(400)
+                << see(u"^Nur bei folgendem Unterricht erinnern$"_s)
                 << tap(u"^Speichern$"_s) << gone(u"^Speichern$"_s)
                 << check(u"saved for the ensemble (mode 3)"_s, [this] {
                        for (const QVariant &v : m_data->reminders()) {

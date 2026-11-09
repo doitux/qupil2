@@ -42,6 +42,19 @@ c.steps << tab(u"Schüler"_s) << tap(u"^Lena Muster$"_s) << tap(u"^Werk$"_s)
   where the layout has one; elements scrolled out of sight are scrolled to.
 - A case that changes data the later cases rely on puts it back (see `lesson-new`).
 
+## Readable text
+
+Every screenshot a case takes (`snap`) and the screen at the end of every case are
+checked for text that cannot be read: for each visible text the test finds what is
+painted behind its middle (a control's background, a card, the window) and computes
+the contrast ratio (WCAG). Below 2:1 the case fails with "text not readable: …" and
+names the text and both colours. It found an entry in the lists of choices
+(ChoiceField) that turned white on an almost white row under the finger.
+
+So a new screen, list, menu or popup gets a case that opens it, puts the highlight
+on an entry where it has one (a key press), and takes a `snap` - before it is
+committed.
+
 ## Platform runs (every evening on main when something changed, and by hand; results on a branch)
 
 | Workflow | Where | Branch |
