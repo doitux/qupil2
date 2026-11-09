@@ -416,8 +416,9 @@ QVariantMap DataService::lessonSummary(const QVariantMap &row, bool withDetails)
     m.insert(u"studentCount"_s, members.size());
     m.insert(u"minutes"_s, minutesBetween(row.value(u"start_time"_s).toString(), row.value(u"end_time"_s).toString()));
 
-    // Reminders for every lesson (mode 1) or for one of its students (mode 2)
-    int reminderCount = scalar(u"SELECT COUNT(*) FROM reminder WHERE deleted = 0 AND mode = 1"_s).toInt();
+    // Reminders for every lesson (mode 1), for one of its students (mode 2) or for this lesson (mode 3)
+    int reminderCount = scalar(u"SELECT COUNT(*) FROM reminder WHERE deleted = 0 AND (mode = 1 OR (mode = 3 AND lesson_id = ?))"_s,
+                               { row.value(u"id"_s) }).toInt();
     for (const QVariant &s : members)
         reminderCount += scalar(u"SELECT COUNT(*) FROM reminder WHERE deleted = 0 AND mode = 2 AND student_id = ?"_s,
                                 { s.toMap().value(u"id"_s) }).toInt();
@@ -447,7 +448,7 @@ QVariantMap DataService::lessonSummary(const QVariantMap &row, bool withDetails)
         for (const QVariant &r : this->reminders()) {
             const QVariantMap rm = r.toMap();
             const int mode = rm.value(u"mode"_s).toInt();
-            if (mode == 1)
+            if (mode == 1 || (mode == 3 && rm.value(u"lesson_id"_s) == row.value(u"id"_s)))
                 reminders << rm;
             else if (mode == 2) {
                 for (const QVariant &s : members)
@@ -620,6 +621,9 @@ bool DataService::deleteLesson(const QString &id)
     bool ok = true;
     for (const QVariant &v : activeMembers(id))
         ok = ok && endMembership(v.toMap().value(u"membership_id"_s).toString(), name);
+    // Its own reminders (mode 3) go with it
+    for (const QVariant &v : rows(u"SELECT id FROM reminder WHERE deleted = 0 AND mode = 3 AND lesson_id = ?"_s, { id }))
+        ok = ok && m_store->remove(u"reminder"_s, v.toMap().value(u"id"_s).toString());
     // With history (ended memberships) the lesson stays as inactive record
     const int history = scalar(u"SELECT COUNT(*) FROM membership WHERE deleted = 0 AND lesson_id = ?"_s, { id }).toInt();
     ok = ok && (history > 0 ? m_store->update(u"lesson"_s, id, { { u"active"_s, 0 } }) : m_store->remove(u"lesson"_s, id));
@@ -1707,11 +1711,33 @@ void DataService::greetBirthday(const QString &studentId)
 QVariantList DataService::reminders() const
 {
     QVariantList out;
-    for (const QVariant &v : rows(u"SELECT r.*, s.forename, s.surname FROM reminder r LEFT JOIN student s ON s.id = r.student_id "
+    for (const QVariant &v : rows(u"SELECT r.*, s.forename, s.surname, l.name AS lesson_name, l.kind AS lesson_kind, "
+                                  u"l.weekday AS lesson_weekday, l.start_time AS lesson_start, l.irregular AS lesson_irregular "
+                                  u"FROM reminder r LEFT JOIN student s ON s.id = r.student_id "
+                                  u"LEFT JOIN lesson l ON l.id = r.lesson_id AND l.deleted = 0 "
                                   u"WHERE r.deleted = 0 ORDER BY r.mode, r.text COLLATE NOCASE"_s)) {
         QVariantMap m = v.toMap();
         m.insert(u"studentName"_s, fullName(m.value(u"forename"_s).toString(), m.value(u"surname"_s).toString()));
+        // Mode 3: the lesson with its day and time ("Streichquartett", "Fr 16:00")
+        const bool weekly = m.value(u"lesson_irregular"_s).toInt() == 0 && !m.value(u"lesson_start"_s).toString().isEmpty();
+        m.insert(u"lessonDay"_s, weekly ? dayAndTime(m.value(u"lesson_weekday"_s).toInt(), m.value(u"lesson_start"_s).toString(), false)
+                                        : QString());
         out << m;
+    }
+    return out;
+}
+
+QVariantList DataService::reminderLessons() const
+{
+    QVariantList out;
+    for (const QVariant &v : rows(u"SELECT id, name, weekday, start_time, irregular FROM lesson WHERE deleted = 0 AND active = 1 "
+                                  u"ORDER BY irregular, weekday, start_time, name COLLATE NOCASE"_s)) {
+        QVariantMap l = v.toMap();
+        const bool weekly = l.value(u"irregular"_s).toInt() == 0 && !l.value(u"start_time"_s).toString().isEmpty();
+        l.insert(u"label"_s, l.value(u"name"_s).toString() + u" · "_s
+                                 + (weekly ? dayAndTime(l.value(u"weekday"_s).toInt(), l.value(u"start_time"_s).toString(), false)
+                                           : qtTrId("common.irregular")));
+        out << l;
     }
     return out;
 }

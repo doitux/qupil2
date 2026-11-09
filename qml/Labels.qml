@@ -60,10 +60,13 @@ QtObject {
     }
 
     //! Reminder: 0 when Qupil starts, 1 every lesson, 2 lessons of one student
-    function reminderMode(mode, studentName) {
+    //! When a reminder comes; for mode 3 the lesson name and its day ("Fr 16:00", may be empty)
+    function reminderMode(mode, studentName, lessonName, lessonDay) {
         switch (mode) {
         case 1: return qsTrId("reminder.mode.every_lesson")
         case 2: return qsTrId("reminder.mode.student").arg(studentName)
+        case 3: return lessonDay ? qsTrId("reminder.mode.lesson_day").arg(lessonName || "").arg(lessonDay)
+                                 : qsTrId("reminder.mode.lesson").arg(lessonName || "")
         default: return qsTrId("reminder.mode.startup")
         }
     }

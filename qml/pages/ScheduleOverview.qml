@@ -82,10 +82,10 @@ Item {
             if (l.start_time <= nowTime)
                 continue
             for (const r of l.reminders || []) {
-                if (r.mode !== 2 || seen[r.id])
+                if ((r.mode !== 2 && r.mode !== 3) || seen[r.id])
                     continue
                 seen[r.id] = true
-                out.push({ reminder: r, time: l.start_time })
+                out.push({ reminder: r, time: l.start_time, lesson: l })
             }
         }
         return out
@@ -129,7 +129,7 @@ Item {
         else if (past.length > 1)
             rows.push({ kind: "several", notes: past })
         for (const lr of lessonReminders)
-            rows.push({ kind: "lessonReminder", reminder: lr.reminder, time: lr.time })
+            rows.push({ kind: "lessonReminder", reminder: lr.reminder, time: lr.time, lesson: lr.lesson })
         for (const r of startReminders)
             rows.push({ kind: "reminder", reminder: r })
         if (!noticesOpen && rows.length > 4) {
@@ -955,7 +955,9 @@ Item {
                                     : modelData.kind === "more" ? "chevronDown" : "cake"
                             lime: modelData.kind === "today"
                             link: modelData.kind === "more"
-                            text: modelData.kind === "lessonReminder" ? (modelData.reminder.forename || modelData.reminder.studentName)
+                            // "Lena: …" for a student, "Streichquartett: …" for a lesson
+                            text: modelData.kind === "lessonReminder" ? (modelData.reminder.mode === 3 ? modelData.lesson.name
+                                                                         : (modelData.reminder.forename || modelData.reminder.studentName))
                                                                          + ": " + modelData.reminder.text
                                   : modelData.kind === "reminder" ? (modelData.reminder.studentName !== ""
                                                                    ? modelData.reminder.studentName + ": " + modelData.reminder.text
@@ -973,6 +975,9 @@ Item {
                                     // All of them on the birthday list, pointed out there
                                     Nav.birthdayFocus = modelData.notes.map(x => x.id)
                                     Nav.showMore("birthdays")
+                                } else if (modelData.kind === "lessonReminder" && modelData.reminder.mode === 3) {
+                                    // A lesson's own reminder stands in the lesson view
+                                    overview.openLesson(modelData.lesson)
                                 } else if (modelData.kind === "lessonReminder") {
                                     // At the student it stands above the tabs (edit it, tick it off)
                                     overview.studentClicked(modelData.reminder.student_id, "")

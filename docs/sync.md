@@ -82,6 +82,10 @@ changes for that one field, compared only with the field's own clock (the
 record's clock may come from the very change that set the key). Older builds
 keep syncing and show the lessons separately.
 
+Schema 7 added `reminder.lesson_id` the same way (`Schema::addedFields()`): a
+reminder of mode 3 belongs to one lesson and comes only there. Older builds keep
+the field in their log and do not show mode-3 reminders until they are updated.
+
 Archive entries (`student_archive`, `event_archive`) keep their `content`
 compressed (`qz1:` + base64 of zlib, see `TextPack`). Entries taken over from
 Qupil 1.x are converted to a compact layout in the background (`ArchiveFormat`).

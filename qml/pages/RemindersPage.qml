@@ -17,7 +17,7 @@ SubPage {
         filled: true
         iconName: "plus"
         text: qsTrId("common.add")
-        onClicked: Nav.editReminder("", "")
+        onClicked: Nav.editReminder("", "", "")
     }
 
     EmptyHint {
@@ -36,7 +36,7 @@ SubPage {
             focusPolicy: Qt.StrongFocus
             Accessible.role: Accessible.Button
             Accessible.name: modelData.text
-            onClicked: Nav.editReminder(modelData.id, "")
+            onClicked: Nav.editReminder(modelData.id, "", "")
             background: Rectangle {
                 radius: Theme.radius
                 color: Theme.surface
@@ -67,7 +67,7 @@ SubPage {
                     Text {
                         Layout.fillWidth: true
                         wrapMode: Text.WordWrap
-                        text: Labels.reminderMode(row.modelData.mode, row.modelData.studentName)
+                        text: Labels.reminderMode(row.modelData.mode, row.modelData.studentName, row.modelData.lesson_name, row.modelData.lessonDay)
                         color: Theme.textMuted
                         font.family: Theme.fontFamily
                         font.pixelSize: 13

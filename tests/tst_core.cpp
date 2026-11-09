@@ -1678,7 +1678,7 @@ private slots:
         QString error;
         QVERIFY2(db.open(path, &error), qPrintable(error));
         QCOMPARE(db.meta(u"schema_version"_s).toInt(), Schema::Version);
-        QCOMPARE(db.meta(u"catch_up"_s), u"plan,membership.shared_key"_s);
+        QCOMPARE(db.meta(u"catch_up"_s), u"plan,membership.shared_key,reminder.lesson_id"_s);
         Store store(&db);
         QCOMPARE(store.catchUp(), 2);
         QCOMPARE(store.catchUp(), 0);   // once
@@ -1742,7 +1742,7 @@ private slots:
         QString error;
         QVERIFY2(db.open(path, &error), qPrintable(error));
         QCOMPARE(db.meta(u"schema_version"_s).toInt(), Schema::Version);
-        QCOMPARE(db.meta(u"catch_up"_s), u"membership.shared_key"_s);
+        QCOMPARE(db.meta(u"catch_up"_s), u"membership.shared_key,reminder.lesson_id"_s);
         Store store(&db);
         QCOMPARE(store.get(u"membership"_s, a).value(u"shared_key"_s).toString(), QString());
         QCOMPARE(store.catchUp(), 2);

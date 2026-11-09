@@ -1621,6 +1621,46 @@ Gute Arbeit!</translation>
         <extracomment>Title of a system notification. %1 = lesson name; more lessons follow after a comma.</extracomment>
         <translation>Erinnerung: %1</translation>
     </message>
+    <message id="reminder.mode.lesson">
+        <source>For lesson “%1”</source>
+        <extracomment>When a reminder comes; %1 = lesson name</extracomment>
+        <translation>Bei dem Unterricht: &quot;%1&quot;</translation>
+    </message>
+    <message id="reminder.mode.lesson_day">
+        <source>For lesson “%1” (%2)</source>
+        <extracomment>%1 = lesson name, %2 = short day and time, e.g. Fr 16:00</extracomment>
+        <translation>Bei dem Unterricht: &quot;%1&quot; (%2)</translation>
+    </message>
+    <message id="reminder.mode.lesson_long">
+        <source>Remind me only at this lesson</source>
+        <extracomment>Choice in the reminder editor</extracomment>
+        <translation>Nur bei folgendem Unterricht erinnern</translation>
+    </message>
+    <message id="reminder.mode.student_hint">
+        <source>at every lesson of the student</source>
+        <extracomment>Small line under &apos;only for this student&apos;</extracomment>
+        <translation>in jedem seiner Unterrichte</translation>
+    </message>
+    <message id="reminder.mode.lesson_hint">
+        <source>only there, e.g. only at the quartet or only at an individual lesson</source>
+        <extracomment>Small line under &apos;only at this lesson&apos;</extracomment>
+        <translation>nur dort, z. B. nur im Quartett oder nur im Einzelunterricht</translation>
+    </message>
+    <message id="reminder.for_lesson">
+        <source>Reminder for this lesson</source>
+        <extracomment>Heading in the pop-up at the start of a lesson</extracomment>
+        <translation>Erinnerung für diesen Unterricht</translation>
+    </message>
+    <message id="reminder.only_this_lesson">
+        <source>Only at this lesson</source>
+        <extracomment>Under a reminder that belongs to one lesson</extracomment>
+        <translation>Nur bei diesem Unterricht</translation>
+    </message>
+    <message id="reminder.only_lesson_day">
+        <source>Only at the lesson on %1</source>
+        <extracomment>Above a reminder on the student&apos;s page; %1 = short day and time, e.g. Tu 14:00</extracomment>
+        <translation>Nur im Unterricht am %1</translation>
+    </message>
     <message id="reminder.for_student">
         <source>Reminder for student “%1”:</source>
         <extracomment>%1 = student name</extracomment>

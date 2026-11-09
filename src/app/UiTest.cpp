@@ -1021,6 +1021,63 @@ void UiTest::addCases()
                 << check(u"the reminder is saved"_s, [this] { return m_data->reminders().size() == m_count + 1; })
                 << see(u"^UI-Test-Erinnerung"_s);
     }
+    // A reminder only for one lesson: the ensemble (from the lesson view), and one for an individual lesson
+    {
+        Case &c = add(u"lesson-reminder"_s, u"reminders for one lesson"_s);
+        c.steps << act(u"the ensemble later today and the running lesson"_s, [this] {
+                       m_membership = runningMembership();
+                       m_other.clear();
+                       m_cleanup.clear();
+                       for (const QVariant &v : m_data->lessonsOn(Qupil::Clock::today().dayOfWeek() - 1))
+                           if (v.toMap().value(u"name"_s).toString().contains(u"Streicherensemble"_s))
+                               m_other = v.toMap().value(u"id"_s).toString();
+                       m_count = m_data->reminders().size();
+                   })
+                << check(u"there is an ensemble today"_s, [this] { return !m_other.isEmpty(); })
+                << tap(u"Streicherensemble"_s) << see(u"^Erinnerung einrichten$"_s) << snap(u"lesson-view"_s)
+                << tap(u"^Erinnerung einrichten$"_s) << see(u"^Nur bei folgendem Unterricht erinnern$"_s)
+                << tap(u"edit:"_s, u"tap the first field"_s) << type(u"UI-Test: Vorspiel besprechen"_s)
+                << snap(u"lesson-reminder-editor"_s)
+                << tap(u"^Speichern$"_s) << gone(u"^Speichern$"_s)
+                << check(u"saved for the ensemble (mode 3)"_s, [this] {
+                       for (const QVariant &v : m_data->reminders()) {
+                           const QVariantMap r = v.toMap();
+                           if (r.value(u"text"_s).toString() == u"UI-Test: Vorspiel besprechen"_s) {
+                               m_cleanup << r.value(u"id"_s).toString();
+                               return r.value(u"mode"_s).toInt() == 3 && r.value(u"lesson_id"_s).toString() == m_other;
+                           }
+                       }
+                       return false;
+                   })
+                << check(u"at the ensemble, not at the running individual lesson"_s, [this] {
+                       const auto has = [](const QVariantMap &lesson) {
+                           const QVariantList list = lesson.value(u"reminders"_s).toList();
+                           return std::any_of(list.cbegin(), list.cend(), [](const QVariant &r) {
+                               return r.toMap().value(u"text"_s).toString() == u"UI-Test: Vorspiel besprechen"_s;
+                           });
+                       };
+                       const QString running = m_data->get(u"membership"_s, m_membership).value(u"lesson_id"_s).toString();
+                       return has(m_data->lesson(m_other)) && !has(m_data->lesson(running));
+                   })
+                << see(u"^UI-Test: Vorspiel besprechen$"_s)
+                << snap(u"lesson-view-reminder"_s)
+                << act(u"a reminder only for the running individual lesson"_s, [this] {
+                       const QString running = m_data->get(u"membership"_s, m_membership).value(u"lesson_id"_s).toString();
+                       m_cleanup << m_data->create(u"reminder"_s, { { u"text"_s, u"UI-Test: nur im Einzelunterricht"_s }, { u"mode"_s, 3 },
+                                                                    { u"lesson_id"_s, running }, { u"student_id"_s, QString() },
+                                                                    { u"sound"_s, 0 } });
+                   })
+                << openStudent(u"Lena Muster"_s)
+                << see(u"UI-Test: nur im Einzelunterricht$"_s)
+                << gone(u"UI-Test: Vorspiel besprechen$"_s)
+                << snap(u"student-lesson-reminder"_s)
+                << act(u"remove them again"_s, [this] {
+                       for (const QString &id : std::as_const(m_cleanup))
+                           m_data->remove(u"reminder"_s, id);
+                       m_cleanup.clear();
+                   })
+                << check(u"removed"_s, [this] { return m_data->reminders().size() == m_count; });
+    }
     // Birthdays and the data page open
     {
         Case &c = add(u"more-pages"_s, u"birthdays and data pages open"_s);

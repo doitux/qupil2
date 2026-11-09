@@ -120,7 +120,9 @@ QList<EntityDef> buildEntities()
 
     // Reminders. mode: 0 at next start, 1 at the student's next lesson.
     list << EntityDef{ QStringLiteral("reminder"), {
-        text("text"), integer("mode"), text("student_id"), integer("sound"),
+        // mode: 0 when Qupil starts, 1 every lesson, 2 a student (in all their lessons),
+        // 3 one lesson (lesson_id: only there)
+        text("text"), integer("mode"), text("student_id"), integer("sound"), text("lesson_id"),
     }, {} };
 
     // Instruments that can be chosen for students
@@ -184,7 +186,8 @@ const QList<AddedEntity> &addedEntities()
 
 const QList<AddedField> &addedFields()
 {
-    static const QList<AddedField> list { { QStringLiteral("membership"), QStringLiteral("shared_key"), 6 } };
+    static const QList<AddedField> list { { QStringLiteral("membership"), QStringLiteral("shared_key"), 6 },
+                                          { QStringLiteral("reminder"), QStringLiteral("lesson_id"), 7 } };
     return list;
 }
 

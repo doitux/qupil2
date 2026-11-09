@@ -76,7 +76,8 @@ QtObject {
     signal planFromNote(string membershipId, string noteId)
     signal editEvent(string eventId)
     signal editActivity(string studentId, string activityId, bool continuous)
-    signal editReminder(string reminderId, string studentId)
+    //! studentId / lessonId: a new reminder for this student (mode 2) or this lesson (mode 3)
+    signal editReminder(string reminderId, string studentId, string lessonId)
     //! Message at the bottom of the window ("Saved", errors)
     signal toast(string message)
 

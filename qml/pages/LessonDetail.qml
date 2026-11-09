@@ -275,21 +275,37 @@ Item {
                 }
             }
 
+            // Reminders that come at this lesson: its own (mode 3), every lesson, its students'
             ColumnLayout {
-                visible: (detail.lesson.reminders || []).length > 0
+                visible: detail.lesson.active !== 0
                 Layout.fillWidth: true
                 spacing: 8
-                SectionLabel { text: qsTrId("reminders.title") }
+                RowLayout {
+                    Layout.fillWidth: true
+                    SectionLabel {
+                        Layout.fillWidth: true
+                        text: qsTrId("reminders.title")
+                    }
+                    ActionButton {
+                        kind: "quiet"
+                        iconName: "plus"
+                        text: qsTrId("student.add_reminder")
+                        onClicked: Nav.editReminder("", "", detail.lessonId)
+                    }
+                }
                 Repeater {
                     model: detail.lesson.reminders || []
                     delegate: AbstractButton {
                         id: reminderRow
                         required property var modelData
+                        Accessible.name: modelData.text
+                        Accessible.description: modelData.mode === 3 ? qsTrId("reminder.only_this_lesson")
+                                                : Labels.reminderMode(modelData.mode, modelData.studentName)
                         Layout.fillWidth: true
                         implicitHeight: implicitContentHeight + topPadding + bottomPadding
                         topPadding: 12
                         bottomPadding: 12
-                        onClicked: Nav.editReminder(modelData.id, "")
+                        onClicked: Nav.editReminder(modelData.id, "", "")
                         background: Rectangle {
                             radius: Theme.radius
                             color: Theme.surface
@@ -318,7 +334,8 @@ Item {
                                 Text {
                                     Layout.fillWidth: true
                                     elide: Text.ElideRight
-                                    text: Labels.reminderMode(reminderRow.modelData.mode, reminderRow.modelData.studentName)
+                                    text: reminderRow.modelData.mode === 3 ? qsTrId("reminder.only_this_lesson")
+                                          : Labels.reminderMode(reminderRow.modelData.mode, reminderRow.modelData.studentName)
                                     color: Theme.textMuted
                                     font.family: Theme.fontFamily
                                     font.pixelSize: 13

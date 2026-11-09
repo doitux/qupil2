@@ -182,6 +182,8 @@ public:
     Q_INVOKABLE void greetBirthday(const QString &studentId);
     //! mode 0: shown on the start page; 1: every lesson; 2: lessons of one student
     Q_INVOKABLE QVariantList reminders() const;
+    //! Active lessons to choose for a lesson reminder: id, name, label ("Streichquartett · Fr 16:00")
+    Q_INVOKABLE QVariantList reminderLessons() const;
     Q_INVOKABLE QVariantList recitalCandidates() const;
     /*!
         Students who should play in an ensemble (ensemble_expected) but have no

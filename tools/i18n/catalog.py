@@ -907,6 +907,24 @@ E("reminder.heading", code="Erinnerung:", de="Erinnerung:", en="Reminder:", fr="
   es="Recordatorio:", note="In 1.4.1 hartkodiert (mainwindowimpl.cpp)")
 E("reminder.alert_title", en="Reminder: %1", de="Erinnerung: %1", fr="Rappel : %1", es="Recordatorio: %1",
   c="Title of a system notification. %1 = lesson name; more lessons follow after a comma.")
+E("reminder.mode.lesson", en="For lesson “%1”", de="Bei dem Unterricht: \"%1\"", fr="Pour le cours «\u00a0%1\u00a0»",
+  es="Para la clase “%1”", c="When a reminder comes; %1 = lesson name")
+E("reminder.mode.lesson_day", en="For lesson “%1” (%2)", de="Bei dem Unterricht: \"%1\" (%2)", fr="Pour le cours «\u00a0%1\u00a0» (%2)",
+  es="Para la clase “%1” (%2)", c="%1 = lesson name, %2 = short day and time, e.g. Fr 16:00")
+E("reminder.mode.lesson_long", en="Remind me only at this lesson", de="Nur bei folgendem Unterricht erinnern",
+  fr="Me le rappeler uniquement à ce cours", es="Recordármelo solo en esta clase", c="Choice in the reminder editor")
+E("reminder.mode.student_hint", en="at every lesson of the student", de="in jedem seiner Unterrichte",
+  fr="à chaque cours de l’élève", es="en cada clase del alumno", c="Small line under 'only for this student'")
+E("reminder.mode.lesson_hint", en="only there, e.g. only at the quartet or only at an individual lesson",
+  de="nur dort, z. B. nur im Quartett oder nur im Einzelunterricht",
+  fr="seulement là, p. ex. seulement au quatuor ou au cours individuel",
+  es="solo allí, p. ej. solo en el cuarteto o en la clase individual", c="Small line under 'only at this lesson'")
+E("reminder.for_lesson", en="Reminder for this lesson:", de="Erinnerung für diesen Unterricht:", fr="Rappel pour ce cours\u00a0:",
+  es="Recordatorio para esta clase:", c="Heading in the pop-up at the start of a lesson")
+E("reminder.only_this_lesson", en="Only at this lesson", de="Nur bei diesem Unterricht", fr="Uniquement à ce cours",
+  es="Solo en esta clase", c="Under a reminder that belongs to one lesson")
+E("reminder.only_lesson_day", en="Only at the lesson on %1", de="Nur im Unterricht am %1", fr="Uniquement au cours du %1",
+  es="Solo en la clase del %1", c="Above a reminder on the student's page; %1 = short day and time, e.g. Tu 14:00")
 E("reminder.for_student", old="Reminder for the pupil ", en="Reminder for student “%1”:",
   de="Erinnerung für den Schüler \"%1\":", fr="Rappel pour l’élève « %1 » :",
   es="Recordatorio para el alumno “%1”:", c="%1 = student name",

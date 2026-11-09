@@ -54,10 +54,15 @@ Item {
     readonly property var pieceCounts: { if (Data.revision < 0) return undefined; return currentMembership ? Data.pieceCounts(currentMembership) : [0, 0, 0, 0, 0, 0] }
     readonly property var activities: { if (Data.revision < 0) return undefined; return studentId ? Data.activities(studentId) : [] }
     readonly property var loans: { if (Data.revision < 0) return undefined; return studentId ? Data.loans(studentId) : [] }
-    //! Reminders for this student (they also pop up when the student's lesson starts)
+    //! Reminders for this student (they also pop up when the student's lesson starts), and those
+    //! for one of their individual lessons (mode 3: only there; a group's stay at the lesson)
     readonly property var reminders: {
         if (Data.revision < 0) return undefined
-        return studentId ? Data.reminders().filter(r => r.mode === 2 && r.student_id === studentId) : []
+        if (!studentId)
+            return []
+        const single = memberships.filter(m => m.active && m.kind === 1).map(m => m.lesson_id)
+        return Data.reminders().filter(r => (r.mode === 2 && r.student_id === studentId)
+                                            || (r.mode === 3 && single.indexOf(r.lesson_id) >= 0))
     }
     //! Birthday today or since the last lesson (gone once ticked off)
     readonly property var birthday: { if (Data.revision < 0) return undefined; return studentId ? Data.birthdayNote(studentId) : ({}) }
@@ -517,22 +522,40 @@ Item {
                             hoverEnabled: true
                             Accessible.role: Accessible.Button
                             Accessible.name: qsTrId("reminder.edit.title") + ": " + reminderRow.modelData.text
-                            onClicked: Nav.editReminder(reminderRow.modelData.id, detail.studentId)
+                            onClicked: Nav.editReminder(reminderRow.modelData.id, detail.studentId, "")
                             background: Rectangle {
                                 radius: 8
                                 color: "transparent"
                                 border.width: parent.visualFocus ? 2 : 0
                                 border.color: Theme.accentText
                             }
-                            contentItem: Text {
+                            contentItem: ColumnLayout {
                                 id: reminderText
-                                text: reminderRow.modelData.text
-                                wrapMode: Text.Wrap
-                                verticalAlignment: Text.AlignVCenter
-                                color: Theme.text
-                                font.family: Theme.fontFamily
-                                font.pixelSize: 15
-                                font.weight: Font.Medium
+                                spacing: 1
+                                // A reminder only for the individual lesson says so ("ONLY ON TU 14:00")
+                                Text {
+                                    visible: reminderRow.modelData.mode === 3
+                                    Layout.fillWidth: true
+                                    wrapMode: Text.Wrap
+                                    text: reminderRow.modelData.lessonDay ? qsTrId("reminder.only_lesson_day").arg(reminderRow.modelData.lessonDay)
+                                                                          : qsTrId("reminder.only_this_lesson")
+                                    color: Theme.textMuted
+                                    font.family: Theme.fontFamily
+                                    font.pixelSize: 11
+                                    font.weight: Font.Bold
+                                    font.letterSpacing: 0.4
+                                    font.capitalization: Font.AllUppercase
+                                }
+                                Text {
+                                    Layout.fillWidth: true
+                                    text: reminderRow.modelData.text
+                                    wrapMode: Text.Wrap
+                                    verticalAlignment: Text.AlignVCenter
+                                    color: Theme.text
+                                    font.family: Theme.fontFamily
+                                    font.pixelSize: 15
+                                    font.weight: Font.Medium
+                                }
                             }
                         }
                         IconButton {
@@ -638,7 +661,7 @@ Item {
         AppMenuItem {
             iconName: "bell"
             text: qsTrId("student.add_reminder")
-            onTriggered: Nav.editReminder("", detail.studentId)
+            onTriggered: Nav.editReminder("", detail.studentId, "")
         }
         AppMenuItem {
             iconName: "archive"

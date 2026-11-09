@@ -546,7 +546,7 @@ ApplicationWindow {
         function onPlanFromNote(membership, note) { window.sheet("planFinish").startFromNote(membership, note) }
         function onEditPiece(membership, piece) { window.sheet("piece").edit(membership, piece) }
         function onEditActivity(student, activity, continuous) { window.sheet("activity").edit(student, activity, continuous) }
-        function onEditReminder(reminder, student) { window.sheet("reminder").edit(reminder, student) }
+        function onEditReminder(reminder, student, lesson) { window.sheet("reminder").edit(reminder, student, lesson) }
         function onShowPage(index) { window.currentPage = index }
         // A page made just now missed the request: it is told directly
         function onShowStudent(id, membership) {
@@ -823,7 +823,7 @@ ApplicationWindow {
     }
 
     // Reminders "when Qupil starts" and at the start of a lesson (Qupil 1.x pop-ups);
-    // student reminders can be ticked as done
+    // reminders for a student or a lesson can be ticked as done
     AppDialog {
         id: reminderDialog
         // Changed only while open: layouts must not lose items while hidden
@@ -865,10 +865,11 @@ ApplicationWindow {
                     anchors.margins: 12
                     spacing: 6
                     Text {
-                        visible: reminderItem.modelData.mode === 2
+                        visible: reminderItem.modelData.mode === 2 || reminderItem.modelData.mode === 3
                         Layout.fillWidth: true
                         wrapMode: Text.WordWrap
-                        text: qsTrId("reminder.for_student").arg(reminderItem.modelData.studentName || "")
+                        text: reminderItem.modelData.mode === 3 ? qsTrId("reminder.for_lesson")
+                              : qsTrId("reminder.for_student").arg(reminderItem.modelData.studentName || "")
                         color: Theme.accentText
                         font.family: Theme.fontFamily
                         font.pixelSize: 13
@@ -884,7 +885,7 @@ ApplicationWindow {
                         font.weight: Font.Bold
                     }
                     CheckBox {
-                        visible: reminderItem.modelData.mode === 2
+                        visible: reminderItem.modelData.mode === 2 || reminderItem.modelData.mode === 3
                         Layout.leftMargin: -6
                         text: qsTrId("reminder.done_remove")
                         font.family: Theme.fontFamily

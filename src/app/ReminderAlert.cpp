@@ -151,7 +151,8 @@ QVariantList ReminderAlert::itemsFor(const QVariantMap &lesson, const QVariantLi
     for (const QVariant &v : reminders) {
         const QVariantMap r = v.toMap();
         const int mode = r.value(u"mode"_s).toInt();
-        if (mode == 1 || (mode == 2 && students.contains(r.value(u"student_id"_s).toString())))
+        if (mode == 1 || (mode == 2 && students.contains(r.value(u"student_id"_s).toString()))
+            || (mode == 3 && r.value(u"lesson_id"_s) == lesson.value(u"id"_s)))
             items << r;
     }
     return items;
