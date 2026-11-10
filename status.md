@@ -1,6 +1,12 @@
-# TestFlight-Sammellauf 2026-11-09 13:05
+# TestFlight-Sammellauf 2026-11-09 22:05
 
-**Mittags Mo–Do kein Build**
+**Kein Build nötig**
 
-Montag bis Donnerstag kein Mittags-Build; die Änderungen kommen um 22:05.
+Seit dem letzten Upload nichts Neues.
 
+- Seit Build 42 (Commit 7a9836f)
+
+Nächtliche Tests:
+- Android: gestartet (seit 5c6dffa, letzter Lauf: success)
+- Desktop: gestartet (seit 5c6dffa, letzter Lauf: success)
+- iOS: gestartet (seit 5c6dffa, letzter Lauf: success)
