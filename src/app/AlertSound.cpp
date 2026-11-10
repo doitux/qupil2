@@ -19,9 +19,10 @@
 #include <cmath>
 #include <utility>
 
+#include "SystemAlerts.h"
+
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 #include "AlertPlayer.h"
-#include "SystemAlerts.h"
 #endif
 
 using namespace Qt::StringLiterals;
