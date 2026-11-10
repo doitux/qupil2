@@ -1101,7 +1101,20 @@ void UiTest::addCases()
         c.steps << act(u"remember the lessons"_s, [this] { m_lessons = allLessons(); })
                 << tap(u"^Neu$"_s) << tap(u"menuitem:^Neuer Unterricht$"_s) << see(u"combobox:^Wochentag$"_s)
                 << tap(u"edit:^Start$"_s) << typeTime(u"11:00"_s)
-                << tap(u"edit:^Ende$"_s) << typeTime(u"11:11"_s)
+                // Tab goes from the start to the end
+                << act(u"press Tab"_s, [this] { sendKey(Qt::Key_Tab, u"\t"_s); })
+                << check(u"the end has the focus"_s, [this] {
+                       QQuickItem *focus = m_window ? m_window->activeFocusItem() : nullptr;
+                       QAccessibleInterface *a = focus ? QAccessible::queryAccessibleInterface(focus) : nullptr;
+                       return a && a->text(QAccessible::Name) == u"Ende"_s;
+                   })
+                // An end before the start cannot be saved: a hint, the editor stays
+                << typeTime(u"10:30"_s) << see(u"^Das Ende muss nach dem Beginn liegen\\.$"_s)
+                << snap(u"lesson-times-wrong"_s)
+                << tap(u"^Speichern$"_s) << see(u"combobox:^Wochentag$"_s)
+                << check(u"nothing saved"_s, [this] { return allLessons().size() == m_lessons.size(); })
+                // Save put the focus into the end field: type the right end
+                << typeTime(u"11:11"_s) << gone(u"^Das Ende muss nach dem Beginn"_s)
                 << snap(u"lesson-times"_s)
                 << tap(u"^Speichern$"_s) << gone(u"combobox:^Wochentag$"_s)
                 << check(u"saved 11:00 to 11:11"_s, [this] {

@@ -22,6 +22,8 @@ Sheet {
     property string error
     //! "Own name" chosen, but the field is empty: saving is not possible
     readonly property bool nameMissing: draft.auto_name === 0 && (draft.name || "").trim() === ""
+    //! A weekly lesson ends after it starts (at least a minute)
+    readonly property bool timesWrong: !draft.irregular && minutes(draft.end_time || "14:45") <= minutes(draft.start_time || "14:00")
     //! Marked once the field is left empty or saving was tried (not while typing)
     property bool nameChecked: false
 
@@ -88,9 +90,14 @@ Sheet {
     title: lessonId ? qsTrId("lesson.edit") : qsTrId("schedule.new_lesson")
     // Only an own name that is empty blocks saving. Save stays tappable: it scrolls to the
     // field, marks it and says why (instead of a grey button without a reason)
-    canAccept: !nameMissing
-    problem: nameMissing ? nameBlock : null
+    canAccept: !nameMissing && !timesWrong
+    problem: timesWrong ? timesHint : nameMissing ? nameBlock : null
     onAcceptRefused: {
+        if (timesWrong) {
+            endField.focusField()
+            timesShake.restart()
+            return
+        }
         nameChecked = true
         nameField.forceActiveFocus()
         shake.restart()
@@ -140,6 +147,7 @@ Sheet {
         }
         TimeField {
             label: qsTrId("common.start")
+            nextField: endField
             time: editor.draft.start_time || "14:00"
             onPicked: (value) => {
                 const length = editor.minutes(editor.draft.end_time) - editor.minutes(editor.draft.start_time)
@@ -150,17 +158,48 @@ Sheet {
             }
         }
         TimeField {
+            id: endField
             label: qsTrId("common.end")
             time: editor.draft.end_time || "14:45"
             onPicked: (value) => editor.set("end_time", value)
         }
     }
-    Text {
+    // Length, or why it cannot be saved (end not after the start)
+    RowLayout {
+        id: timesHint
         visible: !editor.draft.irregular
-        text: qsTrId("lesson.duration").arg(editor.minutes(editor.draft.end_time) - editor.minutes(editor.draft.start_time))
-        color: editor.minutes(editor.draft.end_time) > editor.minutes(editor.draft.start_time) ? Theme.textMuted : Theme.danger
-        font.family: Theme.fontFamily
-        font.pixelSize: 13
+        Layout.fillWidth: true
+        spacing: 6
+        transform: Translate { id: timesShift }
+        Icon {
+            visible: editor.timesWrong
+            Layout.alignment: Qt.AlignTop
+            Layout.preferredWidth: 18
+            Layout.preferredHeight: 18
+            name: "warning"
+            color: Theme.danger
+            strokeWidth: 2
+        }
+        Text {
+            Layout.fillWidth: true
+            wrapMode: Text.WordWrap
+            text: editor.timesWrong ? qsTrId("lesson.time.end_before_start")
+                                    : qsTrId("lesson.duration").arg(editor.minutes(editor.draft.end_time) - editor.minutes(editor.draft.start_time))
+            color: editor.timesWrong ? Theme.danger : Theme.textMuted
+            font.family: Theme.fontFamily
+            font.pixelSize: editor.timesWrong ? 14 : 13
+            font.weight: editor.timesWrong ? Font.DemiBold : Font.Normal
+            Accessible.role: Accessible.StaticText
+            Accessible.name: text
+        }
+        SequentialAnimation {
+            id: timesShake
+            PauseAnimation { duration: 180 }
+            NumberAnimation { target: timesShift; property: "x"; to: -8; duration: 50 }
+            NumberAnimation { target: timesShift; property: "x"; to: 8; duration: 70 }
+            NumberAnimation { target: timesShift; property: "x"; to: -5; duration: 60 }
+            NumberAnimation { target: timesShift; property: "x"; to: 0; duration: 50 }
+        }
     }
 
     ChoiceField {

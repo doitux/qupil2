@@ -1661,6 +1661,11 @@ Gute Arbeit!</translation>
         <extracomment>Above a reminder on the student&apos;s page; %1 = short day and time, e.g. Tu 14:00</extracomment>
         <translation>Nur im Unterricht am %1</translation>
     </message>
+    <message id="lesson.time.end_before_start">
+        <source>The end must be after the start.</source>
+        <extracomment>Lesson editor, below start and end: shown instead of the length; saving is not possible</extracomment>
+        <translation>Das Ende muss nach dem Beginn liegen.</translation>
+    </message>
     <message id="lessonpick.search">
         <source>Search students or lessons</source>
         <extracomment>Search field in the list of lessons to choose from</extracomment>

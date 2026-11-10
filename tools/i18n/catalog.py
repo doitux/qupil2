@@ -925,6 +925,9 @@ E("reminder.only_this_lesson", en="Only at this lesson", de="Nur bei diesem Unte
   es="Solo en esta clase", c="Under a reminder that belongs to one lesson")
 E("reminder.only_lesson_day", en="Only at the lesson on %1", de="Nur im Unterricht am %1", fr="Uniquement au cours du %1",
   es="Solo en la clase del %1", c="Above a reminder on the student's page; %1 = short day and time, e.g. Tu 14:00")
+E("lesson.time.end_before_start", en="The end must be after the start.", de="Das Ende muss nach dem Beginn liegen.",
+  fr="La fin doit être après le début.", es="El final debe ser posterior al inicio.",
+  c="Lesson editor, below start and end: shown instead of the length; saving is not possible")
 E("lessonpick.search", en="Search students or lessons", de="Schüler oder Unterricht suchen",
   fr="Chercher un élève ou un cours", es="Buscar alumno o clase", c="Search field in the list of lessons to choose from")
 E("lessonpick.today", en="Today · %1", de="Heute · %1", fr="Aujourd’hui · %1", es="Hoy · %1",
