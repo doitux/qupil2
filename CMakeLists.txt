@@ -34,7 +34,8 @@ if(MSVC)
     add_compile_options(/utf-8)
 endif()
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Sql Qml Quick QuickControls2 Multimedia Network LinguistTools)
+# Test: the in-app UI test touches with a finger (QTest::touchEvent, UiTest.cpp)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Core Gui Sql Qml Quick QuickControls2 Multimedia Network LinguistTools Test)
 qt_standard_project_setup(REQUIRES 6.5)
 
 # ---------------------------------------------------------------------------- data core
@@ -153,7 +154,7 @@ if(IOS)
 else()
     target_sources(qupil PRIVATE src/app/FileExport_none.cpp src/app/FileImport_none.cpp)
 endif()
-target_link_libraries(qupil PRIVATE qupilcore Qt6::Core Qt6::Gui Qt6::Qml Qt6::Quick Qt6::QuickControls2
+target_link_libraries(qupil PRIVATE qupilcore Qt6::Core Qt6::Gui Qt6::Qml Qt6::Quick Qt6::QuickControls2 Qt6::Test
     Qt6::Multimedia Qt6::Network)
 
 if(APPLE OR WIN32)

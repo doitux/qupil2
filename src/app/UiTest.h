@@ -100,6 +100,9 @@ private:
     //! "select": a note with three lines in the editor; Qupil stays open and logs where
     //! words and format buttons are and what is selected (touch tests from outside)
     void addSelectPhase();
+    void touchTap(const QPointF &scenePoint);
+    QPointF wordInNote(const QString &word) const;
+    QString noteSelection() const;
     void traceSelection();
     Case &add(const QString &name, const QString &title);
 

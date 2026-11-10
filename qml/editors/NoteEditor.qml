@@ -392,6 +392,21 @@ Sheet {
                 Accessible.ignored: true
             }
             Accessible.description: noteText.length === 0 ? (editor.plan ? qsTrId("plan.placeholder") : qsTrId("note.placeholder")) : ""
+
+            // Touch: Qt leaves selecting a word to the system, which on the iPad needs a long
+            // press and then "Auswählen". A double tap selects the word (iPad, iPhone,
+            // Android); on Android also a long press, as usual there (on the iPad a long press
+            // stays the magnifier for the cursor). The handles then extend the selection.
+            function selectWordAt(point) {
+                noteText.cursorPosition = noteText.positionAt(point.x, point.y)
+                noteText.selectWord()
+            }
+            TapHandler {
+                acceptedDevices: PointerDevice.TouchScreen
+                gesturePolicy: TapHandler.DragThreshold
+                onDoubleTapped: (eventPoint) => noteText.selectWordAt(eventPoint.position)
+                onLongPressed: if (Qt.platform.os === "android") noteText.selectWordAt(point.position)
+            }
         }
         Text {
             visible: editor.plan || noteText.length > 0

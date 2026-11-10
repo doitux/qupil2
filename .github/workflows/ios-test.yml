@@ -79,7 +79,13 @@ jobs:
           bash .github/scripts/run-logged.sh brew install idb-companion
           bash .github/scripts/run-logged.sh python3 -m pip install --break-system-packages --quiet fb-idb \
             || python3 -m pip install --user --quiet fb-idb
+          # Where pip put the "idb" command (system or user install): on the PATH of the next steps
+          echo "$(python3 -c 'import sysconfig; print(sysconfig.get_path("scripts"))')" >> "$GITHUB_PATH"
           echo "$(python3 -m site --user-base)/bin" >> "$GITHUB_PATH"
+          for d in "$(python3 -c 'import sysconfig; print(sysconfig.get_path("scripts"))')" "$(python3 -m site --user-base)/bin"; do
+            [ -x "$d/idb" ] && echo "idb: $d/idb"
+          done
+          idb_companion --version 2> /dev/null | head -1 || echo "no idb_companion on the PATH"
 
       - name: Run the scenarios
         env:

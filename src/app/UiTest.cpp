@@ -4,6 +4,7 @@
 
 #include <cmath>
 #include <QAccessible>
+#include <QTest>
 #include <QCoreApplication>
 #include <QDir>
 #include <QFile>
@@ -697,6 +698,41 @@ UiTest::Step UiTest::act(const QString &what, std::function<void()> action)
                   } };
 }
 
+void UiTest::touchTap(const QPointF &scenePoint)
+{
+    // A finger, not the mouse: Qt Quick treats touch differently (the system selects text)
+    static QPointingDevice *finger = QTest::createTouchDevice();
+    if (!m_window)
+        return;
+    const QPoint p = scenePoint.toPoint();
+    QTest::touchEvent(m_window, finger).press(0, p, m_window);
+    QTest::touchEvent(m_window, finger).release(0, p, m_window);
+}
+
+QPointF UiTest::wordInNote(const QString &word) const
+{
+    // Middle of a word in the note field, in window coordinates (null if not there)
+    Node n;
+    if (!find(u"edit:^Notiz$"_s, &n) || !n.item)
+        return {};
+    QString plain;
+    QMetaObject::invokeMethod(n.item, "getText", Q_RETURN_ARG(QString, plain), Q_ARG(int, 0),
+                              Q_ARG(int, n.item->property("length").toInt()));
+    const int at = plain.indexOf(word);
+    if (at < 0)
+        return {};
+    QRectF a, b;
+    QMetaObject::invokeMethod(n.item, "positionToRectangle", Q_RETURN_ARG(QRectF, a), Q_ARG(int, at));
+    QMetaObject::invokeMethod(n.item, "positionToRectangle", Q_RETURN_ARG(QRectF, b), Q_ARG(int, at + int(word.size())));
+    return n.item->mapToScene(QPointF((a.left() + b.right()) / 2, (a.top() + a.bottom()) / 2));
+}
+
+QString UiTest::noteSelection() const
+{
+    Node n;
+    return find(u"edit:^Notiz$"_s, &n) && n.item ? n.item->property("selectedText").toString() : QString();
+}
+
 UiTest::Step UiTest::wait(int ms)
 {
     auto since = std::make_shared<QElapsedTimer>();
@@ -1048,6 +1084,41 @@ void UiTest::addCases()
                 << tap(u"^Abbrechen$"_s) << gone(u"^Notiz speichern$"_s)
                 << check(u"not saved"_s, [this] { return !latestNote(m_membership).contains(u"Wird verworfen"_s); })
                 << check(u"no draft"_s, [this] { return m_app->keptDraft(u"note"_s).isEmpty(); });
+    }
+    // Touch: a double tap on a word selects it (Qt leaves it to the system otherwise), then "B"
+    {
+        Case &c = add(u"note-touch-select"_s, u"double tap with a finger selects a word, B makes it bold"_s);
+        c.steps << tap(u"^Notiz$"_s) << see(u"^Notiz speichern$"_s)
+                << act(u"two lines of text"_s, [this] {
+                       Node n;
+                       if (find(u"edit:^Notiz$"_s, &n) && n.item)
+                           n.item->setProperty("text", u"<p>Tonleitern G-Dur und D-Dur</p><p>Etüde mit Metronom</p>"_s);
+                   })
+                << check(u"the text is there"_s, [this] { return !wordInNote(u"Metronom"_s).isNull(); })
+                << act(u"double tap on \"Metronom\" (90 ms apart)"_s, [this] {
+                       touchTap(wordInNote(u"Metronom"_s));
+                       QTimer::singleShot(90, this, [this] { touchTap(wordInNote(u"Metronom"_s)); });
+                   })
+                << check(u"\"Metronom\" is selected"_s, [this] { return noteSelection() == u"Metronom"_s; })
+                << snap(u"note-touch-select"_s)
+                << tap(u"^Fett$"_s)
+                << check(u"bold"_s, [this] {
+                       Node n;
+                       if (!find(u"edit:^Notiz$"_s, &n) || !n.item)
+                           return false;
+                       for (QObject *child : n.item->parentItem()->children()) {
+                           if (QByteArray(child->metaObject()->className()).contains("TextFormatter")) {
+                               QString markup;
+                               QMetaObject::invokeMethod(child, "markup", Q_RETURN_ARG(QString, markup));
+                               return markup.contains(u"**Metronom**"_s);
+                           }
+                       }
+                       return false;
+                   })
+                << wait(600)   // apart from the next tap: no double tap
+                << act(u"a single tap on \"Tonleitern\""_s, [this] { touchTap(wordInNote(u"Tonleitern"_s)); })
+                << check(u"a single tap only places the cursor"_s, [this] { return noteSelection().isEmpty(); })
+                << tap(u"^Abbrechen$"_s) << gone(u"^Notiz speichern$"_s);
     }
     // Students: search, open one, back
     {

@@ -29,18 +29,27 @@ sel_result() {
     fi
     SEL_ROWS="$SEL_ROWS| $mark | $1 | \`$2\` | \`$3\` |"$'\n'
 }
-# expect_sel <scenario> <text>: the selection is exactly that text
+# expect_sel <scenario> <text>: the selection is exactly that text. Qupil's log lines come
+# with a delay (adb logcat, the console), so it waits up to 5 s for the expected value
 expect_sel() {
-    sleep 1.2
-    local got
-    got=$(sel_now)
+    local got i
+    sleep 1.5
+    for ((i = 0; i < 10; i++)); do
+        got=$(sel_now)
+        [ "$got" = "$2" ] && break
+        sleep 0.5
+    done
     [ "$got" = "$2" ] && sel_result "$1" "$2" "$got" 1 || sel_result "$1" "$2" "$got" 0
 }
-# expect_markup <scenario> <fragment>: the stored note contains it
+# expect_markup <scenario> <fragment>: the stored note contains it (also waits up to 5 s)
 expect_markup() {
-    sleep 1.2
-    local got
-    got=$(sel_markup)
+    local got i
+    sleep 1
+    for ((i = 0; i < 10; i++)); do
+        got=$(sel_markup)
+        case "$got" in *"$2"*) break ;; esac
+        sleep 0.5
+    done
     case "$got" in
     *"$2"*) sel_result "$1" "$2" "$(echo "$got" | cut -c1-90)" 1 ;;
     *) sel_result "$1" "$2" "$(echo "$got" | cut -c1-90)" 0 ;;
