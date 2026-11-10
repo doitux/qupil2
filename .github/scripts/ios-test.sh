@@ -13,6 +13,27 @@ mkdir -p "$OUT"
 SUMMARY=$OUT/summary.md
 FAILED=0
 say() { echo "$*" | tee -a "$SUMMARY"; }
+# idb: the command pip installed, wherever it landed; else the Python module itself
+IDB_NOTE=''
+if ! command -v idb > /dev/null 2>&1; then
+    for d in "$(python3 -c 'import sysconfig; print(sysconfig.get_path("scripts"))' 2> /dev/null)" \
+             "$(python3 -m site --user-base 2> /dev/null)/bin" /opt/homebrew/bin /usr/local/bin \
+             "$HOME"/Library/Python/*/bin /Library/Frameworks/Python.framework/Versions/*/bin; do
+        if [ -x "$d/idb" ]; then
+            PATH="$d:$PATH"
+            IDB_NOTE="idb found in $d"
+            break
+        fi
+    done
+fi
+if ! command -v idb > /dev/null 2>&1; then
+    if python3 -c 'import idb.cli.main' 2> /dev/null; then
+        idb() { python3 -c 'import sys; from idb.cli.main import main; sys.argv[0] = "idb"; sys.exit(main())' "$@"; }
+        IDB_NOTE="idb as a Python module (no command on the PATH)"
+    else
+        IDB_NOTE="idb missing: $(python3 -c 'import idb' 2>&1 | tail -1); python $(python3 --version 2>&1); companion: $(command -v idb_companion || echo none)"
+    fi
+fi
 
 APP=$(find build -type d -name 'Qupil.app' -path '*iphonesimulator*' | head -n 1)
 [ -n "$APP" ] || { say "**no simulator app built**"; exit 1; }
@@ -163,7 +184,8 @@ device_run() {
     cp -R "$data/Documents/draft/." "$dir/draft/" 2> /dev/null
 
     # --- idb (when it installed): what the system's accessibility sees, a tap from outside
-    if command -v idb > /dev/null 2>&1; then
+    [ -n "$IDB_NOTE" ] && say "- $IDB_NOTE"
+    if command -v idb > /dev/null 2>&1 || declare -F idb > /dev/null; then
         say ''
         say '### idb'
         say ''

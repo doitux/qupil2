@@ -398,8 +398,25 @@ Sheet {
             // Android); on Android also a long press, as usual there (on the iPad a long press
             // stays the magnifier for the cursor). The handles then extend the selection.
             function selectWordAt(point) {
-                noteText.cursorPosition = noteText.positionAt(point.x, point.y)
-                noteText.selectWord()
+                // A word with hyphens and apostrophes counts as one ("G-Dur", "Bach’s"), the
+                // punctuation around it does not
+                const pos = noteText.positionAt(point.x, point.y)
+                const text = noteText.getText(0, noteText.length)
+                const stop = " \t\n\u2029\u2028\u00a0.,;:!?()[]{}\"„“”‚‘«»/…–—"
+                const join = "-'’"
+                let from = pos, to = pos
+                while (from > 0 && stop.indexOf(text[from - 1]) < 0)
+                    --from
+                while (to < text.length && stop.indexOf(text[to]) < 0)
+                    ++to
+                while (from < to && join.indexOf(text[from]) >= 0)
+                    ++from
+                while (to > from && join.indexOf(text[to - 1]) >= 0)
+                    --to
+                if (from === to)
+                    noteText.cursorPosition = pos
+                else
+                    noteText.select(from, to)
             }
             TapHandler {
                 // Long press: the word is selected when the finger lifts (the release would

@@ -1125,7 +1125,15 @@ void UiTest::addCases()
                    })
                 << wait(600)   // apart from the next tap: no double tap
                 << act(u"a single tap on \"Tonleitern\""_s, [this] { touchTap(wordInNote(u"Tonleitern"_s)); })
-                << check(u"a single tap only places the cursor"_s, [this] { return noteSelection().isEmpty(); });
+                << check(u"a single tap only places the cursor"_s, [this] { return noteSelection().isEmpty(); })
+                << wait(600)
+                // a word with a hyphen is one word
+                << act(u"double tap on \"G-Dur\""_s, [this] {
+                       touchTap(wordInNote(u"G-Dur"_s));
+                       QTimer::singleShot(90, this, [this] { touchTap(wordInNote(u"G-Dur"_s)); });
+                   })
+                << check(u"\"G-Dur\" is selected (not just \"Dur\")"_s, [this] { return noteSelection() == u"G-Dur"_s; })
+                << wait(600);
 #ifdef Q_OS_ANDROID
         // Android: a long press selects the word too (when the finger lifts)
         c.steps << act(u"long press on \"Etüde\" (1 s)"_s, [this] { touchTap(wordInNote(u"Etüde"_s), 1000); })
