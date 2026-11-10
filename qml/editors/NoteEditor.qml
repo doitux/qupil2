@@ -431,14 +431,17 @@ Sheet {
                         return
                     longAt = point.position
                     longPending = true
+                    noteText.selectWordAt(longAt)
                 }
-                onPressedChanged: {
-                    if (pressed || !longPending)
+                // Again after the finger lifted or the system took the touch over
+                onPressedChanged: if (!pressed) selectAgain()
+                onCanceled: selectAgain()
+                function selectAgain() {
+                    if (!longPending)
                         return
                     longPending = false
                     Qt.callLater(noteText.selectWordAt, longAt)
                 }
-                onCanceled: longPending = false
             }
         }
         Text {
