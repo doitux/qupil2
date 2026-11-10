@@ -639,7 +639,8 @@ UiTest::Step UiTest::typeTime(const QString &time)
                       if (!focus || !focus->inherits("QQuickTextInput"))
                           return false;
                       if (!*sent) {
-                          sendKey(Qt::Key_Home);
+                          // Not the Home key: on macOS it does not go to the start of the field
+                          focus->setProperty("cursorPosition", 0);
                           for (const QChar c : time)
                               if (c.isDigit())
                                   sendKey(0, QString(c));
