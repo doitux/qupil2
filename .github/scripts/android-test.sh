@@ -325,23 +325,14 @@ tap '^System$' && sleep 2
 adb shell am force-stop $PKG
 
 step "Selecting words by touch in the note editor"
-# Touches through the system (as a finger): a double tap needs two touches within Android's
-# double-tap time, so it goes straight to the touch screen device (sendevent), not through
-# "input tap" (which starts a program for every tap)
-touchdev=$(adb shell getevent -pl 2> /dev/null | tr -d '\r' | awk '/add device/ { dev = $4 } /ABS_MT_POSITION_X/ { print dev; exit }')
-maxx=$(adb shell getevent -pl "$touchdev" 2> /dev/null | tr -d '\r' | awk '/ABS_MT_POSITION_X/ { for (i = 1; i <= NF; i++) if ($i == "max") { gsub(",", "", $(i + 1)); print $(i + 1) } }' | head -1)
-maxy=$(adb shell getevent -pl "$touchdev" 2> /dev/null | tr -d '\r' | awk '/ABS_MT_POSITION_Y/ { for (i = 1; i <= NF; i++) if ($i == "max") { gsub(",", "", $(i + 1)); print $(i + 1) } }' | head -1)
-read -r scrw scrh < <(adb shell wm size | tr -d '\r' | sed -n 's/.*: \([0-9]*\)x\([0-9]*\).*/\1 \2/p' | tail -1)
-say "- touch screen: \`${touchdev:-?}\` (${maxx:-?} x ${maxy:-?}), screen ${scrw:-?} x ${scrh:-?}"
+# Touches through the system (as a finger): input tap / input swipe
 t_tap() { adb shell input tap "$1" "$2"; }
+# A double tap: the second "input tap" starts 0.15 s after the first (each "input" is a
+# program of its own that takes a while to start); the interval is in select-taps.txt
 t_double() {
-    if [ -n "$touchdev" ] && [ -n "$maxx" ] && [ -n "$scrw" ]; then
-        local x=$(($1 * (maxx + 1) / scrw)) y=$(($2 * (maxy + 1) / scrh)) one
-        one="sendevent $touchdev 3 47 0; sendevent $touchdev 3 57 7; sendevent $touchdev 3 53 $x; sendevent $touchdev 3 54 $y; sendevent $touchdev 1 330 1; sendevent $touchdev 0 0 0; sendevent $touchdev 3 57 -1; sendevent $touchdev 1 330 0; sendevent $touchdev 0 0 0"
-        adb shell "$one; sleep 0.09; $one"
-    else
-        adb shell "input tap $1 $2; input tap $1 $2"
-    fi
+    local t
+    t=$(adb shell "a=\$(date +%s%3N); input tap $1 $2 & sleep 0.15; input tap $1 $2; wait; echo \$((\$(date +%s%3N) - a))" | tr -d '\r')
+    echo "double tap: ${t} ms for both" >> "$OUT/select-taps.txt"
 }
 t_long() { adb shell input swipe "$1" "$2" "$1" "$2" 1000; }
 t_drag() { adb shell input swipe "$1" "$2" "$3" "$4" "$([ "${5:-}" = fast ] && echo 150 || echo 900)"; }
@@ -367,6 +358,7 @@ if wait_for "ui test: [0-9]* of [0-9]* cases passed" 240; then
     sel_now() { sel_refresh; python3 -I "$HERE/select-touch.py" "$SEL_LOG" - sel; }
     sel_markup() { sel_refresh; python3 -I "$HERE/select-touch.py" "$SEL_LOG" - markup; }
     select_scenarios
+    [ -f "$OUT/select-taps.txt" ] && say "- $(sort -u "$OUT/select-taps.txt" | head -4 | tr '\n' ';')"
 fi
 notes
 adb shell am force-stop $PKG

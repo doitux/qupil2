@@ -402,10 +402,26 @@ Sheet {
                 noteText.selectWord()
             }
             TapHandler {
+                // Long press: the word is selected when the finger lifts (the release would
+                // otherwise put the cursor back into the middle of it)
+                property point longAt
+                property bool longPending: false
                 acceptedDevices: PointerDevice.TouchScreen
                 gesturePolicy: TapHandler.DragThreshold
                 onDoubleTapped: (eventPoint) => noteText.selectWordAt(eventPoint.position)
-                onLongPressed: if (Qt.platform.os === "android") noteText.selectWordAt(point.position)
+                onLongPressed: {
+                    if (Qt.platform.os !== "android")
+                        return
+                    longAt = point.position
+                    longPending = true
+                }
+                onPressedChanged: {
+                    if (pressed || !longPending)
+                        return
+                    longPending = false
+                    Qt.callLater(noteText.selectWordAt, longAt)
+                }
+                onCanceled: longPending = false
             }
         }
         Text {

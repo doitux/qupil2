@@ -698,7 +698,7 @@ UiTest::Step UiTest::act(const QString &what, std::function<void()> action)
                   } };
 }
 
-void UiTest::touchTap(const QPointF &scenePoint)
+void UiTest::touchTap(const QPointF &scenePoint, int holdMs)
 {
     // A finger, not the mouse: Qt Quick treats touch differently (the system selects text)
     static QPointingDevice *finger = QTest::createTouchDevice();
@@ -706,7 +706,15 @@ void UiTest::touchTap(const QPointF &scenePoint)
         return;
     const QPoint p = scenePoint.toPoint();
     QTest::touchEvent(m_window, finger).press(0, p, m_window);
-    QTest::touchEvent(m_window, finger).release(0, p, m_window);
+    if (holdMs <= 0) {
+        QTest::touchEvent(m_window, finger).release(0, p, m_window);
+        return;
+    }
+    QPointer<QQuickWindow> window(m_window);
+    QTimer::singleShot(holdMs, this, [window, p] {
+        if (window)
+            QTest::touchEvent(window, finger).release(0, p, window);
+    });
 }
 
 QPointF UiTest::wordInNote(const QString &word) const
@@ -1117,8 +1125,14 @@ void UiTest::addCases()
                    })
                 << wait(600)   // apart from the next tap: no double tap
                 << act(u"a single tap on \"Tonleitern\""_s, [this] { touchTap(wordInNote(u"Tonleitern"_s)); })
-                << check(u"a single tap only places the cursor"_s, [this] { return noteSelection().isEmpty(); })
-                << tap(u"^Abbrechen$"_s) << gone(u"^Notiz speichern$"_s);
+                << check(u"a single tap only places the cursor"_s, [this] { return noteSelection().isEmpty(); });
+#ifdef Q_OS_ANDROID
+        // Android: a long press selects the word too (when the finger lifts)
+        c.steps << act(u"long press on \"Etüde\" (1 s)"_s, [this] { touchTap(wordInNote(u"Etüde"_s), 1000); })
+                << wait(1500)
+                << check(u"\"Etüde\" is selected"_s, [this] { return noteSelection() == u"Etüde"_s; });
+#endif
+        c.steps << tap(u"^Abbrechen$"_s) << gone(u"^Notiz speichern$"_s);
     }
     // Students: search, open one, back
     {
