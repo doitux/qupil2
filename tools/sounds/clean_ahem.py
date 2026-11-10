@@ -6,8 +6,9 @@
 The original had a DC offset, rumble below 90 Hz and a noise floor only 16 dB below the
 voice; made denser for iOS notifications, the noise became as loud as the voice. Here:
 DC and rumble removed, hiss above 9 kHz cut, spectral subtraction with the noise of the
-pause (0.10-0.20 s), a soft gate for the pauses, then compressed (ffmpeg) and normalised
-to a peak of -1 dBFS with short fades.
+pause (0.10-0.20 s), a soft gate for the pauses, then gently compressed (ffmpeg) while the fade-out at the end keeps its natural
+course (lifted, its single creaks of the voice rattled), the few sharp peaks limited by
+5 dB, and normalised to a peak of -1 dBFS with short fades.
 
 Usage: clean_ahem.py original.wav lesson-end.wav   (needs numpy, scipy, ffmpeg)
 """
@@ -51,9 +52,27 @@ x = x * gain
 write(clean, x)
 # dense: compressor in ffmpeg (as before), then peak -1 dBFS
 subprocess.run(["ffmpeg","-hide_banner","-loglevel","error","-y","-i",clean,"-af",
-  "aresample=176400,acompressor=threshold=-36dB:ratio=6:attack=0.5:release=60:knee=4:makeup=1,aresample=44100:resampler=soxr",
+  "aresample=176400,acompressor=threshold=-30dB:ratio=3:attack=4:release=120:knee=6:makeup=1,aresample=44100:resampler=soxr",
   "-c:a","pcm_s16le",dense], check=True)
-d = read(dense); d = d / np.abs(d).max() * 10**(-1/20)
+d = read(dense)
+# The end of the "hem" fades out in single creaks of the voice; lifted by the compressor
+# they rattle. From 0.33 s on keep the natural fade of the cleaned sound instead.
+smooth = lambda y: np.sqrt(signal.sosfiltfilt(signal.butter(2, 25, 'lowpass', fs=sr, output='sos'), y**2).clip(1e-12))
+ec, ed = smooth(x[:len(d)]), smooth(d)
+tail = np.clip(((ec / ec.max()) / (ed / ed.max())), 0, 1)
+ramp = np.clip((np.arange(len(d)) / sr - 0.33) / 0.03, 0, 1)
+g = 1 - ramp * (1 - tail)
+d = d * signal.sosfiltfilt(signal.butter(2, 30, 'lowpass', fs=sr, output='sos'), g).clip(0, 1)
+d = d / np.abs(d).max()
+# Single sharp creaks set the peak: a limiter (4x oversampled) takes 5 dB off them, so
+# the rest can be that much louder
+shaped, limited = os.path.join(tmp, 'shaped.wav'), os.path.join(tmp, 'limited.wav')
+write(shaped, d * 10**(-6/20))
+subprocess.run(["ffmpeg","-hide_banner","-loglevel","error","-y","-i",shaped,"-af",
+  "aresample=176400,alimiter=level_in=3.55:limit=0.89:attack=2:release=60:level=false,aresample=44100:resampler=soxr",
+  "-c:a","pcm_s16le",limited], check=True)
+d = read(limited)[:len(d)]
+d = d / np.abs(d).max() * 10**(-1/20)
 # fades 3 ms in, 15 ms out
 fi, fo = int(0.003*sr), int(0.015*sr)
 d[:fi] *= np.linspace(0, 1, fi); d[-fo:] *= np.linspace(1, 0, fo)
