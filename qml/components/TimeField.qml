@@ -47,6 +47,16 @@ ColumnLayout {
         color: Theme.text
         selectByMouse: true
         Accessible.name: field.label
+        // Every complete time counts at once: "Speichern" may be tapped while the field
+        // still has the focus (iPad, iPhone: the keyboard stays open, no Return), and then
+        // editingFinished comes too late or not at all
+        onTextEdited: {
+            if (!acceptableInput)
+                return
+            const value = field.normalize(text)
+            if (value !== field.time)
+                field.picked(value)
+        }
         onEditingFinished: {
             const value = field.normalize(text)
             text = Qt.binding(() => field.time)

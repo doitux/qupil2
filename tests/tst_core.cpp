@@ -32,6 +32,7 @@
 #include "LegacyImporter.h"
 #include "Schema.h"
 #include "LessonAlerts.h"
+#include "Performers.h"
 #include "Mdns.h"
 #include "Store.h"
 #include "TakeOver.h"
@@ -1644,6 +1645,26 @@ private slots:
         // Coming birthdays and unknown ones are not shown here
         QCOMPARE(int(noteFor(QDate(2014, 11, 6), tuesday, QDate(2026, 10, 27)).kind), int(Kind::None));
         QCOMPARE(int(noteFor(QDate(), tuesday, {}).kind), int(Kind::None));
+    }
+
+    void performerLine()
+    {
+        using Qupil::Performers::Person;
+        using Qupil::Performers::line;
+        // Same instrument: once at the end
+        QCOMPARE(line({ { u"Lena Muster (10)"_s, u"Violine"_s }, { u"Max Beispiel (11)"_s, u"Violine"_s } }),
+                 u"Lena Muster (10) · Max Beispiel (11) – Violine"_s);
+        // String quartet: after each name
+        QCOMPARE(line({ { u"Anna A. (12)"_s, u"Violine"_s }, { u"Ben B. (13)"_s, u"Violine"_s },
+                        { u"Clara C. (12)"_s, u"Viola"_s }, { u"David D. (14)"_s, u"Violoncello"_s } }),
+                 u"Anna A. (12), Violine · Ben B. (13), Violine · Clara C. (12), Viola · David D. (14), Violoncello"_s);
+        // Someone without an instrument: only they have none, the others keep theirs
+        QCOMPARE(line({ { u"Anna A."_s, u"Violine"_s }, { u"Ben B."_s, u""_s }, { u"Clara C."_s, u"Violine"_s } }),
+                 u"Anna A., Violine · Ben B. · Clara C., Violine"_s);
+        // Nobody with an instrument, one person, nobody
+        QCOMPARE(line({ { u"Anna A."_s, u" "_s }, { u"Ben B."_s, u""_s } }), u"Anna A. · Ben B."_s);
+        QCOMPARE(line({ { u"Anna A. (9)"_s, u"Klavier"_s } }), u"Anna A. (9) – Klavier"_s);
+        QCOMPARE(line({}), QString());
     }
 
     void catchesUpNewEntities()

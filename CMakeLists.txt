@@ -47,6 +47,8 @@ qt_add_library(qupilcore STATIC
     src/core/Clock.cpp
     src/core/Birthday.h
     src/core/Birthday.cpp
+    src/core/Performers.h
+    src/core/Performers.cpp
     src/core/Schema.h
     src/core/Schema.cpp
     src/core/Database.h

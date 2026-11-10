@@ -630,6 +630,28 @@ UiTest::Step UiTest::type(const QString &text)
                   } };
 }
 
+UiTest::Step UiTest::typeTime(const QString &time)
+{
+    // A time field ("99:99" input mask): from the start, the digits overwrite what is there
+    auto sent = std::make_shared<bool>(false);
+    return Step { u"type the time %1"_s.arg(time), [this, time, sent] {
+                      QQuickItem *focus = m_window ? m_window->activeFocusItem() : nullptr;
+                      if (!focus || !focus->inherits("QQuickTextInput"))
+                          return false;
+                      if (!*sent) {
+                          sendKey(Qt::Key_Home);
+                          for (const QChar c : time)
+                              if (c.isDigit())
+                                  sendKey(0, QString(c));
+                          *sent = true;
+                      }
+                      if (focus->property("text").toString() != time)
+                          return false;
+                      *sent = false;
+                      return true;
+                  } };
+}
+
 UiTest::Step UiTest::clearField()
 {
     return Step { u"clear the field"_s, [this] {
@@ -1063,6 +1085,29 @@ void UiTest::addCases()
                        for (const QString &id : allLessons())
                            if (!m_lessons.contains(id))
                                m_data->deleteLesson(id);
+                   })
+                << check(u"removed"_s, [this] { return allLessons().size() == m_lessons.size(); });
+    }
+    // Any length of lesson: type start and end and save right away (iOS: no Return, the
+    // keyboard stays open; the times must still count)
+    {
+        Case &c = add(u"lesson-times"_s, u"a lesson of 11 minutes, times typed and saved at once"_s);
+        c.steps << act(u"remember the lessons"_s, [this] { m_lessons = allLessons(); })
+                << tap(u"^Neu$"_s) << tap(u"menuitem:^Neuer Unterricht$"_s) << see(u"combobox:^Wochentag$"_s)
+                << tap(u"edit:^Start$"_s) << typeTime(u"11:00"_s)
+                << tap(u"edit:^Ende$"_s) << typeTime(u"11:11"_s)
+                << snap(u"lesson-times"_s)
+                << tap(u"^Speichern$"_s) << gone(u"combobox:^Wochentag$"_s)
+                << check(u"saved 11:00 to 11:11"_s, [this] {
+                       for (const QString &id : allLessons()) {
+                           if (m_lessons.contains(id))
+                               continue;
+                           const QVariantMap l = m_data->get(u"lesson"_s, id);
+                           m_data->deleteLesson(id);
+                           return l.value(u"start_time"_s).toString() == u"11:00"_s
+                                  && l.value(u"end_time"_s).toString() == u"11:11"_s;
+                       }
+                       return false;
                    })
                 << check(u"removed"_s, [this] { return allLessons().size() == m_lessons.size(); });
     }

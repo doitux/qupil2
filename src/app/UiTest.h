@@ -117,6 +117,7 @@ private:
     Step snap(const QString &name);
     Step tab(const QString &name);
     Step clearField();
+    Step typeTime(const QString &time);
     QList<Step> openStudent(const QString &name);
 
     // ---- the screen

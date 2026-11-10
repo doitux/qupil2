@@ -31,6 +31,7 @@
 #include "Clock.h"
 #include "Database.h"
 #include "Ids.h"
+#include "Performers.h"
 #include "Csv.h"
 #include "LanguageManager.h"
 #include "NoteFormat.h"
@@ -1394,21 +1395,16 @@ QString DataService::performers(const QString &groupKey) const
         u"JOIN membership m ON m.id = p.membership_id JOIN student s ON s.id = m.student_id "
         u"WHERE p.deleted = 0 AND s.deleted = 0 AND p.group_key = ? ORDER BY s.surname COLLATE NOCASE, s.forename"_s,
         { groupKey });
-    QStringList names;
-    QSet<QString> instruments;
+    QList<Qupil::Performers::Person> list;
     for (const QVariant &v : people) {
         const QVariantMap p = v.toMap();
         const int age = ageOn(p.value(u"birthday"_s).toString());
         QString name = listName(p.value(u"forename"_s).toString(), p.value(u"surname"_s).toString());
         if (age >= 0)
             name += u" (%1)"_s.arg(age);
-        names << name;
-        instruments.insert(p.value(u"instrument"_s).toString());
+        list << Qupil::Performers::Person { name, p.value(u"instrument"_s).toString() };
     }
-    QString text = names.join(u" · "_s);
-    if (instruments.size() == 1 && !instruments.cbegin()->isEmpty())
-        text += u" – "_s + *instruments.cbegin();
-    return text;
+    return Qupil::Performers::line(list);
 }
 
 QVariantList DataService::events() const

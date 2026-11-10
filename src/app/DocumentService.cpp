@@ -13,6 +13,7 @@
 #include <QPageLayout>
 #include <QPageSize>
 #include <QPdfWriter>
+#include <QTextTable>
 #include <QQmlEngine>
 #include <QRegularExpression>
 #include <QSqlQuery>
@@ -41,6 +42,10 @@ namespace {
 
 DocumentService *s_instance = nullptr;
 constexpr int kKeepDocuments = 30;
+//! Space between a table cell's border and its text in PDFs
+constexpr qreal kCellPaddingMm = 0.8;
+//! Space above a table in PDFs (as much as below it)
+constexpr qreal kTableGapMm = 2.5;
 
 QString esc(const QString &s)
 {
@@ -189,6 +194,28 @@ QUrl DocumentService::writePdf(const QString &html, const QString &baseName, boo
     doc.documentLayout()->setPaintDevice(&writer);
     doc.setDefaultFont(QFont(u"Figtree"_s, 10));
     doc.setHtml(html);
+    // Air inside the table cells and above each table. The CSS padding of the cells is lost
+    // here; the layout counts in pixels of 96 dpi.
+    const qreal mm = 96 / 25.4;
+    for (QTextFrame *child : doc.rootFrame()->childFrames()) {
+        auto *t = qobject_cast<QTextTable *>(child);
+        if (!t)
+            continue;
+        QTextTableFormat f = t->format();
+        f.setTopMargin(kTableGapMm * mm);
+        t->setFormat(f);
+        for (int r = 0; r < t->rows(); ++r) {
+            for (int c = 0; c < t->columns(); ++c) {
+                QTextTableCell cell = t->cellAt(r, c);
+                QTextTableCellFormat cf = cell.format().toTableCellFormat();
+                cf.setTopPadding(kCellPaddingMm * mm);
+                cf.setBottomPadding(kCellPaddingMm * mm);
+                cf.setLeftPadding(kCellPaddingMm * 2 * mm);
+                cf.setRightPadding(kCellPaddingMm * 2 * mm);
+                cell.setFormat(cf);
+            }
+        }
+    }
     QTextFrameFormat frame = doc.rootFrame()->frameFormat();
     frame.setMargin(0);
     doc.rootFrame()->setFrameFormat(frame);

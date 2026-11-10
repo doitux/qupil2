@@ -4,6 +4,8 @@ Neu seit Build 39:
 - Erinnerungen für einen Unterricht: In der Unterrichtsansicht (z. B. Streichquartett) gibt es "Erinnerung einrichten"; die Erinnerung kommt dann nur bei diesem Unterricht, nicht in den anderen Stunden der Schüler. Im Editor heißt die neue Art "Nur bei folgendem Unterricht erinnern". So lässt sich auch eine Erinnerung nur für den Einzelunterricht eines Schülers anlegen – sie steht dann auf seiner Schülerseite mit "Nur im Unterricht am …".
 - Neue Unterrichtsauswahl bei Erinnerungen: mit Suche (auch nach Schülern im Ensemble), Tagesauswahl und Überschriften je Tag; die Liste beginnt mit heute.
 - Leihnoten zurücknehmen: Auf der Schülerseite unter "Leihnoten" hat jedes ausgeliehene Heft den Knopf "Zurückgegeben" (mit "Rückgängig", falls versehentlich getippt). Ein Tipp auf das Heft öffnet es in der Notenbibliothek.
+- Unterrichtszeiten: Eine getippte Uhrzeit (z. B. Ende 12:47 statt 12:46) wurde nicht gespeichert, wenn man direkt danach auf "Speichern" tippte. Behoben – jede Unterrichtslänge geht.
+- Veranstaltungen: Bei Ensembles mit verschiedenen Instrumenten (z. B. Streichquartett) steht das Instrument jetzt hinter jedem Namen. Die Programmübersicht als PDF hat mehr Luft in den Tabellenzellen und über der Tabelle (gilt für alle PDF-Tabellen).
 - Wichtig: Diese Version stellt die Daten um. Geräte mit älteren Builds synchronisieren weiter, zeigen gemeinsam geführte Stunden getrennt und Erinnerungen für einen Unterricht gar nicht – bitte alle eigenen Geräte aktualisieren.
 
 Bitte grundsätzlich ausprobieren:
