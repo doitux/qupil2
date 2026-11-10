@@ -346,6 +346,7 @@ t_double() {
 t_long() { adb shell input swipe "$1" "$2" "$1" "$2" 1000; }
 t_drag() { adb shell input swipe "$1" "$2" "$3" "$4" "$([ "${5:-}" = fast ] && echo 150 || echo 900)"; }
 t_shot() { shot "$1"; }
+t_find() { dump; python3 -I "$HERE/android-ui.py" "$OUT/ui/now.xml" "$1"; }
 t_menu() {
     dump
     python3 -I "$HERE/android-ui.py" "$OUT/ui/now.xml" --list | sed 's/^ *[0-9]* *[0-9]*  //' \

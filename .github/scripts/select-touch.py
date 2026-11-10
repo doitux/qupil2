@@ -7,6 +7,7 @@
     select-touch.py <log> -       sel                     what is selected now ("" = nothing)
     select-touch.py <log> -       markup                  the note as Qupil stores it
 
+SEL_DX and SEL_DY (environment) are added to every coordinate (the window's offset).
 <scale> turns Qupil's logical pixels into the unit of the tool that taps: 1 for idb (points),
 "dpr" for adb (the screen's pixels, the factor Qupil logged). Coordinates are printed as
 "x y" (integers). The last logged value counts. Exit code 1 if nothing was logged."""
@@ -42,8 +43,13 @@ def main():
     else:
         factor = float(scale)
 
+    # Where the window sits on the screen (status bar …): measured by the caller against
+    # what the system's accessibility sees, in the output unit
+    import os
+    dx, dy = float(os.environ.get('SEL_DX', 0) or 0), float(os.environ.get('SEL_DY', 0) or 0)
+
     def out(x, y):
-        print(int(round(x * factor)), int(round(y * factor)))
+        print(int(round(x * factor + dx)), int(round(y * factor + dy)))
         return 0
 
     if what == 'sel':

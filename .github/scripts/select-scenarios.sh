@@ -7,6 +7,7 @@
 #   t_tap x y, t_double x y, t_long x y, t_drag x1 y1 x2 y2   touches through the system
 #   t_shot name                                                screenshot (+ what the system sees)
 #   t_menu                                                     prints the system's edit menu items on the screen
+#   t_find pattern                                             "x y" of an element the system's accessibility sees
 #   say text, SEL_LOG (Qupil's log), SEL_SCALE (1 or dpr), HERE
 # Sets SEL_PASSED and SEL_TOTAL. Informational for now: what is hard on a touch screen.
 
@@ -58,6 +59,21 @@ menu_note() {
     sel_result "$1" "(recorded)" "${items:-no menu}" 1
 }
 
+# sel_calibrate: the offset between Qupil's coordinates and the screen's, from the "B"
+# button as the system's accessibility sees it (t_find prints its centre)
+sel_calibrate() {
+    local seen logged
+    SEL_DX=0 SEL_DY=0
+    export SEL_DX SEL_DY
+    seen=$(t_find '^Fett$') || { say '- (no "Fett" in the accessibility tree: no offset)'; return; }
+    logged=$(sel_xy button Fett) || return
+    set -- $seen $logged
+    SEL_DX=$(($1 - $3))
+    SEL_DY=$(($2 - $4))
+    export SEL_DX SEL_DY
+    say "- window offset: $SEL_DX, $SEL_DY (\"Fett\" at $1 $2 on the screen, Qupil logged $3 $4)"
+}
+
 select_scenarios() {
     local xy xy2
     say ''
@@ -67,6 +83,7 @@ select_scenarios() {
         say '- **Qupil logged no positions** ("select: word …"): no touch tests'
         return
     fi
+    sel_calibrate
     t_shot select-start
 
     # 1. A word at the start of the first line: the system's menu comes up over the format buttons

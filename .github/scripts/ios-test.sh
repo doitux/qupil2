@@ -206,6 +206,7 @@ device_run() {
         t_long() { idb ui tap --udid "$udid" --duration 1.0 "$1" "$2"; }
         t_drag() { idb ui swipe --udid "$udid" --duration "$([ "${5:-}" = fast ] && echo 0.15 || echo 1.0)" "$1" "$2" "$3" "$4"; }
         t_shot() { shot "$1"; }
+        t_find() { describe; python3 -I "$HERE/ios-ui.py" "$dir/screen/now.json" "$1"; }
         t_menu() {
             describe
             python3 -I "$HERE/ios-ui.py" "$dir/screen/now.json" --list | sed 's/^ *[0-9]* *[0-9]*  [A-Za-z]* *//' \
