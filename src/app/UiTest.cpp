@@ -712,6 +712,10 @@ UiTest::Step UiTest::wait(int ms)
 UiTest::Step UiTest::snap(const QString &name)
 {
     return Step { u"screenshot %1"_s.arg(name), [this, name] {
+                      // Not while a page slides in: the page below is still there and its
+                      // colours would count as the background of the new page's texts
+                      if (busy())
+                          return false;
                       shot(name);
                       // Every screenshot is also a check that all text on it can be read
                       for (const QString &t : unreadable())
@@ -780,7 +784,8 @@ void UiTest::finishCase()
     if (r.passed) {
         // What the screen looked like at the end (for comparing platforms)
         shot(u"case-%1"_s.arg(r.name));
-        for (const QString &t : unreadable())
+        // (not in the middle of a page transition, see snap())
+        for (const QString &t : busy() ? QStringList() : unreadable())
             if (!m_unreadable.contains(t))
                 m_unreadable << t;
         if (!m_unreadable.isEmpty()) {
