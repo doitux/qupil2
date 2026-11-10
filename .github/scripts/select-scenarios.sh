@@ -105,6 +105,15 @@ select_scenarios() {
     t_tap $xy
     expect_markup '2 "B" while the system menu is open' '**Tonleitern**'
     t_shot select-2-bold
+    # Does only the first tap get lost (the system closing its handles or menu)?
+    case "$(sel_markup)" in
+    *'**Tonleitern**'*) ;;
+    *)
+        xy=$(sel_xy button Fett)
+        t_tap $xy
+        expect_markup '2b "B" a second time' '**Tonleitern**'
+        ;;
+    esac
     clear_sel
     expect_sel '3 a tap behind the text ends the selection' ''
 
