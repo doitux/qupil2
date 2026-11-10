@@ -42,4 +42,9 @@ void cancel()
 
 } // namespace Platform
 
+bool playLikeNotification(const QString &)
+{
+    return false;
+}
+
 } // namespace SystemAlerts

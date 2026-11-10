@@ -10,9 +10,11 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QHash>
 #include <QPointer>
 #include <QStringList>
 
+#import <AudioToolbox/AudioToolbox.h>
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <UserNotifications/UserNotifications.h>
@@ -161,6 +163,23 @@ void openSettings(bool)
     if (@available(iOS 16.0, *))
         address = UIApplicationOpenNotificationSettingsURLString;
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:address] options:@{} completionHandler:nil];
+}
+
+bool playLikeNotification(const QString &path)
+{
+    // A system sound: iOS plays it at the ringtone and alerts volume and keeps it silent
+    // when the device is muted – like the notification sounds. The ids are kept per file
+    // (names change with the sound, so there are only a few).
+    static QHash<QString, SystemSoundID> sounds;
+    SystemSoundID sound = sounds.value(path, 0);
+    if (!sound) {
+        NSURL *url = [NSURL fileURLWithPath:path.toNSString()];
+        if (AudioServicesCreateSystemSoundID((__bridge CFURLRef)url, &sound) != kAudioServicesNoError || !sound)
+            return false;
+        sounds.insert(path, sound);
+    }
+    AudioServicesPlaySystemSound(sound);
+    return true;
 }
 
 namespace Platform {

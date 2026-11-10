@@ -1,7 +1,8 @@
 // SPDX-FileCopyrightText: 2006-2026 Felix Hammer
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 //
-// Sound of an alert: Qupil's own or a file, listen, volume (heard when let go).
+// Sound of an alert: Qupil's own or a file, listen, volume (heard when let go;
+// iPad/iPhone: a hint to the system's volume instead).
 // alert: LessonEnd or ReminderAlert (soundName, busy, volume, chooseSound(),
 // useDefaultSound(), test()).
 
@@ -110,7 +111,64 @@ ColumnLayout {
         font.pixelSize: 13
     }
 
+    // iPad, iPhone: the system sets the volume of notifications (Qupil's would only
+    // make them quieter), so a hint instead of the slider
+    readonly property bool systemVolume: Qt.platform.os === "ios"
+    readonly property string device: Math.min(Screen.width, Screen.height) >= 600 ? "iPad" : "iPhone"
+
+    FieldLabel {
+        visible: chooser.systemVolume
+        Layout.topMargin: 4
+        label: qsTrId("settings.volume")
+    }
+    Rectangle {
+        visible: chooser.systemVolume
+        Layout.fillWidth: true
+        implicitHeight: systemHint.implicitHeight + 24
+        radius: 14
+        color: Theme.accentSoft
+        RowLayout {
+            id: systemHint
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.margins: 12
+            spacing: 10
+            Icon {
+                Layout.alignment: Qt.AlignTop
+                name: "speaker"
+                color: Theme.accentText
+            }
+            ColumnLayout {
+                Layout.fillWidth: true
+                spacing: 4
+                Text {
+                    Layout.fillWidth: true
+                    wrapMode: Text.WordWrap
+                    textFormat: Text.StyledText
+                    text: qsTrId("settings.volume.system").arg(chooser.device)
+                          .arg("<b>" + qsTrId(chooser.device === "iPad" ? "settings.volume.path_ipad"
+                                                                        : "settings.volume.path_iphone") + "</b>")
+                    color: Theme.text
+                    font.family: Theme.fontFamily
+                    font.pixelSize: 14
+                    Accessible.role: Accessible.StaticText
+                    Accessible.name: text.replace(/<[^>]*>/g, "")
+                }
+                Text {
+                    Layout.fillWidth: true
+                    wrapMode: Text.WordWrap
+                    text: qsTrId("settings.volume.listen")
+                    color: Theme.textMuted
+                    font.family: Theme.fontFamily
+                    font.pixelSize: 13
+                }
+            }
+        }
+    }
+
     RowLayout {
+        visible: !chooser.systemVolume
         Layout.fillWidth: true
         Layout.topMargin: 4
         FieldLabel { label: qsTrId("settings.volume") }
@@ -124,6 +182,7 @@ ColumnLayout {
     }
     Slider {
         id: volume
+        visible: !chooser.systemVolume
         Layout.fillWidth: true
         from: 1
         to: 10

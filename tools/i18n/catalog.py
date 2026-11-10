@@ -2191,6 +2191,23 @@ E("settings.reminder_sound.hint",
 E("settings.sound.use_default", en="Default sound", de="Standardklang", fr="Son par défaut",
   es="Sonido predeterminado", c="Button: go back to the sound that comes with Qupil.")
 E("settings.sound.test", en="Listen", de="Anhören", fr="Écouter", es="Escuchar")
+E("settings.volume.system", en="The %1 sets the volume: %2. If the %1 is muted or a Focus is on, the sound stays off.",
+  de="Die Lautstärke stellt das %1 ein: %2. Ist das %1 stumm geschaltet oder ein Fokus an, bleibt der Klang aus.",
+  fr="Le volume est réglé par l’%1 : %2. Si l’%1 est en silencieux ou si un mode de concentration est activé, le son reste coupé.",
+  es="El volumen lo ajusta el %1: %2. Si el %1 está en silencio o hay un modo de concentración activo, el sonido no suena.",
+  c="iPad/iPhone settings, instead of the volume slider; %1 = iPad or iPhone, %2 = settings.volume.path_ipad/_iphone (shown bold)")
+E("settings.volume.path_ipad", en="Settings › Sounds › Ringtone and Alerts",
+  de="Einstellungen › Töne › Klingel- und Hinweistöne",
+  fr="Réglages › Sons › Sonnerie et alertes", es="Ajustes › Sonidos › Tono y avisos",
+  c="Path to the iPad's own setting for the volume of notifications; use the names iPadOS shows")
+E("settings.volume.path_iphone", en="Settings › Sounds & Haptics › Ringtone and Alerts",
+  de="Einstellungen › Töne & Haptik › Klingel- und Hinweistöne",
+  fr="Réglages › Sons et vibrations › Sonnerie et alertes", es="Ajustes › Sonidos y vibraciones › Tono y avisos",
+  c="Path to the iPhone's own setting for the volume of notifications; use the names iOS shows")
+E("settings.volume.listen", en="▷ plays the sound as loud as it will come.",
+  de="▷ spielt den Klang so laut, wie er nachher kommt.",
+  fr="▷ joue le son aussi fort qu’il retentira ensuite.", es="▷ reproduce el sonido tan alto como sonará después.",
+  c="Below settings.volume.system: the play button sounds like the real alert")
 E("settings.sound.hint", en="Your own sound: WAV, MP3 or M4A. Longer sounds stop after 10 seconds.",
   de="Eigener Klang: WAV, MP3 oder M4A. Längere Klänge enden nach 10 Sekunden.",
   fr="Votre propre son : WAV, MP3 ou M4A. Les sons plus longs s’arrêtent après 10 secondes.",

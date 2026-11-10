@@ -71,6 +71,14 @@ void requestPermission(QObject *context, std::function<void()> done);
 //! The app's notification settings, or (Android) the "Alarms & reminders" setting
 void openSettings(bool exactAlarms);
 
+/*!
+    iOS: plays a short sound the way the system plays notification sounds – at the
+    volume for ringtones and alerts, silent when the device is muted – so listening
+    in the settings sounds like the alert later. false elsewhere (or if it cannot):
+    then Qupil plays it itself.
+*/
+bool playLikeNotification(const QString &path);
+
 namespace Platform {
 //! All alerts in the order they come from now on; channels: kind → name
 void schedule(const QList<Alert> &alerts, const QMap<QString, QString> &channels);

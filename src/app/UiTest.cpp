@@ -1340,6 +1340,19 @@ void UiTest::addCases()
                 << tap(u"^Mehr$"_s, u"back to More"_s) << tap(u"^Einstellungen$"_s) << tap(u"^Daten und Backups"_s)
                 << see(u"^Backup erstellen$"_s);
     }
+    // Volume of the alert sounds: a slider, on iPad and iPhone the way to the system's setting
+    {
+        Case &c = add(u"alert-volume"_s, u"volume of alert sounds (iOS: hint to the system setting)"_s);
+        c.steps << tab(u"Mehr"_s) << tap(u"^Einstellungen$"_s) << tap(u"^Hinweise und Klänge"_s)
+                << see(u"^Meldung am Ende des Unterrichts"_s);
+#ifdef Q_OS_IOS
+        c.steps << see(u"^Die Lautstärke stellt das i(Pad|Phone) ein: Einstellungen › "_s)
+                << gone(u"slider:^Lautstärke"_s);
+#else
+        c.steps << see(u"slider:^Lautstärke"_s) << gone(u"^Die Lautstärke stellt das "_s);
+#endif
+        c.steps << snap(u"alert-volume"_s);
+    }
     // Last: a note left unsaved when Qupil quits (--ui-test-phase restart checks it)
     {
         Case &c = add(u"restart-prepare"_s, u"an unsaved note when Qupil quits"_s);

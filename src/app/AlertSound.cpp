@@ -21,6 +21,7 @@
 
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
 #include "AlertPlayer.h"
+#include "SystemAlerts.h"
 #endif
 
 using namespace Qt::StringLiterals;
@@ -79,10 +80,16 @@ void AlertSound::store(const QString &key, const QVariant &value)
 
 int AlertSound::volume() const
 {
+#ifdef Q_OS_IOS
+    // iOS sets the volume of notifications (ringtones and alerts); Qupil's own setting
+    // could only make them quieter, so the sound always comes at full strength there
+    return 10;
+#else
     QSettings s;
     s.beginGroup(m_group);
     const QVariant v = s.value(u"volume"_s);
     return std::clamp(v.isValid() ? v.toInt() : m_defaultVolume ? m_defaultVolume() : 7, 1, 10);
+#endif
 }
 
 void AlertSound::setVolume(int volume)
@@ -163,6 +170,11 @@ void AlertSound::play()
     const QString path = file();
     if (path.isEmpty())
         return;
+#ifdef Q_OS_IOS
+    // As loud as the notification later (not at the media volume)
+    if (SystemAlerts::playLikeNotification(path))
+        return;
+#endif
 #if defined(Q_OS_LINUX) && !defined(Q_OS_ANDROID)
     // In a process of its own: the main thread can stall while the screen is off
     if (!m_player) {

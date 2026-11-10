@@ -3799,6 +3799,26 @@ Póngase en contacto con el autor en %4 para resolver el problema.</translation>
         <source>Listen</source>
         <translation>Escuchar</translation>
     </message>
+    <message id="settings.volume.system">
+        <source>The %1 sets the volume: %2. If the %1 is muted or a Focus is on, the sound stays off.</source>
+        <extracomment>iPad/iPhone settings, instead of the volume slider; %1 = iPad or iPhone, %2 = settings.volume.path_ipad/_iphone (shown bold)</extracomment>
+        <translation>El volumen lo ajusta el %1: %2. Si el %1 está en silencio o hay un modo de concentración activo, el sonido no suena.</translation>
+    </message>
+    <message id="settings.volume.path_ipad">
+        <source>Settings › Sounds › Ringtone and Alerts</source>
+        <extracomment>Path to the iPad&apos;s own setting for the volume of notifications; use the names iPadOS shows</extracomment>
+        <translation>Ajustes › Sonidos › Tono y avisos</translation>
+    </message>
+    <message id="settings.volume.path_iphone">
+        <source>Settings › Sounds &amp; Haptics › Ringtone and Alerts</source>
+        <extracomment>Path to the iPhone&apos;s own setting for the volume of notifications; use the names iOS shows</extracomment>
+        <translation>Ajustes › Sonidos y vibraciones › Tono y avisos</translation>
+    </message>
+    <message id="settings.volume.listen">
+        <source>▷ plays the sound as loud as it will come.</source>
+        <extracomment>Below settings.volume.system: the play button sounds like the real alert</extracomment>
+        <translation>▷ reproduce el sonido tan alto como sonará después.</translation>
+    </message>
     <message id="settings.sound.hint">
         <source>Your own sound: WAV, MP3 or M4A. Longer sounds stop after 10 seconds.</source>
         <translation>Sonido propio: WAV, MP3 o M4A. Los sonidos más largos se cortan a los 10 segundos.</translation>
