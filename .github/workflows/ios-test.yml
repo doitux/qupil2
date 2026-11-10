@@ -67,16 +67,24 @@ jobs:
           bash .github/scripts/run-logged.sh cmake --build build --config Release -- \
             -sdk iphonesimulator ARCHS=x86_64 ONLY_ACTIVE_ARCH=NO CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""
 
+      # fb-idb (the client of idb) does not install on Python 3.14
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
       # Optional: without it the run skips only the taps from outside
       - name: Install idb
         continue-on-error: true
         run: |
-          # idb-companion is built with Xcode 26 (the app itself with the runner's default Xcode)
+          # idb-companion is built with Xcode 26; Homebrew asks xcode-select for it (DEVELOPER_DIR
+          # is not enough), so Xcode 26 is selected for the install and the runner's default after
+          before=$(xcode-select -p)
           x=$(ls -d /Applications/Xcode_26*.app 2> /dev/null | sort -V | tail -n 1)
-          [ -n "$x" ] && export DEVELOPER_DIR="$x/Contents/Developer" && echo "idb with $x"
+          [ -n "$x" ] && sudo xcode-select -s "$x/Contents/Developer" && echo "idb with $x"
           brew tap facebook/fb > /dev/null
           brew trust facebook/fb > /dev/null 2>&1 || true
-          bash .github/scripts/run-logged.sh brew install idb-companion
+          bash .github/scripts/run-logged.sh brew install idb-companion || true
+          sudo xcode-select -s "$before"
           bash .github/scripts/run-logged.sh python3 -m pip install --break-system-packages --quiet fb-idb \
             || python3 -m pip install --user --quiet fb-idb
           # Where pip put the "idb" command (system or user install): on the PATH of the next steps
