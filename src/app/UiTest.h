@@ -10,6 +10,8 @@
 #include <QRectF>
 #include <QString>
 #include <QStringList>
+#include <QHash>
+#include <QTimer>
 
 #include <functional>
 
@@ -95,6 +97,10 @@ private:
     void addCases();
     void addRestartPhase();
     void addDraftPhase();
+    //! "select": a note with three lines in the editor; Qupil stays open and logs where
+    //! words and format buttons are and what is selected (touch tests from outside)
+    void addSelectPhase();
+    void traceSelection();
     Case &add(const QString &name, const QString &title);
 
     // ---- steps
@@ -169,4 +175,6 @@ private:
     QString m_other;              // a second lesson of the same student (case "together")
     QStringList m_cleanup;        // "entity:id" to remove at the end of a case
     QStringList m_unreadable;     // found at a snap or the end of the case
+    QTimer m_traceTimer;
+    QHash<QString, QString> m_traced;
 };

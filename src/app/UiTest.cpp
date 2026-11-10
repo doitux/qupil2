@@ -109,6 +109,8 @@ void UiTest::start()
             addRestartPhase();
         else if (m_phase == u"draft"_s)
             addDraftPhase();
+        else if (m_phase == u"select"_s)
+            addSelectPhase();
         else
             addCases();
         // "only:a,b,c": just these cases (a long run split into several starts)
@@ -842,8 +844,9 @@ void UiTest::report()
         text.write(md.toUtf8());
     qInfo("ui test: %lld of %lld cases passed (%s)", qlonglong(m_results.size() - failed),
           qlonglong(m_results.size()), qPrintable(QDir::toNativeSeparators(m_folder)));
-    // "draft": Qupil stays open with the unsaved note, the system ends it from outside
-    if (m_phase != u"draft"_s)
+    // "draft": Qupil stays open with the unsaved note, the system ends it from outside;
+    // "select": stays open for the touch tests from outside
+    if (m_phase != u"draft"_s && m_phase != u"select"_s)
         QCoreApplication::exit(failed == 0 ? EXIT_SUCCESS : 1);
 }
 
@@ -910,6 +913,87 @@ void UiTest::addDraftPhase()
             << tapIfThere(u"^OK$"_s, 3000, u"close the reminders shown at the start (if any)"_s)
             << tap(u"^Notiz$"_s) << see(u"^Notiz speichern$"_s)
             << tap(u"edit:^Notiz$"_s) << type(u"Vor dem Neustart getippt"_s);
+}
+
+void UiTest::addSelectPhase()
+{
+    // Three lines: a word at the start of the first line (the system's menu for the
+    // selection comes up right where the format buttons are), a phrase, words further down
+    static const QString html = u"<p>Tonleitern G-Dur und D-Dur langsam üben</p>"
+                                "<p>Etüde Nr. 3 bis Takt 16 mit Metronom</p>"
+                                "<p>Vortragsstück: Bogeneinteilung im Mittelteil</p>"_s;
+    Case &c = add(u"select-prepare"_s, u"a note with three lines, positions logged for touch tests from outside"_s);
+    c.keepScreen = true;
+    c.steps << tap(u"^Notiz$"_s) << see(u"^Notiz speichern$"_s)
+            << act(u"three lines of text"_s, [this] {
+                   Node n;
+                   if (!find(u"edit:^Notiz$"_s, &n) || !n.item)
+                       return;
+                   n.item->setProperty("text", html);
+                   n.item->forceActiveFocus();
+                   n.item->setProperty("cursorPosition", n.item->property("length"));
+                   m_traceTimer.setInterval(200);
+                   connect(&m_traceTimer, &QTimer::timeout, this, &UiTest::traceSelection, Qt::UniqueConnection);
+                   m_traceTimer.start();
+               })
+            << check(u"the text is there"_s, [this] {
+                   Node n;
+                   return find(u"edit:^Notiz$"_s, &n) && n.item && n.item->property("length").toInt() > 100;
+               })
+            << snap(u"select-prepare"_s);
+}
+
+void UiTest::traceSelection()
+{
+    // Lines "select: …" in the log, each only when it changed. Coordinates are global and in
+    // logical pixels (iOS: points; Android: times "dpr" for the screen's pixels)
+    Node n;
+    if (!m_window || !find(u"edit:^Notiz$"_s, &n) || !n.item)
+        return;
+    QQuickItem *text = n.item;
+    const auto log = [this](const QString &key, const QString &line) {
+        if (m_traced.value(key) == line)
+            return;
+        m_traced.insert(key, line);
+        qInfo("select: %s", qPrintable(line));
+    };
+    const auto global = [](QQuickItem *item, QPointF p) { return item->mapToGlobal(p); };
+    log(u"dpr"_s, u"dpr %1"_s.arg(m_window->effectiveDevicePixelRatio()));
+    const QRectF field(global(text, { 0, 0 }), QSizeF(text->width(), text->height()));
+    log(u"field"_s, u"field %1 %2 %3 %4"_s.arg(field.x(), 0, 'f', 1).arg(field.y(), 0, 'f', 1)
+                       .arg(field.right(), 0, 'f', 1).arg(field.bottom(), 0, 'f', 1));
+    const int length = text->property("length").toInt();
+    QString plain;
+    QMetaObject::invokeMethod(text, "getText", Q_RETURN_ARG(QString, plain), Q_ARG(int, 0), Q_ARG(int, length));
+    for (const QString &word : { u"Tonleitern"_s, u"G-Dur"_s, u"D-Dur"_s, u"Etüde"_s, u"Metronom"_s,
+                                 u"Bogeneinteilung"_s, u"Mittelteil"_s }) {
+        const int at = plain.indexOf(word);
+        if (at < 0)
+            continue;
+        QRectF a, b;
+        QMetaObject::invokeMethod(text, "positionToRectangle", Q_RETURN_ARG(QRectF, a), Q_ARG(int, at));
+        QMetaObject::invokeMethod(text, "positionToRectangle", Q_RETURN_ARG(QRectF, b), Q_ARG(int, at + int(word.size())));
+        const QPointF p = global(text, a.topLeft()), q = global(text, b.bottomRight());
+        log(u"word "_s + word, u"word %1 %2 %3 %4 %5"_s.arg(word).arg(p.x(), 0, 'f', 1).arg(p.y(), 0, 'f', 1)
+                                   .arg(q.x(), 0, 'f', 1).arg(q.y(), 0, 'f', 1));
+    }
+    for (const QString &button : { u"Fett"_s, u"Kursiv"_s, u"Unterstrichen"_s, u"Textfarbe"_s }) {
+        Node b;
+        if (!find(u"^"_s + button + u"$"_s, &b) || !b.item)
+            continue;
+        const QPointF p = global(b.item, { b.item->width() / 2, b.item->height() / 2 });
+        log(u"button "_s + button, u"button %1 %2 %3"_s.arg(button).arg(p.x(), 0, 'f', 1).arg(p.y(), 0, 'f', 1));
+    }
+    const int from = text->property("selectionStart").toInt(), to = text->property("selectionEnd").toInt();
+    log(u"sel"_s, u"sel %1 %2 %3"_s.arg(from).arg(to).arg(text->property("selectedText").toString()));
+    log(u"cursor"_s, u"cursor %1"_s.arg(text->property("cursorPosition").toInt()));
+    for (QObject *child : text->parentItem() ? text->parentItem()->children() : QObjectList()) {
+        if (QByteArray(child->metaObject()->className()).contains("TextFormatter")) {
+            QString markup;
+            QMetaObject::invokeMethod(child, "markup", Q_RETURN_ARG(QString, markup));
+            log(u"markup"_s, u"markup "_s + QString(markup).replace(u'\n', u" / "_s));
+        }
+    }
 }
 
 void UiTest::addCases()

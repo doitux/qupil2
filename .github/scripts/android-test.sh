@@ -324,6 +324,52 @@ tap_until '^Darstellung' '^System$'
 tap '^System$' && sleep 2
 adb shell am force-stop $PKG
 
+step "Selecting words by touch in the note editor"
+# Touches through the system (as a finger): a double tap needs two touches within Android's
+# double-tap time, so it goes straight to the touch screen device (sendevent), not through
+# "input tap" (which starts a program for every tap)
+touchdev=$(adb shell getevent -pl 2> /dev/null | tr -d '\r' | awk '/add device/ { dev = $4 } /ABS_MT_POSITION_X/ { print dev; exit }')
+maxx=$(adb shell getevent -pl "$touchdev" 2> /dev/null | tr -d '\r' | awk '/ABS_MT_POSITION_X/ { for (i = 1; i <= NF; i++) if ($i == "max") { gsub(",", "", $(i + 1)); print $(i + 1) } }' | head -1)
+maxy=$(adb shell getevent -pl "$touchdev" 2> /dev/null | tr -d '\r' | awk '/ABS_MT_POSITION_Y/ { for (i = 1; i <= NF; i++) if ($i == "max") { gsub(",", "", $(i + 1)); print $(i + 1) } }' | head -1)
+read -r scrw scrh < <(adb shell wm size | tr -d '\r' | sed -n 's/.*: \([0-9]*\)x\([0-9]*\).*/\1 \2/p' | tail -1)
+say "- touch screen: \`${touchdev:-?}\` (${maxx:-?} x ${maxy:-?}), screen ${scrw:-?} x ${scrh:-?}"
+t_tap() { adb shell input tap "$1" "$2"; }
+t_double() {
+    if [ -n "$touchdev" ] && [ -n "$maxx" ] && [ -n "$scrw" ]; then
+        local x=$(($1 * (maxx + 1) / scrw)) y=$(($2 * (maxy + 1) / scrh)) one
+        one="sendevent $touchdev 3 47 0; sendevent $touchdev 3 57 7; sendevent $touchdev 3 53 $x; sendevent $touchdev 3 54 $y; sendevent $touchdev 1 330 1; sendevent $touchdev 0 0 0; sendevent $touchdev 3 57 -1; sendevent $touchdev 1 330 0; sendevent $touchdev 0 0 0"
+        adb shell "$one; sleep 0.09; $one"
+    else
+        adb shell "input tap $1 $2; input tap $1 $2"
+    fi
+}
+t_long() { adb shell input swipe "$1" "$2" "$1" "$2" 1000; }
+t_drag() { adb shell input swipe "$1" "$2" "$3" "$4" "$([ "${5:-}" = fast ] && echo 150 || echo 900)"; }
+t_shot() { shot "$1"; }
+t_menu() {
+    dump
+    python3 -I "$HERE/android-ui.py" "$OUT/ui/now.xml" --list | sed 's/^ *[0-9]* *[0-9]*  //' \
+        | grep -E -i '^(Ausschneiden|Kopieren|Einfügen|Einsetzen|Alle auswählen|Alles auswählen|Auswählen|Teilen|Cut|Copy|Paste|Select all|Share)$' | sort -u
+}
+adb shell am force-stop $PKG
+mark
+adb shell "am start -W -n $ACT --es applicationArguments '--ui-test $uidir/select --lang de --data-dir $uidir/select-data --ui-test-phase select'" > /dev/null
+if wait_for "ui test: [0-9]* of [0-9]* cases passed" 240; then
+    sleep 3
+    SEL_LOG=$OUT/select-log.txt
+    since > "$SEL_LOG"
+    SEL_SCALE=dpr
+    # The positions change when the keyboard comes up: read them again before each touch
+    sel_refresh() { since > "$SEL_LOG"; }
+    . "$HERE/select-scenarios.sh"
+    sel_xy() { sel_refresh; python3 -I "$HERE/select-touch.py" "$SEL_LOG" "$SEL_SCALE" "$@"; }
+    sel_now() { sel_refresh; python3 -I "$HERE/select-touch.py" "$SEL_LOG" - sel; }
+    sel_markup() { sel_refresh; python3 -I "$HERE/select-touch.py" "$SEL_LOG" - markup; }
+    select_scenarios
+fi
+notes
+adb shell am force-stop $PKG
+
 if [ "${QUPIL_TOUR:-0}" = 1 ]; then
     step "Screenshot tour on the emulator"
     adb shell am force-stop $PKG

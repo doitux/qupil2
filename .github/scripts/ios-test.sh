@@ -179,6 +179,42 @@ device_run() {
             tap '^Abbrechen$' && sleep 2
         fi
         xcrun simctl terminate "$udid" $BUNDLE > /dev/null 2>&1
+
+        # --- Selecting words by touch in the note editor (select-scenarios.sh)
+        rm -rf "$data/Documents/select"
+        SEL_LOG=$dir/select.log
+        : > "$SEL_LOG"
+        xcrun simctl launch --console-pty --terminate-running-process "$udid" $BUNDLE \
+            --ui-test "$data/Documents/select" --ui-test-phase select --lang de --data-dir "$data/Library/select-data" \
+            >> "$SEL_LOG" 2>&1 &
+        for ((i = 0; i < 120; i++)); do
+            [ -f "$data/Documents/select/results.md" ] && break
+            sleep 2
+        done
+        sleep 3
+        SEL_SCALE=1
+        t_tap() { idb ui tap --udid "$udid" "$1" "$2"; }
+        # Two taps right after each other (idb has no double tap); the time between them is logged
+        t_double() {
+            local s e
+            s=$(python3 -c 'import time; print(time.time())')
+            idb ui tap --udid "$udid" "$1" "$2"
+            idb ui tap --udid "$udid" "$1" "$2"
+            e=$(python3 -c 'import time; print(time.time())')
+            echo "double tap took $(python3 -c "print(round(($e - $s) * 1000))") ms" >> "$dir/select-taps.txt"
+        }
+        t_long() { idb ui tap --udid "$udid" --duration 1.0 "$1" "$2"; }
+        t_drag() { idb ui swipe --udid "$udid" --duration "$([ "${5:-}" = fast ] && echo 0.15 || echo 1.0)" "$1" "$2" "$3" "$4"; }
+        t_shot() { shot "$1"; }
+        t_menu() {
+            describe
+            python3 -I "$HERE/ios-ui.py" "$dir/screen/now.json" --list | sed 's/^ *[0-9]* *[0-9]*  [A-Za-z]* *//' \
+                | grep -E -i '^(Ausschneiden|Kopieren|Einsetzen|Alles auswählen|Auswählen|Teilen|Nachschlagen|Übersetzen|Cut|Copy|Paste|Select All|Select)$' | sort -u
+        }
+        . "$HERE/select-scenarios.sh"
+        select_scenarios
+        [ -f "$dir/select-taps.txt" ] && say "- $(sort -u "$dir/select-taps.txt" | head -3 | tr '\n' ';')"
+        xcrun simctl terminate "$udid" $BUNDLE > /dev/null 2>&1
     else
         say '- (idb not installed: no taps from outside)'
     fi
