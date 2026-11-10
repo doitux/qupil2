@@ -7,6 +7,7 @@ Neu seit Build 39:
 - Unterrichtszeiten: Eine getippte Uhrzeit (z. B. Ende 12:47 statt 12:46) wurde nicht gespeichert, wenn man direkt danach auf "Speichern" tippte. Behoben – jede Unterrichtslänge geht. Mit Tab (Tastatur am iPad) oder Return springt der Cursor vom Start ins Ende; liegt das Ende nicht nach dem Beginn, sagt Qupil das und speichert nicht.
 - Veranstaltungen: Bei Ensembles mit verschiedenen Instrumenten (z. B. Streichquartett) steht das Instrument jetzt hinter jedem Namen. Die Programmübersicht als PDF hat mehr Luft in den Tabellenzellen und über der Tabelle (gilt für alle PDF-Tabellen).
 - Lautstärke der Klänge (iPad, iPhone): Der Lautstärkeregler in Qupil ist weg – Meldungen kommen in voller Stärke, die Lautstärke stellt das Gerät ein (Einstellungen › Töne bzw. Töne & Haptik › Klingel- und Hinweistöne). Probehören (▷) klingt jetzt so laut wie die Meldung später. Das "Ähem" ist entrauscht und dichter abgemischt und klingt dadurch lauter (ohne zu übersteuern). Bitte prüfen: Passt die Lautstärke im Unterricht?
+- Metronom (iPad, iPhone): läuft jetzt ohne Knacken und Aussetzer und hält das Tempo genau (bitte mit einer anderen Metronom-App vergleichen). Es spielt weiter, wenn Qupil im Hintergrund ist, und auch bei stumm geschaltetem Gerät.
 - Wichtig: Diese Version stellt die Daten um. Geräte mit älteren Builds synchronisieren weiter, zeigen gemeinsam geführte Stunden getrennt und Erinnerungen für einen Unterricht gar nicht – bitte alle eigenen Geräte aktualisieren.
 
 Bitte grundsätzlich ausprobieren:

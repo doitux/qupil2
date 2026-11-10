@@ -107,7 +107,8 @@ endif()
 if(IOS)
     target_sources(qupil PRIVATE src/app/SystemAlerts_ios.mm)
     set_source_files_properties(src/app/SystemAlerts_ios.mm PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
-    target_link_libraries(qupil PRIVATE "-framework UserNotifications" "-framework UIKit" "-framework AudioToolbox")
+    target_link_libraries(qupil PRIVATE "-framework UserNotifications" "-framework UIKit" "-framework AudioToolbox"
+                                        "-framework AVFoundation")
 elseif(ANDROID)
     target_sources(qupil PRIVATE src/app/SystemAlerts_android.cpp)
 else()
@@ -118,6 +119,9 @@ target_sources(qupil PRIVATE src/app/ScreenAwake.h src/app/SystemBars.h)
 if(IOS)
     target_sources(qupil PRIVATE src/app/ScreenAwake_ios.mm)
     set_source_files_properties(src/app/ScreenAwake_ios.mm PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
+    # Metronome: audio session for playing, also in the background
+    target_sources(qupil PRIVATE src/app/AudioSession_ios.mm)
+    set_source_files_properties(src/app/AudioSession_ios.mm PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
     target_sources(qupil PRIVATE src/app/KeyboardHeight.h src/app/KeyboardHeight_ios.mm)
     set_source_files_properties(src/app/KeyboardHeight_ios.mm PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
 elseif(ANDROID)
@@ -400,6 +404,8 @@ qt_add_qml_module(qupil
         src/app/ArchiveFormat.cpp
         src/app/Metronome.h
         src/app/Metronome.cpp
+        src/app/ClickGenerator.h
+        src/app/ClickGenerator.cpp
         src/app/SystemScheme.h
         src/app/SystemScheme.cpp
         src/app/TextFormatter.h
@@ -519,6 +525,13 @@ if(QUPIL_BUILD_TESTS AND NOT ANDROID AND NOT IOS)
     target_link_libraries(tst_core PRIVATE qupilcore Qt6::Test)
     set_target_properties(tst_core PROPERTIES MACOSX_BUNDLE FALSE WIN32_EXECUTABLE FALSE)
     add_test(NAME core COMMAND tst_core)
+
+    # Metronome: clicks at exact sample positions (tempo)
+    qt_add_executable(tst_metronome tests/tst_metronome.cpp src/app/ClickGenerator.h src/app/ClickGenerator.cpp)
+    target_include_directories(tst_metronome PRIVATE src/app)
+    target_link_libraries(tst_metronome PRIVATE Qt6::Multimedia Qt6::Test)
+    set_target_properties(tst_metronome PROPERTIES MACOSX_BUNDLE FALSE WIN32_EXECUTABLE FALSE)
+    add_test(NAME metronome COMMAND tst_metronome)
 
     # Lesson notes and archive entries: the compact formats, old HTML of Qupil 1.x
     qt_add_executable(tst_notes tests/tst_notes.cpp src/app/NoteFormat.h src/app/NoteFormat.cpp

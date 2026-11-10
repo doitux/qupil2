@@ -894,6 +894,8 @@ void UiTest::addRestartPhase()
     c.steps << see(u"^Notiz speichern$"_s)
             << tapIfThere(u"^OK$"_s, 3000, u"close the reminders shown at the start (if any)"_s)
             << check(u"the draft is kept"_s, [this] { return m_app->keptDraft(u"note"_s).contains(u"Vor dem Neustart"_s); })
+            << check(u"the tuning tone's pitch is kept (442 Hz)"_s,
+                     [this] { return m_metronome && m_metronome->property("pitch").toInt() == 442; })
             << snap(u"restart-draft"_s)
             << tap(u"^Abbrechen$"_s)
             << gone(u"^Notiz speichern$"_s)
@@ -904,7 +906,8 @@ void UiTest::addDraftPhase()
 {
     Case &c = add(u"draft-prepare"_s, u"an unsaved note, then the system ends Qupil (from outside)"_s);
     c.keepScreen = true;
-    c.steps << tapIfThere(u"^OK$"_s, 3000, u"close the reminders shown at the start (if any)"_s)
+    c.steps << act(u"tuning tone at 442 Hz"_s, [this] { if (m_metronome) m_metronome->setProperty("pitch", 442); })
+            << tapIfThere(u"^OK$"_s, 3000, u"close the reminders shown at the start (if any)"_s)
             << tap(u"^Notiz$"_s) << see(u"^Notiz speichern$"_s)
             << tap(u"edit:^Notiz$"_s) << type(u"Vor dem Neustart getippt"_s);
 }
@@ -1375,7 +1378,8 @@ void UiTest::addCases()
     {
         Case &c = add(u"restart-prepare"_s, u"an unsaved note when Qupil quits"_s);
         c.keepScreen = true;
-        c.steps << tap(u"^Notiz$"_s) << see(u"^Notiz speichern$"_s)
+        c.steps << act(u"tuning tone at 442 Hz"_s, [this] { if (m_metronome) m_metronome->setProperty("pitch", 442); })
+                << tap(u"^Notiz$"_s) << see(u"^Notiz speichern$"_s)
                 << tap(u"edit:^Notiz$"_s) << type(u"Vor dem Neustart getippt"_s);
     }
 }

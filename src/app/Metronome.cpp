@@ -1,16 +1,15 @@
 // SPDX-FileCopyrightText: 2006-2026 Felix Hammer
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 #include "Metronome.h"
+#include "ClickGenerator.h"
 #include "ScreenAwake.h"
 
 #include <QAudioDevice>
 #include <QAudioFormat>
 #include <QAudioSink>
-#include <QIODevice>
 #include <QMediaDevices>
-#include <QMutex>
-#include <QMutexLocker>
 #include <QSettings>
+#include <QThread>
 
 #include <algorithm>
 #include <atomic>
@@ -18,155 +17,89 @@
 
 using namespace Qt::StringLiterals;
 
+#ifdef Q_OS_IOS
+// AudioSession_ios.mm
+void qupilPlaybackAudioSession();
+#endif
+
 namespace {
-constexpr double kPi = 3.14159265358979323846;
+//! Audio buffer: big enough that a busy moment does not let it run dry (crackling and
+//! a gap that moves every later beat), small enough that a new tempo starts quickly
+constexpr int kBufferMs = 120;
 }
 
 /*
-    Endless audio stream: clicks at exact sample positions plus an optional sine tone.
-    readData() may run on the audio thread; parameters are atomics, the beat anchor
-    is guarded by a mutex.
+    The sound output on a thread of its own. The system takes the samples from a buffer
+    that Qt fills on the thread the QAudioSink lives on; on the user interface thread a
+    page building up or an animation could keep it waiting (iPad: crackling, gaps, the
+    tempo falling behind). Created, polled and closed only on that thread.
 */
-class ClickGenerator : public QIODevice
+class MetronomeOutput : public QObject
 {
 public:
-    explicit ClickGenerator(const QAudioFormat &format)
-        : m_format(format)
+    std::unique_ptr<ClickGenerator> generator;
+    std::unique_ptr<QAudioSink> sink;
+    QTimer beatTimer;
+    std::atomic<bool> open { false };
+    std::atomic<qint64> beat { -1 };   // audible beat since the start, -1 before the first
+
+    bool start(int bpm, int beatsPerBar)
     {
-        open(QIODevice::ReadOnly);
-    }
-
-    std::atomic<int> bpm { 80 };
-    std::atomic<int> beatsPerBar { 4 };
-    std::atomic<bool> clicking { false };
-    std::atomic<double> toneFrequency { 0 };   // 0 = off
-
-    //! Clicks start with the next rendered sample
-    void restartClicks()
-    {
-        m_restart.store(true);
-        clicking.store(true);
-    }
-
-    //! Beat (0-based since start) that is audible at the given number of played samples, -1 before the first
-    qint64 beatAt(qint64 playedSamples) const
-    {
-        QMutexLocker lock(&m_anchorMutex);
-        if (m_anchorSample < 0 || playedSamples < m_anchorSample)
-            return m_anchorBeat - 1;
-        return m_anchorBeat + qint64((playedSamples - m_anchorSample) / m_anchorSamplesPerBeat);
-    }
-
-    bool isSequential() const override { return true; }
-    qint64 bytesAvailable() const override { return (1 << 16) + QIODevice::bytesAvailable(); }
-
-protected:
-    qint64 writeData(const char *, qint64) override { return -1; }
-
-    qint64 readData(char *data, qint64 maxSize) override
-    {
-        const int channels = std::max(1, m_format.channelCount());
-        const int bytesPerSample = m_format.bytesPerSample();
-        const qint64 frames = maxSize / (qint64(bytesPerSample) * channels);
-        const double rate = m_format.sampleRate();
-        const double tone = toneFrequency.load();
-        const int beatsInBar = std::max(1, beatsPerBar.load());
-        const bool click = clicking.load();
-        char *out = data;
-
-        for (qint64 i = 0; i < frames; ++i, ++m_sample) {
-            if (click) {
-                const double samplesPerBeat = rate * 60.0 / std::clamp(bpm.load(), 1, 1000);
-                if (m_restart.exchange(false)) {
-                    m_nextBeat = double(m_sample);
-                    m_beatIndex = 0;
-                    setAnchor(m_sample, 0, samplesPerBeat);
-                }
-                if (double(m_sample) >= m_nextBeat) {
-                    const bool accent = beatsInBar > 1 && m_beatIndex % beatsInBar == 0;
-                    m_clickFrequency = accent ? 1760.0 : 1175.0;
-                    m_clickGain = accent ? 0.9 : 0.6;
-                    m_clickPos = 0;
-                    if (m_anchorSamplesPerBeat != samplesPerBeat)
-                        setAnchor(m_sample, m_beatIndex, samplesPerBeat);
-                    ++m_beatIndex;
-                    m_nextBeat += samplesPerBeat;
-                    if (m_nextBeat < double(m_sample))   // after a big tempo jump
-                        m_nextBeat = double(m_sample) + samplesPerBeat;
-                }
-            }
-
-            double s = 0;
-            const int clickLength = int(rate * 0.035);
-            if (m_clickPos >= 0 && m_clickPos < clickLength) {
-                const double t = m_clickPos / rate;
-                const double envelope = std::exp(-t * 140.0) * std::min(1.0, m_clickPos / (rate * 0.0008));
-                s += m_clickGain * envelope * std::sin(2 * kPi * m_clickFrequency * t);
-                ++m_clickPos;
-            }
-
-            // Tone with short fades to avoid clicks
-            const double targetGain = tone > 0 ? 0.35 : 0.0;
-            m_toneGain += (targetGain - m_toneGain) * (1.0 / (rate * 0.01));
-            if (tone > 0)
-                m_toneFrequency = tone;
-            if (m_toneGain > 1e-4) {
-                m_tonePhase += 2 * kPi * m_toneFrequency / rate;
-                if (m_tonePhase > 2 * kPi)
-                    m_tonePhase -= 2 * kPi;
-                // a little second harmonic: easier to hear on small speakers
-                s += m_toneGain * (0.8 * std::sin(m_tonePhase) + 0.2 * std::sin(2 * m_tonePhase));
-            }
-
-            s = std::clamp(s, -1.0, 1.0);
-            for (int c = 0; c < channels; ++c) {
-                switch (m_format.sampleFormat()) {
-                case QAudioFormat::UInt8:
-                    *reinterpret_cast<quint8 *>(out) = quint8(128 + s * 127);
-                    break;
-                case QAudioFormat::Int16:
-                    *reinterpret_cast<qint16 *>(out) = qint16(s * 32767);
-                    break;
-                case QAudioFormat::Int32:
-                    *reinterpret_cast<qint32 *>(out) = qint32(s * 2147483647.0);
-                    break;
-                case QAudioFormat::Float:
-                    *reinterpret_cast<float *>(out) = float(s);
-                    break;
-                default:
-                    break;
-                }
-                out += bytesPerSample;
-            }
+        if (sink && sink->state() != QAudio::StoppedState)
+            return true;
+        close();
+        const QAudioDevice device = QMediaDevices::defaultAudioOutput();
+        if (device.isNull())
+            return false;
+#ifdef Q_OS_IOS
+        qupilPlaybackAudioSession();
+#endif
+        QAudioFormat format;
+        format.setSampleRate(48000);
+        format.setChannelCount(1);
+        format.setSampleFormat(QAudioFormat::Int16);
+        if (!device.isFormatSupported(format))
+            format = device.preferredFormat();
+        generator = std::make_unique<ClickGenerator>(format);
+        generator->bpm.store(bpm);
+        generator->beatsPerBar.store(beatsPerBar);
+        sink = std::make_unique<QAudioSink>(device, format);
+        sink->setBufferSize(format.bytesForDuration(kBufferMs * 1000));
+        sink->start(generator.get());
+        if (sink->error() != QAudio::NoError) {
+            close();
+            return false;
         }
-        return frames * bytesPerSample * channels;
+        beatTimer.setInterval(10);
+        QObject::connect(&beatTimer, &QTimer::timeout, this, [this] { updateBeat(); }, Qt::UniqueConnection);
+        beatTimer.start();
+        open.store(true);
+        return true;
+    }
+
+    void close()
+    {
+        beatTimer.stop();
+        if (sink)
+            sink->stop();
+        sink.reset();
+        generator.reset();
+        open.store(false);
+        beat.store(-1);
     }
 
 private:
-    void setAnchor(qint64 sample, qint64 beat, double samplesPerBeat)
+    void updateBeat()
     {
-        QMutexLocker lock(&m_anchorMutex);
-        m_anchorSample = sample;
-        m_anchorBeat = beat;
-        m_anchorSamplesPerBeat = samplesPerBeat;
+        if (!sink || !generator)
+            return;
+        if (sink->state() == QAudio::StoppedState) {
+            open.store(false);
+            return;
+        }
+        const qint64 played = sink->processedUSecs() * sink->format().sampleRate() / 1000000;
+        beat.store(generator->beatAt(played));
     }
-
-    QAudioFormat m_format;
-    std::atomic<bool> m_restart { false };
-    qint64 m_sample = 0;
-    double m_nextBeat = 0;
-    qint64 m_beatIndex = 0;
-    int m_clickPos = -1;
-    double m_clickFrequency = 1000;
-    double m_clickGain = 0.6;
-    double m_tonePhase = 0;
-    double m_toneGain = 0;
-    double m_toneFrequency = 440;
-
-    mutable QMutex m_anchorMutex;
-    qint64 m_anchorSample = -1;
-    qint64 m_anchorBeat = 0;
-    double m_anchorSamplesPerBeat = 1;
 };
 
 // ---------------------------------------------------------------------------- Metronome
@@ -181,6 +114,13 @@ Metronome::Metronome(QObject *parent)
     m_pitch = std::clamp(settings.value(u"pitch"_s, 443).toInt(), MinPitch, MaxPitch);
     const QString note = settings.value(u"note"_s, u"A"_s).toString();
     m_toneNote = (note == u"Bb"_s || note == u"B"_s) ? note : u"A"_s;
+
+    m_audioThread = new QThread(this);
+    m_audioThread->setObjectName(u"metronome audio"_s);
+    m_output = new MetronomeOutput;
+    m_output->moveToThread(m_audioThread);
+    connect(m_audioThread, &QThread::finished, m_output, &QObject::deleteLater);
+    m_audioThread->start(QThread::TimeCriticalPriority);
 
     m_beatTimer.setInterval(15);
     connect(&m_beatTimer, &QTimer::timeout, this, &Metronome::updateBeat);
@@ -197,8 +137,9 @@ Metronome::Metronome(QObject *parent)
 
 Metronome::~Metronome()
 {
-    if (m_sink)
-        m_sink->stop();
+    QMetaObject::invokeMethod(m_output, [this] { m_output->close(); }, Qt::BlockingQueuedConnection);
+    m_audioThread->quit();
+    m_audioThread->wait();
 }
 
 void Metronome::save()
@@ -217,8 +158,8 @@ void Metronome::setBpm(int bpm)
     if (bpm == m_bpm)
         return;
     m_bpm = bpm;
-    if (m_generator)
-        m_generator->bpm.store(bpm);
+    if (ClickGenerator *g = generator())
+        g->bpm.store(bpm);
     save();
     emit bpmChanged();
 }
@@ -229,8 +170,8 @@ void Metronome::setBeatsPerBar(int beats)
     if (beats == m_beatsPerBar)
         return;
     m_beatsPerBar = beats;
-    if (m_generator)
-        m_generator->beatsPerBar.store(beats);
+    if (ClickGenerator *g = generator())
+        g->beatsPerBar.store(beats);
     save();
     emit beatsPerBarChanged();
 }
@@ -241,8 +182,8 @@ void Metronome::setToneNote(const QString &note)
     if (n == m_toneNote)
         return;
     m_toneNote = n;
-    if (m_tonePlaying && m_generator)
-        m_generator->toneFrequency.store(toneFrequency());
+    if (ClickGenerator *g = generator(); m_tonePlaying && g)
+        g->toneFrequency.store(toneFrequency());
     save();
     emit toneChanged();
 }
@@ -253,8 +194,8 @@ void Metronome::setPitch(int pitch)
     if (pitch == m_pitch)
         return;
     m_pitch = pitch;
-    if (m_tonePlaying && m_generator)
-        m_generator->toneFrequency.store(toneFrequency());
+    if (ClickGenerator *g = generator(); m_tonePlaying && g)
+        g->toneFrequency.store(toneFrequency());
     save();
     emit toneChanged();
 }
@@ -266,35 +207,22 @@ double Metronome::toneFrequency() const
     return m_pitch * std::pow(2.0, semitones / 12.0);
 }
 
+ClickGenerator *Metronome::generator() const
+{
+    // Set and reset on the audio thread only while it is blocked for us (ensureAudio,
+    // releaseAudioIfIdle), so reading the pointer here is safe
+    return m_output && m_output->open.load() ? m_output->generator.get() : nullptr;
+}
+
 bool Metronome::ensureAudio()
 {
-    if (m_sink && m_sink->state() != QAudio::StoppedState)
-        return true;
-    const QAudioDevice device = QMediaDevices::defaultAudioOutput();
-    if (device.isNull()) {
+    bool ok = false;
+    const int bpm = m_bpm, beats = m_beatsPerBar;
+    QMetaObject::invokeMethod(m_output, [this, &ok, bpm, beats] { ok = m_output->start(bpm, beats); },
+                              Qt::BlockingQueuedConnection);
+    if (!ok) {
         m_error = qtTrId("audio.init_failed");
         emit errorChanged();
-        return false;
-    }
-    QAudioFormat format;
-    format.setSampleRate(48000);
-    format.setChannelCount(1);
-    format.setSampleFormat(QAudioFormat::Int16);
-    if (!device.isFormatSupported(format))
-        format = device.preferredFormat();
-
-    m_sink.reset();
-    m_generator = std::make_unique<ClickGenerator>(format);
-    m_generator->bpm.store(m_bpm);
-    m_generator->beatsPerBar.store(m_beatsPerBar);
-    m_sink = std::make_unique<QAudioSink>(device, format);
-    // ~40 ms buffer: low latency for the clicks, still safe on phones
-    m_sink->setBufferSize(format.bytesForDuration(40000));
-    m_sink->start(m_generator.get());
-    if (m_sink->error() != QAudio::NoError) {
-        m_error = qtTrId("audio.init_failed");
-        emit errorChanged();
-        m_sink.reset();
         return false;
     }
     if (!m_error.isEmpty()) {
@@ -306,11 +234,9 @@ bool Metronome::ensureAudio()
 
 void Metronome::releaseAudioIfIdle()
 {
-    if (m_running || m_tonePlaying || !m_sink)
+    if (m_running || m_tonePlaying)
         return;
-    m_sink->stop();
-    m_sink.reset();
-    m_generator.reset();
+    QMetaObject::invokeMethod(m_output, [this] { m_output->close(); }, Qt::BlockingQueuedConnection);
 }
 
 void Metronome::start()
@@ -322,7 +248,7 @@ void Metronome::start()
     if (!ensureAudio())
         return;
     m_idleTimer.stop();
-    m_generator->restartClicks();
+    generator()->restartClicks();
     m_running = true;
     m_beatTimer.start();
     emit runningChanged();
@@ -333,8 +259,8 @@ void Metronome::stop()
     if (!m_running)
         return;
     m_running = false;
-    if (m_generator)
-        m_generator->clicking.store(false);
+    if (ClickGenerator *g = generator())
+        g->clicking.store(false);
     m_beatTimer.stop();
     m_beat = -1;
     emit beatChanged();
@@ -349,10 +275,7 @@ void Metronome::toggle()
 
 void Metronome::updateBeat()
 {
-    if (!m_sink || !m_generator)
-        return;
-    const qint64 played = m_sink->processedUSecs() * m_sink->format().sampleRate() / 1000000;
-    const qint64 beat = m_generator->beatAt(played);
+    const qint64 beat = m_output ? m_output->beat.load() : -1;
     const int inBar = beat < 0 ? -1 : int(beat % std::max(1, m_beatsPerBar));
     if (inBar != m_beat) {
         m_beat = inBar;
@@ -388,7 +311,7 @@ void Metronome::toggleTone()
     if (!ensureAudio())
         return;
     m_idleTimer.stop();
-    m_generator->toneFrequency.store(toneFrequency());
+    generator()->toneFrequency.store(toneFrequency());
     m_tonePlaying = true;
     emit tonePlayingChanged();
 }
@@ -397,8 +320,8 @@ void Metronome::stopTone()
 {
     if (!m_tonePlaying)
         return;
-    if (m_generator)
-        m_generator->toneFrequency.store(0);
+    if (ClickGenerator *g = generator())
+        g->toneFrequency.store(0);
     m_tonePlaying = false;
     emit tonePlayingChanged();
     m_idleTimer.start();

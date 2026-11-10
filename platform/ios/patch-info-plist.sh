@@ -32,6 +32,10 @@ plutil -replace NSCameraUsageDescription \
 plutil -replace NSMicrophoneUsageDescription \
     -string "Qupil does not use the microphone. iOS requires this text because a system library used for sound playback refers to it." "$plist"
 
+# Metronome and tuning tone keep playing while Qupil is in the background (like a
+# metronome app); AudioSession_ios.mm sets the playback session
+plutil -replace UIBackgroundModes -json '["audio"]' "$plist"
+
 # Export compliance: the sync is encrypted with standard algorithms (Monocypher: XChaCha20-Poly1305,
 # X25519, Argon2id, BLAKE2b) in addition to the system's HTTPS. Answered in App Store Connect on
 # 2026-10-27: standard algorithms, not distributed in France -> no export documentation required,

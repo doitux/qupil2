@@ -10,15 +10,18 @@
 
 #include <memory>
 
-class QAudioSink;
 class ClickGenerator;
+class MetronomeOutput;
+class QThread;
 
 /*!
     Metronome and tuning tone, available in QML as the singleton "Metronome".
 
-    Clicks and the tone are synthesised sample-accurately in one audio stream,
-    so the tempo stays exact and no sound files are needed. Keeps running while
-    the user switches screens. Tempo, accent and pitch are remembered per device.
+    Clicks and the tone are synthesised sample-accurately in one audio stream
+    (ClickGenerator), so the tempo stays exact and no sound files are needed. The
+    stream is played on a thread of its own, so a busy user interface cannot make it
+    stutter. Keeps running while the user switches screens and (iPad, iPhone) while
+    Qupil is in the background. Tempo, accent and pitch are remembered per device.
 */
 class Metronome : public QObject
 {
@@ -86,8 +89,10 @@ private:
     void updateBeat();
     void save();
 
-    std::unique_ptr<ClickGenerator> m_generator;
-    std::unique_ptr<QAudioSink> m_sink;
+    ClickGenerator *generator() const;
+
+    QThread *m_audioThread = nullptr;
+    MetronomeOutput *m_output = nullptr;   // lives on m_audioThread
     QTimer m_beatTimer;
     QTimer m_idleTimer;
     QElapsedTimer m_tapClock;
