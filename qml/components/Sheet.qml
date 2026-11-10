@@ -41,6 +41,11 @@ Popup {
     //! Closing, waiting for the keyboard to go down first (dismiss)
     property bool leaving: false
     default property alias content: column.data
+    //! A bar at the bottom of the sheet, right above the on-screen keyboard (or at the bottom
+    //! of the window without one) – the note editor's format buttons: there the system's
+    //! menu for a selection (which comes up above the selection) does not cover them
+    property alias toolbar: toolbarRow.data
+    property bool toolbarShown: false
 
     readonly property bool compact: parent ? parent.width < 720 : true
 
@@ -244,7 +249,8 @@ Popup {
     readonly property real keyboardInset: Nav.keyboardInset
     height: compact ? parent.height - 24 - keyboardInset
                     : Math.min(parent.height - 48 - keyboardInset, header.implicitHeight + column.implicitHeight + 40
-                                                                   + (sheet.bottomButton ? 76 : 0))
+                                                                   + (sheet.bottomButton ? 76 : 0)
+                                                                   + (sheet.toolbarShown ? toolbarRow.implicitHeight + 24 : 0))
     x: compact ? 0 : Math.round((parent.width - width) / 2)
     y: compact ? parent.height - keyboardInset - height : Math.round((parent.height - keyboardInset - height) / 2)
 
@@ -373,6 +379,32 @@ Popup {
                 y: 12
                 width: flick.width - 40
                 spacing: 16
+            }
+        }
+
+        Item {
+            id: toolbarArea
+            property real shown: sheet.toolbarShown ? 1 : 0
+            Behavior on shown {
+                enabled: sheet.opened && !sheet.leaving
+                NumberAnimation { duration: 160; easing.type: Easing.OutCubic }
+            }
+            visible: shown > 0
+            clip: true
+            Layout.fillWidth: true
+            Layout.preferredHeight: shown * (toolbarRow.implicitHeight + 16)
+            Layout.bottomMargin: sheet.compact || sheet.bottomButton ? 0 : 8
+            Rectangle {
+                width: parent.width
+                height: 1
+                color: Theme.divider
+            }
+            RowLayout {
+                id: toolbarRow
+                x: 20
+                y: 8
+                spacing: 6
+                opacity: toolbarArea.shown
             }
         }
 

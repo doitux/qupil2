@@ -318,46 +318,50 @@ Sheet {
         }
     }
 
+    // Bold, italic, underline, colour: in the bar at the bottom of the sheet (above the
+    // keyboard) while the note is edited – right above the text the system's menu for a
+    // selection (Ausschneiden, Kopieren …) covered them
+    toolbarShown: noteText.activeFocus
+    toolbar: [
+        FormatButton {
+            text: "B"
+            font.weight: Font.ExtraBold
+            checked: formatter.bold
+            Accessible.name: qsTrId("format.bold")
+            onClicked: formatter.toggleBold()
+        },
+        FormatButton {
+            text: "I"
+            font.italic: true
+            checked: formatter.italic
+            Accessible.name: qsTrId("format.italic")
+            onClicked: formatter.toggleItalic()
+        },
+        FormatButton {
+            text: "U"
+            font.underline: true
+            checked: formatter.underline
+            Accessible.name: qsTrId("format.underline")
+            onClicked: formatter.toggleUnderline()
+        },
+        FormatButton {
+            checked: formatter.colored
+            Accessible.name: qsTrId("format.text_color")
+            onClicked: formatter.toggleColor(Theme.noteMark)
+            Rectangle {
+                anchors.centerIn: parent
+                width: 18
+                height: 18
+                radius: 9
+                color: Theme.noteMark
+            }
+        }
+    ]
+
     ColumnLayout {
         Layout.fillWidth: true
         spacing: 8
         FieldLabel { visible: !editor.tight; label: editor.plan ? qsTrId("plan.label") : qsTrId("common.note") }
-        RowLayout {
-            spacing: 6
-            FormatButton {
-                text: "B"
-                font.weight: Font.ExtraBold
-                checked: formatter.bold
-                Accessible.name: qsTrId("format.bold")
-                onClicked: formatter.toggleBold()
-            }
-            FormatButton {
-                text: "I"
-                font.italic: true
-                checked: formatter.italic
-                Accessible.name: qsTrId("format.italic")
-                onClicked: formatter.toggleItalic()
-            }
-            FormatButton {
-                text: "U"
-                font.underline: true
-                checked: formatter.underline
-                Accessible.name: qsTrId("format.underline")
-                onClicked: formatter.toggleUnderline()
-            }
-            FormatButton {
-                checked: formatter.colored
-                Accessible.name: qsTrId("format.text_color")
-                onClicked: formatter.toggleColor(Theme.noteMark)
-                Rectangle {
-                    anchors.centerIn: parent
-                    width: 18
-                    height: 18
-                    radius: 9
-                    color: Theme.noteMark
-                }
-            }
-        }
         TextArea {
             id: noteText
             Layout.fillWidth: true
