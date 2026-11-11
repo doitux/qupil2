@@ -106,11 +106,19 @@ clear_sel() {
     xy=$(sel_xy field-end) && t_tap $xy
     sleep 1.2
 }
-# select_word <scenario> <word>: a double tap on it. A test tool too slow for a double tap
-# (idb: a second or more between the touches) is noted, and a long press selects instead
+# select_word <scenario> <word>: a double tap on it. A test tool that cannot double tap
+# (SEL_NO_DOUBLE_TAP=1 from the caller – idb: a second between its touches) selects with a
+# long press instead; Qupil's own UI test checks the double tap there with real touches.
+# A double tap that the tool made too slowly (SEL_DOUBLE_MS) is noted the same way.
 select_word() {
     local xy
     xy=$(sel_xy word "$2" middle)
+    if [ "${SEL_NO_DOUBLE_TAP:-0}" = 1 ]; then
+        sel_result "$1" "$2" "the tool cannot double tap: long press" skip
+        t_long $xy
+        expect_sel "$1 (long press instead)" "$2"
+        return
+    fi
     SEL_DOUBLE_MS=0
     t_double $xy
     if [ "${SEL_DOUBLE_MS:-0}" -gt "$SEL_DOUBLE_MAX" ]; then

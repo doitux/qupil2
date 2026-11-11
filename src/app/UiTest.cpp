@@ -1326,6 +1326,10 @@ void UiTest::addTextTouchCases()
                 << check(u"again: the menu goes"_s, [this] { return !menuShown(); })
                 << wait(600) << fingerTaps(u"Tonleitern"_s, 1) << fingerDone()
                 << check(u"a tap elsewhere moves the cursor"_s, [cursorIn] { return cursorIn(u"Tonleitern"_s); })
+                // B with the cursor in a word: the whole word (the keyboard may hold a part of
+                // it as text being composed)
+                << wait(1000) << tap(u"^Fett$"_s)
+                << check(u"B: the whole word bold"_s, [this] { return textMarkup().contains(u"**Tonleitern**"_s); })
                 << close;
     }
     {
@@ -1373,6 +1377,13 @@ void UiTest::addTextTouchCases()
                        return t && textSelection().isEmpty() && t->property("cursorPosition").toInt() == t->property("length").toInt()
                               && menuItems().contains(u"Alles auswählen"_s);
                    })
+                // Two slow taps on a word (the cursor there, then its menu), then a long press
+                // on it: the word, not the menu switched off
+                << wait(600) << fingerTaps(u"Mittelteil"_s, 1) << fingerDone() << wait(700)
+                << fingerTaps(u"Mittelteil"_s, 1) << fingerDone()
+                << check(u"a tap on the cursor: menu"_s, [this] { return textSelection().isEmpty() && menuShown(); })
+                << wait(1200) << fingerLong(u"Mittelteil"_s) << fingerDone()
+                << check(u"then a long press: the word, menu"_s, [this] { return textSelection() == u"Mittelteil"_s && menuShown(); })
                 << close;
     }
     {
@@ -1440,9 +1451,9 @@ void UiTest::addTextTouchCases()
                 << close;
     }
     {
-        // Twenty lines: the field is longer than the sheet
+        // Fifty lines: the field is longer than the sheet, also on a big iPad without a keyboard
         QString lines;
-        for (int i = 1; i <= 20; ++i)
+        for (int i = 1; i <= 50; ++i)
             lines += u"<p>Zeile %1 mit etwas Text zum Blättern</p>"_s.arg(i);
         auto before = std::make_shared<qreal>(0);
         const auto flickOf = [this]() -> QQuickItem * {

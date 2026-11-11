@@ -236,6 +236,8 @@ device_run() {
             python3 -I "$HERE/ios-ui.py" "$dir/screen/now.json" --list | sed 's/^ *[0-9]* *[0-9]*  [A-Za-z]* *//' \
                 | grep -E -i '^(Ausschneiden|Kopieren|Einsetzen|Alles auswählen|Auswählen|Teilen|Nachschlagen|Übersetzen|Cut|Copy|Paste|Select All|Select)$' | sort -u
         }
+        # idb's touches are 0.6–1.8 s apart: no double tap (Qupil's UI test above has it)
+        SEL_NO_DOUBLE_TAP=1
         . "$HERE/select-scenarios.sh"
         select_scenarios
         [ -f "$dir/select-taps.txt" ] && say "- $(sort -u "$dir/select-taps.txt" | head -3 | tr '\n' ';')"

@@ -322,32 +322,34 @@ Sheet {
     // keyboard) while the note is edited – right above the text the system's menu for a
     // selection (Ausschneiden, Kopieren …) covered them
     toolbarShown: noteText.activeFocus
+    // Each button first ends a word the keyboard is still composing (iPhone: the part of a
+    // word behind the cursor): formatted while composed, it would come back unformatted
     toolbar: [
         FormatButton {
             text: "B"
             font.weight: Font.ExtraBold
             checked: formatter.bold
             Accessible.name: qsTrId("format.bold")
-            onClicked: formatter.toggleBold()
+            onClicked: { Qt.inputMethod.commit(); formatter.toggleBold() }
         },
         FormatButton {
             text: "I"
             font.italic: true
             checked: formatter.italic
             Accessible.name: qsTrId("format.italic")
-            onClicked: formatter.toggleItalic()
+            onClicked: { Qt.inputMethod.commit(); formatter.toggleItalic() }
         },
         FormatButton {
             text: "U"
             font.underline: true
             checked: formatter.underline
             Accessible.name: qsTrId("format.underline")
-            onClicked: formatter.toggleUnderline()
+            onClicked: { Qt.inputMethod.commit(); formatter.toggleUnderline() }
         },
         FormatButton {
             checked: formatter.colored
             Accessible.name: qsTrId("format.text_color")
-            onClicked: formatter.toggleColor(Theme.noteMark)
+            onClicked: { Qt.inputMethod.commit(); formatter.toggleColor(Theme.noteMark) }
             Rectangle {
                 anchors.centerIn: parent
                 width: 18
