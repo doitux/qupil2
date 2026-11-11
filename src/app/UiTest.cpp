@@ -1343,6 +1343,11 @@ void UiTest::traceSelection()
 // events, on every platform. Three lines of a note; each case opens and cancels the editor.
 void UiTest::addTextTouchCases()
 {
+#ifdef Q_OS_IOS
+    // TextTouch is off on iOS for now (the keyboard replaced words, TextTouch.qml: active);
+    // the platform run from outside checks there that the text stays intact
+    return;
+#endif
     static const QString html = u"<p>Tonleitern G-Dur und D-Dur langsam üben</p>"
                                 "<p>Etüde Nr. 3 bis Takt 16 mit Metronom</p>"
                                 "<p>Vortragsstück: Bogeneinteilung im Mittelteil</p>"_s;
@@ -1631,6 +1636,8 @@ void UiTest::addCases()
                 << check(u"no draft"_s, [this] { return m_app->keptDraft(u"note"_s).isEmpty(); });
     }
     // Touch: a double tap on a word selects it (Qt leaves it to the system otherwise), then "B"
+    // (TextTouch: not on iOS for now)
+#ifndef Q_OS_IOS
     {
         Case &c = add(u"note-touch-select"_s, u"double tap with a finger selects a word, B makes it bold"_s);
         c.steps << tap(u"^Notiz$"_s) << see(u"^Notiz speichern$"_s)
@@ -1679,6 +1686,7 @@ void UiTest::addCases()
 #endif
         c.steps << tap(u"^Abbrechen$"_s) << gone(u"^Notiz speichern$"_s);
     }
+#endif
     addTextTouchCases();
 
     // Students: search, open one, back
@@ -1835,7 +1843,7 @@ void UiTest::addCases()
             return false;
         };
         c.steps << openStudent(u"Lena Muster"_s) << tap(u"^Werke$"_s) << tap(u"^Werk$"_s)
-                << tap(u"^Ende "_s) << check(u"the calendar for the end date: all of it on the screen"_s, calendarInside)
+                << tap(u"^Start "_s) << check(u"the calendar for the start date: all of it on the screen"_s, calendarInside)
                 << snap(u"date-calendar"_s)
                 << key(Qt::Key_Escape, u"close the calendar"_s)
                 << tap(u"^Abbrechen$"_s) << gone(u"edit:^Titel$"_s) << backIfThere(u"^Schüler$"_s);

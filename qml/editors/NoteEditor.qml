@@ -406,7 +406,7 @@ Sheet {
             Accessible.description: noteText.length === 0 ? (editor.plan ? qsTrId("plan.placeholder") : qsTrId("note.placeholder")) : ""
 
             // Finger gestures: Qupil's own, the same on iPhone, iPad and Android (TextTouch)
-            inputMethodHints: Qt.ImhNoTextHandles
+            inputMethodHints: (Qt.platform.os === "ios" ? Qt.ImhNone : Qt.ImhNoTextHandles)
             TextTouch { target: noteText }
         }
         Text {

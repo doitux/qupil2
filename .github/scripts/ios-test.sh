@@ -284,6 +284,9 @@ device_run() {
         }
         # idb's touches are 0.6–1.8 s apart: no double tap (Qupil's UI test above has it)
         SEL_NO_DOUBLE_TAP=1
+        # Qupil's touch rules are off on iOS for now (TextTouch.qml: active): only that the
+        # text stays intact counts
+        SEL_TEXT_ONLY=1
         . "$HERE/select-scenarios.sh"
         select_scenarios
         [ -f "$dir/select-taps.txt" ] && say "- $(sort -u "$dir/select-taps.txt" | head -3 | tr '\n' ';')"
