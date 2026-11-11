@@ -183,6 +183,49 @@ device_run() {
     mkdir -p "$dir/draft"
     cp -R "$data/Documents/draft/." "$dir/draft/" 2> /dev/null
 
+    # --- The metronome plays on in the background (audio session "Playback", background
+    #     mode "audio"): Qupil's metronome phase logs "metronome: beat <n> … session <kind>"
+    #     every second; Settings in front, then the beats must still go on
+    say ''
+    say '### Metronome in the background'
+    say ''
+    xcrun simctl terminate "$udid" $BUNDLE > /dev/null 2>&1
+    local mlog=$dir/metronome.log
+    : > "$mlog"
+    rm -rf "$data/Documents/metronome"
+    xcrun simctl launch --console-pty --terminate-running-process "$udid" $BUNDLE \
+        --ui-test "$data/Documents/metronome" --ui-test-phase metronome --lang de --data-dir "$data/Library/metronome-data" \
+        >> "$mlog" 2>&1 &
+    for ((i = 0; i < 90; i++)); do
+        grep -q 'metronome: beat' "$mlog" 2> /dev/null && break
+        sleep 2
+    done
+    sleep 4
+    mbeat() { grep -o 'metronome: beat [0-9]*' "$mlog" | tail -1 | grep -o '[0-9]*$'; }
+    msession() { grep -o 'session [a-z-]*' "$mlog" | tail -1 | cut -d' ' -f2; }
+    local b0 b1 b2 s1
+    b0=$(mbeat)
+    shot metronome-playing
+    xcrun simctl launch "$udid" com.apple.Preferences > /dev/null
+    sleep 3
+    b1=$(mbeat)
+    sleep 8
+    b2=$(mbeat)
+    s1=$(msession)
+    shot metronome-background
+    say "| | Check | Got |"
+    say "|---|---|---|"
+    if [ -n "$b0" ] && [ "${b0:-0}" -gt 0 ]; then say "| ✅ | plays in front | $b0 beats |"; else say "| ❌ | plays in front | ${b0:-no log} |"; FAILED=1; fi
+    # 80 bpm: about 10 beats in 8 s
+    if [ -n "$b2" ] && [ -n "$b1" ] && [ $((b2 - b1)) -ge 6 ]; then
+        say "| ✅ | plays on in the background (8 s) | $((b2 - b1)) beats |"
+    else
+        say "| ❌ | plays on in the background (8 s) | ${b1:-?} → ${b2:-?} beats |"
+        FAILED=1
+    fi
+    if [ "$s1" = playback ]; then say "| ✅ | audio session | Playback |"; else say "| ❌ | audio session | ${s1:-no log} |"; FAILED=1; fi
+    xcrun simctl terminate "$udid" $BUNDLE > /dev/null 2>&1
+
     # --- idb (when it installed): what the system's accessibility sees, a tap from outside
     [ -n "$IDB_NOTE" ] && say "- $IDB_NOTE"
     if command -v idb > /dev/null 2>&1 || declare -F idb > /dev/null; then

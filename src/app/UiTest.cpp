@@ -31,6 +31,11 @@
 #include "DataService.h"
 #include "LanguageManager.h"
 
+#ifdef Q_OS_IOS
+// AudioSession_ios.mm
+bool qupilPlaybackAudioSessionSet();
+#endif
+
 using namespace Qt::StringLiterals;
 
 namespace {
@@ -114,6 +119,8 @@ void UiTest::start()
             addDraftPhase();
         else if (m_phase == u"select"_s)
             addSelectPhase();
+        else if (m_phase == u"metronome"_s)
+            addMetronomePhase();
         else
             addCases();
         // "only:a,b,c": just these cases (a long run split into several starts)
@@ -1109,8 +1116,9 @@ void UiTest::report()
     qInfo("ui test: %lld of %lld cases passed (%s)", qlonglong(m_results.size() - failed),
           qlonglong(m_results.size()), qPrintable(QDir::toNativeSeparators(m_folder)));
     // "draft": Qupil stays open with the unsaved note, the system ends it from outside;
-    // "select": stays open for the touch tests from outside
-    if (m_phase != u"draft"_s && m_phase != u"select"_s)
+    // "select": stays open for the touch tests from outside; "metronome": stays open and
+    // plays, the platform test puts Qupil into the background
+    if (m_phase != u"draft"_s && m_phase != u"select"_s && m_phase != u"metronome"_s)
         QCoreApplication::exit(failed == 0 ? EXIT_SUCCESS : 1);
 }
 
@@ -1205,6 +1213,39 @@ void UiTest::addSelectPhase()
                    return find(u"edit:^Notiz$"_s, &n) && n.item && n.item->property("length").toInt() > 100;
                })
             << snap(u"select-prepare"_s);
+}
+
+void UiTest::addMetronomePhase()
+{
+    // The metronome plays on; every second Qupil logs "metronome: beat <n> session <kind>"
+    // – from outside the test sends Qupil into the background and checks that the beats go
+    // on (iOS: only with the audio session "Playback")
+    Case &c = add(u"metronome-prepare"_s, u"the metronome plays, its beats logged for the background test from outside"_s);
+    c.keepScreen = true;
+    c.steps << tab(u"Metronom"_s) << see(u"^Im Takt tippen$"_s) << tap(u"^Start$"_s)
+            << check(u"running"_s, [this] { return m_metronome && m_metronome->property("running").toBool(); })
+            << act(u"log the beats"_s, [this] {
+                   // Counted from the beats the sound output has played (processedUSecs)
+                   connect(m_metronome, SIGNAL(beatChanged()), this, SLOT(countBeat()));
+                   m_traceTimer.setInterval(1000);
+                   connect(&m_traceTimer, &QTimer::timeout, this, [this] {
+                       if (!m_metronome)
+                           return;
+#ifdef Q_OS_IOS
+                       const char *session = qupilPlaybackAudioSessionSet() ? "playback" : "other";
+#else
+                       const char *session = "-";
+#endif
+                       qInfo("metronome: beat %lld running %d session %s", qlonglong(m_beatsHeard),
+                             m_metronome->property("running").toBool() ? 1 : 0, session);
+                   }, Qt::UniqueConnection);
+                   m_traceTimer.start();
+               });
+}
+
+void UiTest::countBeat()
+{
+    ++m_beatsHeard;
 }
 
 void UiTest::traceSelection()
@@ -1663,6 +1704,14 @@ void UiTest::addCases()
                        if (m_metronome && !m_metronome->property("running").toBool())
                            m_results.last().note = u"no sound: "_s + m_metronome->property("error").toString();
                    })
+#ifdef Q_OS_IOS
+                // The session for playing (background, silent switch) – Qt sets "Ambient"
+                // when the sound output opens (AudioSession_ios.mm)
+                << wait(1500)
+                << check(u"iOS: audio session \"Playback\" while it plays"_s, [this] {
+                       return !m_metronome || !m_metronome->property("running").toBool() || qupilPlaybackAudioSessionSet();
+                   })
+#endif
                 << tap(u"^(Stopp|Start)$"_s, u"tap Stopp (or Start again)"_s);
     }
     // Appearance: dark and back to light
