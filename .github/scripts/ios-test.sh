@@ -224,6 +224,8 @@ device_run() {
             idb ui tap --udid "$udid" "$1" "$2"
             e=$(python3 -c 'import time; print(time.time())')
             echo "double tap took $(python3 -c "print(round(($e - $s) * 1000))") ms" >> "$dir/select-taps.txt"
+            # Roughly the time between the touches: one call of idb each
+            SEL_DOUBLE_MS=$(python3 -c "print(round(($e - $s) * 500))")
         }
         t_long() { idb ui tap --udid "$udid" --duration 1.0 "$1" "$2"; }
         t_drag() { idb ui swipe --udid "$udid" --duration "$([ "${5:-}" = fast ] && echo 0.15 || echo 1.0)" "$1" "$2" "$3" "$4"; }
@@ -237,6 +239,7 @@ device_run() {
         . "$HERE/select-scenarios.sh"
         select_scenarios
         [ -f "$dir/select-taps.txt" ] && say "- $(sort -u "$dir/select-taps.txt" | head -3 | tr '\n' ';')"
+        [ "$SEL_FAILED" = 0 ] || FAILED=1
         xcrun simctl terminate "$udid" $BUNDLE > /dev/null 2>&1
     else
         say '- (idb not installed: no taps from outside)'

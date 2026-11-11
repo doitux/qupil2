@@ -155,13 +155,15 @@ sleep 1
 # The UI test first, on a fresh emulator: after many starts the emulator's graphics
 # (the GL pipe to the host) can stall, and later starts hang in shader setup
 step "Qupil's own UI test (inside the app) and its restart half"
-# In three starts of six cases each, then the restart half: a long run in one start
+# In a few starts of some cases each, then the restart half: a long run in one start
 # wore out the emulator's graphics (a stall in its GL pipe)
 adb shell am force-stop $PKG
 uidir=/data/data/$PKG/files/ui-test
 adb shell rm -rf "$uidir"
 PARTS="1:pages,today,note-save,note-cancel,note-touch-select,student-search,student-new
 2:event-open,metronome,appearance,language,reminders,test-mode
+4:text-tap,text-double-tap,text-triple-tap,text-long-press,text-handles,text-tap-selection
+5:text-menu,text-wipe,text-field,text-mouse
 3:plan-save,piece-new,lesson-new,together,together-new,reminder-new,lesson-reminder,loan-return,lesson-times,more-pages,alert-volume,restart-prepare
 restart:"
 while IFS= read -r part <&3; do
@@ -180,7 +182,7 @@ while IFS= read -r part <&3; do
 done 3<<< "$PARTS"   # (on fd 3: adb reads stdin and would eat the list)
 adb pull "$uidir" "$OUT/ui-test" > /dev/null 2>&1
 # (the data folder stays: sample data only, to start the restart half elsewhere)
-for name in 1 2 3 restart; do
+for name in 1 4 5 2 3 restart; do
     if [ -f "$OUT/ui-test/$name/results.md" ]; then
         sed -e '1,/^$/d' "$OUT/ui-test/$name/results.md" >> "$SUMMARY"
         say ''
@@ -333,6 +335,8 @@ t_double() {
     local t
     t=$(adb shell "a=\$(date +%s%3N); input tap $1 $2 & sleep 0.15; input tap $1 $2; wait; echo \$((\$(date +%s%3N) - a))" | tr -d '\r')
     echo "double tap: ${t} ms for both" >> "$OUT/select-taps.txt"
+    # The touches themselves are 0.15 s apart (both programs start the same way)
+    SEL_DOUBLE_MS=150
 }
 t_long() { adb shell input swipe "$1" "$2" "$1" "$2" 1000; }
 t_drag() { adb shell input swipe "$1" "$2" "$3" "$4" "$([ "${5:-}" = fast ] && echo 150 || echo 900)"; }
@@ -359,6 +363,10 @@ if wait_for "ui test: [0-9]* of [0-9]* cases passed" 240; then
     sel_markup() { sel_refresh; python3 -I "$HERE/select-touch.py" "$SEL_LOG" - markup; }
     select_scenarios
     [ -f "$OUT/select-taps.txt" ] && say "- $(sort -u "$OUT/select-taps.txt" | head -4 | tr '\n' ';')"
+    [ "$SEL_FAILED" = 0 ] || FAILED=1
+else
+    say "- **the select phase did not start**"
+    FAILED=1
 fi
 notes
 adb shell am force-stop $PKG

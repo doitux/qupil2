@@ -1249,6 +1249,25 @@ void UiTest::traceSelection()
     const int from = text->property("selectionStart").toInt(), to = text->property("selectionEnd").toInt();
     log(u"sel"_s, u"sel %1 %2 %3"_s.arg(from).arg(to).arg(text->property("selectedText").toString()));
     log(u"cursor"_s, u"cursor %1"_s.arg(text->property("cursorPosition").toInt()));
+    // Qupil's own text menu (TextTouch) and where its items and the handles are
+    log(u"menu"_s, u"menu "_s + menuItems());
+    for (const QString &label : { u"Ausschneiden"_s, u"Kopieren"_s, u"Einsetzen"_s, u"Auswählen"_s }) {
+        Node b;
+        if (!find(u"^"_s + label + u"$"_s, &b) || !b.item)
+            continue;
+        const QPointF p = global(b.item, { b.item->width() / 2, b.item->height() / 2 });
+        log(u"button "_s + label, u"button %1 %2 %3"_s.arg(label).arg(p.x(), 0, 'f', 1).arg(p.y(), 0, 'f', 1));
+    }
+    for (bool end : { false, true }) {
+        const QPointF p = handlePoint(end);
+        const QString name = end ? u"end"_s : u"start"_s;
+        if (p.isNull())
+            log(u"handle "_s + name, u"handle %1 -"_s.arg(name));
+        else {
+            const QPointF g = m_window->mapToGlobal(p);
+            log(u"handle "_s + name, u"handle %1 %2 %3"_s.arg(name).arg(g.x(), 0, 'f', 1).arg(g.y(), 0, 'f', 1));
+        }
+    }
     for (QObject *child : text->parentItem() ? text->parentItem()->children() : QObjectList()) {
         if (QByteArray(child->metaObject()->className()).contains("TextFormatter")) {
             QString markup;
