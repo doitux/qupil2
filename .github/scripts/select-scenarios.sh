@@ -220,15 +220,7 @@ select_scenarios() {
     t_shot select-13-colour
     clear_sel
 
-    # 5. Wiping over the text must not select anything
-    xy=$(sel_xy word Etüde start)
-    xy2=$(sel_xy word Bogeneinteilung end)
-    t_drag $xy $xy2 fast
-    expect_sel '14 a quick wipe over the text selects nothing' ''
-    t_shot select-14-wipe
-    clear_sel
-
-    # 6. Copy and paste with Qupil's menu: "Etüde" to the end of the note
+    # 5. Copy and paste with Qupil's menu: "Etüde" to the end of the note
     xy=$(sel_xy word Etüde middle)
     t_long $xy
     expect_sel '15 long press on "Etüde"' 'Etüde'
@@ -250,6 +242,15 @@ select_scenarios() {
         sel_result '18 "Einsetzen"' 'Einsetzen' "$(sel_menu)" 0
     fi
     t_shot select-18-pasted
+
+    # 6. Wiping over the text must not select anything (last: it may scroll the sheet, and
+    # the positions of the words change)
+    xy=$(sel_xy word Etüde start)
+    xy2=$(sel_xy word Bogeneinteilung end)
+    t_drag $xy $xy2 fast
+    expect_sel '19 a quick wipe over the text selects nothing' ''
+    t_shot select-19-wipe
+    clear_sel
 
     say "| | Scenario | Expected | Got |"
     say "|---|---|---|---|"
