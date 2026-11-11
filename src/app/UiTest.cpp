@@ -782,7 +782,8 @@ QString UiTest::textPlain() const
 QPointF UiTest::textPoint(const QString &word, int part) const
 {
     // In window coordinates: 0 the middle of the word, 1 its start, 2 its end, 3 an empty
-    // place in the field after the whole text (below the last line)
+    // place in the field after the whole text (below the last line), 4 just right of the
+    // word's end (on its line)
     QQuickItem *t = textItem();
     if (!t)
         return {};
@@ -799,6 +800,7 @@ QPointF UiTest::textPoint(const QString &word, int part) const
     switch (part) {
     case 1: p = { a.left() + 3, y }; break;
     case 2: p = { b.left() - 3, y }; break;
+    case 4: p = { b.left() + 8, y }; break;
     case 3: {
         // Below the last line (the field is taller than its text), else right of its end
         const qreal below = b.bottom() + b.height();
@@ -1422,6 +1424,15 @@ void UiTest::addTextTouchCases()
                 << check(u"again: menu back"_s, [this] { return textSelection() == u"Metronom"_s && menuShown(); })
                 << wait(600) << fingerTaps(u"Tonleitern"_s, 1) << fingerDone()
                 << check(u"a tap outside: selection and menu gone"_s, [this] { return textSelection().isEmpty() && !menuShown(); })
+                // The last word, then a tap right behind it: outside too (the cursor there)
+                << wait(600) << fingerTaps(u"Mittelteil"_s, 2) << fingerDone()
+                << check(u"the last word selected"_s, [this] { return textSelection() == u"Mittelteil"_s; })
+                << wait(600) << fingerTaps(u"Mittelteil"_s, 1, 4) << fingerDone()
+                << check(u"a tap behind it: the selection ends, the cursor behind the word, no menu"_s, [this] {
+                       QQuickItem *t = textItem();
+                       return t && textSelection().isEmpty() && !menuShown()
+                              && t->property("cursorPosition").toInt() == t->property("length").toInt();
+                   })
                 << close;
     }
     {

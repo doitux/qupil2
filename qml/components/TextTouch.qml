@@ -158,7 +158,7 @@ Item {
         if (hasSelection) {
             const from = Math.min(target.selectionStart, target.selectionEnd)
             const to = Math.max(target.selectionStart, target.selectionEnd)
-            if (p >= from && p <= to) {
+            if (inSelection(point, p, from, to)) {
                 menuShown ? hideMenu() : showMenu()
                 focusField()
                 return
@@ -174,6 +174,23 @@ Item {
         }
         placeCursor(point)
         hideMenu()
+    }
+    //! The point is on the selected text – not behind its last character (the end of a line,
+    //! the empty part of the field) or before its first one
+    function inSelection(point, p, from, to) {
+        if (p > from && p < to)
+            return true
+        if (p !== from && p !== to)
+            return false
+        const a = target.positionToRectangle(from)
+        const b = target.positionToRectangle(to)
+        if (point.y < a.y || point.y > b.y + b.height)
+            return false
+        if (p === from && point.y <= a.y + a.height && point.x < a.x)
+            return false
+        if (p === to && point.y >= b.y && point.x > b.x)
+            return false
+        return true
     }
     function longPressed(point) {
         taps = 0

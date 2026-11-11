@@ -160,6 +160,18 @@ select_scenarios() {
     sel_calibrate
     t_shot select-start
 
+    # 0. The tool's first touch: on the iOS simulator the first long press from idb came as
+    # a tap (every later one held), so the first one is only noted
+    xy=$(sel_xy word Bogeneinteilung middle)
+    t_long $xy
+    sleep 1.5
+    if [ "$(sel_now)" = Bogeneinteilung ]; then
+        sel_result '0 first long press of the tool' 'Bogeneinteilung' 'Bogeneinteilung' 1
+    else
+        sel_result '0 first long press of the tool' 'Bogeneinteilung' "\"$(sel_now)\": came as a tap (noted only)" skip
+    fi
+    clear_sel
+
     # 1. Double tap on a word at the start of line 1: the word, Qupil's menu, B at once
     select_word '1 double tap on a word, line 1' Tonleitern
     t_shot select-1-double-tap
