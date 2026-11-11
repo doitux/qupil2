@@ -65,6 +65,9 @@ public:
         const QAudioDevice device = QMediaDevices::defaultAudioOutput();
         if (device.isNull())
             return false;
+#ifdef Q_OS_IOS
+        qupilPlaybackAudioSession();   // CONTROL: before the sink, as in build 44
+#endif
         QAudioFormat format;
         format.setSampleRate(48000);
         format.setChannelCount(1);
@@ -82,8 +85,6 @@ public:
             return false;
         }
 #ifdef Q_OS_IOS
-        // After start(): opening the sink set the session to "Ambient" (AudioSession_ios.mm)
-        qupilPlaybackAudioSession();
         sessionChecks = 0;
 #endif
         beatTimer.start();
@@ -118,8 +119,7 @@ private:
         // sink of its own) set the session back to "Ambient" – playing again at once
         if (++sessionChecks >= 50) {
             sessionChecks = 0;
-            if (!qupilPlaybackAudioSessionSet())
-                qupilPlaybackAudioSession();
+            // CONTROL: no check
         }
 #endif
     }
@@ -159,8 +159,7 @@ Metronome::Metronome(QObject *parent)
 #ifdef Q_OS_IOS
     // Into the background with the session for playing, or iOS stops the sound
     connect(qGuiApp, &QGuiApplication::applicationStateChanged, this, [this](Qt::ApplicationState state) {
-        if (state != Qt::ApplicationActive && (m_running || m_tonePlaying))
-            qupilPlaybackAudioSession();
+        Q_UNUSED(state);   // CONTROL
     });
 #endif
 }
