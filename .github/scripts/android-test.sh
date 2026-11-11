@@ -358,9 +358,6 @@ if wait_for "ui test: [0-9]* of [0-9]* cases passed" 240; then
     # The positions change when the keyboard comes up: read them again before each touch
     sel_refresh() { since > "$SEL_LOG"; }
     . "$HERE/select-scenarios.sh"
-    sel_xy() { sel_refresh; python3 -I "$HERE/select-touch.py" "$SEL_LOG" "$SEL_SCALE" "$@"; }
-    sel_now() { sel_refresh; python3 -I "$HERE/select-touch.py" "$SEL_LOG" - sel; }
-    sel_markup() { sel_refresh; python3 -I "$HERE/select-touch.py" "$SEL_LOG" - markup; }
     select_scenarios
     [ -f "$OUT/select-taps.txt" ] && say "- $(sort -u "$OUT/select-taps.txt" | head -4 | tr '\n' ';')"
     [ "$SEL_FAILED" = 0 ] || FAILED=1

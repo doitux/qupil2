@@ -19,10 +19,12 @@
 #   say text, SEL_LOG (Qupil's log), SEL_SCALE (1 or dpr), HERE
 # Sets SEL_PASSED, SEL_TOTAL and SEL_FAILED (number of checks that went wrong).
 
-sel_xy() { python3 -I "$HERE/select-touch.py" "$SEL_LOG" "$SEL_SCALE" "$@"; }
-sel_now() { python3 -I "$HERE/select-touch.py" "$SEL_LOG" - sel; }
-sel_markup() { python3 -I "$HERE/select-touch.py" "$SEL_LOG" - markup; }
-sel_menu() { python3 -I "$HERE/select-touch.py" "$SEL_LOG" - menu; }
+# sel_refresh (optional, from the caller): brings SEL_LOG up to date before each reading
+type sel_refresh > /dev/null 2>&1 || sel_refresh() { :; }
+sel_xy() { sel_refresh; python3 -I "$HERE/select-touch.py" "$SEL_LOG" "$SEL_SCALE" "$@"; }
+sel_now() { sel_refresh; python3 -I "$HERE/select-touch.py" "$SEL_LOG" - sel; }
+sel_markup() { sel_refresh; python3 -I "$HERE/select-touch.py" "$SEL_LOG" - markup; }
+sel_menu() { sel_refresh; python3 -I "$HERE/select-touch.py" "$SEL_LOG" - menu; }
 
 SEL_PASSED=0
 SEL_TOTAL=0
@@ -77,10 +79,23 @@ expect_markup() {
     fi
 }
 # expect_menu <scenario> <Qupil's items, "" = closed>: Qupil's menu shows exactly these, and
-# no item of the system's own menu is on the screen
+# no item of the system's own menu is on the screen. "Einsetzen" is there when the clipboard
+# holds text (the device's clipboard: whatever a test before copied), so it may come or not
+# where the scenario does not depend on it
 expect_menu() {
-    local system
-    expect_now "$1" "$2" sel_menu
+    local system got i want
+    want=$(printf '%s' "$2" | sed 's/^Ausschneiden, Kopieren, Alles auswählen$/Ausschneiden, Kopieren, (Einsetzen, )?Alles auswählen/')
+    sleep 1
+    for ((i = 0; i < 12; i++)); do
+        got=$(sel_menu)
+        printf '%s\n' "$got" | grep -q -x -E -- "$want" && break
+        sleep 0.5
+    done
+    if printf '%s\n' "$got" | grep -q -x -E -- "$want"; then
+        sel_result "$1" "$2" "$got" 1
+    else
+        sel_result "$1" "$2" "$got" 0
+    fi
     system=$(t_menu | grep -v -x -E 'Ausschneiden|Kopieren|Einsetzen|Auswählen|Alles auswählen' \
         | tr '\n' ',' | sed 's/,$//; s/,/, /g')
     [ -z "$system" ] && sel_result "$1: no system menu" "" "" 1 || sel_result "$1: no system menu" "" "$system" 0
