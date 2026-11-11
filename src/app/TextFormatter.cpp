@@ -3,6 +3,7 @@
 #include "TextFormatter.h"
 
 #include "NoteFormat.h"
+#include "TextFormatting.h"
 
 #include <QTextCharFormat>
 #include <QTextCursor>
@@ -25,103 +26,66 @@ void TextFormatter::setDocument(QQuickTextDocument *document)
     emit formatChanged();
 }
 
-QTextCursor TextFormatter::cursor() const
+QTextDocument *TextFormatter::doc() const
 {
-    QTextDocument *doc = m_document ? m_document->textDocument() : nullptr;
-    if (!doc)
-        return {};
-    QTextCursor c(doc);
-    // The editor may report positions of the text before it was replaced
-    const auto valid = [doc](int position) { return std::clamp(position, 0, std::max(0, doc->characterCount() - 1)); };
-    if (m_selectionStart != m_selectionEnd) {
-        c.setPosition(valid(m_selectionStart));
-        c.setPosition(valid(m_selectionEnd), QTextCursor::KeepAnchor);
-    } else {
-        c.setPosition(valid(m_cursorPosition));
-    }
-    return c;
+    return m_document ? m_document->textDocument() : nullptr;
 }
 
-QTextCharFormat TextFormatter::currentFormat() const
+bool TextFormatter::has(int attribute) const
 {
-    QTextCursor c = cursor();
-    if (c.isNull())
-        return {};
-    // The format at a position is the one of the character before it
-    if (!c.hasSelection() && c.position() == 0 && c.document()->characterCount() > 1)
-        c.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-    return c.charFormat();
+    QTextDocument *d = doc();
+    return d && TextFormatting::has(*d, TextFormatting::Attribute(attribute), m_selectionStart, m_selectionEnd,
+                                    m_cursorPosition);
+}
+
+void TextFormatter::toggle(int attribute, const QColor &color)
+{
+    QTextDocument *d = doc();
+    if (!d)
+        return;
+    TextFormatting::toggle(*d, TextFormatting::Attribute(attribute), m_selectionStart, m_selectionEnd,
+                           m_cursorPosition, color);
+    emit formatChanged();
 }
 
 bool TextFormatter::bold() const
 {
-    return currentFormat().fontWeight() >= QFont::DemiBold;
+    return has(int(TextFormatting::Attribute::Bold));
 }
 
 bool TextFormatter::italic() const
 {
-    return currentFormat().fontItalic();
+    return has(int(TextFormatting::Attribute::Italic));
 }
 
 bool TextFormatter::underline() const
 {
-    return currentFormat().fontUnderline();
+    return has(int(TextFormatting::Attribute::Underline));
 }
 
 bool TextFormatter::colored() const
 {
-    return currentFormat().hasProperty(QTextFormat::ForegroundBrush);
-}
-
-void TextFormatter::merge(const QTextCharFormat &format)
-{
-    QTextCursor c = cursor();
-    if (c.isNull())
-        return;
-    if (!c.hasSelection())
-        c.select(QTextCursor::WordUnderCursor);
-    c.mergeCharFormat(format);
-    emit formatChanged();
+    return has(int(TextFormatting::Attribute::Colored));
 }
 
 void TextFormatter::toggleBold()
 {
-    QTextCharFormat f;
-    f.setFontWeight(bold() ? QFont::Normal : QFont::Bold);
-    merge(f);
+    toggle(int(TextFormatting::Attribute::Bold));
 }
 
 void TextFormatter::toggleItalic()
 {
-    QTextCharFormat f;
-    f.setFontItalic(!italic());
-    merge(f);
+    toggle(int(TextFormatting::Attribute::Italic));
 }
 
 void TextFormatter::toggleUnderline()
 {
-    QTextCharFormat f;
-    f.setFontUnderline(!underline());
-    merge(f);
+    toggle(int(TextFormatting::Attribute::Underline));
 }
 
 void TextFormatter::toggleColor(const QColor &color)
 {
-    QTextCursor c = cursor();
-    if (c.isNull())
-        return;
-    if (!c.hasSelection())
-        c.select(QTextCursor::WordUnderCursor);
-    if (colored()) {
-        QTextCharFormat f = c.charFormat();
-        f.clearForeground();
-        c.setCharFormat(f);
-    } else {
-        QTextCharFormat f;
-        f.setForeground(color);
-        c.mergeCharFormat(f);
-    }
-    emit formatChanged();
+    toggle(int(TextFormatting::Attribute::Colored), color);
 }
 
 bool TextFormatter::isEmpty() const

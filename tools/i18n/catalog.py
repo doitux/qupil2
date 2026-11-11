@@ -928,6 +928,13 @@ E("reminder.only_lesson_day", en="Only at the lesson on %1", de="Nur im Unterric
 E("lesson.time.end_before_start", en="The end must be after the start.", de="Das Ende muss nach dem Beginn liegen.",
   fr="La fin doit être après le début.", es="El final debe ser posterior al inicio.",
   c="Lesson editor, below start and end: shown instead of the length; saving is not possible")
+E("textmenu.cut", en="Cut", de="Ausschneiden", fr="Couper", es="Cortar", c="Menu over selected text (touch)")
+E("textmenu.copy", en="Copy", de="Kopieren", fr="Copier", es="Copiar", c="Menu over selected text (touch)")
+E("textmenu.paste", en="Paste", de="Einsetzen", fr="Coller", es="Pegar", c="Menu over selected text or the cursor (touch)")
+E("textmenu.select", en="Select", de="Auswählen", fr="Sélectionner", es="Seleccionar", c="Menu at the cursor: select the word (touch)")
+E("textmenu.select_all", en="Select All", de="Alles auswählen", fr="Tout sélectionner", es="Seleccionar todo", c="Menu at the cursor or selection (touch)")
+E("textmenu.handle_start", en="Start of selection", de="Anfang der Auswahl", fr="Début de la sélection", es="Inicio de la selección", c="Accessible name of the handle at the start of selected text")
+E("textmenu.handle_end", en="End of selection", de="Ende der Auswahl", fr="Fin de la sélection", es="Fin de la selección", c="Accessible name of the handle at the end of selected text")
 E("lessonpick.search", en="Search students or lessons", de="Schüler oder Unterricht suchen",
   fr="Chercher un élève ou un cours", es="Buscar alumno o clase", c="Search field in the list of lessons to choose from")
 E("lessonpick.today", en="Today · %1", de="Heute · %1", fr="Aujourd’hui · %1", es="Hoy · %1",

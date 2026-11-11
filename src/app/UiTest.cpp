@@ -4,6 +4,8 @@
 
 #include <cmath>
 #include <QAccessible>
+#include <QClipboard>
+#include <QGuiApplication>
 #include <QTest>
 #include <QCoreApplication>
 #include <QDir>
@@ -325,6 +327,29 @@ void UiTest::click(const QPointF &point)
     QCoreApplication::sendEvent(m_window.data(), &press);
     QMouseEvent release(QEvent::MouseButtonRelease, point, global, Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
     QCoreApplication::sendEvent(m_window.data(), &release);
+}
+
+void UiTest::mouseClicks(const QPointF &point, int count)
+{
+    // count clicks 90 ms apart with timestamps, so Qt sees a double or triple click (QTest
+    // spaces its clicks out on purpose so they never form one)
+    if (!m_window)
+        return;
+    const QPointF global = m_window->mapToGlobal(point);
+    static ulong t = 1000000;
+    t += 5000;
+    const auto send = [this, point, global](QEvent::Type type, Qt::MouseButtons buttons, ulong at) {
+        QMouseEvent e(type, point, global, Qt::LeftButton, buttons, Qt::NoModifier);
+        e.setTimestamp(at);
+        QCoreApplication::sendEvent(m_window.data(), &e);
+    };
+    for (int i = 0; i < count; ++i) {
+        send(QEvent::MouseButtonPress, Qt::LeftButton, t);
+        if (i == 1)
+            send(QEvent::MouseButtonDblClick, Qt::LeftButton, t);
+        send(QEvent::MouseButtonRelease, Qt::NoButton, t + 10);
+        t += 90;
+    }
 }
 
 void UiTest::sendKey(int key, const QString &text)
@@ -735,6 +760,199 @@ QPointF UiTest::wordInNote(const QString &word) const
     return n.item->mapToScene(QPointF((a.left() + b.right()) / 2, (a.top() + a.bottom()) / 2));
 }
 
+// ---------------------------------------------------------------- text by finger (TextTouch)
+
+QQuickItem *UiTest::textItem() const
+{
+    Node n;
+    return find(m_textField, &n) ? n.item : nullptr;
+}
+
+QString UiTest::textPlain() const
+{
+    QQuickItem *t = textItem();
+    if (!t)
+        return {};
+    QString plain;
+    QMetaObject::invokeMethod(t, "getText", Q_RETURN_ARG(QString, plain), Q_ARG(int, 0),
+                              Q_ARG(int, t->property("length").toInt()));
+    return plain;
+}
+
+QPointF UiTest::textPoint(const QString &word, int part) const
+{
+    // In window coordinates: 0 the middle of the word, 1 its start, 2 its end, 3 an empty
+    // place in the field after the whole text (below the last line)
+    QQuickItem *t = textItem();
+    if (!t)
+        return {};
+    const QString plain = textPlain();
+    const int at = part == 3 ? int(plain.size()) : int(plain.indexOf(word));
+    if (at < 0)
+        return {};
+    const int end = part == 3 ? at : at + int(word.size());
+    QRectF a, b;
+    QMetaObject::invokeMethod(t, "positionToRectangle", Q_RETURN_ARG(QRectF, a), Q_ARG(int, at));
+    QMetaObject::invokeMethod(t, "positionToRectangle", Q_RETURN_ARG(QRectF, b), Q_ARG(int, end));
+    const qreal y = (a.top() + a.bottom()) / 2;
+    QPointF p;
+    switch (part) {
+    case 1: p = { a.left() + 3, y }; break;
+    case 2: p = { b.left() - 3, y }; break;
+    case 3: {
+        // Below the last line (the field is taller than its text), else right of its end
+        const qreal below = b.bottom() + b.height();
+        p = below < t->height() - 8 ? QPointF(b.left(), below) : QPointF(std::min(b.left() + 40, t->width() - 20), y);
+        break;
+    }
+    default: p = { (a.left() + b.left()) / 2, y }; break;
+    }
+    return t->mapToScene(p);
+}
+
+QString UiTest::textSelection() const
+{
+    QQuickItem *t = textItem();
+    return t ? t->property("selectedText").toString() : QString();
+}
+
+QString UiTest::textMarkup() const
+{
+    QQuickItem *t = textItem();
+    if (!t || !t->parentItem())
+        return {};
+    for (QObject *child : t->parentItem()->children()) {
+        if (QByteArray(child->metaObject()->className()).contains("TextFormatter")) {
+            QString markup;
+            QMetaObject::invokeMethod(child, "markup", Q_RETURN_ARG(QString, markup));
+            return markup;
+        }
+    }
+    return {};
+}
+
+QPointF UiTest::handlePoint(bool end) const
+{
+    // The knob of a selection handle (TextTouch), in window coordinates
+    QQuickItem *t = textItem();
+    if (!t)
+        return {};
+    const auto handles = t->findChildren<QQuickItem *>(end ? u"textTouchEnd"_s : u"textTouchStart"_s);
+    if (handles.isEmpty() || !handles.first()->isVisible())
+        return {};
+    QQuickItem *h = handles.first();
+    const QRectF line = h->property("line").toRectF();
+    const qreal knob = 14;
+    return h->mapToScene(QPointF(h->width() / 2, end ? line.height() + knob / 2 : 22 + knob / 2));
+}
+
+void UiTest::finger(int state, const QPointF &scenePoint)
+{
+    static QPointingDevice *device = QTest::createTouchDevice();
+    if (!m_window)
+        return;
+    const QPoint p = scenePoint.toPoint();
+    if (state == 0)
+        QTest::touchEvent(m_window, device).press(0, p, m_window);
+    else if (state == 1)
+        QTest::touchEvent(m_window, device).move(0, p, m_window);
+    else
+        QTest::touchEvent(m_window, device).release(0, p, m_window);
+}
+
+UiTest::Step UiTest::fingerTaps(const QString &word, int count, int part)
+{
+    // count taps 80 ms apart; what is selected right after the last touch (before the finger
+    // lifts) goes to m_atPress
+    return Step { u"%1× tap on \"%2\""_s.arg(count).arg(word), [this, word, count, part] {
+                      const QPointF p = textPoint(word, part);
+                      if (p.isNull())
+                          return false;
+                      m_fingerDone = false;
+                      auto left = std::make_shared<int>(count);
+                      auto one = std::make_shared<std::function<void()>>();
+                      *one = [this, p, left, one] {
+                          finger(0, p);
+                          if (--*left == 0)
+                              m_atPress = textSelection();
+                          finger(2, p);
+                          if (*left > 0)
+                              QTimer::singleShot(80, this, *one);
+                          else
+                              m_fingerDone = true;
+                      };
+                      (*one)();
+                      return true;
+                  } }
+        ;
+}
+
+UiTest::Step UiTest::fingerLong(const QString &word, int part)
+{
+    // Press, hold 700 ms (what is selected then: m_atPress), lift
+    return Step { u"long press on \"%1\""_s.arg(word), [this, word, part] {
+                      const QPointF p = textPoint(word, part);
+                      if (p.isNull())
+                          return false;
+                      m_fingerDone = false;
+                      m_atPress.clear();
+                      finger(0, p);
+                      QTimer::singleShot(700, this, [this, p] {
+                          m_atPress = textSelection();
+                          m_menuAtPress = menuShown();
+                          finger(2, p);
+                          m_fingerDone = true;
+                      });
+                      return true;
+                  } };
+}
+
+UiTest::Step UiTest::fingerDrag(std::function<QPointF()> from, std::function<QPointF()> to, int ms)
+{
+    // A finger from one point to another in ~20 steps
+    return Step { u"drag with a finger"_s, [this, from, to, ms] {
+                      const QPointF a = from(), b = to();
+                      if (a.isNull() || b.isNull())
+                          return false;
+                      m_fingerDone = false;
+                      finger(0, a);
+                      const int steps = 20;
+                      for (int i = 1; i <= steps; ++i) {
+                          QTimer::singleShot(ms * i / steps, this, [this, a, b, i] {
+                              const QPointF p = a + (b - a) * (qreal(i) / steps);
+                              finger(1, p);
+                              if (i == steps) {
+                                  finger(2, p);
+                                  m_fingerDone = true;
+                              }
+                          });
+                      }
+                      return true;
+                  } };
+}
+
+UiTest::Step UiTest::fingerDone()
+{
+    return Step { u"the finger lifted"_s, [this] { return m_fingerDone; } };
+}
+
+bool UiTest::menuShown() const
+{
+    Node n;
+    return find(u"^(Kopieren|Einsetzen|Auswählen|Alles auswählen)$"_s, &n);
+}
+
+QString UiTest::menuItems() const
+{
+    QStringList items;
+    for (const QString &label : { u"Ausschneiden"_s, u"Kopieren"_s, u"Auswählen"_s, u"Einsetzen"_s, u"Alles auswählen"_s }) {
+        Node n;
+        if (find(u"^"_s + label + u"$"_s, &n))
+            items << label;
+    }
+    return items.join(u", "_s);
+}
+
 QString UiTest::noteSelection() const
 {
     Node n;
@@ -1040,6 +1258,223 @@ void UiTest::traceSelection()
     }
 }
 
+// Text by finger – the rules of TextTouch.qml (docs/text-touch.md), each with real touch
+// events, on every platform. Three lines of a note; each case opens and cancels the editor.
+void UiTest::addTextTouchCases()
+{
+    static const QString html = u"<p>Tonleitern G-Dur und D-Dur langsam üben</p>"
+                                "<p>Etüde Nr. 3 bis Takt 16 mit Metronom</p>"
+                                "<p>Vortragsstück: Bogeneinteilung im Mittelteil</p>"_s;
+    const auto open = [this](const QString &text) {
+        return QList<Step> {
+            act(u"the note field"_s, [this] { m_textField = u"edit:^Notiz$"_s; }),
+            tap(u"^Notiz$"_s), see(u"^Notiz speichern$"_s),
+            act(u"the text"_s, [this, text] {
+                if (QQuickItem *t = textItem()) {
+                    t->setProperty("text", text);
+                    t->forceActiveFocus();
+                }
+            }),
+            check(u"the text is there"_s, [this] { return !textPoint(u"Metronom"_s).isNull(); }),
+            wait(600),
+        };
+    };
+    const QList<Step> close = { tap(u"^Abbrechen$"_s), gone(u"^Notiz speichern$"_s) };
+    const auto fettChecked = [this] {
+        Node n;
+        return find(u"^Fett$"_s, &n) && n.item && n.item->property("checked").toBool();
+    };
+    const auto cursorIn = [this](const QString &word) {
+        QQuickItem *t = textItem();
+        const int at = int(textPlain().indexOf(word));
+        const int c = t ? t->property("cursorPosition").toInt() : -1;
+        return t && at >= 0 && c >= at && c <= at + int(word.size()) && textSelection().isEmpty();
+    };
+
+    {
+        Case &c = add(u"text-tap"_s, u"finger: a tap places the cursor; a tap on the cursor shows and hides the menu"_s);
+        c.steps << open(html)
+                << fingerTaps(u"Metronom"_s, 1) << fingerDone()
+                << check(u"cursor in \"Metronom\", nothing selected, no menu"_s,
+                         [cursorIn, this] { return cursorIn(u"Metronom"_s) && !menuShown(); })
+                << wait(600) << fingerTaps(u"Metronom"_s, 1) << fingerDone()
+                << check(u"a tap on the cursor: menu with Auswählen, Alles auswählen"_s, [this] {
+                       return menuItems().contains(u"Auswählen"_s) && menuItems().contains(u"Alles auswählen"_s)
+                              && !menuItems().contains(u"Kopieren"_s);
+                   })
+                << snap(u"text-menu-cursor"_s)
+                << wait(600) << fingerTaps(u"Metronom"_s, 1) << fingerDone()
+                << check(u"again: the menu goes"_s, [this] { return !menuShown(); })
+                << wait(600) << fingerTaps(u"Tonleitern"_s, 1) << fingerDone()
+                << check(u"a tap elsewhere moves the cursor"_s, [cursorIn] { return cursorIn(u"Tonleitern"_s); })
+                << close;
+    }
+    {
+        Case &c = add(u"text-double-tap"_s, u"finger: a double tap selects the word at the second touch; B and B again"_s);
+        c.steps << open(html)
+                << fingerTaps(u"G-Dur"_s, 2) << fingerDone()
+                << check(u"\"G-Dur\" selected already at the second touch"_s, [this] { return m_atPress == u"G-Dur"_s; })
+                << check(u"and after the finger lifted, with handles and the menu"_s, [this] {
+                       return textSelection() == u"G-Dur"_s && !handlePoint(true).isNull() && !handlePoint(false).isNull()
+                              && menuItems().startsWith(u"Ausschneiden, Kopieren"_s);
+                   })
+                << snap(u"text-double-tap"_s)
+                << tap(u"^Fett$"_s)
+                << check(u"bold, and B shows it"_s, [this, fettChecked] { return textMarkup().contains(u"**G-Dur**"_s) && fettChecked(); })
+                << tap(u"^Fett$"_s)
+                << check(u"B again: normal"_s, [this, fettChecked] { return !textMarkup().contains(u"**"_s) && !fettChecked(); })
+                << close;
+    }
+    {
+        Case &c = add(u"text-triple-tap"_s, u"finger: a triple tap selects the paragraph (without its end); B, B again"_s);
+        c.steps << open(html)
+                << fingerTaps(u"Metronom"_s, 3) << fingerDone()
+                << check(u"line 2 selected at the third touch"_s,
+                         [this] { return m_atPress == u"Etüde Nr. 3 bis Takt 16 mit Metronom"_s; })
+                << check(u"still after the finger lifted"_s,
+                         [this] { return textSelection() == u"Etüde Nr. 3 bis Takt 16 mit Metronom"_s && menuShown(); })
+                << tap(u"^Fett$"_s)
+                << check(u"the paragraph bold, B shows it"_s, [this, fettChecked] {
+                       return textMarkup().contains(u"**Etüde Nr. 3 bis Takt 16 mit Metronom**"_s) && fettChecked();
+                   })
+                << tap(u"^Fett$"_s)
+                << check(u"B again: normal"_s, [this, fettChecked] { return !textMarkup().contains(u"**"_s) && !fettChecked(); })
+                << close;
+    }
+    {
+        Case &c = add(u"text-long-press"_s, u"finger: a long press selects the word while the finger is down"_s);
+        c.steps << open(html)
+                << fingerLong(u"Metronom"_s) << fingerDone()
+                << check(u"\"Metronom\" selected while the finger was down, menu there"_s,
+                         [this] { return m_atPress == u"Metronom"_s && m_menuAtPress; })
+                << check(u"still selected after it lifted"_s, [this] { return textSelection() == u"Metronom"_s && menuShown(); })
+                << wait(600) << fingerLong(QString(), 3) << fingerDone()
+                << check(u"behind the text: the cursor there, menu with Alles auswählen"_s, [this] {
+                       QQuickItem *t = textItem();
+                       return t && textSelection().isEmpty() && t->property("cursorPosition").toInt() == t->property("length").toInt()
+                              && menuItems().contains(u"Alles auswählen"_s);
+                   })
+                << close;
+    }
+    {
+        // From the end handle on its knob to behind "D-Dur" (the knob hangs below the line)
+        const auto endKnobTo = [this](const QString &word) {
+            return [this, word] {
+                const QPointF knob = handlePoint(true), wordEnd = textPoint(u"G-Dur"_s, 2);
+                return textPoint(word, 2) + (knob - wordEnd);
+            };
+        };
+        const auto startKnobTo = [this](const QString &word) {
+            return [this, word] {
+                const QPointF knob = handlePoint(false), wordStart = textPoint(u"G-Dur"_s, 1);
+                return textPoint(word, 1) + (knob - wordStart);
+            };
+        };
+        Case &c = add(u"text-handles"_s, u"finger: the handles make the selection longer at either end"_s);
+        c.steps << open(html)
+                << fingerTaps(u"G-Dur"_s, 2) << fingerDone() << wait(300)
+                << fingerDrag([this] { return handlePoint(true); }, endKnobTo(u"D-Dur"_s)) << fingerDone()
+                << check(u"the end to \"D-Dur\""_s, [this] { return textSelection() == u"G-Dur und D-Dur"_s; })
+                << check(u"menu back after the drag"_s, [this] { return menuShown(); })
+                << fingerDrag([this] { return handlePoint(false); }, startKnobTo(u"Tonleitern"_s)) << fingerDone()
+                << check(u"the start to \"Tonleitern\""_s, [this] { return textSelection() == u"Tonleitern G-Dur und D-Dur"_s; })
+                << snap(u"text-handles"_s)
+                << close;
+    }
+    {
+        Case &c = add(u"text-tap-selection"_s, u"finger: a tap into the selection hides/shows the menu, outside ends it"_s);
+        c.steps << open(html)
+                << fingerTaps(u"Metronom"_s, 2) << fingerDone()
+                << check(u"selected, menu"_s, [this] { return textSelection() == u"Metronom"_s && menuShown(); })
+                << wait(600) << fingerTaps(u"Metronom"_s, 1) << fingerDone()
+                << check(u"a tap into it: menu gone, still selected"_s, [this] { return textSelection() == u"Metronom"_s && !menuShown(); })
+                << wait(600) << fingerTaps(u"Metronom"_s, 1) << fingerDone()
+                << check(u"again: menu back"_s, [this] { return textSelection() == u"Metronom"_s && menuShown(); })
+                << wait(600) << fingerTaps(u"Tonleitern"_s, 1) << fingerDone()
+                << check(u"a tap outside: selection and menu gone"_s, [this] { return textSelection().isEmpty() && !menuShown(); })
+                << close;
+    }
+    {
+        Case &c = add(u"text-menu"_s, u"finger: Kopieren, Einsetzen, Alles auswählen, Ausschneiden"_s);
+        c.steps << open(html)
+                << fingerTaps(u"Metronom"_s, 2) << fingerDone()
+                << tap(u"^Kopieren$"_s)
+                << check(u"copied, menu gone"_s, [this] {
+                       return QGuiApplication::clipboard()->text() == u"Metronom"_s && !menuShown();
+                   })
+                << wait(600) << fingerTaps(QString(), 1, 3) << fingerDone()
+                << wait(600) << fingerTaps(QString(), 1, 3) << fingerDone()
+                << check(u"a tap on the cursor at the end: Einsetzen"_s, [this] { return menuItems().contains(u"Einsetzen"_s); })
+                << tap(u"^Einsetzen$"_s)
+                << check(u"pasted at the end"_s, [this] { return textPlain().endsWith(u"MittelteilMetronom"_s) && !menuShown(); })
+                // the cursor is at the end after pasting: one tap on it brings the menu
+                << wait(600) << fingerTaps(QString(), 1, 3) << fingerDone()
+                << tap(u"^Alles auswählen$"_s)
+                << check(u"everything selected, menu stays"_s, [this] {
+                       return !textSelection().isEmpty() && textSelection().size() >= textPlain().size() - 2
+                              && menuItems().contains(u"Ausschneiden"_s);
+                   })
+                << tap(u"^Ausschneiden$"_s)
+                << check(u"cut: the field is empty, the text in the clipboard"_s, [this] {
+                       return textPlain().isEmpty() && QGuiApplication::clipboard()->text().contains(u"Tonleitern"_s);
+                   })
+                << close;
+    }
+    {
+        // Twenty lines: the field is longer than the sheet
+        QString lines;
+        for (int i = 1; i <= 20; ++i)
+            lines += u"<p>Zeile %1 mit etwas Text zum Blättern</p>"_s.arg(i);
+        auto before = std::make_shared<qreal>(0);
+        const auto flickOf = [this]() -> QQuickItem * {
+            for (QQuickItem *p = textItem(); p; p = p->parentItem())
+                if (p->property("flicking").isValid() && p->property("contentY").isValid())
+                    return p;
+            return nullptr;
+        };
+        Case &c = add(u"text-wipe"_s, u"finger: wiping over the text scrolls and selects nothing"_s);
+        c.steps << open(lines + html)
+                << act(u"where the sheet is scrolled to"_s, [before, flickOf] {
+                       if (QQuickItem *f = flickOf())
+                           *before = f->property("contentY").toReal();
+                   })
+                << fingerDrag([this] { return textPoint(u"Zeile 9 "_s); }, [this] { return textPoint(u"Zeile 2 "_s); }, 250)
+                << fingerDone() << wait(800)
+                << check(u"scrolled, nothing selected"_s, [this, before, flickOf] {
+                       QQuickItem *f = flickOf();
+                       return f && std::abs(f->property("contentY").toReal() - *before) > 40 && textSelection().isEmpty();
+                   })
+                << close;
+    }
+    {
+        Case &c = add(u"text-field"_s, u"finger: the same in a one-line field (title of a piece)"_s);
+        c.steps << act(u"the title field"_s, [this] { m_textField = u"edit:^Titel$"_s; })
+                << openStudent(u"Lena Muster"_s) << tap(u"^Werke$"_s) << tap(u"^Werk$"_s)
+                << tap(u"edit:^Titel$"_s) << type(u"Menuett in G-Dur"_s) << wait(600)
+                << fingerTaps(u"G-Dur"_s, 2) << fingerDone()
+                << check(u"double tap: \"G-Dur\", menu"_s, [this] { return textSelection() == u"G-Dur"_s && menuItems().contains(u"Kopieren"_s); })
+                << wait(600) << fingerLong(u"Menuett"_s) << fingerDone()
+                << check(u"long press: \"Menuett\""_s, [this] { return textSelection() == u"Menuett"_s; })
+                << tap(u"^Abbrechen$"_s) << gone(u"edit:^Titel$"_s)
+                << act(u"back to the note field"_s, [this] { m_textField = u"edit:^Notiz$"_s; });
+    }
+    {
+        // A mouse: the field selects by itself; double and triple click with the same rules
+        Case &c = add(u"text-mouse"_s, u"mouse: double click at the start of a paragraph takes the word; B, B again; triple click"_s);
+        c.steps << open(html)
+                << act(u"double click at the start of line 1"_s, [this] { mouseClicks(textPoint(u"Tonleitern"_s, 1), 2); })
+                << check(u"\"Tonleitern\", not the paragraph"_s, [this] { return textSelection() == u"Tonleitern"_s; })
+                << tap(u"^Fett$"_s)
+                << check(u"bold, B shows it"_s, [this, fettChecked] { return textMarkup().contains(u"**Tonleitern**"_s) && fettChecked(); })
+                << tap(u"^Fett$"_s)
+                << check(u"B again: normal"_s, [this, fettChecked] { return !textMarkup().contains(u"**"_s) && !fettChecked(); })
+                << wait(600)
+                << act(u"triple click in line 2"_s, [this] { mouseClicks(textPoint(u"Metronom"_s), 3); })
+                << check(u"the paragraph"_s, [this] { return textSelection() == u"Etüde Nr. 3 bis Takt 16 mit Metronom"_s; })
+                << close;
+    }
+}
+
 void UiTest::addCases()
 {
     // Every page, with what it shows to screen readers (for comparing platforms)
@@ -1142,6 +1577,8 @@ void UiTest::addCases()
 #endif
         c.steps << tap(u"^Abbrechen$"_s) << gone(u"^Notiz speichern$"_s);
     }
+    addTextTouchCases();
+
     // Students: search, open one, back
     {
         Case &c = add(u"student-search"_s, u"search a student, open and close the student page"_s);

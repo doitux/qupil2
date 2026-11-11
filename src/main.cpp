@@ -136,6 +136,13 @@ int main(int argc, char *argv[])
     qputenv("QT_DISABLE_SHADER_DISK_CACHE", "1");
     qputenv("QSG_RHI_DISABLE_DISK_CACHE", "1");
 #endif
+#ifdef Q_OS_ANDROID
+    // Selecting text with a finger is Qupil's own (TextTouch.qml), the same as on the iPad.
+    // Qt's Android long press, handles and "Paste" bubble would answer the same touches with
+    // other rules; Qt asks only this variable for the long press (Qt.ImhNoTextHandles on the
+    // fields switches the rest off, and on iOS all of it)
+    qputenv("QT_QPA_NO_TEXT_HANDLES", "1");
+#endif
     QUPIL_BOOT("main: start");
     QGuiApplication app(argc, argv);
     QUPIL_BOOT("main: application created");

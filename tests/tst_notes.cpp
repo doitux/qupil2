@@ -8,6 +8,7 @@
 
 #include "ArchiveFormat.h"
 #include "NoteFormat.h"
+#include "TextFormatting.h"
 #include "TextPack.h"
 
 using namespace Qt::StringLiterals;
@@ -59,6 +60,85 @@ class TestNotes : public QObject
     Q_OBJECT
 
 private slots:
+
+    // ---- Format buttons (TextFormatting): the state of a selection and toggling it
+
+    void wordBoundaries_data()
+    {
+        QTest::addColumn<QString>("text");
+        QTest::addColumn<int>("position");
+        QTest::addColumn<QString>("word");
+        QTest::newRow("middle") << u"Tonleitern G-Dur und"_s << 3 << u"Tonleitern"_s;
+        QTest::newRow("hyphen") << u"Tonleitern G-Dur und"_s << 12 << u"G-Dur"_s;
+        QTest::newRow("at the hyphen") << u"Tonleitern G-Dur und"_s << 12 << u"G-Dur"_s;
+        QTest::newRow("before the word") << u"Tonleitern G-Dur und"_s << 11 << u"G-Dur"_s;
+        QTest::newRow("apostrophe") << u"Bach’s Menuett"_s << 2 << u"Bach’s"_s;
+        QTest::newRow("full stop out") << u"Takt 16."_s << 6 << u"16"_s;
+        QTest::newRow("colon out") << u"Vortragsstück: Mitte"_s << 4 << u"Vortragsstück"_s;
+        QTest::newRow("dash alone") << u"1 - 2"_s << 2 << u""_s;
+        QTest::newRow("quotes out") << u"„Andante“ langsam"_s << 3 << u"Andante"_s;
+        QTest::newRow("space") << u"a  b"_s << 2 << u""_s;
+    }
+    void wordBoundaries()
+    {
+        QFETCH(QString, text);
+        QFETCH(int, position);
+        QFETCH(QString, word);
+        int from = 0, to = 0;
+        TextFormatting::wordAt(text, position, &from, &to);
+        QCOMPARE(text.mid(from, to - from), word);
+    }
+
+    void formatOfAParagraphSelection()
+    {
+        // Reported: a double click at the start of a paragraph selected it up to the start of
+        // the next one; "B" made it bold but then showed "not bold" and could not undo it
+        QTextDocument doc;
+        doc.setHtml(u"<p>Tonleitern G-Dur</p><p>Etüde Nr. 3</p>"_s);
+        const int paragraphEnd = 16;   // the separator after "Tonleitern G-Dur"
+        const int nextStart = paragraphEnd + 1;
+        using TextFormatting::Attribute;
+        QVERIFY(!TextFormatting::has(doc, Attribute::Bold, 0, nextStart, nextStart));
+        QVERIFY(TextFormatting::toggle(doc, Attribute::Bold, 0, nextStart, nextStart));
+        QVERIFY(TextFormatting::has(doc, Attribute::Bold, 0, nextStart, nextStart));
+        QVERIFY(!TextFormatting::has(doc, Attribute::Bold, nextStart, nextStart + 5, nextStart + 5));   // next one untouched
+        QVERIFY(!TextFormatting::toggle(doc, Attribute::Bold, 0, nextStart, nextStart));
+        QVERIFY(!TextFormatting::has(doc, Attribute::Bold, 0, nextStart, nextStart));
+        // The same when the selection goes backwards
+        QVERIFY(TextFormatting::toggle(doc, Attribute::Italic, nextStart, 0, 0));
+        QVERIFY(TextFormatting::has(doc, Attribute::Italic, nextStart, 0, 0));
+        QVERIFY(TextFormatting::has(doc, Attribute::Italic, 0, paragraphEnd, paragraphEnd));
+    }
+
+    void formatOfMixedSelection()
+    {
+        QTextDocument doc;
+        doc.setHtml(u"<p><b>Tonleitern</b> G-Dur</p>"_s);
+        using TextFormatting::Attribute;
+        QVERIFY(TextFormatting::has(doc, Attribute::Bold, 0, 10, 10));
+        QVERIFY(!TextFormatting::has(doc, Attribute::Bold, 0, 16, 16));   // partly bold: not bold
+        QVERIFY(TextFormatting::toggle(doc, Attribute::Bold, 0, 16, 16));  // so B makes all of it bold
+        QVERIFY(TextFormatting::has(doc, Attribute::Bold, 0, 16, 16));
+    }
+
+    void formatWithoutSelection()
+    {
+        // No selection: the word under the cursor, also with a hyphen
+        QTextDocument doc;
+        doc.setHtml(u"<p>Tonleitern G-Dur und</p>"_s);
+        using TextFormatting::Attribute;
+        QVERIFY(TextFormatting::toggle(doc, Attribute::Underline, 13, 13, 13));
+        QVERIFY(TextFormatting::has(doc, Attribute::Underline, 11, 16, 16));
+        QVERIFY(!TextFormatting::has(doc, Attribute::Underline, 0, 10, 10));
+        QVERIFY(!TextFormatting::has(doc, Attribute::Underline, 17, 20, 20));
+        // Colour on and off again (removing needs another way than setting)
+        QVERIFY(TextFormatting::toggle(doc, Attribute::Colored, 3, 3, 3, QColor(u"#c00"_s)));
+        QVERIFY(TextFormatting::has(doc, Attribute::Colored, 0, 10, 10));
+        QVERIFY(!TextFormatting::toggle(doc, Attribute::Colored, 0, 10, 10, QColor(u"#c00"_s)));
+        QVERIFY(!TextFormatting::has(doc, Attribute::Colored, 0, 10, 10));
+        // Only a paragraph end selected: nothing to show as bold
+        QVERIFY(!TextFormatting::has(doc, Attribute::Bold, 20, 21, 21));
+    }
     void legacyHtml()
     {
         QVERIFY(NoteFormat::isHtml(kLegacy));
