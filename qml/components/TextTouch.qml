@@ -366,10 +366,15 @@ Item {
         parent: touch.menuHost
         visible: touch.active && touch.menuShown && touch.target.activeFocus && items.actions.length > 0
         z: 1000
-        width: items.implicitWidth
+        width: Math.min(items.implicitWidth, maxWidth)
         height: items.implicitHeight
         radius: 10
         color: Theme.inverse
+        clip: true
+
+        // Wider than the window (a phone: four entries, "Alles auswählen" was cut off): the
+        // bar scrolls sideways with a finger; a soft edge shows there is more
+        readonly property real maxWidth: (parent ? parent.width : 360) - 16
 
         function place() {
             if (!parent)
@@ -387,97 +392,131 @@ Item {
             x = Math.max(8, Math.min(parent.width - width - 8, centre - width / 2))
         }
         onWidthChanged: if (visible) place()
-        onVisibleChanged: if (visible) place()
+        onVisibleChanged: if (visible) { strip.contentX = 0; place() }
 
-        Row {
-            id: items
-            // What the menu offers now, in this order
-            readonly property var actions: {
-                touch.target.length; touch.target.selectionStart; touch.target.selectionEnd; touch.target.cursorPosition
-                const list = []
-                const all = touch.target.length > 0
-                            && Math.abs(touch.target.selectionEnd - touch.target.selectionStart) < touch.target.length
-                const paste = !touch.readOnly && touch.target.canPaste === true
-                if (touch.hasSelection) {
-                    if (!touch.readOnly)
-                        list.push("cut")
-                    list.push("copy")
-                } else if (touch.target.length > 0) {
-                    const r = touch.wordRange(touch.target.cursorPosition)
-                    if (r[0] !== r[1])
-                        list.push("select")
-                }
-                if (paste)
-                    list.push("paste")
-                if (all)
-                    list.push("select_all")
-                return list
-            }
-            function label(action) {
-                switch (action) {
-                case "cut": return qsTrId("textmenu.cut")
-                case "copy": return qsTrId("textmenu.copy")
-                case "paste": return qsTrId("textmenu.paste")
-                case "select": return qsTrId("textmenu.select")
-                default: return qsTrId("textmenu.select_all")
-                }
-            }
-            function run(action) {
-                menu.acting = true
-                const keep = action === "select" || action === "select_all"
-                if (action === "cut")
-                    touch.target.cut()
-                else if (action === "copy")
-                    touch.target.copy()
-                else if (action === "paste")
-                    touch.target.paste()
-                else if (action === "select")
-                    touch.selectRange(touch.wordRange(touch.target.cursorPosition))
-                else if (action === "select_all")
-                    touch.target.selectAll()
-                menu.acting = false
-                if (keep)
-                    touch.showMenu()
-                else
-                    touch.hideMenu()
-            }
+        Flickable {
+            id: strip
+            objectName: "textTouchMenuStrip"
+            anchors.fill: parent
+            contentWidth: items.implicitWidth
+            contentHeight: items.implicitHeight
+            flickableDirection: Flickable.HorizontalFlick
+            boundsBehavior: Flickable.StopAtBounds
+            interactive: contentWidth > width + 1
 
-            Repeater {
-                model: items.actions
-                delegate: Row {
-                    id: entry
-                    required property string modelData
-                    required property int index
-                    Rectangle {
-                        visible: entry.index > 0
-                        width: 1
-                        height: 22
-                        anchors.verticalCenter: parent.verticalCenter
-                        color: Theme.inverseMuted
+            Row {
+                id: items
+                // What the menu offers now, in this order
+                readonly property var actions: {
+                    touch.target.length; touch.target.selectionStart; touch.target.selectionEnd; touch.target.cursorPosition
+                    const list = []
+                    const all = touch.target.length > 0
+                                && Math.abs(touch.target.selectionEnd - touch.target.selectionStart) < touch.target.length
+                    const paste = !touch.readOnly && touch.target.canPaste === true
+                    if (touch.hasSelection) {
+                        if (!touch.readOnly)
+                            list.push("cut")
+                        list.push("copy")
+                    } else if (touch.target.length > 0) {
+                        const r = touch.wordRange(touch.target.cursorPosition)
+                        if (r[0] !== r[1])
+                            list.push("select")
                     }
-                    AbstractButton {
-                        id: action
-                        focusPolicy: Qt.NoFocus
-                        height: 40
-                        leftPadding: 14
-                        rightPadding: 14
-                        text: items.label(entry.modelData)
-                        font.family: Theme.fontFamily
-                        font.pixelSize: 15
-                        Accessible.name: text
-                        onClicked: items.run(entry.modelData)
-                        contentItem: Text {
-                            text: action.text
-                            color: Theme.textOnInverse
-                            font: action.font
-                            verticalAlignment: Text.AlignVCenter
-                        }
-                        background: Rectangle {
-                            color: action.pressed ? Theme.inverseMuted : "transparent"
-                            radius: 10
-                        }
+                    if (paste)
+                        list.push("paste")
+                    if (all)
+                        list.push("select_all")
+                    return list
+                }
+                function label(action) {
+                    switch (action) {
+                    case "cut": return qsTrId("textmenu.cut")
+                    case "copy": return qsTrId("textmenu.copy")
+                    case "paste": return qsTrId("textmenu.paste")
+                    case "select": return qsTrId("textmenu.select")
+                    default: return qsTrId("textmenu.select_all")
                     }
                 }
+                function run(action) {
+                    menu.acting = true
+                    const keep = action === "select" || action === "select_all"
+                    if (action === "cut")
+                        touch.target.cut()
+                    else if (action === "copy")
+                        touch.target.copy()
+                    else if (action === "paste")
+                        touch.target.paste()
+                    else if (action === "select")
+                        touch.selectRange(touch.wordRange(touch.target.cursorPosition))
+                    else if (action === "select_all")
+                        touch.target.selectAll()
+                    menu.acting = false
+                    if (keep)
+                        touch.showMenu()
+                    else
+                        touch.hideMenu()
+                }
+
+                Repeater {
+                    model: items.actions
+                    delegate: Row {
+                        id: entry
+                        required property string modelData
+                        required property int index
+                        Rectangle {
+                            visible: entry.index > 0
+                            width: 1
+                            height: 22
+                            anchors.verticalCenter: parent.verticalCenter
+                            color: Theme.inverseMuted
+                        }
+                        AbstractButton {
+                            id: action
+                            focusPolicy: Qt.NoFocus
+                            height: 40
+                            leftPadding: 14
+                            rightPadding: 14
+                            text: items.label(entry.modelData)
+                            font.family: Theme.fontFamily
+                            font.pixelSize: 15
+                            Accessible.name: text
+                            onClicked: items.run(entry.modelData)
+                            contentItem: Text {
+                                text: action.text
+                                color: Theme.textOnInverse
+                                font: action.font
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                            background: Rectangle {
+                                color: action.pressed ? Theme.inverseMuted : "transparent"
+                                radius: 10
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // The soft edges: more entries to that side
+        Rectangle {
+            visible: strip.interactive && strip.contentX > 1
+            anchors { left: parent.left; top: parent.top; bottom: parent.bottom }
+            width: 28
+            radius: 10
+            gradient: Gradient {
+                orientation: Gradient.Horizontal
+                GradientStop { position: 0; color: Theme.inverse }
+                GradientStop { position: 1; color: Qt.rgba(Theme.inverse.r, Theme.inverse.g, Theme.inverse.b, 0) }
+            }
+        }
+        Rectangle {
+            visible: strip.interactive && strip.contentX < strip.contentWidth - strip.width - 1
+            anchors { right: parent.right; top: parent.top; bottom: parent.bottom }
+            width: 28
+            radius: 10
+            gradient: Gradient {
+                orientation: Gradient.Horizontal
+                GradientStop { position: 0; color: Qt.rgba(Theme.inverse.r, Theme.inverse.g, Theme.inverse.b, 0) }
+                GradientStop { position: 1; color: Theme.inverse }
             }
         }
     }
