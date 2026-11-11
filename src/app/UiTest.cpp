@@ -1527,6 +1527,52 @@ void UiTest::addTextTouchCases()
                 << close;
     }
     {
+        // A phone: four entries are wider than the screen ("Alles auswählen" was cut off).
+        // The menu stays inside the window, a finger wipes the bar to the rest
+        const auto menuInside = [this] {
+            for (QQuickItem *m : m_window->findChildren<QQuickItem *>(u"textTouchMenu"_s)) {
+                if (!m->isVisible())
+                    continue;
+                const QRectF r = m->mapRectToScene(QRectF(0, 0, m->width(), m->height()));
+                return r.width() > 50 && r.left() >= 0 && r.right() <= m_window->width();
+            }
+            return false;
+        };
+        const auto menuPoint = [this](qreal at) {
+            for (QQuickItem *m : m_window->findChildren<QQuickItem *>(u"textTouchMenu"_s))
+                if (m->isVisible())
+                    return m->mapToScene(QPointF(m->width() * at, m->height() / 2));
+            return QPointF();
+        };
+        Case &c = add(u"text-menu-narrow"_s, u"finger: the menu fits the window, wiping the bar shows the rest"_s);
+        c.steps << act(u"text in the clipboard (Einsetzen in the menu)"_s, [] { QGuiApplication::clipboard()->setText(u"Etüde"_s); })
+                << open(html)
+                << fingerTaps(u"Metronom"_s, 2) << fingerDone()
+                << check(u"selected, the menu inside the window"_s, [this, menuInside] {
+                       return textSelection() == u"Metronom"_s && menuInside() && menuItems().contains(u"Kopieren"_s);
+                   })
+                << snap(u"text-menu-narrow"_s)
+                // A finger wipes the bar to the left (where everything fits it does not move)
+                << fingerDrag([this, menuPoint] { return menuPoint(0.85); }, [this, menuPoint] { return menuPoint(0.1); }, 300)
+                << fingerDone() << wait(400)
+                << snap(u"text-menu-narrow-wiped"_s)
+                << check(u"\"Alles auswählen\" on the screen, inside the menu; still selected"_s, [this, menuInside] {
+                       Node n;
+                       if (!find(u"^Alles auswählen$"_s, &n) || !n.item || !menuInside())
+                           return false;
+                       const QRectF r = n.item->mapRectToScene(QRectF(0, 0, n.item->width(), n.item->height()));
+                       for (QQuickItem *m : m_window->findChildren<QQuickItem *>(u"textTouchMenu"_s)) {
+                           const QRectF mr = m->mapRectToScene(QRectF(0, 0, m->width(), m->height()));
+                           if (m->isVisible())
+                               return mr.contains(r.adjusted(1, 1, -1, -1)) && textSelection() == u"Metronom"_s;
+                       }
+                       return false;
+                   })
+                << tap(u"^Alles auswählen$"_s)
+                << check(u"everything selected"_s, [this] { return textSelection().size() >= textPlain().size() - 2; })
+                << close;
+    }
+    {
         // Fifty lines: the field is longer than the sheet, also on a big iPad without a keyboard
         QString lines;
         for (int i = 1; i <= 50; ++i)
