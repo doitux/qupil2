@@ -30,7 +30,7 @@ SubPage {
             font.family: Theme.fontFamily
             font.pixelSize: 13
             // Selecting and copying with a finger: the same rules as in the editors
-            inputMethodHints: Qt.ImhNoTextHandles
+            inputMethodHints: (Qt.platform.os === "ios" ? Qt.ImhNone : Qt.ImhNoTextHandles)
             TextTouch { target: licenseText }
         }
     }

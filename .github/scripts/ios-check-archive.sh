@@ -52,6 +52,9 @@ done
 [ -n "$(get NSCameraUsageDescription)" ] || fail "NSCameraUsageDescription missing"
 [ -n "$(get NSMicrophoneUsageDescription)" ] || fail "NSMicrophoneUsageDescription missing"
 [ "$(get ITSAppUsesNonExemptEncryption)" = "false" ] || fail "ITSAppUsesNonExemptEncryption missing or not NO"
+# Metronome and tuning tone keep playing in the background
+/usr/libexec/PlistBuddy -c "Print :UIBackgroundModes" "$plist" 2> /dev/null | grep -q '^ *audio$' \
+    || fail "UIBackgroundModes without audio (the metronome would stop in the background)"
 plutil -lint "$app/PrivacyInfo.xcprivacy" || fail "PrivacyInfo.xcprivacy missing or invalid"
 for l in de en es fr; do
     [ -f "$app/$l.lproj/InfoPlist.strings" ] \

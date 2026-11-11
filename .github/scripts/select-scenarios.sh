@@ -34,11 +34,19 @@ SEL_ROWS=''
 # interval, 400 ms by default); a test tool that is slower cannot double tap
 SEL_DOUBLE_MAX=380
 
+# SEL_TEXT_ONLY=1 (from the caller): Qupil's touch rules are off on this system (iOS for
+# now, TextTouch.qml: active) – only the checks that the text stays intact count, the
+# others are recorded (ℹ️) to see what the system does
+SEL_CHECKING_TEXT=0
+
 # sel_result <scenario> <expected> <got> <ok 0/1/skip>
 sel_result() {
     local mark='❌'
     if [ "$4" = skip ]; then
         mark='⏭'
+    elif [ "${SEL_TEXT_ONLY:-0}" = 1 ] && [ "$SEL_CHECKING_TEXT" != 1 ]; then
+        mark='ℹ️'
+        [ "$4" = 1 ] && mark='ℹ️ ✓'
     else
         SEL_TOTAL=$((SEL_TOTAL + 1))
         if [ "$4" = 1 ]; then
@@ -99,6 +107,16 @@ expect_menu() {
     system=$(t_menu | grep -v -x -E 'Ausschneiden|Kopieren|Einsetzen|Auswählen|Alles auswählen' \
         | tr '\n' ',' | sed 's/,$//; s/,/, /g')
     [ -z "$system" ] && sel_result "$1: no system menu" "" "" 1 || sel_result "$1: no system menu" "" "$system" 0
+}
+# expect_text <scenario> <text>: the note without its formatting is exactly this – no word
+# replaced, lost or doubled (the iOS keyboard once replaced a word: "Tonleitern" became
+# "Bogenei", a pasted word came twice)
+SEL_TEXT='Tonleitern G-Dur und D-Dur langsam üben / Etüde Nr. 3 bis Takt 16 mit Metronom / Vortragsstück: Bogeneinteilung im Mittelteil'
+sel_plain() { sel_markup | sed -e 's/\*\*//g; s/\*//g; s/++//g; s/==//g'; }
+expect_text() {
+    SEL_CHECKING_TEXT=1
+    expect_now "$1" "$2" sel_plain
+    SEL_CHECKING_TEXT=0
 }
 # clear_sel: a tap behind the last word ends the selection (the cursor goes there)
 clear_sel() {
@@ -183,6 +201,7 @@ select_scenarios() {
     clear_sel
     expect_sel '4 a tap behind the text ends the selection' ''
     expect_menu '4 menu closed' ''
+    expect_text '4 the text itself unchanged' "$SEL_TEXT"
 
     # 2. Long press on a word in line 2: selected while the finger is down, stays after
     xy=$(sel_xy word Metronom middle)
@@ -219,6 +238,7 @@ select_scenarios() {
     expect_markup '13 colour on it' '==Mittelteil=='
     t_shot select-13-colour
     clear_sel
+    expect_text '13 the text itself unchanged' "$SEL_TEXT"
 
     # 5. Copy and paste with Qupil's menu: "Etüde" to the end of the note
     xy=$(sel_xy word Etüde middle)
@@ -235,13 +255,16 @@ select_scenarios() {
     xy=$(sel_xy field-end) && t_tap $xy
     expect_menu '17 a tap on the cursor: menu' 'Auswählen, Einsetzen, Alles auswählen'
     t_shot select-17-paste-menu
+    local pasted=''
     if xy=$(sel_xy button Einsetzen); then
         t_tap $xy
+        pasted=Etüde
         expect_markup '18 "Einsetzen" puts it at the end' 'Etüde(==)?$'
     else
         sel_result '18 "Einsetzen"' 'Einsetzen' "$(sel_menu)" 0
     fi
     t_shot select-18-pasted
+    expect_text '18 the text: what was pasted at the end, nothing else changed' "${SEL_TEXT}${pasted}"
 
     # 6. Wiping over the text must not select anything (last: it may scroll the sheet, and
     # the positions of the words change)
@@ -251,12 +274,17 @@ select_scenarios() {
     expect_sel '19 a quick wipe over the text selects nothing' ''
     t_shot select-19-wipe
     clear_sel
+    expect_text '19 the text after the wipe unchanged' "${SEL_TEXT}${pasted}"
 
     say "| | Scenario | Expected | Got |"
     say "|---|---|---|---|"
     printf '%s' "$SEL_ROWS" | tee -a "$SUMMARY" > /dev/null
     say ''
-    say "$SEL_PASSED of $SEL_TOTAL touch checks as expected."
+    if [ "${SEL_TEXT_ONLY:-0}" = 1 ]; then
+        say "$SEL_PASSED of $SEL_TOTAL checks that the text stays intact as expected (Qupil's touch rules are off here: the other rows show what the system does)."
+    else
+        say "$SEL_PASSED of $SEL_TOTAL touch checks as expected."
+    fi
     say ''
     say "Markup at the end: \`$(sel_markup)\`"
 }

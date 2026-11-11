@@ -6,6 +6,8 @@
 #include <QAccessible>
 #include <QClipboard>
 #include <QGuiApplication>
+#include <QInputMethodEvent>
+#include <QSet>
 #include <QTest>
 #include <QCoreApplication>
 #include <QDir>
@@ -30,6 +32,11 @@
 #include "Clock.h"
 #include "DataService.h"
 #include "LanguageManager.h"
+
+#ifdef Q_OS_IOS
+// AudioSession_ios.mm
+bool qupilPlaybackAudioSessionSet();
+#endif
 
 using namespace Qt::StringLiterals;
 
@@ -114,6 +121,8 @@ void UiTest::start()
             addDraftPhase();
         else if (m_phase == u"select"_s)
             addSelectPhase();
+        else if (m_phase == u"metronome"_s)
+            addMetronomePhase();
         else
             addCases();
         // "only:a,b,c": just these cases (a long run split into several starts)
@@ -1109,8 +1118,9 @@ void UiTest::report()
     qInfo("ui test: %lld of %lld cases passed (%s)", qlonglong(m_results.size() - failed),
           qlonglong(m_results.size()), qPrintable(QDir::toNativeSeparators(m_folder)));
     // "draft": Qupil stays open with the unsaved note, the system ends it from outside;
-    // "select": stays open for the touch tests from outside
-    if (m_phase != u"draft"_s && m_phase != u"select"_s)
+    // "select": stays open for the touch tests from outside; "metronome": stays open and
+    // plays, the platform test puts Qupil into the background
+    if (m_phase != u"draft"_s && m_phase != u"select"_s && m_phase != u"metronome"_s)
         QCoreApplication::exit(failed == 0 ? EXIT_SUCCESS : 1);
 }
 
@@ -1196,6 +1206,8 @@ void UiTest::addSelectPhase()
                    n.item->setProperty("text", html);
                    n.item->forceActiveFocus();
                    n.item->setProperty("cursorPosition", n.item->property("length"));
+                   // What the keyboard sends to the field (iOS replaced a word once)
+                   n.item->installEventFilter(this);
                    m_traceTimer.setInterval(200);
                    connect(&m_traceTimer, &QTimer::timeout, this, &UiTest::traceSelection, Qt::UniqueConnection);
                    m_traceTimer.start();
@@ -1205,6 +1217,53 @@ void UiTest::addSelectPhase()
                    return find(u"edit:^Notiz$"_s, &n) && n.item && n.item->property("length").toInt() > 100;
                })
             << snap(u"select-prepare"_s);
+}
+
+void UiTest::addMetronomePhase()
+{
+    // The metronome plays on; every second Qupil logs "metronome: beat <n> session <kind>"
+    // – from outside the test sends Qupil into the background and checks that the beats go
+    // on (iOS: only with the audio session "Playback")
+    Case &c = add(u"metronome-prepare"_s, u"the metronome plays, its beats logged for the background test from outside"_s);
+    c.keepScreen = true;
+    c.steps << tab(u"Metronom"_s) << see(u"^Im Takt tippen$"_s) << tap(u"^Start$"_s)
+            << check(u"running"_s, [this] { return m_metronome && m_metronome->property("running").toBool(); })
+            << act(u"log the beats"_s, [this] {
+                   // Counted from the beats the sound output has played (processedUSecs)
+                   connect(m_metronome, SIGNAL(beatChanged()), this, SLOT(countBeat()));
+                   m_traceTimer.setInterval(1000);
+                   // (no Qt::UniqueConnection: not allowed with a lambda, the connection fails)
+                   connect(&m_traceTimer, &QTimer::timeout, this, [this] {
+                       if (!m_metronome)
+                           return;
+#ifdef Q_OS_IOS
+                       const char *session = qupilPlaybackAudioSessionSet() ? "playback" : "other";
+#else
+                       const char *session = "-";
+#endif
+                       qInfo("metronome: beat %lld running %d session %s", qlonglong(m_beatsHeard),
+                             m_metronome->property("running").toBool() ? 1 : 0, session);
+                   });
+                   m_traceTimer.start();
+               });
+}
+
+bool UiTest::eventFilter(QObject *watched, QEvent *event)
+{
+    // Select phase: every input method event to the note, and Qupil's commit of the input
+    // method, in the log ("select: ime …")
+    if (event->type() == QEvent::InputMethod) {
+        const auto *e = static_cast<QInputMethodEvent *>(event);
+        qInfo("select: ime commit '%s' preedit '%s' replace %d %d cursor %d",
+              qPrintable(e->commitString()), qPrintable(e->preeditString()), e->replacementStart(),
+              e->replacementLength(), watched->property("cursorPosition").toInt());
+    }
+    return QObject::eventFilter(watched, event);
+}
+
+void UiTest::countBeat()
+{
+    ++m_beatsHeard;
 }
 
 void UiTest::traceSelection()
@@ -1251,6 +1310,7 @@ void UiTest::traceSelection()
     const int from = text->property("selectionStart").toInt(), to = text->property("selectionEnd").toInt();
     log(u"sel"_s, u"sel %1 %2 %3"_s.arg(from).arg(to).arg(text->property("selectedText").toString()));
     log(u"cursor"_s, u"cursor %1"_s.arg(text->property("cursorPosition").toInt()));
+    log(u"preedit"_s, u"preedit '%1'"_s.arg(text->property("preeditText").toString()));
     // Qupil's own text menu (TextTouch) and where its items and the handles are
     log(u"menu"_s, u"menu "_s + menuItems());
     for (const QString &label : { u"Ausschneiden"_s, u"Kopieren"_s, u"Einsetzen"_s, u"Auswählen"_s }) {
@@ -1283,6 +1343,11 @@ void UiTest::traceSelection()
 // events, on every platform. Three lines of a note; each case opens and cancels the editor.
 void UiTest::addTextTouchCases()
 {
+#ifdef Q_OS_IOS
+    // TextTouch is off on iOS for now (the keyboard replaced words, TextTouch.qml: active);
+    // the platform run from outside checks there that the text stays intact
+    return;
+#endif
     static const QString html = u"<p>Tonleitern G-Dur und D-Dur langsam üben</p>"
                                 "<p>Etüde Nr. 3 bis Takt 16 mit Metronom</p>"
                                 "<p>Vortragsstück: Bogeneinteilung im Mittelteil</p>"_s;
@@ -1571,6 +1636,8 @@ void UiTest::addCases()
                 << check(u"no draft"_s, [this] { return m_app->keptDraft(u"note"_s).isEmpty(); });
     }
     // Touch: a double tap on a word selects it (Qt leaves it to the system otherwise), then "B"
+    // (TextTouch: not on iOS for now)
+#ifndef Q_OS_IOS
     {
         Case &c = add(u"note-touch-select"_s, u"double tap with a finger selects a word, B makes it bold"_s);
         c.steps << tap(u"^Notiz$"_s) << see(u"^Notiz speichern$"_s)
@@ -1619,6 +1686,7 @@ void UiTest::addCases()
 #endif
         c.steps << tap(u"^Abbrechen$"_s) << gone(u"^Notiz speichern$"_s);
     }
+#endif
     addTextTouchCases();
 
     // Students: search, open one, back
@@ -1663,6 +1731,22 @@ void UiTest::addCases()
                        if (m_metronome && !m_metronome->property("running").toBool())
                            m_results.last().note = u"no sound: "_s + m_metronome->property("error").toString();
                    })
+                // The beat display follows the sound (the beat the output has played): it
+                // must move through the bar
+                << check(u"the beat moves (what the sound output played)"_s, [this, seen = std::make_shared<QSet<int>>()] {
+                       if (!m_metronome || !m_metronome->property("running").toBool())
+                           return true;
+                       seen->insert(m_metronome->property("beat").toInt());
+                       return seen->size() >= 3;
+                   }, 6000)
+#ifdef Q_OS_IOS
+                // The session for playing (background, silent switch) – Qt sets "Ambient"
+                // when the sound output opens (AudioSession_ios.mm)
+                << wait(1500)
+                << check(u"iOS: audio session \"Playback\" while it plays"_s, [this] {
+                       return !m_metronome || !m_metronome->property("running").toBool() || qupilPlaybackAudioSessionSet();
+                   })
+#endif
                 << tap(u"^(Stopp|Start)$"_s, u"tap Stopp (or Start again)"_s);
     }
     // Appearance: dark and back to light
@@ -1738,6 +1822,36 @@ void UiTest::addCases()
                 << tap(u"^Speichern$"_s) << gone(u"edit:^Titel$"_s)
                 << check(u"the piece is saved"_s, [this] { return m_data->pieces(m_membership).size() == m_count + 1; });
     }
+    // The calendar of a date field in the lower part of an editor (iPad in landscape): it
+    // has to be on the screen as a whole, every day reachable. Not on iOS yet: in the
+    // simulator the calendar was not open after the test's tap (on the iPad it opens) – to
+    // be found out first
+#ifndef Q_OS_IOS
+    {
+        Case &c = add(u"date-calendar"_s, u"the calendar of a date field is on the screen as a whole"_s);
+        const auto calendarInside = [this] {
+            if (!m_window)
+                return false;
+            for (QObject *popup : m_window->findChildren<QObject *>(u"dateCalendar"_s)) {
+                if (!popup->property("opened").toBool())
+                    continue;
+                // Where the calendar really is (the popup's y is only what it asked for)
+                auto *content = popup->property("contentItem").value<QQuickItem *>();
+                if (!content)
+                    continue;
+                const QRectF r = content->mapRectToScene(QRectF(0, 0, content->width(), content->height()));
+                return r.height() > 100 && r.top() >= 0 && r.bottom() <= m_window->height()
+                       && r.left() >= 0 && r.right() <= m_window->width();
+            }
+            return false;
+        };
+        c.steps << openStudent(u"Lena Muster"_s) << tap(u"^Werke$"_s) << tap(u"^Werk$"_s)
+                << tap(u"^Start "_s) << check(u"the calendar for the start date: all of it on the screen"_s, calendarInside)
+                << snap(u"date-calendar"_s)
+                << key(Qt::Key_Escape, u"close the calendar"_s)
+                << tap(u"^Abbrechen$"_s) << gone(u"edit:^Titel$"_s) << backIfThere(u"^Schüler$"_s);
+    }
+#endif
     // A new lesson (the editor's defaults): then it is in the schedule; removed again, so the
     // lesson running at 14:20 stays the same for the other cases
     {

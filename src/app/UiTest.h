@@ -100,6 +100,9 @@ private:
     //! "select": a note with three lines in the editor; Qupil stays open and logs where
     //! words and format buttons are and what is selected (touch tests from outside)
     void addSelectPhase();
+    void addMetronomePhase();
+    Q_SLOT void countBeat();
+    bool eventFilter(QObject *watched, QEvent *event) override;
     //! A finger tap (held for holdMs: a long press)
     void touchTap(const QPointF &scenePoint, int holdMs = 0);
     QPointF wordInNote(const QString &word) const;
@@ -176,6 +179,7 @@ private:
     QPointer<QObject> m_theme;
     QPointer<QObject> m_nav;
     QPointer<QObject> m_metronome;
+    qint64 m_beatsHeard = 0;
     AppController *m_app;
     DataService *m_data;
     LanguageManager *m_languages;

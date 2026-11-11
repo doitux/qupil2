@@ -26,6 +26,12 @@ Item {
     id: touch
 
     required property Item target
+    //! Off on iPad and iPhone for now: there the system's keyboard replaced words when Qupil
+    //! moved the cursor or the selection itself (11.11.2026, iOS simulator: "Tonleitern"
+    //! became "Mittelteil", a pasted word came twice). iOS keeps its own selection (loupe,
+    //! handles, menu) – the fields leave Qt.ImhNoTextHandles out there – until that is
+    //! understood. Android and the desktop use Qupil's rules.
+    readonly property bool active: Qt.platform.os !== "ios"
     readonly property bool readOnly: target.readOnly === true
     readonly property bool hasSelection: target.selectionStart !== target.selectionEnd
     //! Handles only after a touch (not for a mouse selection)
@@ -82,13 +88,22 @@ Item {
         if (!readOnly)
             Qt.inputMethod.show()
     }
+    //! Ends a word the keyboard is still composing (Android: the underlined word) – only
+    //! when there is one, as Qt does itself. Qt.inputMethod.commit() without one is not
+    //! harmless on iOS: it tells the keyboard that the text changed, and the keyboard then
+    //! "accepts" the word it was working on – at the cursor's new place, replacing the word
+    //! there ("Tonleitern" became "Bogenei", a pasted word came twice)
+    function commitComposing() {
+        if (target.preeditText !== undefined && target.preeditText.length > 0)
+            Qt.inputMethod.commit()
+    }
     function placeCursor(point) {
-        Qt.inputMethod.commit()
+        commitComposing()
         focusField()
         target.cursorPosition = positionAt(point)
     }
     function selectRange(range) {
-        Qt.inputMethod.commit()
+        commitComposing()
         focusField()
         if (range[0] === range[1])
             target.cursorPosition = range[0]
@@ -201,6 +216,7 @@ Item {
     TapHandler {
         id: finger
         objectName: "textTouchFinger"
+        enabled: touch.active
         acceptedDevices: PointerDevice.TouchScreen
         // Takes the touch on press: the field itself gets none (it would move the cursor
         // again); a Flickable around may still take it over to scroll
@@ -216,6 +232,7 @@ Item {
     TapHandler {
         // On the field itself (on this layer it kept the press from the field: no focus)
         parent: touch.target
+        enabled: touch.active
         acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
         gesturePolicy: TapHandler.DragThreshold
         onPressedChanged: if (pressed) { touch.touchMode = false; touch.hideMenu() }
@@ -231,7 +248,7 @@ Item {
     }
 
     // ---------------------------------------------------------------- handles
-    readonly property bool handlesShown: touchMode && hasSelection && target.activeFocus
+    readonly property bool handlesShown: active && touchMode && hasSelection && target.activeFocus
     readonly property real handleSize: 14
 
     component Handle: Item {
@@ -347,7 +364,7 @@ Item {
         objectName: "textTouchMenu"
         property bool acting: false
         parent: touch.menuHost
-        visible: touch.menuShown && touch.target.activeFocus && items.actions.length > 0
+        visible: touch.active && touch.menuShown && touch.target.activeFocus && items.actions.length > 0
         z: 1000
         width: items.implicitWidth
         height: items.implicitHeight

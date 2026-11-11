@@ -7,6 +7,7 @@
 #include <QAudioDevice>
 #include <QAudioFormat>
 #include <QAudioSink>
+#include <QGuiApplication>
 #include <QMediaDevices>
 #include <QSettings>
 #include <QThread>
@@ -20,6 +21,7 @@ using namespace Qt::StringLiterals;
 #ifdef Q_OS_IOS
 // AudioSession_ios.mm
 void qupilPlaybackAudioSession();
+bool qupilPlaybackAudioSessionSet();
 #endif
 
 namespace {
@@ -39,9 +41,21 @@ class MetronomeOutput : public QObject
 public:
     std::unique_ptr<ClickGenerator> generator;
     std::unique_ptr<QAudioSink> sink;
-    QTimer beatTimer;
+    //! A child: moveToThread() takes it along to the audio thread (a plain member stayed on
+    //! the user interface thread and could not be started from the audio thread – the
+    //! beat was never read)
+    QTimer beatTimer { this };
+
+    MetronomeOutput()
+    {
+        beatTimer.setInterval(10);
+        QObject::connect(&beatTimer, &QTimer::timeout, this, [this] { updateBeat(); });
+    }
     std::atomic<bool> open { false };
     std::atomic<qint64> beat { -1 };   // audible beat since the start, -1 before the first
+#ifdef Q_OS_IOS
+    int sessionChecks = 0;
+#endif
 
     bool start(int bpm, int beatsPerBar)
     {
@@ -51,9 +65,6 @@ public:
         const QAudioDevice device = QMediaDevices::defaultAudioOutput();
         if (device.isNull())
             return false;
-#ifdef Q_OS_IOS
-        qupilPlaybackAudioSession();
-#endif
         QAudioFormat format;
         format.setSampleRate(48000);
         format.setChannelCount(1);
@@ -70,8 +81,11 @@ public:
             close();
             return false;
         }
-        beatTimer.setInterval(10);
-        QObject::connect(&beatTimer, &QTimer::timeout, this, [this] { updateBeat(); }, Qt::UniqueConnection);
+#ifdef Q_OS_IOS
+        // After start(): opening the sink set the session to "Ambient" (AudioSession_ios.mm)
+        qupilPlaybackAudioSession();
+        sessionChecks = 0;
+#endif
         beatTimer.start();
         open.store(true);
         return true;
@@ -99,6 +113,15 @@ private:
         }
         const qint64 played = sink->processedUSecs() * sink->format().sampleRate() / 1000000;
         beat.store(generator->beatAt(played));
+#ifdef Q_OS_IOS
+        // About twice a second: another sound (an alert, a preview: QSoundEffect opens a
+        // sink of its own) set the session back to "Ambient" – playing again at once
+        if (++sessionChecks >= 50) {
+            sessionChecks = 0;
+            if (!qupilPlaybackAudioSessionSet())
+                qupilPlaybackAudioSession();
+        }
+#endif
     }
 };
 
@@ -133,6 +156,13 @@ Metronome::Metronome(QObject *parent)
     const auto keepAwake = [this] { ScreenAwake::set(m_running || m_tonePlaying); };
     connect(this, &Metronome::runningChanged, this, keepAwake);
     connect(this, &Metronome::tonePlayingChanged, this, keepAwake);
+#ifdef Q_OS_IOS
+    // Into the background with the session for playing, or iOS stops the sound
+    connect(qGuiApp, &QGuiApplication::applicationStateChanged, this, [this](Qt::ApplicationState state) {
+        if (state != Qt::ApplicationActive && (m_running || m_tonePlaying))
+            qupilPlaybackAudioSession();
+    });
+#endif
 }
 
 Metronome::~Metronome()
