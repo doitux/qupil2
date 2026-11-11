@@ -6,6 +6,7 @@
 #include <QAccessible>
 #include <QClipboard>
 #include <QGuiApplication>
+#include <QSet>
 #include <QTest>
 #include <QCoreApplication>
 #include <QDir>
@@ -1228,6 +1229,7 @@ void UiTest::addMetronomePhase()
                    // Counted from the beats the sound output has played (processedUSecs)
                    connect(m_metronome, SIGNAL(beatChanged()), this, SLOT(countBeat()));
                    m_traceTimer.setInterval(1000);
+                   // (no Qt::UniqueConnection: not allowed with a lambda, the connection fails)
                    connect(&m_traceTimer, &QTimer::timeout, this, [this] {
                        if (!m_metronome)
                            return;
@@ -1238,7 +1240,7 @@ void UiTest::addMetronomePhase()
 #endif
                        qInfo("metronome: beat %lld running %d session %s", qlonglong(m_beatsHeard),
                              m_metronome->property("running").toBool() ? 1 : 0, session);
-                   }, Qt::UniqueConnection);
+                   });
                    m_traceTimer.start();
                });
 }
@@ -1704,6 +1706,14 @@ void UiTest::addCases()
                        if (m_metronome && !m_metronome->property("running").toBool())
                            m_results.last().note = u"no sound: "_s + m_metronome->property("error").toString();
                    })
+                // The beat display follows the sound (the beat the output has played): it
+                // must move through the bar
+                << check(u"the beat moves (what the sound output played)"_s, [this, seen = std::make_shared<QSet<int>>()] {
+                       if (!m_metronome || !m_metronome->property("running").toBool())
+                           return true;
+                       seen->insert(m_metronome->property("beat").toInt());
+                       return seen->size() >= 3;
+                   }, 6000)
 #ifdef Q_OS_IOS
                 // The session for playing (background, silent switch) – Qt sets "Ambient"
                 // when the sound output opens (AudioSession_ios.mm)

@@ -41,7 +41,16 @@ class MetronomeOutput : public QObject
 public:
     std::unique_ptr<ClickGenerator> generator;
     std::unique_ptr<QAudioSink> sink;
-    QTimer beatTimer;
+    //! A child: moveToThread() takes it along to the audio thread (a plain member stayed on
+    //! the user interface thread and could not be started from the audio thread – the
+    //! beat was never read)
+    QTimer beatTimer { this };
+
+    MetronomeOutput()
+    {
+        beatTimer.setInterval(10);
+        QObject::connect(&beatTimer, &QTimer::timeout, this, [this] { updateBeat(); });
+    }
     std::atomic<bool> open { false };
     std::atomic<qint64> beat { -1 };   // audible beat since the start, -1 before the first
 #ifdef Q_OS_IOS
@@ -77,8 +86,6 @@ public:
         qupilPlaybackAudioSession();
         sessionChecks = 0;
 #endif
-        beatTimer.setInterval(10);
-        QObject::connect(&beatTimer, &QTimer::timeout, this, [this] { updateBeat(); }, Qt::UniqueConnection);
         beatTimer.start();
         open.store(true);
         return true;
