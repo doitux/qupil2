@@ -83,7 +83,22 @@ ColumnLayout {
 
         Popup {
             id: popup
+            objectName: "dateCalendar"
+            // Below the field; where there is not enough room below (a field in the lower half
+            // of an editor, iPad in landscape: the calendar ran off the screen and could not be
+            // reached), above it. margins keep it inside the window either way
             y: button.height + 6
+            margins: 8
+            onAboutToShow: {
+                const host = Overlay.overlay
+                if (!host)
+                    return
+                const top = button.mapToItem(host, 0, 0).y
+                const below = host.height - (top + button.height + 6) - 8
+                const above = top - 6 - 8
+                const needed = implicitHeight
+                y = needed <= below || below >= above ? button.height + 6 : -needed - 6
+            }
             width: Math.max(300, Math.min(button.width, 360))
             padding: 12
             modal: false
