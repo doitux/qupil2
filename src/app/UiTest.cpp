@@ -6,6 +6,7 @@
 #include <QAccessible>
 #include <QClipboard>
 #include <QGuiApplication>
+#include <QInputMethodEvent>
 #include <QSet>
 #include <QTest>
 #include <QCoreApplication>
@@ -1205,6 +1206,8 @@ void UiTest::addSelectPhase()
                    n.item->setProperty("text", html);
                    n.item->forceActiveFocus();
                    n.item->setProperty("cursorPosition", n.item->property("length"));
+                   // What the keyboard sends to the field (iOS replaced a word once)
+                   n.item->installEventFilter(this);
                    m_traceTimer.setInterval(200);
                    connect(&m_traceTimer, &QTimer::timeout, this, &UiTest::traceSelection, Qt::UniqueConnection);
                    m_traceTimer.start();
@@ -1243,6 +1246,19 @@ void UiTest::addMetronomePhase()
                    });
                    m_traceTimer.start();
                });
+}
+
+bool UiTest::eventFilter(QObject *watched, QEvent *event)
+{
+    // Select phase: every input method event to the note, and Qupil's commit of the input
+    // method, in the log ("select: ime …")
+    if (event->type() == QEvent::InputMethod) {
+        const auto *e = static_cast<QInputMethodEvent *>(event);
+        qInfo("select: ime commit '%s' preedit '%s' replace %d %d cursor %d",
+              qPrintable(e->commitString()), qPrintable(e->preeditString()), e->replacementStart(),
+              e->replacementLength(), watched->property("cursorPosition").toInt());
+    }
+    return QObject::eventFilter(watched, event);
 }
 
 void UiTest::countBeat()
@@ -1294,6 +1310,7 @@ void UiTest::traceSelection()
     const int from = text->property("selectionStart").toInt(), to = text->property("selectionEnd").toInt();
     log(u"sel"_s, u"sel %1 %2 %3"_s.arg(from).arg(to).arg(text->property("selectedText").toString()));
     log(u"cursor"_s, u"cursor %1"_s.arg(text->property("cursorPosition").toInt()));
+    log(u"preedit"_s, u"preedit '%1'"_s.arg(text->property("preeditText").toString()));
     // Qupil's own text menu (TextTouch) and where its items and the handles are
     log(u"menu"_s, u"menu "_s + menuItems());
     for (const QString &label : { u"Ausschneiden"_s, u"Kopieren"_s, u"Einsetzen"_s, u"Auswählen"_s }) {

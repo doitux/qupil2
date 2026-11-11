@@ -102,6 +102,7 @@ private:
     void addSelectPhase();
     void addMetronomePhase();
     Q_SLOT void countBeat();
+    bool eventFilter(QObject *watched, QEvent *event) override;
     //! A finger tap (held for holdMs: a long press)
     void touchTap(const QPointF &scenePoint, int holdMs = 0);
     QPointF wordInNote(const QString &word) const;
