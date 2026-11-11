@@ -82,13 +82,22 @@ Item {
         if (!readOnly)
             Qt.inputMethod.show()
     }
+    //! Ends a word the keyboard is still composing (Android: the underlined word) – only
+    //! when there is one, as Qt does itself. Qt.inputMethod.commit() without one is not
+    //! harmless on iOS: it tells the keyboard that the text changed, and the keyboard then
+    //! "accepts" the word it was working on – at the cursor's new place, replacing the word
+    //! there ("Tonleitern" became "Bogenei", a pasted word came twice)
+    function commitComposing() {
+        if (target.preeditText !== undefined && target.preeditText.length > 0)
+            Qt.inputMethod.commit()
+    }
     function placeCursor(point) {
-        Qt.inputMethod.commit()
+        commitComposing()
         focusField()
         target.cursorPosition = positionAt(point)
     }
     function selectRange(range) {
-        Qt.inputMethod.commit()
+        commitComposing()
         focusField()
         if (range[0] === range[1])
             target.cursorPosition = range[0]
