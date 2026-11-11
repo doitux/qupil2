@@ -148,17 +148,20 @@
     "tools/i18n/catalog.py",
     "tools/sounds/clean_ahem.py"
   ],
-  "result": "started",
+  "result": "uploaded",
   "build": {
     "number": 44,
     "run_id": 42937138949,
     "sha": "f52dbef8fae494827e862865aeaf4a547bf4da1a",
     "url": "https://github.com/doitux/qupil2/actions/runs/42937138949",
     "created": "2026-11-11T01:11:48Z",
-    "status": "in_progress",
-    "conclusion": null,
-    "attempt": 1
+    "status": "completed",
+    "conclusion": "success",
+    "attempt": 1,
+    "rerun": false,
+    "upload": "success",
+    "whats_new": "success"
   },
-  "written": "2026-11-11T02:11:59+01:00",
-  "headline": "Build 44 gestartet"
+  "written": "2026-11-11T02:21:05+01:00",
+  "headline": "Build 44 hochgeladen"
 }

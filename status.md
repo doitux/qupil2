@@ -1,8 +1,8 @@
 # TestFlight-Sammellauf 2026-11-10 22:05
 
-**Build 44 gestartet**
+**Build 44 hochgeladen**
 
-- Build 44 (Commit f52dbef): in_progress, Upload: -, Testtext: -
+- Build 44 (Commit f52dbef): success, Upload: success, Testtext: success
 - https://github.com/doitux/qupil2/actions/runs/42937138949
 - Seit Build 42 (Commit 7a9836f)
 
