@@ -185,7 +185,10 @@ device_run() {
 
     # --- The metronome plays on in the background (audio session "Playback", background
     #     mode "audio"): Qupil's metronome phase logs "metronome: beat <n> … session <kind>"
-    #     every second; Settings in front, then the beats must still go on
+    #     every second; Settings in front, then the beats must still go on. Note: the
+    #     simulator played on in the background even with the wrong session ("Ambient",
+    #     build 44 - a control run on 11.11.2026); the device does not. What catches that
+    #     error here is the session check, the beats only show the sound is not stopped
     say ''
     say '### Metronome in the background'
     say ''
