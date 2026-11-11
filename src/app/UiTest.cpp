@@ -1475,7 +1475,8 @@ void UiTest::addTextTouchCases()
                 << wait(600) << fingerLong(u"Menuett"_s) << fingerDone()
                 << check(u"long press: \"Menuett\""_s, [this] { return textSelection() == u"Menuett"_s; })
                 << tap(u"^Abbrechen$"_s) << gone(u"edit:^Titel$"_s)
-                << act(u"back to the note field"_s, [this] { m_textField = u"edit:^Notiz$"_s; });
+                << act(u"back to the note field"_s, [this] { m_textField = u"edit:^Notiz$"_s; })
+                << backIfThere(u"^Schüler$"_s);
     }
     {
         // A mouse: the field selects by itself; double and triple click with the same rules
@@ -1601,7 +1602,8 @@ void UiTest::addCases()
     // Students: search, open one, back
     {
         Case &c = add(u"student-search"_s, u"search a student, open and close the student page"_s);
-        c.steps << tab(u"Schüler"_s) << tap(u"edit:^Schüler suchen$"_s) << type(u"Lena"_s)
+        // (a case before may have left a search in the field)
+        c.steps << tab(u"Schüler"_s) << tap(u"edit:^Schüler suchen$"_s) << clearField() << type(u"Lena"_s)
                 << see(u"^Lena Muster$"_s) << gone(u"^Jonas Becker$"_s)
                 << snap(u"student-search"_s)
                 << tapUntil(u"^Lena Muster$"_s, u"^Unterricht wählen$"_s)
