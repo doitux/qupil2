@@ -1738,6 +1738,32 @@ void UiTest::addCases()
                 << tap(u"^Speichern$"_s) << gone(u"edit:^Titel$"_s)
                 << check(u"the piece is saved"_s, [this] { return m_data->pieces(m_membership).size() == m_count + 1; });
     }
+    // The calendar of a date field in the lower part of an editor (iPad in landscape): it
+    // has to be on the screen as a whole, every day reachable
+    {
+        Case &c = add(u"date-calendar"_s, u"the calendar of a date field is on the screen as a whole"_s);
+        const auto calendarInside = [this] {
+            if (!m_window)
+                return false;
+            for (QObject *popup : m_window->findChildren<QObject *>(u"dateCalendar"_s)) {
+                if (!popup->property("opened").toBool())
+                    continue;
+                // Where the calendar really is (the popup's y is only what it asked for)
+                auto *content = popup->property("contentItem").value<QQuickItem *>();
+                if (!content)
+                    continue;
+                const QRectF r = content->mapRectToScene(QRectF(0, 0, content->width(), content->height()));
+                return r.height() > 100 && r.top() >= 0 && r.bottom() <= m_window->height()
+                       && r.left() >= 0 && r.right() <= m_window->width();
+            }
+            return false;
+        };
+        c.steps << openStudent(u"Lena Muster"_s) << tap(u"^Werke$"_s) << tap(u"^Werk$"_s)
+                << tap(u"^Ende "_s) << check(u"the calendar for the end date: all of it on the screen"_s, calendarInside)
+                << snap(u"date-calendar"_s)
+                << key(Qt::Key_Escape, u"close the calendar"_s)
+                << tap(u"^Abbrechen$"_s) << gone(u"edit:^Titel$"_s) << backIfThere(u"^Schüler$"_s);
+    }
     // A new lesson (the editor's defaults): then it is in the schedule; removed again, so the
     // lesson running at 14:20 stays the same for the other cases
     {
