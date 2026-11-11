@@ -8,8 +8,7 @@
 #include <QQuickTextDocument>
 #include <QtQml/qqmlregistration.h>
 
-class QTextCursor;
-class QTextCharFormat;
+class QTextDocument;
 
 /*!
     Bold, italic, underline and colour for a rich-text TextArea (lesson notes).
@@ -62,9 +61,9 @@ signals:
     void formatChanged();
 
 private:
-    QTextCursor cursor() const;
-    QTextCharFormat currentFormat() const;
-    void merge(const QTextCharFormat &format);
+    QTextDocument *doc() const;
+    bool has(int attribute) const;
+    void toggle(int attribute, const QColor &color = {});
 
     QPointer<QQuickTextDocument> m_document;
     int m_selectionStart = 0;

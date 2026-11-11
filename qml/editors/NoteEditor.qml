@@ -322,32 +322,34 @@ Sheet {
     // keyboard) while the note is edited – right above the text the system's menu for a
     // selection (Ausschneiden, Kopieren …) covered them
     toolbarShown: noteText.activeFocus
+    // Each button first ends a word the keyboard is still composing (iPhone: the part of a
+    // word behind the cursor): formatted while composed, it would come back unformatted
     toolbar: [
         FormatButton {
             text: "B"
             font.weight: Font.ExtraBold
             checked: formatter.bold
             Accessible.name: qsTrId("format.bold")
-            onClicked: formatter.toggleBold()
+            onClicked: { Qt.inputMethod.commit(); formatter.toggleBold() }
         },
         FormatButton {
             text: "I"
             font.italic: true
             checked: formatter.italic
             Accessible.name: qsTrId("format.italic")
-            onClicked: formatter.toggleItalic()
+            onClicked: { Qt.inputMethod.commit(); formatter.toggleItalic() }
         },
         FormatButton {
             text: "U"
             font.underline: true
             checked: formatter.underline
             Accessible.name: qsTrId("format.underline")
-            onClicked: formatter.toggleUnderline()
+            onClicked: { Qt.inputMethod.commit(); formatter.toggleUnderline() }
         },
         FormatButton {
             checked: formatter.colored
             Accessible.name: qsTrId("format.text_color")
-            onClicked: formatter.toggleColor(Theme.noteMark)
+            onClicked: { Qt.inputMethod.commit(); formatter.toggleColor(Theme.noteMark) }
             Rectangle {
                 anchors.centerIn: parent
                 width: 18
@@ -397,56 +399,9 @@ Sheet {
             }
             Accessible.description: noteText.length === 0 ? (editor.plan ? qsTrId("plan.placeholder") : qsTrId("note.placeholder")) : ""
 
-            // Touch: Qt leaves selecting a word to the system, which on the iPad needs a long
-            // press and then "Auswählen". A double tap selects the word (iPad, iPhone,
-            // Android); on Android also a long press, as usual there (on the iPad a long press
-            // stays the magnifier for the cursor). The handles then extend the selection.
-            function selectWordAt(point) {
-                // A word with hyphens and apostrophes counts as one ("G-Dur", "Bach’s"), the
-                // punctuation around it does not
-                const pos = noteText.positionAt(point.x, point.y)
-                const text = noteText.getText(0, noteText.length)
-                const stop = " \t\n\u2029\u2028\u00a0.,;:!?()[]{}\"„“”‚‘«»/…–—"
-                const join = "-'’"
-                let from = pos, to = pos
-                while (from > 0 && stop.indexOf(text[from - 1]) < 0)
-                    --from
-                while (to < text.length && stop.indexOf(text[to]) < 0)
-                    ++to
-                while (from < to && join.indexOf(text[from]) >= 0)
-                    ++from
-                while (to > from && join.indexOf(text[to - 1]) >= 0)
-                    --to
-                if (from === to)
-                    noteText.cursorPosition = pos
-                else
-                    noteText.select(from, to)
-            }
-            TapHandler {
-                // Long press: the word is selected when the finger lifts (the release would
-                // otherwise put the cursor back into the middle of it)
-                property point longAt
-                property bool longPending: false
-                acceptedDevices: PointerDevice.TouchScreen
-                gesturePolicy: TapHandler.DragThreshold
-                onDoubleTapped: (eventPoint) => noteText.selectWordAt(eventPoint.position)
-                onLongPressed: {
-                    if (Qt.platform.os !== "android")
-                        return
-                    longAt = point.position
-                    longPending = true
-                    noteText.selectWordAt(longAt)
-                }
-                // Again after the finger lifted or the system took the touch over
-                onPressedChanged: if (!pressed) selectAgain()
-                onCanceled: selectAgain()
-                function selectAgain() {
-                    if (!longPending)
-                        return
-                    longPending = false
-                    Qt.callLater(noteText.selectWordAt, longAt)
-                }
-            }
+            // Finger gestures: Qupil's own, the same on iPhone, iPad and Android (TextTouch)
+            inputMethodHints: Qt.ImhNoTextHandles
+            TextTouch { target: noteText }
         }
         Text {
             visible: editor.plan || noteText.length > 0

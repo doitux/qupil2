@@ -4,6 +4,8 @@
     select-touch.py <log> <scale> word <Word> start|end|middle|below-end
     select-touch.py <log> <scale> button <Name>           centre of a format button
     select-touch.py <log> <scale> field-end               end of the last line (inside the field)
+    select-touch.py <log> <scale> handle start|end        knob of a selection handle (exit 1: none)
+    select-touch.py <log> -       menu                    items of Qupil's text menu ("" = closed)
     select-touch.py <log> -       sel                     what is selected now ("" = nothing)
     select-touch.py <log> -       markup                  the note as Qupil stores it
 
@@ -25,7 +27,7 @@ def latest(path):
             if not m:
                 continue
             kind, rest = m.group(1), m.group(2)
-            if kind in ('word', 'button'):
+            if kind in ('word', 'button', 'handle'):
                 name, _, coords = rest.partition(' ')
                 values[(kind, name)] = coords
             else:
@@ -59,6 +61,18 @@ def main():
         parts = rest.split(' ', 2)
         print(parts[2] if len(parts) > 2 and parts[0] != parts[1] else '')
         return 0
+    if what == 'menu':
+        rest = values.get(('menu', ''))
+        if rest is None:
+            return 1
+        print(rest)
+        return 0
+    if what == 'handle':
+        coords = values.get(('handle', sys.argv[4]))
+        if not coords or coords == '-':
+            return 1
+        x, y = map(float, coords.split())
+        return out(x, y)
     if what == 'markup':
         rest = values.get(('markup', ''))
         if rest is None:

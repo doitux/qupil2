@@ -56,7 +56,8 @@ ColumnLayout {
         onTextEdited: field.edited(text)
         onAccepted: field.accepted()
         placeholderText: field.placeholder
-        inputMethodHints: field.inputMethodHints
+        // Finger gestures: Qupil's own (TextTouch), not the system's
+        inputMethodHints: field.inputMethodHints | Qt.ImhNoTextHandles
         echoMode: field.echoMode
         font.family: Theme.fontFamily
         font.pixelSize: 16
@@ -64,6 +65,7 @@ ColumnLayout {
         placeholderTextColor: Theme.textMuted
         selectByMouse: true
         Accessible.name: field.label !== "" ? field.label : field.placeholder
+        TextTouch { target: input }
         background: Rectangle {
             radius: 12
             color: Theme.surface
@@ -119,7 +121,9 @@ ColumnLayout {
         color: Theme.text
         placeholderTextColor: Theme.textMuted
         selectByMouse: true
+        inputMethodHints: Qt.ImhNoTextHandles
         Accessible.name: field.label !== "" ? field.label : field.placeholder
+        TextTouch { target: area }
         background: Rectangle {
             radius: 12
             color: Theme.surface

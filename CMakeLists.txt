@@ -308,6 +308,7 @@ set(QUPIL_QML_FILES
     qml/components/StudentPicker.qml
     qml/components/LessonPicker.qml
     qml/components/LessonBadge.qml
+    qml/components/TextTouch.qml
     qml/components/SwitchRow.qml
     qml/components/SyncCard.qml
     qml/components/TimeField.qml
@@ -411,6 +412,8 @@ qt_add_qml_module(qupil
         src/app/SystemScheme.cpp
         src/app/TextFormatter.h
         src/app/TextFormatter.cpp
+        src/app/TextFormatting.h
+        src/app/TextFormatting.cpp
         src/app/WebDavFolder.h
         src/app/WebDavFolder.cpp
         src/app/SyncController.h
@@ -536,6 +539,7 @@ if(QUPIL_BUILD_TESTS AND NOT ANDROID AND NOT IOS)
 
     # Lesson notes and archive entries: the compact formats, old HTML of Qupil 1.x
     qt_add_executable(tst_notes tests/tst_notes.cpp src/app/NoteFormat.h src/app/NoteFormat.cpp
+        src/app/TextFormatting.h src/app/TextFormatting.cpp
         src/app/ArchiveFormat.h src/app/ArchiveFormat.cpp src/core/TextPack.h src/core/TextPack.cpp)
     target_include_directories(tst_notes PRIVATE src/app src/core)
     target_link_libraries(tst_notes PRIVATE Qt6::Gui Qt6::Test)

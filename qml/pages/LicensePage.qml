@@ -17,6 +17,7 @@ SubPage {
     Card {
         Layout.fillWidth: true
         TextEdit {
+            id: licenseText
             Layout.fillWidth: true
             readOnly: true
             selectByMouse: true
@@ -28,6 +29,9 @@ SubPage {
             selectedTextColor: Theme.text
             font.family: Theme.fontFamily
             font.pixelSize: 13
+            // Selecting and copying with a finger: the same rules as in the editors
+            inputMethodHints: Qt.ImhNoTextHandles
+            TextTouch { target: licenseText }
         }
     }
 }

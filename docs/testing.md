@@ -47,6 +47,12 @@ c.steps << tab(u"Schüler"_s) << tap(u"^Lena Muster$"_s) << tap(u"^Werk$"_s)
 - A toast is found by its text (its `Accessible.name`), its undo button by
   "Rückgängig".
 
+## Text by finger
+
+The `text-*` cases drive real touch events (`fingerTaps`, `fingerLong`, `fingerDrag`) and
+timestamped mouse clicks (`mouseClicks`) against the rules in `docs/text-touch.md`; the
+platform runs also touch the note editor from outside (`select-scenarios.sh`).
+
 ## Readable text
 
 Every screenshot a case takes (`snap`) and the screen at the end of every case are

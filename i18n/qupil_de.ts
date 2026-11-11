@@ -1666,6 +1666,41 @@ Gute Arbeit!</translation>
         <extracomment>Lesson editor, below start and end: shown instead of the length; saving is not possible</extracomment>
         <translation>Das Ende muss nach dem Beginn liegen.</translation>
     </message>
+    <message id="textmenu.cut">
+        <source>Cut</source>
+        <extracomment>Menu over selected text (touch)</extracomment>
+        <translation>Ausschneiden</translation>
+    </message>
+    <message id="textmenu.copy">
+        <source>Copy</source>
+        <extracomment>Menu over selected text (touch)</extracomment>
+        <translation>Kopieren</translation>
+    </message>
+    <message id="textmenu.paste">
+        <source>Paste</source>
+        <extracomment>Menu over selected text or the cursor (touch)</extracomment>
+        <translation>Einsetzen</translation>
+    </message>
+    <message id="textmenu.select">
+        <source>Select</source>
+        <extracomment>Menu at the cursor: select the word (touch)</extracomment>
+        <translation>Auswählen</translation>
+    </message>
+    <message id="textmenu.select_all">
+        <source>Select All</source>
+        <extracomment>Menu at the cursor or selection (touch)</extracomment>
+        <translation>Alles auswählen</translation>
+    </message>
+    <message id="textmenu.handle_start">
+        <source>Start of selection</source>
+        <extracomment>Accessible name of the handle at the start of selected text</extracomment>
+        <translation>Anfang der Auswahl</translation>
+    </message>
+    <message id="textmenu.handle_end">
+        <source>End of selection</source>
+        <extracomment>Accessible name of the handle at the end of selected text</extracomment>
+        <translation>Ende der Auswahl</translation>
+    </message>
     <message id="lessonpick.search">
         <source>Search students or lessons</source>
         <extracomment>Search field in the list of lessons to choose from</extracomment>

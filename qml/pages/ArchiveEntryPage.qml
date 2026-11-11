@@ -57,6 +57,9 @@ SubPage {
             color: "#1D1A22"
             font.family: Theme.fontFamily
             font.pixelSize: 14
+            // Selecting and copying with a finger: the same rules as in the editors
+            inputMethodHints: Qt.ImhNoTextHandles
+            TextTouch { target: record }
         }
     }
 

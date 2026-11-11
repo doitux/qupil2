@@ -104,6 +104,22 @@ private:
     void touchTap(const QPointF &scenePoint, int holdMs = 0);
     QPointF wordInNote(const QString &word) const;
     QString noteSelection() const;
+    // Text by finger (TextTouch): the field m_textField, words in it, touches
+    QQuickItem *textItem() const;
+    QString textPlain() const;
+    QPointF textPoint(const QString &word, int part = 0) const;
+    QString textSelection() const;
+    QString textMarkup() const;
+    QPointF handlePoint(bool end) const;
+    void finger(int state, const QPointF &scenePoint);
+    void mouseClicks(const QPointF &point, int count);
+    Step fingerTaps(const QString &word, int count, int part = 0);
+    Step fingerLong(const QString &word, int part = 0);
+    Step fingerDrag(std::function<QPointF()> from, std::function<QPointF()> to, int ms = 400);
+    Step fingerDone();
+    bool menuShown() const;
+    QString menuItems() const;
+    void addTextTouchCases();
     void traceSelection();
     Case &add(const QString &name, const QString &title);
 
@@ -181,4 +197,8 @@ private:
     QStringList m_unreadable;     // found at a snap or the end of the case
     QTimer m_traceTimer;
     QHash<QString, QString> m_traced;
+    QString m_textField = QStringLiteral("edit:^Notiz$");
+    QString m_atPress;
+    bool m_menuAtPress = false;
+    bool m_fingerDone = true;
 };
