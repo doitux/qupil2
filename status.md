@@ -1,12 +1,6 @@
-# TestFlight-Sammellauf 2026-11-11 22:05
+# TestFlight-Sammellauf 2026-11-12 13:05
 
-**Kein Build nötig**
+**Mittags Mo–Do kein Build**
 
-Seit dem letzten Upload nichts Neues.
+Montag bis Donnerstag kein Mittags-Build; die Änderungen kommen um 22:05.
 
-- Seit Build 46 (Commit 6c53974)
-
-Nächtliche Tests:
-- Android: gestartet (seit f52dbef, letzter Lauf: success)
-- Desktop: gestartet (seit f52dbef, letzter Lauf: success)
-- iOS: gestartet (seit f52dbef, letzter Lauf: success)
