@@ -160,7 +160,7 @@ step "Qupil's own UI test (inside the app) and its restart half"
 adb shell am force-stop $PKG
 uidir=/data/data/$PKG/files/ui-test
 adb shell rm -rf "$uidir"
-PARTS="1:pages,today,note-save,note-cancel,note-touch-select,student-search,student-new
+PARTS="1:pages,today,note-save,note-cancel,keyboard-smooth,note-touch-select,student-search,student-new
 2:event-open,metronome,appearance,language,reminders,test-mode
 4:text-tap,text-double-tap,text-triple-tap,text-long-press,text-handles,text-tap-selection
 5:text-menu,text-wipe,text-field,text-mouse
