@@ -69,4 +69,14 @@ void keepViewInPlace()
     undoMove();
 }
 
+qreal viewOffset()
+{
+    for (UIWindow *window in [UIApplication sharedApplication].windows)
+        if (isQtWindow(window) && !window.hidden) {
+            CALayer *layer = window.rootViewController.view.layer;
+            return (layer.presentationLayer ?: layer).sublayerTransform.m42;
+        }
+    return 0;
+}
+
 } // namespace KeyboardHeight
