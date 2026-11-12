@@ -53,6 +53,14 @@ The `text-*` cases drive real touch events (`fingerTaps`, `fingerLong`, `fingerD
 timestamped mouse clicks (`mouseClicks`) against the rules in `docs/text-touch.md`; the
 platform runs also touch the note editor from outside (`select-scenarios.sh`).
 
+## On-screen keyboard
+
+Neither the iOS simulator nor the Android emulator of the test runs shows an on-screen
+keyboard (on iOS also not with `ConnectHardwareKeyboard` off per device and the Simulator
+app open, which hung the iPad run). `keyboard-smooth` (the editor makes room with the
+keyboard, frame by frame, and iOS's view stays in place) then notes "not measured" instead
+of passing quietly; what depends on the keyboard is checked on a device.
+
 ## Readable text
 
 Every screenshot a case takes (`snap`) and the screen at the end of every case are
