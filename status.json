@@ -1,167 +1,37 @@
 {
-  "mode": "now",
-  "started_at": "2026-11-11T23:38:20+01:00",
-  "slot": "2026-11-11 23:38 (von Hand, now)",
-  "since": "f52dbef8fae494827e862865aeaf4a547bf4da1a",
-  "since_build": 44,
-  "main": "6c5397412f392b7fe7c9b19abdf9a0cb47b300d4",
-  "commits": [
-    {
-      "sha": "4ca38b2",
-      "subject": "WIP: one touch/mouse rule set for text fields (TextTouch)"
+  "mode": "schedule",
+  "started_at": "2026-11-12T03:12:35+01:00",
+  "slot": "2026-11-11 22:05",
+  "tests": {
+    "android-test.yml": {
+      "name": "Android",
+      "since": "f52dbef",
+      "last": "success",
+      "files": 25,
+      "result": "started"
     },
-    {
-      "sha": "3cd0baa",
-      "subject": "Touch tests from outside follow the new text rules and fail the run"
+    "ui-test.yml": {
+      "name": "Desktop",
+      "since": "f52dbef",
+      "last": "success",
+      "files": 23,
+      "result": "started"
     },
-    {
-      "sha": "595af8f",
-      "subject": "UI test: student search starts from an empty field"
-    },
-    {
-      "sha": "224e71a",
-      "subject": "Touch tests from outside: read the menu from a fresh log, allow Einsetzen"
-    },
-    {
-      "sha": "f576685",
-      "subject": "Docs: text by finger (rules, implementation, tests); What's new"
-    },
-    {
-      "sha": "942f7ec",
-      "subject": "Text touch: format buttons commit the composed word; iOS/iPad test fixes"
-    },
-    {
-      "sha": "7b60c8c",
-      "subject": "Text touch: a tap right behind the selection ends it"
-    },
-    {
-      "sha": "9b4963d",
-      "subject": "Touch tests from outside: the wipe comes last"
-    },
-    {
-      "sha": "e55de2d",
-      "subject": "Merge feature/text-touch: one set of touch rules for text on iOS and Android"
-    },
-    {
-      "sha": "5a8a307",
-      "subject": "iOS: metronome keeps playing in the background and on silent"
-    },
-    {
-      "sha": "1a5b951",
-      "subject": "What's new: metronome in the background fixed after build 43"
-    },
-    {
-      "sha": "10b3a3f",
-      "subject": "What's new: say what was tested where, not more"
-    },
-    {
-      "sha": "33597c8",
-      "subject": "What's new: new since build 42, and only what was checked"
-    },
-    {
-      "sha": "3100511",
-      "subject": "Metronome: the beat timer runs on the audio thread; test log connected"
-    },
-    {
-      "sha": "a793920",
-      "subject": "UI test select phase: log what the keyboard sends to the note"
-    },
-    {
-      "sha": "71e8e51",
-      "subject": "Text touch: commit the keyboard only when it is composing a word"
-    },
-    {
-      "sha": "564c6d3",
-      "subject": "Date field: the calendar opens above the field when there is no room below"
-    },
-    {
-      "sha": "880f394",
-      "subject": "What's new: the date calendar above the field"
-    },
-    {
-      "sha": "c2ccc9a",
-      "subject": "Metronome background: the simulator does not show the error; say so"
-    },
-    {
-      "sha": "d6d3ee8",
-      "subject": "Merge fix/date-popup-ipad into fix/ios-metronome-background (one set of platform runs)"
-    },
-    {
-      "sha": "8b1de39",
-      "subject": "iOS: system text selection again for now; calendar test uses \"Start\""
-    },
-    {
-      "sha": "134f5bd",
-      "subject": "UI test: date-calendar not on iOS yet"
-    },
-    {
-      "sha": "c5124e9",
-      "subject": "Merge fix/ios-metronome-background: metronome on iOS, date calendar, iOS text selection"
-    },
-    {
-      "sha": "467647c",
-      "subject": "What's new: say exactly where the calendar was tested; metronome line tidied"
-    },
-    {
-      "sha": "db6667a",
-      "subject": "Text menu: the bar scrolls sideways when it is wider than the window"
-    },
-    {
-      "sha": "0b6f0c8",
-      "subject": "What's new: new since build 44 (given to the external testers this morning)"
-    },
-    {
-      "sha": "ddafb9d",
-      "subject": "Merge branch 'main' into fix/text-menu-scroll"
-    },
-    {
-      "sha": "6c53974",
-      "subject": "Merge fix/text-menu-scroll: the text menu bar scrolls sideways on narrow screens"
+    "ios-test.yml": {
+      "name": "iOS",
+      "since": "f52dbef",
+      "last": "success",
+      "files": 25,
+      "result": "started"
     }
-  ],
-  "relevant_files": [
-    ".github/scripts/android-test.sh",
-    ".github/scripts/ios-check-archive.sh",
-    ".github/scripts/ios-test.sh",
-    ".github/scripts/select-scenarios.sh",
-    ".github/scripts/select-touch.py",
-    "CMakeLists.txt",
-    "i18n/qupil_de.ts",
-    "i18n/qupil_en.ts",
-    "i18n/qupil_es.ts",
-    "i18n/qupil_fr.ts",
-    "qml/components/DateField.qml",
-    "qml/components/InputField.qml",
-    "qml/components/TextTouch.qml",
-    "qml/editors/NoteEditor.qml",
-    "qml/pages/ArchiveEntryPage.qml",
-    "qml/pages/LicensePage.qml",
-    "src/app/AudioSession_ios.mm",
-    "src/app/Metronome.cpp",
-    "src/app/TextFormatter.cpp",
-    "src/app/TextFormatter.h",
-    "src/app/TextFormatting.cpp",
-    "src/app/TextFormatting.h",
-    "src/app/UiTest.cpp",
-    "src/app/UiTest.h",
-    "src/main.cpp",
-    "tests/tst_notes.cpp",
-    "tools/i18n/catalog.py"
-  ],
-  "result": "uploaded",
-  "build": {
-    "number": 46,
-    "run_id": 43113447383,
-    "sha": "6c5397412f392b7fe7c9b19abdf9a0cb47b300d4",
-    "url": "https://github.com/doitux/qupil2/actions/runs/43113447383",
-    "created": "2026-11-11T22:38:25Z",
-    "status": "completed",
-    "conclusion": "success",
-    "attempt": 1,
-    "rerun": false,
-    "upload": "success",
-    "whats_new": "success"
   },
-  "written": "2026-11-11T23:47:41+01:00",
-  "headline": "Build 46 hochgeladen"
+  "since": "6c5397412f392b7fe7c9b19abdf9a0cb47b300d4",
+  "since_build": 46,
+  "main": "6c5397412f392b7fe7c9b19abdf9a0cb47b300d4",
+  "commits": [],
+  "relevant_files": [],
+  "result": "no_change",
+  "note": "Seit dem letzten Upload nichts Neues.",
+  "written": "2026-11-12T03:12:45+01:00",
+  "headline": "Kein Build nötig"
 }
