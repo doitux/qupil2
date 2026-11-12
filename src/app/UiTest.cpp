@@ -30,6 +30,9 @@
 
 #include "AppController.h"
 #include "Clock.h"
+#ifdef Q_OS_IOS
+#include "KeyboardHeight.h"
+#endif
 #include "DataService.h"
 #include "LanguageManager.h"
 
@@ -1681,6 +1684,111 @@ void UiTest::addCases()
                 << check(u"not saved"_s, [this] { return !latestNote(m_membership).contains(u"Wird verworfen"_s); })
                 << check(u"no draft"_s, [this] { return m_app->keptDraft(u"note"_s).isEmpty(); });
     }
+#if defined(Q_OS_IOS) || defined(Q_OS_ANDROID)
+    // The keyboard comes while an editor is open: the editor makes room with it, smoothly.
+    // Each frame the editor's top and bottom on screen (with how far iOS moved the whole
+    // view) are noted. iOS used to move the whole view up and slide it back down, and the
+    // editor jumped only after the keyboard had arrived (Qt knows its height only then).
+    {
+        struct Frame { qint64 ms; qreal top; qreal bottom; qreal offset; };
+        struct Record { QList<Frame> frames; QElapsedTimer clock; QMetaObject::Connection connection; };
+        auto rec = std::make_shared<Record>();
+        auto sheetItem = [this]() -> QQuickItem * {
+            Node n;
+            if (!find(u"^Notiz speichern$"_s, &n) || !n.item)
+                return nullptr;
+            QQuickItem *item = n.item;
+            while (item->parentItem() && !item->parentItem()->inherits("QQuickOverlay"))
+                item = item->parentItem();
+            return item->parentItem() ? item : nullptr;
+        };
+        auto keyboardUp = [] {
+            return QGuiApplication::inputMethod()->isVisible() && QGuiApplication::inputMethod()->keyboardRectangle().height() > 50;
+        };
+        auto keyboardThere = [this, keyboardUp] { return keyboardUp() || m_app->keyboardHeight() > 50; };
+        Case &c = add(u"keyboard-smooth"_s, u"the keyboard comes in an open editor: the editor makes room smoothly"_s);
+        c.steps << tap(u"^Notiz$"_s) << see(u"^Notiz speichern$"_s)
+                << check(u"the keyboard came with the editor"_s, keyboardThere, 6000)
+                << wait(800)
+                << act(u"keyboard down"_s, [] { QGuiApplication::inputMethod()->hide(); })
+                << check(u"the keyboard is down"_s, [this] {
+                       return !QGuiApplication::inputMethod()->isVisible() && m_app->keyboardHeight() < 1;
+                   }, 6000)
+                << wait(1200)
+                << act(u"note every frame"_s, [this, rec, sheetItem] {
+                       rec->frames.clear();
+                       rec->clock.start();
+                       rec->connection = connect(m_window.data(), &QQuickWindow::frameSwapped, this, [this, rec, sheetItem] {
+                           if (rec->clock.elapsed() > 4000) {   // the case stopped early
+                               disconnect(rec->connection);
+                               return;
+                           }
+                           QQuickItem *sheet = sheetItem();
+                           if (!sheet)
+                               return;
+                           qreal offset = 0;
+#ifdef Q_OS_IOS
+                           offset = KeyboardHeight::viewOffset();
+#endif
+                           const QPointF top = sheet->mapToScene(QPointF(0, 0));
+                           rec->frames << Frame { rec->clock.elapsed(), top.y() + offset, top.y() + sheet->height() + offset, offset };
+                           m_window->update();   // a frame each time, also when nothing moves
+                       });
+                       m_window->update();
+                   })
+                << wait(300)
+                << tap(u"edit:^Notiz$"_s, u"tap into the note: the keyboard comes"_s)
+                << check(u"the keyboard is up"_s, keyboardThere, 6000)
+                << wait(1000)
+                << act(u"stop noting"_s, [this, rec] {
+                       disconnect(rec->connection);
+                       for (const Frame &f : std::as_const(rec->frames))
+                           qInfo("keyboard-smooth: %lld ms top %.1f bottom %.1f view %.1f", qlonglong(f.ms), f.top, f.bottom, f.offset);
+                   })
+                << check(u"enough frames noted"_s, [rec] { return rec->frames.size() >= 20; }, 100)
+#ifdef Q_OS_IOS
+                << check(u"the whole view never moved"_s, [rec] {
+                       for (const Frame &f : std::as_const(rec->frames))
+                           if (std::abs(f.offset) > 1)
+                               return false;
+                       return true;
+                   }, 100)
+#endif
+                ;
+        // The bottom (iPhone, iPad) and the top (iPad: the editor stays centred) on screen:
+        // one way only, over several frames, no frame with most of the move
+        for (const bool bottom : { true, false }) {
+            const QString edge = bottom ? u"bottom"_s : u"top"_s;
+            c.steps << check(u"the editor's %1 moves smoothly, one way"_s.arg(edge), [rec, bottom, edge] {
+                const QList<Frame> &fs = rec->frames;
+                if (fs.size() < 2)
+                    return false;
+                auto at = [&](int i) { return bottom ? fs[i].bottom : fs[i].top; };
+                const qreal total = at(fs.size() - 1) - at(0);
+                if (!bottom && std::abs(total) < 20)
+                    return true;   // phones: the top stays
+                if (std::abs(total) < 50) {
+                    qInfo("keyboard-smooth: %s moved only %.1f", qPrintable(edge), total);
+                    return false;
+                }
+                qreal biggest = 0, back = 0;
+                int moving = 0;
+                for (int i = 1; i < fs.size(); ++i) {
+                    const qreal step = at(i) - at(i - 1);
+                    if (std::abs(step) > 0.5)
+                        ++moving;
+                    if (step * total < 0)
+                        back = std::max(back, std::abs(step));
+                    biggest = std::max(biggest, std::abs(step));
+                }
+                qInfo("keyboard-smooth: %s moved %.1f in %d frames, biggest step %.1f, back %.1f",
+                      qPrintable(edge), total, moving, biggest, back);
+                return moving >= 3 && biggest <= 0.6 * std::abs(total) && back <= 2;
+            }, 100);
+        }
+        c.steps << tap(u"^Abbrechen$"_s) << gone(u"^Notiz speichern$"_s);
+    }
+#endif
     // Touch: a double tap on a word selects it (Qt leaves it to the system otherwise), then "B"
     // (TextTouch: not on iOS for now)
 #ifndef Q_OS_IOS

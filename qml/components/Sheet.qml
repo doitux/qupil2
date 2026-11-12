@@ -245,12 +245,13 @@ Popup {
     padding: 0
 
     width: compact ? parent.width : Math.min(620, parent.width - 48)
-    //! Room taken at the bottom by the on-screen keyboard (Android)
+    //! Room taken at the bottom by the on-screen keyboard (moves with it)
     readonly property real keyboardInset: Nav.keyboardInset
     height: compact ? parent.height - 24 - keyboardInset
                     : Math.min(parent.height - 48 - keyboardInset, header.implicitHeight + column.implicitHeight + 40
                                                                    + (sheet.bottomButton ? 76 : 0)
-                                                                   + (sheet.toolbarShown ? toolbarRow.implicitHeight + 24 : 0))
+                                                                   // grows with the bar (it comes with the keyboard)
+                                                                   + toolbarArea.shown * (toolbarRow.implicitHeight + 24))
     x: compact ? 0 : Math.round((parent.width - width) / 2)
     y: compact ? parent.height - keyboardInset - height : Math.round((parent.height - keyboardInset - height) / 2)
 

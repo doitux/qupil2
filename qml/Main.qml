@@ -116,29 +116,20 @@ ApplicationWindow {
     // themselves, the pages only when typing in a field on the page (search, settings).
     // - Android: the window keeps its size (App.keyboardHeight, measured by QupilActivity);
     //   the room grows and shrinks with the keyboard.
-    // - iOS: the keyboard's height from Qt, at once. Otherwise iOS moves the whole view up
-    //   to show the cursor, and on the iPad an editor's header with Save went off the top.
-    //   An editor that opens for typing makes room before the keyboard comes (its height
-    //   last time, Nav.expectKeyboard). While editors are open, iOS's own moving of the
-    //   view is undone (App.holdViewForKeyboard): both together took the editor off the
-    //   top. Pages keep iOS's way (they do not make room themselves there).
+    // - iOS: the keyboard's height as soon as it starts to come or go (App.keyboardHeight,
+    //   from UIKit's notification: Qt's keyboardRectangle has it only once the keyboard is
+    //   there, the editor then jumped after the keyboard had slid in). The room grows and
+    //   shrinks with the keyboard, in about its time and curve. Otherwise iOS moves the whole
+    //   view up to show the cursor, and on the iPad an editor's header with Save went off the
+    //   top. An editor that opens for typing makes room before the keyboard comes (its height
+    //   last time, Nav.expectKeyboard), at once (the editor slides in meanwhile); the keyboard
+    //   then takes that room over. While editors are open, iOS's own moving of the view is
+    //   undone (App.holdViewForKeyboard): both together took the editor off the top. Pages
+    //   keep iOS's way (they do not make room themselves there).
     readonly property bool ios: Qt.platform.os === "ios"
-    readonly property real iosKeyboard: {
-        if (!ios || !Qt.inputMethod.visible)
-            return 0
-        const r = Qt.inputMethod.keyboardRectangle
-        return r.width >= width - 1 ? r.height : 0      // docked (a floating one on the iPad: no room)
-    }
+    readonly property real iosKeyboard: ios ? App.keyboardHeight : 0
     property real keyboardPortrait: 0
     property real keyboardLandscape: 0
-    onIosKeyboardChanged: {
-        if (iosKeyboard <= 0)
-            return
-        if (width > height)
-            keyboardLandscape = iosKeyboard
-        else
-            keyboardPortrait = iosKeyboard
-    }
     // A hardware keyboard on the iPad: the on-screen one does not come (or only its small
     // shortcut bar, floating: no room needed). Then no room in advance any more until the
     // on-screen keyboard is seen again; otherwise each editor would shrink and grow back.
@@ -151,9 +142,51 @@ ApplicationWindow {
                 window.keyboardPortrait = 0
         }
     }
-    readonly property real expectedKeyboard: Nav.expectKeyboard && iosKeyboard === 0
-                                             ? (width > height ? keyboardLandscape : keyboardPortrait) : 0
-    property real keyboardInset: ios ? Math.max(iosKeyboard, expectedKeyboard) : App.keyboardHeight
+    readonly property real expectedKeyboard: Nav.expectKeyboard ? (width > height ? keyboardLandscape : keyboardPortrait) : 0
+    //! iOS: the room shown now (moves to the keyboard's height with it)
+    property real iosRoom: 0
+    function moveIosRoom() {
+        const to = Math.max(iosKeyboard, expectedKeyboard)
+        if (Math.abs(to - iosRoom) < 0.5 && !iosRoomMove.running)
+            return
+        iosRoomMove.stop()
+        iosRoomMove.from = iosRoom
+        iosRoomMove.to = to
+        iosRoomMove.start()
+    }
+    NumberAnimation {
+        id: iosRoomMove
+        target: window
+        property: "iosRoom"
+        duration: 250
+        easing.type: Easing.OutCubic
+    }
+    onIosKeyboardChanged: {
+        if (iosKeyboard > 0) {
+            if (width > height)
+                keyboardLandscape = iosKeyboard
+            else
+                keyboardPortrait = iosKeyboard
+        }
+        roomLater.stop()
+        moveIosRoom()
+    }
+    onExpectedKeyboardChanged: {
+        if (expectedKeyboard > iosRoom) {
+            // Room in advance: at once
+            iosRoomMove.stop()
+            iosRoom = expectedKeyboard
+        } else {
+            // No longer expected: the keyboard's own height decides (it may be just arriving)
+            roomLater.restart()
+        }
+    }
+    Timer {
+        id: roomLater
+        interval: 300
+        onTriggered: window.moveIosRoom()
+    }
+    property real keyboardInset: ios ? iosRoom : App.keyboardHeight
     Behavior on keyboardInset {
         enabled: !window.ios
         NumberAnimation { duration: 250; easing.type: Easing.OutCubic }

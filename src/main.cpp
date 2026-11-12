@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
     QUPIL_BOOT("main: opening data");
     AppController controller(dataDir, nullptr);
     QUPIL_BOOT("main: data open, phase %d", int(controller.phase()));
-#ifdef Q_OS_ANDROID
+#if defined(Q_OS_ANDROID) || defined(Q_OS_IOS)
     KeyboardHeight::watch([&controller](qreal height) { controller.setKeyboardHeight(height); });
 #endif
 #ifdef Q_OS_IOS
