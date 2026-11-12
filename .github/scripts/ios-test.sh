@@ -72,8 +72,18 @@ for runtime in sorted(devices, key=lambda r: [int(x) if x.isdigit() else 0 for x
             pad = d["udid"]
 print(phone or "-", pad or "-")')
 
-# On-screen keyboard instead of the Mac's keyboard (as on a device without one)
+# On-screen keyboard instead of the Mac's keyboard (as on a device without one). The global
+# setting alone was not enough (no keyboard came in the runs up to 43): the Simulator app
+# keeps it per device too, and it attaches the Mac's keyboard itself when it runs
 defaults write com.apple.iphonesimulator ConnectHardwareKeyboard -bool false
+no_hardware_keyboard() {
+    local plist=~/Library/Preferences/com.apple.iphonesimulator.plist
+    /usr/libexec/PlistBuddy -c "Add :DevicePreferences dict" "$plist" 2> /dev/null
+    /usr/libexec/PlistBuddy -c "Add :DevicePreferences:$1 dict" "$plist" 2> /dev/null
+    /usr/libexec/PlistBuddy -c "Delete :DevicePreferences:$1:ConnectHardwareKeyboard" "$plist" 2> /dev/null
+    /usr/libexec/PlistBuddy -c "Add :DevicePreferences:$1:ConnectHardwareKeyboard bool false" "$plist"
+    killall cfprefsd 2> /dev/null || true
+}
 
 say "# iOS test run ${GITHUB_RUN_NUMBER:-local} (${GITHUB_SHA:0:7})"
 say ''
@@ -90,8 +100,12 @@ device_run() {
     fi
     say "## $kind: $(xcrun simctl list devices | grep "$udid" | sed 's/ (.*//; s/^ *//')"
     say ''
+    no_hardware_keyboard "$udid"
     xcrun simctl boot "$udid" 2> /dev/null
     xcrun simctl bootstatus "$udid" -b > /dev/null
+    # The Simulator app shows the device (with the setting above, without the Mac's keyboard)
+    open -a Simulator --args -CurrentDeviceUDID "$udid" 2> /dev/null || true
+    sleep 5
     xcrun simctl status_bar "$udid" override --time 14:20 > /dev/null 2>&1
     xcrun simctl ui "$udid" appearance light
     xcrun simctl install "$udid" "$APP" || { say "- **install failed**"; FAILED=1; return; }
