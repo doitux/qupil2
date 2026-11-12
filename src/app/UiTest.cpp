@@ -1705,10 +1705,20 @@ void UiTest::addCases()
         auto keyboardUp = [] {
             return QGuiApplication::inputMethod()->isVisible() && QGuiApplication::inputMethod()->keyboardRectangle().height() > 50;
         };
-        auto keyboardThere = [this, keyboardUp] { return keyboardUp() || m_app->keyboardHeight() > 50; };
+        auto keyboardThere = [this, keyboardUp] {
+            static QElapsedTimer said;
+            if (!said.isValid() || said.elapsed() > 1000) {
+                said.start();
+                const QRectF r = QGuiApplication::inputMethod()->keyboardRectangle();
+                qInfo("keyboard-smooth: keyboard visible %d rect %.0f %.0f %.0f %.0f measured %.0f",
+                      QGuiApplication::inputMethod()->isVisible(), r.x(), r.y(), r.width(), r.height(), m_app->keyboardHeight());
+            }
+            return keyboardUp() || m_app->keyboardHeight() > 50;
+        };
         Case &c = add(u"keyboard-smooth"_s, u"the keyboard comes in an open editor: the editor makes room smoothly"_s);
-        c.steps << tap(u"^Notiz$"_s) << see(u"^Notiz speichern$"_s)
-                << check(u"the keyboard came with the editor"_s, keyboardThere, 6000)
+        c.steps << tap(u"^Notiz$"_s) << see(u"^Notiz speichern$"_s) << wait(500)
+                << tap(u"edit:^Notiz$"_s, u"tap into the note"_s)
+                << check(u"the keyboard came"_s, keyboardThere, 6000)
                 << wait(800)
                 << act(u"keyboard down"_s, [] { QGuiApplication::inputMethod()->hide(); })
                 << check(u"the keyboard is down"_s, [this] {
