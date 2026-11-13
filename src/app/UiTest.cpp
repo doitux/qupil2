@@ -2253,7 +2253,15 @@ void UiTest::addCases()
                        m_lessons = allLessons();
                    })
                 << tap(u"^Neu$"_s) << tap(u"menuitem:^Neuer Unterricht$"_s) << see(u"combobox:^Wochentag$"_s)
-                << tap(u"combobox:^Wochentag$"_s) << tap(u"^Montag$"_s)
+                // In the editor the list does not always open at the first tap (iOS); before
+                // taps on covered elements were refused, "Montag" of the day strip under the
+                // editor was tapped instead and the case passed without choosing a day
+                << openList(u"combobox:^Wochentag$"_s) << tap(u"^Montag$"_s)
+                << check(u"Monday chosen"_s, [this] {
+                       Node n;
+                       return find(u"combobox:^Wochentag$"_s, &n) && n.item
+                              && n.item->property("currentText").toString() == u"Montag"_s;
+                   })
                 << tap(u"^Schüler auswählen$"_s) << tap(u"edit:^Schüler suchen$"_s) << type(u"Lena"_s)
                 // (iOS: the first tap may only close the keyboard)
                 << tapUntil(u"^Muster, Lena"_s, u"^Gemeinsam mit Montag führen$|^Gemeinsam mit Dienstag führen$"_s)
