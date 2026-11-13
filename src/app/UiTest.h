@@ -161,6 +161,11 @@ private:
     void shot(const QString &name);
     QVariant windowProperty(const char *name) const;
     bool busy() const;
+    //! Popup items over the window (QQuickPopupItem) in paint order, bottom first
+    QList<QQuickItem *> popupItems() const;
+    //! The node lies in a popup (or the page) under an open modal popup: a tap there
+    //! lands on what covers it (seen: "OK" of a dialog under the note editor saved the note)
+    bool covered(const Node &node) const;
     bool scrollIntoView(const Node &node);
     bool editorOpen() const;
     bool compact() const;
