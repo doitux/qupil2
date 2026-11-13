@@ -221,10 +221,16 @@ int main(int argc, char *argv[])
         Qupil::Clock::pretend(shownDate);
     QTemporaryDir scratchDir;
     if (smokeTest || screenshots || uiTest) {
-        // Keep the user's real settings and data untouched
+        // Keep the user's real settings and data untouched. On macOS and iOS QSettings goes
+        // by the organization's domain (de.qupil.Qupil.plist), not its name: the domain
+        // must differ too, otherwise a test run wrote the real settings there (seen in the
+        // iOS simulator: the UI test's "light" stayed for a normal start)
         QGuiApplication::setOrganizationName(smokeTest ? u"QupilSmokeTest"_s
                                              : uiTest  ? u"QupilUiTest"_s
                                                        : u"QupilScreenshots"_s);
+        QGuiApplication::setOrganizationDomain(smokeTest ? u"smoketest.qupil.de"_s
+                                               : uiTest  ? u"uitest.qupil.de"_s
+                                                         : u"screenshots.qupil.de"_s);
     }
     if (smokeTest)
         s_previousHandler = qInstallMessageHandler(smokeTestHandler);
