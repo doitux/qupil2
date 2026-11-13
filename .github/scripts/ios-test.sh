@@ -108,6 +108,22 @@ device_run() {
         say "- screenshot \`$kind/shots/$name.png\`"
     }
     describe() { idb ui describe-all --udid "$udid" > "$dir/screen/now.json" 2> /dev/null; }
+    # drawn: waits until Qupil's window shows something the system's accessibility sees (at
+    # most 60 s). A plain start (not Qupil's UI test) stayed black for the idb and dark mode
+    # checks: either it only needs longer under Rosetta, or it hangs – this says which.
+    drawn() {
+        local i
+        for ((i = 0; i < 30; i++)); do
+            describe
+            if python3 -I "$HERE/ios-ui.py" "$dir/screen/now.json" --list 2> /dev/null | grep -q Application; then
+                say "- Qupil drawn after about $((i * 2)) s"
+                return 0
+            fi
+            sleep 2
+        done
+        say "- **Qupil shows nothing after 60 s** (black window)"
+        return 1
+    }
     tap() {
         local xy
         describe
@@ -236,7 +252,8 @@ device_run() {
         say '### idb'
         say ''
         launch --load-demo --lang de
-        sleep 6
+        drawn
+        sleep 2
         shot start
         tap '^OK$' && sleep 2
         if tap '^Notiz$'; then
@@ -296,7 +313,8 @@ device_run() {
         say '- (idb not installed: no taps from outside)'
     fi
     launch --load-demo --lang de
-    sleep 6
+    drawn
+    sleep 2
 
     # --- 3. Dark mode while running and at the start
     say ''
@@ -307,7 +325,8 @@ device_run() {
     shot dark-running
     xcrun simctl terminate "$udid" $BUNDLE > /dev/null 2>&1
     launch
-    sleep 4
+    drawn
+    sleep 2
     shot dark-start
     xcrun simctl ui "$udid" appearance light
     sleep 4
