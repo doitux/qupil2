@@ -6,6 +6,7 @@
 #include <QAccessible>
 #include <QClipboard>
 #include <QGuiApplication>
+#include <QHash>
 #include <QInputMethodEvent>
 #include <QSet>
 #include <QTest>
@@ -392,11 +393,67 @@ void UiTest::shot(const QString &name)
 
 bool UiTest::busy() const
 {
-    // A page stack in its transition takes no input
+    // A page stack in its transition takes no input; nor does a popup (editor, dialog,
+    // menu) while it comes in or goes: its buttons move under the finger (an editor slides
+    // up on phones, a tap meant for something else hit its Save button on the way)
     if (!m_window)
         return false;
     for (QObject *o : m_window->findChildren<QObject *>()) {
         if (o->inherits("QQuickStackView") && o->property("busy").toBool())
+            return true;
+        if (o->inherits("QQuickPopup") && o->property("visible").toBool() && !o->property("opened").toBool())
+            return true;
+    }
+    return false;
+}
+
+QList<QQuickItem *> UiTest::popupItems() const
+{
+    // Same order as nodes(): children by z, stable (the overlay paints them so)
+    QList<QQuickItem *> out;
+    if (!m_window)
+        return out;
+    std::function<void(QQuickItem *)> walk = [&](QQuickItem *item) {
+        QList<QQuickItem *> children = item->childItems();
+        std::stable_sort(children.begin(), children.end(), [](QQuickItem *a, QQuickItem *b) { return a->z() < b->z(); });
+        for (QQuickItem *child : children) {
+            if (child->inherits("QQuickPopupItem"))
+                out << child;
+            else
+                walk(child);
+        }
+    };
+    walk(m_window->contentItem());
+    return out;
+}
+
+bool UiTest::covered(const Node &node) const
+{
+    if (!node.item)
+        return false;
+    // The popup the node is in (none: the page)
+    QQuickItem *own = nullptr;
+    for (QQuickItem *p = node.item; p; p = p->parentItem()) {
+        if (p->inherits("QQuickPopupItem")) {
+            own = p;
+            break;
+        }
+    }
+    // The popup of each popup item (its content item sits in it)
+    QHash<QQuickItem *, QObject *> popupOf;
+    for (QObject *o : m_window->findChildren<QObject *>()) {
+        if (!o->inherits("QQuickPopup"))
+            continue;
+        if (auto *content = o->property("contentItem").value<QQuickItem *>(); content && content->parentItem())
+            popupOf.insert(content->parentItem(), o);
+    }
+    const QList<QQuickItem *> popups = popupItems();
+    const qsizetype ownIndex = own ? popups.indexOf(own) : -1;
+    // An open modal popup above it takes every tap
+    for (qsizetype i = popups.size() - 1; i > ownIndex; --i) {
+        QQuickItem *item = popups.at(i);
+        QObject *popup = popupOf.value(item);
+        if (item->isVisible() && item->opacity() > 0.01 && popup && popup->property("modal").toBool())
             return true;
     }
     return false;
@@ -483,6 +540,9 @@ UiTest::Step UiTest::tap(const QString &pattern, const QString &what)
     return Step { what.isEmpty() ? u"tap \"%1\""_s.arg(pattern) : what, [this, pattern] {
                       Node node;
                       if (busy() || !find(pattern, &node))
+                          return false;
+                      // Under an editor or dialog: a person could not tap it (wait until it is free)
+                      if (covered(node))
                           return false;
                       // Partly out of sight: scrolled into view first, as a person would
                       if ((node.rect.isEmpty() || node.rect.height() < node.full.height() - 1
@@ -1171,15 +1231,26 @@ void UiTest::addRestartPhase()
 {
     Case &c = add(u"restart-draft"_s, u"after a restart the unsaved note is in the editor again"_s);
     c.keepScreen = true;
+    // The reminders "at the start" come up too; their dialog lies under the editor, so its
+    // "OK" is not tapped then (a tap there hit the editor's Save while it slid in, iPhone)
+    auto membership = std::make_shared<QString>();
     c.steps << see(u"^Notiz speichern$"_s)
             << tapIfThere(u"^OK$"_s, 3000, u"close the reminders shown at the start (if any)"_s)
-            << check(u"the draft is kept"_s, [this] { return m_app->keptDraft(u"note"_s).contains(u"Vor dem Neustart"_s); })
+            << check(u"the draft is kept"_s, [this, membership] {
+                   const QString draft = m_app->keptDraft(u"note"_s);
+                   *membership = QJsonDocument::fromJson(draft.toUtf8()).object().value(u"membershipId"_s).toString();
+                   return draft.contains(u"Vor dem Neustart"_s);
+               })
+            << see(u"^Notiz speichern$"_s)
             << check(u"the tuning tone's pitch is kept (442 Hz)"_s,
                      [this] { return m_metronome && m_metronome->property("pitch").toInt() == 442; })
             << snap(u"restart-draft"_s)
             << tap(u"^Abbrechen$"_s)
             << gone(u"^Notiz speichern$"_s)
-            << check(u"the draft is gone after cancelling"_s, [this] { return m_app->keptDraft(u"note"_s).isEmpty(); });
+            << check(u"the draft is gone after cancelling"_s, [this] { return m_app->keptDraft(u"note"_s).isEmpty(); })
+            << check(u"the draft was not saved as a note"_s, [this, membership] {
+                   return !membership->isEmpty() && !latestNote(*membership).contains(u"Vor dem Neustart"_s);
+               });
 }
 
 void UiTest::addDraftPhase()
@@ -2182,7 +2253,15 @@ void UiTest::addCases()
                        m_lessons = allLessons();
                    })
                 << tap(u"^Neu$"_s) << tap(u"menuitem:^Neuer Unterricht$"_s) << see(u"combobox:^Wochentag$"_s)
-                << tap(u"combobox:^Wochentag$"_s) << tap(u"^Montag$"_s)
+                // In the editor the list does not always open at the first tap (iOS); before
+                // taps on covered elements were refused, "Montag" of the day strip under the
+                // editor was tapped instead and the case passed without choosing a day
+                << openList(u"combobox:^Wochentag$"_s) << tap(u"^Montag$"_s)
+                << check(u"Monday chosen"_s, [this] {
+                       Node n;
+                       return find(u"combobox:^Wochentag$"_s, &n) && n.item
+                              && n.item->property("currentText").toString() == u"Montag"_s;
+                   })
                 << tap(u"^Schüler auswählen$"_s) << tap(u"edit:^Schüler suchen$"_s) << type(u"Lena"_s)
                 // (iOS: the first tap may only close the keyboard)
                 << tapUntil(u"^Muster, Lena"_s, u"^Gemeinsam mit Montag führen$|^Gemeinsam mit Dienstag führen$"_s)

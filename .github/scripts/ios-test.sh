@@ -108,6 +108,33 @@ device_run() {
         say "- screenshot \`$kind/shots/$name.png\`"
     }
     describe() { idb ui describe-all --udid "$udid" > "$dir/screen/now.json" 2> /dev/null; }
+    # wait_for pattern seconds: until the element is on the screen
+    wait_for() {
+        local i
+        for ((i = 0; i < $2; i += 2)); do
+            seen "$1" && return 0
+            sleep 2
+        done
+        return 1
+    }
+    # drawn: waits until Qupil's window shows something the system's accessibility sees (at
+    # most 60 s). A plain start (not Qupil's UI test) stayed black for the idb and dark mode
+    # checks: either it only needs longer under Rosetta, or it hangs – this says which.
+    drawn() {
+        local i
+        for ((i = 0; i < 30; i++)); do
+            describe
+            # Qupil's elements, or a system alert over it (it asks for notifications at a
+            # normal start): either way something is on the screen
+            if python3 -I "$HERE/ios-ui.py" "$dir/screen/now.json" --list 2> /dev/null | grep -q .; then
+                say "- Qupil drawn after about $((i * 2)) s"
+                return 0
+            fi
+            sleep 2
+        done
+        say "- **Qupil shows nothing after 60 s** (black window)"
+        return 1
+    }
     tap() {
         local xy
         describe
@@ -236,9 +263,16 @@ device_run() {
         say '### idb'
         say ''
         launch --load-demo --lang de
-        sleep 6
+        drawn
+        # The reminders "at the start" come a few seconds after the window
+        wait_for '^OK$' 30
         shot start
         tap '^OK$' && sleep 2
+        # A note: at the running lesson; at night (real clock) there is none, then from a
+        # student's page (first individual lesson of the day)
+        if ! seen '^Notiz$' && tap '^[0-9][0-9]:[0-9][0-9] EU-'; then
+            sleep 3
+        fi
         if tap '^Notiz$'; then
             sleep 3
             idb ui text --udid "$udid" "Mit idb getippt"
@@ -296,18 +330,30 @@ device_run() {
         say '- (idb not installed: no taps from outside)'
     fi
     launch --load-demo --lang de
-    sleep 6
+    drawn
+    sleep 2
 
     # --- 3. Dark mode while running and at the start
     say ''
     say '### Dark mode'
     say ''
+    # Qupil's own setting (System / Hell / Dunkel) of a normal start, for the pictures below
+    local plist found=0
+    for plist in "$data"/Library/Preferences/*.plist; do
+        [ -f "$plist" ] || continue
+        while read -r line; do
+            say "- setting in \`$(basename "$plist")\`: \`$line\`"
+            found=1
+        done < <(plutil -p "$plist" 2> /dev/null | grep -E -i 'appearance[./]mode')
+    done
+    [ $found = 1 ] || say "- no appearance setting stored (Qupil follows the system)"
     xcrun simctl ui "$udid" appearance dark
     sleep 4
     shot dark-running
     xcrun simctl terminate "$udid" $BUNDLE > /dev/null 2>&1
     launch
-    sleep 4
+    drawn
+    sleep 2
     shot dark-start
     xcrun simctl ui "$udid" appearance light
     sleep 4
