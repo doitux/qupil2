@@ -1,8 +1,8 @@
 # TestFlight-Sammellauf 2026-11-12 22:05
 
-**Build 47 gestartet**
+**Build 47 hochgeladen**
 
-- Build 47 (Commit ca6fcee): in_progress, Upload: -, Testtext: -
+- Build 47 (Commit ca6fcee): success, Upload: success, Testtext: success
 - https://github.com/doitux/qupil2/actions/runs/43347275755
 - Seit Build 46 (Commit 6c53974)
 

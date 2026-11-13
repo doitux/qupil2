@@ -87,17 +87,20 @@
     "src/app/UiTest.cpp",
     "src/main.cpp"
   ],
-  "result": "started",
+  "result": "uploaded",
   "build": {
     "number": 47,
     "run_id": 43347275755,
     "sha": "ca6fceef2fce26a2f820326c70aedbd43ac55cdd",
     "url": "https://github.com/doitux/qupil2/actions/runs/43347275755",
     "created": "2026-11-13T01:45:40Z",
-    "status": "in_progress",
-    "conclusion": null,
-    "attempt": 1
+    "status": "completed",
+    "conclusion": "success",
+    "attempt": 1,
+    "rerun": false,
+    "upload": "success",
+    "whats_new": "success"
   },
-  "written": "2026-11-13T02:45:51+01:00",
-  "headline": "Build 47 gestartet"
+  "written": "2026-11-13T03:03:01+01:00",
+  "headline": "Build 47 hochgeladen"
 }
