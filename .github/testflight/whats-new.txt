@@ -1,8 +1,8 @@
-Neu seit Build 46 (was nur im Simulator getestet ist, steht mit "bitte am Gerät prüfen" dabei):
-- Tastatur im Notizfenster (iPad, iPhone): Kommt die Bildschirmtastatur, während das Notizfenster offen ist, springt das ganze Bild nicht mehr erst hoch und dann wieder runter, und das Fenster macht gleichzeitig mit der Tastatur Platz statt danach in einem Ruck; auch die Leiste mit B, I, U blendet sich weich ein. Im Simulator nicht messbar (er zeigt keine Bildschirmtastatur), bitte am iPad prüfen: in eine offene Notiz tippen, Tastatur ein- und ausblenden.
+Neu seit Build 47 (was nur im Simulator getestet ist, steht mit "bitte am Gerät prüfen" dabei):
+- (noch nichts)
 
-Aus Build 46 inzwischen am iPad bestätigt:
-- Metronom: spielt im Hintergrund, bei gesperrtem Bildschirm und im Stummmodus weiter und läuft synchron mit einer anderen Metronom-App.
+Aus Build 47 inzwischen am iPad bestätigt:
+- Tastatur im Notizfenster: Das Bild springt nicht mehr, das Fenster macht gleichzeitig mit der Tastatur Platz.
 
 Bitte grundsätzlich ausprobieren:
 - Daten übernehmen: Backup zurückspielen oder die Qupil-1.x-Datenbank (qupil.db) übernehmen. Stimmen Schüler, Unterrichte, Notizen und Werke?
