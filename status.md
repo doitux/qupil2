@@ -1,8 +1,8 @@
 # TestFlight-Sammellauf 2026-11-13 22:05
 
-**Build 48 gestartet**
+**Build 48 fehlgeschlagen**
 
-- Build 48 (Commit d30ff1f): in_progress, Upload: -, Testtext: -
+- Build 48 (Commit d30ff1f): failure, Upload: failure, Testtext: skipped
 - https://github.com/doitux/qupil2/actions/runs/43540352894
 - Seit Build 47 (Commit ca6fcee)
 
