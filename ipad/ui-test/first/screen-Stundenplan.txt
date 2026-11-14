@@ -1,0 +1,34 @@
+button      960    55    44    44  Neu
+button      236   117   105    60  Montag
+button      347   117   104    60  Dienstag
+button      457   117   105    60  Mittwoch
+button      568   117   104    60  Donnerstag
+button      678   117   105    60  Freitag
+button      789   117   104    60  Samstag
+button      899   117   105    60  Sonntag
+button      236   223   768    46  Heute Geburtstag: Lina wird 15 18:30
+button      236   269   768    46  Geburtstag: Karl (Sonntag, 12) 16:30
+button      236   315   768    46  Karl: Probe mit der Klavierbegleitung absprechen 16:30
+button      236   361   768    46  + 4 weitere Hinweise
+button      252   445   736    53  EU-45-Rau-LenMus
+button      252   510   736    80  Lena Muster
+button      252   602   364    46  Notiz
+button      624   602   364    46  Metronom
+button      236   706   768    64  11:00 Streicherklasse 4a
+button      236   770   768    64  13:30 EU-30-Rau-RomWer
+button      236   834   768    64  14:45 EU-30-Rau-SopKle
+button      236   898   768    64  15:30 GU-60-Rau-JM
+button      236   962   768    64  16:30 EU-30-Rau-KarKöh
+40          934   982    24    24  Hatte Geburtstag
+button      236  1026   768    64  17:00 Streicherensemble
+button      236  1090   768    64  18:30 EU-30-Rau-LinFuc
+40          934  1110    24    24  Heute Geburtstag
+button      236  1154   768    64  19:00 EU-30-Rau-MicHah
+button      236  1218   768    64  19:30 EU-30-Rau-SabWin
+button      236  1290   283    19  Unregelmäßige Termine (1) anzeigen
+button       92    31    93    23  Qupil 2.0.0 (d30ff1f)
+tab          14    79   188    46  Stundenplan
+tab          14   129   188    46  Schüler
+tab          14   179   188    46  Veranstaltungen
+tab          14   229   188    46  Metronom
+tab          14   279   188    46  Mehr

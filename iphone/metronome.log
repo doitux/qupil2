@@ -1,0 +1,50 @@
+objc[37581]: Class LACUISecureTextField is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/LocalAuthenticationCoreUI.framework/LocalAuthenticationCoreUI (0x189892638) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/Frameworks/LocalAuthenticationEmbeddedUI.framework/LocalAuthenticationEmbeddedUI (0x185947738). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+objc[37581]: Class AKAlertImageURLProvider is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/AuthKit.framework/AuthKit (0x127d25c30) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/AuthKitUI.framework/AuthKitUI (0x18977e090). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+objc[37581]: Class AKBiometricRatchetUtility is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/AuthKit.framework/AuthKit (0x127d27aa8) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/AuthKitUI.framework/AuthKitUI (0x18977e108). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+stale focus object 0x0 , doing manual update
+2026-11-14 01:40:41.879 Qupil[37581:100819] void * _Nullable NSMapGet(NSMapTable * _Nonnull, const void * _Nullable): map table argument is NULL
+ui test: start
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+objc[37581]: Class UIAccessibilityLoaderWebShared is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebCore.axbundle/WebCore (0x1c394f328) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebKit.axbundle/WebKit (0x1c1f51398). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+ui test: start passed
+ui test: metronome-prepare
+stale focus object 0x600002abb600 , doing manual update
+ui test: metronome-prepare passed
+ui test: 2 of 2 cases passed (/Users/runner/Library/Developer/CoreSimulator/Devices/309F4F0C-F632-4F5C-BB25-BD783E57455C/data/Containers/Data/Application/EC29F6C8-01DE-4E3F-9DF6-DBBF148921AC/Documents/metronome)
+metronome: beat 1 running 1 session playback
+metronome: beat 2 running 1 session playback
+metronome: beat 4 running 1 session playback
+metronome: beat 5 running 1 session playback
+metronome: beat 6 running 1 session playback
+metronome: beat 8 running 1 session playback
+metronome: beat 9 running 1 session playback
+metronome: beat 10 running 1 session playback
+metronome: beat 12 running 1 session playback
+metronome: beat 13 running 1 session playback
+metronome: beat 14 running 1 session playback
+metronome: beat 16 running 1 session playback
+metronome: beat 17 running 1 session playback
+metronome: beat 18 running 1 session playback
+metronome: beat 20 running 1 session playback
+metronome: beat 21 running 1 session playback
+metronome: beat 22 running 1 session playback
+metronome: beat 24 running 1 session playback
+metronome: beat 25 running 1 session playback
+metronome: beat 26 running 1 session playback
+metronome: beat 28 running 1 session playback
+metronome: beat 28 running 1 session playback
+metronome: beat 29 running 1 session playback
+metronome: beat 31 running 1 session playback
+metronome: beat 32 running 1 session playback
+metronome: beat 33 running 1 session playback
+metronome: beat 35 running 1 session playback
+metronome: beat 36 running 1 session playback
+metronome: beat 37 running 1 session playback
+metronome: beat 39 running 1 session playback
+metronome: beat 40 running 1 session playback
+metronome: beat 41 running 1 session playback
+metronome: beat 43 running 1 session playback
+de.qupil.app: 37581

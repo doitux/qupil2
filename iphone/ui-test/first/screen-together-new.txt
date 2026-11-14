@@ -1,0 +1,49 @@
+button      329    55    44    44  Neu
+button       20   117    45    60  Montag
+button       71   117    46    60  Dienstag
+button      123   117    45    60  Mittwoch
+button      174   117    45    60  Donnerstag
+button      225   117    45    60  Freitag
+button      276   117    46    60  Samstag
+button      328   117    45    60  Sonntag
+button       20   223   353    46  Heute Geburtstag: Lina wird 15 18:30
+button       20   269   353    46  Geburtstag: Karl (Sonntag, 12) 16:30
+button       20   315   353    46  Karl: Probe mit der Klavierbegleitung absprechen 16:30
+button       20   361   353    46  + 4 weitere Hinweise
+button       36   445   321    53  EU-45-Rau-LenMus
+button       36   510   321    80  Lena Muster
+button       36   602   157    46  Notiz
+button      201   602   156    46  Metronom
+button       20   706   353    64  11:00 Streicherklasse 4a  (scrolled out of sight)
+button       20   770   353    64  13:30 EU-30-Rau-RomWer  (scrolled out of sight)
+button       20   834   353    64  14:45 EU-30-Rau-SopKle  (scrolled out of sight)
+button       20   898   353    64  15:30 GU-60-Rau-JM  (scrolled out of sight)
+button       20   962   353    64  16:30 EU-30-Rau-KarKöh  (scrolled out of sight)
+40          303   982    24    24  Hatte Geburtstag  (scrolled out of sight)
+button       20  1026   353    64  17:00 Streicherensemble  (scrolled out of sight)
+button       20  1090   353    64  18:30 EU-30-Rau-LinFuc  (scrolled out of sight)
+40          303  1110    24    24  Heute Geburtstag  (scrolled out of sight)
+button       20  1154   353    64  19:00 EU-30-Rau-MicHah  (scrolled out of sight)
+button       20  1218   353    64  19:30 EU-30-Rau-SabWin  (scrolled out of sight)
+button       20  1290   283    44  Unregelmäßige Termine (1) anzeigen  (scrolled out of sight)
+tab           4   699    77    60  Stundenplan
+tab          81   699    77    60  Schüler
+tab         158   699    77    60  Veranstaltungen
+tab         235   699    77    60  Metronom
+tab         312   699    77    60  Mehr
+button        8    41   109    44  Abbrechen
+radio        24    85    99    11  Einzelunterricht
+radio       127    85   116    11  Gruppenunterricht
+radio       247    85   122    11  Ensembleunterricht
+checkbox     20   116   353    56  Unregelmäßiger Unterricht
+combobox     20   209   353    48  Wochentag
+edit         20   294   171    48  Start
+edit        205   294   168    48  Ende
+text         20   358   353    16  45 Minuten
+combobox     20   411   353    48  Unterrichtsort
+radio        24   500   163    40  Automatisch
+radio       191   500   178    40  Eigener Name
+button      333   614    36    36  Entfernen Muster, Lena
+combobox     20   663   353    14  Anderen Schüler auswählen
+checkbox     20   727   353    92  Gemeinsam mit Dienstag führen  (scrolled out of sight)
+button       20   685   353    54  Speichern

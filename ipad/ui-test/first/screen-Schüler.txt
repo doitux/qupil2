@@ -1,0 +1,30 @@
+button      349    32    44    44  Neuer Schüler
+edit        236    92   768    48  Schüler suchen
+button      216   182   808    64  Jonas Becker
+button      216   246   808    64  Alma Berger
+button      216   310   808    64  Jakob Braun
+button      216   374   808    64  Thea Braun
+button      216   438   808    64  Merle Busch
+button      216   502   808    64  David Böhm
+button      216   596   808    64  Erik Frank
+button      216   660   808    64  Andreas Franke
+button      216   724   808    64  Ida Franke
+button      216   788   808    64  Mila Friedrich
+button      216   852   808    64  Ole Friedrich
+button      216   916   808    64  Lina Fuchs
+button      216  1010   808    64  Ronja Graf
+button      216  1074   808    64  Luisa Günther
+button      216  1168   808    64  Michael Hahn
+button      216  1232   808    64  Amelie Hartmann
+button      216  1296   808    13  Annika Herrmann
+button      216  1360   808    64  Katrin Herrmann  (scrolled out of sight)
+button      216  1424   808    64  Emma Hoffmann  (scrolled out of sight)
+button      216  1488   808    64  Fabian Hofmann  (scrolled out of sight)
+button      216  1552   808    64  Max Huber  (scrolled out of sight)
+button      216  1646   808    64  Julian Jung  (scrolled out of sight)
+button       92    31    93    23  Qupil 2.0.0 (d30ff1f)
+tab          14    79   188    46  Stundenplan
+tab          14   129   188    46  Schüler
+tab          14   179   188    46  Veranstaltungen
+tab          14   229   188    46  Metronom
+tab          14   279   188    46  Mehr
