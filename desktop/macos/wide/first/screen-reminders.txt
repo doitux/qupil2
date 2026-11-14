@@ -1,0 +1,23 @@
+button      228    12    78    44  Mehr
+button      872    70    44    44  Hinzufügen
+button      236   128   680    60  Anmeldung Musizierfreizeit: alle Eltern informieren
+button      236   200   680    60  Noten für das Ensemble bestellen
+button      236   272   680    60  Sommerkonzert: abfragen, wer mitspielt
+button      236   344   680    60  Anmeldebogen Musizierfreizeit einsammeln
+button      236   416   680    60  Anmeldung zur Prüfung (Stufe 1) mitgeben
+button      236   488   680    60  Anmeldung „Jugend musiziert“ besprechen
+button      236   560   680    60  Duett-Stimmen kopieren
+button      236   632   680    24  E-Saite wechseln
+button      236   704   680    60  Elternbrief zum Vorspiel mitgeben  (scrolled out of sight)
+button      236   776   680    60  Fotos für den Wettbewerb machen  (scrolled out of sight)
+button      236   848   680    60  Geliehene Noten zurückgeben lassen  (scrolled out of sight)
+button      236   920   680    60  Größeres Cello ausprobieren (3/4)  (scrolled out of sight)
+button      236   992   680    60  Leihinstrument zur Kontrolle mitbringen lassen  (scrolled out of sight)
+button      236  1064   680    60  Probe mit der Klavierbegleitung absprechen  (scrolled out of sight)
+button      236  1136   680    60  Übe-Tagebuch ansehen  (scrolled out of sight)
+button       92    31    93    23  Qupil 2.0.0 (d30ff1f)
+tab          14    79   188    46  Stundenplan
+tab          14   129   188    46  Schüler
+tab          14   179   188    46  Veranstaltungen
+tab          14   229   188    46  Metronom
+tab          14   279   188    46  Mehr

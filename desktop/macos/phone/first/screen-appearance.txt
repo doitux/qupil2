@@ -1,0 +1,42 @@
+button       12    12   138    44  Einstellungen
+text         38   166    78    18  Darstellung
+radio        42   198   122    40  System
+radio       168   198    64    40  Hell
+radio       236   198   112    40  Dunkel
+text         38   260    48    18  Farben
+radio        38   373    40    40  #6e3c5a
+radio        88   373    40    40  #a0305f
+radio       138   373    40    40  #8c1c3a
+radio       188   373    40    40  #7a4b1e
+radio       238   373    40    40  #2f6b3a
+radio       288   373    40    40  #0f6b6b
+radio        38   423    40    40  #1f4e8c
+radio        88   423    40    40  #5b3fa0
+radio       138   423    40    40  #3f4a5a
+radio       188   423    40    40  Eigene Farbe
+radio        38   500    40    40  #c9f36b
+radio        88   500    40    40  #ffe066
+radio       138   500    40    40  #ffb680
+radio       188   500    40    40  #ff8c7a
+radio       238   500    40    40  #ffadd2
+radio       288   500    40    40  #cdb8ff
+radio        38   550    40    39  #9fd8ff
+radio        88   550    40    39  #9ff0c8
+radio       138   550    40    39  #e3ded3
+radio       188   550    40    39  Eigene Farbe
+radio        38   627    40    40  #b3261e  (scrolled out of sight)
+radio        88   627    40    40  #d84315  (scrolled out of sight)
+radio       138   627    40    40  #b8860b  (scrolled out of sight)
+radio       188   627    40    40  #2e7d32  (scrolled out of sight)
+radio       238   627    40    40  #00838f  (scrolled out of sight)
+radio       288   627    40    40  #1565c0  (scrolled out of sight)
+radio        38   677    40    40  #6a1b9a  (scrolled out of sight)
+radio        88   677    40    40  #ad1457  (scrolled out of sight)
+radio       138   677    40    40  Eigene Farbe  (scrolled out of sight)
+text         38   735    57    18  Sprache  (scrolled out of sight)
+combobox     38   763   314    44  Sprache  (scrolled out of sight)
+tab           4   593    76    60  Stundenplan
+tab          80   593    77    60  Schüler
+tab         157   593    76    60  Veranstaltungen
+tab         233   593    77    60  Metronom
+tab         310   593    76    60  Mehr

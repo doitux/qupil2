@@ -1,0 +1,21 @@
+button      349    32    44    44  Neuer Schüler
+edit        236    92   744    48  Schüler suchen
+button      216   181   784    64  Jonas Becker
+button      216   245   784    64  Alma Berger
+button      216   309   784    64  David Böhm
+button      216   373   784    64  Jakob Braun
+button      216   437   784    64  Thea Braun
+button      216   501   784    64  Merle Busch
+button      216   594   784    64  Erik Frank
+button      216   658   784     2  Andreas Franke
+button      216   722   784    64  Ida Franke  (scrolled out of sight)
+button      216   786   784    64  Mila Friedrich  (scrolled out of sight)
+button      216   850   784    64  Ole Friedrich  (scrolled out of sight)
+button      216   914   784    64  Lina Fuchs  (scrolled out of sight)
+button      216  1007   784    64  Ronja Graf  (scrolled out of sight)
+button       93    32   100    22  Qupil 2.0.0 (d30ff1f)
+tab          14    79   188    46  Stundenplan
+tab          14   129   188    46  Schüler
+tab          14   179   188    46  Veranstaltungen
+tab          14   229   188    46  Metronom
+tab          14   279   188    46  Mehr

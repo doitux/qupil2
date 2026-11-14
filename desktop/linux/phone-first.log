@@ -1,0 +1,114 @@
+qt.multimedia.symbolsresolver: Couldn't load pipewire-0.3 library
+qt.multimedia.symbolsresolver: Couldn't resolve pipewire-0.3 symbols
+ui test: start
+ui test: start passed
+ui test: pages
+ui test: pages passed
+ui test: today
+ui test: today passed
+ui test: note-save
+ui test: note-save passed
+ui test: note-cancel
+QTextCursor::setPosition: Position '36' out of range
+QTextCursor::setPosition: Position '36' out of range
+QTextCursor::setPosition: Position '36' out of range
+QTextCursor::setPosition: Position '36' out of range
+ui test: note-cancel passed
+ui test: note-touch-select
+QTextCursor::setPosition: Position '14' out of range
+QTextCursor::setPosition: Position '14' out of range
+QTextCursor::setPosition: Position '14' out of range
+QTextCursor::setPosition: Position '14' out of range
+ui test: note-touch-select passed
+ui test: text-tap
+ui test: text-tap passed
+ui test: text-double-tap
+QTextCursor::setPosition: Position '5' out of range
+QTextCursor::setPosition: Position '5' out of range
+QTextCursor::setPosition: Position '5' out of range
+QTextCursor::setPosition: Position '5' out of range
+ui test: text-double-tap passed
+ui test: text-triple-tap
+ui test: text-triple-tap passed
+ui test: text-long-press
+ui test: text-long-press passed
+ui test: text-handles
+ui test: text-handles passed
+ui test: text-tap-selection
+ui test: text-tap-selection passed
+ui test: text-menu
+QTextCursor::setPosition: Position '121' out of range
+QTextCursor::setPosition: Position '121' out of range
+QTextCursor::setPosition: Position '121' out of range
+QTextCursor::setPosition: Position '121' out of range
+ui test: text-menu passed
+ui test: text-menu-narrow
+ui test: text-menu-narrow passed
+ui test: text-wipe
+ui test: text-wipe passed
+ui test: text-field
+ui test: text-field passed
+ui test: text-mouse
+ui test: text-mouse passed
+ui test: student-search
+ui test: student-search passed
+ui test: student-new
+ui test: student-new passed
+ui test: event-open
+ui test: event-open passed
+ui test: metronome
+qt.multimedia.symbolsresolver: Couldn't load va-x11 library
+qt.multimedia.symbolsresolver: Couldn't resolve va-x11 symbols
+qt.multimedia.symbolsresolver: Couldn't load va-drm library
+qt.multimedia.symbolsresolver: Couldn't resolve va-drm symbols
+qt.multimedia.symbolsresolver: Couldn't load va library
+qt.multimedia.symbolsresolver: Couldn't resolve va symbols
+qt.multimedia.symbolsresolver: Couldn't load va(in plugin) library
+qt.multimedia.symbolsresolver: Couldn't resolve va(in plugin) symbols
+qt.multimedia.ffmpeg: Using Qt multimedia with FFmpeg version 7.1 LGPL version 2.1 or later
+PulseAudioService: pa_context_connect() failed
+ui test: metronome passed
+ui test: appearance
+ui test: appearance passed
+ui test: language
+ui test: language passed
+ui test: reminders
+ui test: reminders passed
+ui test: test-mode
+ui test: test-mode passed
+ui test: plan-save
+ui test: plan-save passed
+ui test: piece-new
+ui test: piece-new passed
+ui test: date-calendar
+ui test: date-calendar passed
+ui test: lesson-new
+ui test: lesson-new passed
+ui test: lesson-times
+ui test: lesson-times passed
+ui test: together
+ui test: together passed
+ui test: together-new
+ui test: together-new passed
+ui test: reminder-new
+ui test: reminder-new passed
+ui test: lesson-reminder
+QTextCursor::setPosition: Position '18' out of range
+QTextCursor::setPosition: Position '18' out of range
+QTextCursor::setPosition: Position '18' out of range
+QTextCursor::setPosition: Position '18' out of range
+ui test: lesson-reminder passed
+ui test: loan-return
+ui test: loan-return passed
+ui test: more-pages
+ui test: more-pages passed
+ui test: alert-volume
+ui test: alert-volume passed
+ui test: restart-prepare
+QTextCursor::setPosition: Position '37' out of range
+QTextCursor::setPosition: Position '37' out of range
+QTextCursor::setPosition: Position '37' out of range
+QTextCursor::setPosition: Position '37' out of range
+ui test: restart-prepare passed
+ui test: 38 of 38 cases passed (out/linux/phone/first)
+Draft note: kept, 230 characters

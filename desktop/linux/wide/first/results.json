@@ -1,0 +1,388 @@
+{
+    "cases": [
+        {
+            "failure": "",
+            "ms": 10408,
+            "name": "start",
+            "note": "",
+            "passed": true,
+            "title": "close the reminders shown at the start",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6875,
+            "name": "pages",
+            "note": "",
+            "passed": true,
+            "title": "every page opens",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 2359,
+            "name": "today",
+            "note": "",
+            "passed": true,
+            "title": "today with the running lesson, switching days",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 3210,
+            "name": "note-save",
+            "note": "",
+            "passed": true,
+            "title": "write and save a note for the running lesson",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 2879,
+            "name": "note-cancel",
+            "note": "",
+            "passed": true,
+            "title": "cancel a note: nothing saved, no draft",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7024,
+            "name": "note-touch-select",
+            "note": "",
+            "passed": true,
+            "title": "double tap with a finger selects a word, B makes it bold",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 10980,
+            "name": "text-tap",
+            "note": "",
+            "passed": true,
+            "title": "finger: a tap places the cursor; a tap on the cursor shows and hides the menu",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 5491,
+            "name": "text-double-tap",
+            "note": "",
+            "passed": true,
+            "title": "finger: a double tap selects the word at the second touch; B and B again",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 5206,
+            "name": "text-triple-tap",
+            "note": "",
+            "passed": true,
+            "title": "finger: a triple tap selects the paragraph (without its end); B, B again",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 12629,
+            "name": "text-long-press",
+            "note": "",
+            "passed": true,
+            "title": "finger: a long press selects the word while the finger is down",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6637,
+            "name": "text-handles",
+            "note": "",
+            "passed": true,
+            "title": "finger: the handles make the selection longer at either end",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 12192,
+            "name": "text-tap-selection",
+            "note": "",
+            "passed": true,
+            "title": "finger: a tap into the selection hides/shows the menu, outside ends it",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 10162,
+            "name": "text-menu",
+            "note": "",
+            "passed": true,
+            "title": "finger: Kopieren, Einsetzen, Alles auswählen, Ausschneiden",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6756,
+            "name": "text-menu-narrow",
+            "note": "",
+            "passed": true,
+            "title": "finger: the menu fits the window, wiping the bar shows the rest",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 5333,
+            "name": "text-wipe",
+            "note": "",
+            "passed": true,
+            "title": "finger: wiping over the text scrolls and selects nothing",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 8172,
+            "name": "text-field",
+            "note": "",
+            "passed": true,
+            "title": "finger: the same in a one-line field (title of a piece)",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6101,
+            "name": "text-mouse",
+            "note": "",
+            "passed": true,
+            "title": "mouse: double click at the start of a paragraph takes the word; B, B again; triple click",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 3574,
+            "name": "student-search",
+            "note": "",
+            "passed": true,
+            "title": "search a student, open and close the student page",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 3547,
+            "name": "student-new",
+            "note": "",
+            "passed": true,
+            "title": "add a student",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 2110,
+            "name": "event-open",
+            "note": "",
+            "passed": true,
+            "title": "open an event and go back",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 2548,
+            "name": "metronome",
+            "note": "no sound: Konnte die Soundkarte nicht initialisieren.",
+            "passed": true,
+            "title": "start and stop the metronome",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 2884,
+            "name": "appearance",
+            "note": "",
+            "passed": true,
+            "title": "switch to dark and back to light",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 4046,
+            "name": "language",
+            "note": "",
+            "passed": true,
+            "title": "switch the language to English and back",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 2331,
+            "name": "reminders",
+            "note": "",
+            "passed": true,
+            "title": "open the reminders",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 5013,
+            "name": "test-mode",
+            "note": "",
+            "passed": true,
+            "title": "switch the test mode on (7 taps on the version) and off",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 4168,
+            "name": "plan-save",
+            "note": "",
+            "passed": true,
+            "title": "plan the next lesson of a student",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 5045,
+            "name": "piece-new",
+            "note": "",
+            "passed": true,
+            "title": "add a piece for a student",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 4346,
+            "name": "date-calendar",
+            "note": "",
+            "passed": true,
+            "title": "the calendar of a date field is on the screen as a whole",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 3234,
+            "name": "lesson-new",
+            "note": "",
+            "passed": true,
+            "title": "add a lesson from the schedule",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6023,
+            "name": "lesson-times",
+            "note": "",
+            "passed": true,
+            "title": "a lesson of 11 minutes, times typed and saved at once",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7656,
+            "name": "together",
+            "note": "",
+            "passed": true,
+            "title": "two individual lessons of a student kept together",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 5723,
+            "name": "together-new",
+            "note": "",
+            "passed": true,
+            "title": "new lesson for a student who has one: kept together",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 3471,
+            "name": "reminder-new",
+            "note": "",
+            "passed": true,
+            "title": "add a reminder",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 12895,
+            "name": "lesson-reminder",
+            "note": "",
+            "passed": true,
+            "title": "reminders for one lesson",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 5141,
+            "name": "loan-return",
+            "note": "",
+            "passed": true,
+            "title": "return sheet music from the student's page",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 2419,
+            "name": "more-pages",
+            "note": "",
+            "passed": true,
+            "title": "birthdays and data pages open",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 2344,
+            "name": "alert-volume",
+            "note": "",
+            "passed": true,
+            "title": "volume of alert sounds (iOS: hint to the system setting)",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 1968,
+            "name": "restart-prepare",
+            "note": "",
+            "passed": true,
+            "title": "an unsaved note when Qupil quits",
+            "warnings": [
+            ]
+        }
+    ],
+    "failed": 0,
+    "platform": "Ubuntu 24.04.5 LTS",
+    "qpa": "xcb",
+    "qt": "6.8.3"
+}

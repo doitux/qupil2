@@ -1,0 +1,34 @@
+button      936    54    44    44  Neu
+button      236   116   101    60  Montag
+button      343   116   101    60  Dienstag
+button      450   116   101    60  Mittwoch
+button      557   116   102    60  Donnerstag
+button      665   116   101    60  Freitag
+button      772   116   101    60  Samstag
+button      879   116   101    60  Sonntag
+button      236   221   744    46  Heute Geburtstag: Lina wird 15 18:30
+button      236   267   744    46  Geburtstag: Karl (Sonntag, 12) 16:30
+button      236   313   744    46  Karl: Probe mit der Klavierbegleitung absprechen 16:30
+button      236   359   744    46  + 4 weitere Hinweise
+button      252   443   712    52  EU-45-Rau-LenMus
+button      252   507   712    77  Lena Muster
+button      252   596   352    46  Notiz
+button      612   596   352    46  Metronom
+button      236   699   744    63  11:00 Streicherklasse 4a  (scrolled out of sight)
+button      236   762   744    63  13:30 EU-30-Rau-RomWer  (scrolled out of sight)
+button      236   825   744    63  14:45 EU-30-Rau-SopKle  (scrolled out of sight)
+button      236   888   744    63  15:30 GU-60-Rau-JM  (scrolled out of sight)
+button      236   951   744    63  16:30 EU-30-Rau-KarKöh  (scrolled out of sight)
+40          910   971    24    24  Hatte Geburtstag  (scrolled out of sight)
+button      236  1014   744    63  17:00 Streicherensemble  (scrolled out of sight)
+button      236  1077   744    63  18:30 EU-30-Rau-LinFuc  (scrolled out of sight)
+40          910  1097    24    24  Heute Geburtstag  (scrolled out of sight)
+button      236  1140   744    63  19:00 EU-30-Rau-MicHah  (scrolled out of sight)
+button      236  1203   744    63  19:30 EU-30-Rau-SabWin  (scrolled out of sight)
+button      236  1274   286    44  Unregelmäßige Termine (1) anzeigen  (scrolled out of sight)
+button       93    32   100    22  Qupil 2.0.0 (d30ff1f)
+tab          14    79   188    46  Stundenplan
+tab          14   129   188    46  Schüler
+tab          14   179   188    46  Veranstaltungen
+tab          14   229   188    46  Metronom
+tab          14   279   188    46  Mehr

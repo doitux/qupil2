@@ -1,0 +1,35 @@
+button      228    12    95    44  Schüler
+button      936    12    44    44  Weitere Aktionen
+combobox    236   142   744    54  Unterricht wählen
+tab         236   210    82    38  Notizen
+tab         326   210    73    38  Werke
+tab         407   210   102    38  Aktivitäten
+tab         518   210    70    38  Daten
+tab         596   210    95    38  Leihnoten
+checkbox    236   262    63    34  Alle · 3
+checkbox    305   262    92    34  In Arbeit · 2
+checkbox    403   262   107    34  Vorspielreif · 1
+button      236   306   744    99  J. S. Bach Bourrée (Suite Nr. 3)
+button      236   415   744    99  A. Vivaldi Konzert a-Moll, 1. Satz
+button      236   524   744    99  O. Rieding Concertino op. 35
+button      870   584   110    56  Werk
+button       93    32   110    22  Qupil 2.0.0 (d30ff1f)
+tab          14    79   189    46  Stundenplan
+tab          14   129   189    46  Schüler
+tab          14   179   189    46  Veranstaltungen
+tab          14   229   189    46  Metronom
+tab          14   279   189    46  Mehr
+button      198   101   109    44  Abbrechen
+button      700   101   102    44  Speichern
+edit        210   178   580    48  Komponist
+edit        210   263   580    48  Titel
+combobox    210   348   273    48  Stil
+button      501   352    48    40  −
+button      738   352    48    40  +
+checkbox    210   433    70    34  Geplant
+checkbox    286   433    75    34  In Arbeit
+checkbox    368   433    58    34  Pause
+checkbox    433   433    92    34  Vorspielreif
+checkbox    532   433    73    34  Beendet
+button      210   504   397    48  Start Di, 10.11.2026
+button      621   504   169    48  Ende –

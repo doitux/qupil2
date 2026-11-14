@@ -1,0 +1,31 @@
+button      228    12    78    44  Mehr
+button      872    70    44    44  Hinzufügen
+button      236   128   680    59  Anmeldung Musizierfreizeit: alle Eltern informieren
+button      236   199   680    59  Noten für das Ensemble bestellen
+button      236   270   680    59  Sommerkonzert: abfragen, wer mitspielt
+button      236   341   680    59  Anmeldebogen Musizierfreizeit einsammeln
+button      236   412   680    59  Anmeldung zur Prüfung (Stufe 1) mitgeben
+button      236   483   680    59  Anmeldung „Jugend musiziert“ besprechen
+button      236   554   680    59  Duett-Stimmen kopieren
+button      236   625   680    35  E-Saite wechseln
+button      236   696   680    59  Elternbrief zum Vorspiel mitgeben  (scrolled out of sight)
+button      236   767   680    59  Fotos für den Wettbewerb machen  (scrolled out of sight)
+button      236   838   680    59  Geliehene Noten zurückgeben lassen  (scrolled out of sight)
+button      236   909   680    59  Größeres Cello ausprobieren (3/4)  (scrolled out of sight)
+button      236   980   680    59  Leihinstrument zur Kontrolle mitbringen lassen  (scrolled out of sight)
+button      236  1051   680    59  Probe mit der Klavierbegleitung absprechen  (scrolled out of sight)
+button      236  1122   680    59  Übe-Tagebuch ansehen  (scrolled out of sight)
+button       93    32   100    22  Qupil 2.0.0 (d30ff1f)
+tab          14    79   188    46  Stundenplan
+tab          14   129   188    46  Schüler
+tab          14   179   188    46  Veranstaltungen
+tab          14   229   188    46  Metronom
+tab          14   279   188    46  Mehr
+button      198    67   109    44  Abbrechen
+button      700    67   102    44  Speichern
+edit        210   143   580    96  Erinnerungstext
+radio       210   275   580    52  Erinnerung nur bei Programmstart
+radio       210   333   580    52  Am Anfang jeder Unterrichtseinheit erinnern
+radio       210   391   580    58  Nur bei folgendem Schüler erinnern
+radio       210   455   580    58  Nur bei folgendem Unterricht erinnern
+checkbox    210   529   580    56  Spiele Klangdatei beim Anzeigen der Erinnerung

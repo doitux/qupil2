@@ -1,0 +1,19 @@
+button      221    51   100    22  Qupil 2.0.0 (d30ff1f)
+button      326    40    44    44  Einstellungen
+button       20   133   350    58  Vorspielkandidaten, 72
+button       20   191   350    58  Ensemblekandidaten, 74
+button       20   249   350    58  Vorspielbereite Werke, 48
+button       20   356   350    58  Noten-Bibliothek, 2 verliehen
+button       20   414   350    58  Instrumente, 2 Leihinstrumente
+button       20   472   350    58  Erinnerungen, 15 aktiv
+button       20   530   350    58  Geburtstage, 1 heute
+button       20   588   350    58  Schülerarchiv, 1
+button       20   695   350    58  Tagesübersicht  (scrolled out of sight)
+button       20   753   350    58  Stundenplan  (scrolled out of sight)
+button       20   811   350    58  Leihinstrumente Inventarliste  (scrolled out of sight)
+button       20   889   350    58  Einstellungen, Sync, Darstellung, Daten  (scrolled out of sight)
+tab           4   689    76    60  Stundenplan
+tab          80   689    77    60  Schüler
+tab         157   689    76    60  Veranstaltungen
+tab         233   689    77    60  Metronom
+tab         310   689    76    60  Mehr
