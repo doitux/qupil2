@@ -1,0 +1,52 @@
+button       12    12    78    44  Mehr
+button       34   134   343    44  Synchronisation, Aus – Ihre Daten sind nur auf diesem Gerät
+button       34   190   168    44  Einrichten
+button      210   190   167    44  Gerät koppeln
+button       20   294   371    58  Darstellung, Hell
+button       20   352   371    58  Hinweise und Klänge
+button       20   456   371    58  Unterricht und Veranstaltungen
+button       20   514   371    58  Listen
+button       20   618   371    58  Daten und Backups
+button       20   694   371    58  Über Qupil, 2.0.0 (d30ff1f)
+button       12    12   138    44  Einstellungen
+text         38   166    78    18  Darstellung
+radio        42   198   130    40  System
+radio       176   198    69    40  Hell
+radio       249   198   120    40  Dunkel
+text         38   260    48    18  Farben
+radio        38   357    40    40  #6e3c5a
+radio        88   357    40    40  #a0305f
+radio       138   357    40    40  #8c1c3a
+radio       188   357    40    40  #7a4b1e
+radio       238   357    40    40  #2f6b3a
+radio       288   357    40    40  #0f6b6b
+radio        38   407    40    40  #1f4e8c
+radio        88   407    40    40  #5b3fa0
+radio       138   407    40    40  #3f4a5a
+radio       188   407    40    40  Eigene Farbe
+radio        38   484    40    40  #c9f36b
+radio        88   484    40    40  #ffe066
+radio       138   484    40    40  #ffb680
+radio       188   484    40    40  #ff8c7a
+radio       238   484    40    40  #ffadd2
+radio       288   484    40    40  #cdb8ff
+radio        38   534    40    40  #9fd8ff
+radio        88   534    40    40  #9ff0c8
+radio       138   534    40    40  #e3ded3
+radio       188   534    40    40  Eigene Farbe
+radio        38   611    40    40  #b3261e
+radio        88   611    40    40  #d84315
+radio       138   611    40    40  #b8860b
+radio       188   611    40    40  #2e7d32
+radio       238   611    40    40  #00838f
+radio       288   611    40    40  #1565c0
+radio        38   661    40    40  #6a1b9a
+radio        88   661    40    40  #ad1457
+radio       138   661    40    40  Eigene Farbe
+text         38   719    57    18  Sprache
+combobox     38   747   335    44  Sprache
+tab           4   806    81    60  Stundenplan
+tab          85   806    80    60  Schüler
+tab         165   806    81    60  Veranstaltungen
+tab         246   806    80    60  Metronom
+tab         326   806    81    60  Mehr

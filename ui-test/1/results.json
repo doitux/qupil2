@@ -1,0 +1,98 @@
+{
+    "cases": [
+        {
+            "failure": "",
+            "ms": 10553,
+            "name": "start",
+            "note": "",
+            "passed": true,
+            "title": "close the reminders shown at the start",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7316,
+            "name": "pages",
+            "note": "",
+            "passed": true,
+            "title": "every page opens",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 2470,
+            "name": "today",
+            "note": "",
+            "passed": true,
+            "title": "today with the running lesson, switching days",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6619,
+            "name": "note-save",
+            "note": "",
+            "passed": true,
+            "title": "write and save a note for the running lesson",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6171,
+            "name": "note-cancel",
+            "note": "",
+            "passed": true,
+            "title": "cancel a note: nothing saved, no draft",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 15798,
+            "name": "keyboard-smooth",
+            "note": "No on-screen keyboard came: not measured. ",
+            "passed": true,
+            "title": "the keyboard comes in an open editor: the editor makes room smoothly",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9680,
+            "name": "note-touch-select",
+            "note": "",
+            "passed": true,
+            "title": "double tap with a finger selects a word, B makes it bold",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7917,
+            "name": "student-search",
+            "note": "",
+            "passed": true,
+            "title": "search a student, open and close the student page",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9972,
+            "name": "student-new",
+            "note": "",
+            "passed": true,
+            "title": "add a student",
+            "warnings": [
+            ]
+        }
+    ],
+    "failed": 0,
+    "platform": "Android 13 (13.0)",
+    "qpa": "android",
+    "qt": "6.8.3"
+}
