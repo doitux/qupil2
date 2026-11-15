@@ -1,9 +1,85 @@
 {
   "mode": "schedule",
-  "started_at": "2026-11-14T18:43:54+01:00",
-  "slot": "2026-11-14 13:05",
-  "result": "late",
-  "note": "GitHub hat den Lauf erst um 18:43 gestartet (geplant 13:05); die Änderungen kommen in den nächsten Sammel-Lauf.",
-  "written": "2026-11-14T18:43:54+01:00",
-  "headline": "Verspätet gestartet, kein Build"
+  "started_at": "2026-11-15T01:57:37+01:00",
+  "slot": "2026-11-14 22:05",
+  "tests": {
+    "android-test.yml": {
+      "name": "Android",
+      "since": "d30ff1f",
+      "last": "success",
+      "result": "no_change"
+    },
+    "ui-test.yml": {
+      "name": "Desktop",
+      "since": "d30ff1f",
+      "last": "success",
+      "result": "no_change"
+    },
+    "ios-test.yml": {
+      "name": "iOS",
+      "since": "d30ff1f",
+      "last": "success",
+      "result": "no_change"
+    }
+  },
+  "since": "ca6fceef2fce26a2f820326c70aedbd43ac55cdd",
+  "since_build": 47,
+  "main": "b925a613dc720aa600c5b13293556bbc59d16e8a",
+  "commits": [
+    {
+      "sha": "4f2ce0b",
+      "subject": "UI test: no taps on what an editor covers, none while a popup moves"
+    },
+    {
+      "sha": "7ef1a3c",
+      "subject": "iOS test: wait until Qupil is drawn before the idb and dark mode checks"
+    },
+    {
+      "sha": "d740dbe",
+      "subject": "UI test together-new: open the weekday list until it is open, check Monday"
+    },
+    {
+      "sha": "ecde403",
+      "subject": "iOS test: idb waits for the reminders, finds \"Notiz\" also at night; theme setting noted"
+    },
+    {
+      "sha": "6f4f46e",
+      "subject": "Merge fix/draft-tap-under-editor: UI test taps nothing an editor covers (restart-draft on the iPhone)"
+    },
+    {
+      "sha": "a16b049",
+      "subject": "Tests keep the real settings untouched on macOS and iOS too"
+    },
+    {
+      "sha": "0120815",
+      "subject": "Merge fix/apple-test-settings: tests keep the real settings untouched on macOS and iOS"
+    },
+    {
+      "sha": "d30ff1f",
+      "subject": "What's new since build 46 (46 distributed)"
+    },
+    {
+      "sha": "b925a61",
+      "subject": "What's new since build 47 (47 distributed, keyboard confirmed on the iPad)"
+    }
+  ],
+  "relevant_files": [
+    ".github/scripts/ios-test.sh",
+    "src/app/UiTest.cpp",
+    "src/app/UiTest.h",
+    "src/main.cpp"
+  ],
+  "result": "started",
+  "build": {
+    "number": 49,
+    "run_id": 43660768819,
+    "sha": "b925a613dc720aa600c5b13293556bbc59d16e8a",
+    "url": "https://github.com/doitux/qupil2/actions/runs/43660768819",
+    "created": "2026-11-15T00:57:44Z",
+    "status": "in_progress",
+    "conclusion": null,
+    "attempt": 1
+  },
+  "written": "2026-11-15T01:57:55+01:00",
+  "headline": "Build 49 gestartet"
 }
