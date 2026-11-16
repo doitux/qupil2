@@ -1,8 +1,8 @@
 # TestFlight-Sammellauf 2026-11-15 22:05
 
-**Build 50 gestartet**
+**Build 50 fehlgeschlagen**
 
-- Build 50 (Commit b925a61): in_progress, Upload: -, Testtext: -
+- Build 50 (Commit b925a61): failure, Upload: failure, Testtext: skipped
 - https://github.com/doitux/qupil2/actions/runs/43783267696
 - Seit Build 47 (Commit ca6fcee)
 
