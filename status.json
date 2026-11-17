@@ -69,17 +69,20 @@
     "src/app/UiTest.h",
     "src/main.cpp"
   ],
-  "result": "started",
+  "result": "upload_failed",
   "build": {
     "number": 51,
     "run_id": 44011968485,
     "sha": "b925a613dc720aa600c5b13293556bbc59d16e8a",
     "url": "https://github.com/doitux/qupil2/actions/runs/44011968485",
     "created": "2026-11-17T03:41:30Z",
-    "status": "in_progress",
-    "conclusion": null,
-    "attempt": 1
+    "status": "completed",
+    "conclusion": "failure",
+    "attempt": 1,
+    "rerun": false,
+    "upload": "failure",
+    "whats_new": "skipped"
   },
-  "written": "2026-11-17T04:41:41+01:00",
-  "headline": "Build 51 gestartet"
+  "written": "2026-11-17T04:47:47+01:00",
+  "headline": "Build 51 fehlgeschlagen"
 }
