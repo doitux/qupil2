@@ -1,9 +1,34 @@
 {
   "mode": "schedule",
-  "started_at": "2026-11-17T21:33:04+01:00",
-  "slot": "2026-11-17 13:05",
-  "result": "weekday_skip",
-  "note": "Montag bis Donnerstag kein Mittags-Build; die Änderungen kommen um 22:05.",
-  "written": "2026-11-17T21:33:04+01:00",
-  "headline": "Mittags Mo–Do kein Build"
+  "started_at": "2026-11-18T03:50:01+01:00",
+  "slot": "2026-11-17 22:05",
+  "tests": {
+    "android-test.yml": {
+      "name": "Android",
+      "since": "d30ff1f",
+      "last": "success",
+      "result": "no_change"
+    },
+    "ui-test.yml": {
+      "name": "Desktop",
+      "since": "d30ff1f",
+      "last": "success",
+      "result": "no_change"
+    },
+    "ios-test.yml": {
+      "name": "iOS",
+      "since": "d30ff1f",
+      "last": "success",
+      "result": "no_change"
+    }
+  },
+  "since": "b925a613dc720aa600c5b13293556bbc59d16e8a",
+  "since_build": 51,
+  "main": "b925a613dc720aa600c5b13293556bbc59d16e8a",
+  "commits": [],
+  "relevant_files": [],
+  "result": "no_change",
+  "note": "Seit dem letzten Upload nichts Neues.",
+  "written": "2026-11-18T03:50:08+01:00",
+  "headline": "Kein Build nötig"
 }
