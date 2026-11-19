@@ -179,6 +179,36 @@ jobs:
           esac
           ls -l package
 
+      # The ZIP as a user gets it: unpacked, signature intact, starts (smoke test). A broken
+      # signature lets the app build fine, but a Mac with Apple silicon ends it at its start.
+      - name: Check the Mac app from the ZIP (signature, start)
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          unpacked="$RUNNER_TEMP/unpacked"
+          rm -rf "$unpacked" && mkdir -p "$unpacked"
+          ditto -x -k package/Qupil-macOS-universal-*.zip "$unpacked"
+          app="$unpacked/Qupil.app"
+          codesign --verify --deep --strict --verbose=2 "$app"
+          for arch in arm64 x86_64; do
+            lipo "$app/Contents/MacOS/Qupil" -verify_arch "$arch" || { echo "::error::Qupil.app has no $arch code"; exit 1; }
+          done
+          data="$RUNNER_TEMP/smoke-data"
+          rm -rf "$data"
+          "$app/Contents/MacOS/Qupil" --smoke-test --data-dir "$data" &
+          pid=$!
+          for _ in $(seq 1 180); do kill -0 "$pid" 2> /dev/null || break; sleep 1; done
+          if kill -0 "$pid" 2> /dev/null; then
+            kill -9 "$pid"
+            echo "::error::The Mac app from the ZIP did not finish its smoke test within 3 minutes"
+            exit 1
+          fi
+          if ! wait "$pid"; then
+            echo "::error::The Mac app from the ZIP did not start or failed its smoke test"
+            exit 1
+          fi
+          echo "Signature, both architectures and the start of the packed app OK"
+
       # Installer: a newer one updates the installed Qupil in place (platform/windows/qupil.iss)
       - name: Installer (Windows)
         if: runner.os == 'Windows'

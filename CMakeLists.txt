@@ -503,6 +503,14 @@ if(NOT ANDROID AND NOT IOS)
     install(SCRIPT ${qupil_deploy_script})
 endif()
 
+if(APPLE AND NOT IOS)
+    # The deploy step changes the binaries (library paths) after the linker signed them, and
+    # adds the Qt frameworks and plugins: on a Mac with Apple silicon macOS then ends Qupil
+    # at its start ("Code Signature Invalid"). So the whole bundle is signed again at the end
+    # (ad hoc, without an Apple certificate: Gatekeeper still asks once).
+    install(CODE "execute_process(COMMAND codesign --force --deep --sign - \"\${CMAKE_INSTALL_PREFIX}/Qupil.app\" COMMAND_ERROR_IS_FATAL ANY)")
+endif()
+
 # ---------------------------------------------------------------------------- tests
 
 option(QUPIL_BUILD_TESTS "Build the unit tests" ON)
