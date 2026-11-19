@@ -23,8 +23,8 @@ Rectangle {
     readonly property bool wifiPaused: Wifi.peers.some(p => p.paused || p.problem !== "")
     // Another device has a newer Qupil: what it wrote is partly not shown here
     readonly property int heldBack: App.info.heldBack ?? 0
-    readonly property var newerDevices: (Sync.connected ? Sync.devices : []).concat(Wifi.peers)
-        .filter(d => Labels.versionState(d, App.schemaVersion) === "newer")
+    readonly property var newerDevices: (Sync.connected ? Sync.devices : []).filter(d => Labels.deviceActive(d, new Date()))
+        .concat(Wifi.peers).filter(d => Labels.versionState(d, App.schemaVersion) === "newer")
     readonly property bool updateNeeded: heldBack > 0 || newerDevices.length > 0
     readonly property bool syncWarn: (Sync.connected && (Sync.needsPassword || Sync.error !== "")) || wifiPaused || updateNeeded
     readonly property string syncTitle: {

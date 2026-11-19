@@ -30,6 +30,8 @@ public:
     virtual bool write(const QString &path, const QByteArray &data) = 0;
     //! Renames a file or folder (the target must not exist)
     virtual bool move(const QString &from, const QString &to) = 0;
+    //! Deletes a file; true also when it was not there
+    virtual bool remove(const QString &path) = 0;
     virtual QString lastError() const = 0;
     virtual bool lastErrorWasNotFound() const = 0;
 };
@@ -74,6 +76,7 @@ public:
         int applied = 0;
         qint64 maxTime = 0;   //!< latest received time (for our clock)
         QList<Device> devices;   //!< the other devices
+        QStringList removedDevices;   //!< of setDevicesToRemove: deleted (or not there)
     };
 
     FolderSync(Store *store, RemoteFolder *remote, const QString &root = QStringLiteral("Qupil"));
@@ -103,6 +106,13 @@ public:
     QString error() const { return m_error; }
     //! What this Qupil is, for the other devices (in this device's file): e.g. "2.0.0 (0c34f48)"
     void setAppVersion(const QString &app) { m_app = app; }
+    /*!
+        Device files to delete at the next run: ids this device had before (a new database
+        gets a new id) and devices taken out of the list by hand. Only the small file with
+        name and version goes; their changes stay for the others. A device still in use
+        writes its file again at its next sync. Stats::removedDevices says which went.
+    */
+    void setDevicesToRemove(const QStringList &ids) { m_removeDevices = ids; }
 
     //! Changes per file (also the unit of upload)
     static constexpr int BatchSize = 2000;
@@ -118,6 +128,7 @@ private:
     QString m_root;
     QString m_error;
     QString m_app;
+    QStringList m_removeDevices;
 };
 
 //! Changes as compact, compressed bytes (sync files and Wi-Fi messages)

@@ -25,6 +25,7 @@ public:
     std::optional<QByteArray> read(const QString &path) override;
     bool write(const QString &path, const QByteArray &data) override;
     bool move(const QString &from, const QString &to) override;
+    bool remove(const QString &path) override;
     QString lastError() const override { return m_error; }
     bool lastErrorWasNotFound() const override { return m_notFound; }
     //! HTTP status of the last request (401: the app password was revoked)

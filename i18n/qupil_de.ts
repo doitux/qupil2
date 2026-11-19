@@ -2976,6 +2976,29 @@ Vorher legt Qupil ein Backup an, das Sie gleich danach wiederherstellen können.
         <extracomment>Sync › Devices, under another device whose Qupil is newer than this one</extracomment>
         <translation>Neueres Qupil: bitte Qupil auf diesem Gerät aktualisieren</translation>
     </message>
+    <message id="sync.device.last">
+        <source>Last sync: %1</source>
+        <extracomment>Sync › Devices, under another device: %1 = when it last synced, e.g. &apos;today 13:05&apos;</extracomment>
+        <translation>Zuletzt: %1</translation>
+    </message>
+    <message id="sync.devices.inactive" numerus="yes">
+        <source>Not active anymore (%n)</source>
+        <extracomment>Sync › Devices: fold-out for devices that did not sync for 30 days (older installs of a device, devices no longer used)</extracomment>
+        <translation>
+            <numerusform>Nicht mehr aktiv (%n)</numerusform>
+            <numerusform>Nicht mehr aktiv (%n)</numerusform>
+        </translation>
+    </message>
+    <message id="sync.devices.inactive_hint">
+        <source>No sync for over 30 days. Often an earlier install of a device: a reinstall, a restored backup or replaced data make a new device for the sync. Removing deletes only the entry; the changes stay. A device still in use comes back with its next sync.</source>
+        <extracomment>Sync › Devices, text in the fold-out of inactive devices</extracomment>
+        <translation>Seit über 30 Tagen nicht synchronisiert. Oft eine frühere Installation eines Geräts: Neuinstallation, wiederhergestelltes Backup oder ersetzte Daten ergeben für den Sync ein neues Gerät. Entfernen löscht nur den Eintrag, die Änderungen bleiben. Ein Gerät, das noch benutzt wird, erscheint beim nächsten Sync wieder.</translation>
+    </message>
+    <message id="sync.devices.remove">
+        <source>Remove</source>
+        <extracomment>Sync › Devices › Not active anymore: removes a device&apos;s entry from the list</extracomment>
+        <translation>Entfernen</translation>
+    </message>
     <message id="sync.update.title">
         <source>Please update Qupil</source>
         <extracomment>Sync card: another device uses a newer Qupil</extracomment>

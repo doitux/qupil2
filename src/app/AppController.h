@@ -170,6 +170,9 @@ public:
     */
     Q_INVOKABLE bool resetDevice();
     QVariantMap resetBackup() const;
+    //! This device's id changed (a new database): the old one is put on the list of device
+    //! files to delete (QSettings device/remove, done by the Nextcloud sync)
+    void noteDeviceId();
 
     //! "Qupil-Backup-2026-10-15.db"
     Q_INVOKABLE QString suggestedBackupName() const;

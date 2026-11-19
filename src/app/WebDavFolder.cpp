@@ -161,6 +161,17 @@ bool WebDavFolder::write(const QString &path, const QByteArray &data)
     return false;
 }
 
+bool WebDavFolder::remove(const QString &path)
+{
+    m_notFound = false;
+    const Reply r = send("DELETE", path);
+    m_notFound = r.status == 404;
+    if (r.status == 200 || r.status == 204 || r.status == 404)
+        return true;
+    m_error = !r.error.isEmpty() ? r.error : u"DELETE %1: HTTP %2"_s.arg(path).arg(r.status);
+    return false;
+}
+
 bool WebDavFolder::move(const QString &from, const QString &to)
 {
     m_notFound = false;

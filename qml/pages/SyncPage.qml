@@ -25,7 +25,12 @@ SubPage {
     // Another device has a newer Qupil: what it wrote is partly not shown here
     readonly property int heldBack: App.info.heldBack ?? 0
     readonly property bool updateNeeded: heldBack > 0
-        || (Sync.connected ? Sync.devices : []).concat(Wifi.peers).some(d => Labels.versionState(d, App.schemaVersion) === "newer")
+        || activeDevices.concat(Wifi.peers).some(d => Labels.versionState(d, App.schemaVersion) === "newer")
+    // Nextcloud devices: in use, and those without a sync for 30 days (mostly earlier
+    // installs: a new database is a new device), folded away
+    readonly property var activeDevices: (Sync.connected ? Sync.devices : []).filter(d => Labels.deviceActive(d, now))
+    readonly property var inactiveDevices: (Sync.connected ? Sync.devices : []).filter(d => !Labels.deviceActive(d, now))
+    property bool showInactive: false
     //! Data that would be affected when joining an existing folder
     readonly property bool hasLocalData: App.info.awaitingSync !== true
         && ((App.info.students ?? 0) + (App.info.lessons ?? 0) + (App.info.events ?? 0)) > 0
@@ -537,13 +542,45 @@ SubPage {
         }
         // Devices that sync through the Nextcloud
         Repeater {
-            model: Sync.connected ? Sync.devices : []
+            model: page.activeDevices
             delegate: DeviceRow {
                 required property var modelData
                 name: modelData.name
                 detail: "Nextcloud"
-                note: Labels.versionLine(modelData, App.schemaVersion)
+                note: [Labels.versionLine(modelData, App.schemaVersion),
+                       modelData.lastSync ? qsTrId("sync.device.last").arg(Labels.syncWhen(modelData.lastSync, page.now)) : ""]
+                      .filter(t => t !== "").join(" · ")
                 warn: Labels.versionState(modelData, App.schemaVersion) !== ""
+            }
+        }
+        // No sync for 30 days: folded away, without the version warning, removable
+        ActionButton {
+            visible: page.inactiveDevices.length > 0
+            kind: "quiet"
+            iconName: "chevron"
+            text: qsTrId("sync.devices.inactive", page.inactiveDevices.length)
+            onClicked: page.showInactive = !page.showInactive
+        }
+        Text {
+            visible: page.showInactive && page.inactiveDevices.length > 0
+            Layout.fillWidth: true
+            wrapMode: Text.WordWrap
+            text: qsTrId("sync.devices.inactive_hint")
+            color: Theme.textMuted
+            font.family: Theme.fontFamily
+            font.pixelSize: 13
+        }
+        Repeater {
+            model: page.showInactive ? page.inactiveDevices : []
+            delegate: DeviceRow {
+                required property var modelData
+                opacity: 0.7
+                name: modelData.name
+                detail: ""
+                note: qsTrId("sync.device.last").arg(Labels.syncWhen(modelData.lastSync, page.now))
+                      + (modelData.app ? " · " + modelData.app : "")
+                removable: true
+                onRemove: Sync.removeDevice(modelData.id)
             }
         }
         InputField {
@@ -630,6 +667,9 @@ SubPage {
         //! Its Qupil (and whether it is behind or ahead), under the name
         property string note
         property bool warn: false
+        //! A "Remove" button instead of the detail (devices no longer active)
+        property bool removable: false
+        signal remove()
         Layout.fillWidth: true
         spacing: 12
         Icon {
@@ -666,6 +706,13 @@ SubPage {
             color: Theme.textMuted
             font.family: Theme.fontFamily
             font.pixelSize: 13
+        }
+        ActionButton {
+            visible: deviceRow.removable
+            kind: "quiet"
+            text: qsTrId("sync.devices.remove")
+            Accessible.name: qsTrId("sync.devices.remove") + ": " + deviceRow.name
+            onClicked: deviceRow.remove()
         }
     }
 
