@@ -1328,6 +1328,9 @@ void UiTest::addResetPhase()
                    return !id.isEmpty() && id != before->deviceId;
                })
             << check(u"the backup is no longer offered"_s, [this] { return m_app->resetBackup().isEmpty(); })
+            << check(u"the old device id is on the list of device files to delete"_s, [before] {
+                   return QSettings().value(u"device/remove"_s).toStringList().contains(before->deviceId);
+               })
             << act(u"appearance setting of the test removed"_s, [] { QSettings().remove(u"appearance/kept"_s); });
 
     // A newer Qupil on another device sent something this version does not know: kept back,

@@ -102,6 +102,13 @@ public:
         folders = movedFolders;
         return true;
     }
+    bool remove(const QString &path) override
+    {
+        if (offline)
+            return false;
+        files.remove(path);
+        return true;
+    }
     QString lastError() const override { return QStringLiteral("offline"); }
     bool lastErrorWasNotFound() const override { return notFound; }
 };
@@ -988,6 +995,23 @@ private slots:
         // Which devices have changes in the folder (to recognise the same data)
         QCOMPARE(fb.origins().value_or(QStringList()), QStringList { a.deviceId() });
         QCOMPARE(sb.get(u"student"_s, lena).value(u"forename"_s).toString(), u"Lena"_s);
+
+        // A device file that is no longer needed (an earlier id, removed by hand) goes;
+        // the device's changes stay. A device still in use writes it again
+        const QString laptopFile = u"Qupil/devices/"_s + a.deviceId() + u".bin"_s;
+        const int filesBefore = cloud.files.size();
+        fb.setDevicesToRemove({ a.deviceId(), b.deviceId(), u"0190a0b0-dead-7000-8000-000000000000"_s });
+        FolderSync::Stats removed;
+        QCOMPARE(fb.run(keyB, u"iPad"_s, &removed), FolderSync::Status::Ok);
+        QVERIFY(!cloud.files.contains(laptopFile));
+        QCOMPARE(cloud.files.size(), filesBefore - 1);   // only that file
+        QVERIFY(removed.devices.isEmpty());
+        // Its own id is never removed; one that is not there counts as removed
+        QCOMPARE(removed.removedDevices,
+                 (QStringList { a.deviceId(), u"0190a0b0-dead-7000-8000-000000000000"_s }));
+        fb.setDevicesToRemove({});
+        QCOMPARE(fa.run(keyA, u"Laptop"_s, nullptr), FolderSync::Status::Ok);
+        QVERIFY(cloud.files.contains(laptopFile));
 
         // Changes travel both ways
         QVERIFY(sb.update(u"student"_s, lena, { { u"phone"_s, u"0123"_s } }));

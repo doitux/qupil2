@@ -346,6 +346,13 @@ FolderSync::Status FolderSync::run(const QByteArray &key, const QString &deviceN
     if (!m_remote->write(path(u"devices/"_s + me + u".bin"_s),
                          Crypto::seal(key, QJsonDocument(device).toJson(QJsonDocument::Compact), kDeviceAd)))
         return fail(m_remote->lastError()), Status::Failed;
+    // Device files of ids no longer in use (this device's earlier ones, removed by hand)
+    for (const QString &id : std::as_const(m_removeDevices)) {
+        if (id.isEmpty() || id == me || id.contains(u'/'))
+            continue;
+        if (m_remote->remove(path(u"devices/"_s + id + u".bin"_s)))
+            s.removedDevices << id;
+    }
     if (const auto devices = m_remote->list(path(u"devices"_s))) {
         for (const QString &f : *devices) {
             if (!f.endsWith(u".bin"_s) || f == me + u".bin"_s)

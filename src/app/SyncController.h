@@ -97,6 +97,12 @@ public:
     */
     Q_INVOKABLE void setPassword(const QString &password, JoinMode joinMode = Merge);
     Q_INVOKABLE void syncNow();
+    /*!
+        Takes a device out of the list: its small file in the Nextcloud folder (name, version)
+        is deleted at the next sync, its changes stay. A device still in use comes back
+        with its next sync.
+    */
+    Q_INVOKABLE void removeDevice(const QString &id);
 
 signals:
     void accountChanged();

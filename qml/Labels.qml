@@ -92,6 +92,14 @@ QtObject {
         return when.toLocaleString(Qt.locale(), Locale.ShortFormat)
     }
 
+    //! A device of the Nextcloud folder that synced in the last 30 days (or tells no time).
+    //! The others are mostly earlier installs of a device (a new database is a new device)
+    function deviceActive(device, now) {
+        if (!device.lastSync)
+            return true
+        return now.getTime() - new Date(device.lastSync).getTime() < 30 * 24 * 3600 * 1000
+    }
+
     //! Another device's Qupil next to this one (an entry of Sync.devices or Wifi.peers):
     //! "older", "newer" or "" (the same, or not known yet). mine: App.schemaVersion
     function versionState(device, mine) {

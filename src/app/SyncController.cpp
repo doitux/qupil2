@@ -371,6 +371,24 @@ void SyncController::disconnectNextcloud()
     setError(QString());
 }
 
+void SyncController::removeDevice(const QString &id)
+{
+    if (id.isEmpty())
+        return;
+    QSettings s;
+    QStringList remove = s.value(u"device/remove"_s).toStringList();
+    if (!remove.contains(id))
+        remove << id;
+    s.setValue(u"device/remove"_s, remove);
+    for (qsizetype i = m_devices.size() - 1; i >= 0; --i)
+        if (m_devices.at(i).toMap().value(u"id"_s).toString() == id)
+            m_devices.removeAt(i);
+    saveSettings();
+    emit statusChanged();
+    if (connected())
+        syncNow();
+}
+
 //! Qupil on this device is reset: no account, no server, the device name of a new install
 void SyncController::resetAll()
 {
@@ -507,10 +525,12 @@ void SyncController::syncNow()
     const QString databasePath = m_app->databasePath();
     const QString deviceName = m_deviceName;
     const QString appVersion = m_app->versionText();
+    // Device files to delete: this device's earlier ids, devices taken out of the list
+    const QStringList removeDevices = QSettings().value(u"device/remove"_s).toStringList();
     struct Result { FolderSync::Status status = FolderSync::Status::Failed; FolderSync::Stats stats; QString error; int http = 0; };
     setBusy(true);
     m_app->beginSync();
-    inWorker<Result>(this, [account, key, databasePath, deviceName, appVersion] {
+    inWorker<Result>(this, [account, key, databasePath, deviceName, appVersion, removeDevices] {
         Result r;
         // Own connection: the GUI keeps working while the sync runs
         Qupil::Database db;
@@ -524,6 +544,7 @@ void SyncController::syncNow()
         WebDavFolder folder(account.server, account.loginName, account.userId, account.password);
         FolderSync sync(&store, &folder);
         sync.setAppVersion(appVersion);
+        sync.setDevicesToRemove(removeDevices);
         r.status = sync.run(key, deviceName, &r.stats);
         r.error = sync.error();
         r.http = folder.lastStatus();
@@ -533,6 +554,13 @@ void SyncController::syncNow()
         setBusy(false);
         if (r.status == FolderSync::Status::Ok) {
             m_lastSync = QDateTime::currentDateTimeUtc().toString(Qt::ISODate);
+            if (!r.stats.removedDevices.isEmpty()) {
+                QSettings s;
+                QStringList remove = s.value(u"device/remove"_s).toStringList();
+                for (const QString &id : r.stats.removedDevices)
+                    remove.removeAll(id);
+                s.setValue(u"device/remove"_s, remove);
+            }
             m_devices.clear();
             for (const FolderSync::Device &d : r.stats.devices) {
                 m_devices << QVariantMap { { u"id"_s, d.id }, { u"name"_s, d.name }, { u"platform"_s, d.platform },

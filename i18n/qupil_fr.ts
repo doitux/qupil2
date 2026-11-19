@@ -2975,6 +2975,29 @@ Qupil crée d’abord une sauvegarde que vous pourrez restaurer juste après. Ri
         <extracomment>Sync › Devices, under another device whose Qupil is newer than this one</extracomment>
         <translation>Qupil plus récent : veuillez mettre à jour Qupil sur cet appareil</translation>
     </message>
+    <message id="sync.device.last">
+        <source>Last sync: %1</source>
+        <extracomment>Sync › Devices, under another device: %1 = when it last synced, e.g. &apos;today 13:05&apos;</extracomment>
+        <translation>Dernière fois : %1</translation>
+    </message>
+    <message id="sync.devices.inactive" numerus="yes">
+        <source>Not active anymore (%n)</source>
+        <extracomment>Sync › Devices: fold-out for devices that did not sync for 30 days (older installs of a device, devices no longer used)</extracomment>
+        <translation>
+            <numerusform>Plus actif (%n)</numerusform>
+            <numerusform>Plus actifs (%n)</numerusform>
+        </translation>
+    </message>
+    <message id="sync.devices.inactive_hint">
+        <source>No sync for over 30 days. Often an earlier install of a device: a reinstall, a restored backup or replaced data make a new device for the sync. Removing deletes only the entry; the changes stay. A device still in use comes back with its next sync.</source>
+        <extracomment>Sync › Devices, text in the fold-out of inactive devices</extracomment>
+        <translation>Aucune synchronisation depuis plus de 30 jours. Souvent une installation précédente d’un appareil : une réinstallation, une sauvegarde restaurée ou des données remplacées font un nouvel appareil pour la synchronisation. Supprimer n’efface que l’entrée ; les modifications restent. Un appareil encore utilisé réapparaît à sa prochaine synchronisation.</translation>
+    </message>
+    <message id="sync.devices.remove">
+        <source>Remove</source>
+        <extracomment>Sync › Devices › Not active anymore: removes a device&apos;s entry from the list</extracomment>
+        <translation>Supprimer</translation>
+    </message>
     <message id="sync.update.title">
         <source>Please update Qupil</source>
         <extracomment>Sync card: another device uses a newer Qupil</extracomment>

@@ -1663,6 +1663,31 @@ E("sync.version.newer", en="Newer Qupil: please update Qupil on this device",
   fr="Qupil plus récent : veuillez mettre à jour Qupil sur cet appareil",
   es="Qupil más reciente: actualice Qupil en este dispositivo",
   c="Sync › Devices, under another device whose Qupil is newer than this one")
+E("sync.device.last", en="Last sync: %1", de="Zuletzt: %1", fr="Dernière fois : %1", es="Última vez: %1",
+  c="Sync › Devices, under another device: %1 = when it last synced, e.g. 'today 13:05'")
+E("sync.devices.inactive", src="Not active anymore (%n)",
+  en=["Not active anymore (%n)", "Not active anymore (%n)"],
+  de=["Nicht mehr aktiv (%n)", "Nicht mehr aktiv (%n)"],
+  fr=["Plus actif (%n)", "Plus actifs (%n)"],
+  es=["Ya no activo (%n)", "Ya no activos (%n)"],
+  c="Sync › Devices: fold-out for devices that did not sync for 30 days (older installs of a device, devices no longer used)")
+E("sync.devices.inactive_hint",
+  en="No sync for over 30 days. Often an earlier install of a device: a reinstall, a restored backup or replaced data "
+     "make a new device for the sync. Removing deletes only the entry; the changes stay. A device still in use comes "
+     "back with its next sync.",
+  de="Seit über 30 Tagen nicht synchronisiert. Oft eine frühere Installation eines Geräts: Neuinstallation, "
+     "wiederhergestelltes Backup oder ersetzte Daten ergeben für den Sync ein neues Gerät. Entfernen löscht nur den "
+     "Eintrag, die Änderungen bleiben. Ein Gerät, das noch benutzt wird, erscheint beim nächsten Sync wieder.",
+  fr="Aucune synchronisation depuis plus de 30 jours. Souvent une installation précédente d’un appareil : une "
+     "réinstallation, une sauvegarde restaurée ou des données remplacées font un nouvel appareil pour la synchronisation. "
+     "Supprimer n’efface que l’entrée ; les modifications restent. Un appareil encore utilisé réapparaît à sa prochaine "
+     "synchronisation.",
+  es="Sin sincronizar desde hace más de 30 días. A menudo una instalación anterior de un dispositivo: reinstalar, "
+     "restaurar una copia o reemplazar los datos crea un dispositivo nuevo para la sincronización. Quitar solo borra la "
+     "entrada; los cambios se mantienen. Un dispositivo que se sigue usando vuelve a aparecer en su próxima sincronización.",
+  c="Sync › Devices, text in the fold-out of inactive devices")
+E("sync.devices.remove", en="Remove", de="Entfernen", fr="Supprimer", es="Quitar",
+  c="Sync › Devices › Not active anymore: removes a device's entry from the list")
 E("sync.update.title", en="Please update Qupil", de="Bitte Qupil aktualisieren", fr="Veuillez mettre à jour Qupil",
   es="Actualice Qupil", c="Sync card: another device uses a newer Qupil")
 E("sync.update.held_back", src="%n change(s) from a newer Qupil cannot be shown here yet",

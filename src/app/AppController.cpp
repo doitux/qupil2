@@ -384,8 +384,10 @@ void AppController::setPhase(Phase phase)
     m_phase = phase;
     // The data is there again (restored, taken over or new): the copy from before a
     // reset is no longer offered on the setup screen (it stays in the backups folder)
-    if (phase == Ready)
+    if (phase == Ready) {
         QSettings().remove(u"reset"_s);
+        noteDeviceId();
+    }
     emit phaseChanged();
     emit infoChanged();
 }
@@ -872,6 +874,8 @@ void AppController::finishTakeOver(const Qupil::TakeOver::Outcome &o)
     m_startupError.clear();
     setBusy(false);
     emit lastTakeOverChanged();
+    if (m_phase == Ready)
+        noteDeviceId();
     emit dataReplaced();
     m_store->notifyReset();
     emit infoChanged();
@@ -944,6 +948,32 @@ void AppController::dismissTakeOver()
         return;
     m_lastTakeOver.clear();
     emit lastTakeOverChanged();
+}
+
+// ---------------------------------------------------------------------------- device id
+
+void AppController::noteDeviceId()
+{
+    // The sample data of the test mode has an id of its own: not this device's
+    if (m_testMode || !m_db->isOpen() || m_db->deviceId().isEmpty())
+        return;
+    const QString id = m_db->deviceId();
+    QSettings s;
+    const QString known = s.value(u"device/id"_s).toString();
+    if (known == id)
+        return;
+    // A new database (restored, replaced, reset) is a new device for the sync: the file
+    // of the old id in the Nextcloud folder goes at the next sync (SyncController)
+    if (!known.isEmpty()) {
+        QStringList remove = s.value(u"device/remove"_s).toStringList();
+        if (!remove.contains(known))
+            remove << known;
+        while (remove.size() > 20)
+            remove.removeFirst();
+        s.setValue(u"device/remove"_s, remove);
+        qInfo("Device id changed: the old one leaves the device list at the next sync");
+    }
+    s.setValue(u"device/id"_s, id);
 }
 
 // ---------------------------------------------------------------------------- reset
@@ -1043,6 +1073,8 @@ bool AppController::replaceWithEmpty()
     m_lastTakeOver.clear();
     emit lastTakeOverChanged();
     setPhase(Ready);
+    if (m_phase == Ready)
+        noteDeviceId();
     emit dataReplaced();
     m_store->notifyReset();
     emit infoChanged();
