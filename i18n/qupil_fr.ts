@@ -2965,6 +2965,39 @@ Qupil crée d’abord une sauvegarde que vous pourrez restaurer juste après. Ri
         <source>Pair device</source>
         <translation>Associer un appareil</translation>
     </message>
+    <message id="sync.version.older">
+        <source>Older Qupil: shows new entries only after an update</source>
+        <extracomment>Sync › Devices, under another device whose Qupil is older than this one</extracomment>
+        <translation>Qupil plus ancien : n’affiche les nouvelles entrées qu’après une mise à jour</translation>
+    </message>
+    <message id="sync.version.newer">
+        <source>Newer Qupil: please update Qupil on this device</source>
+        <extracomment>Sync › Devices, under another device whose Qupil is newer than this one</extracomment>
+        <translation>Qupil plus récent : veuillez mettre à jour Qupil sur cet appareil</translation>
+    </message>
+    <message id="sync.update.title">
+        <source>Please update Qupil</source>
+        <extracomment>Sync card: another device uses a newer Qupil</extracomment>
+        <translation>Veuillez mettre à jour Qupil</translation>
+    </message>
+    <message id="sync.update.held_back" numerus="yes">
+        <source>%n change(s) from a newer Qupil cannot be shown here yet</source>
+        <extracomment>Sync card and sync page: changes received from another device with a newer Qupil</extracomment>
+        <translation>
+            <numerusform>%n modification venant d’un Qupil plus récent ne peut pas encore être affichée ici</numerusform>
+            <numerusform>%n modifications venant d’un Qupil plus récent ne peuvent pas encore être affichées ici</numerusform>
+        </translation>
+    </message>
+    <message id="sync.update.newer_on">
+        <source>%1 uses a newer Qupil</source>
+        <extracomment>Sync card: %1 = name(s) of the other device(s)</extracomment>
+        <translation>%1 utilise un Qupil plus récent</translation>
+    </message>
+    <message id="sync.update.banner">
+        <source>Another device uses a newer Qupil. Please update Qupil on this device so that everything is shown here too.</source>
+        <extracomment>Sync page, at the top: another device has a newer Qupil</extracomment>
+        <translation>Un autre appareil utilise un Qupil plus récent. Veuillez mettre à jour Qupil sur cet appareil pour que tout s’affiche aussi ici.</translation>
+    </message>
     <message id="sync.devices">
         <source>Devices</source>
         <translation>Appareils</translation>

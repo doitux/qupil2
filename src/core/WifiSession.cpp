@@ -12,6 +12,7 @@
 
 #include "Crypto.h"
 #include "FolderSync.h"
+#include "Schema.h"
 
 using namespace Qt::StringLiterals;
 
@@ -56,6 +57,19 @@ std::optional<QJsonObject> parseClear(const std::optional<QByteArray> &frame)
 }
 
 //! Device ids told while pairing (none from devices before this was added)
+//! What this Qupil is: the other device tells its user when one of the two is behind
+QJsonObject about(const Identity &me)
+{
+    return { { u"app"_s, me.app }, { u"schema"_s, Schema::Version } };
+}
+//! The other device's: schema -1 when it did not tell (an older Qupil)
+void readAbout(const QJsonObject &o, QString *app, int *schema)
+{
+    const QJsonObject a = o.value(u"about"_s).toObject();
+    *app = a.value(u"app"_s).toString();
+    *schema = a.contains(u"schema"_s) ? a.value(u"schema"_s).toInt() : -1;
+}
+
 QStringList historyOf(const QJsonObject &o)
 {
     QStringList out;
@@ -298,7 +312,7 @@ Status pair(FrameChannel *channel, const Identity &me, const QString &code, bool
     Crypto::wipe(master);
 
     if (!secure.sendJson({ { u"pub"_s, b64(me.publicKey) }, { u"name"_s, me.name }, { u"hasData"_s, hasData },
-                           { u"history"_s, QJsonArray::fromStringList(history) } }))
+                           { u"history"_s, QJsonArray::fromStringList(history) }, { u"about"_s, about(me) } }))
         return setError(error, u"connection lost"_s), Status::Failed;
     QJsonObject clear;
     const auto theirs = secure.receiveJson(&clear);
@@ -315,6 +329,7 @@ Status pair(FrameChannel *channel, const Identity &me, const QString &code, bool
     peer->publicKey = pub;
     peer->history = historyOf(*theirs);
     peer->hasData = theirs->value(u"hasData"_s).toBool();
+    readAbout(*theirs, &peer->app, &peer->schema);
     return Status::Ok;
 }
 
@@ -350,11 +365,12 @@ Status sync(FrameChannel *channel, Store *store, const Identity &me, const Peer 
     Secure secure(channel, master, true);
     Crypto::wipe(master);
 
-    if (!secure.sendJson({ { u"vv"_s, toJson(store->versionVector()) } }))
+    if (!secure.sendJson({ { u"vv"_s, toJson(store->versionVector()) }, { u"about"_s, about(me) } }))
         return setError(error, u"connection lost"_s), Status::Failed;
     const auto theirs = secure.receiveJson();
     if (!theirs)
         return setError(error, u"not authentic"_s), Status::AuthFailed;
+    readAbout(*theirs, &s.peerApp, &s.peerSchema);
     QString problem;
     if (!sendChanges(secure, store, fromJson(theirs->value(u"vv"_s).toObject()), &s))
         return setError(error, u"connection lost"_s), Status::Failed;
@@ -417,12 +433,13 @@ ServeResult serve(FrameChannel *channel, Store *store, const Identity &me, const
         if (pub.size() != 32)
             return refuse("bad_key", Status::Failed);
         if (!secure.sendJson({ { u"pub"_s, b64(me.publicKey) }, { u"name"_s, me.name }, { u"hasData"_s, state.hasData },
-                               { u"history"_s, QJsonArray::fromStringList(state.history) } })) {
+                               { u"history"_s, QJsonArray::fromStringList(state.history) }, { u"about"_s, about(me) } })) {
             r.error = u"connection lost"_s;
             return r;
         }
         r.peer = { clientId, theirs->value(u"name"_s).toString(), pub, theirs->value(u"hasData"_s).toBool(),
                    historyOf(*theirs) };
+        readAbout(*theirs, &r.peer.app, &r.peer.schema);
         r.status = Status::Ok;
         return r;
     }
@@ -467,7 +484,8 @@ ServeResult serve(FrameChannel *channel, Store *store, const Identity &me, const
             return r;
         }
         const VersionVector theirVersions = fromJson(theirs->value(u"vv"_s).toObject());
-        if (!secure.sendJson({ { u"vv"_s, toJson(store->versionVector()) } })) {
+        readAbout(*theirs, &r.stats.peerApp, &r.stats.peerSchema);
+        if (!secure.sendJson({ { u"vv"_s, toJson(store->versionVector()) }, { u"about"_s, about(me) } })) {
             r.error = u"connection lost"_s;
             return r;
         }

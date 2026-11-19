@@ -33,6 +33,7 @@
 
 #include "AppController.h"
 #include "Database.h"
+#include "Store.h"
 #include "SyncController.h"
 #include "WifiController.h"
 #include "Clock.h"
@@ -1328,6 +1329,22 @@ void UiTest::addResetPhase()
                })
             << check(u"the backup is no longer offered"_s, [this] { return m_app->resetBackup().isEmpty(); })
             << act(u"appearance setting of the test removed"_s, [] { QSettings().remove(u"appearance/kept"_s); });
+
+    // A newer Qupil on another device sent something this version does not know: kept back,
+    // counted, and More tells to update (the sync card comes up for it)
+    Case &hint = add(u"update-hint"_s, u"changes from a newer Qupil: More asks for an update"_s);
+    hint.steps << check(u"nothing held back yet"_s, [this] { return m_app->info().value(u"heldBack"_s).toInt() == 0; })
+               << act(u"a change from a newer Qupil arrives"_s, [this] {
+                      const Qupil::Change c { u"0190a0b0-0000-7000-8000-0000000000ff"_s, 1,
+                                              m_app->database()->clock().now(), u"future_thing"_s,
+                                              u"0190a0b0-6666-7000-8000-000000000001"_s, { { u"title"_s, u"Neu"_s } } };
+                      m_app->store()->applyRemote({ c });
+                      m_app->refreshInfo();
+                  })
+               << check(u"held back: one change"_s, [this] { return m_app->info().value(u"heldBack"_s).toInt() == 1; })
+               << tab(u"Mehr"_s)
+               << see(u"^Bitte Qupil aktualisieren, 1 Änderung von einem neueren Qupil kann hier noch nicht angezeigt werden$"_s)
+               << snap(u"update-hint"_s);
 }
 
 void UiTest::addDraftPhase()

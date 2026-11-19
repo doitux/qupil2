@@ -623,6 +623,25 @@ ApplicationWindow {
         }
     }
 
+    // A newer Qupil on another device sent what this one cannot show: said once for each
+    // new amount (the sync card and page keep saying it until the update)
+    Settings {
+        id: hintStore
+        category: "hints"
+        property int heldBackShown: 0
+    }
+    Connections {
+        target: App
+        function onInfoChanged() {
+            if (App.testMode || App.phase !== App.Ready)
+                return
+            const held = App.info.heldBack ?? 0
+            if (held > hintStore.heldBackShown)
+                Nav.toast(qsTrId("sync.update.held_back", held))
+            hintStore.heldBackShown = held   // (lower after an update)
+        }
+    }
+
     // Space starts and stops the metronome on its page (desktop)
     Shortcut {
         sequence: "Space"

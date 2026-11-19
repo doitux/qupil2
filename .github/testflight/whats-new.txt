@@ -1,5 +1,6 @@
 Neu seit Build 47 (was nur im Simulator getestet ist, steht mit "bitte am Gerät prüfen" dabei):
 - Einstellungen › Daten und Backups › „Qupil auf diesem Gerät zurücksetzen“: Qupil ist danach auf diesem Gerät wie neu installiert (Daten, Nextcloud-Anmeldung und WLAN-Kopplungen weg, Darstellung und Sprache bleiben). Vorher wird ein Backup angelegt, das sich auf dem Startbildschirm gleich wieder zurückspielen lässt. Andere Geräte und die Nextcloud bleiben unberührt. (bitte am Gerät prüfen)
+- Synchronisation › Geräte: Bei jedem Gerät steht jetzt, welches Qupil darauf läuft. Ist ein Gerät älter oder neuer, steht das in Orange dabei. Hat ein Gerät Änderungen von einem neueren Qupil bekommen, die es noch nicht anzeigen kann, sagt es das (Hinweis unter Mehr und auf der Synchronisationsseite) und bittet um ein Update. Diesen Hinweis zeigen erst Geräte ab dieser Version; noch ältere erscheinen auf den neuen als „Älteres Qupil“. (bitte am Gerät prüfen)
 
 Aus Build 47 inzwischen am iPad bestätigt:
 - Tastatur im Notizfenster: Das Bild springt nicht mehr, das Fenster macht gleichzeitig mit der Tastatur Platz.

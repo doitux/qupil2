@@ -39,7 +39,7 @@ public:
 
     Qupil/
       key.json                         salt and a check value for the password
-      devices/<device>.bin             name and last sync of every device
+      devices/<device>.bin             name, last sync and Qupil version of every device
       changes/<device>/<first>-<last>.bin   the change log of each device in batches
 
     Each device only writes its own folder and reads all others, so nothing is
@@ -56,13 +56,24 @@ public:
         Failed            //!< network or server problem, see error()
     };
 
+    //! Another device of the folder, as it described itself at its last sync
+    struct Device
+    {
+        QString id;
+        QString name;
+        QString platform;
+        QString app;        //!< its Qupil, e.g. "2.0.0 (0c34f48)"; empty: an older Qupil
+        QString lastSync;   //!< ISO, UTC
+        int schema = -1;    //!< its database layout (Schema::Version); -1: an older Qupil that does not tell
+    };
+
     struct Stats
     {
         int uploaded = 0;
         int downloaded = 0;
         int applied = 0;
         qint64 maxTime = 0;   //!< latest received time (for our clock)
-        QStringList devices;   //!< names of the other devices
+        QList<Device> devices;   //!< the other devices
     };
 
     FolderSync(Store *store, RemoteFolder *remote, const QString &root = QStringLiteral("Qupil"));
@@ -90,6 +101,8 @@ public:
     Status run(const QByteArray &key, const QString &deviceName, Stats *stats);
 
     QString error() const { return m_error; }
+    //! What this Qupil is, for the other devices (in this device's file): e.g. "2.0.0 (0c34f48)"
+    void setAppVersion(const QString &app) { m_app = app; }
 
     //! Changes per file (also the unit of upload)
     static constexpr int BatchSize = 2000;
@@ -104,6 +117,7 @@ private:
     RemoteFolder *m_remote;
     QString m_root;
     QString m_error;
+    QString m_app;
 };
 
 //! Changes as compact, compressed bytes (sync files and Wi-Fi messages)

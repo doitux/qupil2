@@ -46,7 +46,10 @@ class SyncController : public QObject
     Q_PROPERTY(bool checking READ checking NOTIFY busyChanged FINAL)
     Q_PROPERTY(QString lastSync READ lastSync NOTIFY statusChanged FINAL)
     Q_PROPERTY(QString error READ error NOTIFY statusChanged FINAL)
-    Q_PROPERTY(QStringList devices READ devices NOTIFY statusChanged FINAL)
+    //! The other devices of the Nextcloud folder as they told at their last sync:
+    //! [{ id, name, platform, app, lastSync, schema }] (schema -1: an older Qupil that does not
+    //! tell, 0: not known yet)
+    Q_PROPERTY(QVariantList devices READ devices NOTIFY statusChanged FINAL)
     Q_PROPERTY(bool autoSync READ autoSync WRITE setAutoSync NOTIFY autoSyncChanged FINAL)
     //! Name of this device as other devices see it
     Q_PROPERTY(QString deviceName READ deviceName WRITE setDeviceName NOTIFY deviceNameChanged FINAL)
@@ -69,7 +72,7 @@ public:
     bool checking() const { return m_checking; }
     QString lastSync() const { return m_lastSync; }
     QString error() const { return m_error; }
-    QStringList devices() const { return m_devices; }
+    QVariantList devices() const { return m_devices; }
     bool autoSync() const { return m_autoSync; }
     void setAutoSync(bool on);
     QString deviceName() const { return m_deviceName; }
@@ -145,6 +148,6 @@ private:
     bool m_autoSync = true;
     QString m_lastSync;
     QString m_error;
-    QStringList m_devices;
+    QVariantList m_devices;
     QString m_deviceName;
 };

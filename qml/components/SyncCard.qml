@@ -21,20 +21,31 @@ Rectangle {
     readonly property bool syncUsed: Sync.connected || wifiUsed
     readonly property bool syncSetUp: (Sync.connected && !Sync.needsPassword) || wifiUsed
     readonly property bool wifiPaused: Wifi.peers.some(p => p.paused || p.problem !== "")
-    readonly property bool syncWarn: (Sync.connected && (Sync.needsPassword || Sync.error !== "")) || wifiPaused
+    // Another device has a newer Qupil: what it wrote is partly not shown here
+    readonly property int heldBack: App.info.heldBack ?? 0
+    readonly property var newerDevices: (Sync.connected ? Sync.devices : []).concat(Wifi.peers)
+        .filter(d => Labels.versionState(d, App.schemaVersion) === "newer")
+    readonly property bool updateNeeded: heldBack > 0 || newerDevices.length > 0
+    readonly property bool syncWarn: (Sync.connected && (Sync.needsPassword || Sync.error !== "")) || wifiPaused || updateNeeded
     readonly property string syncTitle: {
-        if (Sync.loggingIn || !syncUsed) return qsTrId("sync.title")
+        if (Sync.loggingIn) return qsTrId("sync.title")
+        // (changes kept back from an earlier sync, e.g. before the Nextcloud was disconnected)
+        if (!syncUsed) return updateNeeded ? qsTrId("sync.update.title") : qsTrId("sync.title")
         if (Sync.connected && Sync.needsPassword) return Sync.folderExists ? qsTrId("sync.password.enter_title") : qsTrId("sync.password.choose_title")
         if (Sync.busy || Wifi.busy) return qsTrId("sync.in_progress")
         if ((Sync.connected && Sync.error !== "") || wifiPaused) return qsTrId("sync.status.problem")
+        if (updateNeeded) return qsTrId("sync.update.title")
         if (Sync.lastSync === "" && Wifi.lastSync === "") return qsTrId("sync.never")
         return qsTrId("sync.all_synced")
     }
     readonly property string syncDetail: {
         if (Sync.loggingIn) return qsTrId("sync.nextcloud.waiting")
-        if (!syncUsed) return qsTrId("sync.status.off")
+        if (!syncUsed) return heldBack > 0 ? qsTrId("sync.update.held_back", heldBack) : qsTrId("sync.status.off")
         if (Sync.connected && Sync.needsPassword) return qsTrId("sync.nextcloud.connected_as").arg(Sync.user).arg(Sync.server.replace(/^https?:\/\//, ""))
         if (Sync.connected && Sync.error !== "") return Sync.error
+        if (heldBack > 0 && !wifiPaused) return qsTrId("sync.update.held_back", heldBack)
+        if (newerDevices.length > 0 && !wifiPaused)
+            return qsTrId("sync.update.newer_on").arg(newerDevices.map(d => d.name).join(", "))
         const parts = []
         if (Sync.connected)
             parts.push(qsTrId("sync.nextcloud.when").arg(Labels.syncWhen(Sync.lastSync, card.now)))
@@ -45,7 +56,7 @@ Rectangle {
         return parts.join(" · ")
     }
     readonly property bool warn: syncWarn
-    readonly property var tile: !syncUsed ? Theme.tile.gray : syncWarn ? Theme.tile.orange : Theme.tile.green
+    readonly property var tile: !syncUsed && !updateNeeded ? Theme.tile.gray : syncWarn ? Theme.tile.orange : Theme.tile.green
 
     Timer {
         interval: 30000

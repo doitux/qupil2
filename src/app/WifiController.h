@@ -57,7 +57,8 @@ class WifiController : public QObject
     Q_PROPERTY(QString pairingCode READ pairingCode NOTIFY pairingChanged FINAL)
     //! Our IPv4 addresses, for pairing by address when devices do not find each other
     Q_PROPERTY(QStringList addresses READ addresses NOTIFY stateChanged FINAL)
-    //! Paired devices: id, name, online, lastSync, syncing, paused, problem
+    //! Paired devices: id, name, online, lastSync, syncing, paused, problem, app and schema
+    //! (its Qupil and database layout; schema 0: not known yet, -1: an older Qupil that does not tell)
     Q_PROPERTY(QVariantList peers READ peers NOTIFY peersChanged FINAL)
     //! Devices nearby that show a pairing code: id, name
     Q_PROPERTY(QVariantList nearby READ nearby NOTIFY nearbyChanged FINAL)

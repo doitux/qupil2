@@ -66,6 +66,9 @@ class AppController : public QObject
     Q_PROPERTY(QString versionText READ versionText CONSTANT FINAL)
     //! The commit this build was made from ("dev" for local builds)
     Q_PROPERTY(QString build READ build CONSTANT FINAL)
+    //! Database layout of this version (Schema::Version): what this Qupil can show. The other
+    //! devices tell theirs when they sync (Sync.devices, Wifi.peers)
+    Q_PROPERTY(int schemaVersion READ schemaVersion CONSTANT FINAL)
     //! Qt's "save as" dialog works here (not on iOS: see exportPickerAvailable)
     Q_PROPERTY(bool saveDialogAvailable READ saveDialogAvailable CONSTANT FINAL)
     //! The system's own "Save to Files" picker chooses where a backup goes (iOS)
@@ -127,6 +130,7 @@ public:
     bool desktop() const;
     QString versionText() const;
     QString build() const;
+    int schemaVersion() const;
     //! Puts text on the clipboard (e.g. the version for a bug report)
     Q_INVOKABLE void copyText(const QString &text) const;
     //! Qupil's license (GPL 3 with the app store permission) and those of the bundled parts
@@ -210,6 +214,8 @@ public:
     bool awaitingSync() const;
     //! The first sync is done: from now on this is normal data
     void syncArrived();
+    //! A sync brought changes: App.info again (e.g. heldBack), also when none could be shown
+    void refreshInfo() { emit infoChanged(); }
     /*!
         Devices in this database's change log. Another device (or the Nextcloud
         folder) that knows one of them has the same data, synchronised before:

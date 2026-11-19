@@ -160,6 +160,8 @@ void WifiController::loadSettings()
         p.lastSync = o.value(u"lastSync"_s).toString();
         p.paused = o.value(u"paused"_s).toBool();
         p.problem = o.value(u"problem"_s).toString();
+        p.peer.app = o.value(u"app"_s).toString();
+        p.peer.schema = o.value(u"schema"_s).toInt();
         if (!p.peer.id.isEmpty() && p.peer.publicKey.size() == 32)
             m_peers << p;
     }
@@ -172,7 +174,8 @@ void WifiController::saveSettings()
         peers.append(QJsonObject { { u"id"_s, p.peer.id }, { u"name"_s, p.peer.name },
                                    { u"key"_s, QString::fromLatin1(p.peer.publicKey.toBase64()) },
                                    { u"host"_s, p.host }, { u"port"_s, p.port }, { u"lastSync"_s, p.lastSync },
-                                   { u"paused"_s, p.paused }, { u"problem"_s, p.problem } });
+                                   { u"paused"_s, p.paused }, { u"problem"_s, p.problem },
+                                   { u"app"_s, p.peer.app }, { u"schema"_s, p.peer.schema } });
     }
     QSettings s;
     s.beginGroup(u"wifi"_s);
@@ -200,7 +203,7 @@ void WifiController::ensureIdentity()
 
 Wifi::Identity WifiController::identity() const
 {
-    return { m_id, m_sync->deviceName(), m_secretKey, m_publicKey };
+    return { m_id, m_sync->deviceName(), m_secretKey, m_publicKey, m_app->versionText() };
 }
 
 void WifiController::setEnabled(bool on)
@@ -310,7 +313,8 @@ QVariantList WifiController::peers() const
     for (const PeerInfo &p : m_peers) {
         out << QVariantMap { { u"id"_s, p.peer.id }, { u"name"_s, p.peer.name },
                              { u"online"_s, m_found.contains(p.peer.id) }, { u"lastSync"_s, p.lastSync },
-                             { u"syncing"_s, p.syncing }, { u"paused"_s, p.paused }, { u"problem"_s, p.problem } };
+                             { u"syncing"_s, p.syncing }, { u"paused"_s, p.paused }, { u"problem"_s, p.problem },
+                             { u"app"_s, p.peer.app }, { u"schema"_s, p.peer.schema } };
     }
     return out;
 }
@@ -655,6 +659,8 @@ void WifiController::syncWith(const QString &peerId)
             if (r.status == Wifi::Status::Ok) {
                 p->lastSync = nowIso();
                 p->problem.clear();
+                p->peer.app = r.stats.peerApp;
+                p->peer.schema = r.stats.peerSchema;
             } else if (r.status == Wifi::Status::UnknownDevice || r.status == Wifi::Status::AuthFailed) {
                 p->problem = u"unknown"_s;   // removed or paired again on the other device
             } else if (r.status == Wifi::Status::Outdated) {
@@ -735,6 +741,8 @@ void WifiController::accept(qintptr socketDescriptor)
                 if (s.status == Wifi::Status::Ok) {
                     p->lastSync = nowIso();
                     p->problem.clear();
+                    p->peer.app = s.stats.peerApp;
+                    p->peer.schema = s.stats.peerSchema;
                     if (!r.host.isEmpty() && p->host != r.host && !m_found.contains(p->peer.id))
                         p->host = r.host;
                     saveSettings();
@@ -757,6 +765,9 @@ void WifiController::applied(const Wifi::Stats &stats)
         m_app->database()->clock().observe(stats.maxTime);
         m_app->store()->notifyReset();
     }
+    // Changes only a newer Qupil can show change nothing here, but their number
+    if (stats.received > stats.applied)
+        m_app->refreshInfo();
     if (m_app->awaitingSync() && stats.received > 0) {
         m_app->syncArrived();
         emit firstSyncDone();

@@ -22,6 +22,10 @@ SubPage {
     property string deviceNameDraft
 
     readonly property string host: Sync.server.replace(/^https?:\/\//, "")
+    // Another device has a newer Qupil: what it wrote is partly not shown here
+    readonly property int heldBack: App.info.heldBack ?? 0
+    readonly property bool updateNeeded: heldBack > 0
+        || (Sync.connected ? Sync.devices : []).concat(Wifi.peers).some(d => Labels.versionState(d, App.schemaVersion) === "newer")
     //! Data that would be affected when joining an existing folder
     readonly property bool hasLocalData: App.info.awaitingSync !== true
         && ((App.info.students ?? 0) + (App.info.lessons ?? 0) + (App.info.events ?? 0)) > 0
@@ -73,6 +77,13 @@ SubPage {
         visible: App.testMode
         iconName: "info"
         text: qsTrId("testmode.sync_off")
+    }
+
+    Banner {
+        visible: page.updateNeeded
+        iconName: "info"
+        text: qsTrId("sync.update.banner")
+              + (page.heldBack > 0 ? "\n" + qsTrId("sync.update.held_back", page.heldBack) + "." : "")
     }
 
     Banner {
@@ -451,6 +462,8 @@ SubPage {
                       : modelData.paused ? qsTrId("wifi.paused")
                       : (modelData.online ? qsTrId("wifi.online") : qsTrId("wifi.offline"))
                         + (modelData.lastSync ? " · " + Labels.syncWhen(modelData.lastSync, page.now) : "")
+                note: Labels.versionLine(modelData, App.schemaVersion)
+                noteWarn: Labels.versionState(modelData, App.schemaVersion) !== ""
                 canDecide: modelData.paused && modelData.problem === ""
                 onDecide: Nav.decideJoin(modelData.id, modelData.name)
                 onForget: {
@@ -520,14 +533,17 @@ SubPage {
         DeviceRow {
             name: page.deviceNameDraft
             detail: qsTrId("sync.device.this")
+            note: App.versionText
         }
         // Devices that sync through the Nextcloud
         Repeater {
             model: Sync.connected ? Sync.devices : []
             delegate: DeviceRow {
-                required property string modelData
-                name: modelData
+                required property var modelData
+                name: modelData.name
                 detail: "Nextcloud"
+                note: Labels.versionLine(modelData, App.schemaVersion)
+                warn: Labels.versionState(modelData, App.schemaVersion) !== ""
             }
         }
         InputField {
@@ -611,22 +627,38 @@ SubPage {
         id: deviceRow
         property string name
         property string detail
+        //! Its Qupil (and whether it is behind or ahead), under the name
+        property string note
+        property bool warn: false
         Layout.fillWidth: true
         spacing: 12
         Icon {
             Layout.preferredWidth: 22
             Layout.preferredHeight: 22
             name: "device"
-            color: Theme.icon
+            color: deviceRow.warn ? Theme.tile.orange.fg : Theme.icon
         }
-        Text {
+        ColumnLayout {
             Layout.fillWidth: true
-            elide: Text.ElideRight
-            text: deviceRow.name
-            color: Theme.text
-            font.family: Theme.fontFamily
-            font.pixelSize: 15
-            font.weight: Font.DemiBold
+            spacing: 1
+            Text {
+                Layout.fillWidth: true
+                elide: Text.ElideRight
+                text: deviceRow.name
+                color: Theme.text
+                font.family: Theme.fontFamily
+                font.pixelSize: 15
+                font.weight: Font.DemiBold
+            }
+            Text {
+                visible: deviceRow.note !== ""
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+                text: deviceRow.note
+                color: deviceRow.warn ? Theme.tile.orange.fg : Theme.textMuted
+                font.family: Theme.fontFamily
+                font.pixelSize: 13
+            }
         }
         Text {
             visible: deviceRow.detail !== ""
@@ -644,6 +676,9 @@ SubPage {
         property bool warn
         property bool syncing
         property bool canDecide
+        //! Its Qupil (and whether it is behind or ahead)
+        property string note
+        property bool noteWarn: false
         signal decide()
         signal forget()
         Layout.fillWidth: true
@@ -652,7 +687,7 @@ SubPage {
             Layout.preferredWidth: 22
             Layout.preferredHeight: 22
             name: "device"
-            color: peerRow.warn ? Theme.tile.orange.fg : Theme.icon
+            color: peerRow.warn || peerRow.noteWarn ? Theme.tile.orange.fg : Theme.icon
         }
         ColumnLayout {
             Layout.fillWidth: true
@@ -671,6 +706,15 @@ SubPage {
                 wrapMode: Text.WordWrap
                 text: peerRow.status
                 color: peerRow.warn ? Theme.tile.orange.fg : Theme.textMuted
+                font.family: Theme.fontFamily
+                font.pixelSize: 13
+            }
+            Text {
+                visible: peerRow.note !== ""
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+                text: peerRow.note
+                color: peerRow.noteWarn ? Theme.tile.orange.fg : Theme.textMuted
                 font.family: Theme.fontFamily
                 font.pixelSize: 13
             }
