@@ -380,6 +380,10 @@ void AppController::setPhase(Phase phase)
     if (m_phase == phase)
         return;
     m_phase = phase;
+    // The data is there again (restored, taken over or new): the copy from before a
+    // reset is no longer offered on the setup screen (it stays in the backups folder)
+    if (phase == Ready)
+        QSettings().remove(u"reset"_s);
     emit phaseChanged();
     emit infoChanged();
 }
@@ -932,6 +936,68 @@ void AppController::dismissTakeOver()
         return;
     m_lastTakeOver.clear();
     emit lastTakeOverChanged();
+}
+
+// ---------------------------------------------------------------------------- reset
+
+bool AppController::resetDevice()
+{
+    if (m_busy || m_syncRunning > 0 || m_testMode || m_phase != Ready)
+        return false;
+    // First the safety copy: without it nothing is deleted
+    QString backup;
+    if (m_db->isOpen() && !m_db->isEmpty()) {
+        backup = QDir(m_dataDir).filePath(u"backups/before-reset-%1.db"_s.arg(timestamp()));
+        QString error;
+        if (!m_db->backupTo(backup, &error)) {
+            QFile::remove(backup);
+            //: %1 = technical error message
+            emit resetFailed(qtTrId("reset.failed").arg(error));
+            return false;
+        }
+        rotate(u"before-reset-"_s, kKeepSafetyBackups);
+    }
+    QSettings settings;
+    settings.remove(u"reset"_s);
+    if (!backup.isEmpty()) {
+        settings.setValue(u"reset/backup"_s, backup);
+        settings.setValue(u"reset/date"_s, QDateTime::currentDateTimeUtc().toString(Qt::ISODate));
+    }
+    setBusy(true);
+    // After the caller's own handling: the page that asked goes away with the switch to
+    // the setup screen
+    QTimer::singleShot(0, this, [this] {
+        QSettings settings;
+        settings.remove(u"draft"_s);
+        settings.sync();
+        // Sync and Wi-Fi forget their accounts and pairings while the data is still open
+        emit deviceReset();
+        m_lastTakeOver.clear();
+        emit lastTakeOverChanged();
+        m_startupError.clear();
+        setPhase(Setup);
+        m_db->close();
+        removeDatabaseFiles(databasePath());
+        // Reminders and lesson-end alerts of the old data are taken back
+        m_store->notifyReset();
+        setBusy(false);
+        emit infoChanged();
+        refreshLegacyFolders();
+        qInfo("Reset: Qupil on this device is as newly installed");
+    });
+    return true;
+}
+
+QVariantMap AppController::resetBackup() const
+{
+    if (m_phase != Setup)
+        return {};
+    QSettings settings;
+    const QString file = settings.value(u"reset/backup"_s).toString();
+    if (file.isEmpty() || !QFileInfo::exists(file))
+        return {};
+    return { { u"url"_s, QUrl::fromLocalFile(file) },
+             { u"date"_s, settings.value(u"reset/date"_s).toString() } };
 }
 
 // ---------------------------------------------------------------------------- sync

@@ -118,6 +118,7 @@ private:
     void setError(const QString &error);
     void scheduleSoon();
     void forgetKey(const QString &reason);
+    void resetAll();
 
     AppController *m_app;
     QNetworkAccessManager m_network;

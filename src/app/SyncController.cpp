@@ -102,6 +102,7 @@ SyncController::SyncController(AppController *app, QObject *parent)
         if (!m_app->testMode() && m_autoSync)
             QTimer::singleShot(3000, this, &SyncController::syncNow);
     });
+    connect(app, &AppController::deviceReset, this, &SyncController::resetAll);
     connect(app, &AppController::dataReplaced, this, [this] {
         if (m_app->testMode())
             return;   // a backup put into the sample data: the real data is the same
@@ -357,6 +358,36 @@ void SyncController::disconnectNextcloud()
     saveSettings();
     emit accountChanged();
     emit folderExistsChanged();
+    setError(QString());
+}
+
+//! Qupil on this device is reset: no account, no server, the device name of a new install
+void SyncController::resetAll()
+{
+    cancelLogin();
+    m_soon.stop();
+    m_pollEndpoint.clear();
+    m_pollToken.clear();
+    m_pollCount = 0;
+    Qupil::Crypto::wipe(m_key);
+    m_key.clear();
+    m_appPassword.clear();
+    m_server.clear();
+    m_loginName.clear();
+    m_userId.clear();
+    m_lastSync.clear();
+    m_devices.clear();
+    m_folderOrigins.clear();
+    m_folderExists = false;
+    m_syncAgain = false;
+    QSettings s;
+    s.remove(u"sync"_s);
+    s.sync();
+    loadSettings();   // the defaults of a new install (automatic sync, the computer's name)
+    emit accountChanged();
+    emit folderExistsChanged();
+    emit autoSyncChanged();
+    emit deviceNameChanged();
     setError(QString());
 }
 

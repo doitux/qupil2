@@ -358,6 +358,27 @@ Flickable {
             }
         }
 
+        // ------------------------------------------------------------ right after a reset
+        // The backup Qupil made just before it: back in one tap, if that was a mistake
+        Card {
+            visible: page.choices && App.resetBackup.url !== undefined
+            Layout.fillWidth: true
+            ChoiceHeader {
+                iconName: "restore"
+                tile: Theme.tile.orange
+                title: qsTrId("setup.reset_backup.title")
+                text: qsTrId("setup.reset_backup.text").arg(App.resetBackup.date
+                          ? new Date(App.resetBackup.date).toLocaleString(Qt.locale(), Locale.ShortFormat) : "")
+            }
+            ActionButton {
+                kind: "primary"
+                iconName: "restore"
+                text: qsTrId("setup.reset_backup.action")
+                enabled: !App.busy
+                onClicked: actions.start(App.resetBackup.url, "backup")
+            }
+        }
+
         // ------------------------------------------------------------ 2. backup
         Card {
             visible: page.choices

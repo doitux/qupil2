@@ -2500,6 +2500,62 @@ Póngase en contacto con el autor en %4 para resolver el problema.</translation>
         <source>Open backup folder</source>
         <translation>Abrir carpeta de copias</translation>
     </message>
+    <message id="data.reset">
+        <source>Reset Qupil on this device</source>
+        <extracomment>Settings › Data and backups, last row: everything on this device as if newly installed</extracomment>
+        <translation>Restablecer Qupil en este dispositivo</translation>
+    </message>
+    <message id="reset.title">
+        <source>Reset Qupil?</source>
+        <translation>¿Restablecer Qupil?</translation>
+    </message>
+    <message id="reset.text">
+        <source>Afterwards Qupil on this device is as if newly installed. Deleted here: all students, lessons, notes and events, the Nextcloud login and the Wi-Fi pairings. Appearance, language and sounds stay.
+
+Qupil first makes a backup that you can restore right afterwards. Nothing changes on your other devices or in the Nextcloud.</source>
+        <extracomment>Confirmation before resetting Qupil on this device</extracomment>
+        <translation>Después, Qupil quedará en este dispositivo como recién instalado. Se eliminan aquí todos los alumnos, clases, notas y eventos, el inicio de sesión en Nextcloud y las vinculaciones por Wi-Fi. El aspecto, el idioma y los sonidos se mantienen.
+
+Antes, Qupil hace una copia de seguridad que podrá restaurar justo después. En sus otros dispositivos y en Nextcloud no cambia nada.</translation>
+    </message>
+    <message id="reset.accept">
+        <source>Reset</source>
+        <extracomment>Button in the confirmation: resets Qupil on this device</extracomment>
+        <translation>Restablecer</translation>
+    </message>
+    <message id="reset.busy">
+        <source>A sync is running. Please try again in a moment.</source>
+        <extracomment>Short message: resetting is not possible while a sync runs</extracomment>
+        <translation>Se está sincronizando. Vuelva a intentarlo en un momento.</translation>
+    </message>
+    <message id="reset.failed.title">
+        <source>Not reset</source>
+        <translation>No restablecido</translation>
+    </message>
+    <message id="reset.failed">
+        <source>Qupil could not make a backup, so nothing was deleted.
+
+%1</source>
+        <extracomment>%1 = technical error message</extracomment>
+        <translation>Qupil no pudo hacer una copia de seguridad, así que no se ha eliminado nada.
+
+%1</translation>
+    </message>
+    <message id="setup.reset_backup.title">
+        <source>Data from before the reset</source>
+        <extracomment>Setup screen right after a reset: the backup made just before it</extracomment>
+        <translation>Datos de antes del restablecimiento</translation>
+    </message>
+    <message id="setup.reset_backup.text">
+        <source>Qupil backed them up on %1. Set up the Nextcloud and Wi-Fi again afterwards.</source>
+        <extracomment>%1 = date and time of the backup</extracomment>
+        <translation>Qupil los guardó el %1. Después, vuelva a configurar Nextcloud y el Wi-Fi.</translation>
+    </message>
+    <message id="setup.reset_backup.action">
+        <source>Restore</source>
+        <extracomment>Setup screen after a reset: restores the backup made just before it</extracomment>
+        <translation>Restaurar</translation>
+    </message>
     <message id="setup.demo.action">
         <source>Try it out with sample data</source>
         <translation>Probar con datos de ejemplo</translation>

@@ -138,6 +138,7 @@ private:
     };
 
     void loadSettings();
+    void resetAll();
     void saveSettings();
     void ensureIdentity();
     Qupil::WifiSync::Identity identity() const;
