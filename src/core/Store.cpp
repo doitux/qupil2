@@ -514,6 +514,31 @@ int Store::catchUp()
     return ok ? applied : -1;
 }
 
+// "7:12": schema version of the count, number of changes
+static const QString kHeldBack = QStringLiteral("held_back");
+
+int Store::heldBack() const
+{
+    const QString value = m_db->meta(kHeldBack);
+    if (value.section(u':', 0, 0).toInt() != Schema::Version)
+        return 0;
+    return value.section(u':', 1, 1).toInt();
+}
+
+void Store::recountHeldBack()
+{
+    if (m_db->meta(kHeldBack).section(u':', 0, 0).toInt() == Schema::Version)
+        return;
+    int count = 0;
+    QSqlQuery q(m_db->connection());
+    if (q.exec(u"SELECT entity, COUNT(*) FROM change_log GROUP BY entity"_s)) {
+        while (q.next())
+            if (!Schema::entity(q.value(0).toString()))
+                count += q.value(1).toInt();
+    }
+    m_db->setMeta(kHeldBack, u"%1:%2"_s.arg(Schema::Version).arg(count));
+}
+
 int Store::applyRemote(const QList<Change> &changes)
 {
     QList<Change> sorted = changes;
@@ -523,6 +548,8 @@ int Store::applyRemote(const QList<Change> &changes)
     std::sort(sorted.begin(), sorted.end(), [](const Change &a, const Change &b) { return b.isNewerThan(a.time, a.origin); });
 
     int applied = 0;
+    int held = 0;   // changes from a newer version this one cannot show
+    recountHeldBack();   // the count belongs to this version (before the new ones are logged)
     beginBatch();
     bool ok = true;
     QSqlQuery seen(m_db->connection());
@@ -541,13 +568,24 @@ int Store::applyRemote(const QList<Change> &changes)
         if (!(ok = logChange(origin, c)))
             break;
         const EntityDef *def = Schema::entity(c.entity);
-        if (!def || c.rowId.isEmpty())
+        if (!def || c.rowId.isEmpty()) {
+            if (!def)
+                ++held;
             continue;   // from a newer version: kept in the log for relaying, catchUp() after an update
+        }
+        for (auto it = c.fields.cbegin(); it != c.fields.cend(); ++it) {
+            if (!def->hasField(it.key())) {
+                ++held;   // a field of a newer version: merge() leaves it out
+                break;
+            }
+        }
         const int result = merge(def, c, origin);
         if (!(ok = result >= 0))
             break;
         applied += result;
     }
+    if (ok && held > 0)
+        ok = m_db->setMeta(kHeldBack, u"%1:%2"_s.arg(Schema::Version).arg(heldBack() + held));
     endBatch(ok);
     return ok ? applied : -1;
 }

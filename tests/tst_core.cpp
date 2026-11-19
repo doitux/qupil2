@@ -958,6 +958,7 @@ private slots:
 
         // First device sets up the folder
         FolderSync fa(&sa, &cloud);
+        fa.setAppVersion(u"2.0.0 (laptop1)"_s);
         QCOMPARE(fa.isSetUp().value_or(true), false);
         FolderSync::Status status;
         const QByteArray keyA = fa.unlock(u"Bratsche 4/4"_s, &status);
@@ -978,7 +979,12 @@ private slots:
         FolderSync::Stats stats;
         QCOMPARE(fb.run(keyB, u"iPad"_s, &stats), FolderSync::Status::Ok);
         QVERIFY(stats.applied > 0);
-        QCOMPARE(stats.devices, QStringList { u"Laptop"_s });
+        // The other devices with their Qupil: a device that is behind can be told
+        QCOMPARE(stats.devices.size(), 1);
+        QCOMPARE(stats.devices.first().name, u"Laptop"_s);
+        QCOMPARE(stats.devices.first().id, a.deviceId());
+        QCOMPARE(stats.devices.first().app, u"2.0.0 (laptop1)"_s);
+        QCOMPARE(stats.devices.first().schema, Schema::Version);
         // Which devices have changes in the folder (to recognise the same data)
         QCOMPARE(fb.origins().value_or(QStringList()), QStringList { a.deviceId() });
         QCOMPARE(sb.get(u"student"_s, lena).value(u"forename"_s).toString(), u"Lena"_s);
@@ -1086,7 +1092,7 @@ private slots:
         using namespace WifiSync;
         auto identity = [](const QString &id, const QString &name) {
             const Crypto::KeyPair keys = Crypto::x25519KeyPair();
-            return Identity { id, name, keys.secretKey, keys.publicKey };
+            return Identity { id, name, keys.secretKey, keys.publicKey, u"2.0.0 ("_s + id.left(4) + u")"_s };
         };
         const Identity laptop = identity(u"laptop-id"_s, u"Laptop"_s);
         const Identity ipad = identity(u"ipad-id"_s, u"iPad"_s);
@@ -1145,6 +1151,11 @@ private slots:
         QCOMPARE(served.peer.id, laptop.id);
         QCOMPARE(served.peer.publicKey, laptop.publicKey);
         QVERIFY(!served.peer.hasData);
+        // Each tells its Qupil and database layout
+        QCOMPARE(seenByLaptop.app, u"2.0.0 (ipad)"_s);
+        QCOMPARE(seenByLaptop.schema, Schema::Version);
+        QCOMPARE(served.peer.app, u"2.0.0 (lapt)"_s);
+        QCOMPARE(served.peer.schema, Schema::Version);
         const Peer laptopOnIpad = served.peer;
 
         ServerState notPairing;
@@ -1181,6 +1192,10 @@ private slots:
         QCOMPARE(served.kind, ServeResult::Synced);
         QVERIFY(stats.sent > 0 && stats.received > 0 && stats.applied > 0);
         QVERIFY(served.stats.applied > 0);
+        QCOMPARE(stats.peerApp, u"2.0.0 (ipad)"_s);
+        QCOMPARE(stats.peerSchema, Schema::Version);
+        QCOMPARE(served.stats.peerApp, u"2.0.0 (lapt)"_s);
+        QCOMPARE(served.stats.peerSchema, Schema::Version);
         QCOMPARE(laptopStore.select(u"lesson"_s).size(), 1);
         {
             Database db;
@@ -1775,6 +1790,42 @@ private slots:
         QCOMPARE(store.applyRemote({ { newer, 4, t0 + 1, u"membership"_s, b, { { u"shared_key"_s, u"old"_s } } } }), 0);
         QCOMPARE(store.applyRemote({ { newer, 5, t1 + 1, u"membership"_s, b, { { u"shared_key"_s, QString() } } } }), 1);
         QCOMPARE(store.get(u"membership"_s, b).value(u"shared_key"_s).toString(), QString());
+    }
+
+    void countsHeldBack()
+    {
+        // Changes from a newer Qupil: a record of an entity this version does not know, a
+        // field it does not know. Kept in the log and counted, so the user can be told
+        Database db;
+        QVERIFY(db.open(file(u"held-back.db"_s)));
+        Store store(&db);
+        store.recountHeldBack();
+        QCOMPARE(store.heldBack(), 0);
+        const QString newer = u"0190a0b0-0000-7000-8000-00000000000f"_s;
+        const QString lena = store.create(u"student"_s, { { u"surname"_s, u"Muster"_s }, { u"forename"_s, u"Lena"_s } });
+        const qint64 t = HybridClock::make(1'900'000'000'000, 0);
+        const QString future = u"0190a0b0-5555-7000-8000-000000000001"_s;
+        const QList<Change> changes {
+            { newer, 1, t, u"future_thing"_s, future, { { u"title"_s, u"Neu"_s } } },
+            { newer, 2, t + 1, u"student"_s, lena, { { u"forename"_s, u"Lea"_s }, { u"future_field"_s, 1 } } },
+            { newer, 3, t + 2, u"student"_s, lena, { { u"phone"_s, u"0123"_s } } },
+        };
+        QCOMPARE(store.applyRemote(changes), 2);
+        QCOMPARE(store.heldBack(), 2);
+        // What it knows is applied: the known field of the change with an unknown one too
+        QCOMPARE(store.get(u"student"_s, lena).value(u"forename"_s).toString(), u"Lea"_s);
+        // The same changes again (e.g. from a third device): not counted twice
+        QCOMPARE(store.applyRemote(changes), 0);
+        QCOMPARE(store.heldBack(), 2);
+        // Kept in the log for the other devices
+        QCOMPARE(store.changesOf(newer, 0).size(), 3);
+
+        // After an update the count starts again from the log: still unknown records
+        // are counted, fields from then on
+        QVERIFY(db.setMeta(u"held_back"_s, u"%1:9"_s.arg(Schema::Version - 1)));
+        QCOMPARE(store.heldBack(), 0);
+        store.recountHeldBack();
+        QCOMPARE(store.heldBack(), 1);
     }
 
     void syncFormats()

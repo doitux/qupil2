@@ -91,4 +91,27 @@ QtObject {
             return qsTrId("sync.today_at").arg(when.toLocaleTimeString(Qt.locale(), Locale.ShortFormat))
         return when.toLocaleString(Qt.locale(), Locale.ShortFormat)
     }
+
+    //! Another device's Qupil next to this one (an entry of Sync.devices or Wifi.peers):
+    //! "older", "newer" or "" (the same, or not known yet). mine: App.schemaVersion
+    function versionState(device, mine) {
+        const schema = device.schema ?? 0
+        if (schema === 0)
+            return ""          // not known yet (no sync since this version)
+        if (schema < 0 || schema < mine)
+            return "older"     // -1: a Qupil that does not tell its version yet
+        return schema > mine ? "newer" : ""
+    }
+    //! "2.0.0 (0c34f48) · Older Qupil: …" under a device
+    function versionLine(device, mine) {
+        const parts = []
+        if ((device.app ?? "") !== "")
+            parts.push(device.app)
+        const state = versionState(device, mine)
+        if (state === "older")
+            parts.push(qsTrId("sync.version.older"))
+        else if (state === "newer")
+            parts.push(qsTrId("sync.version.newer"))
+        return parts.join(" · ")
+    }
 }

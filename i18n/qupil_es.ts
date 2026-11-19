@@ -2965,6 +2965,39 @@ Antes, Qupil hace una copia de seguridad que podrá restaurar justo después. En
         <source>Pair device</source>
         <translation>Vincular dispositivo</translation>
     </message>
+    <message id="sync.version.older">
+        <source>Older Qupil: shows new entries only after an update</source>
+        <extracomment>Sync › Devices, under another device whose Qupil is older than this one</extracomment>
+        <translation>Qupil más antiguo: muestra las entradas nuevas solo tras actualizar</translation>
+    </message>
+    <message id="sync.version.newer">
+        <source>Newer Qupil: please update Qupil on this device</source>
+        <extracomment>Sync › Devices, under another device whose Qupil is newer than this one</extracomment>
+        <translation>Qupil más reciente: actualice Qupil en este dispositivo</translation>
+    </message>
+    <message id="sync.update.title">
+        <source>Please update Qupil</source>
+        <extracomment>Sync card: another device uses a newer Qupil</extracomment>
+        <translation>Actualice Qupil</translation>
+    </message>
+    <message id="sync.update.held_back" numerus="yes">
+        <source>%n change(s) from a newer Qupil cannot be shown here yet</source>
+        <extracomment>Sync card and sync page: changes received from another device with a newer Qupil</extracomment>
+        <translation>
+            <numerusform>%n cambio de un Qupil más reciente aún no se puede mostrar aquí</numerusform>
+            <numerusform>%n cambios de un Qupil más reciente aún no se pueden mostrar aquí</numerusform>
+        </translation>
+    </message>
+    <message id="sync.update.newer_on">
+        <source>%1 uses a newer Qupil</source>
+        <extracomment>Sync card: %1 = name(s) of the other device(s)</extracomment>
+        <translation>%1 usa un Qupil más reciente</translation>
+    </message>
+    <message id="sync.update.banner">
+        <source>Another device uses a newer Qupil. Please update Qupil on this device so that everything is shown here too.</source>
+        <extracomment>Sync page, at the top: another device has a newer Qupil</extracomment>
+        <translation>Otro dispositivo usa un Qupil más reciente. Actualice Qupil en este dispositivo para que aquí también se muestre todo.</translation>
+    </message>
     <message id="sync.devices">
         <source>Devices</source>
         <translation>Dispositivos</translation>

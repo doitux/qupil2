@@ -14,6 +14,7 @@
 #include "Crypto.h"
 #include "Database.h"
 #include "Ids.h"
+#include "Schema.h"
 
 using namespace Qt::StringLiterals;
 
@@ -336,10 +337,11 @@ FolderSync::Status FolderSync::run(const QByteArray &key, const QString &deviceN
         }
     }
 
-    // 3. Who else syncs here
+    // 3. Who else syncs here, with which Qupil (a device that is behind shows less: tell it)
     const QJsonObject device {
         { u"id"_s, me }, { u"name"_s, deviceName }, { u"platform"_s, QSysInfo::prettyProductName() },
         { u"lastSync"_s, QDateTime::currentDateTimeUtc().toString(Qt::ISODate) },
+        { u"app"_s, m_app }, { u"schema"_s, Schema::Version }, { u"format"_s, SyncFormat::Version },
     };
     if (!m_remote->write(path(u"devices/"_s + me + u".bin"_s),
                          Crypto::seal(key, QJsonDocument(device).toJson(QJsonDocument::Compact), kDeviceAd)))
@@ -349,8 +351,13 @@ FolderSync::Status FolderSync::run(const QByteArray &key, const QString &deviceN
             if (!f.endsWith(u".bin"_s) || f == me + u".bin"_s)
                 continue;
             if (const auto sealed = m_remote->read(path(u"devices/"_s + f))) {
-                if (const auto plain = Crypto::open(key, *sealed, kDeviceAd))
-                    s.devices << QJsonDocument::fromJson(*plain).object().value(u"name"_s).toString();
+                if (const auto plain = Crypto::open(key, *sealed, kDeviceAd)) {
+                    const QJsonObject o = QJsonDocument::fromJson(*plain).object();
+                    s.devices << Device { o.value(u"id"_s).toString(f.chopped(4)), o.value(u"name"_s).toString(),
+                                          o.value(u"platform"_s).toString(), o.value(u"app"_s).toString(),
+                                          o.value(u"lastSync"_s).toString(),
+                                          o.contains(u"schema"_s) ? o.value(u"schema"_s).toInt() : -1 };
+                }
             }
         }
     }

@@ -83,6 +83,19 @@ public:
         know them). Runs once; returns the number of records written, -1 on error.
     */
     int catchUp();
+    /*!
+        Changes received from a newer Qupil that this version cannot show yet: records of
+        an entity it does not know, fields it does not know. They stay in the log (relayed
+        to the other devices, catchUp() after the update). Counted by applyRemote().
+    */
+    int heldBack() const;
+    /*!
+        Counts the held-back changes again when the database layout changed since the last
+        count (after an update, or the first start of a version that counts them): what
+        this version now knows is no longer held back. Records of an unknown entity are
+        counted; unknown fields only from then on (applyRemote).
+    */
+    void recountHeldBack();
 
     VersionVector versionVector() const;
     //! Changes the other side has not seen yet, oldest first

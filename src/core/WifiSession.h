@@ -56,6 +56,7 @@ struct Identity
     QString name;
     QByteArray secretKey;
     QByteArray publicKey;
+    QString app;   //!< this Qupil, e.g. "2.0.0 (0c34f48)": told to the other device with Schema::Version
 };
 
 //! A paired device
@@ -68,6 +69,10 @@ struct Peer
     //! Told while pairing: devices in its change log. A device in both logs means
     //! the same data (synchronised before, e.g. through the Nextcloud)
     QStringList history;
+    //! Its Qupil and database layout, as it told when pairing or at the last sync.
+    //! schema 0: not known yet; -1: an older Qupil that does not tell
+    QString app;
+    int schema = 0;
 };
 
 enum class Status {
@@ -87,6 +92,8 @@ struct Stats
     int received = 0;    //!< changes received
     int applied = 0;     //!< of those, newer than what we had
     qint64 maxTime = 0;  //!< latest received time (for our clock)
+    QString peerApp;     //!< the other device's Qupil (see Peer::app)
+    int peerSchema = -1; //!< the other device's database layout; -1: an older Qupil that does not tell
 };
 
 //! Client: pairs with the device that shows code. On success, *peer is that device.

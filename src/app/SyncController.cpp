@@ -6,6 +6,7 @@
 #include <QDesktopServices>
 #include <QGuiApplication>
 #include <QJSEngine>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QNetworkReply>
@@ -157,7 +158,15 @@ void SyncController::loadSettings()
         m_key.clear();
     m_autoSync = s.value(u"auto"_s, true).toBool();
     m_lastSync = s.value(u"lastSync"_s).toString();
-    m_devices = s.value(u"devices"_s).toStringList();
+    m_devices.clear();
+    const QJsonArray devices = QJsonDocument::fromJson(s.value(u"deviceList"_s).toByteArray()).array();
+    for (const QJsonValue &v : devices)
+        m_devices << v.toObject().toVariantMap();
+    if (devices.isEmpty()) {
+        // Before the versions: names only
+        for (const QString &name : s.value(u"devices"_s).toStringList())
+            m_devices << QVariantMap { { u"name"_s, name }, { u"schema"_s, 0 } };
+    }
     m_folderExists = s.value(u"folderExists"_s, false).toBool();
     QString fallback = QSysInfo::machineHostName();
     if (fallback.isEmpty() || fallback == u"localhost"_s)
@@ -176,7 +185,8 @@ void SyncController::saveSettings()
     s.setValue(u"key"_s, m_key.toBase64());
     s.setValue(u"auto"_s, m_autoSync);
     s.setValue(u"lastSync"_s, m_lastSync);
-    s.setValue(u"devices"_s, m_devices);
+    s.setValue(u"deviceList"_s, QJsonDocument(QJsonArray::fromVariantList(m_devices)).toJson(QJsonDocument::Compact));
+    s.remove(u"devices"_s);
     s.setValue(u"folderExists"_s, m_folderExists);
     s.setValue(u"deviceName"_s, m_deviceName);
 }
@@ -496,10 +506,11 @@ void SyncController::syncNow()
     const QByteArray key = m_key;
     const QString databasePath = m_app->databasePath();
     const QString deviceName = m_deviceName;
+    const QString appVersion = m_app->versionText();
     struct Result { FolderSync::Status status = FolderSync::Status::Failed; FolderSync::Stats stats; QString error; int http = 0; };
     setBusy(true);
     m_app->beginSync();
-    inWorker<Result>(this, [account, key, databasePath, deviceName] {
+    inWorker<Result>(this, [account, key, databasePath, deviceName, appVersion] {
         Result r;
         // Own connection: the GUI keeps working while the sync runs
         Qupil::Database db;
@@ -512,6 +523,7 @@ void SyncController::syncNow()
         Qupil::Store store(&db);
         WebDavFolder folder(account.server, account.loginName, account.userId, account.password);
         FolderSync sync(&store, &folder);
+        sync.setAppVersion(appVersion);
         r.status = sync.run(key, deviceName, &r.stats);
         r.error = sync.error();
         r.http = folder.lastStatus();
@@ -521,7 +533,11 @@ void SyncController::syncNow()
         setBusy(false);
         if (r.status == FolderSync::Status::Ok) {
             m_lastSync = QDateTime::currentDateTimeUtc().toString(Qt::ISODate);
-            m_devices = r.stats.devices;
+            m_devices.clear();
+            for (const FolderSync::Device &d : r.stats.devices) {
+                m_devices << QVariantMap { { u"id"_s, d.id }, { u"name"_s, d.name }, { u"platform"_s, d.platform },
+                                           { u"app"_s, d.app }, { u"lastSync"_s, d.lastSync }, { u"schema"_s, d.schema } };
+            }
             m_error.clear();
             saveSettings();
             if (r.stats.applied > 0) {
@@ -535,6 +551,9 @@ void SyncController::syncNow()
                 m_app->syncArrived();
                 emit firstSyncDone();
             }
+            // Changes only a newer Qupil can show change nothing here, but their number
+            if (r.stats.downloaded > r.stats.applied)
+                m_app->refreshInfo();
             emit statusChanged();
         } else if (r.status == FolderSync::Status::WrongPassword) {
             // Another device started over with a new password

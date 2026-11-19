@@ -1653,6 +1653,35 @@ E("sync.minutes_ago", src="%n minute(s) ago",
   en=["%n minute ago", "%n minutes ago"], de=["vor %n Minute", "vor %n Minuten"],
   fr=["il y a %n minute", "il y a %n minutes"], es=["hace %n minuto", "hace %n minutos"])
 E("sync.pair", en="Pair device", de="Gerät koppeln", fr="Associer un appareil", es="Vincular dispositivo")
+E("sync.version.older", en="Older Qupil: shows new entries only after an update",
+  de="Älteres Qupil: zeigt neue Einträge erst nach einem Update",
+  fr="Qupil plus ancien : n’affiche les nouvelles entrées qu’après une mise à jour",
+  es="Qupil más antiguo: muestra las entradas nuevas solo tras actualizar",
+  c="Sync › Devices, under another device whose Qupil is older than this one")
+E("sync.version.newer", en="Newer Qupil: please update Qupil on this device",
+  de="Neueres Qupil: bitte Qupil auf diesem Gerät aktualisieren",
+  fr="Qupil plus récent : veuillez mettre à jour Qupil sur cet appareil",
+  es="Qupil más reciente: actualice Qupil en este dispositivo",
+  c="Sync › Devices, under another device whose Qupil is newer than this one")
+E("sync.update.title", en="Please update Qupil", de="Bitte Qupil aktualisieren", fr="Veuillez mettre à jour Qupil",
+  es="Actualice Qupil", c="Sync card: another device uses a newer Qupil")
+E("sync.update.held_back", src="%n change(s) from a newer Qupil cannot be shown here yet",
+  en=["%n change from a newer Qupil cannot be shown here yet", "%n changes from a newer Qupil cannot be shown here yet"],
+  de=["%n Änderung von einem neueren Qupil kann hier noch nicht angezeigt werden",
+      "%n Änderungen von einem neueren Qupil können hier noch nicht angezeigt werden"],
+  fr=["%n modification venant d’un Qupil plus récent ne peut pas encore être affichée ici",
+      "%n modifications venant d’un Qupil plus récent ne peuvent pas encore être affichées ici"],
+  es=["%n cambio de un Qupil más reciente aún no se puede mostrar aquí",
+      "%n cambios de un Qupil más reciente aún no se pueden mostrar aquí"],
+  c="Sync card and sync page: changes received from another device with a newer Qupil")
+E("sync.update.newer_on", en="%1 uses a newer Qupil", de="Auf %1 läuft ein neueres Qupil",
+  fr="%1 utilise un Qupil plus récent", es="%1 usa un Qupil más reciente",
+  c="Sync card: %1 = name(s) of the other device(s)")
+E("sync.update.banner", en="Another device uses a newer Qupil. Please update Qupil on this device so that everything is shown here too.",
+  de="Ein anderes Gerät nutzt ein neueres Qupil. Bitte aktualisieren Sie Qupil auf diesem Gerät, damit auch hier alles angezeigt wird.",
+  fr="Un autre appareil utilise un Qupil plus récent. Veuillez mettre à jour Qupil sur cet appareil pour que tout s’affiche aussi ici.",
+  es="Otro dispositivo usa un Qupil más reciente. Actualice Qupil en este dispositivo para que aquí también se muestre todo.",
+  c="Sync page, at the top: another device has a newer Qupil")
 E("sync.devices", en="Devices", de="Geräte", fr="Appareils", es="Dispositivos")
 E("sync.device.this", en="This device", de="Dieses Gerät", fr="Cet appareil", es="Este dispositivo")
 E("sync.nextcloud.connect", en="Connect to Nextcloud", de="Mit Nextcloud verbinden",

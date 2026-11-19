@@ -213,6 +213,8 @@ bool AppController::openDatabase(QString *error)
     if (opened) {
         // Changes for data this device did not know before the update (e.g. lesson plans)
         m_store->catchUp();
+        // What came from a newer Qupil and is not shown here (counted again after an update)
+        m_store->recountHeldBack();
         // Compact notes and archives of older versions, then give the space back
         if (upgradeNotes() + upgradeArchives() > 0)
             QSqlQuery(m_db->connection()).exec(u"VACUUM"_s);
@@ -656,6 +658,11 @@ QString AppController::build() const
 #endif
 }
 
+int AppController::schemaVersion() const
+{
+    return Qupil::Schema::Version;
+}
+
 QString AppController::versionText() const
 {
     return QCoreApplication::applicationVersion() + u" ("_s + build() + u')';
@@ -725,6 +732,7 @@ QVariantMap AppController::info() const
     m.insert(u"lastAutoBackup"_s, m_db->meta(u"last_auto_backup"_s));
     m.insert(u"demo"_s, m_db->meta(u"demo"_s) == u"1"_s);
     m.insert(u"awaitingSync"_s, m_db->meta(u"awaiting_sync"_s) == u"1"_s);
+    m.insert(u"heldBack"_s, m_store->heldBack());
     static const std::pair<const char *, const char *> counted[] = {
         { "students", "student" }, { "lessons", "lesson" }, { "events", "event" },
         { "pieces", "piece" }, { "notes", "note" },
