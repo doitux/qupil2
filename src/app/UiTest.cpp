@@ -11,7 +11,6 @@
 #include <QSet>
 #include <QTest>
 #include <QCoreApplication>
-#include <QDebug>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -1289,9 +1288,8 @@ void UiTest::addResetPhase()
             << tab(u"Mehr"_s) << tap(u"^Einstellungen$"_s) << tap(u"^Daten und Backups"_s)
             << see(u"^Backup erstellen$"_s)
             << tap(u"^Qupil auf diesem Gerät zurücksetzen$"_s)
-            << wait(800)
-            << act(u"the screen in the log (while the reset test is new)"_s, [this] { qInfo().noquote() << "ui test screen:\n" + dump(); })
-            << see(u"^Qupil zurücksetzen\\?$"_s)
+            // (texts without a name for screen readers are not seen: the dialog's buttons)
+            << see(u"button:^Zurücksetzen$"_s)
             << snap(u"reset-confirm"_s)
             << tap(u"^Zurücksetzen$"_s)
             << check(u"the setup screen of a new install"_s, [this] { return m_app->phase() == AppController::Setup; }, 10000)
@@ -1315,7 +1313,7 @@ void UiTest::addResetPhase()
                })
             << check(u"the backup from just before is offered"_s,
                      [this] { return m_app->resetBackup().value(u"url"_s).toUrl().isLocalFile(); })
-            << see(u"^Daten von vor dem Zurücksetzen$"_s)
+            << see(u"button:^Wiederherstellen$"_s)
             << snap(u"reset-setup"_s)
             << tap(u"^Wiederherstellen$"_s)
             << see(u"^Weiter$"_s)
