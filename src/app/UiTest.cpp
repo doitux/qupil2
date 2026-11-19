@@ -11,6 +11,7 @@
 #include <QSet>
 #include <QTest>
 #include <QCoreApplication>
+#include <QDebug>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -1286,7 +1287,10 @@ void UiTest::addResetPhase()
                })
             << check(u"there is data to reset"_s, [before] { return before->students > 0 && !before->deviceId.isEmpty(); })
             << tab(u"Mehr"_s) << tap(u"^Einstellungen$"_s) << tap(u"^Daten und Backups"_s)
+            << see(u"^Backup erstellen$"_s)
             << tap(u"^Qupil auf diesem Gerät zurücksetzen$"_s)
+            << wait(800)
+            << act(u"the screen in the log (while the reset test is new)"_s, [this] { qInfo().noquote() << "ui test screen:\n" + dump(); })
             << see(u"^Qupil zurücksetzen\\?$"_s)
             << snap(u"reset-confirm"_s)
             << tap(u"^Zurücksetzen$"_s)
