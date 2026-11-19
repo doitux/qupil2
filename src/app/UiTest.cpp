@@ -13,6 +13,7 @@
 #include <QCoreApplication>
 #include <QDir>
 #include <QFile>
+#include <QFileInfo>
 #include <QGuiApplication>
 #include <QImage>
 #include <QJsonArray>
@@ -23,6 +24,7 @@
 #include <QQuickItem>
 #include <QQuickWindow>
 #include <QRegularExpression>
+#include <QSettings>
 #include <QSysInfo>
 #include <QTimer>
 
@@ -30,6 +32,9 @@
 #include <cstdio>
 
 #include "AppController.h"
+#include "Database.h"
+#include "SyncController.h"
+#include "WifiController.h"
 #include "Clock.h"
 #ifdef Q_OS_IOS
 #include "KeyboardHeight.h"
@@ -127,6 +132,8 @@ void UiTest::start()
             addSelectPhase();
         else if (m_phase == u"metronome"_s)
             addMetronomePhase();
+        else if (m_phase == u"reset"_s)
+            addResetPhase();
         else
             addCases();
         // "only:a,b,c": just these cases (a long run split into several starts)
@@ -1251,6 +1258,74 @@ void UiTest::addRestartPhase()
             << check(u"the draft was not saved as a note"_s, [this, membership] {
                    return !membership->isEmpty() && !latestNote(*membership).contains(u"Vor dem Neustart"_s);
                });
+}
+
+void UiTest::addResetPhase()
+{
+    // Settings › Data › reset: the setup screen of a new install, nothing of the old
+    // accounts and pairings left; then back with the backup it made just before
+    Case &c = add(u"reset"_s, u"reset Qupil on this device, then restore the data from before"_s);
+    struct Before {
+        int students = -1;
+        QString deviceId;
+    };
+    auto before = std::make_shared<Before>();
+    c.steps << act(u"accounts, pairing and a draft to forget"_s, [this, before] {
+                   before->students = m_app->info().value(u"students"_s).toInt();
+                   before->deviceId = m_app->database()->meta(u"device_id"_s);
+                   QSettings s;
+                   s.setValue(u"sync/server"_s, u"https://cloud.example.org"_s);
+                   s.setValue(u"wifi/peers"_s, QByteArray("[]"));
+                   s.setValue(u"draft/note"_s, u"{}"_s);
+                   s.setValue(u"appearance/kept"_s, u"yes"_s);
+                   s.sync();
+                   if (auto *sync = SyncController::instance())
+                       sync->setDeviceName(u"UI-Test-Gerät"_s);
+                   if (auto *wifi = WifiController::instance())
+                       wifi->setEnabled(false);
+               })
+            << check(u"there is data to reset"_s, [before] { return before->students > 0 && !before->deviceId.isEmpty(); })
+            << tab(u"Mehr"_s) << tap(u"^Einstellungen$"_s) << tap(u"^Daten und Backups"_s)
+            << tap(u"^Qupil auf diesem Gerät zurücksetzen$"_s)
+            << see(u"^Qupil zurücksetzen\\?$"_s)
+            << snap(u"reset-confirm"_s)
+            << tap(u"^Zurücksetzen$"_s)
+            << check(u"the setup screen of a new install"_s, [this] { return m_app->phase() == AppController::Setup; }, 10000)
+            << check(u"no data open, no database file"_s, [this] {
+                   return !m_app->database()->isOpen()
+                       && !QFileInfo::exists(m_app->info().value(u"databasePath"_s).toString());
+               })
+            << check(u"Nextcloud, Wi-Fi and drafts forgotten, the appearance kept"_s, [] {
+                   QSettings s;
+                   return !s.contains(u"sync/server"_s) && !s.contains(u"wifi/peers"_s) && !s.contains(u"draft/note"_s)
+                       && s.value(u"appearance/kept"_s).toString() == u"yes"_s;
+               })
+            << check(u"the sync has no account and the device name of a new install"_s, [] {
+                   auto *sync = SyncController::instance();
+                   return sync && sync->server().isEmpty() && !sync->connected()
+                       && sync->deviceName() != u"UI-Test-Gerät"_s;
+               })
+            << check(u"Wi-Fi: no pairings, on again"_s, [] {
+                   auto *wifi = WifiController::instance();
+                   return wifi && wifi->peers().isEmpty() && wifi->enabled();
+               })
+            << check(u"the backup from just before is offered"_s,
+                     [this] { return m_app->resetBackup().value(u"url"_s).toUrl().isLocalFile(); })
+            << see(u"^Daten von vor dem Zurücksetzen$"_s)
+            << snap(u"reset-setup"_s)
+            << tap(u"^Wiederherstellen$"_s)
+            << see(u"^Weiter$"_s)
+            << tap(u"^Weiter$"_s)
+            << check(u"the data is back"_s, [this, before] {
+                   return m_app->phase() == AppController::Ready
+                       && m_app->info().value(u"students"_s).toInt() == before->students;
+               }, 15000)
+            << check(u"a new device id (the restored copy is a new device for the sync)"_s, [this, before] {
+                   const QString id = m_app->database()->meta(u"device_id"_s);
+                   return !id.isEmpty() && id != before->deviceId;
+               })
+            << check(u"the backup is no longer offered"_s, [this] { return m_app->resetBackup().isEmpty(); })
+            << act(u"appearance setting of the test removed"_s, [] { QSettings().remove(u"appearance/kept"_s); });
 }
 
 void UiTest::addDraftPhase()

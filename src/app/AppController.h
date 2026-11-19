@@ -73,6 +73,9 @@ class AppController : public QObject
     //! The system's own picker opens files as a copy (iOS): use pickFile instead of Qt's file dialog
     Q_PROPERTY(bool importPickerAvailable READ importPickerAvailable CONSTANT FINAL)
     Q_PROPERTY(QUrl backupFolder READ backupFolder CONSTANT FINAL)
+    //! The safety copy resetDevice made, while the setup screen is shown after it:
+    //! { url, date }, else empty
+    Q_PROPERTY(QVariantMap resetBackup READ resetBackup NOTIFY phaseChanged FINAL)
     /*!
         Height of the on-screen keyboard over the window (device-independent pixels, 0 when
         closed). Android only: there the window keeps its size when the keyboard comes (a
@@ -152,6 +155,17 @@ public:
     //! Leaves the setup screen after the import summary
     Q_INVOKABLE void finishSetup();
     Q_INVOKABLE void dismissTakeOver();
+    /*!
+        Qupil on this device as if newly installed: a safety copy of the data first
+        (resetBackup offers it on the setup screen), then the data, the Nextcloud
+        login, the Wi-Fi pairings and the kept drafts are gone, and the setup screen
+        comes. A new database also means a new device id for the sync. Appearance,
+        language and alert sounds stay. The other devices and the Nextcloud folder
+        are not touched. False (with resetFailed) when the copy could not be made:
+        then nothing is deleted.
+    */
+    Q_INVOKABLE bool resetDevice();
+    QVariantMap resetBackup() const;
 
     //! "Qupil-Backup-2026-10-15.db"
     Q_INVOKABLE QString suggestedBackupName() const;
@@ -247,6 +261,10 @@ signals:
     void filePicked(const QString &purpose, const QUrl &file, const QString &error);
     //! The whole database was replaced (import / restore): reload everything
     void dataReplaced();
+    //! resetDevice: the data is gone; sync and Wi-Fi forget their accounts and pairings
+    void deviceReset();
+    //! resetDevice could not make its safety copy (nothing was deleted)
+    void resetFailed(const QString &message);
 
 private:
     void finishTakeOver(const Qupil::TakeOver::Outcome &outcome);

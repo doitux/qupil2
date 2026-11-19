@@ -156,13 +156,14 @@ device_run() {
         sleep 8
     }
 
-    # --- 1. Qupil's own UI test, then its restart half on the same data
+    # --- 1. Qupil's own UI test, then its restart half on the same data, then the reset
+    #        (Settings › Data) and the backup from before it restored
     say '### UI test (inside Qupil)'
     say ''
     local layout
-    for phase in first restart; do
+    for phase in first restart reset; do
         local args=(--ui-test "$data/Documents/ui-test/$phase" --lang de --data-dir "$data/Library/ui-test-data")
-        [ $phase = restart ] && args+=(--ui-test-phase restart)
+        [ $phase != first ] && args+=(--ui-test-phase $phase)
         run_for 900 xcrun simctl launch --console-pty --terminate-running-process "$udid" $BUNDLE "${args[@]}" \
             > "$dir/ui-test-$phase.log" 2>&1
         if [ -f "$data/Documents/ui-test/$phase/results.md" ]; then

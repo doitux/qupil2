@@ -155,7 +155,7 @@ sleep 1
 # The UI test first, on a fresh emulator: after many starts the emulator's graphics
 # (the GL pipe to the host) can stall, and later starts hang in shader setup
 step "Qupil's own UI test (inside the app) and its restart half"
-# In a few starts of some cases each, then the restart half: a long run in one start
+# In a few starts of some cases each, then the restart half and the reset: a long run in one start
 # wore out the emulator's graphics (a stall in its GL pipe)
 adb shell am force-stop $PKG
 uidir=/data/data/$PKG/files/ui-test
@@ -165,11 +165,12 @@ PARTS="1:pages,today,note-save,note-cancel,keyboard-smooth,note-touch-select,stu
 4:text-tap,text-double-tap,text-triple-tap,text-long-press,text-handles,text-tap-selection
 5:text-menu,text-wipe,text-field,text-mouse
 3:plan-save,piece-new,lesson-new,together,together-new,reminder-new,lesson-reminder,loan-return,lesson-times,more-pages,alert-volume,restart-prepare
-restart:"
+restart:
+reset:"
 while IFS= read -r part <&3; do
     name=${part%%:*}
     cases=${part#*:}
-    if [ "$name" = restart ]; then phase=restart; else phase="only:$cases"; fi
+    case $name in restart|reset) phase=$name ;; *) phase="only:$cases" ;; esac
     mark
     adb shell "am start -W -n $ACT --es applicationArguments '--ui-test $uidir/$name --lang de --data-dir $uidir/data --ui-test-phase $phase'" > /dev/null
     if ! wait_for "ui test: [a-z]" 30; then
@@ -182,7 +183,7 @@ while IFS= read -r part <&3; do
 done 3<<< "$PARTS"   # (on fd 3: adb reads stdin and would eat the list)
 adb pull "$uidir" "$OUT/ui-test" > /dev/null 2>&1
 # (the data folder stays: sample data only, to start the restart half elsewhere)
-for name in 1 4 5 2 3 restart; do
+for name in 1 4 5 2 3 restart reset; do
     if [ -f "$OUT/ui-test/$name/results.md" ]; then
         sed -e '1,/^$/d' "$OUT/ui-test/$name/results.md" >> "$SUMMARY"
         say ''

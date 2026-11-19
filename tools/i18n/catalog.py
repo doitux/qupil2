@@ -1426,6 +1426,51 @@ E("data.take_over", en="Take over from Qupil 1.x…", de="Aus Qupil 1.x überneh
   fr="Reprendre de Qupil 1.x…", es="Importar de Qupil 1.x…")
 E("data.open_backup_folder", en="Open backup folder", de="Backup-Ordner öffnen",
   fr="Ouvrir le dossier des sauvegardes", es="Abrir carpeta de copias")
+E("data.reset", en="Reset Qupil on this device", de="Qupil auf diesem Gerät zurücksetzen",
+  fr="Réinitialiser Qupil sur cet appareil", es="Restablecer Qupil en este dispositivo",
+  c="Settings › Data and backups, last row: everything on this device as if newly installed")
+E("reset.title", en="Reset Qupil?", de="Qupil zurücksetzen?", fr="Réinitialiser Qupil ?", es="¿Restablecer Qupil?")
+E("reset.text",
+  en="Afterwards Qupil on this device is as if newly installed. Deleted here: all students, lessons, notes and events, "
+     "the Nextcloud login and the Wi-Fi pairings. Appearance, language and sounds stay.\n\n"
+     "Qupil first makes a backup that you can restore right afterwards. Nothing changes on your other devices "
+     "or in the Nextcloud.",
+  de="Qupil ist danach auf diesem Gerät wie neu installiert. Gelöscht werden hier alle Schüler, Unterrichte, Notizen "
+     "und Veranstaltungen, die Anmeldung bei der Nextcloud und die WLAN-Kopplungen. Darstellung, Sprache und Klänge "
+     "bleiben.\n\nVorher legt Qupil ein Backup an, das Sie gleich danach wiederherstellen können. Auf Ihren anderen "
+     "Geräten und in der Nextcloud ändert sich nichts.",
+  fr="Ensuite, Qupil sera sur cet appareil comme fraîchement installé. Supprimés ici : tous les élèves, cours, notes "
+     "et événements, la connexion à Nextcloud et les associations Wi-Fi. L’apparence, la langue et les sons sont "
+     "conservés.\n\nQupil crée d’abord une sauvegarde que vous pourrez restaurer juste après. Rien ne change sur vos "
+     "autres appareils ni dans Nextcloud.",
+  es="Después, Qupil quedará en este dispositivo como recién instalado. Se eliminan aquí todos los alumnos, clases, "
+     "notas y eventos, el inicio de sesión en Nextcloud y las vinculaciones por Wi-Fi. El aspecto, el idioma y los "
+     "sonidos se mantienen.\n\nAntes, Qupil hace una copia de seguridad que podrá restaurar justo después. En sus "
+     "otros dispositivos y en Nextcloud no cambia nada.",
+  c="Confirmation before resetting Qupil on this device")
+E("reset.accept", en="Reset", de="Zurücksetzen", fr="Réinitialiser", es="Restablecer",
+  c="Button in the confirmation: resets Qupil on this device")
+E("reset.busy", en="A sync is running. Please try again in a moment.",
+  de="Gerade wird synchronisiert. Bitte versuchen Sie es gleich noch einmal.",
+  fr="Une synchronisation est en cours. Veuillez réessayer dans un instant.",
+  es="Se está sincronizando. Vuelva a intentarlo en un momento.",
+  c="Short message: resetting is not possible while a sync runs")
+E("reset.failed.title", en="Not reset", de="Nicht zurückgesetzt", fr="Pas réinitialisé", es="No restablecido")
+E("reset.failed", en="Qupil could not make a backup, so nothing was deleted.\n\n%1",
+  de="Qupil konnte kein Backup anlegen und hat deshalb nichts gelöscht.\n\n%1",
+  fr="Qupil n’a pas pu créer de sauvegarde, rien n’a donc été supprimé.\n\n%1",
+  es="Qupil no pudo hacer una copia de seguridad, así que no se ha eliminado nada.\n\n%1",
+  c="%1 = technical error message")
+E("setup.reset_backup.title", en="Data from before the reset", de="Daten von vor dem Zurücksetzen",
+  fr="Données d’avant la réinitialisation", es="Datos de antes del restablecimiento",
+  c="Setup screen right after a reset: the backup made just before it")
+E("setup.reset_backup.text", en="Qupil backed them up on %1. Set up the Nextcloud and Wi-Fi again afterwards.",
+  de="Qupil hat sie am %1 gesichert. Nextcloud und WLAN richten Sie danach neu ein.",
+  fr="Qupil les a sauvegardées le %1. Configurez ensuite à nouveau Nextcloud et le Wi-Fi.",
+  es="Qupil los guardó el %1. Después, vuelva a configurar Nextcloud y el Wi-Fi.",
+  c="%1 = date and time of the backup")
+E("setup.reset_backup.action", en="Restore", de="Wiederherstellen", fr="Restaurer", es="Restaurar",
+  c="Setup screen after a reset: restores the backup made just before it")
 E("setup.demo.action", en="Try it out with sample data", de="Mit Beispieldaten ausprobieren",
   fr="Essayer avec des données d’exemple", es="Probar con datos de ejemplo")
 E("summary.title.demo", en="Sample data loaded", de="Beispieldaten geladen", fr="Données d’exemple chargées",

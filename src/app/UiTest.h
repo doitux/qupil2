@@ -41,6 +41,7 @@ class QQuickWindow;
     --ui-test-phase only:pages,today,…: just these cases (one long run split into several
     starts, e.g. in the Android emulator).
 
+    --ui-test-phase reset: Settings › Data › reset, then the backup from before it restored
     --ui-test-phase draft: only types an unsaved note and stays open, for a test run
     that sends Qupil to the background and lets the system end it (iOS simulator);
     the restart half then checks the note as above.
@@ -101,6 +102,7 @@ private:
     //! words and format buttons are and what is selected (touch tests from outside)
     void addSelectPhase();
     void addMetronomePhase();
+    void addResetPhase();
     Q_SLOT void countBeat();
     bool eventFilter(QObject *watched, QEvent *event) override;
     //! A finger tap (held for holdMs: a long press)

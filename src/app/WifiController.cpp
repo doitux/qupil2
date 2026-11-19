@@ -101,6 +101,7 @@ WifiController::WifiController(AppController *app, SyncController *sync, QObject
         if (!m_app->testMode())
             QTimer::singleShot(3000, this, &WifiController::syncAll);
     });
+    connect(app, &AppController::deviceReset, this, &WifiController::resetAll);
     connect(app, &AppController::dataReplaced, this, [this] {
         if (m_replacingData || m_app->testMode())
             return;
@@ -569,6 +570,28 @@ void WifiController::forget(const QString &peerId)
     }
     saveSettings();
     updateRunning();
+    emit peersChanged();
+    emit nearbyChanged();
+}
+
+//! Qupil on this device is reset: no pairings, and a new identity (the other devices
+//! see a new device, which they can pair with again)
+void WifiController::resetAll()
+{
+    stopPairing();
+    m_peers.clear();
+    m_found.clear();
+    m_failedAttempts = 0;
+    Qupil::Crypto::wipe(m_secretKey);
+    m_secretKey.clear();
+    m_publicKey.clear();
+    m_id.clear();
+    m_enabled = true;
+    QSettings s;
+    s.remove(u"wifi"_s);
+    s.sync();
+    updateRunning();
+    emit stateChanged();
     emit peersChanged();
     emit nearbyChanged();
 }

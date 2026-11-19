@@ -1,12 +1,13 @@
 # ctest ui_test_phone / ui_test_wide: qupil --ui-test (the important flows, see
-# src/app/UiTest.h), then the restart half on the same data (the unsaved note is back).
+# src/app/UiTest.h), then the restart half on the same data (the unsaved note is back),
+# then the reset (Settings › Data) and the backup from before it restored.
 #   cmake -DQUPIL=<qupil> -DSIZE=390x844 -DOUT=<folder> -P ui-test.cmake
 file(REMOVE_RECURSE "${OUT}")
 file(MAKE_DIRECTORY "${OUT}/data")
-foreach(phase first restart)
+foreach(phase first restart reset)
     set(args --ui-test "${OUT}/${phase}" --lang de --ui-test-size ${SIZE} --data-dir "${OUT}/data")
-    if(phase STREQUAL "restart")
-        list(APPEND args --ui-test-phase restart)
+    if(NOT phase STREQUAL "first")
+        list(APPEND args --ui-test-phase ${phase})
     endif()
     execute_process(COMMAND "${QUPIL}" ${args} RESULT_VARIABLE result)
     if(EXISTS "${OUT}/${phase}/results.md")
