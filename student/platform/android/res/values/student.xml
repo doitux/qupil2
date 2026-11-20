@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Icon background, and the window in the app's background colour (Theme.qml: bg)
+     so nothing white or black shows before the interface -->
+<resources>
+    <color name="ic_launcher_background">#C9F36B</color>
+    <color name="student_window">#F4F3F6</color>
+    <style name="StudentTheme" parent="@android:style/Theme.DeviceDefault.Light.NoActionBar">
+        <item name="android:windowBackground">@color/student_window</item>
+        <item name="android:statusBarColor">@color/student_window</item>
+        <item name="android:navigationBarColor">@color/student_window</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+    </style>
+</resources>

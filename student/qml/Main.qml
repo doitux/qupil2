@@ -20,9 +20,10 @@ ApplicationWindow {
     font.family: Theme.fontFamily
 
     readonly property bool coupled: StudentApp.teachers.length > 0
-    // Safe areas (notch, home indicator); Qt 6.9 knows them, older Qt gets a fixed guess on phones
-    readonly property real topInset: Qt.platform.os === "ios" ? 47 : (Qt.platform.os === "android" ? 24 : 0)
-    readonly property real bottomInset: Qt.platform.os === "ios" ? 28 : 0
+    // Room for notch and home indicator: Qt keeps the window inside the safe area (as in
+    // Qupil); only if the window ever reaches below the status bar these come into play
+    readonly property real topInset: 0
+    readonly property real bottomInset: 0
 
     function showNotice(text) {
         toast.text = text
