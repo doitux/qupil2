@@ -2732,6 +2732,21 @@ Vorher legt Qupil ein Backup an, das Sie gleich danach wiederherstellen können.
         <source>Edit note</source>
         <translation>Notiz bearbeiten</translation>
     </message>
+    <message id="note.share">
+        <source>Share as a message</source>
+        <extracomment>Sends the note to the student through the system&apos;s share menu (Messages, WhatsApp …)</extracomment>
+        <translation>Als Nachricht teilen</translation>
+    </message>
+    <message id="note.share.heading">
+        <source>Homework from %1</source>
+        <extracomment>First line of a shared note; %1 is the date with weekday</extracomment>
+        <translation>Hausaufgaben vom %1</translation>
+    </message>
+    <message id="note.share.copied">
+        <source>Copied – paste it into a message</source>
+        <extracomment>Toast on desktop systems, which have no share menu</extracomment>
+        <translation>Kopiert – zum Einfügen in eine Nachricht</translation>
+    </message>
     <message id="pieces.empty">
         <source>No pieces yet.</source>
         <translation>Noch keine Werke.</translation>

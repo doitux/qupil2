@@ -219,6 +219,17 @@ QString DataService::plainText(const QString &note, int maxLength) const
     return text;
 }
 
+QString DataService::homeworkText(const QString &note, const QString &date) const
+{
+    QStringList lines = NoteFormat::toPlainText(note).split(u'\n');
+    for (QString &line : lines)
+        line = line.trimmed();
+    QString body = lines.join(u'\n').trimmed();
+    while (body.contains(u"\n\n\n"_s))
+        body.replace(u"\n\n\n"_s, u"\n\n"_s);
+    return qtTrId("note.share.heading").arg(formatDate(date, true)) + u"\n\n"_s + body;
+}
+
 QString DataService::noteHtml(const QString &note, const QString &markColor) const
 {
     return NoteFormat::toHtml(note, markColor);

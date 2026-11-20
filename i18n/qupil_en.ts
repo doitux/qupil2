@@ -2731,6 +2731,21 @@ Qupil first makes a backup that you can restore right afterwards. Nothing change
         <source>Edit note</source>
         <translation>Edit note</translation>
     </message>
+    <message id="note.share">
+        <source>Share as a message</source>
+        <extracomment>Sends the note to the student through the system&apos;s share menu (Messages, WhatsApp …)</extracomment>
+        <translation>Share as a message</translation>
+    </message>
+    <message id="note.share.heading">
+        <source>Homework from %1</source>
+        <extracomment>First line of a shared note; %1 is the date with weekday</extracomment>
+        <translation>Homework from %1</translation>
+    </message>
+    <message id="note.share.copied">
+        <source>Copied – paste it into a message</source>
+        <extracomment>Toast on desktop systems, which have no share menu</extracomment>
+        <translation>Copied – paste it into a message</translation>
+    </message>
     <message id="pieces.empty">
         <source>No pieces yet.</source>
         <translation>No pieces yet.</translation>

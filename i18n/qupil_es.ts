@@ -2731,6 +2731,21 @@ Antes, Qupil hace una copia de seguridad que podrá restaurar justo después. En
         <source>Edit note</source>
         <translation>Editar nota</translation>
     </message>
+    <message id="note.share">
+        <source>Share as a message</source>
+        <extracomment>Sends the note to the student through the system&apos;s share menu (Messages, WhatsApp …)</extracomment>
+        <translation>Compartir como mensaje</translation>
+    </message>
+    <message id="note.share.heading">
+        <source>Homework from %1</source>
+        <extracomment>First line of a shared note; %1 is the date with weekday</extracomment>
+        <translation>Tareas del %1</translation>
+    </message>
+    <message id="note.share.copied">
+        <source>Copied – paste it into a message</source>
+        <extracomment>Toast on desktop systems, which have no share menu</extracomment>
+        <translation>Copiado: pégalo en un mensaje</translation>
+    </message>
     <message id="pieces.empty">
         <source>No pieces yet.</source>
         <translation>Todavía no hay obras.</translation>

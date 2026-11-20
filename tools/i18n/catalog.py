@@ -1544,6 +1544,13 @@ E("student.add_reminder", en="Set up reminder…", de="Erinnerung einrichten ...
 E("notes.empty", en="No notes yet.", de="Noch keine Notizen.", fr="Aucune note pour l’instant.",
   es="Todavía no hay notas.")
 E("note.edit", en="Edit note", de="Notiz bearbeiten", fr="Modifier la note", es="Editar nota")
+E("note.share", en="Share as a message", de="Als Nachricht teilen", fr="Partager comme message",
+  es="Compartir como mensaje", c="Sends the note to the student through the system's share menu (Messages, WhatsApp …)")
+E("note.share.heading", en="Homework from %1", de="Hausaufgaben vom %1", fr="Devoirs du %1", es="Tareas del %1",
+  c="First line of a shared note; %1 is the date with weekday")
+E("note.share.copied", en="Copied – paste it into a message", de="Kopiert – zum Einfügen in eine Nachricht",
+  fr="Copié – à coller dans un message", es="Copiado: pégalo en un mensaje",
+  c="Toast on desktop systems, which have no share menu")
 E("pieces.empty", en="No pieces yet.", de="Noch keine Werke.", fr="Aucun morceau pour l’instant.",
   es="Todavía no hay obras.")
 E("piece.edit", en="Edit piece", de="Werk bearbeiten", fr="Modifier le morceau", es="Editar obra")

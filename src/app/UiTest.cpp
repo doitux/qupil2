@@ -2318,6 +2318,41 @@ void UiTest::addCases()
                    })
                 << backIfThere(u"^Schüler$"_s);
     }
+    // Homework as a message: a note goes to the system's share menu (here: the clipboard, the
+    // test never opens the menu) as "Hausaufgaben vom …" and the text without mark-up
+    {
+        Case &c = add(u"note-share"_s, u"share a note as a message (homework for a student without the app)"_s);
+        c.steps << act(u"a note with mark-up and blocks"_s, [this] {
+                       m_app->setShareToClipboard(true);
+                       m_membership = runningMembership();
+                       m_text = m_data->addNote(m_membership, Qupil::Clock::today().addDays(-7).toString(Qt::ISODate),
+                                                u"**UI-Teilen Tonleiter**\nG-Dur ==zweioktavig==\n\n\n\n*Etüde* Nr. 3"_s, false);
+                   })
+                << openStudent(u"Lena Muster"_s)
+                << act(u"roll in the buttons of the note"_s, [this] {
+                       for (QObject *o : m_window->findChildren<QObject *>(u"studentDetail"_s))
+                           o->setProperty("revealedNote", m_text);
+                   })
+                << see(u"^Als Nachricht teilen$"_s) << snap(u"note-share"_s)
+                << tap(u"^Als Nachricht teilen$"_s)
+                << check(u"shared: heading with the date, the text without mark-up, one empty line between blocks"_s, [this] {
+                       const QString date = m_data->formatDate(Qupil::Clock::today().addDays(-7).toString(Qt::ISODate), true);
+                       return m_app->lastShared()
+                              == u"Hausaufgaben vom %1\n\nUI-Teilen Tonleiter\nG-Dur zweioktavig\n\nEtüde Nr. 3"_s.arg(date);
+                   })
+                << see(u"^Kopiert – zum Einfügen in eine Nachricht$"_s)
+                << check(u"the buttons rolled back"_s, [this] {
+                       for (QObject *o : m_window->findChildren<QObject *>(u"studentDetail"_s))
+                           if (!o->property("revealedNote").toString().isEmpty())
+                               return false;
+                       return true;
+                   })
+                << act(u"remove the note again"_s, [this] {
+                       m_data->deleteNote(m_text, false);
+                       m_app->setShareToClipboard(false);
+                   })
+                << backIfThere(u"^Schüler$"_s);
+    }
     // A plan for next week (made on the day of the lesson): the schedule of this week shows
     // the clipboard at the student already, as long as the plan is for a coming lesson
     {
