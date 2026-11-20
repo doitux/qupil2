@@ -580,6 +580,8 @@ E("plan.planned_today", en="Planned for today", de="Geplant für heute", fr="Pr�
   es="Planificado para hoy")
 E("plan.planned", en="Planned", de="Geplant", fr="Prévu", es="Planificado",
   c="Symbol on a lesson or student with a plan (for screen readers), and before the first point")
+E("plan.planned_for", en="Planned for %1", de="Geplant für %1", fr="Prévu pour le %1", es="Planificado para el %1",
+  c="Before the points of a plan for a coming lesson (not today's); %1 = weekday and date")
 E("note.new", en="New note", de="Neue Notiz", fr="Nouvelle note", es="Nueva nota")
 E("note.save", en="Save note", de="Notiz speichern", fr="Enregistrer la note", es="Guardar nota")
 E("note.save_for_all", src="Save for all %n students",

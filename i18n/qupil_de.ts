@@ -1080,6 +1080,11 @@ Bitte ändern Sie die Schüleranzahl um zu speichern!</translation>
         <extracomment>Symbol on a lesson or student with a plan (for screen readers), and before the first point</extracomment>
         <translation>Geplant</translation>
     </message>
+    <message id="plan.planned_for">
+        <source>Planned for %1</source>
+        <extracomment>Before the points of a plan for a coming lesson (not today&apos;s); %1 = weekday and date</extracomment>
+        <translation>Geplant für %1</translation>
+    </message>
     <message id="note.new">
         <source>New note</source>
         <translation>Neue Notiz</translation>

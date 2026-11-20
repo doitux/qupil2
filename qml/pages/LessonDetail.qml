@@ -179,7 +179,14 @@ Item {
                             required property int index
                             readonly property var birthday: { if (Data.revision < 0) return undefined; return Data.birthdayNote(modelData.id) }
                             readonly property bool hasBirthday: !!birthday && (birthday.kind === "today" || birthday.kind === "past")
-                            readonly property var plan: { if (Data.revision < 0) return undefined; return Data.plans(modelData.membership_id).find(p => p.today) }
+                            // The plan for this day, else the next one to come (planned on Monday for
+                            // next week: shown this week already, like the clipboard in the schedule)
+                            readonly property var plan: {
+                                if (Data.revision < 0)
+                                    return undefined
+                                const plans = Data.plans(modelData.membership_id)
+                                return plans.find(p => p.today) || plans.find(p => !p.due)
+                            }
                             Layout.fillWidth: true
                             implicitHeight: implicitContentHeight + topPadding + bottomPadding
                             topPadding: 12
@@ -235,7 +242,7 @@ Item {
                                         font.family: Theme.fontFamily
                                         font.pixelSize: 13
                                     }
-                                    // Planned for today's lesson
+                                    // Planned for today's lesson, or for the next one
                                     RowLayout {
                                         readonly property var plan: row.plan
                                         visible: plan !== undefined && !detail.shared
@@ -252,8 +259,10 @@ Item {
                                         Text {
                                             Layout.fillWidth: true
                                             elide: Text.ElideRight
-                                            text: parent.plan ? qsTrId("plan.planned") + ": "
-                                                                + parent.plan.points.join(" · ") : ""
+                                            text: !parent.plan ? ""
+                                                  : (parent.plan.today ? qsTrId("plan.planned")
+                                                                       : qsTrId("plan.planned_for").arg(Data.formatDate(parent.plan.date, true)))
+                                                    + ": " + parent.plan.points.join(" · ")
                                             color: Theme.accentText
                                             font.family: Theme.fontFamily
                                             font.pixelSize: 13
