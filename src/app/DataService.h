@@ -230,7 +230,17 @@ public:
         the plan's lesson (a block: its heading the title, its lines the hints; a plain point:
         a task of its own), the rest stays planned for the next lesson.
     */
-    Q_INVOKABLE bool planToTasks(const QString &planId, const QString &covered, const QString &rest, bool forAll);
+    Q_INVOKABLE bool planToTasks(const QString &planId, const QString &covered, const QString &rest, bool forAll,
+                                 const QString &privateNote = QString());
+    //! Blocks of a plan or note as tasks for the editor: [{ title, hints }] (a block: its
+    //! heading and lines; plain points: one task each)
+    Q_INVOKABLE QVariantList blocksAsTasks(const QString &content) const;
+    //! Tasks back into plan blocks (heading bold, hints as lines, an empty line between)
+    Q_INVOKABLE QString tasksAsBlocks(const QVariantList &tasks) const;
+    //! What is left of a plan after the lesson: planned for the next lesson (empty: the plan goes)
+    Q_INVOKABLE bool finishPlan(const QString &planId, const QString &rest, bool forAll);
+    //! Adds \a text to the note of that lesson (a new note if there is none)
+    Q_INVOKABLE bool appendToNote(const QString &membershipId, const QString &date, const QString &text, bool forAll);
     //! The student's answers from the practice book: feedback per task id ({practiced,
     //! works, done, at}, the newer one wins) and questions (they replace the stored ones)
     bool applyFeedback(const QString &studentId, const QVariantMap &feedback, const QVariantList &questions);

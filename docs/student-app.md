@@ -112,7 +112,10 @@ round: lime tile, plum figures).
   QR code, link to send, switches, questions, ending (link and folder go).
 - **Booklets**: written after each sync and shortly after changes; answers collected
   and shown at the tasks and in the pop-up at the start of the lesson.
-- **Plans**: "Turn into tasks" for a coupled student.
+- **Plans** of a coupled student: written in the tasks editor (tasks and hints, saved as
+  plan blocks: heading bold, hints as lines). After the lesson "Turn into tasks": covered
+  blocks become tasks; a block with the lock goes into the private note instead; "Edit
+  before saving" opens the tasks editor with the new tasks (saved only there).
 - **Homework as a message** (any student): a note through the system's share menu.
 
 ## Still to do
@@ -120,6 +123,4 @@ round: lime tile, plum figures).
 - Try it against the music school's Nextcloud (link passwords, uploads by link,
   expiry) and on devices.
 - qupil.de: upload `student/web/`; then `QUPIL_STUDENT_ASSOCIATED_DOMAINS=ON`.
-- The plan editor in task mode for coupled students (now: the plan is written as before,
-  "Turn into tasks" makes the tasks).
 - Scanning the QR code inside the app (now: the phone's camera opens the link).

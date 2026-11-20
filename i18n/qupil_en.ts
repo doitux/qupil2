@@ -956,6 +956,14 @@
         <source>What did you cover? That becomes the tasks of this lesson.</source>
         <translation>What did you cover? That becomes the tasks of this lesson.</translation>
     </message>
+    <message id="plan.finish.tasks_info">
+        <source>What is ticked becomes the tasks of %1.</source>
+        <translation>What is ticked becomes the tasks of %1.</translation>
+    </message>
+    <message id="plan.finish.private_info">
+        <source>With the lock: into your private note instead.</source>
+        <translation>With the lock: into your private note instead.</translation>
+    </message>
     <message id="plan.finish.tasks">
         <source>Save as tasks</source>
         <translation>Save as tasks</translation>
@@ -1301,6 +1309,15 @@
     <message id="task.for_all_hint">
         <source>Each student gets their own and answers for themselves</source>
         <translation>Each student gets their own and answers for themselves</translation>
+    </message>
+    <message id="task.plan_hint">
+        <source>Planned as tasks: after the lesson, what was covered becomes the student&apos;s tasks.</source>
+        <translation>Planned as tasks: after the lesson, what was covered becomes the student&apos;s tasks.</translation>
+    </message>
+    <message id="plan.finish.private">
+        <source>Keep %1 private</source>
+        <extracomment>Lock at a block of the plan: it goes into the private note, not to the student</extracomment>
+        <translation>Keep %1 private</translation>
     </message>
     <message id="task.private_add">
         <source>Add a private note</source>

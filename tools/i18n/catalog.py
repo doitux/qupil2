@@ -511,6 +511,11 @@ E("plan.lesson_over_tasks", en="What did you cover? That becomes the tasks of th
   de="Was davon war dran? Daraus werden die Aufgaben der Stunde.",
   fr="Qu'avez-vous travaillé ? Cela devient les devoirs du cours.",
   es="¿Qué se trabajó? Eso pasa a ser las tareas de la clase.")
+E("plan.finish.tasks_info", en="What is ticked becomes the tasks of %1.", de="Was angehakt ist, wird zu Aufgaben vom %1.",
+  fr="Ce qui est coché devient les devoirs du %1.", es="Lo marcado pasa a ser las tareas del %1.")
+E("plan.finish.private_info", en="With the lock: into your private note instead.",
+  de="Mit Schloss: stattdessen in Ihre private Notiz.", fr="Avec le cadenas : dans votre note privée à la place.",
+  es="Con el candado: a su nota privada en su lugar.")
 E("plan.finish.tasks", en="Save as tasks", de="Als Aufgaben speichern", fr="Enregistrer comme devoirs",
   es="Guardar como tareas")
 E("plan.postpone", en="Move to the next lesson", de="Auf nächste Stunde schieben", fr="Reporter au cours suivant",
@@ -703,6 +708,12 @@ E("task.for_all", src="Tasks for all %n students",
 E("task.for_all_hint", en="Each student gets their own and answers for themselves",
   de="Jeder bekommt eigene Aufgaben und gibt eigene Rückmeldung",
   fr="Chacun reçoit les siens et répond pour lui-même", es="Cada uno recibe las suyas y responde por sí mismo")
+E("task.plan_hint", en="Planned as tasks: after the lesson, what was covered becomes the student's tasks.",
+  de="Als Aufgaben geplant: Nach der Stunde wird, was dran war, zu den Aufgaben des Schülers.",
+  fr="Préparé en devoirs : après le cours, ce qui a été travaillé devient les devoirs de l’élève.",
+  es="Planificado como tareas: después de la clase, lo trabajado pasa a ser las tareas del alumno.")
+E("plan.finish.private", en="Keep %1 private", de="„%1“ privat halten", fr="Garder « %1 » privé",
+  es="Mantener «%1» en privado", c="Lock at a block of the plan: it goes into the private note, not to the student")
 E("task.private_add", en="Add a private note", de="Private Notiz hinzufügen", fr="Ajouter une note privée",
   es="Añadir una nota privada")
 E("task.private_label", en="Private note", de="Private Notiz", fr="Note privée", es="Nota privada")

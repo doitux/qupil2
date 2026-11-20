@@ -371,33 +371,49 @@ QString DataService::bookletSummary(const QString &studentId) const
     return lines.join(u'\n');
 }
 
-bool DataService::planToTasks(const QString &planId, const QString &covered, const QString &rest, bool forAll)
+QVariantList DataService::blocksAsTasks(const QString &content) const
 {
-    const QVariantMap plan = m_store->get(u"plan"_s, planId);
-    if (plan.isEmpty())
-        return false;
-    const QString membership = plan.value(u"membership_id"_s).toString();
-    const QString date = plan.value(u"date"_s).toString();
-    // The tasks the lesson has already, then the new ones
-    QVariantList list;
-    for (const QVariant &v : tasksOn(membership, date)) {
-        const QVariantMap t = v.toMap();
-        list << QVariantMap { { u"id"_s, t.value(u"id"_s) }, { u"title"_s, t.value(u"title"_s) },
-                              { u"hints"_s, t.value(u"hints"_s) }, { u"kind"_s, t.value(u"kind"_s) } };
-    }
-    for (const NoteFormat::Block &b : NoteFormat::blocks(NoteFormat::normalized(covered))) {
+    QVariantList out;
+    for (const NoteFormat::Block &b : NoteFormat::blocks(NoteFormat::normalized(content))) {
         QString title = NoteFormat::toPlainText(b.title).simplified();
         if (title.endsWith(u':'))
             title.chop(1);
         QStringList hints;
-        for (const QString &line : b.lines)
-            hints << NoteFormat::toPlainText(line).simplified();
-        list << QVariantMap { { u"title"_s, title }, { u"hints"_s, hints }, { u"kind"_s, 0 } };
+        for (const QString &line : b.lines) {
+            const QString hint = NoteFormat::toPlainText(line).simplified();
+            if (!hint.isEmpty())
+                hints << hint;
+        }
+        if (!title.isEmpty() || !hints.isEmpty())
+            out << QVariantMap { { u"title"_s, title }, { u"hints"_s, hints } };
     }
+    return out;
+}
+
+QString DataService::tasksAsBlocks(const QVariantList &list) const
+{
+    QStringList blocks;
+    for (const QVariant &v : list) {
+        const QVariantMap t = v.toMap();
+        const QString title = t.value(u"title"_s).toString().simplified().remove(u"**"_s);
+        const QStringList hints = hintList(t.value(u"hints"_s));
+        if (title.isEmpty() && hints.isEmpty())
+            continue;
+        QStringList lines;
+        // The heading bold as a whole: a block even without lines (NoteFormat::blocks)
+        lines << (title.isEmpty() ? hints.first() : u"**"_s + title + u"**"_s);
+        lines << (title.isEmpty() ? hints.mid(1) : hints);
+        blocks << lines.join(u'\n');
+    }
+    return blocks.join(u"\n\n"_s);
+}
+
+bool DataService::finishPlan(const QString &planId, const QString &rest, bool forAll)
+{
     const QStringList copies = forAll ? groupCopies(u"plan"_s, planId) : QStringList { planId };
-    m_store->beginBatch();
-    bool ok = saveTasks(membership, date, list, forAll && copies.size() > 1);
     const QString left = NoteFormat::normalized(rest);
+    m_store->beginBatch();
+    bool ok = true;
     if (left.trimmed().isEmpty()) {
         for (const QString &copy : copies)
             ok = ok && m_store->remove(u"plan"_s, copy);
@@ -406,5 +422,43 @@ bool DataService::planToTasks(const QString &planId, const QString &covered, con
             ok = ok && m_store->update(u"plan"_s, copy, { { u"content"_s, left } });
         ok = ok && !postponePlan(planId, forAll).isEmpty();
     }
+    return m_store->endBatch(ok) && ok;
+}
+
+bool DataService::appendToNote(const QString &membershipId, const QString &date, const QString &text, bool forAll)
+{
+    if (text.trimmed().isEmpty())
+        return true;
+    for (const QVariant &v : notes(membershipId)) {
+        const QVariantMap n = v.toMap();
+        if (n.value(u"date"_s).toString() == date)
+            return updateNote(n.value(u"id"_s).toString(), date,
+                              n.value(u"content"_s).toString().trimmed() + u"\n\n"_s + text.trimmed(), forAll);
+    }
+    return !addNote(membershipId, date, text.trimmed(), forAll).isEmpty();
+}
+
+bool DataService::planToTasks(const QString &planId, const QString &covered, const QString &rest, bool forAll,
+                              const QString &privateNote)
+{
+    const QVariantMap plan = m_store->get(u"plan"_s, planId);
+    if (plan.isEmpty())
+        return false;
+    const QString membership = plan.value(u"membership_id"_s).toString();
+    const QString date = plan.value(u"date"_s).toString();
+    const bool all = forAll && groupCopies(u"plan"_s, planId).size() > 1;
+    // The tasks the lesson has already, then the new ones
+    QVariantList list;
+    for (const QVariant &v : tasksOn(membership, date)) {
+        const QVariantMap t = v.toMap();
+        list << QVariantMap { { u"id"_s, t.value(u"id"_s) }, { u"title"_s, t.value(u"title"_s) },
+                              { u"hints"_s, t.value(u"hints"_s) }, { u"kind"_s, t.value(u"kind"_s) } };
+    }
+    list << blocksAsTasks(covered);
+    m_store->beginBatch();
+    bool ok = saveTasks(membership, date, list, all);
+    // Marked private: into the note of the lesson, never to the student
+    ok = ok && appendToNote(membership, date, NoteFormat::normalized(privateNote), all);
+    ok = ok && finishPlan(planId, rest, forAll);
     return m_store->endBatch(ok) && ok;
 }

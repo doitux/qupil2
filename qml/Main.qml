@@ -526,6 +526,8 @@ ApplicationWindow {
         PlanFinish {
             onEditRequested: (membership, plan, content, rest, restCount) =>
                              window.sheet("note").fromPlan(membership, plan, content, rest, restCount)
+            onEditTasksRequested: (membership, plan, covered, privateText, rest) =>
+                                  window.sheet("tasks").fromPlan(membership, plan, covered, privateText, rest)
         }
     }
     Component { id: pieceEditor; PieceEditor {} }
@@ -576,7 +578,13 @@ ApplicationWindow {
         function onEditLesson(id, weekday) { window.sheet("lesson").edit(id, weekday) }
         function onEditNote(membership, note) { window.sheet("note").edit(membership, note) }
         function onNewNoteFrom(membership, note) { window.sheet("note").copy(membership, note) }
-        function onEditPlan(membership, plan) { window.sheet("note").editPlan(membership, plan) }
+        // A student coupled with the practice book plans in tasks (the same editor)
+        function onEditPlan(membership, plan) {
+            if (Data.isCoupled(Data.get("membership", membership).student_id || ""))
+                window.sheet("tasks").editPlan(membership, plan)
+            else
+                window.sheet("note").editPlan(membership, plan)
+        }
         function onEditTasks(membership, date) { window.sheet("tasks").edit(membership, date) }
         function onShowBooklet(student) { window.sheet("booklet").show(student) }
         function onFinishPlan(membership, plan) { window.sheet("planFinish").start(membership, plan) }

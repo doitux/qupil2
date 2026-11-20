@@ -200,6 +200,36 @@ private slots:
         QVERIFY(plans.at(0).toMap().value(u"date"_s).toString() > u"2026-11-17"_s);
     }
 
+    void blocksAndTasks()
+    {
+        const QVariantList t = m_data->blocksAsTasks(u"**Bach:**\nTakt *1–8*\n\n**Etüde**\n\nNur eine Zeile"_s);
+        QCOMPARE(t.size(), 3);
+        QCOMPARE(t.at(0).toMap().value(u"title"_s).toString(), u"Bach"_s);
+        QCOMPARE(t.at(0).toMap().value(u"hints"_s).toStringList(), QStringList { u"Takt 1–8"_s });
+        QCOMPARE(t.at(1).toMap().value(u"title"_s).toString(), u"Etüde"_s);
+        QCOMPARE(t.at(2).toMap().value(u"title"_s).toString(), u"Nur eine Zeile"_s);
+        // And back: the same blocks again
+        const QString blocks = m_data->tasksAsBlocks(t);
+        QCOMPARE(blocks, u"**Bach**\nTakt 1–8\n\n**Etüde**\n\n**Nur eine Zeile**"_s);
+        QCOMPARE(m_data->blocksAsTasks(blocks).size(), 3);
+        // Saved as a plan, unchanged
+        const QString plan = m_data->savePlan(m_membership, QString(), u"2026-12-01"_s, blocks, false);
+        QCOMPARE(m_data->plans(m_membership).value(0).toMap().value(u"content"_s).toString(), blocks);
+        Q_UNUSED(plan)
+    }
+
+    void planPrivatePart()
+    {
+        const QString plan = m_data->savePlan(m_membership, QString(), u"2026-11-17"_s,
+                                              u"**Bach**\nTakt 1–8\n\n**Gespräch**\nLeihinstrument"_s, false);
+        QVERIFY(m_data->planToTasks(plan, u"**Bach**\nTakt 1–8"_s, QString(), false, u"**Gespräch**\nLeihinstrument"_s));
+        QCOMPARE(m_data->tasksOn(m_membership, u"2026-11-17"_s).size(), 1);
+        const QVariantList notes = m_data->notes(m_membership);
+        QCOMPARE(notes.size(), 1);
+        QVERIFY(notes.at(0).toMap().value(u"content"_s).toString().contains(u"Leihinstrument"_s));
+        QCOMPARE(m_data->plans(m_membership).size(), 0);   // nothing left: the plan is done
+    }
+
     void bookletContent()
     {
         QVERIFY(m_data->bookletContent(m_student).isEmpty());   // not coupled

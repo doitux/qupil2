@@ -2452,6 +2452,95 @@ void UiTest::addCases()
                 << tap(u"^Schließen$"_s)
                 << act(u"remove the coupling record"_s, [this] { m_data->remove(u"coupling"_s, m_text); });
     }
+    // Practice book, plans of a coupled student: written as tasks (the tasks editor), saved as
+    // plan blocks. After the lesson the covered blocks become tasks; a block marked private
+    // goes into the note of the lesson instead, never to the student
+    {
+        Case &c = add(u"plan-tasks"_s, u"coupled: plan as tasks, then tasks from it with one block kept private"_s);
+        c.steps << act(u"couple the student of the running lesson; a plan of an earlier lesson"_s, [this] {
+                       m_membership = runningMembership();
+                       const QString student = m_data->get(u"membership"_s, m_membership).value(u"student_id"_s).toString();
+                       m_text = m_data->create(u"coupling"_s, { { u"student_id"_s, student }, { u"created"_s, m_data->today() } });
+                       // (a date of its own: other tests' plans stay as they are)
+                       m_other = m_data->savePlan(m_membership, {}, Qupil::Clock::today().addDays(-77).toString(Qt::ISODate),
+                                                  u"**UI-Plan Bach**\nTakt 1 bis 8"_s, false);
+                       QMetaObject::invokeMethod(m_nav, "editPlan", Q_ARG(QString, m_membership), Q_ARG(QString, m_other));
+                   })
+                << see(u"^Planung speichern$"_s) << see(u"^Weitere Aufgabe$"_s)
+                << check(u"no private note and no kind in a plan"_s, [this] {
+                       Node n;
+                       return !find(u"^Private Notiz hinzufügen$"_s, &n) && !find(u"^Üben$"_s, &n);
+                   })
+                << tap(u"^Weitere Aufgabe$"_s) << type(u"UI-Plan Gespräch Leihinstrument"_s)
+                << snap(u"plan-tasks"_s)
+                << tap(u"^Planung speichern$"_s) << gone(u"^Weitere Aufgabe$"_s)
+                << check(u"saved as plan blocks"_s, [this] {
+                       return m_data->get(u"plan"_s, m_other).value(u"content"_s).toString()
+                              == u"**UI-Plan Bach**\nTakt 1 bis 8\n\n**UI-Plan Gespräch Leihinstrument**"_s;
+                   })
+                << act(u"after the lesson: what was covered?"_s, [this] {
+                       QMetaObject::invokeMethod(m_nav, "finishPlan", Q_ARG(QString, m_membership), Q_ARG(QString, m_other));
+                   })
+                << see(u"^Als Aufgaben speichern$"_s)
+                << tap(u"^„UI-Plan Gespräch Leihinstrument“ privat halten$"_s, u"keep the talk private"_s)
+                << snap(u"plan-tasks-private"_s)
+                << tap(u"^Als Aufgaben speichern$"_s) << gone(u"^Als Aufgaben speichern$"_s)
+                << check(u"one task with its hint; the private block in the note, not a task"_s, [this] {
+                       const QString date = Qupil::Clock::today().addDays(-77).toString(Qt::ISODate);
+                       const QVariantList list = m_data->tasksOn(m_membership, date);
+                       bool note = false;
+                       for (const QVariant &v : m_data->notes(m_membership))
+                           if (v.toMap().value(u"date"_s).toString() == date
+                               && v.toMap().value(u"content"_s).toString().contains(u"UI-Plan Gespräch Leihinstrument"_s))
+                               note = true;
+                       return note && list.size() == 1 && list.at(0).toMap().value(u"title"_s).toString() == u"UI-Plan Bach"_s
+                              && list.at(0).toMap().value(u"hints"_s).toStringList() == QStringList { u"Takt 1 bis 8"_s };
+                   })
+                << act(u"remove tasks, note and coupling again"_s, [this] {
+                       const QString date = Qupil::Clock::today().addDays(-77).toString(Qt::ISODate);
+                       for (const QVariant &v : m_data->tasksOn(m_membership, date))
+                           m_data->deleteTask(v.toMap().value(u"id"_s).toString(), false);
+                       for (const QVariant &v : m_data->notes(m_membership))
+                           if (v.toMap().value(u"content"_s).toString().contains(u"UI-Plan"_s))
+                               m_data->deleteNote(v.toMap().value(u"id"_s).toString(), false);
+                       for (const QVariant &v : m_data->plans(m_membership))
+                           if (v.toMap().value(u"content"_s).toString().contains(u"UI-Plan"_s))
+                               m_data->deletePlan(v.toMap().value(u"id"_s).toString(), false);
+                       m_data->remove(u"coupling"_s, m_text);
+                   });
+    }
+    // Coupled: "Edit before saving" opens the tasks editor with the covered blocks as new
+    // tasks; only its Save makes them, and only then the plan is done
+    {
+        Case &c = add(u"plan-tasks-edit"_s, u"coupled: covered blocks into the tasks editor before saving"_s);
+        c.steps << act(u"coupled, a plan of an earlier lesson"_s, [this] {
+                       m_membership = runningMembership();
+                       const QString student = m_data->get(u"membership"_s, m_membership).value(u"student_id"_s).toString();
+                       m_text = m_data->create(u"coupling"_s, { { u"student_id"_s, student }, { u"created"_s, m_data->today() } });
+                       m_other = m_data->savePlan(m_membership, {}, Qupil::Clock::today().addDays(-84).toString(Qt::ISODate),
+                                                  u"**UI-Edit Etüde**\nNr. 3 langsam"_s, false);
+                       QMetaObject::invokeMethod(m_nav, "finishPlan", Q_ARG(QString, m_membership), Q_ARG(QString, m_other));
+                   })
+                << tap(u"^Vor dem Speichern noch bearbeiten$"_s)
+                << see(u"^Weitere Aufgabe$"_s)
+                << check(u"nothing saved yet"_s, [this] {
+                       return m_data->tasksOn(m_membership, Qupil::Clock::today().addDays(-84).toString(Qt::ISODate)).isEmpty()
+                              && !m_data->get(u"plan"_s, m_other).isEmpty() && m_data->get(u"plan"_s, m_other).value(u"deleted"_s).toInt() == 0;
+                   })
+                << tap(u"^Speichern$"_s) << gone(u"^Weitere Aufgabe$"_s)
+                << check(u"the task with its hint, the plan done"_s, [this] {
+                       const QVariantList list = m_data->tasksOn(m_membership, Qupil::Clock::today().addDays(-84).toString(Qt::ISODate));
+                       return list.size() == 1 && list.at(0).toMap().value(u"title"_s).toString() == u"UI-Edit Etüde"_s
+                              && list.at(0).toMap().value(u"hints"_s).toStringList() == QStringList { u"Nr. 3 langsam"_s }
+                              && (m_data->get(u"plan"_s, m_other).isEmpty()
+                                  || m_data->get(u"plan"_s, m_other).value(u"deleted"_s).toInt() != 0);
+                   })
+                << act(u"remove the task and the coupling again"_s, [this] {
+                       for (const QVariant &v : m_data->tasksOn(m_membership, Qupil::Clock::today().addDays(-84).toString(Qt::ISODate)))
+                           m_data->deleteTask(v.toMap().value(u"id"_s).toString(), false);
+                       m_data->remove(u"coupling"_s, m_text);
+                   });
+    }
     // A plan for next week (made on the day of the lesson): the schedule of this week shows
     // the clipboard at the student already, as long as the plan is for a coming lesson – also
     // next to a birthday (one sign used to hide the other)

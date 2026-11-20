@@ -10,6 +10,11 @@
 // keyboard: + Hint, + Task, Private.
 // Open tasks of earlier lessons come along ("open since …"): kept, they move to this
 // lesson; ticked as done, they stay where they were.
+//
+// The same editor writes the plan of a coupled student (editPlan): tasks and hints, saved
+// as plan blocks (a task: its heading bold, its hints as lines), so that after the lesson
+// "Turn into tasks" makes the same tasks again. And it takes the covered part of a plan
+// (fromPlan) to adjust before saving; the rest stays planned.
 
 import QtQuick
 import QtQuick.Controls
@@ -29,12 +34,24 @@ Sheet {
     readonly property int groupSize: info.groupSize || 1
     //! Task and hint that last had the focus (the bar adds there)
     property int currentTask: -1
+    //! A plan instead of the lesson's tasks (planId: the plan changed, "" for a new one)
+    property bool planMode: false
+    property string planId
+    //! Made from this plan: what is left of it stays planned (planRest)
+    property string fromPlanId
+    property string planRest
+    property string fromText
 
     function edit(membership, day) {
         membershipId = membership
         info = Data.membershipInfo(membership)
         date = day || Data.today()
         forAll = Data.setting("save_for_all_students", 1) !== 0
+        planMode = false
+        planId = ""
+        fromPlanId = ""
+        planRest = ""
+        fromText = ""
         load()
         open()
         Qt.callLater(() => focusTitle(tasks.count > carriedCount() ? carriedCount() : 0))
@@ -54,6 +71,60 @@ Sheet {
         privateText.text = note ? Data.noteHtml(note.content || "", Theme.noteMark) : ""
         privateOpen = noteId !== ""
         currentTask = -1
+    }
+    //! The plan of a coupled student, as tasks
+    function editPlan(membership, id) {
+        membershipId = membership
+        info = Data.membershipInfo(membership)
+        planMode = true
+        planId = ""
+        fromPlanId = ""
+        fromText = ""
+        privateOpen = false
+        const plans = Data.plans(membership)
+        let p = id ? plans.find(x => x.id === id) : undefined
+        if (!p) {
+            date = Data.nextLessonDate(membership, "")
+            p = plans.find(x => x.date === date)      // one plan per lesson
+        }
+        forAll = Data.setting("save_for_all_students", 1) !== 0
+        tasks.clear()
+        if (p) {
+            planId = p.id
+            date = p.date
+            forAll = forAll && (p.shared || 1) > 1
+            for (const t of Data.blocksAsTasks(p.content || ""))
+                tasks.append(Object.assign(blank(), { title: t.title, hints: t.hints.map(h => ({ text: h })) }))
+        }
+        // "+ Plan" with a plan for that lesson already: a new task at its end to write in
+        if (tasks.count === 0 || !id)
+            tasks.append(blank())
+        currentTask = -1
+        open()
+        Qt.callLater(() => focusTitle(tasks.count - 1))
+    }
+    //! The covered part of a plan as new tasks of its lesson, to adjust before saving
+    function fromPlan(membership, id, covered, privatePart, rest) {
+        const p = Data.plans(membership).find(x => x.id === id) || {}
+        edit(membership, p.date || Data.today())
+        fromPlanId = id
+        planRest = rest
+        forAll = (p.shared || 1) > 1
+        fromText = qsTrId("plan.from_all").arg(Data.formatDate(date))
+        // A lone empty task goes; the plan's blocks come after the lesson's tasks
+        if (tasks.count === 1 && tasks.get(0).tid === "" && tasks.get(0).title === "" && tasks.get(0).hints.count === 0)
+            tasks.clear()
+        for (const t of Data.blocksAsTasks(covered))
+            tasks.append(Object.assign(blank(), { title: t.title, hints: t.hints.map(h => ({ text: h })) }))
+        if (tasks.count === 0)
+            tasks.append(blank())
+        // Marked private: into the note of the lesson
+        if (privatePart.trim() !== "") {
+            const note = Data.notes(membershipId).find(n => n.date === date)
+            const content = (note ? (note.content || "").trim() + "\n\n" : "") + privatePart.trim()
+            privateText.text = Data.noteHtml(content, Theme.noteMark)
+            privateOpen = true
+        }
     }
     function entry(t, carried) {
         const fb = t.feedback || {}
@@ -119,6 +190,7 @@ Sheet {
             onClicked: editor.addTask(editor.currentTask)
         },
         BarButton {
+            visible: !editor.planMode
             iconName: "lock"
             text: qsTrId("task.private")
             onClicked: editor.openPrivate()
@@ -131,13 +203,14 @@ Sheet {
         onActivated: editor.accept()
     }
 
-    title: qsTrId("task.lesson_of").arg(Data.formatDate(editor.date, true))
-    acceptText: qsTrId("task.save")
+    title: editor.planMode ? (editor.planId ? qsTrId("plan.edit") : qsTrId("plan.new"))
+                           : qsTrId("task.lesson_of").arg(Data.formatDate(editor.date, true))
+    acceptText: editor.planMode ? qsTrId("plan.save") : qsTrId("task.save")
     canAccept: {
         for (let i = 0; i < tasks.count; ++i)
             if (tasks.get(i).title.trim() !== "" || tasks.get(i).hints.count > 0)
                 return true
-        return privateText.length > 0 || editor.noteId !== ""
+        return !editor.planMode && (privateText.length > 0 || editor.noteId !== "")
     }
     onAccepted: {
         const list = []
@@ -156,7 +229,17 @@ Sheet {
             list.push({ id: t.tid, title: t.title, hints: hints, kind: t.kind, closed: t.done })
         }
         const all = editor.forAll && editor.groupSize > 1
+        if (editor.planMode) {
+            const content = Data.tasksAsBlocks(list)
+            if (content.trim() !== "")
+                Data.savePlan(editor.membershipId, editor.planId, editor.date, content, all)
+            else if (editor.planId !== "")
+                Data.deletePlan(editor.planId, all)
+            return
+        }
         Data.saveTasks(editor.membershipId, editor.date, list, all)
+        if (editor.fromPlanId !== "")
+            Data.finishPlan(editor.fromPlanId, editor.planRest, all)
         const content = formatter.markup()
         if (editor.noteId !== "") {
             if (content.trim() === "")
@@ -199,9 +282,20 @@ Sheet {
             date: editor.date
             onPicked: (value) => {
                 editor.date = value || Data.today()
-                editor.load()
+                if (!editor.planMode && editor.fromPlanId === "")
+                    editor.load()
             }
         }
+    }
+
+    Text {
+        visible: editor.fromText !== "" || editor.planMode
+        Layout.fillWidth: true
+        wrapMode: Text.WordWrap
+        text: editor.planMode ? qsTrId("task.plan_hint") : editor.fromText
+        color: Theme.textMuted
+        font.family: Theme.fontFamily
+        font.pixelSize: 13
     }
 
     SwitchRow {
@@ -314,6 +408,7 @@ Sheet {
                     // Practise or only to get done (get the music: the student only ticks it)
                     AbstractButton {
                         id: kindButton
+                        visible: !editor.planMode
                         implicitWidth: kindLabel.implicitWidth + 16
                         implicitHeight: 28
                         focusPolicy: Qt.TabFocus
@@ -445,7 +540,7 @@ Sheet {
 
     // ---- the private note: never goes to the student
     ActionButton {
-        visible: !editor.privateOpen
+        visible: !editor.privateOpen && !editor.planMode
         Layout.alignment: Qt.AlignLeft
         kind: "quiet"
         iconName: "lock"
@@ -454,7 +549,7 @@ Sheet {
         onClicked: editor.openPrivate()
     }
     ColumnLayout {
-        visible: editor.privateOpen
+        visible: editor.privateOpen && !editor.planMode
         Layout.fillWidth: true
         spacing: 8
         FieldLabel { label: qsTrId("task.private_label") }
@@ -497,6 +592,19 @@ Sheet {
             selectionStart: privateText.selectionStart
             selectionEnd: privateText.selectionEnd
             cursorPosition: privateText.cursorPosition
+        }
+    }
+
+    ActionButton {
+        visible: editor.planMode && editor.planId !== ""
+        Layout.alignment: Qt.AlignLeft
+        kind: "quiet"
+        iconName: "trash"
+        text: qsTrId("plan.discard")
+        focusPolicy: Qt.TabFocus
+        onClicked: {
+            Data.deletePlan(editor.planId, editor.forAll && editor.groupSize > 1)
+            editor.dismiss()
         }
     }
 

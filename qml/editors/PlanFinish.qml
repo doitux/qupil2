@@ -29,6 +29,9 @@ Sheet {
     property var lineChecks: []
     //! Which blocks show their lines
     property var peeked: []
+    //! Coupled with the practice book: blocks marked private go into the note of the lesson
+    //! instead of the tasks (never to the student)
+    property var privates: []
     //! Set when blocks of this note go into the plan of the next lesson
     property string fromNoteId
     property bool forAll: false
@@ -69,6 +72,8 @@ Sheet {
 
     //! "Edit before saving": the note editor takes over
     signal editRequested(string membershipId, string planId, string content, string rest, int restCount)
+    //! The same for a coupled student: the tasks editor, with the private part as the note
+    signal editTasksRequested(string membershipId, string planId, string covered, string privateText, string rest)
 
     function start(membership, id) {
         membershipId = membership
@@ -78,6 +83,7 @@ Sheet {
         checks = blocks.map(() => true)
         lineChecks = blocks.map(() => null)
         peeked = blocks.map(() => false)
+        privates = blocks.map(() => false)
         nextDate = plan.date ? Data.nextLessonDate(membership, plan.date) : ""
         open()
     }
@@ -91,19 +97,22 @@ Sheet {
         checks = blocks.map(() => false)
         lineChecks = blocks.map(() => null)
         peeked = blocks.map(() => false)
+        privates = blocks.map(() => false)
         forAll = Data.setting("save_for_all_students", 1) !== 0 && (n.shared || 1) > 1
         nextDate = Data.nextLessonDate(membership, "")
         open()
     }
-    //! [ticked blocks, the others, how many others]; a block with some lines ticked goes
-    //! into both, each time with its heading
+    //! [ticked blocks, the others, how many others, ticked blocks marked private]; a block
+    //! with some lines ticked goes into both, each time with its heading
     function parts() {
         const done = []
         const left = []
+        const hidden = []
         blocks.forEach((b, i) => {
             const state = blockState(i)
+            const into = privates[i] === true ? hidden : done
             if (state !== 1) {
-                (state === 2 ? done : left).push(b.text)
+                (state === 2 ? into : left).push(b.text)
                 return
             }
             // The heading bold as a whole: alone, the part stays a block (NoteFormat::blocks)
@@ -111,11 +120,16 @@ Sheet {
             const title = /^\*\*[^*].*\*\*$/.test(t) && t.slice(2, -2).indexOf("**") < 0
                           ? t : "**" + t.replace(/\*\*/g, "") + "**"
             const lines = linesOf(i)
-            done.push([title].concat(lines.filter((x, j) => lineTicked(i, j))).join("\n"))
+            into.push([title].concat(lines.filter((x, j) => lineTicked(i, j))).join("\n"))
             left.push([title].concat(lines.filter((x, j) => !lineTicked(i, j))).join("\n"))
         })
         const sep = grouped ? "\n\n" : "\n"
-        return [done.join(sep), left.join(sep), left.length]
+        return [done.join(sep), left.join(sep), left.length, hidden.join(sep)]
+    }
+    function togglePrivate(index) {
+        const p = privates.slice()
+        p[index] = !p[index]
+        privates = p
     }
     function toggle(index) {
         const c = checks.slice()
@@ -161,6 +175,13 @@ Sheet {
         if (done.length === 0)
             return qsTrId("plan.finish.none")
         const date = Data.formatDate(plan.date || "")
+        // Coupled with the practice book: tasks, and what is locked into the private note
+        if (coupled) {
+            const left = indexes(false)
+            return qsTrId("plan.finish.tasks_info").arg(date)
+                   + (privates.some(Boolean) ? " " + qsTrId("plan.finish.private_info") : "")
+                   + (left.length > 0 && grouped ? " " + qsTrId("plan.finish.blocks_left").arg(names(left, false)).arg(next) : "")
+        }
         if (!grouped)
             return qsTrId("plan.finish.info").arg(date).arg(next)
         const left = indexes(false)
@@ -170,7 +191,8 @@ Sheet {
 
     title: fromNoteId ? qsTrId("plan.from_note.title") : qsTrId("plan.finish.title")
     //! Coupled with the practice book: what was covered becomes tasks, not a note
-    readonly property bool coupled: membershipId !== "" && Data.isCoupled(Data.get("membership", membershipId).student_id || "")
+    readonly property bool coupled: Data.revision >= 0 && membershipId !== ""
+                                    && Data.isCoupled(Data.get("membership", membershipId).student_id || "")
     acceptText: fromNoteId ? qsTrId("plan.from_note.save") : coupled ? qsTrId("plan.finish.tasks") : qsTrId("plan.finish.save")
     canAccept: checkedCount > 0
     onAccepted: {
@@ -179,7 +201,7 @@ Sheet {
             if (Data.savePlan(membershipId, "", nextDate, done, forAll))
                 Nav.toast(qsTrId("plan.from_note.done").arg(Data.formatDate(nextDate, true)))
         } else if (coupled) {
-            Data.planToTasks(plan.id, done, left, (plan.shared || 1) > 1)
+            Data.planToTasks(plan.id, done, left, (plan.shared || 1) > 1, parts()[3])
         } else {
             Data.planToNote(plan.id, done, left, (plan.shared || 1) > 1)
         }
@@ -224,7 +246,7 @@ Sheet {
                 spacing: 6
                 Item {
                     width: parent.width
-                    implicitHeight: Math.max(28, pointRow.hasMore ? 28 : pointText.implicitHeight)
+                    implicitHeight: Math.max(lockButton.visible ? 32 : 28, pointRow.hasMore ? 28 : pointText.implicitHeight)
                     Rectangle {
                         id: box
                         anchors.verticalCenter: pointRow.hasMore ? parent.verticalCenter : undefined
@@ -250,6 +272,7 @@ Sheet {
                         x: 36
                         anchors.verticalCenter: pointRow.hasMore ? parent.verticalCenter : undefined
                         width: parent.width - x - (pointRow.hasMore ? peekButton.width + 8 : 0)
+                               - (lockButton.visible ? lockButton.width + 4 : 0)
                         wrapMode: pointRow.hasMore ? Text.NoWrap : Text.Wrap
                         elide: pointRow.hasMore ? Text.ElideRight : Text.ElideNone
                         textFormat: pointRow.hasMore ? Text.PlainText : Text.RichText
@@ -259,6 +282,35 @@ Sheet {
                         font.family: Theme.fontFamily
                         font.pixelSize: 15
                         font.weight: pointRow.hasMore ? Font.Bold : Font.Normal
+                    }
+                    // Coupled: keep this block out of the practice book (into the private note)
+                    AbstractButton {
+                        id: lockButton
+                        readonly property bool hidden: sheet.privates[pointRow.index] === true
+                        visible: sheet.coupled && sheet.fromNoteId === ""
+                        anchors.right: pointRow.hasMore ? peekButton.left : parent.right
+                        anchors.rightMargin: pointRow.hasMore ? 4 : 0
+                        anchors.verticalCenter: pointRow.hasMore ? parent.verticalCenter : undefined
+                        implicitWidth: 32
+                        implicitHeight: 32
+                        checkable: true
+                        checked: hidden
+                        Accessible.role: Accessible.CheckBox
+                        Accessible.name: qsTrId("plan.finish.private").arg(pointRow.modelData.heading || "")
+                        onClicked: sheet.togglePrivate(pointRow.index)
+                        background: Rectangle {
+                            radius: 16
+                            color: lockButton.hidden ? Theme.inverse : "transparent"
+                        }
+                        contentItem: Item {
+                            Icon {
+                                anchors.centerIn: parent
+                                width: 18
+                                height: 18
+                                name: "lock"
+                                color: lockButton.hidden ? Theme.textOnInverse : Theme.textMuted
+                            }
+                        }
                     }
                     // Look into the block without ticking it
                     AbstractButton {
@@ -372,16 +424,21 @@ Sheet {
         Layout.preferredHeight: 48
         kind: "secondary"
         iconName: "edit"
-        // Coupled: the tasks editor opens instead, with the lesson's tasks (after saving them)
-        visible: sheet.fromNoteId === "" && !sheet.coupled
+        // Coupled: the tasks editor, with the new tasks after those the lesson has (nothing
+        // is saved before its Save)
+        visible: sheet.fromNoteId === ""
         enabled: sheet.checkedCount > 0
         text: qsTrId("plan.finish.edit")
         onClicked: {
-            const [done, left, count] = sheet.parts()
+            const [done, left, count, hidden] = sheet.parts()
             const membership = sheet.membershipId
             const id = sheet.plan.id
+            const coupled = sheet.coupled
             sheet.close()
-            sheet.editRequested(membership, id, done, left, count)
+            if (coupled)
+                sheet.editTasksRequested(membership, id, done, hidden, left)
+            else
+                sheet.editRequested(membership, id, done, left, count)
         }
     }
 }

@@ -957,6 +957,14 @@ Bitte ändern Sie die Schüleranzahl um zu speichern!</translation>
         <source>What did you cover? That becomes the tasks of this lesson.</source>
         <translation>Was davon war dran? Daraus werden die Aufgaben der Stunde.</translation>
     </message>
+    <message id="plan.finish.tasks_info">
+        <source>What is ticked becomes the tasks of %1.</source>
+        <translation>Was angehakt ist, wird zu Aufgaben vom %1.</translation>
+    </message>
+    <message id="plan.finish.private_info">
+        <source>With the lock: into your private note instead.</source>
+        <translation>Mit Schloss: stattdessen in Ihre private Notiz.</translation>
+    </message>
     <message id="plan.finish.tasks">
         <source>Save as tasks</source>
         <translation>Als Aufgaben speichern</translation>
@@ -1302,6 +1310,15 @@ Bitte ändern Sie die Schüleranzahl um zu speichern!</translation>
     <message id="task.for_all_hint">
         <source>Each student gets their own and answers for themselves</source>
         <translation>Jeder bekommt eigene Aufgaben und gibt eigene Rückmeldung</translation>
+    </message>
+    <message id="task.plan_hint">
+        <source>Planned as tasks: after the lesson, what was covered becomes the student&apos;s tasks.</source>
+        <translation>Als Aufgaben geplant: Nach der Stunde wird, was dran war, zu den Aufgaben des Schülers.</translation>
+    </message>
+    <message id="plan.finish.private">
+        <source>Keep %1 private</source>
+        <extracomment>Lock at a block of the plan: it goes into the private note, not to the student</extracomment>
+        <translation>„%1“ privat halten</translation>
     </message>
     <message id="task.private_add">
         <source>Add a private note</source>
