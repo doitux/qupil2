@@ -2875,6 +2875,66 @@ void UiTest::addCases()
                 << check(u"the reminder is saved"_s, [this] { return m_data->reminders().size() == m_count + 1; })
                 << see(u"^UI-Test-Erinnerung"_s);
     }
+    // Plan for an ensemble from its lesson view: "Plan for everybody" saves one plan for
+    // all its students; the lesson view shows it once ("Planned for … · for everybody")
+    {
+        Case &c = add(u"lesson-plan-for-all"_s, u"plan for a whole ensemble from the lesson view"_s);
+        c.steps << tab(u"Stundenplan"_s)
+                << act(u"the ensemble later today"_s, [this] {
+                       m_other.clear();
+                       for (const QVariant &v : m_data->lessonsOn(Qupil::Clock::today().dayOfWeek() - 1))
+                           if (v.toMap().value(u"name"_s).toString().contains(u"Streicherensemble"_s))
+                               m_other = v.toMap().value(u"id"_s).toString();
+                   })
+                << check(u"there is an ensemble today with students"_s, [this] {
+                       return !m_other.isEmpty() && m_data->lesson(m_other).value(u"students"_s).toList().size() > 1;
+                   })
+                << tap(u"Streicherensemble"_s) << see(u"^Planung für alle$"_s) << snap(u"lesson-plan-button"_s)
+                << tap(u"^Planung für alle$"_s) << see(u"^Planung speichern$"_s)
+                << tap(u"edit:^Notiz$"_s) << type(u"UI-Test: Ensembleprobe Takt 1–16"_s)
+                << snap(u"lesson-plan-editor"_s)
+                << tap(u"^Planung speichern$"_s) << gone(u"^Planung speichern$"_s)
+                << check(u"every student of the ensemble has the plan, saved together"_s, [this] {
+                       QString key;
+                       const QVariantList students = m_data->lesson(m_other).value(u"students"_s).toList();
+                       for (const QVariant &st : students) {
+                           bool found = false;
+                           for (const QVariant &p : m_data->plans(st.toMap().value(u"membership_id"_s).toString())) {
+                               const QVariantMap plan = p.toMap();
+                               if (!plan.value(u"content"_s).toString().contains(u"UI-Test: Ensembleprobe"_s))
+                                   continue;
+                               const QString k = plan.value(u"group_key"_s).toString();
+                               if (k.isEmpty() || (!key.isEmpty() && k != key))
+                                   return false;
+                               key = k;
+                               found = true;
+                           }
+                           if (!found)
+                               return false;
+                       }
+                       return !students.isEmpty();
+                   })
+                << wait(500) << snap(u"lesson-plan-shared"_s)
+                << check(u"the lesson view shows it once, for everybody"_s, [this] {
+                       // (its label is plain text, outside the accessible tree)
+                       for (QObject *o : m_window->findChildren<QObject *>()) {
+                           if (o->property("lessonId").toString() != m_other || !o->property("shared").isValid())
+                               continue;
+                           QVariant v = o->property("shared");
+                           const QVariantMap shared = v.canConvert<QJSValue>() ? v.value<QJSValue>().toVariant().toMap() : v.toMap();
+                           if (shared.value(u"kind"_s).toString() == u"plan"_s)
+                               return true;
+                       }
+                       return false;
+                   })
+                << act(u"remove the plan again"_s, [this] {
+                       for (const QVariant &st : m_data->lesson(m_other).value(u"students"_s).toList())
+                           for (const QVariant &p : m_data->plans(st.toMap().value(u"membership_id"_s).toString()))
+                               if (p.toMap().value(u"content"_s).toString().contains(u"UI-Test: Ensembleprobe"_s))
+                                   m_data->deletePlan(p.toMap().value(u"id"_s).toString(), false);
+                   })
+                << backIfThere(u"^Zurück$"_s);
+    }
     // A reminder only for one lesson: the ensemble (from the lesson view), and one for an individual lesson
     {
         Case &c = add(u"lesson-reminder"_s, u"reminders for one lesson"_s);

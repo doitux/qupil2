@@ -471,6 +471,8 @@ E("note.delete.for_all", src="Delete for all %n students of the group",
   c="Check box when deleting a note of a group lesson.")
 E("plan.label", en="Plan", de="Planung", fr="Préparation", es="Planificación",
   c="Lesson plan: what the teacher plans before a lesson (button, field label)")
+E("plan.for_all", en="Plan for everybody", de="Planung für alle", fr="Préparation pour tous",
+  es="Planificación para todos", c="Button in a group's or ensemble's lesson view, next to lesson.note_for_all")
 E("plan.new", en="New plan", de="Neue Planung", fr="Nouvelle préparation", es="Nueva planificación")
 E("plan.edit", en="Change plan", de="Planung ändern", fr="Modifier la préparation", es="Cambiar planificación")
 E("plan.save", en="Save plan", de="Planung speichern", fr="Enregistrer la préparation", es="Guardar planificación")
@@ -1759,6 +1761,9 @@ E("lesson.for_all", en="%1 · for everybody: %2", de="%1 · für alle: %2", fr="
   c="Running lesson of a group; %1 = date, %2 = the note")
 E("plan.planned_today_all", en="Planned for today · for everybody", de="Geplant für heute · für alle",
   fr="Prévu pour aujourd’hui · pour tous", es="Planificado para hoy · para todos")
+E("plan.planned_for_all", en="Planned for %1 · for everybody", de="Geplant für %1 · für alle",
+  fr="Prévu pour le %1 · pour tous", es="Planificado para el %1 · para todos",
+  c="Above a group's plan for a coming lesson (not today's); %1 = weekday and date")
 E("lesson.note_for_all", en="Note for everybody", de="Notiz für alle", fr="Note pour tous", es="Nota para todos")
 E("events.empty", en="No events yet.", de="Noch keine Veranstaltungen.", fr="Aucun événement pour l’instant.",
   es="Todavía no hay eventos.")

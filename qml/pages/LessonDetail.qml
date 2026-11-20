@@ -16,17 +16,21 @@ Item {
     property string backText: qsTrId("common.back")
     readonly property var lesson: { if (Data.revision < 0) return undefined; return Data.lesson(lessonId) }
     readonly property string lessonName: lesson.name || ""
-    //! Group or ensemble with the same plan for today or the same last note for everybody
-    //! (saved for all): shown once above the students, not under each of them
+    //! Group or ensemble with the same plan (for today, else the next one to come) or the
+    //! same last note for everybody (saved for all): shown once above the students, not
+    //! under each of them
     readonly property var shared: {
         if (Data.revision < 0)
             return undefined
         const st = lesson.students || []
         if (st.length < 2)
             return null
-        const plans = st.map(x => Data.plans(x.membership_id).find(p => p.today))
+        const plans = st.map(x => {
+            const all = Data.plans(x.membership_id)
+            return all.find(p => p.today) || all.find(p => !p.due)
+        })
         if (plans.every(p => !!p && !!p.group_key && p.group_key === plans[0].group_key))
-            return { kind: "plan", points: plans[0].points }
+            return { kind: "plan", points: plans[0].points, today: !!plans[0].today, date: plans[0].date }
         if (plans.every(p => !p) && !!st[0].lastNote
                 && st.every(x => x.lastNote === st[0].lastNote && x.lastNoteDate === st[0].lastNoteDate))
             return { kind: "note", date: st[0].lastNoteDate, text: st[0].lastNote }
@@ -99,7 +103,9 @@ Item {
                 }
             }
 
-            RowLayout {
+            // Note (or tasks), plan, metronome: side by side, on a narrow phone the rest on a
+            // second line
+            Flow {
                 Layout.fillWidth: true
                 spacing: 8
                 ActionButton {
@@ -114,6 +120,16 @@ Item {
                     onClicked: tasks ? Nav.editTasks(detail.lesson.students[0].membership_id, "")
                                      : Nav.editNote(detail.lesson.students[0].membership_id, "")
                 }
+                // Plan the next lesson here, also for a group or an ensemble at once (the
+                // editor saves it for all students; from a student's page only that student
+                // was in reach)
+                ActionButton {
+                    objectName: "lessonPlanButton"
+                    iconName: "plan"
+                    text: (detail.lesson.studentCount || 0) > 1 ? qsTrId("plan.for_all") : qsTrId("plan.label")
+                    enabled: (detail.lesson.studentCount || 0) > 0
+                    onClicked: Nav.editPlan(detail.lesson.students[0].membership_id, "")
+                }
                 ActionButton {
                     iconName: "metronome"
                     text: qsTrId("metronome.title")
@@ -123,7 +139,10 @@ Item {
 
             SectionLabel {
                 visible: !!detail.shared
-                text: !detail.shared ? "" : detail.shared.kind === "plan" ? qsTrId("plan.planned_today_all") : qsTrId("lesson.last_note_all")
+                text: !detail.shared ? ""
+                      : detail.shared.kind !== "plan" ? qsTrId("lesson.last_note_all")
+                      : detail.shared.today ? qsTrId("plan.planned_today_all")
+                      : qsTrId("plan.planned_for_all").arg(Data.formatDate(detail.shared.date, true))
             }
             Rectangle {
                 visible: !!detail.shared

@@ -889,6 +889,11 @@
         <extracomment>Lesson plan: what the teacher plans before a lesson (button, field label)</extracomment>
         <translation>Plan</translation>
     </message>
+    <message id="plan.for_all">
+        <source>Plan for everybody</source>
+        <extracomment>Button in a group&apos;s or ensemble&apos;s lesson view, next to lesson.note_for_all</extracomment>
+        <translation>Plan for everybody</translation>
+    </message>
     <message id="plan.new">
         <source>New plan</source>
         <translation>New plan</translation>
@@ -3146,6 +3151,11 @@ Qupil first makes a backup that you can restore right afterwards. Nothing change
     <message id="plan.planned_today_all">
         <source>Planned for today · for everybody</source>
         <translation>Planned for today · for everybody</translation>
+    </message>
+    <message id="plan.planned_for_all">
+        <source>Planned for %1 · for everybody</source>
+        <extracomment>Above a group&apos;s plan for a coming lesson (not today&apos;s); %1 = weekday and date</extracomment>
+        <translation>Planned for %1 · for everybody</translation>
     </message>
     <message id="lesson.note_for_all">
         <source>Note for everybody</source>
