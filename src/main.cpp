@@ -31,6 +31,7 @@
 #include "BackKey.h"
 #include "Clock.h"
 #include "DataService.h"
+#include "BookletService.h"
 #include "DocumentService.h"
 #include "LanguageManager.h"
 #include "LessonEndAlert.h"
@@ -280,6 +281,8 @@ int main(int argc, char *argv[])
         controller.loadDemo();
     }
     SyncController sync(&controller, nullptr);
+    // Practice book: coupled students' booklets in the Nextcloud of the sync
+    BookletService booklet(&controller, &data, &sync, nullptr);
     QObject::connect(&sync, &SyncController::firstSyncDone, &data, &DataService::ensureDefaults);
     WifiController wifi(&controller, &sync, nullptr);
     QObject::connect(&wifi, &WifiController::firstSyncDone, &data, &DataService::ensureDefaults);

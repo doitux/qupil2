@@ -2353,6 +2353,55 @@ void UiTest::addCases()
                    })
                 << backIfThere(u"^Schüler$"_s);
     }
+    // Practice book: tasks of a coupled student typed with the keyboard. Enter in the title
+    // goes to a hint, Enter in a hint makes the next one, Enter in an empty hint a new task
+    {
+        Case &c = add(u"tasks-enter"_s, u"tasks of a coupled student with the keyboard: title, hints, next task"_s);
+        c.steps << act(u"couple the student of the running lesson"_s, [this] {
+                       m_membership = runningMembership();
+                       const QString student = m_data->get(u"membership"_s, m_membership).value(u"student_id"_s).toString();
+                       m_text = m_data->create(u"coupling"_s, { { u"student_id"_s, student },
+                                                                { u"created"_s, m_data->today() } });
+                   })
+                << act(u"open the tasks of today's lesson"_s, [this] {
+                       QMetaObject::invokeMethod(m_nav, "editTasks", Q_ARG(QString, m_membership), Q_ARG(QString, QString()));
+                   })
+                << see(u"^Weitere Aufgabe$"_s)
+                << type(u"UI-Tonleiter G-Dur"_s) << key(Qt::Key_Return, u"Enter: to the first hint"_s)
+                << type(u"zweioktavig"_s) << key(Qt::Key_Return, u"Enter: the next hint"_s)
+                << type(u"Metronom 60"_s) << key(Qt::Key_Return, u"Enter: the next hint"_s)
+                << key(Qt::Key_Return, u"Enter in the empty hint: a new task"_s)
+                << type(u"UI-Noten besorgen"_s)
+                << snap(u"tasks-enter"_s)
+                << tap(u"^Speichern$"_s) << gone(u"^Weitere Aufgabe$"_s)
+                << check(u"two tasks, the hints with the first, no empty hint"_s, [this] {
+                       const QVariantList list = m_data->tasksOn(m_membership, m_data->today());
+                       if (list.size() != 2)
+                           return false;
+                       const QVariantMap a = list.at(0).toMap();
+                       const QVariantMap b = list.at(1).toMap();
+                       return a.value(u"title"_s).toString() == u"UI-Tonleiter G-Dur"_s
+                              && a.value(u"hints"_s).toStringList() == QStringList { u"zweioktavig"_s, u"Metronom 60"_s }
+                              && b.value(u"title"_s).toString() == u"UI-Noten besorgen"_s
+                              && b.value(u"hints"_s).toStringList().isEmpty();
+                   })
+                << check(u"no private note was made"_s, [this] {
+                       for (const QVariant &v : m_data->notes(m_membership))
+                           if (v.toMap().value(u"date"_s).toString() == m_data->today()
+                               && v.toMap().value(u"content"_s).toString().contains(u"UI-Tonleiter"_s))
+                               return false;
+                       return true;
+                   })
+                << openStudent(u"Lena Muster"_s)
+                << see(u"^Stunde vom .*: UI-Tonleiter G-Dur, UI-Noten besorgen$"_s) << see(u"^Aufgaben$"_s)
+                << snap(u"tasks-card"_s)
+                << backIfThere(u"^Schüler$"_s)
+                << act(u"remove the tasks and the coupling again"_s, [this] {
+                       for (const QVariant &v : m_data->tasksOn(m_membership, m_data->today()))
+                           m_data->deleteTask(v.toMap().value(u"id"_s).toString(), false);
+                       m_data->remove(u"coupling"_s, m_text);
+                   });
+    }
     // A plan for next week (made on the day of the lesson): the schedule of this week shows
     // the clipboard at the student already, as long as the plan is for a coming lesson
     {

@@ -4,6 +4,8 @@
 // The practice book's data in the teacher's Qupil: tasks of a lesson, open tasks moving on
 // to the next lesson, group copies, the student's feedback, the coupling. Invented data.
 
+#include <QJsonArray>
+#include <QJsonDocument>
 #include <QTemporaryDir>
 #include <QTest>
 
@@ -174,6 +176,50 @@ private slots:
         // Ended: no longer coupled
         QVERIFY(m_store->update(u"coupling"_s, m_data->coupling(m_student).value(u"id"_s).toString(), { { u"ended"_s, u"2026-11-20"_s } }));
         QVERIFY(!m_data->isCoupled(m_student));
+    }
+
+    void bookletContent()
+    {
+        QVERIFY(m_data->bookletContent(m_student).isEmpty());   // not coupled
+        m_store->update(u"student"_s, m_student, { { u"instrument"_s, u"Viola"_s }, { u"notes"_s, u"privat"_s },
+                                                   { u"mother_phone"_s, u"0123"_s } });
+        m_data->setSetting(u"booklet_teacher_name"_s, u"Frau Rau"_s);
+        QVERIFY(!m_store->create(u"coupling"_s, { { u"student_id"_s, m_student }, { u"created"_s, u"2026-11-01"_s },
+                                                  { u"allow_questions"_s, 0 } }).isEmpty());
+        const QString today = Clock::today().toString(Qt::ISODate);
+        QVERIFY(m_data->saveTasks(m_membership, today, { task(u"Tonleiter"_s, { u"langsam"_s }), task(u"Noten besorgen"_s, {}, 1) }, false));
+        const QVariantList list = m_data->tasksOn(m_membership, today);
+        QVERIFY(m_data->closeTask(list.at(1).toMap().value(u"id"_s).toString(), true));
+        m_data->addNote(m_membership, today, u"Privat: müde heute"_s, false);
+        m_store->create(u"piece"_s, { { u"membership_id"_s, m_membership }, { u"title"_s, u"Bourrée"_s },
+                                      { u"composer"_s, u"Bach"_s }, { u"state"_s, 3 } });
+        m_store->create(u"piece"_s, { { u"membership_id"_s, m_membership }, { u"title"_s, u"Alt"_s }, { u"state"_s, 4 } });
+
+        const QJsonObject b = m_data->bookletContent(m_student);
+        QCOMPARE(b.value(u"format"_s).toInt(), 1);
+        QCOMPARE(b.value(u"teacher"_s).toString(), u"Frau Rau"_s);
+        QCOMPARE(b.value(u"student"_s).toString(), u"Mia"_s);
+        QCOMPARE(b.value(u"instrument"_s).toString(), u"Viola"_s);
+        QCOMPARE(b.value(u"allow"_s).toObject().value(u"questions"_s).toBool(), false);
+        // Only the open task, with its hints
+        const QJsonArray tasks = b.value(u"tasks"_s).toArray();
+        QCOMPARE(tasks.size(), 1);
+        QCOMPARE(tasks.at(0).toObject().value(u"title"_s).toString(), u"Tonleiter"_s);
+        QCOMPARE(tasks.at(0).toObject().value(u"hints"_s).toArray().at(0).toString(), u"langsam"_s);
+        QCOMPARE(tasks.at(0).toObject().value(u"kind"_s).toString(), u"practice"_s);
+        // Pieces in progress or ready only
+        QCOMPARE(b.value(u"pieces"_s).toArray().size(), 1);
+        QVERIFY(b.value(u"pieces"_s).toArray().at(0).toObject().value(u"ready"_s).toBool());
+        // The next lessons on the lesson's weekday
+        const QJsonArray next = b.value(u"next"_s).toArray();
+        QCOMPARE(next.size(), 3);
+        QCOMPARE(QDate::fromString(next.at(0).toObject().value(u"date"_s).toString(), Qt::ISODate).dayOfWeek(), 2);
+        QCOMPARE(next.at(0).toObject().value(u"start"_s).toString(), u"15:00"_s);
+        // Nothing private
+        const QByteArray json = QJsonDocument(b).toJson();
+        QVERIFY(!json.contains("müde"));
+        QVERIFY(!json.contains("0123"));
+        QVERIFY(!json.contains("privat"));
     }
 };
 

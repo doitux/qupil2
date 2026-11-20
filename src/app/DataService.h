@@ -4,6 +4,7 @@
 
 #include <QDate>
 #include <QDateTime>
+#include <QJsonObject>
 #include <QObject>
 #include <QUrl>
 #include <QStringList>
@@ -203,6 +204,10 @@ public:
     //! The active coupling of a student ({} when not coupled)
     Q_INVOKABLE QVariantMap coupling(const QString &studentId) const;
     Q_INVOKABLE bool isCoupled(const QString &studentId) const;
+    //! All active couplings (the booklets to write)
+    QVariantList couplings() const;
+    //! All tasks of a student, in all their lessons
+    QVariantList studentTasks(const QString &studentId) const;
     //! Tasks of a membership (and those kept together with it), newest lesson first:
     //! id, date, since, title, hints (list), kind, position, closed, feedback (map), shared
     Q_INVOKABLE QVariantList tasks(const QString &membershipId) const;
@@ -223,6 +228,13 @@ public:
     //! The student's answers from the practice book: feedback per task id ({practiced,
     //! works, done, at}, the newer one wins) and questions (they replace the stored ones)
     bool applyFeedback(const QString &studentId, const QVariantMap &feedback, const QVariantList &questions);
+    /*!
+        What the student's practice book shows (format 1, docs/student-app.md): the next
+        lessons, open tasks with the student's answers,
+        pieces in progress or ready, coming events the student plays in. Never notes, other
+        students, contact data. Empty when the student is not coupled.
+    */
+    QJsonObject bookletContent(const QString &studentId) const;
 
     // ------------------------------------------------------------ sheet music library
     //! mode 0 all, 1 available, 2 lent; filter matches author, title, publisher, borrower

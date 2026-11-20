@@ -493,12 +493,13 @@ ApplicationWindow {
         if (!sheets[name]) {
             const components = { note: noteEditor, planFinish: planFinish, piece: pieceEditor, student: newStudent,
                                  lesson: lessonEditor, activity: activityEditor, reminder: reminderEditor,
-                                 pairing: pairingSheet }
+                                 pairing: pairingSheet, tasks: taskEditor }
             sheets[name] = components[name].createObject(window.contentItem)
         }
         return sheets[name]
     }
     Component { id: noteEditor; NoteEditor {} }
+    Component { id: taskEditor; TaskEditor {} }
 
     // A note or plan kept as a draft when Qupil went to the background or quit (Nav,
     // NoteEditor): its editor opens again once the data is there
@@ -575,6 +576,7 @@ ApplicationWindow {
         function onEditNote(membership, note) { window.sheet("note").edit(membership, note) }
         function onNewNoteFrom(membership, note) { window.sheet("note").copy(membership, note) }
         function onEditPlan(membership, plan) { window.sheet("note").editPlan(membership, plan) }
+        function onEditTasks(membership, date) { window.sheet("tasks").edit(membership, date) }
         function onFinishPlan(membership, plan) { window.sheet("planFinish").start(membership, plan) }
         function onPlanFromNote(membership, note) { window.sheet("planFinish").startFromNote(membership, note) }
         function onEditPiece(membership, piece) { window.sheet("piece").edit(membership, piece) }

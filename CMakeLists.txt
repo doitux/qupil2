@@ -96,7 +96,7 @@ else()
     set(QUPIL_BUILD "dev")
 endif()
 target_compile_definitions(qupil PRIVATE QUPIL_BUILD="${QUPIL_BUILD}")
-target_include_directories(qupil PRIVATE src src/core src/app)
+target_include_directories(qupil PRIVATE src src/core src/app src/shared 3rdparty/qrcodegen)
 # Finding devices in the network: Bonjour on Apple systems, our own mDNS elsewhere
 if(APPLE)
     target_sources(qupil PRIVATE src/app/BonjourDiscovery.h src/app/BonjourDiscovery.cpp)
@@ -318,6 +318,7 @@ set(QUPIL_QML_FILES
     qml/components/StudentPicker.qml
     qml/components/LessonPicker.qml
     qml/components/LessonBadge.qml
+    qml/components/TaskLessonCard.qml
     qml/components/TextTouch.qml
     qml/components/SwitchRow.qml
     qml/components/SyncCard.qml
@@ -333,6 +334,7 @@ set(QUPIL_QML_FILES
     qml/editors/LessonEditor.qml
     qml/editors/NewStudent.qml
     qml/editors/NoteEditor.qml
+    qml/editors/TaskEditor.qml
     qml/editors/PlanFinish.qml
     qml/editors/PieceEditor.qml
     qml/editors/ReadyPiecesPicker.qml
@@ -401,6 +403,7 @@ qt_add_qml_module(qupil
         LICENSES/OFL-1.1.txt
         LICENSES/Apache-2.0.txt
         3rdparty/monocypher/LICENCE.md
+        3rdparty/qrcodegen/LICENSE.md
     SOURCES
         src/core/LanguageManager.h
         src/core/LanguageManager.cpp
@@ -411,6 +414,18 @@ qt_add_qml_module(qupil
         src/app/DataService.h
         src/app/DataService.cpp
         src/app/DataServiceTasks.cpp
+        src/app/BookletService.h
+        src/app/BookletService.cpp
+        src/shared/Booklet.h
+        src/shared/Booklet.cpp
+        src/shared/BookletInbox.h
+        src/shared/BookletInbox.cpp
+        src/shared/NextcloudShares.h
+        src/shared/NextcloudShares.cpp
+        src/shared/QrCode.h
+        src/shared/QrCode.cpp
+        3rdparty/qrcodegen/qrcodegen.hpp
+        3rdparty/qrcodegen/qrcodegen.cpp
         src/app/NoteFormat.h
         src/app/NoteFormat.cpp
         src/app/ArchiveFormat.h

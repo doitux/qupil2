@@ -30,6 +30,23 @@ QtObject {
         }
     }
 
+    //! Practice book: what the student answered ("a lot", "some", "hardly"; 3 … 1)
+    function practiced(value) {
+        switch (value) {
+        case 3: return qsTrId("task.practiced.3")
+        case 2: return qsTrId("task.practiced.2")
+        default: return qsTrId("task.practiced.1")
+        }
+    }
+    //! "works well", "so-so", "not yet" (3 … 1)
+    function works(value) {
+        switch (value) {
+        case 3: return qsTrId("task.works.3")
+        case 2: return qsTrId("task.works.2")
+        default: return qsTrId("task.works.1")
+        }
+    }
+
     function pieceState(state) {
         switch (state) {
         case 1: return qsTrId("piece.status.in_progress")

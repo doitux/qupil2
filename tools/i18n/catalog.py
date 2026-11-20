@@ -582,6 +582,53 @@ E("plan.planned", en="Planned", de="Geplant", fr="Prévu", es="Planificado",
   c="Symbol on a lesson or student with a plan (for screen readers), and before the first point")
 E("note.new", en="New note", de="Neue Notiz", fr="Nouvelle note", es="Nueva nota")
 E("note.save", en="Save note", de="Notiz speichern", fr="Enregistrer la note", es="Guardar nota")
+# ---- practice book: tasks of coupled students (TaskEditor)
+E("task.lesson_of", en="Lesson of %1", de="Stunde vom %1", fr="Cours du %1", es="Clase del %1",
+  c="Title of the task editor; %1 is the date with weekday")
+E("task.fab", en="Tasks", de="Aufgaben", fr="Devoirs", es="Tareas",
+  c="Button at a student coupled with the practice book (instead of Note)")
+E("task.save", en="Save", de="Speichern", fr="Enregistrer", es="Guardar")
+E("task.add", en="Task", de="Aufgabe", fr="Devoir", es="Tarea", c="Button above the keyboard with a plus: a new task")
+E("task.add_more", en="Another task", de="Weitere Aufgabe", fr="Autre devoir", es="Otra tarea")
+E("task.add_hint", en="Hint", de="Hinweis", fr="Conseil", es="Consejo", c="Button above the keyboard with a plus: a new hint")
+E("task.private", en="Private", de="Privat", fr="Privé", es="Privado", c="Button above the keyboard: the private note")
+E("task.title", en="Task", de="Aufgabe", fr="Devoir", es="Tarea")
+E("task.title_placeholder", en="Task, e.g. Bourrée bars 17–24", de="Aufgabe, z. B. Bourrée Takt 17–24",
+  fr="Devoir, p. ex. Bourrée mesures 17–24", es="Tarea, p. ej. Bourrée compases 17–24")
+E("task.hint", en="Hint", de="Hinweis", fr="Conseil", es="Consejo")
+E("task.hint_placeholder", en="Hint – Enter: the next one", de="Hinweis – Enter: nächster",
+  fr="Conseil – Entrée : le suivant", es="Consejo – Intro: el siguiente")
+E("task.kind.practice", en="Practise", de="Üben", fr="Travailler", es="Practicar",
+  c="Kind of a task: the student says how it went")
+E("task.kind.todo", en="To do", de="Erledigen", fr="À faire", es="Por hacer",
+  c="Kind of a task (get the music): the student only ticks it")
+E("task.remove", en="Remove task", de="Aufgabe entfernen", fr="Retirer le devoir", es="Quitar la tarea")
+E("task.open_since", en="open since %1", de="offen seit %1", fr="ouvert depuis le %1", es="pendiente desde %1")
+E("task.done", en="Done", de="Erledigt", fr="Terminé", es="Hecho")
+E("task.for_all", src="Tasks for all %n students",
+  en=["Tasks for %n student", "Tasks for all %n students"],
+  de=["Aufgaben für %n Schüler", "Aufgaben für alle %n Schüler"],
+  fr=["Devoirs pour %n élève", "Devoirs pour les %n élèves"],
+  es=["Tareas para %n alumno", "Tareas para los %n alumnos"])
+E("task.for_all_hint", en="Each student gets their own and answers for themselves",
+  de="Jeder bekommt eigene Aufgaben und gibt eigene Rückmeldung",
+  fr="Chacun reçoit les siens et répond pour lui-même", es="Cada uno recibe las suyas y responde por sí mismo")
+E("task.private_add", en="Add a private note", de="Private Notiz hinzufügen", fr="Ajouter une note privée",
+  es="Añadir una nota privada")
+E("task.private_label", en="Private note", de="Private Notiz", fr="Note privée", es="Nota privada")
+E("task.private_hint", en="Only for you – it is never shown in the practice book.",
+  de="Nur für Sie – erscheint nie im Übeheft.", fr="Pour vous seul – n’apparaît jamais dans le cahier.",
+  es="Solo para usted: nunca aparece en el cuaderno.")
+E("task.feedback.practiced", en="Practised: %1", de="Geübt: %1", fr="Travaillé : %1", es="Practicado: %1")
+E("task.feedback.works", en="Works: %1", de="Klappt: %1", fr="Ça marche : %1", es="Sale: %1")
+E("task.feedback.done", en="Reported as done", de="Als erledigt gemeldet", fr="Signalé comme fait",
+  es="Marcado como hecho")
+E("task.practiced.3", en="a lot", de="viel", fr="beaucoup", es="mucho")
+E("task.practiced.2", en="some", de="etwas", fr="un peu", es="algo")
+E("task.practiced.1", en="hardly", de="kaum", fr="à peine", es="poco")
+E("task.works.3", en="well", de="gut", fr="bien", es="bien")
+E("task.works.2", en="so-so", de="geht so", fr="moyen", es="más o menos")
+E("task.works.1", en="not yet", de="noch nicht", fr="pas encore", es="aún no")
 E("note.save_for_all", src="Save for all %n students",
   en=["Save for %n student", "Save for all %n students"],
   de=["Für %n Schüler speichern", "Für alle %n Schüler speichern"],

@@ -719,6 +719,8 @@ QString AppController::licenseText() const
         + u"\n\nFigtree font: © The Figtree Project Authors\n\n"_s + read(u"LICENSES/OFL-1.1.txt"_s)
         + u"\n\n"_s + rule + u"\n\nMonocypher: © 2017–2020 Loup Vaillant\n\n"_s
         + read(u"3rdparty/monocypher/LICENCE.md"_s) + u"\n\n"_s + rule
+        + u"\n\nQR Code generator library: © Project Nayuki\n\n"_s
+        + read(u"3rdparty/qrcodegen/LICENSE.md"_s) + u"\n\n"_s + rule
         + u"\n\nQt: © The Qt Company Ltd. and other contributors, used under the GNU Lesser General "
           u"Public License version 3 (https://www.gnu.org/licenses/lgpl-3.0.html). "
           u"Source code: https://code.qt.io\n"_s

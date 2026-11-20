@@ -51,6 +51,30 @@ Item {
     readonly property var togetherSwitch: student.togetherSwitch || null
     readonly property var notes: { if (Data.revision < 0) return undefined; return currentMembership ? Data.notes(currentMembership) : [] }
     readonly property var plans: { if (Data.revision < 0) return undefined; return currentMembership ? Data.plans(currentMembership) : [] }
+    //! Coupled with the practice book app: tasks instead of notes (a card per lesson, the
+    //! note of that day as its private line)
+    readonly property bool coupled: { if (Data.revision < 0) return undefined; return studentId ? Data.isCoupled(studentId) : false }
+    readonly property var taskLessons: {
+        if (Data.revision < 0) return undefined
+        if (!coupled || !currentMembership)
+            return []
+        const byDate = {}
+        const out = []
+        for (const t of Data.tasks(currentMembership)) {
+            if (!byDate[t.date]) {
+                byDate[t.date] = { date: t.date, tasks: [], note: null }
+                out.push(byDate[t.date])
+            }
+            byDate[t.date].tasks.push(t)
+        }
+        for (const n of notes)
+            if (byDate[n.date] && !byDate[n.date].note)
+                byDate[n.date].note = n
+        return out
+    }
+    //! Notes not shown in a lesson card of the practice book
+    readonly property var plainNotes: taskLessons.length === 0 ? notes
+                                      : notes.filter(n => !taskLessons.some(l => l.note && l.note.id === n.id))
     readonly property var pieces: { if (Data.revision < 0) return undefined; return currentMembership ? Data.pieces(currentMembership, pieceFilter) : [] }
     readonly property var pieceCounts: { if (Data.revision < 0) return undefined; return currentMembership ? Data.pieceCounts(currentMembership) : [0, 0, 0, 0, 0, 0] }
     readonly property var activities: { if (Data.revision < 0) return undefined; return studentId ? Data.activities(studentId) : [] }
@@ -633,8 +657,11 @@ Item {
         // Above the running metronome at the bottom right, not under it
         anchors.bottomMargin: 20 + Nav.playerInset
         Behavior on anchors.bottomMargin { NumberAnimation { duration: 180; easing.type: Easing.OutCubic } }
-        text: detail.tab === 0 ? qsTrId("common.note") : qsTrId("common.piece")
-        onClicked: detail.tab === 0 ? Nav.editNote(detail.currentMembership, "") : Nav.editPiece(detail.currentMembership, "")
+        // Coupled with the practice book: "Tasks" (and the private note with them)
+        text: detail.tab === 0 ? (detail.coupled ? qsTrId("task.fab") : qsTrId("common.note")) : qsTrId("common.piece")
+        onClicked: detail.tab === 0 ? (detail.coupled ? Nav.editTasks(detail.currentMembership, "")
+                                                      : Nav.editNote(detail.currentMembership, ""))
+                                    : Nav.editPiece(detail.currentMembership, "")
     }
 
     //! The menu behind "…" (also for the screenshot tour)
@@ -797,12 +824,23 @@ Item {
                     plan: modelData
                 }
             }
+            // Practice book: one card per lesson with its tasks
+            Repeater {
+                model: detail.taskLessons
+                delegate: TaskLessonCard {
+                    required property var modelData
+                    Layout.fillWidth: true
+                    lesson: modelData
+                    relative: detail.relative(modelData.date)
+                    onOpened: Nav.editTasks(detail.currentMembership, modelData.date)
+                }
+            }
             EmptyHint {
-                visible: detail.notes.length === 0 && detail.plans.length === 0
+                visible: detail.notes.length === 0 && detail.plans.length === 0 && detail.taskLessons.length === 0
                 text: detail.memberships.length === 0 ? qsTrId("student.no_lesson") : qsTrId("notes.empty")
             }
             Repeater {
-                model: detail.notes
+                model: detail.plainNotes
                 // Tap: a new note for today with this text, to adjust for the next lesson (as in
                 // Qupil 1.x). Swipe left, press and hold or right click: edit and delete roll in
                 // on the right; swipe right or tap hides them again.

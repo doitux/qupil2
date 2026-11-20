@@ -51,6 +51,24 @@ bool DataService::isCoupled(const QString &studentId) const
     return !coupling(studentId).isEmpty();
 }
 
+QVariantList DataService::couplings() const
+{
+    return rows(u"SELECT * FROM coupling WHERE deleted = 0 AND ended = '' ORDER BY created, id"_s);
+}
+
+QVariantList DataService::studentTasks(const QString &studentId) const
+{
+    QVariantList out;
+    QSet<QString> seen;
+    for (const QVariant &m : rows(u"SELECT id FROM membership WHERE deleted = 0 AND student_id = ?"_s, { studentId }))
+        for (const QVariant &v : tasks(m.toMap().value(u"id"_s).toString()))
+            if (!seen.contains(v.toMap().value(u"id"_s).toString())) {
+                seen.insert(v.toMap().value(u"id"_s).toString());
+                out << v;
+            }
+    return out;
+}
+
 QVariantList DataService::tasks(const QString &membershipId) const
 {
     const QStringList all = together(membershipId);
@@ -205,4 +223,113 @@ bool DataService::applyFeedback(const QString &studentId, const QVariantMap &fee
     if (q != c.value(u"questions"_s).toString())
         ok = ok && m_store->update(u"coupling"_s, c.value(u"id"_s).toString(), { { u"questions"_s, q } });
     return m_store->endBatch(ok) && ok;
+}
+
+QJsonObject DataService::bookletContent(const QString &studentId) const
+{
+    const QVariantMap c = coupling(studentId);
+    if (c.isEmpty())
+        return {};
+    const QVariantMap student = m_store->get(u"student"_s, studentId);
+    const QDate today = Qupil::Clock::today();
+    const QString todayIso = today.toString(Qt::ISODate);
+    const QStringList memberships = [&] {
+        QStringList out;
+        for (const QVariant &v : rows(u"SELECT id FROM membership WHERE deleted = 0 AND student_id = ? "
+                                      u"AND (end_date = '' OR end_date > ?)"_s, { studentId, todayIso }))
+            out << v.toMap().value(u"id"_s).toString();
+        return out;
+    }();
+
+    QJsonObject booklet;
+    booklet.insert(u"format"_s, 1);
+    booklet.insert(u"written"_s, QDateTime::currentDateTimeUtc().toString(Qt::ISODate));
+    booklet.insert(u"teacher"_s, setting(u"booklet_teacher_name"_s, QString()).toString());
+    booklet.insert(u"student"_s, student.value(u"forename"_s).toString());
+    booklet.insert(u"instrument"_s, student.value(u"instrument"_s).toString());
+    const bool receives = c.value(u"receives"_s, 1).toInt() != 0;
+    booklet.insert(u"allow"_s, QJsonObject { { u"feedback"_s, receives && c.value(u"allow_feedback"_s, 1).toInt() != 0 },
+                                             { u"questions"_s, receives && c.value(u"allow_questions"_s, 1).toInt() != 0 } });
+
+    // The next three lessons (weekly ones; irregular lessons have no date to tell)
+    struct Next { QString date, start, end, place; };
+    QList<Next> next;
+    for (const QString &m : memberships) {
+        const QVariantMap lesson = m_store->get(u"lesson"_s, m_store->get(u"membership"_s, m).value(u"lesson_id"_s).toString());
+        if (lesson.isEmpty() || lesson.value(u"irregular"_s).toInt() != 0 || lesson.value(u"active"_s, 1).toInt() == 0)
+            continue;
+        QString after;
+        for (int i = 0; i < 3; ++i) {
+            const QString date = nextDateOf(m, after);
+            if (date.isEmpty() || date == after)
+                break;
+            next.append({ date, lesson.value(u"start_time"_s).toString(), lesson.value(u"end_time"_s).toString(),
+                          lesson.value(u"location"_s).toString() });
+            after = date;
+        }
+    }
+    std::sort(next.begin(), next.end(), [](const Next &a, const Next &b) { return a.date + a.start < b.date + b.start; });
+    QJsonArray nextArray;
+    for (const Next &n : next.mid(0, 3))
+        nextArray.append(QJsonObject { { u"date"_s, n.date }, { u"start"_s, n.start }, { u"end"_s, n.end },
+                                       { u"place"_s, n.place }, { u"cancelled"_s, false } });
+    booklet.insert(u"next"_s, nextArray);
+
+    // Open tasks with the answers so far (closed by the teacher: gone from the booklet)
+    QJsonArray taskArray;
+    QJsonObject feedback;
+    QSet<QString> seen;
+    for (const QString &m : memberships) {
+        for (const QVariant &v : tasks(m)) {
+            const QVariantMap t = v.toMap();
+            const QString id = t.value(u"id"_s).toString();
+            const QString closed = t.value(u"closed"_s).toString();
+            if (seen.contains(id) || !closed.isEmpty())
+                continue;
+            seen.insert(id);
+            taskArray.append(QJsonObject { { u"id"_s, id }, { u"date"_s, t.value(u"date"_s).toString() },
+                                           { u"since"_s, t.value(u"since"_s).toString() },
+                                           { u"title"_s, t.value(u"title"_s).toString() },
+                                           { u"hints"_s, QJsonArray::fromStringList(t.value(u"hints"_s).toStringList()) },
+                                           { u"kind"_s, t.value(u"kind"_s).toInt() == 1 ? u"todo"_s : u"practice"_s } });
+            const QVariantMap fb = t.value(u"feedback"_s).toMap();
+            if (!fb.isEmpty())
+                feedback.insert(id, QJsonObject::fromVariantMap(fb));
+        }
+    }
+    booklet.insert(u"tasks"_s, taskArray);
+    booklet.insert(u"feedback"_s, feedback);
+
+    // Pieces in progress or ready for a recital
+    QJsonArray pieces;
+    for (const QString &m : memberships) {
+        for (const QVariant &v : rows(u"SELECT title, composer, start_date, state FROM piece WHERE deleted = 0 "
+                                      u"AND membership_id = ? AND state IN (1, 3) ORDER BY start_date, title"_s, { m })) {
+            const QVariantMap p = v.toMap();
+            pieces.append(QJsonObject { { u"title"_s, p.value(u"title"_s).toString() },
+                                        { u"composer"_s, p.value(u"composer"_s).toString() },
+                                        { u"since"_s, p.value(u"start_date"_s).toString() },
+                                        { u"ready"_s, p.value(u"state"_s).toInt() == 3 } });
+        }
+    }
+    booklet.insert(u"pieces"_s, pieces);
+
+    // Coming events the student plays in (with the piece)
+    QJsonArray events;
+    if (!memberships.isEmpty()) {
+        for (const QVariant &v : rows(u"SELECT e.date, e.time, e.title, e.location, p.title AS piece FROM event e "
+                                      u"JOIN event_item i ON i.event_id = e.id AND i.deleted = 0 "
+                                      u"JOIN piece p ON p.id = i.piece_id AND p.deleted = 0 "
+                                      u"WHERE e.deleted = 0 AND e.state = 0 AND e.date >= ? AND p.membership_id IN (%1) "
+                                      u"ORDER BY e.date, e.time"_s.arg(placeholders(memberships.size())),
+                                      QVariantList { todayIso } + QVariantList(memberships.cbegin(), memberships.cend()))) {
+            const QVariantMap e = v.toMap();
+            events.append(QJsonObject { { u"date"_s, e.value(u"date"_s).toString() }, { u"time"_s, e.value(u"time"_s).toString() },
+                                        { u"name"_s, e.value(u"title"_s).toString() },
+                                        { u"place"_s, e.value(u"location"_s).toString() },
+                                        { u"contribution"_s, e.value(u"piece"_s).toString() } });
+        }
+    }
+    booklet.insert(u"events"_s, events);
+    return booklet;
 }

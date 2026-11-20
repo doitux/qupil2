@@ -1088,6 +1088,136 @@ Bitte ändern Sie die Schüleranzahl um zu speichern!</translation>
         <source>Save note</source>
         <translation>Notiz speichern</translation>
     </message>
+    <message id="task.lesson_of">
+        <source>Lesson of %1</source>
+        <extracomment>Title of the task editor; %1 is the date with weekday</extracomment>
+        <translation>Stunde vom %1</translation>
+    </message>
+    <message id="task.fab">
+        <source>Tasks</source>
+        <extracomment>Button at a student coupled with the practice book (instead of Note)</extracomment>
+        <translation>Aufgaben</translation>
+    </message>
+    <message id="task.save">
+        <source>Save</source>
+        <translation>Speichern</translation>
+    </message>
+    <message id="task.add">
+        <source>Task</source>
+        <extracomment>Button above the keyboard with a plus: a new task</extracomment>
+        <translation>Aufgabe</translation>
+    </message>
+    <message id="task.add_more">
+        <source>Another task</source>
+        <translation>Weitere Aufgabe</translation>
+    </message>
+    <message id="task.add_hint">
+        <source>Hint</source>
+        <extracomment>Button above the keyboard with a plus: a new hint</extracomment>
+        <translation>Hinweis</translation>
+    </message>
+    <message id="task.private">
+        <source>Private</source>
+        <extracomment>Button above the keyboard: the private note</extracomment>
+        <translation>Privat</translation>
+    </message>
+    <message id="task.title">
+        <source>Task</source>
+        <translation>Aufgabe</translation>
+    </message>
+    <message id="task.title_placeholder">
+        <source>Task, e.g. Bourrée bars 17–24</source>
+        <translation>Aufgabe, z. B. Bourrée Takt 17–24</translation>
+    </message>
+    <message id="task.hint">
+        <source>Hint</source>
+        <translation>Hinweis</translation>
+    </message>
+    <message id="task.hint_placeholder">
+        <source>Hint – Enter: the next one</source>
+        <translation>Hinweis – Enter: nächster</translation>
+    </message>
+    <message id="task.kind.practice">
+        <source>Practise</source>
+        <extracomment>Kind of a task: the student says how it went</extracomment>
+        <translation>Üben</translation>
+    </message>
+    <message id="task.kind.todo">
+        <source>To do</source>
+        <extracomment>Kind of a task (get the music): the student only ticks it</extracomment>
+        <translation>Erledigen</translation>
+    </message>
+    <message id="task.remove">
+        <source>Remove task</source>
+        <translation>Aufgabe entfernen</translation>
+    </message>
+    <message id="task.open_since">
+        <source>open since %1</source>
+        <translation>offen seit %1</translation>
+    </message>
+    <message id="task.done">
+        <source>Done</source>
+        <translation>Erledigt</translation>
+    </message>
+    <message id="task.for_all" numerus="yes">
+        <source>Tasks for all %n students</source>
+        <translation>
+            <numerusform>Aufgaben für %n Schüler</numerusform>
+            <numerusform>Aufgaben für alle %n Schüler</numerusform>
+        </translation>
+    </message>
+    <message id="task.for_all_hint">
+        <source>Each student gets their own and answers for themselves</source>
+        <translation>Jeder bekommt eigene Aufgaben und gibt eigene Rückmeldung</translation>
+    </message>
+    <message id="task.private_add">
+        <source>Add a private note</source>
+        <translation>Private Notiz hinzufügen</translation>
+    </message>
+    <message id="task.private_label">
+        <source>Private note</source>
+        <translation>Private Notiz</translation>
+    </message>
+    <message id="task.private_hint">
+        <source>Only for you – it is never shown in the practice book.</source>
+        <translation>Nur für Sie – erscheint nie im Übeheft.</translation>
+    </message>
+    <message id="task.feedback.practiced">
+        <source>Practised: %1</source>
+        <translation>Geübt: %1</translation>
+    </message>
+    <message id="task.feedback.works">
+        <source>Works: %1</source>
+        <translation>Klappt: %1</translation>
+    </message>
+    <message id="task.feedback.done">
+        <source>Reported as done</source>
+        <translation>Als erledigt gemeldet</translation>
+    </message>
+    <message id="task.practiced.3">
+        <source>a lot</source>
+        <translation>viel</translation>
+    </message>
+    <message id="task.practiced.2">
+        <source>some</source>
+        <translation>etwas</translation>
+    </message>
+    <message id="task.practiced.1">
+        <source>hardly</source>
+        <translation>kaum</translation>
+    </message>
+    <message id="task.works.3">
+        <source>well</source>
+        <translation>gut</translation>
+    </message>
+    <message id="task.works.2">
+        <source>so-so</source>
+        <translation>geht so</translation>
+    </message>
+    <message id="task.works.1">
+        <source>not yet</source>
+        <translation>noch nicht</translation>
+    </message>
     <message id="note.save_for_all" numerus="yes">
         <source>Save for all %n students</source>
         <extracomment>Switch in the note editor of group lessons.</extracomment>
