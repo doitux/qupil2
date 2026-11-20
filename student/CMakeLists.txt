@@ -39,10 +39,15 @@ endif()
 
 set(QUPIL_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/..)
 
-# ---- booklet format and encryption (shared with the teacher app)
+# ---- booklet format and encryption (shared with the teacher app; the teacher's side
+#      of it – inbox, links in Nextcloud – is built here too, for its tests)
 qt_add_library(qupilbooklet STATIC
     ${QUPIL_ROOT}/src/shared/Booklet.h
     ${QUPIL_ROOT}/src/shared/Booklet.cpp
+    ${QUPIL_ROOT}/src/shared/BookletInbox.h
+    ${QUPIL_ROOT}/src/shared/BookletInbox.cpp
+    ${QUPIL_ROOT}/src/shared/NextcloudShares.h
+    ${QUPIL_ROOT}/src/shared/NextcloudShares.cpp
     ${QUPIL_ROOT}/src/core/Crypto.h
     ${QUPIL_ROOT}/src/core/Crypto.cpp
     ${QUPIL_ROOT}/3rdparty/monocypher/monocypher.c
@@ -50,7 +55,7 @@ qt_add_library(qupilbooklet STATIC
 target_include_directories(qupilbooklet
     PUBLIC ${QUPIL_ROOT}/src/shared ${QUPIL_ROOT}/src/core
     PRIVATE ${QUPIL_ROOT}/3rdparty/monocypher)
-target_link_libraries(qupilbooklet PUBLIC Qt6::Core)
+target_link_libraries(qupilbooklet PUBLIC Qt6::Core Qt6::Network)
 
 # ---- interface and state (a library, so the tests drive the same QML as the app)
 qt_add_library(qupilstudentui STATIC)
@@ -170,9 +175,12 @@ if(QUPIL_STUDENT_TESTS AND NOT ANDROID AND NOT IOS)
     find_package(Qt6 REQUIRED COMPONENTS Test)
     qt_add_executable(tst_booklet tests/tst_booklet.cpp)
     target_link_libraries(tst_booklet PRIVATE qupilbooklet Qt6::Test)
+    qt_add_executable(tst_teacherside tests/tst_teacherside.cpp tests/FakeNextcloud.h tests/FakeNextcloud.cpp)
+    target_link_libraries(tst_teacherside PRIVATE qupilbooklet Qt6::Test)
+    add_test(NAME tst_teacherside COMMAND tst_teacherside)
     qt_add_executable(tst_studentapp tests/tst_studentapp.cpp tests/FakeNextcloud.h tests/FakeNextcloud.cpp)
     target_link_libraries(tst_studentapp PRIVATE qupilstudentui qupilstudentuiplugin Qt6::Test)
-    set_target_properties(tst_booklet tst_studentapp PROPERTIES MACOSX_BUNDLE FALSE WIN32_EXECUTABLE FALSE)
+    set_target_properties(tst_booklet tst_teacherside tst_studentapp PROPERTIES MACOSX_BUNDLE FALSE WIN32_EXECUTABLE FALSE)
     add_test(NAME tst_booklet COMMAND tst_booklet)
     add_test(NAME tst_studentapp COMMAND tst_studentapp -platform offscreen)
 endif()

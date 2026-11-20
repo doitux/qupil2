@@ -123,8 +123,8 @@ private slots:
     void init()
     {
         removeAll();
-        m_cloud->files.clear();
-        m_cloud->files.insert(u"heft.qupil"_s, Booklet::seal(m_link.key, Booklet::Purpose::Booklet, exampleBooklet()));
+        m_cloud->files().clear();
+        m_cloud->files().insert(u"heft.qupil"_s, Booklet::seal(m_link.key, Booklet::Purpose::Booklet, exampleBooklet()));
         m_cloud->legacyOnly = false;
         m_cloud->shareGone = false;
     }
@@ -159,13 +159,13 @@ private slots:
         QTRY_COMPARE_WITH_TIMEOUT(m_app->current().value(u"sendState"_s).toString(), u"sent"_s, 8000);
         QCOMPARE(m_cloud->puts, 1);
         QString name;
-        for (auto it = m_cloud->files.constBegin(); it != m_cloud->files.constEnd(); ++it)
+        for (auto it = m_cloud->files().constBegin(); it != m_cloud->files().constEnd(); ++it)
             if (Booklet::isFeedbackFileName(it.key()))
                 name = it.key();
         QVERIFY(!name.isEmpty());
 
         // What the teacher's Qupil reads
-        const auto content = Booklet::open(m_link.key, Booklet::Purpose::Feedback, m_cloud->files.value(name));
+        const auto content = Booklet::open(m_link.key, Booklet::Purpose::Feedback, m_cloud->files().value(name));
         QVERIFY(content.has_value());
         const QJsonObject feedback = content->value(u"feedback"_s).toObject();
         QCOMPARE(feedback.value(u"t1"_s).toObject().value(u"practiced"_s).toInt(), 3);
@@ -174,8 +174,8 @@ private slots:
         QCOMPARE(content->value(u"questions"_s).toArray().first().toObject().value(u"text"_s).toString(),
                  u"Wie schnell soll ich spielen?"_s);
         // Not readable as a booklet, and no plain text in the file
-        QVERIFY(!Booklet::open(m_link.key, Booklet::Purpose::Booklet, m_cloud->files.value(name)));
-        QVERIFY(!m_cloud->files.value(name).contains("schnell"));
+        QVERIFY(!Booklet::open(m_link.key, Booklet::Purpose::Booklet, m_cloud->files().value(name)));
+        QVERIFY(!m_cloud->files().value(name).contains("schnell"));
     }
 
     void teacherEchoIsMerged()
@@ -183,7 +183,7 @@ private slots:
         // Another device of the student sent "practised: some" later; the teacher echoes it
         QJsonObject booklet = exampleBooklet();
         booklet.insert(u"feedback"_s, QJsonObject{{u"t1"_s, QJsonObject{{u"practiced"_s, 2}, {u"at"_s, 4.0e12}}}});
-        m_cloud->files.insert(u"heft.qupil"_s, Booklet::seal(m_link.key, Booklet::Purpose::Booklet, booklet));
+        m_cloud->files().insert(u"heft.qupil"_s, Booklet::seal(m_link.key, Booklet::Purpose::Booklet, booklet));
         QCOMPARE(m_app->addLink(Booklet::encodeLink(m_link)), QString());
         QTRY_COMPARE(task(u"t1"_s).value(u"practiced"_s).toInt(), 2);
     }
@@ -198,13 +198,13 @@ private slots:
         removeAll();
 
         // A newer format than this app knows
-        m_cloud->files.insert(u"heft.qupil"_s, Booklet::seal(m_link.key, Booklet::Purpose::Booklet, exampleBooklet(Booklet::Format + 1)));
+        m_cloud->files().insert(u"heft.qupil"_s, Booklet::seal(m_link.key, Booklet::Purpose::Booklet, exampleBooklet(Booklet::Format + 1)));
         QCOMPARE(m_app->addLink(Booklet::encodeLink(m_link)), QString());
         QTRY_COMPARE(m_app->current().value(u"error"_s).toString(), u"newer"_s);
         removeAll();
 
         // Loaded once, then the teacher ends the share: the last state stays visible
-        m_cloud->files.insert(u"heft.qupil"_s, Booklet::seal(m_link.key, Booklet::Purpose::Booklet, exampleBooklet()));
+        m_cloud->files().insert(u"heft.qupil"_s, Booklet::seal(m_link.key, Booklet::Purpose::Booklet, exampleBooklet()));
         QCOMPARE(m_app->addLink(Booklet::encodeLink(m_link)), QString());
         QTRY_VERIFY(!task(u"t1"_s).isEmpty());
         m_cloud->shareGone = true;
