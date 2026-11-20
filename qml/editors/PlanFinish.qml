@@ -5,7 +5,9 @@
 // what was not covered. The ticked ones become the note of the lesson (saved at once, or
 // first adjusted in the note editor), the rest stays planned for the next lesson.
 // A plan with blocks (heading and lines, after an empty line) is ticked block by block;
-// the badge shows a block's lines without changing its tick.
+// the badge opens a block, and there each line can be ticked on its own: the ticked lines
+// go into the note under the block's heading, the others stay planned under the same
+// heading (a block with some lines ticked shows a dash).
 //
 // The same sheet takes blocks of an earlier note into the plan of the next lesson
 // (startFromNote): nothing is ticked at first, the note stays as it is.
@@ -23,6 +25,8 @@ Sheet {
     //! The blocks of the plan or note (Data.blocks); without blocks one per line
     property var blocks: []
     property var checks: []
+    //! Per block: the ticks of its lines once one differs from the block (else null)
+    property var lineChecks: []
     //! Which blocks show their lines
     property var peeked: []
     //! Set when blocks of this note go into the plan of the next lesson
@@ -31,7 +35,37 @@ Sheet {
     //! The next lesson: where the rest (or the blocks of the note) is planned
     property string nextDate
     readonly property bool grouped: blocks.some(b => b.more > 0)
-    readonly property int checkedCount: checks.filter(Boolean).length
+    readonly property int checkedCount: blocks.filter((b, i) => blockState(i) !== 0).length
+
+    //! The lines of block \a i (raw text, as written)
+    function linesOf(i) {
+        const b = blocks[i]
+        return b && b.more > 0 ? b.body.split("\n") : []
+    }
+    function lineTicked(i, j) {
+        const l = lineChecks[i]
+        return l ? l[j] === true : checks[i] === true
+    }
+    //! 0 nothing ticked, 1 some lines, 2 all
+    function blockState(i) {
+        const l = lineChecks[i]
+        if (!l)
+            return checks[i] === true ? 2 : 0
+        const n = l.filter(Boolean).length
+        return n === 0 ? 0 : n === l.length ? 2 : 1
+    }
+    function toggleLine(i, j) {
+        const lines = linesOf(i).map((x, k) => lineTicked(i, k))
+        lines[j] = !lines[j]
+        const all = lines.every(Boolean)
+        const none = !lines.some(Boolean)
+        const c = checks.slice()
+        c[i] = all
+        const l = lineChecks.slice()
+        l[i] = all || none ? null : lines
+        checks = c
+        lineChecks = l
+    }
 
     //! "Edit before saving": the note editor takes over
     signal editRequested(string membershipId, string planId, string content, string rest, int restCount)
@@ -42,6 +76,7 @@ Sheet {
         plan = Data.plans(membership).find(p => p.id === id) || ({})
         blocks = plan.blocks || []
         checks = blocks.map(() => true)
+        lineChecks = blocks.map(() => null)
         peeked = blocks.map(() => false)
         nextDate = plan.date ? Data.nextLessonDate(membership, plan.date) : ""
         open()
@@ -54,35 +89,58 @@ Sheet {
         plan = ({ id: "", date: n.date || "" })
         blocks = Data.blocks(n.content || "")
         checks = blocks.map(() => false)
+        lineChecks = blocks.map(() => null)
         peeked = blocks.map(() => false)
         forAll = Data.setting("save_for_all_students", 1) !== 0 && (n.shared || 1) > 1
         nextDate = Data.nextLessonDate(membership, "")
         open()
     }
-    //! [ticked blocks, the others, how many others]
+    //! [ticked blocks, the others, how many others]; a block with some lines ticked goes
+    //! into both, each time with its heading
     function parts() {
         const done = []
         const left = []
-        blocks.forEach((b, i) => (checks[i] ? done : left).push(b.text))
+        blocks.forEach((b, i) => {
+            const state = blockState(i)
+            if (state !== 1) {
+                (state === 2 ? done : left).push(b.text)
+                return
+            }
+            const lines = linesOf(i)
+            done.push([b.title].concat(lines.filter((x, j) => lineTicked(i, j))).join("\n"))
+            left.push([b.title].concat(lines.filter((x, j) => !lineTicked(i, j))).join("\n"))
+        })
         const sep = grouped ? "\n\n" : "\n"
         return [done.join(sep), left.join(sep), left.length]
     }
     function toggle(index) {
         const c = checks.slice()
-        c[index] = !c[index]
+        c[index] = blockState(index) !== 2
+        const l = lineChecks.slice()
+        l[index] = null
         checks = c
+        lineChecks = l
     }
     function peek(index) {
         const p = peeked.slice()
         p[index] = !p[index]
         peeked = p
     }
+    //! Blocks with something ticked (\a ticked) or something left
     function indexes(ticked) {
-        return blocks.map((b, i) => i).filter(i => (checks[i] === true) === ticked)
+        return blocks.map((b, i) => i).filter(i => ticked ? blockState(i) !== 0 : blockState(i) !== 2)
     }
-    //! The headings of these blocks: „Jazz“ und „Bach“
-    function names(list) {
-        const quoted = list.map(i => qsTrId("block.quoted").arg(blocks[i].heading))
+    //! The headings of these blocks: „Jazz“ und „Bach“ (a block with some lines ticked:
+    //! how many of its lines)
+    function names(list, ticked) {
+        const quoted = list.map(i => {
+            const name = qsTrId("block.quoted").arg(blocks[i].heading)
+            if (blockState(i) !== 1)
+                return name
+            const lines = linesOf(i)
+            const n = lines.filter((x, j) => lineTicked(i, j) === ticked).length
+            return qsTrId("block.lines_of").arg(name).arg(n).arg(lines.length)
+        })
         return quoted.length > 1 ? qsTrId("block.and").arg(quoted.slice(0, -1).join(", ")).arg(quoted[quoted.length - 1])
                                  : quoted.join("")
     }
@@ -94,7 +152,7 @@ Sheet {
             if (done.length === 0)
                 return qsTrId("plan.from_note.none")
             const existing = Data.plans(membershipId).some(p => p.date === nextDate)
-            return qsTrId(existing ? "plan.from_note.add" : "plan.from_note.new").arg(names(done)).arg(next)
+            return qsTrId(existing ? "plan.from_note.add" : "plan.from_note.new").arg(names(done, true)).arg(next)
         }
         if (done.length === 0)
             return qsTrId("plan.finish.none")
@@ -103,7 +161,7 @@ Sheet {
             return qsTrId("plan.finish.info").arg(date).arg(next)
         const left = indexes(false)
         return qsTrId("plan.finish.blocks").arg(date)
-               + (left.length > 0 ? " " + qsTrId("plan.finish.blocks_left").arg(names(left)).arg(next) : "")
+               + (left.length > 0 ? " " + qsTrId("plan.finish.blocks_left").arg(names(left, false)).arg(next) : "")
     }
 
     title: fromNoteId ? qsTrId("plan.from_note.title") : qsTrId("plan.finish.title")
@@ -135,7 +193,8 @@ Sheet {
             id: pointRow
             required property var modelData
             required property int index
-            readonly property bool ticked: sheet.checks[index] === true
+            readonly property int tickState: sheet.blockState(index)
+            readonly property bool ticked: tickState === 2
             readonly property bool hasMore: modelData.more > 0
             readonly property bool peeking: sheet.peeked[index] === true
             Layout.fillWidth: true
@@ -148,7 +207,7 @@ Sheet {
             onClicked: sheet.toggle(index)
             background: Rectangle {
                 radius: 14
-                color: pointRow.ticked ? Theme.accentSoft : Theme.surfaceAlt
+                color: pointRow.tickState !== 0 ? Theme.accentSoft : Theme.surfaceAlt
                 border.width: pointRow.visualFocus ? 2 : 0
                 border.color: Theme.accentText
             }
@@ -165,15 +224,15 @@ Sheet {
                         width: 24
                         height: 24
                         radius: 7
-                        color: pointRow.ticked ? Theme.accent : "transparent"
-                        border.width: pointRow.ticked ? 0 : 2
+                        color: pointRow.tickState !== 0 ? Theme.accent : "transparent"
+                        border.width: pointRow.tickState !== 0 ? 0 : 2
                         border.color: Theme.border
                         Icon {
-                            visible: pointRow.ticked
+                            visible: pointRow.tickState !== 0
                             anchors.centerIn: parent
                             width: 18
                             height: 18
-                            name: "check"
+                            name: pointRow.tickState === 1 ? "minus" : "check"
                             color: Theme.textOnAccent
                             strokeWidth: 2.6
                         }
@@ -214,16 +273,63 @@ Sheet {
                         }
                     }
                 }
-                Text {
-                    visible: pointRow.peeking
-                    x: 36
-                    width: parent.width - x
-                    wrapMode: Text.Wrap
-                    textFormat: Text.RichText
-                    text: pointRow.peeking ? Data.noteHtml(pointRow.modelData.body, Theme.noteMark) : ""
-                    color: Theme.text
-                    font.family: Theme.fontFamily
-                    font.pixelSize: 14
+                // The lines of an open block, each with its own tick
+                Repeater {
+                    model: pointRow.peeking ? sheet.linesOf(pointRow.index) : []
+                    delegate: AbstractButton {
+                        id: lineRow
+                        required property string modelData
+                        required property int index
+                        readonly property bool lineTicked: sheet.lineTicked(pointRow.index, index)
+                        x: 36
+                        width: rowColumn.width - x
+                        implicitHeight: Math.max(30, lineText.implicitHeight + 8)
+                        focusPolicy: Qt.StrongFocus
+                        checkable: true
+                        checked: lineTicked
+                        Accessible.role: Accessible.CheckBox
+                        Accessible.name: lineText.text.replace(/<[^>]*>/g, "")
+                        onClicked: sheet.toggleLine(pointRow.index, index)
+                        background: Rectangle {
+                            radius: 8
+                            color: "transparent"
+                            border.width: lineRow.visualFocus ? 2 : 0
+                            border.color: Theme.accentText
+                        }
+                        contentItem: Item {
+                            Rectangle {
+                                id: lineBox
+                                y: 4
+                                width: 20
+                                height: 20
+                                radius: 6
+                                color: lineRow.lineTicked ? Theme.accent : Theme.surface
+                                border.width: lineRow.lineTicked ? 0 : 2
+                                border.color: Theme.border
+                                Icon {
+                                    visible: lineRow.lineTicked
+                                    anchors.centerIn: parent
+                                    width: 15
+                                    height: 15
+                                    name: "check"
+                                    color: Theme.textOnAccent
+                                    strokeWidth: 2.6
+                                }
+                            }
+                            Text {
+                                id: lineText
+                                x: 30
+                                y: 4 + (20 - Math.min(20, font.pixelSize * 1.4)) / 2
+                                width: parent.width - x
+                                wrapMode: Text.Wrap
+                                textFormat: Text.RichText
+                                text: Data.noteHtml(lineRow.modelData, Theme.noteMark)
+                                color: Theme.text
+                                font.family: Theme.fontFamily
+                                font.pixelSize: 14
+                            }
+                        }
+                    }
                 }
             }
             leftPadding: 14

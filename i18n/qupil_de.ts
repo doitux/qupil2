@@ -977,14 +977,14 @@ Bitte ändern Sie die Schüleranzahl um zu speichern!</translation>
         <translation>Die angehakten Punkte werden zur Notiz vom %1 – was nicht dran war, bleibt als Planung für die nächste Stunde (%2).</translation>
     </message>
     <message id="plan.finish.blocks">
-        <source>The ticked blocks become the note of %1.</source>
+        <source>What is ticked becomes the note of %1.</source>
         <extracomment>%1 = date of the lesson; plan.finish.blocks_left may follow</extracomment>
-        <translation>Die angehakten Blöcke werden zur Notiz vom %1.</translation>
+        <translation>Was angehakt ist, wird zur Notiz vom %1.</translation>
     </message>
     <message id="plan.finish.blocks_left">
-        <source>Still planned for the next lesson (%2), with all lines: %1.</source>
-        <extracomment>%1 = headings of the blocks not ticked (block.quoted, block.and), %2 = date of the next lesson</extracomment>
-        <translation>Weiter geplant für die nächste Stunde (%2), mit allen Zeilen: %1.</translation>
+        <source>Still planned for the next lesson (%2): %1.</source>
+        <extracomment>%1 = headings of the blocks not or not completely ticked (block.quoted, block.lines_of, block.and), %2 = date of the next lesson</extracomment>
+        <translation>Weiter geplant für die nächste Stunde (%2): %1.</translation>
     </message>
     <message id="plan.from_note">
         <source>Plan for the next lesson</source>
@@ -1027,6 +1027,11 @@ Bitte ändern Sie die Schüleranzahl um zu speichern!</translation>
         <source>“%1”</source>
         <extracomment>The heading of a block in a sentence</extracomment>
         <translation>„%1“</translation>
+    </message>
+    <message id="block.lines_of">
+        <source>%1 (%2 of %3 lines)</source>
+        <extracomment>%1 = quoted heading of a block, %2 = how many of its %3 lines</extracomment>
+        <translation>%1 (%2 von %3 Zeilen)</translation>
     </message>
     <message id="block.and">
         <source>%1 and %2</source>

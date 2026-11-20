@@ -48,6 +48,8 @@ private:
     void addSamplePlans();
     void addLongNote();
     void addSampleBirthdays();
+    void addPlanLines(const std::function<Step(int, int)> &size, const std::function<Step(const char *)> &mode,
+                      const std::function<Step(const QString &)> &snap);
     void writeDocuments();
 
     QPointer<QQuickWindow> m_window;

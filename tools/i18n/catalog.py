@@ -518,14 +518,14 @@ E("plan.finish.info", en="The ticked points become the note of %1 – what was n
   fr="Les points cochés deviennent la note du %1 – ce qui n’a pas été fait reste prévu pour le cours suivant (%2).",
   es="Los puntos marcados se convierten en la nota del %1; lo que no se trabajó queda planificado para la próxima clase (%2).",
   c="%1 = date of the lesson, %2 = date of the next lesson")
-E("plan.finish.blocks", en="The ticked blocks become the note of %1.", de="Die angehakten Blöcke werden zur Notiz vom %1.",
-  fr="Les blocs cochés deviennent la note du %1.", es="Los bloques marcados se convierten en la nota del %1.",
+E("plan.finish.blocks", en="What is ticked becomes the note of %1.", de="Was angehakt ist, wird zur Notiz vom %1.",
+  fr="Ce qui est coché devient la note du %1.", es="Lo marcado se convierte en la nota del %1.",
   c="%1 = date of the lesson; plan.finish.blocks_left may follow")
-E("plan.finish.blocks_left", en="Still planned for the next lesson (%2), with all lines: %1.",
-  de="Weiter geplant für die nächste Stunde (%2), mit allen Zeilen: %1.",
-  fr="Reste prévu pour le cours suivant (%2), avec toutes les lignes : %1.",
-  es="Sigue planificado para la próxima clase (%2), con todas las líneas: %1.",
-  c="%1 = headings of the blocks not ticked (block.quoted, block.and), %2 = date of the next lesson")
+E("plan.finish.blocks_left", en="Still planned for the next lesson (%2): %1.",
+  de="Weiter geplant für die nächste Stunde (%2): %1.",
+  fr="Reste prévu pour le cours suivant (%2) : %1.",
+  es="Sigue planificado para la próxima clase (%2): %1.",
+  c="%1 = headings of the blocks not or not completely ticked (block.quoted, block.lines_of, block.and), %2 = date of the next lesson")
 E("plan.from_note", en="Plan for the next lesson", de="Für die nächste Stunde planen", fr="Prévoir pour le cours suivant",
   es="Planificar para la próxima clase", c="Button next to edit and delete of a note")
 E("plan.from_note.title", en="Plan the next lesson", de="Nächste Stunde planen", fr="Préparer le cours suivant",
@@ -549,6 +549,8 @@ E("plan.from_note.new", en="Plan for %2: %1. The note stays as it is.",
 E("plan.from_note.done", en="Planned for %1", de="Geplant für %1", fr="Prévu pour le %1", es="Planificado para el %1",
   c="Toast, %1 = date with weekday")
 E("block.quoted", en="“%1”", de="„%1“", fr="« %1 »", es="«%1»", c="The heading of a block in a sentence")
+E("block.lines_of", en="%1 (%2 of %3 lines)", de="%1 (%2 von %3 Zeilen)", fr="%1 (%2 lignes sur %3)",
+  es="%1 (%2 de %3 líneas)", c="%1 = quoted heading of a block, %2 = how many of its %3 lines")
 E("block.and", en="%1 and %2", de="%1 und %2", fr="%1 et %2", es="%1 y %2",
   c="%1 = several quoted headings with commas, %2 = the last one")
 E("block.more_lines", src="%n more line(s)",
