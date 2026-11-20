@@ -173,9 +173,31 @@ private slots:
         QVERIFY(m_data->applyFeedback(m_student, { { id, QVariantMap { { u"practiced"_s, 1 }, { u"at"_s, 1000.0 } } } }, {}));
         QCOMPARE(m_data->tasksOn(m_membership, u"2026-11-17"_s).value(0).toMap().value(u"feedback"_s).toMap().value(u"practiced"_s).toInt(), 3);
 
+        // For the pop-up at the start of the lesson
+        const QString summary = m_data->bookletSummary(m_student);
+        QVERIFY(summary.contains(u"Tonleiter"_s));
+        QVERIFY(!summary.contains(u"Fremd"_s));
         // Ended: no longer coupled
         QVERIFY(m_store->update(u"coupling"_s, m_data->coupling(m_student).value(u"id"_s).toString(), { { u"ended"_s, u"2026-11-20"_s } }));
         QVERIFY(!m_data->isCoupled(m_student));
+    }
+
+    void planToTasks()
+    {
+        const QString plan = m_data->savePlan(m_membership, QString(), u"2026-11-17"_s,
+                                              u"**Bach**\nTakt 1–8\nPedal später\n\n**Etüde**\nNr. 3\n\n**Jazz**\nBlues in F"_s, false);
+        QVERIFY(!plan.isEmpty());
+        QVERIFY(m_data->planToTasks(plan, u"**Bach**\nTakt 1–8\nPedal später\n\n**Etüde**\nNr. 3"_s, u"**Jazz**\nBlues in F"_s, false));
+        const QVariantList list = m_data->tasksOn(m_membership, u"2026-11-17"_s);
+        QCOMPARE(list.size(), 2);
+        QCOMPARE(list.at(0).toMap().value(u"title"_s).toString(), u"Bach"_s);
+        QCOMPARE(list.at(0).toMap().value(u"hints"_s).toStringList(), (QStringList { u"Takt 1–8"_s, u"Pedal später"_s }));
+        QCOMPARE(list.at(1).toMap().value(u"title"_s).toString(), u"Etüde"_s);
+        // The rest stays planned, for the next lesson
+        const QVariantList plans = m_data->plans(m_membership);
+        QCOMPARE(plans.size(), 1);
+        QVERIFY(plans.at(0).toMap().value(u"content"_s).toString().contains(u"Blues in F"_s));
+        QVERIFY(plans.at(0).toMap().value(u"date"_s).toString() > u"2026-11-17"_s);
     }
 
     void bookletContent()

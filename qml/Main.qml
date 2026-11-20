@@ -493,13 +493,14 @@ ApplicationWindow {
         if (!sheets[name]) {
             const components = { note: noteEditor, planFinish: planFinish, piece: pieceEditor, student: newStudent,
                                  lesson: lessonEditor, activity: activityEditor, reminder: reminderEditor,
-                                 pairing: pairingSheet, tasks: taskEditor }
+                                 pairing: pairingSheet, tasks: taskEditor, booklet: bookletSheet }
             sheets[name] = components[name].createObject(window.contentItem)
         }
         return sheets[name]
     }
     Component { id: noteEditor; NoteEditor {} }
     Component { id: taskEditor; TaskEditor {} }
+    Component { id: bookletSheet; BookletSheet {} }
 
     // A note or plan kept as a draft when Qupil went to the background or quit (Nav,
     // NoteEditor): its editor opens again once the data is there
@@ -577,6 +578,7 @@ ApplicationWindow {
         function onNewNoteFrom(membership, note) { window.sheet("note").copy(membership, note) }
         function onEditPlan(membership, plan) { window.sheet("note").editPlan(membership, plan) }
         function onEditTasks(membership, date) { window.sheet("tasks").edit(membership, date) }
+        function onShowBooklet(student) { window.sheet("booklet").show(student) }
         function onFinishPlan(membership, plan) { window.sheet("planFinish").start(membership, plan) }
         function onPlanFromNote(membership, note) { window.sheet("planFinish").startFromNote(membership, note) }
         function onEditPiece(membership, piece) { window.sheet("piece").edit(membership, piece) }
@@ -958,10 +960,11 @@ ApplicationWindow {
                     anchors.margins: 12
                     spacing: 6
                     Text {
-                        visible: reminderItem.modelData.mode === 2 || reminderItem.modelData.mode === 3
+                        visible: reminderItem.modelData.mode >= 2
                         Layout.fillWidth: true
                         wrapMode: Text.WordWrap
-                        text: reminderItem.modelData.mode === 3 ? qsTrId("reminder.for_lesson")
+                        text: reminderItem.modelData.mode === 4 ? qsTrId("booklet.from").arg(reminderItem.modelData.studentName || "")
+                              : reminderItem.modelData.mode === 3 ? qsTrId("reminder.for_lesson")
                               : qsTrId("reminder.for_student").arg(reminderItem.modelData.studentName || "")
                         color: Theme.accentText
                         font.family: Theme.fontFamily
@@ -974,8 +977,9 @@ ApplicationWindow {
                         text: reminderItem.modelData.text
                         color: Theme.text
                         font.family: Theme.fontFamily
-                        font.pixelSize: 16
-                        font.weight: Font.Bold
+                        // The practice book's answers: several lines, not bold
+                        font.pixelSize: reminderItem.modelData.mode === 4 ? 15 : 16
+                        font.weight: reminderItem.modelData.mode === 4 ? Font.Normal : Font.Bold
                     }
                     CheckBox {
                         visible: reminderItem.modelData.mode === 2 || reminderItem.modelData.mode === 3

@@ -17,7 +17,8 @@ Page {
     readonly property bool allowFeedback: allow.feedback ?? true
     readonly property bool allowQuestions: allow.questions ?? true
     readonly property var nextLesson: (b.next ?? []).length > 0 ? b.next[0] : null
-    readonly property string teacherName: b.teacher ?? ""
+    // Without a name set in the teacher's Qupil: "your teacher"
+    readonly property string teacherName: (b.teacher ?? "") !== "" ? b.teacher : qsTrId("s.teacher_fallback")
     property var openTasks: ({})       // task id -> hints shown
 
     // ---- top bar

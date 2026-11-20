@@ -335,6 +335,7 @@ set(QUPIL_QML_FILES
     qml/editors/NewStudent.qml
     qml/editors/NoteEditor.qml
     qml/editors/TaskEditor.qml
+    qml/editors/BookletSheet.qml
     qml/editors/PlanFinish.qml
     qml/editors/PieceEditor.qml
     qml/editors/ReadyPiecesPicker.qml

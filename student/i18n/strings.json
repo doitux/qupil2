@@ -383,6 +383,12 @@
   "es": "Ahora no hay tareas.",
   "fr": "Pas de devoirs pour l'instant."
  },
+ "s.teacher_fallback": {
+  "de": "deine Lehrkraft",
+  "en": "your teacher",
+  "es": "tu profesor",
+  "fr": "ton professeur"
+ },
  "s.welcome.privacy": {
   "de": "Kein Konto, keine E-Mail-Adresse. Was du schreibst, geht verschlüsselt nur an deine Lehrkraft.",
   "en": "No account, no e-mail address. What you write goes encrypted to your teacher only.",

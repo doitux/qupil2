@@ -169,13 +169,17 @@ Sheet {
     }
 
     title: fromNoteId ? qsTrId("plan.from_note.title") : qsTrId("plan.finish.title")
-    acceptText: fromNoteId ? qsTrId("plan.from_note.save") : qsTrId("plan.finish.save")
+    //! Coupled with the practice book: what was covered becomes tasks, not a note
+    readonly property bool coupled: membershipId !== "" && Data.isCoupled(Data.get("membership", membershipId).student_id || "")
+    acceptText: fromNoteId ? qsTrId("plan.from_note.save") : coupled ? qsTrId("plan.finish.tasks") : qsTrId("plan.finish.save")
     canAccept: checkedCount > 0
     onAccepted: {
         const [done, left] = parts()
         if (fromNoteId) {
             if (Data.savePlan(membershipId, "", nextDate, done, forAll))
                 Nav.toast(qsTrId("plan.from_note.done").arg(Data.formatDate(nextDate, true)))
+        } else if (coupled) {
+            Data.planToTasks(plan.id, done, left, (plan.shared || 1) > 1)
         } else {
             Data.planToNote(plan.id, done, left, (plan.shared || 1) > 1)
         }
@@ -368,7 +372,8 @@ Sheet {
         Layout.preferredHeight: 48
         kind: "secondary"
         iconName: "edit"
-        visible: sheet.fromNoteId === ""
+        // Coupled: the tasks editor opens instead, with the lesson's tasks (after saving them)
+        visible: sheet.fromNoteId === "" && !sheet.coupled
         enabled: sheet.checkedCount > 0
         text: qsTrId("plan.finish.edit")
         onClicked: {

@@ -12,6 +12,7 @@
 
 #include "Clock.h"
 #include "Ids.h"
+#include "NoteFormat.h"
 #include "Store.h"
 
 using namespace Qt::StringLiterals;
@@ -332,4 +333,78 @@ QJsonObject DataService::bookletContent(const QString &studentId) const
     }
     booklet.insert(u"events"_s, events);
     return booklet;
+}
+
+QString DataService::bookletSummary(const QString &studentId) const
+{
+    const QVariantMap c = coupling(studentId);
+    if (c.isEmpty())
+        return {};
+    const auto label = [](const char *prefix, int value) {
+        return qtTrId(QByteArray(prefix + QByteArray::number(std::clamp(value, 1, 3))).constData());
+    };
+    QStringList lines;
+    for (const QVariant &v : studentTasks(studentId)) {
+        const QVariantMap t = v.toMap();
+        const QVariantMap fb = t.value(u"feedback"_s).toMap();
+        if (!t.value(u"closed"_s).toString().isEmpty() || fb.isEmpty())
+            continue;
+        QStringList parts;
+        if (t.value(u"kind"_s).toInt() == 1) {
+            if (fb.value(u"done"_s).toBool())
+                parts << qtTrId("task.feedback.done");
+        } else {
+            if (fb.value(u"practiced"_s).toInt() > 0)
+                parts << qtTrId("task.feedback.practiced").arg(label("task.practiced.", fb.value(u"practiced"_s).toInt()));
+            if (fb.value(u"works"_s).toInt() > 0)
+                parts << qtTrId("task.feedback.works").arg(label("task.works.", fb.value(u"works"_s).toInt()));
+        }
+        if (!parts.isEmpty())
+            lines << t.value(u"title"_s).toString() + u": "_s + parts.join(u" · "_s);
+    }
+    const double since = double(Qupil::Clock::now().addDays(-14).toMSecsSinceEpoch());
+    for (const QJsonValue &q : QJsonDocument::fromJson(c.value(u"questions"_s).toString().toUtf8()).array()) {
+        const QJsonObject o = q.toObject();
+        if (o.value(u"at"_s).toDouble() >= since)
+            lines << qtTrId("booklet.question_line").arg(o.value(u"text"_s).toString());
+    }
+    return lines.join(u'\n');
+}
+
+bool DataService::planToTasks(const QString &planId, const QString &covered, const QString &rest, bool forAll)
+{
+    const QVariantMap plan = m_store->get(u"plan"_s, planId);
+    if (plan.isEmpty())
+        return false;
+    const QString membership = plan.value(u"membership_id"_s).toString();
+    const QString date = plan.value(u"date"_s).toString();
+    // The tasks the lesson has already, then the new ones
+    QVariantList list;
+    for (const QVariant &v : tasksOn(membership, date)) {
+        const QVariantMap t = v.toMap();
+        list << QVariantMap { { u"id"_s, t.value(u"id"_s) }, { u"title"_s, t.value(u"title"_s) },
+                              { u"hints"_s, t.value(u"hints"_s) }, { u"kind"_s, t.value(u"kind"_s) } };
+    }
+    for (const NoteFormat::Block &b : NoteFormat::blocks(NoteFormat::normalized(covered))) {
+        QString title = NoteFormat::toPlainText(b.title).simplified();
+        if (title.endsWith(u':'))
+            title.chop(1);
+        QStringList hints;
+        for (const QString &line : b.lines)
+            hints << NoteFormat::toPlainText(line).simplified();
+        list << QVariantMap { { u"title"_s, title }, { u"hints"_s, hints }, { u"kind"_s, 0 } };
+    }
+    const QStringList copies = forAll ? groupCopies(u"plan"_s, planId) : QStringList { planId };
+    m_store->beginBatch();
+    bool ok = saveTasks(membership, date, list, forAll && copies.size() > 1);
+    const QString left = NoteFormat::normalized(rest);
+    if (left.trimmed().isEmpty()) {
+        for (const QString &copy : copies)
+            ok = ok && m_store->remove(u"plan"_s, copy);
+    } else {
+        for (const QString &copy : copies)
+            ok = ok && m_store->update(u"plan"_s, copy, { { u"content"_s, left } });
+        ok = ok && !postponePlan(planId, forAll).isEmpty();
+    }
+    return m_store->endBatch(ok) && ok;
 }

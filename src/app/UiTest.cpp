@@ -2402,6 +2402,55 @@ void UiTest::addCases()
                        m_data->remove(u"coupling"_s, m_text);
                    });
     }
+    // Practice book: the student's sheet. Not coupled: the Nextcloud of the sync is needed
+    // (none in the test). Coupled: the QR code, the link, the switches; ending asks first
+    {
+        Case &c = add(u"booklet-sheet"_s, u"practice book sheet: QR code of a coupled student, ending asks first"_s);
+        c.steps << act(u"the student of the running lesson"_s, [this] {
+                       m_membership = runningMembership();
+                       m_other = m_data->get(u"membership"_s, m_membership).value(u"student_id"_s).toString();
+                       QMetaObject::invokeMethod(m_nav, "showBooklet", Q_ARG(QString, m_other));
+                   })
+                << see(u"^Koppeln$"_s)
+                << check(u"no Nextcloud in the test: coupling is not offered"_s, [this] {
+                       for (QObject *o : m_window->findChildren<QObject *>())
+                           if (o->property("text").toString() == u"Koppeln"_s && o->property("visible").toBool())
+                               return !o->property("enabled").toBool();
+                       return false;
+                   })
+                << tap(u"^Schließen$"_s) << gone(u"^Koppeln$"_s)
+                << act(u"coupled (as another device of the teacher would sync it)"_s, [this] {
+                       m_text = m_data->create(u"coupling"_s, {
+                           { u"student_id"_s, m_other }, { u"server"_s, u"https://cloud.example.org"_s },
+                           { u"folder"_s, u"Qupil Übeheft/uitest"_s }, { u"share_id"_s, u"1"_s },
+                           { u"token"_s, u"UiTestToken123"_s }, { u"password"_s, u"Qp-7UiTestPassword"_s },
+                           { u"key"_s, QString::fromLatin1(QByteArray(32, '\x05').toBase64()) },
+                           { u"created"_s, m_data->today() } });
+                       QMetaObject::invokeMethod(m_nav, "showBooklet", Q_ARG(QString, m_other));
+                   })
+                << see(u"^QR-Code für die Übeheft-App$"_s) << see(u"^Stattdessen Link schicken$"_s)
+                << see(u"^Rückmeldung zu Aufgaben$"_s)
+                << snap(u"booklet-sheet"_s)
+                << tap(u"^Kopplung beenden$"_s) << see(u"^Abbrechen$"_s)
+                << tap(u"^Abbrechen$"_s, u"cancel ending (in the sheet, not the sheet's own Cancel)"_s)
+                << check(u"still coupled"_s, [this] { return m_data->isCoupled(m_other); })
+                << tap(u"^Kopplung beenden$"_s) << see(u"^Abbrechen$"_s)
+                << act(u"confirm"_s, [this] {
+                       // The second "Kopplung beenden" (the red one under the question)
+                       for (QObject *o : m_window->findChildren<QObject *>()) {
+                           if (o->property("kind").toString() == u"danger"_s && o->property("text").toString() == u"Kopplung beenden"_s
+                               && o->property("visible").toBool()) {
+                               QMetaObject::invokeMethod(o, "clicked");
+                               break;
+                           }
+                       }
+                   })
+                << check(u"ended (without the Nextcloud: here, the next device with it ends the link)"_s,
+                         [this] { return !m_data->isCoupled(m_other); })
+                << see(u"^Koppeln$"_s)
+                << tap(u"^Schließen$"_s)
+                << act(u"remove the coupling record"_s, [this] { m_data->remove(u"coupling"_s, m_text); });
+    }
     // A plan for next week (made on the day of the lesson): the schedule of this week shows
     // the clipboard at the student already, as long as the plan is for a coming lesson
     {

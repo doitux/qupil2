@@ -225,6 +225,12 @@ public:
     //! Done (today) or open again
     Q_INVOKABLE bool closeTask(const QString &id, bool closed);
     Q_INVOKABLE bool deleteTask(const QString &id, bool forAll);
+    /*!
+        After the lesson, for a coupled student: what was covered of the plan becomes tasks of
+        the plan's lesson (a block: its heading the title, its lines the hints; a plain point:
+        a task of its own), the rest stays planned for the next lesson.
+    */
+    Q_INVOKABLE bool planToTasks(const QString &planId, const QString &covered, const QString &rest, bool forAll);
     //! The student's answers from the practice book: feedback per task id ({practiced,
     //! works, done, at}, the newer one wins) and questions (they replace the stored ones)
     bool applyFeedback(const QString &studentId, const QVariantMap &feedback, const QVariantList &questions);
@@ -235,6 +241,9 @@ public:
         students, contact data. Empty when the student is not coupled.
     */
     QJsonObject bookletContent(const QString &studentId) const;
+    //! For the pop-up at the start of a lesson: what the student answered in the practice book
+    //! (open tasks with an answer, questions of the last two weeks), one line each; "" if nothing
+    QString bookletSummary(const QString &studentId) const;
 
     // ------------------------------------------------------------ sheet music library
     //! mode 0 all, 1 available, 2 lent; filter matches author, title, publisher, borrower

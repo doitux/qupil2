@@ -947,6 +947,19 @@
         <source>Turn into a note</source>
         <translation>Turn into a note</translation>
     </message>
+    <message id="plan.make_tasks">
+        <source>Turn into tasks</source>
+        <extracomment>Plan of a student coupled with the practice book</extracomment>
+        <translation>Turn into tasks</translation>
+    </message>
+    <message id="plan.lesson_over_tasks">
+        <source>What did you cover? That becomes the tasks of this lesson.</source>
+        <translation>What did you cover? That becomes the tasks of this lesson.</translation>
+    </message>
+    <message id="plan.finish.tasks">
+        <source>Save as tasks</source>
+        <translation>Save as tasks</translation>
+    </message>
     <message id="plan.postpone">
         <source>Move to the next lesson</source>
         <translation>Move to the next lesson</translation>
@@ -1086,6 +1099,121 @@
     <message id="note.save">
         <source>Save note</source>
         <translation>Save note</translation>
+    </message>
+    <message id="booklet.title">
+        <source>Practice book</source>
+        <translation>Practice book</translation>
+    </message>
+    <message id="booklet.menu">
+        <source>Practice book</source>
+        <extracomment>Student menu: couple the student with the practice book app</extracomment>
+        <translation>Practice book</translation>
+    </message>
+    <message id="booklet.menu_coupled">
+        <source>Practice book (coupled)</source>
+        <translation>Practice book (coupled)</translation>
+    </message>
+    <message id="booklet.intro">
+        <source>With the practice book app %1 sees the tasks of the lessons on their own phone and can say how practising went. The data stays in your Nextcloud, end-to-end encrypted.</source>
+        <translation>With the practice book app %1 sees the tasks of the lessons on their own phone and can say how practising went. The data stays in your Nextcloud, end-to-end encrypted.</translation>
+    </message>
+    <message id="booklet.coupled_text">
+        <source>%1 scans this code with the phone&apos;s camera. Tasks you give from now on show in the app.</source>
+        <translation>%1 scans this code with the phone&apos;s camera. Tasks you give from now on show in the app.</translation>
+    </message>
+    <message id="booklet.teacher_name">
+        <source>Your name in the practice book</source>
+        <translation>Your name in the practice book</translation>
+    </message>
+    <message id="booklet.teacher_name_placeholder">
+        <source>e.g. Ms Rau</source>
+        <translation>e.g. Ms Rau</translation>
+    </message>
+    <message id="booklet.needs_nextcloud">
+        <source>The practice book uses the Nextcloud of the sync. Connect it under More › Settings › Sync first.</source>
+        <translation>The practice book uses the Nextcloud of the sync. Connect it under More › Settings › Sync first.</translation>
+    </message>
+    <message id="booklet.couple">
+        <source>Couple</source>
+        <translation>Couple</translation>
+    </message>
+    <message id="booklet.coupling">
+        <source>Coupling</source>
+        <translation>Coupling</translation>
+    </message>
+    <message id="booklet.qr">
+        <source>QR code for the practice book app</source>
+        <translation>QR code for the practice book app</translation>
+    </message>
+    <message id="booklet.qr_hint">
+        <source>The code is the key: show it only to this student (or their parents).</source>
+        <translation>The code is the key: show it only to this student (or their parents).</translation>
+    </message>
+    <message id="booklet.send_link">
+        <source>Send the link instead</source>
+        <translation>Send the link instead</translation>
+    </message>
+    <message id="booklet.link_message">
+        <source>Your practice book, %1: open this link on your phone (with the app installed).</source>
+        <extracomment>Message with the coupling link to the student (the student app says du)</extracomment>
+        <translation>Your practice book, %1: open this link on your phone (with the app installed).</translation>
+    </message>
+    <message id="booklet.link_copied">
+        <source>Link copied – paste it into a message</source>
+        <translation>Link copied – paste it into a message</translation>
+    </message>
+    <message id="booklet.read_only">
+        <source>Your Nextcloud does not allow uploads by link: the student sees the tasks but cannot send anything back.</source>
+        <translation>Your Nextcloud does not allow uploads by link: the student sees the tasks but cannot send anything back.</translation>
+    </message>
+    <message id="booklet.allow_feedback">
+        <source>Feedback on tasks</source>
+        <translation>Feedback on tasks</translation>
+    </message>
+    <message id="booklet.allow_feedback_hint">
+        <source>Practised: a lot, some, hardly · Works: well, so-so, not yet</source>
+        <translation>Practised: a lot, some, hardly · Works: well, so-so, not yet</translation>
+    </message>
+    <message id="booklet.allow_questions">
+        <source>Questions</source>
+        <translation>Questions</translation>
+    </message>
+    <message id="booklet.questions">
+        <source>Questions from the practice book</source>
+        <translation>Questions from the practice book</translation>
+    </message>
+    <message id="booklet.end">
+        <source>End coupling</source>
+        <translation>End coupling</translation>
+    </message>
+    <message id="booklet.end_confirm">
+        <source>The link stops working and the folder is deleted. %1&apos;s app says the coupling has ended. Tasks and notes stay here.</source>
+        <translation>The link stops working and the folder is deleted. %1&apos;s app says the coupling has ended. Tasks and notes stay here.</translation>
+    </message>
+    <message id="booklet.ended_toast">
+        <source>Coupling with %1 ended</source>
+        <translation>Coupling with %1 ended</translation>
+    </message>
+    <message id="booklet.error.links">
+        <source>Your Nextcloud does not allow sharing by link. Ask its admin.</source>
+        <translation>Your Nextcloud does not allow sharing by link. Ask its admin.</translation>
+    </message>
+    <message id="booklet.error.access">
+        <source>The Nextcloud refused access. Connect it again under More › Settings › Sync.</source>
+        <translation>The Nextcloud refused access. Connect it again under More › Settings › Sync.</translation>
+    </message>
+    <message id="booklet.error.offline">
+        <source>No connection to the Nextcloud. Try again later.</source>
+        <translation>No connection to the Nextcloud. Try again later.</translation>
+    </message>
+    <message id="booklet.from">
+        <source>From %1&apos;s practice book</source>
+        <extracomment>Lesson-start pop-up: what the student answered</extracomment>
+        <translation>From %1&apos;s practice book</translation>
+    </message>
+    <message id="booklet.question_line">
+        <source>Question: %1</source>
+        <translation>Question: %1</translation>
     </message>
     <message id="task.lesson_of">
         <source>Lesson of %1</source>

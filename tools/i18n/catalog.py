@@ -505,6 +505,14 @@ E("plan.more_points", src="+ %n more point(s)",
   es=["+ %n punto más", "+ %n puntos más"],
   c="Running lesson: a long plan shows its first 4 points, then this")
 E("plan.make_note", en="Turn into a note", de="Notiz daraus machen", fr="En faire une note", es="Convertir en nota")
+E("plan.make_tasks", en="Turn into tasks", de="Aufgaben daraus machen", fr="En faire des devoirs",
+  es="Convertir en tareas", c="Plan of a student coupled with the practice book")
+E("plan.lesson_over_tasks", en="What did you cover? That becomes the tasks of this lesson.",
+  de="Was davon war dran? Daraus werden die Aufgaben der Stunde.",
+  fr="Qu'avez-vous travaillé ? Cela devient les devoirs du cours.",
+  es="¿Qué se trabajó? Eso pasa a ser las tareas de la clase.")
+E("plan.finish.tasks", en="Save as tasks", de="Als Aufgaben speichern", fr="Enregistrer comme devoirs",
+  es="Guardar como tareas")
 E("plan.postpone", en="Move to the next lesson", de="Auf nächste Stunde schieben", fr="Reporter au cours suivant",
   es="Pasar a la próxima clase")
 E("plan.postponed", en="Moved to %1", de="Verschoben auf %1", fr="Reporté au %1", es="Pasado al %1", c="%1 = date")
@@ -582,6 +590,86 @@ E("plan.planned", en="Planned", de="Geplant", fr="Prévu", es="Planificado",
   c="Symbol on a lesson or student with a plan (for screen readers), and before the first point")
 E("note.new", en="New note", de="Neue Notiz", fr="Nouvelle note", es="Nueva nota")
 E("note.save", en="Save note", de="Notiz speichern", fr="Enregistrer la note", es="Guardar nota")
+# ---- practice book: coupling (BookletSheet)
+E("booklet.title", en="Practice book", de="Übeheft", fr="Cahier d’exercices", es="Cuaderno de práctica")
+E("booklet.menu", en="Practice book …", de="Übeheft …", fr="Cahier d’exercices …", es="Cuaderno de práctica …",
+  c="Student menu: couple the student with the practice book app")
+E("booklet.menu_coupled", en="Practice book (coupled) …", de="Übeheft (gekoppelt) …",
+  fr="Cahier d’exercices (relié) …", es="Cuaderno de práctica (vinculado) …")
+E("booklet.intro",
+  en="With the practice book app %1 sees the tasks of the lessons on their own phone and can say how practising went. "
+     "The data stays in your Nextcloud, end-to-end encrypted.",
+  de="Mit der Übeheft-App sieht %1 die Aufgaben aus dem Unterricht auf dem eigenen Handy und kann sagen, wie das Üben lief. "
+     "Die Daten bleiben in Ihrer Nextcloud, Ende-zu-Ende verschlüsselt.",
+  fr="Avec l’application cahier, %1 voit les devoirs des cours sur son téléphone et peut dire comment s’est passé le travail. "
+     "Les données restent dans votre Nextcloud, chiffrées de bout en bout.",
+  es="Con la aplicación del cuaderno, %1 ve las tareas de las clases en su móvil y puede contar cómo fue la práctica. "
+     "Los datos quedan en su Nextcloud, cifrados de extremo a extremo.")
+E("booklet.coupled_text",
+  en="%1 scans this code with the phone's camera. Tasks you give from now on show in the app.",
+  de="%1 scannt diesen Code mit der Kamera des Handys. Aufgaben, die Sie ab jetzt geben, erscheinen in der App.",
+  fr="%1 scanne ce code avec l’appareil photo du téléphone. Les devoirs donnés désormais apparaissent dans l’application.",
+  es="%1 escanea este código con la cámara del móvil. Las tareas que dé a partir de ahora aparecen en la aplicación.")
+E("booklet.teacher_name", en="Your name in the practice book", de="Ihr Name im Übeheft",
+  fr="Votre nom dans le cahier", es="Su nombre en el cuaderno")
+E("booklet.teacher_name_placeholder", en="e.g. Ms Rau", de="z. B. Frau Rau", fr="p. ex. Mme Rau", es="p. ej. Sra. Rau")
+E("booklet.needs_nextcloud", en="The practice book uses the Nextcloud of the sync. Connect it under More › Settings › Sync first.",
+  de="Das Übeheft nutzt die Nextcloud der Synchronisierung. Verbinden Sie sie zuerst unter Mehr › Einstellungen › Synchronisation.",
+  fr="Le cahier utilise le Nextcloud de la synchronisation. Connectez-le d’abord sous Plus › Paramètres › Synchronisation.",
+  es="El cuaderno usa el Nextcloud de la sincronización. Conéctelo primero en Más › Ajustes › Sincronización.")
+E("booklet.couple", en="Couple", de="Koppeln", fr="Relier", es="Vincular")
+E("booklet.coupling", en="Coupling …", de="Wird gekoppelt …", fr="Liaison …", es="Vinculando …")
+E("booklet.qr", en="QR code for the practice book app", de="QR-Code für die Übeheft-App",
+  fr="Code QR pour l’application cahier", es="Código QR para la aplicación del cuaderno")
+E("booklet.qr_hint", en="The code is the key: show it only to this student (or their parents).",
+  de="Der Code ist der Schlüssel: Zeigen Sie ihn nur diesem Schüler bzw. den Eltern.",
+  fr="Le code est la clé : ne le montrez qu’à cet élève (ou à ses parents).",
+  es="El código es la llave: muéstrelo solo a este alumno (o a sus padres).")
+E("booklet.send_link", en="Send the link instead", de="Stattdessen Link schicken", fr="Envoyer le lien à la place",
+  es="Enviar el enlace en su lugar")
+E("booklet.link_message", en="Your practice book, %1: open this link on your phone (with the app installed).",
+  de="Dein Übeheft, %1: Öffne diesen Link auf deinem Handy (mit installierter App).",
+  fr="Ton cahier, %1 : ouvre ce lien sur ton téléphone (avec l’application installée).",
+  es="Tu cuaderno, %1: abre este enlace en tu móvil (con la aplicación instalada).",
+  c="Message with the coupling link to the student (the student app says du)")
+E("booklet.link_copied", en="Link copied – paste it into a message", de="Link kopiert – zum Einfügen in eine Nachricht",
+  fr="Lien copié – à coller dans un message", es="Enlace copiado: péguelo en un mensaje")
+E("booklet.read_only", en="Your Nextcloud does not allow uploads by link: the student sees the tasks but cannot send anything back.",
+  de="Ihre Nextcloud erlaubt kein Hochladen per Link: Der Schüler sieht die Aufgaben, kann aber nichts zurückschicken.",
+  fr="Votre Nextcloud n’autorise pas l’envoi par lien : l’élève voit les devoirs mais ne peut rien renvoyer.",
+  es="Su Nextcloud no permite subir por enlace: el alumno ve las tareas pero no puede enviar nada.")
+E("booklet.allow_feedback", en="Feedback on tasks", de="Rückmeldung zu Aufgaben", fr="Retour sur les devoirs",
+  es="Respuesta a las tareas")
+E("booklet.allow_feedback_hint", en="Practised: a lot, some, hardly · Works: well, so-so, not yet",
+  de="Geübt: viel, etwas, kaum · Klappt: gut, geht so, noch nicht",
+  fr="Travaillé : beaucoup, un peu, à peine · Ça marche : bien, moyen, pas encore",
+  es="Practicado: mucho, algo, poco · Sale: bien, más o menos, aún no")
+E("booklet.allow_questions", en="Questions", de="Fragen", fr="Questions", es="Preguntas")
+E("booklet.questions", en="Questions from the practice book", de="Fragen aus dem Übeheft",
+  fr="Questions du cahier", es="Preguntas del cuaderno")
+E("booklet.end", en="End coupling", de="Kopplung beenden", fr="Mettre fin à la liaison", es="Terminar el vínculo")
+E("booklet.end_confirm",
+  en="The link stops working and the folder is deleted. %1's app says the coupling has ended. Tasks and notes stay here.",
+  de="Der Link wird ungültig und der Ordner gelöscht. Die App von %1 zeigt, dass die Kopplung beendet ist. Aufgaben und Notizen bleiben hier erhalten.",
+  fr="Le lien ne fonctionne plus et le dossier est supprimé. L’application de %1 indique que la liaison est terminée. Devoirs et notes restent ici.",
+  es="El enlace deja de funcionar y la carpeta se elimina. La aplicación de %1 indica que el vínculo terminó. Tareas y notas se quedan aquí.")
+E("booklet.ended_toast", en="Coupling with %1 ended", de="Kopplung mit %1 beendet", fr="Liaison avec %1 terminée",
+  es="Vínculo con %1 terminado")
+E("booklet.error.links", en="Your Nextcloud does not allow sharing by link. Ask its admin.",
+  de="Ihre Nextcloud erlaubt kein Teilen per Link. Fragen Sie die Administration.",
+  fr="Votre Nextcloud n’autorise pas le partage par lien. Demandez à l’administration.",
+  es="Su Nextcloud no permite compartir por enlace. Pregunte a la administración.")
+E("booklet.error.access", en="The Nextcloud refused access. Connect it again under More › Settings › Sync.",
+  de="Die Nextcloud hat den Zugriff verweigert. Verbinden Sie sie unter Mehr › Einstellungen › Synchronisation neu.",
+  fr="Le Nextcloud a refusé l’accès. Reconnectez-le sous Plus › Paramètres › Synchronisation.",
+  es="El Nextcloud rechazó el acceso. Vuelva a conectarlo en Más › Ajustes › Sincronización.")
+E("booklet.error.offline", en="No connection to the Nextcloud. Try again later.",
+  de="Keine Verbindung zur Nextcloud. Versuchen Sie es später noch einmal.",
+  fr="Pas de connexion au Nextcloud. Réessayez plus tard.", es="Sin conexión con el Nextcloud. Inténtelo más tarde.")
+
+E("booklet.from", en="From %1's practice book", de="Aus dem Übeheft von %1", fr="Du cahier de %1",
+  es="Del cuaderno de %1", c="Lesson-start pop-up: what the student answered")
+E("booklet.question_line", en="Question: %1", de="Frage: %1", fr="Question : %1", es="Pregunta: %1")
 # ---- practice book: tasks of coupled students (TaskEditor)
 E("task.lesson_of", en="Lesson of %1", de="Stunde vom %1", fr="Cours du %1", es="Clase del %1",
   c="Title of the task editor; %1 is the date with weekday")

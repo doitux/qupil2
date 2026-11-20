@@ -91,6 +91,7 @@ E("s.error.newer", "Your teacher uses a newer Qupil. Please update this app.",
   "Deine Lehrkraft nutzt ein neueres Qupil. Bitte aktualisiere diese App.",
   "Ton professeur utilise un Qupil plus récent. Mets cette application à jour.",
   "Tu profesor usa un Qupil más reciente. Actualiza esta aplicación.")
+E("s.teacher_fallback", "your teacher", "deine Lehrkraft", "ton professeur", "tu profesor")
 E("s.next.label", "Next lesson", "Nächste Stunde", "Prochain cours", "Próxima clase")
 E("s.next.none", "No lesson planned yet", "Noch keine Stunde geplant", "Aucun cours prévu", "Ninguna clase prevista")
 E("s.next.cancelled", "cancelled", "fällt aus", "annulé", "cancelada")

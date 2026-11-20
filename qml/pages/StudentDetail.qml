@@ -686,6 +686,13 @@ Item {
             text: qsTrId("lesson.edit")
             onTriggered: Nav.editLesson(detail.currentLessonId, -1)
         }
+        // Practice book: couple, QR code, end
+        AppMenuItem {
+            objectName: "bookletMenu"
+            iconName: "book"
+            text: detail.coupled ? qsTrId("booklet.menu_coupled") : qsTrId("booklet.menu")
+            onTriggered: Nav.showBooklet(detail.studentId)
+        }
         AppMenuItem {
             iconName: "bell"
             text: qsTrId("student.add_reminder")
@@ -740,6 +747,9 @@ Item {
         onAccepted: {
             const name = detail.student.name || ""
             Docs.archiveStudent(detail.studentId)
+            // Practice book: the link goes too (the coupling record stays until it is gone)
+            if (detail.coupled)
+                Booklet.endCoupling(detail.studentId)
             Data.deleteStudent(detail.studentId)
             Nav.toast(qsTrId("archive.saved").arg(name))
             detail.back()
@@ -805,6 +815,8 @@ Item {
         rejectText: qsTrId("common.cancel")
         acceptText: qsTrId("common.delete")
         onAccepted: {
+            if (detail.coupled)
+                Booklet.endCoupling(detail.studentId)
             Data.deleteStudent(detail.studentId)
             detail.back()
         }
@@ -1607,7 +1619,7 @@ Item {
                 visible: card.plan.due === true
                 Layout.fillWidth: true
                 wrapMode: Text.WordWrap
-                text: qsTrId("plan.lesson_over")
+                text: detail.coupled ? qsTrId("plan.lesson_over_tasks") : qsTrId("plan.lesson_over")
                 color: Theme.textMuted
                 font.family: Theme.fontFamily
                 font.pixelSize: 13
@@ -1616,7 +1628,7 @@ Item {
                 visible: card.plan.due === true
                 kind: "primary"
                 iconName: "file"
-                text: qsTrId("plan.make_note")
+                text: detail.coupled ? qsTrId("plan.make_tasks") : qsTrId("plan.make_note")
                 onClicked: Nav.finishPlan(detail.currentMembership, card.plan.id)
             }
         }
