@@ -106,9 +106,13 @@ Sheet {
                 (state === 2 ? done : left).push(b.text)
                 return
             }
+            // The heading bold as a whole: alone, the part stays a block (NoteFormat::blocks)
+            const t = b.title.trim()
+            const title = /^\*\*[^*].*\*\*$/.test(t) && t.slice(2, -2).indexOf("**") < 0
+                          ? t : "**" + t.replace(/\*\*/g, "") + "**"
             const lines = linesOf(i)
-            done.push([b.title].concat(lines.filter((x, j) => lineTicked(i, j))).join("\n"))
-            left.push([b.title].concat(lines.filter((x, j) => !lineTicked(i, j))).join("\n"))
+            done.push([title].concat(lines.filter((x, j) => lineTicked(i, j))).join("\n"))
+            left.push([title].concat(lines.filter((x, j) => !lineTicked(i, j))).join("\n"))
         })
         const sep = grouped ? "\n\n" : "\n"
         return [done.join(sep), left.join(sep), left.length]

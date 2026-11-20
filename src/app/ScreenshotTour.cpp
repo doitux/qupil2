@@ -463,6 +463,19 @@ void ScreenshotTour::addPlanLines(const std::function<Step(int, int)> &size, con
                       },
                       {} }
             << close << student << snap(u"t4-student-after"_s)
+            // The rest planned, its block opened; the note's sonatina too
+            << Step { [this] {
+                          DataService *data = DataService::instance();
+                          QVariantMap open;
+                          for (const QVariant &p : data->plans(m_membership))
+                              open.insert(p.toMap().value(u"id"_s).toString() + u"/0"_s, true);
+                          const QVariantList notes = data->notes(m_membership);
+                          if (!notes.isEmpty())
+                              open.insert(notes.first().toMap().value(u"id"_s).toString() + u"/0"_s, true);
+                          setAll("unfolded", open);
+                      },
+                      {} }
+            << snap(u"t5-student-after-open"_s)
             << size(390, 844) << student << snap(u"p5-student-after"_s);
 }
 

@@ -57,7 +57,9 @@ struct Block
 /*!
     The blocks of a note or plan. An empty line separates them, the first line is the
     heading ("Bach, Partita" with the points below it). Without empty lines every line
-    is a block of its own, i.e. a plain list of points.
+    is a block of its own, i.e. a plain list of points – unless the first line is bold as a
+    whole and lines follow: that is one block (what stays planned of a block when only some
+    of its lines were covered).
 */
 QList<Block> blocks(const QString &note);
 //! True if one of the blocks has lines below its heading
