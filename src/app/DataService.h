@@ -193,6 +193,37 @@ public:
     */
     Q_INVOKABLE QVariantMap ensembleCandidates() const;
 
+    // ------------------------------------------------------------ practice book (DataServiceTasks.cpp)
+    /*!
+        Students coupled with the practice book app get tasks instead of shared notes: one
+        record each, title and hints (one per line), kind 0 practise / 1 to-do. A task belongs
+        to the lesson of its date; an open one moves on to the next lesson (since: the lesson
+        it was first given in). Notes stay private as they are.
+    */
+    //! The active coupling of a student ({} when not coupled)
+    Q_INVOKABLE QVariantMap coupling(const QString &studentId) const;
+    Q_INVOKABLE bool isCoupled(const QString &studentId) const;
+    //! Tasks of a membership (and those kept together with it), newest lesson first:
+    //! id, date, since, title, hints (list), kind, position, closed, feedback (map), shared
+    Q_INVOKABLE QVariantList tasks(const QString &membershipId) const;
+    Q_INVOKABLE QVariantList tasksOn(const QString &membershipId, const QString &date) const;
+    //! Open tasks of earlier lessons (they move on to the lesson of \a date when it is saved)
+    Q_INVOKABLE QVariantList openTasksBefore(const QString &membershipId, const QString &date) const;
+    /*!
+        The tasks of the lesson on \a date as the editor has them, in this order: maps with
+        id (empty: new), title, hints (list or text, one per line), kind, closed (bool).
+        Tasks of that date missing from the list are deleted; open ones of earlier lessons
+        in the list move to this date. forAll: new tasks for every student of the group
+        (each their own, with its own feedback), changes to all copies.
+    */
+    Q_INVOKABLE bool saveTasks(const QString &membershipId, const QString &date, const QVariantList &tasks, bool forAll);
+    //! Done (today) or open again
+    Q_INVOKABLE bool closeTask(const QString &id, bool closed);
+    Q_INVOKABLE bool deleteTask(const QString &id, bool forAll);
+    //! The student's answers from the practice book: feedback per task id ({practiced,
+    //! works, done, at}, the newer one wins) and questions (they replace the stored ones)
+    bool applyFeedback(const QString &studentId, const QVariantMap &feedback, const QVariantList &questions);
+
     // ------------------------------------------------------------ sheet music library
     //! mode 0 all, 1 available, 2 lent; filter matches author, title, publisher, borrower
     Q_INVOKABLE QVariantList libraryItems(int mode = 0, const QString &filter = {}) const;

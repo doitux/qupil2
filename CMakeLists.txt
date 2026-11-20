@@ -400,6 +400,7 @@ qt_add_qml_module(qupil
         src/app/BackKey.cpp
         src/app/DataService.h
         src/app/DataService.cpp
+        src/app/DataServiceTasks.cpp
         src/app/NoteFormat.h
         src/app/NoteFormat.cpp
         src/app/ArchiveFormat.h
@@ -555,6 +556,16 @@ if(QUPIL_BUILD_TESTS AND NOT ANDROID AND NOT IOS)
     add_test(NAME notes COMMAND tst_notes)
     set_tests_properties(notes PROPERTIES TIMEOUT 60)
 
+    # Practice book: tasks of coupled students, moving on, group copies, feedback
+    qt_add_executable(tst_tasks tests/tst_tasks.cpp src/app/DataService.h src/app/DataService.cpp
+        src/app/DataServiceTasks.cpp src/app/NoteFormat.h src/app/NoteFormat.cpp
+        src/core/LanguageManager.h src/core/LanguageManager.cpp
+        src/app/TextFormatting.h src/app/TextFormatting.cpp)
+    target_include_directories(tst_tasks PRIVATE src/app src/core)
+    target_link_libraries(tst_tasks PRIVATE qupilcore Qt6::Gui Qt6::Qml Qt6::Test)
+    set_target_properties(tst_tasks PROPERTIES MACOSX_BUNDLE FALSE WIN32_EXECUTABLE FALSE)
+    add_test(NAME tasks COMMAND tst_tasks)
+
     # Loads the whole QML UI once and fails on any QML warning
     add_test(NAME qml_smoke COMMAND qupil --smoke-test)
     # Goes through the important flows by tapping and typing, phone and wide layout
@@ -567,6 +578,6 @@ if(QUPIL_BUILD_TESTS AND NOT ANDROID AND NOT IOS)
                  COMMAND ${CMAKE_COMMAND} -DQUPIL=$<TARGET_FILE:qupil> -DSIZE=${_size}
                          -DOUT=${CMAKE_BINARY_DIR}/ui-test/${layout} -P ${CMAKE_CURRENT_SOURCE_DIR}/tests/ui-test.cmake)
     endforeach()
-    set_tests_properties(languagemanager core notes qml_smoke ui_test_phone ui_test_wide
+    set_tests_properties(languagemanager core notes tasks qml_smoke ui_test_phone ui_test_wide
                          PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
 endif()

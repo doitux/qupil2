@@ -40,7 +40,8 @@ namespace Schema {
 //! 5: plan (lesson plans: notes made before a lesson)
 //! 6: membership.shared_key (single lessons of a student kept together: same notes, plans, pieces)
 //! 7: reminder.lesson_id (mode 3: a reminder for one lesson)
-constexpr int Version = 7;
+//! 8: task and coupling (the practice book: tasks for coupled students, their coupling)
+constexpr int Version = 8;
 
 //! Entities added after the first version of the sync: an older device kept their changes
 //! in its log without applying them (Store::catchUp() does after the update)

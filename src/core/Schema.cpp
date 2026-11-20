@@ -88,6 +88,27 @@ QList<EntityDef> buildEntities()
         text("membership_id"), text("group_key"), text("date"), text("content"),
     }, { QStringLiteral("membership_id"), QStringLiteral("group_key") } };
 
+    // Tasks of the practice book (only for students coupled with the practice book app): one
+    // record per task, so the student's feedback and "done" belong to it. date: the lesson it
+    // is listed for (open tasks move on to the next lesson), since: the lesson it was first
+    // given in (empty: date). hints: one per line. kind: 0 practise, 1 to-do (get the music:
+    // only a tick). closed: the day it was finished (empty: open). feedback: the student's
+    // answer as JSON ({practiced, works, done, at}). group_key links the copies of a group.
+    list << EntityDef{ QStringLiteral("task"), {
+        text("membership_id"), text("group_key"), text("date"), text("since"), text("title"), text("hints"),
+        integer("kind"), integer("position"), text("closed"), text("feedback"),
+    }, { QStringLiteral("membership_id"), QStringLiteral("group_key") } };
+
+    // A student coupled with the practice book app: the folder in the teacher's Nextcloud,
+    // its link (share id, token, password) and the key the booklet is sealed with (base64).
+    // ended: the day the coupling ended (empty: active). questions: the student's questions
+    // as JSON. written: when the booklet was last written (ISO time, UTC).
+    list << EntityDef{ QStringLiteral("coupling"), {
+        text("student_id"), text("server"), text("folder"), text("share_id"), text("token"), text("password"),
+        text("key"), text("created"), text("ended"), integer("allow_feedback", 1), integer("allow_questions", 1),
+        integer("receives", 1), text("questions"), text("written"),
+    }, { QStringLiteral("student_id") } };
+
     // Activities outside lessons: continuous (weekly, e.g. orchestra) or single (e.g. a recital)
     list << EntityDef{ QStringLiteral("activity"), {
         text("student_id"), integer("continuous"), text("description"), integer("weekday"), text("time"),
@@ -180,7 +201,8 @@ QVariantMap currentFields(const QString &entity, const QVariantMap &fields)
 
 const QList<AddedEntity> &addedEntities()
 {
-    static const QList<AddedEntity> list { { QStringLiteral("plan"), 5 } };
+    static const QList<AddedEntity> list { { QStringLiteral("plan"), 5 }, { QStringLiteral("task"), 8 },
+                                           { QStringLiteral("coupling"), 8 } };
     return list;
 }
 
