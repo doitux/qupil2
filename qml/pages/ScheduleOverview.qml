@@ -1265,7 +1265,9 @@ Item {
                     font.pixelSize: 13
                 }
             }
-            // One sign per row: birthday, else reminder, else plan
+            // Each sign of its own: birthday and reminder on the left, the clipboard always in
+            // the same column on the right (its place kept without a plan), so a look down the
+            // list shows which lessons are planned. A birthday used to hide the plan
             BirthdayTag {
                 id: rowBirthday
                 readonly property var list: { if (Data.revision < 0) return undefined; return overview.birthdaysOf(row.lesson.students) }
@@ -1273,23 +1275,25 @@ Item {
                 count: list.length
             }
             Icon {
-                visible: !rowBirthday.visible && row.lesson.reminderCount === 0
-                         && (row.lesson.students || []).some(s => row.planned.indexOf(s.membership_id) >= 0)
-                Layout.preferredWidth: 18
-                Layout.preferredHeight: 18
-                name: "plan"
-                color: Theme.accentText
-                strokeWidth: 2
-                Accessible.role: Accessible.Graphic
-                Accessible.name: qsTrId("plan.planned")
-            }
-            Icon {
-                visible: !rowBirthday.visible && row.lesson.reminderCount > 0
+                visible: row.lesson.reminderCount > 0
                 Layout.preferredWidth: 18
                 Layout.preferredHeight: 18
                 name: "bell"
                 color: Theme.accentText
                 strokeWidth: 2
+            }
+            Item {
+                Layout.preferredWidth: 18
+                Layout.preferredHeight: 18
+                Icon {
+                    anchors.fill: parent
+                    visible: (row.lesson.students || []).some(s => row.planned.indexOf(s.membership_id) >= 0)
+                    name: "plan"
+                    color: Theme.accentText
+                    strokeWidth: 2
+                    Accessible.role: Accessible.Graphic
+                    Accessible.name: qsTrId("plan.planned")
+                }
             }
             Icon {
                 Layout.preferredWidth: 20
@@ -1407,6 +1411,22 @@ Item {
                         font.family: Theme.fontFamily
                         font.pixelSize: 12
                     }
+                    // The column of the clipboard, as in the student rows below: the signs of
+                    // the lesson stay left of it. Ensembles (no student rows) show it here
+                    Item {
+                        Layout.preferredWidth: 17
+                        Layout.preferredHeight: 17
+                        Icon {
+                            anchors.fill: parent
+                            visible: lessonCard.lesson.kind === 3
+                                     && (lessonCard.lesson.students || []).some(s => lessonCard.planned.indexOf(s.membership_id) >= 0)
+                            name: "plan"
+                            color: lessonCard.lessonSelected ? Theme.textOnAccent : Theme.accentText
+                            strokeWidth: 2
+                            Accessible.role: Accessible.Graphic
+                            Accessible.name: qsTrId("plan.planned")
+                        }
+                    }
                 }
                 leftPadding: 12
                 rightPadding: 12
@@ -1469,15 +1489,20 @@ Item {
                             id: rowBirthday
                             note: { if (Data.revision < 0) return ({}); return Data.birthdayNote(studentRow.modelData.id) }
                         }
-                        Icon {
-                            visible: !rowBirthday.visible && lessonCard.planned.indexOf(studentRow.modelData.membership_id) >= 0
+                        // The clipboard always in the same column on the right (its place kept
+                        // without a plan), next to a birthday too
+                        Item {
                             Layout.preferredWidth: 17
                             Layout.preferredHeight: 17
-                            name: "plan"
-                            color: studentRow.selected ? Theme.textOnAccent : Theme.accentText
-                            strokeWidth: 2
-                            Accessible.role: Accessible.Graphic
-                            Accessible.name: qsTrId("plan.planned")
+                            Icon {
+                                anchors.fill: parent
+                                visible: lessonCard.planned.indexOf(studentRow.modelData.membership_id) >= 0
+                                name: "plan"
+                                color: studentRow.selected ? Theme.textOnAccent : Theme.accentText
+                                strokeWidth: 2
+                                Accessible.role: Accessible.Graphic
+                                Accessible.name: qsTrId("plan.planned")
+                            }
                         }
                     }
                     leftPadding: lessonCard.lesson.irregular ? 12 : 118
