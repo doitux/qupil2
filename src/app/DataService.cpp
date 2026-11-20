@@ -1117,7 +1117,10 @@ QVariantList DataService::blocks(const QString &content) const
 QStringList DataService::plannedOn(const QString &date) const
 {
     QStringList out;
-    for (const QVariant &v : rows(u"SELECT DISTINCT membership_id FROM plan WHERE deleted = 0 AND date = ?"_s, { date }))
+    // The plan of that day, or one for a coming lesson: planned on Monday for next week
+    // shows in this week already (the schedule shows only the current week)
+    for (const QVariant &v : rows(u"SELECT DISTINCT membership_id FROM plan WHERE deleted = 0 AND (date = ? OR date >= ?)"_s,
+                                  { date, todayIso() }))
         for (const QString &m : together(v.toMap().value(u"membership_id"_s).toString()))
             if (!out.contains(m))
                 out << m;

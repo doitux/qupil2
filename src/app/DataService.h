@@ -107,7 +107,7 @@ public:
         time to turn the plan into a note).
     */
     Q_INVOKABLE QVariantList plans(const QString &membershipId) const;
-    //! Memberships with a plan for that day (yyyy-MM-dd)
+    //! Memberships with a plan for that day (yyyy-MM-dd) or for a coming day (from today on)
     Q_INVOKABLE QStringList plannedOn(const QString &date) const;
     //! Blocks of a note or plan (NoteFormat::blocks): [{title, heading (one line, plain),
     //! body (the lines below it), more (how many), text}]
