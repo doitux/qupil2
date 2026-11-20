@@ -50,7 +50,11 @@ Item {
         cake: "M4 21h16v-8a2 2 0 0 0 -2 -2h-12a2 2 0 0 0 -2 2z M4 16c2 0 2 -1.5 4 -1.5s2 1.5 4 1.5s2 -1.5 4 -1.5s2 1.5 4 1.5 M12 11v-4 M12 4.5v0.01",
         star: "M12 3l2.7 5.5l6 0.9l-4.4 4.3l1 6l-5.3 -2.9l-5.3 2.9l1 -6l-4.4 -4.3l6 -0.9z",
         edit: "M4 20h4l11 -11l-4 -4l-11 11z",
-        lock: "M6 10.25h12v10h-12z M8.5 10.25v-3a3.5 3.5 0 0 1 7 0v3",
+        // Optically centred: the heavy body sits a little above the middle, so the lock does
+        // not look low in a round button
+        lock: "M6 9h12v10h-12z M8.5 9v-3a3.5 3.5 0 0 1 7 0v3",
+        // The same lock with the shackle open to the right (not private)
+        lockOpen: "M6 9h12v10h-12z M8.5 9v-3a3.5 3.5 0 0 1 6.85 -1",
         share: "M12 3v12 M8 7l4 -4l4 4 M8 10h-2a2 2 0 0 0 -2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-7a2 2 0 0 0 -2 -2h-2",
         trash: "M4 7h16 M10 11v6 M14 11v6 M6 7l1 14h10l1 -14 M9 7v-3h6v3",
         search: "M4 11a7 7 0 1 0 14 0a7 7 0 1 0 -14 0 M16 16l4.5 4.5",

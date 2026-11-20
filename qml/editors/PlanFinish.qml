@@ -308,7 +308,8 @@ Sheet {
                                 anchors.centerIn: parent
                                 width: 18
                                 height: 18
-                                name: "lock"
+                                // Closed: private (into the note); open: goes to the student
+                                name: lockButton.hidden ? "lock" : "lockOpen"
                                 color: lockButton.hidden ? Theme.textOnInverse : Theme.textMuted
                             }
                         }
