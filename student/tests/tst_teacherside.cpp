@@ -10,6 +10,9 @@
 #include "Crypto.h"
 #include "FakeNextcloud.h"
 #include "NextcloudShares.h"
+#include "QrCode.h"
+
+#include <QDir>
 
 #include <QJsonArray>
 #include <QNetworkAccessManager>
@@ -163,6 +166,25 @@ private slots:
         QCOMPARE(again.questions.size(), 1);
     }
 
+    void qrCode()
+    {
+        Booklet::Link link{u"https://cloud.musikschule.example.org"_s, u"AbCdEfGhIjKlMnO"_s,
+                           u"Lnk-pw-ABCDEFGHIJKLMNOPQRST"_s, Crypto::randomBytes(Crypto::KeySize)};
+        const QString text = Booklet::encodeLink(link);
+        const QrCode::Code code = QrCode::encode(text);
+        QVERIFY(!code.isEmpty());
+        QVERIFY2(code.size <= 77, "small enough to scan from a phone screen at arm's length");   // version 15
+        const QImage image = QrCode::toImage(code, 6);
+        QCOMPARE(image.width(), (code.size + 8) * 6);
+        QCOMPARE(image.pixelColor(2, 2), QColor(Qt::white));            // quiet zone
+        QCOMPARE(image.pixelColor(4 * 6 + 1, 4 * 6 + 1), QColor(Qt::black));   // finder pattern
+        QVERIFY(QrCode::toSvgPath(code).startsWith(u"M4 4h7v1h-7z"_s));
+        // For checking it with a real reader by hand (zxing): QUPIL_QR_OUT=<file>.png
+        if (qEnvironmentVariableIsSet("QUPIL_QR_OUT"))
+            image.save(qEnvironmentVariable("QUPIL_QR_OUT"));
+        QVERIFY(QrCode::encode(QString(5000, u'x')).isEmpty());
+    }
+
     void inboxCleansValues()
     {
         // A changed app (or a broken file) cannot put odd values into the teacher's Qupil
@@ -182,5 +204,5 @@ private slots:
     }
 };
 
-QTEST_GUILESS_MAIN(TestTeacherSide)
+QTEST_MAIN(TestTeacherSide)
 #include "tst_teacherside.moc"

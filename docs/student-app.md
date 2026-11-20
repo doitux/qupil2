@@ -41,7 +41,8 @@ Nextcloud, end-to-end encrypted:
 
 Code: `src/shared/Booklet` (link, sealing, file names), `src/shared/BookletInbox`
 (teacher: collecting feedback), `src/shared/NextcloudShares` (teacher: links via the OCS
-share API), `student/src/StudentApp` (the app's state), `student/qml` (interface).
+share API), `src/shared/QrCode` (teacher: the QR code, `3rdparty/qrcodegen`),
+`student/src/StudentApp` (the app's state), `student/qml` (interface).
 
 ## The booklet (format 1)
 
@@ -80,7 +81,7 @@ since a review cannot scan a teacher's code.
 | Test | What it checks |
 |---|---|
 | `tst_booklet` | link round trip and forms, invalid links, sealing (wrong key, wrong purpose, tampered), file names, URLs |
-| `tst_teacherside` | links via OCS (read + create; read only; enforced expiry and renewal; wrong login), the inbox (newest per device, newer answer wins, values cleaned) |
+| `tst_teacherside` | links via OCS (read + create; read only; enforced expiry and renewal; wrong login), the QR code (size, quiet zone; `QUPIL_QR_OUT=x.png` saves it for a check with a real reader), the inbox (newest per device, newer answer wins, values cleaned) |
 | `tst_studentapp` | the app against a fake Nextcloud: coupling, feedback upload and its content, echo from the teacher, wrong key, newer format, ended link, wrong password, old Nextcloud, state kept; the interface by tap: example, hints, feedback, to-do, closing the example, removing a teacher (asks first) |
 
 `student/tests/FakeNextcloud` is the stand-in for Nextcloud (public links with

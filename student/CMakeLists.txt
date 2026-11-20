@@ -48,14 +48,18 @@ qt_add_library(qupilbooklet STATIC
     ${QUPIL_ROOT}/src/shared/BookletInbox.cpp
     ${QUPIL_ROOT}/src/shared/NextcloudShares.h
     ${QUPIL_ROOT}/src/shared/NextcloudShares.cpp
+    ${QUPIL_ROOT}/src/shared/QrCode.h
+    ${QUPIL_ROOT}/src/shared/QrCode.cpp
+    ${QUPIL_ROOT}/3rdparty/qrcodegen/qrcodegen.hpp
+    ${QUPIL_ROOT}/3rdparty/qrcodegen/qrcodegen.cpp
     ${QUPIL_ROOT}/src/core/Crypto.h
     ${QUPIL_ROOT}/src/core/Crypto.cpp
     ${QUPIL_ROOT}/3rdparty/monocypher/monocypher.c
     ${QUPIL_ROOT}/3rdparty/monocypher/monocypher.h)
 target_include_directories(qupilbooklet
     PUBLIC ${QUPIL_ROOT}/src/shared ${QUPIL_ROOT}/src/core
-    PRIVATE ${QUPIL_ROOT}/3rdparty/monocypher)
-target_link_libraries(qupilbooklet PUBLIC Qt6::Core Qt6::Network)
+    PRIVATE ${QUPIL_ROOT}/3rdparty/monocypher ${QUPIL_ROOT}/3rdparty/qrcodegen)
+target_link_libraries(qupilbooklet PUBLIC Qt6::Core Qt6::Gui Qt6::Network)
 
 # ---- interface and state (a library, so the tests drive the same QML as the app)
 qt_add_library(qupilstudentui STATIC)
@@ -177,7 +181,7 @@ if(QUPIL_STUDENT_TESTS AND NOT ANDROID AND NOT IOS)
     target_link_libraries(tst_booklet PRIVATE qupilbooklet Qt6::Test)
     qt_add_executable(tst_teacherside tests/tst_teacherside.cpp tests/FakeNextcloud.h tests/FakeNextcloud.cpp)
     target_link_libraries(tst_teacherside PRIVATE qupilbooklet Qt6::Test)
-    add_test(NAME tst_teacherside COMMAND tst_teacherside)
+    add_test(NAME tst_teacherside COMMAND tst_teacherside -platform offscreen)
     qt_add_executable(tst_studentapp tests/tst_studentapp.cpp tests/FakeNextcloud.h tests/FakeNextcloud.cpp)
     target_link_libraries(tst_studentapp PRIVATE qupilstudentui qupilstudentuiplugin Qt6::Test)
     set_target_properties(tst_booklet tst_teacherside tst_studentapp PROPERTIES MACOSX_BUNDLE FALSE WIN32_EXECUTABLE FALSE)
