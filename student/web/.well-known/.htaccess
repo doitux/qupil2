@@ -1,0 +1,7 @@
+# Apple and Android read these files to let links to qupil.de/u open the Qupil practice book app
+<Files "apple-app-site-association">
+    ForceType application/json
+</Files>
+<Files "assetlinks.json">
+    ForceType application/json
+</Files>

@@ -1,0 +1,13 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["8LBKF4942K.de.qupil.student"],
+        "components": [
+          { "/": "/u", "comment": "Qupil practice book: coupling link" },
+          { "/": "/u/", "comment": "Qupil practice book: coupling link" }
+        ]
+      }
+    ]
+  }
+}
