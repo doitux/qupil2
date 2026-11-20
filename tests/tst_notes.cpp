@@ -303,6 +303,19 @@ private slots:
         QVERIFY(list.at(2).lines.isEmpty());
         QVERIFY(NoteFormat::hasBlocks(list));
 
+        // A bold first line with lines below it: one block, also without empty lines; a
+        // bold line among others or one partly bold stays a point
+        list = NoteFormat::blocks(u"**Sonatine G-Dur, 1. Satz**\nDynamik: piano wirklich leise"_s);
+        QCOMPARE(list.size(), 1);
+        QCOMPARE(list.at(0).title, u"**Sonatine G-Dur, 1. Satz**"_s);
+        QCOMPARE(list.at(0).lines, QStringList({ u"Dynamik: piano wirklich leise"_s }));
+        QVERIFY(NoteFormat::hasBlocks(list));
+        QVERIFY(!NoteFormat::hasBlocks(NoteFormat::blocks(u"**Etüde** und **Tonleiter**\nNr. 8"_s)));
+        QVERIFY(!NoteFormat::hasBlocks(NoteFormat::blocks(u"Tonleiter\n**Etüde**\nNr. 8"_s)));
+        QVERIFY(!NoteFormat::hasBlocks(NoteFormat::blocks(u"**Noten mitbringen**"_s)));
+        QCOMPARE(NoteFormat::joined(u"**Sonatine**\nDynamik"_s, u"**Bach**\nTakt 1–24"_s),
+                 u"**Sonatine**\nDynamik\n\n**Bach**\nTakt 1–24"_s);
+
         // Joined: line by line, or block by block (points of a plain list become points)
         QCOMPARE(NoteFormat::joined(u"a\nb"_s, u"c"_s), u"a\nb\nc"_s);
         QCOMPARE(NoteFormat::joined(u"a\nb"_s, u"Mozart\n- Triller"_s), u"a\nb\nMozart\n- Triller"_s);

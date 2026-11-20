@@ -976,14 +976,14 @@
         <translation>Les points cochés deviennent la note du %1 – ce qui n’a pas été fait reste prévu pour le cours suivant (%2).</translation>
     </message>
     <message id="plan.finish.blocks">
-        <source>The ticked blocks become the note of %1.</source>
+        <source>What is ticked becomes the note of %1.</source>
         <extracomment>%1 = date of the lesson; plan.finish.blocks_left may follow</extracomment>
-        <translation>Les blocs cochés deviennent la note du %1.</translation>
+        <translation>Ce qui est coché devient la note du %1.</translation>
     </message>
     <message id="plan.finish.blocks_left">
-        <source>Still planned for the next lesson (%2), with all lines: %1.</source>
-        <extracomment>%1 = headings of the blocks not ticked (block.quoted, block.and), %2 = date of the next lesson</extracomment>
-        <translation>Reste prévu pour le cours suivant (%2), avec toutes les lignes : %1.</translation>
+        <source>Still planned for the next lesson (%2): %1.</source>
+        <extracomment>%1 = headings of the blocks not or not completely ticked (block.quoted, block.lines_of, block.and), %2 = date of the next lesson</extracomment>
+        <translation>Reste prévu pour le cours suivant (%2) : %1.</translation>
     </message>
     <message id="plan.from_note">
         <source>Plan for the next lesson</source>
@@ -1026,6 +1026,11 @@
         <source>“%1”</source>
         <extracomment>The heading of a block in a sentence</extracomment>
         <translation>« %1 »</translation>
+    </message>
+    <message id="block.lines_of">
+        <source>%1 (%2 of %3 lines)</source>
+        <extracomment>%1 = quoted heading of a block, %2 = how many of its %3 lines</extracomment>
+        <translation>%1 (%2 lignes sur %3)</translation>
     </message>
     <message id="block.and">
         <source>%1 and %2</source>

@@ -197,7 +197,15 @@ void ScreenshotTour::addDetails(const QString &prefix)
                           setAll("peeked", QVariantList { false, true, false });
                       },
                       {} }
-            << snap(prefix + u"-7d-plan-finish-blocks"_s) << close
+            << snap(prefix + u"-7d-plan-finish-blocks"_s)
+            // Vivaldi opened, one of its lines not covered (it stays planned)
+            << Step { [this] {
+                          setAll("checks", QVariantList { false, true, true });
+                          setAll("lineChecks", QVariantList { QVariantList { true, false, true }, QVariant(), QVariant() });
+                          setAll("peeked", QVariantList { true, false, false });
+                      },
+                      {} }
+            << snap(prefix + u"-7d2-plan-finish-lines"_s) << close
             << Step { [this, nav] { nav("planFromNote", m_longMembership, m_longNote).action(); }, {} }
             << Step { [this] { setAll("checks", QVariantList { false, false, true, false, false }); }, {} }
             << snap(prefix + u"-7e-plan-from-note"_s) << close

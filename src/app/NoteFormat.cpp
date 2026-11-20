@@ -341,6 +341,15 @@ QList<Block> blocks(const QString &note)
             text = true;
         }
     }
+    // One block alone: a first line that is bold as a whole, with lines below it (what is
+    // left of a block when only some of its lines were covered)
+    if (!grouped) {
+        const auto first = std::find_if_not(lines.cbegin(), lines.cend(), blank);
+        const QString title = first != lines.cend() ? first->trimmed() : QString();
+        const bool bold = title.size() > 4 && title.startsWith(u"**"_s) && title.endsWith(u"**"_s)
+                          && !title.mid(2, title.size() - 4).contains(u"**"_s);
+        grouped = bold && std::count_if(lines.cbegin(), lines.cend(), [&](const QString &l) { return !blank(l); }) > 1;
+    }
     QList<Block> out;
     Block current;
     bool open = false;
