@@ -1,79 +1,9 @@
 {
-  "mode": "now",
-  "started_at": "2026-11-20T15:50:55+01:00",
-  "slot": "2026-11-20 15:50 (von Hand, now)",
-  "since": "e55d6c24541874c994b44daae7cedafb81f04604",
-  "since_build": 52,
-  "main": "37eb400cbcc1ea6f29b2d467cf7a1ee31aa6e889",
-  "commits": [
-    {
-      "sha": "49fa09b",
-      "subject": "Prototype: tick single lines of a block in \"What did you cover?\""
-    },
-    {
-      "sha": "1142d48",
-      "subject": "A bold heading with lines below it is a block also on its own"
-    },
-    {
-      "sha": "6ee5d2a",
-      "subject": "Single lines of a block: UI tests, tour picture, no mockup mode"
-    },
-    {
-      "sha": "79ce658",
-      "subject": "Android test: the two plan line cases in part 3"
-    },
-    {
-      "sha": "b1a06f4",
-      "subject": "What's new: single lines of a block in plans"
-    },
-    {
-      "sha": "2c0c36b",
-      "subject": "Merge feature/plan-finish-lines: single lines of a block in \"What did you cover?\" and \"Plan the next lesson\""
-    },
-    {
-      "sha": "1832324",
-      "subject": "Schedule: the clipboard shows while a plan for a coming lesson exists"
-    },
-    {
-      "sha": "4b935a3",
-      "subject": "What's new: the clipboard for plans of coming lessons"
-    },
-    {
-      "sha": "37eb400",
-      "subject": "Merge feature/plan-icon-coming: the schedule shows the clipboard while a plan for a coming lesson exists"
-    }
-  ],
-  "relevant_files": [
-    ".github/scripts/android-test.sh",
-    "i18n/qupil_de.ts",
-    "i18n/qupil_en.ts",
-    "i18n/qupil_es.ts",
-    "i18n/qupil_fr.ts",
-    "qml/editors/PlanFinish.qml",
-    "src/app/DataService.cpp",
-    "src/app/DataService.h",
-    "src/app/NoteFormat.cpp",
-    "src/app/NoteFormat.h",
-    "src/app/ScreenshotTour.cpp",
-    "src/app/UiTest.cpp",
-    "src/app/UiTest.h",
-    "tests/tst_notes.cpp",
-    "tools/i18n/catalog.py"
-  ],
-  "result": "uploaded",
-  "build": {
-    "number": 53,
-    "run_id": 44757411454,
-    "sha": "37eb400cbcc1ea6f29b2d467cf7a1ee31aa6e889",
-    "url": "https://github.com/doitux/qupil2/actions/runs/44757411454",
-    "created": "2026-11-20T14:50:59Z",
-    "status": "completed",
-    "conclusion": "success",
-    "attempt": 1,
-    "rerun": false,
-    "upload": "success",
-    "whats_new": "success"
-  },
-  "written": "2026-11-20T16:02:18+01:00",
-  "headline": "Build 53 hochgeladen"
+  "mode": "schedule",
+  "started_at": "2026-11-20T20:41:32+01:00",
+  "slot": "2026-11-20 13:05",
+  "result": "late",
+  "note": "GitHub hat den Lauf erst um 20:41 gestartet (geplant 13:05); die Änderungen kommen in den nächsten Sammel-Lauf.",
+  "written": "2026-11-20T20:41:32+01:00",
+  "headline": "Verspätet gestartet, kein Build"
 }
