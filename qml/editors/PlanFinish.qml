@@ -246,7 +246,7 @@ Sheet {
                 spacing: 6
                 Item {
                     width: parent.width
-                    implicitHeight: Math.max(lockButton.visible ? 32 : 28, pointRow.hasMore ? 28 : pointText.implicitHeight)
+                    implicitHeight: Math.max(28, pointRow.hasMore ? 28 : pointText.implicitHeight)
                     Rectangle {
                         id: box
                         anchors.verticalCenter: pointRow.hasMore ? parent.verticalCenter : undefined
@@ -290,7 +290,8 @@ Sheet {
                         visible: sheet.coupled && sheet.fromNoteId === ""
                         anchors.right: pointRow.hasMore ? peekButton.left : parent.right
                         anchors.rightMargin: pointRow.hasMore ? 4 : 0
-                        anchors.verticalCenter: pointRow.hasMore ? parent.verticalCenter : undefined
+                        // Centred on the tick box (a point without lines may wrap: then at its first line)
+                        y: box.y + (box.height - height) / 2
                         implicitWidth: 32
                         implicitHeight: 32
                         checkable: true
