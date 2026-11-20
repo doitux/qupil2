@@ -60,17 +60,20 @@
     "tests/tst_notes.cpp",
     "tools/i18n/catalog.py"
   ],
-  "result": "started",
+  "result": "uploaded",
   "build": {
     "number": 53,
     "run_id": 44757411454,
     "sha": "37eb400cbcc1ea6f29b2d467cf7a1ee31aa6e889",
     "url": "https://github.com/doitux/qupil2/actions/runs/44757411454",
     "created": "2026-11-20T14:50:59Z",
-    "status": "in_progress",
-    "conclusion": null,
-    "attempt": 1
+    "status": "completed",
+    "conclusion": "success",
+    "attempt": 1,
+    "rerun": false,
+    "upload": "success",
+    "whats_new": "success"
   },
-  "written": "2026-11-20T15:51:10+01:00",
-  "headline": "Build 53 gestartet"
+  "written": "2026-11-20T16:02:18+01:00",
+  "headline": "Build 53 hochgeladen"
 }
