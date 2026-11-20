@@ -1,0 +1,440 @@
+{
+ "s.add.clipboard_empty": {
+  "de": "In der Zwischenablage ist kein Link.",
+  "en": "There is no link on the clipboard.",
+  "es": "No hay ningún enlace en el portapapeles.",
+  "fr": "Aucun lien dans le presse-papiers."
+ },
+ "s.add.demo": {
+  "de": "Beispiel ansehen",
+  "en": "See an example",
+  "es": "Ver un ejemplo",
+  "fr": "Voir un exemple"
+ },
+ "s.add.invalid": {
+  "de": "Das ist kein Qupil-Link. Frag deine Lehrkraft nach einem neuen.",
+  "en": "This is not a Qupil link. Ask your teacher for a new one.",
+  "es": "Esto no es un enlace de Qupil. Pide uno nuevo a tu profesor.",
+  "fr": "Ce n'est pas un lien Qupil. Demande-en un nouveau à ton professeur."
+ },
+ "s.add.link.text": {
+  "de": "Wenn deine Lehrkraft dir den Link geschickt hat, füge ihn hier ein.",
+  "en": "If your teacher sent you the link, paste it here.",
+  "es": "Si tu profesor te envió el enlace, pégalo aquí.",
+  "fr": "Si ton professeur t'a envoyé le lien, colle-le ici."
+ },
+ "s.add.link.title": {
+  "de": "Link bekommen?",
+  "en": "Got a link?",
+  "es": "¿Te enviaron un enlace?",
+  "fr": "Tu as reçu un lien ?"
+ },
+ "s.add.open": {
+  "de": "Öffnen",
+  "en": "Open",
+  "es": "Abrir",
+  "fr": "Ouvrir"
+ },
+ "s.add.paste": {
+  "de": "Einfügen",
+  "en": "Paste",
+  "es": "Pegar",
+  "fr": "Coller"
+ },
+ "s.add.scan.text": {
+  "de": "Deine Lehrkraft zeigt dir in Qupil einen Code. Halte die Kamera deines Handys darauf – das Übeheft öffnet sich dann von selbst hier.",
+  "en": "Your teacher shows you a code in Qupil. Point your phone's camera at it – the practice book opens here by itself.",
+  "es": "Tu profesor te muestra un código en Qupil. Apunta la cámara del móvil hacia él y el cuaderno se abre aquí solo.",
+  "fr": "Ton professeur te montre un code dans Qupil. Vise-le avec l'appareil photo de ton téléphone – le cahier s'ouvre ici tout seul."
+ },
+ "s.add.scan.title": {
+  "de": "QR-Code scannen",
+  "en": "Scan the QR code",
+  "es": "Escanear el código QR",
+  "fr": "Scanner le code QR"
+ },
+ "s.app.name": {
+  "de": "Qupil für Schüler",
+  "en": "Qupil for students",
+  "es": "Qupil para alumnos",
+  "fr": "Qupil pour élèves"
+ },
+ "s.app.section": {
+  "de": "Übeheft",
+  "en": "Practice book",
+  "es": "Cuaderno",
+  "fr": "Cahier"
+ },
+ "s.back": {
+  "de": "Zurück",
+  "en": "Back",
+  "es": "Atrás",
+  "fr": "Retour"
+ },
+ "s.coupled": {
+  "de": "Übeheft hinzugefügt",
+  "en": "Practice book added",
+  "es": "Cuaderno añadido",
+  "fr": "Cahier ajouté"
+ },
+ "s.demo.banner": {
+  "de": "Beispiel mit ausgedachten Daten – es wird nichts gesendet.",
+  "en": "Example with made-up data – nothing is sent.",
+  "es": "Ejemplo con datos inventados: no se envía nada.",
+  "fr": "Exemple avec des données inventées – rien n'est envoyé."
+ },
+ "s.demo.end": {
+  "de": "Beenden",
+  "en": "Close",
+  "es": "Cerrar",
+  "fr": "Fermer"
+ },
+ "s.error.gone": {
+  "de": "%1 hat die Verbindung beendet. Du kannst dieses Übeheft in den Einstellungen entfernen.",
+  "en": "%1 has ended the connection. You can remove this practice book in the settings.",
+  "es": "%1 ha terminado la conexión. Puedes quitar este cuaderno en los ajustes.",
+  "fr": "%1 a mis fin à la connexion. Tu peux retirer ce cahier dans les réglages."
+ },
+ "s.error.key": {
+  "de": "Das Übeheft lässt sich nicht öffnen. Frag deine Lehrkraft nach einem neuen Code.",
+  "en": "The practice book cannot be opened. Ask your teacher for a new code.",
+  "es": "No se puede abrir el cuaderno. Pide un código nuevo a tu profesor.",
+  "fr": "Impossible d'ouvrir le cahier. Demande un nouveau code à ton professeur."
+ },
+ "s.error.newer": {
+  "de": "Deine Lehrkraft nutzt ein neueres Qupil. Bitte aktualisiere diese App.",
+  "en": "Your teacher uses a newer Qupil. Please update this app.",
+  "es": "Tu profesor usa un Qupil más reciente. Actualiza esta aplicación.",
+  "fr": "Ton professeur utilise un Qupil plus récent. Mets cette application à jour."
+ },
+ "s.error.offline": {
+  "de": "Keine Verbindung – du siehst den letzten Stand.",
+  "en": "No connection – you see the last state.",
+  "es": "Sin conexión: ves el último estado.",
+  "fr": "Pas de connexion – tu vois le dernier état."
+ },
+ "s.events.title": {
+  "de": "Termine",
+  "en": "Dates",
+  "es": "Fechas",
+  "fr": "Dates"
+ },
+ "s.events.you_play": {
+  "de": "Du spielst: %1",
+  "en": "You play: %1",
+  "es": "Tocas: %1",
+  "fr": "Tu joues : %1"
+ },
+ "s.fb.practiced": {
+  "de": "Geübt",
+  "en": "Practised",
+  "es": "Practicado",
+  "fr": "Travaillé"
+ },
+ "s.fb.practiced.1": {
+  "de": "kaum",
+  "en": "hardly",
+  "es": "poco",
+  "fr": "à peine"
+ },
+ "s.fb.practiced.2": {
+  "de": "etwas",
+  "en": "some",
+  "es": "algo",
+  "fr": "un peu"
+ },
+ "s.fb.practiced.3": {
+  "de": "viel",
+  "en": "a lot",
+  "es": "mucho",
+  "fr": "beaucoup"
+ },
+ "s.fb.works": {
+  "de": "Klappt",
+  "en": "Works",
+  "es": "Sale",
+  "fr": "Ça marche"
+ },
+ "s.fb.works.1": {
+  "de": "noch nicht",
+  "en": "not yet",
+  "es": "aún no",
+  "fr": "pas encore"
+ },
+ "s.fb.works.2": {
+  "de": "geht so",
+  "en": "so-so",
+  "es": "más o menos",
+  "fr": "moyen"
+ },
+ "s.fb.works.3": {
+  "de": "gut",
+  "en": "well",
+  "es": "bien",
+  "fr": "bien"
+ },
+ "s.fmt.day_number": {
+  "de": "d",
+  "en": "d",
+  "es": "d",
+  "fr": "d"
+ },
+ "s.fmt.long": {
+  "de": "dddd, d. MMMM",
+  "en": "dddd d MMMM",
+  "es": "dddd d 'de' MMMM",
+  "fr": "dddd d MMMM"
+ },
+ "s.fmt.month_short": {
+  "de": "MMM",
+  "en": "MMM",
+  "es": "MMM",
+  "fr": "MMM"
+ },
+ "s.fmt.short": {
+  "de": "d.M.",
+  "en": "d MMM",
+  "es": "d MMM",
+  "fr": "d MMM"
+ },
+ "s.fmt.weekday_short": {
+  "de": "ddd, d.M.",
+  "en": "ddd d MMM",
+  "es": "ddd d MMM",
+  "fr": "ddd d MMM"
+ },
+ "s.home.loading": {
+  "de": "Übeheft wird geladen …",
+  "en": "Loading the practice book …",
+  "es": "Cargando el cuaderno …",
+  "fr": "Chargement du cahier …"
+ },
+ "s.home.not_loaded": {
+  "de": "Noch nicht geladen. Zum Aktualisieren nach unten ziehen.",
+  "en": "Not loaded yet. Pull down to try again.",
+  "es": "Aún no se ha cargado. Desliza hacia abajo para reintentar.",
+  "fr": "Pas encore chargé. Tire vers le bas pour réessayer."
+ },
+ "s.home.refresh": {
+  "de": "Aktualisieren",
+  "en": "Update",
+  "es": "Actualizar",
+  "fr": "Actualiser"
+ },
+ "s.home.updated": {
+  "de": "Aktualisiert %1",
+  "en": "Updated %1",
+  "es": "Actualizado %1",
+  "fr": "Mis à jour %1"
+ },
+ "s.next.cancelled": {
+  "de": "fällt aus",
+  "en": "cancelled",
+  "es": "cancelada",
+  "fr": "annulé"
+ },
+ "s.next.label": {
+  "de": "Nächste Stunde",
+  "en": "Next lesson",
+  "es": "Próxima clase",
+  "fr": "Prochain cours"
+ },
+ "s.next.none": {
+  "de": "Noch keine Stunde geplant",
+  "en": "No lesson planned yet",
+  "es": "Ninguna clase prevista",
+  "fr": "Aucun cours prévu"
+ },
+ "s.pieces.ready": {
+  "de": "sitzt",
+  "en": "ready",
+  "es": "lista",
+  "fr": "prêt"
+ },
+ "s.pieces.title": {
+  "de": "Stücke",
+  "en": "Pieces",
+  "es": "Obras",
+  "fr": "Morceaux"
+ },
+ "s.question.demo": {
+  "de": "Im Beispiel wird nichts gesendet.",
+  "en": "In the example nothing is sent.",
+  "es": "En el ejemplo no se envía nada.",
+  "fr": "Dans l'exemple, rien n'est envoyé."
+ },
+ "s.question.hint": {
+  "de": "Deine Lehrkraft liest das vor der nächsten Stunde.",
+  "en": "Your teacher reads it before the next lesson.",
+  "es": "Tu profesor lo leerá antes de la próxima clase.",
+  "fr": "Ton professeur le lira avant le prochain cours."
+ },
+ "s.question.placeholder": {
+  "de": "Etwas unklar? Frag hier …",
+  "en": "Something unclear? Ask here …",
+  "es": "¿Algo no está claro? Pregunta aquí …",
+  "fr": "Quelque chose n'est pas clair ? Demande ici …"
+ },
+ "s.question.send": {
+  "de": "Senden",
+  "en": "Send",
+  "es": "Enviar",
+  "fr": "Envoyer"
+ },
+ "s.question.title": {
+  "de": "Frage an %1",
+  "en": "Question to %1",
+  "es": "Pregunta para %1",
+  "fr": "Question à %1"
+ },
+ "s.send.pending": {
+  "de": "Wird gesendet …",
+  "en": "Will be sent …",
+  "es": "Se enviará …",
+  "fr": "Envoi en cours …"
+ },
+ "s.send.sent": {
+  "de": "An %1 geschickt · %2",
+  "en": "Sent to %1 · %2",
+  "es": "Enviado a %1 · %2",
+  "fr": "Envoyé à %1 · %2"
+ },
+ "s.settings.add": {
+  "de": "Weitere Lehrkraft hinzufügen",
+  "en": "Add another teacher",
+  "es": "Añadir otro profesor",
+  "fr": "Ajouter un autre professeur"
+ },
+ "s.settings.demo": {
+  "de": "Beispiel",
+  "en": "Example",
+  "es": "Ejemplo",
+  "fr": "Exemple"
+ },
+ "s.settings.privacy": {
+  "de": "Datenschutz",
+  "en": "Privacy",
+  "es": "Privacidad",
+  "fr": "Confidentialité"
+ },
+ "s.settings.privacy_text": {
+  "de": "Das Übeheft liegt verschlüsselt in der Cloud deiner Lehrkraft. Lesen können es nur diese App und das Qupil deiner Lehrkraft. Was du zurückschickst (geübt, klappt, Fragen), geht verschlüsselt nur an deine Lehrkraft. Die App hat kein Konto, keine Werbung und kein Tracking.",
+  "en": "The practice book lies encrypted in your teacher's cloud. Only this app and your teacher's Qupil can read it. What you send back (practised, works, questions) goes encrypted to your teacher only. The app has no account, no advertising and no tracking.",
+  "es": "El cuaderno está cifrado en la nube de tu profesor. Solo esta aplicación y el Qupil de tu profesor pueden leerlo. Lo que envías (practicado, sale, preguntas) llega cifrado solo a tu profesor. La aplicación no tiene cuenta, ni publicidad, ni rastreo.",
+  "fr": "Le cahier est stocké chiffré dans le cloud de ton professeur. Seuls cette application et le Qupil de ton professeur peuvent le lire. Ce que tu renvoies (travaillé, ça marche, questions) va, chiffré, uniquement à ton professeur. L'application n'a ni compte, ni publicité, ni pistage."
+ },
+ "s.settings.remove": {
+  "de": "Entfernen",
+  "en": "Remove",
+  "es": "Quitar",
+  "fr": "Retirer"
+ },
+ "s.settings.remove_confirm": {
+  "de": "Wirklich entfernen",
+  "en": "Really remove",
+  "es": "Quitar de verdad",
+  "fr": "Vraiment retirer"
+ },
+ "s.settings.remove_hint": {
+  "de": "Das entfernt das Übeheft nur von diesem Handy. Deine Lehrkraft kann dir jederzeit einen neuen Code geben.",
+  "en": "This removes the practice book from this phone only. Your teacher can give you a new code at any time.",
+  "es": "Solo se quita el cuaderno de este móvil. Tu profesor puede darte un código nuevo cuando quieras.",
+  "fr": "Le cahier n'est retiré que de ce téléphone. Ton professeur peut te donner un nouveau code à tout moment."
+ },
+ "s.settings.teachers": {
+  "de": "Übehefte",
+  "en": "Practice books",
+  "es": "Cuadernos",
+  "fr": "Cahiers"
+ },
+ "s.settings.title": {
+  "de": "Einstellungen",
+  "en": "Settings",
+  "es": "Ajustes",
+  "fr": "Réglages"
+ },
+ "s.settings.unknown_teacher": {
+  "de": "Übeheft",
+  "en": "Practice book",
+  "es": "Cuaderno",
+  "fr": "Cahier"
+ },
+ "s.task.hints": {
+  "de": "%1 Hinweise",
+  "en": "%1 tips",
+  "es": "%1 consejos",
+  "fr": "%1 conseils"
+ },
+ "s.task.open_since": {
+  "de": "offen seit %1",
+  "en": "open since %1",
+  "es": "pendiente desde %1",
+  "fr": "ouvert depuis le %1"
+ },
+ "s.tasks.from": {
+  "de": "Aufgaben vom %1",
+  "en": "Tasks from %1",
+  "es": "Tareas del %1",
+  "fr": "Devoirs du %1"
+ },
+ "s.tasks.none": {
+  "de": "Gerade keine Aufgaben.",
+  "en": "No tasks right now.",
+  "es": "Ahora no hay tareas.",
+  "fr": "Pas de devoirs pour l'instant."
+ },
+ "s.welcome.privacy": {
+  "de": "Kein Konto, keine E-Mail-Adresse. Was du schreibst, geht verschlüsselt nur an deine Lehrkraft.",
+  "en": "No account, no e-mail address. What you write goes encrypted to your teacher only.",
+  "es": "Sin cuenta ni correo electrónico. Lo que escribes llega cifrado solo a tu profesor o profesora.",
+  "fr": "Pas de compte, pas d'adresse e-mail. Ce que tu écris va, chiffré, uniquement à ton professeur."
+ },
+ "s.welcome.text": {
+  "de": "Hier schreibt deine Lehrerin oder dein Lehrer auf, was du bis zur nächsten Stunde übst – auf Wunsch mit Tipps. Du sagst kurz, wie es lief.",
+  "en": "Your teacher writes down here what to practise until the next lesson – with tips if you like. You tell them how it went.",
+  "es": "Aquí tu profesor o profesora apunta lo que practicas hasta la próxima clase, con consejos si quieres. Tú le cuentas qué tal te fue.",
+  "fr": "Ici, ton professeur note ce que tu travailles jusqu'au prochain cours – avec des conseils si tu veux. Tu lui dis comment ça s'est passé."
+ },
+ "s.welcome.title": {
+  "de": "Dein Übeheft",
+  "en": "Your practice book",
+  "es": "Tu cuaderno de práctica",
+  "fr": "Ton cahier d'exercices"
+ },
+ "s.when.in_days": {
+  "de": {
+   "one": "in %n Tag",
+   "other": "in %n Tagen"
+  },
+  "en": {
+   "one": "in %n day",
+   "other": "in %n days"
+  },
+  "es": {
+   "one": "en %n día",
+   "other": "en %n días"
+  },
+  "fr": {
+   "one": "dans %n jour",
+   "other": "dans %n jours"
+  }
+ },
+ "s.when.today": {
+  "de": "heute",
+  "en": "today",
+  "es": "hoy",
+  "fr": "aujourd'hui"
+ },
+ "s.when.today_at": {
+  "de": "heute, %1",
+  "en": "today, %1",
+  "es": "hoy, %1",
+  "fr": "aujourd'hui, %1"
+ },
+ "s.when.tomorrow": {
+  "de": "morgen",
+  "en": "tomorrow",
+  "es": "mañana",
+  "fr": "demain"
+ }
+}

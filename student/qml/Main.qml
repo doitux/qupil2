@@ -1,0 +1,90 @@
+// SPDX-FileCopyrightText: 2006-2026 Felix Hammer
+// SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
+//
+// The student's booklet: the welcome page until a teacher is coupled, then the booklet;
+// settings slide in from the right.
+
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Window
+import QupilStudent
+
+ApplicationWindow {
+    id: window
+
+    width: 390
+    height: 844
+    visible: true
+    title: qsTrId("s.app.name")
+    color: Theme.bg
+    font.family: Theme.fontFamily
+
+    readonly property bool coupled: StudentApp.teachers.length > 0
+    // Safe areas (notch, home indicator); Qt 6.9 knows them, older Qt gets a fixed guess on phones
+    readonly property real topInset: Qt.platform.os === "ios" ? 47 : (Qt.platform.os === "android" ? 24 : 0)
+    readonly property real bottomInset: Qt.platform.os === "ios" ? 28 : 0
+
+    function showNotice(text) {
+        toast.text = text
+        toast.opacity = 1
+        toastTimer.restart()
+    }
+
+    StackView {
+        id: stack
+        anchors.fill: parent
+        initialItem: window.coupled ? homePage : welcomePage
+    }
+
+    Component { id: welcomePage; WelcomePage {} }
+    Component { id: homePage; HomePage {} }
+    Component { id: settingsPage; SettingsPage {} }
+
+    Connections {
+        target: StudentApp
+        function onNotice(text) { window.showNotice(text) }
+        function onChanged() {
+            // Coupled for the first time, or the last teacher removed
+            const onHome = stack.depth > 0 && stack.get(0) instanceof HomePage
+            if (window.coupled !== onHome)
+                stack.replace(null, window.coupled ? homePage : welcomePage)
+        }
+    }
+
+    // Pages ask for these
+    function openSettings() { stack.push(settingsPage) }
+    function back() { if (stack.depth > 1) stack.pop() }
+
+    // ---- small message at the bottom
+    Rectangle {
+        id: toast
+        property alias text: toastText.text
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: window.bottomInset + 24
+        width: Math.min(parent.width - 40, toastText.implicitWidth + 32)
+        height: toastText.implicitHeight + 22
+        radius: 14
+        color: Theme.inverse
+        opacity: 0
+        visible: opacity > 0
+        Behavior on opacity { NumberAnimation { duration: 180 } }
+        T {
+            id: toastText
+            anchors.centerIn: parent
+            width: Math.min(implicitWidth, window.width - 72)
+            color: Theme.textOnInverse
+            font.weight: Font.DemiBold
+            horizontalAlignment: Text.AlignHCenter
+        }
+        Timer { id: toastTimer; interval: 3200; onTriggered: toast.opacity = 0 }
+    }
+
+    // Android back button
+    onClosing: close => {
+        if (stack.depth > 1) {
+            close.accepted = false
+            stack.pop()
+        }
+    }
+}
