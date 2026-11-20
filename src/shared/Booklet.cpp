@@ -93,10 +93,15 @@ QUrl fileUrl(const Link &link, const QString &fileName)
                 + QString::fromLatin1(QUrl::toPercentEncoding(fileName)));
 }
 
-QUrl legacyDownloadUrl(const Link &link, const QString &fileName)
+QUrl legacyFileUrl(const Link &link, const QString &fileName)
 {
-    return QUrl(normalizedServer(link.server) + u"/s/"_s + link.token + u"/download?path=/&files="_s
+    return QUrl(normalizedServer(link.server) + u"/public.php/webdav/"_s
                 + QString::fromLatin1(QUrl::toPercentEncoding(fileName)));
+}
+
+QByteArray legacyAuthorization(const Link &link)
+{
+    return "Basic " + (link.token + u':' + link.password).toUtf8().toBase64();
 }
 
 QByteArray authorization(const Link &link)

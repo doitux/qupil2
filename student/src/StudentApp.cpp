@@ -374,9 +374,10 @@ void StudentApp::refresh()
 void StudentApp::fetch(Teacher &teacher, bool legacy)
 {
     const QString id = teacher.id;
-    QNetworkRequest request(legacy ? Booklet::legacyDownloadUrl(teacher.link, QString::fromLatin1(Booklet::BookletFile))
-                                   : Booklet::fileUrl(teacher.link, QString::fromLatin1(Booklet::BookletFile)));
-    request.setRawHeader("Authorization", Booklet::authorization(teacher.link));
+    const QString file = QString::fromLatin1(Booklet::BookletFile);
+    QNetworkRequest request(legacy ? Booklet::legacyFileUrl(teacher.link, file) : Booklet::fileUrl(teacher.link, file));
+    request.setRawHeader("Authorization", legacy ? Booklet::legacyAuthorization(teacher.link)
+                                                 : Booklet::authorization(teacher.link));
     request.setAttribute(QNetworkRequest::CacheLoadControlAttribute, QNetworkRequest::AlwaysNetwork);
     request.setTransferTimeout(20000);
     setBusy(true);
@@ -389,9 +390,8 @@ void StudentApp::fetch(Teacher &teacher, bool legacy)
             return;
         const int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
         if (reply->error() != QNetworkReply::NoError) {
-            // Nextcloud before 29 has no public WebDAV: try the share page once
-            if (!legacy && (status == 404 || status == 405 || status == 501)
-                && !reply->url().path().contains(u"/s/"_s)) {
+            // Nextcloud before 29 has no new public WebDAV: try the old one once
+            if (!legacy && (status == 404 || status == 405 || status == 501)) {
                 fetch(*t, true);
                 return;
             }
@@ -404,6 +404,7 @@ void StudentApp::fetch(Teacher &teacher, bool legacy)
                 t->error = u"newer"_s;
             } else {
                 t->booklet = *content;
+                t->legacy = legacy;
                 t->fetched = QDateTime::currentDateTime();
                 t->error.clear();
             }
@@ -442,8 +443,9 @@ void StudentApp::upload(Teacher &teacher)
                               {u"feedback"_s, teacher.feedback},
                               {u"questions"_s, teacher.questions}};
     const QString name = Booklet::feedbackFileName(m_deviceId, nowMs());
-    QNetworkRequest request(Booklet::fileUrl(teacher.link, name));
-    request.setRawHeader("Authorization", Booklet::authorization(teacher.link));
+    QNetworkRequest request(teacher.legacy ? Booklet::legacyFileUrl(teacher.link, name) : Booklet::fileUrl(teacher.link, name));
+    request.setRawHeader("Authorization", teacher.legacy ? Booklet::legacyAuthorization(teacher.link)
+                                                         : Booklet::authorization(teacher.link));
     request.setRawHeader("X-Requested-With", "XMLHttpRequest");
     request.setHeader(QNetworkRequest::ContentTypeHeader, u"application/octet-stream"_s);
     request.setTransferTimeout(20000);

@@ -223,10 +223,14 @@ private slots:
 
     void oldNextcloud()
     {
-        // No public WebDAV (before Nextcloud 29): the download link of the share page
+        // No new public WebDAV (before Nextcloud 29): the old one, both ways
         m_cloud->legacyOnly = true;
+        const int puts = m_cloud->puts;
         QCOMPARE(m_app->addLink(Booklet::encodeLink(m_link)), QString());
         QTRY_COMPARE(m_app->current().value(u"teacher"_s).toString(), u"Herr Test"_s);
+        m_app->setPracticed(u"t1"_s, 2);
+        QTRY_COMPARE_WITH_TIMEOUT(m_app->current().value(u"sendState"_s).toString(), u"sent"_s, 8000);
+        QCOMPARE(m_cloud->puts, puts + 1);
     }
 
     void keptAfterRestart()

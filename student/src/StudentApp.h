@@ -92,6 +92,7 @@ private:
         QJsonObject booklet;
         QDateTime fetched;
         QString error;             // "", "offline", "gone", "key", "newer"
+        bool legacy = false;       // Nextcloud before 29: old public WebDAV (found again on each load)
         bool demo = false;
         QJsonObject feedback;      // taskId -> {practiced, works, done, at}
         QJsonArray questions;      // {id, text, task, at}

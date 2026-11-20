@@ -57,10 +57,11 @@ std::optional<Link> decodeLink(const QString &text);
 
 //! Public WebDAV address of a file in the shared folder (Nextcloud 29 and later)
 QUrl fileUrl(const Link &link, const QString &fileName);
-//! Older Nextclouds (before 29): download through the share page
-QUrl legacyDownloadUrl(const Link &link, const QString &fileName);
 //! Basic authentication for the public WebDAV ("anonymous" and the link password)
 QByteArray authorization(const Link &link);
+//! Older Nextclouds (before 29): the old public WebDAV, signed in with token and password
+QUrl legacyFileUrl(const Link &link, const QString &fileName);
+QByteArray legacyAuthorization(const Link &link);
 
 enum class Purpose { Booklet, Feedback };
 

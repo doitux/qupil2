@@ -3,7 +3,8 @@
 //
 // A tiny stand-in for Nextcloud, enough for the practice book:
 // - public links: GET and PUT below /public.php/dav/files/<token>/ (Nextcloud 29+) with
-//   the link password, or only /s/<token>/download (older Nextcloud); permissions as set
+//   the link password, or the old /public.php/webdav/ (token and password; Nextcloud
+//   before 29); permissions as set
 // - the teacher's side: capabilities and the OCS share API (create, list, renew, delete)
 
 #pragma once

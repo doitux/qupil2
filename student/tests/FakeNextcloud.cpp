@@ -113,10 +113,13 @@ void FakeNextcloud::handle(QTcpSocket *socket)
         const QString rest = url.path().mid(prefix.size());
         token = rest.section(u'/', 0, 0);
         name = rest.section(u'/', 1);
-    } else if (url.path().startsWith(u"/s/"_s) && url.path().endsWith(u"/download"_s)) {
-        token = url.path().section(u'/', 2, 2);
-        name = QUrlQuery(url).queryItemValue(u"files"_s);
+    } else if (url.path().startsWith(u"/public.php/webdav/"_s)) {
+        // Old public WebDAV: user name is the token
+        const QByteArray decoded = QByteArray::fromBase64(auth.mid(6));
+        token = QString::fromUtf8(decoded.left(decoded.indexOf(':')));
+        name = url.path().mid(19);
         legacy = true;
+        auth = basic(u"anonymous"_s, QString::fromUtf8(decoded.mid(decoded.indexOf(':') + 1)));
     } else {
         return reply(socket, 404);
     }
@@ -135,7 +138,7 @@ void FakeNextcloud::handle(QTcpSocket *socket)
         ++gets;
         return folder.contains(name) ? reply(socket, 200, folder.value(name)) : reply(socket, 404);
     }
-    if (method == "PUT" && !legacy) {
+    if (method == "PUT") {
         if (!ajax)                                  // CSRF check of Nextcloud
             return reply(socket, 412);
         if (!(link.permissions & 4))                // no "create"
@@ -146,7 +149,7 @@ void FakeNextcloud::handle(QTcpSocket *socket)
         folder.insert(name, body);
         return reply(socket, 201);
     }
-    if (method == "DELETE" && !legacy) {
+    if (method == "DELETE") {
         if (!(link.permissions & 8))
             return reply(socket, 403);
         folder.remove(name);
