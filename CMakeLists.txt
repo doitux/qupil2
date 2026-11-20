@@ -96,7 +96,7 @@ else()
     set(QUPIL_BUILD "dev")
 endif()
 target_compile_definitions(qupil PRIVATE QUPIL_BUILD="${QUPIL_BUILD}")
-target_include_directories(qupil PRIVATE src src/core src/app)
+target_include_directories(qupil PRIVATE src src/core src/app src/shared 3rdparty/qrcodegen)
 # Finding devices in the network: Bonjour on Apple systems, our own mDNS elsewhere
 if(APPLE)
     target_sources(qupil PRIVATE src/app/BonjourDiscovery.h src/app/BonjourDiscovery.cpp)
@@ -145,6 +145,16 @@ if(UNIX AND NOT APPLE AND NOT ANDROID)
 endif()
 # iOS has its own pickers: "Save to Files" for backups (Qt's dialog cannot save there) and
 # one for opening files of other apps as a copy (Qt's dialog gives paths Qupil may not read)
+# Homework as a message: the system's share menu (iOS, Android); desktop copies the text
+target_sources(qupil PRIVATE src/app/TextShare.h)
+if(IOS)
+    target_sources(qupil PRIVATE src/app/TextShare_ios.mm)
+    set_source_files_properties(src/app/TextShare_ios.mm PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
+elseif(ANDROID)
+    target_sources(qupil PRIVATE src/app/TextShare_android.cpp)
+else()
+    target_sources(qupil PRIVATE src/app/TextShare_none.cpp)
+endif()
 target_sources(qupil PRIVATE src/app/FileExport.h src/app/FileImport.h)
 if(IOS)
     target_sources(qupil PRIVATE src/app/FileExport_ios.mm src/app/FileImport_ios.mm)
@@ -308,6 +318,7 @@ set(QUPIL_QML_FILES
     qml/components/StudentPicker.qml
     qml/components/LessonPicker.qml
     qml/components/LessonBadge.qml
+    qml/components/TaskLessonCard.qml
     qml/components/TextTouch.qml
     qml/components/SwitchRow.qml
     qml/components/SyncCard.qml
@@ -323,6 +334,8 @@ set(QUPIL_QML_FILES
     qml/editors/LessonEditor.qml
     qml/editors/NewStudent.qml
     qml/editors/NoteEditor.qml
+    qml/editors/TaskEditor.qml
+    qml/editors/BookletSheet.qml
     qml/editors/PlanFinish.qml
     qml/editors/PieceEditor.qml
     qml/editors/ReadyPiecesPicker.qml
@@ -391,6 +404,7 @@ qt_add_qml_module(qupil
         LICENSES/OFL-1.1.txt
         LICENSES/Apache-2.0.txt
         3rdparty/monocypher/LICENCE.md
+        3rdparty/qrcodegen/LICENSE.md
     SOURCES
         src/core/LanguageManager.h
         src/core/LanguageManager.cpp
@@ -400,6 +414,19 @@ qt_add_qml_module(qupil
         src/app/BackKey.cpp
         src/app/DataService.h
         src/app/DataService.cpp
+        src/app/DataServiceTasks.cpp
+        src/app/BookletService.h
+        src/app/BookletService.cpp
+        src/shared/Booklet.h
+        src/shared/Booklet.cpp
+        src/shared/BookletInbox.h
+        src/shared/BookletInbox.cpp
+        src/shared/NextcloudShares.h
+        src/shared/NextcloudShares.cpp
+        src/shared/QrCode.h
+        src/shared/QrCode.cpp
+        3rdparty/qrcodegen/qrcodegen.hpp
+        3rdparty/qrcodegen/qrcodegen.cpp
         src/app/NoteFormat.h
         src/app/NoteFormat.cpp
         src/app/ArchiveFormat.h
@@ -555,6 +582,16 @@ if(QUPIL_BUILD_TESTS AND NOT ANDROID AND NOT IOS)
     add_test(NAME notes COMMAND tst_notes)
     set_tests_properties(notes PROPERTIES TIMEOUT 60)
 
+    # Practice book: tasks of coupled students, moving on, group copies, feedback
+    qt_add_executable(tst_tasks tests/tst_tasks.cpp src/app/DataService.h src/app/DataService.cpp
+        src/app/DataServiceTasks.cpp src/app/NoteFormat.h src/app/NoteFormat.cpp
+        src/core/LanguageManager.h src/core/LanguageManager.cpp
+        src/app/TextFormatting.h src/app/TextFormatting.cpp)
+    target_include_directories(tst_tasks PRIVATE src/app src/core)
+    target_link_libraries(tst_tasks PRIVATE qupilcore Qt6::Gui Qt6::Qml Qt6::Test)
+    set_target_properties(tst_tasks PROPERTIES MACOSX_BUNDLE FALSE WIN32_EXECUTABLE FALSE)
+    add_test(NAME tasks COMMAND tst_tasks)
+
     # Loads the whole QML UI once and fails on any QML warning
     add_test(NAME qml_smoke COMMAND qupil --smoke-test)
     # Goes through the important flows by tapping and typing, phone and wide layout
@@ -567,6 +604,6 @@ if(QUPIL_BUILD_TESTS AND NOT ANDROID AND NOT IOS)
                  COMMAND ${CMAKE_COMMAND} -DQUPIL=$<TARGET_FILE:qupil> -DSIZE=${_size}
                          -DOUT=${CMAKE_BINARY_DIR}/ui-test/${layout} -P ${CMAKE_CURRENT_SOURCE_DIR}/tests/ui-test.cmake)
     endforeach()
-    set_tests_properties(languagemanager core notes qml_smoke ui_test_phone ui_test_wide
+    set_tests_properties(languagemanager core notes tasks qml_smoke ui_test_phone ui_test_wide
                          PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
 endif()

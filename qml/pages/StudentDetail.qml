@@ -13,6 +13,7 @@ import Qupil
 
 Item {
     id: detail
+    objectName: "studentDetail"
 
     property string studentId
     property string membershipId
@@ -50,6 +51,30 @@ Item {
     readonly property var togetherSwitch: student.togetherSwitch || null
     readonly property var notes: { if (Data.revision < 0) return undefined; return currentMembership ? Data.notes(currentMembership) : [] }
     readonly property var plans: { if (Data.revision < 0) return undefined; return currentMembership ? Data.plans(currentMembership) : [] }
+    //! Coupled with the practice book app: tasks instead of notes (a card per lesson, the
+    //! note of that day as its private line)
+    readonly property bool coupled: { if (Data.revision < 0) return undefined; return studentId ? Data.isCoupled(studentId) : false }
+    readonly property var taskLessons: {
+        if (Data.revision < 0) return undefined
+        if (!coupled || !currentMembership)
+            return []
+        const byDate = {}
+        const out = []
+        for (const t of Data.tasks(currentMembership)) {
+            if (!byDate[t.date]) {
+                byDate[t.date] = { date: t.date, tasks: [], note: null }
+                out.push(byDate[t.date])
+            }
+            byDate[t.date].tasks.push(t)
+        }
+        for (const n of notes)
+            if (byDate[n.date] && !byDate[n.date].note)
+                byDate[n.date].note = n
+        return out
+    }
+    //! Notes not shown in a lesson card of the practice book
+    readonly property var plainNotes: taskLessons.length === 0 ? notes
+                                      : notes.filter(n => !taskLessons.some(l => l.note && l.note.id === n.id))
     readonly property var pieces: { if (Data.revision < 0) return undefined; return currentMembership ? Data.pieces(currentMembership, pieceFilter) : [] }
     readonly property var pieceCounts: { if (Data.revision < 0) return undefined; return currentMembership ? Data.pieceCounts(currentMembership) : [0, 0, 0, 0, 0, 0] }
     readonly property var activities: { if (Data.revision < 0) return undefined; return studentId ? Data.activities(studentId) : [] }
@@ -632,8 +657,11 @@ Item {
         // Above the running metronome at the bottom right, not under it
         anchors.bottomMargin: 20 + Nav.playerInset
         Behavior on anchors.bottomMargin { NumberAnimation { duration: 180; easing.type: Easing.OutCubic } }
-        text: detail.tab === 0 ? qsTrId("common.note") : qsTrId("common.piece")
-        onClicked: detail.tab === 0 ? Nav.editNote(detail.currentMembership, "") : Nav.editPiece(detail.currentMembership, "")
+        // Coupled with the practice book: "Tasks" (and the private note with them)
+        text: detail.tab === 0 ? (detail.coupled ? qsTrId("task.fab") : qsTrId("common.note")) : qsTrId("common.piece")
+        onClicked: detail.tab === 0 ? (detail.coupled ? Nav.editTasks(detail.currentMembership, "")
+                                                      : Nav.editNote(detail.currentMembership, ""))
+                                    : Nav.editPiece(detail.currentMembership, "")
     }
 
     //! The menu behind "…" (also for the screenshot tour)
@@ -657,6 +685,13 @@ Item {
             iconName: "calendar"
             text: qsTrId("lesson.edit")
             onTriggered: Nav.editLesson(detail.currentLessonId, -1)
+        }
+        // Practice book: couple, QR code, end
+        AppMenuItem {
+            objectName: "bookletMenu"
+            iconName: "book"
+            text: detail.coupled ? qsTrId("booklet.menu_coupled") : qsTrId("booklet.menu")
+            onTriggered: Nav.showBooklet(detail.studentId)
         }
         AppMenuItem {
             iconName: "bell"
@@ -712,6 +747,9 @@ Item {
         onAccepted: {
             const name = detail.student.name || ""
             Docs.archiveStudent(detail.studentId)
+            // Practice book: the link goes too (the coupling record stays until it is gone)
+            if (detail.coupled)
+                Booklet.endCoupling(detail.studentId)
             Data.deleteStudent(detail.studentId)
             Nav.toast(qsTrId("archive.saved").arg(name))
             detail.back()
@@ -777,6 +815,8 @@ Item {
         rejectText: qsTrId("common.cancel")
         acceptText: qsTrId("common.delete")
         onAccepted: {
+            if (detail.coupled)
+                Booklet.endCoupling(detail.studentId)
             Data.deleteStudent(detail.studentId)
             detail.back()
         }
@@ -796,12 +836,23 @@ Item {
                     plan: modelData
                 }
             }
+            // Practice book: one card per lesson with its tasks
+            Repeater {
+                model: detail.taskLessons
+                delegate: TaskLessonCard {
+                    required property var modelData
+                    Layout.fillWidth: true
+                    lesson: modelData
+                    relative: detail.relative(modelData.date)
+                    onOpened: Nav.editTasks(detail.currentMembership, modelData.date)
+                }
+            }
             EmptyHint {
-                visible: detail.notes.length === 0 && detail.plans.length === 0
+                visible: detail.notes.length === 0 && detail.plans.length === 0 && detail.taskLessons.length === 0
                 text: detail.memberships.length === 0 ? qsTrId("student.no_lesson") : qsTrId("notes.empty")
             }
             Repeater {
-                model: detail.notes
+                model: detail.plainNotes
                 // Tap: a new note for today with this text, to adjust for the next lesson (as in
                 // Qupil 1.x). Swipe left, press and hold or right click: edit and delete roll in
                 // on the right; swipe right or tap hides them again.
@@ -971,13 +1022,13 @@ Item {
                     leftPadding: 16
                     rightPadding: 16
 
-                    // Plan, edit and delete, rolled in from the right edge over the text
+                    // Plan, share, edit and delete, rolled in from the right edge over the text
                     Rectangle {
                         id: actions
                         z: 2
                         y: 0
-                        // Three round buttons (built only while rolled in, see actionRow)
-                        width: 3 * Theme.touchTarget + 2 * 10 + 28
+                        // Four round buttons (built only while rolled in, see actionRow)
+                        width: 4 * Theme.touchTarget + 3 * 10 + 28
                         height: noteCard.height
                         // How far it is rolled in (0 … width): set by the finger or by slideTo().
                         // Only this value moves, so a new layout (another student) moves nothing.
@@ -1034,6 +1085,22 @@ Item {
                                     onClicked: {
                                         detail.revealedNote = ""
                                         Nav.planFromNote(detail.currentMembership, noteCard.modelData.id)
+                                    }
+                                }
+                                // Homework as a message (Messages, WhatsApp …): for students
+                                // without the practice book app; nothing is synchronised
+                                IconButton {
+                                    objectName: "noteShare"
+                                    iconName: "share"
+                                    text: qsTrId("note.share")
+                                    fill: Theme.surfaceAlt
+                                    tint: Theme.accentText
+                                    onClicked: {
+                                        detail.revealedNote = ""
+                                        const note = noteCard.modelData
+                                        const text = Data.homeworkText(note.content, note.date)
+                                        if (!App.shareText(text, qsTrId("note.share.heading").arg(Data.formatDate(note.date, true))))
+                                            Nav.toast(qsTrId("note.share.copied"))
                                     }
                                 }
                                 IconButton {
@@ -1552,7 +1619,7 @@ Item {
                 visible: card.plan.due === true
                 Layout.fillWidth: true
                 wrapMode: Text.WordWrap
-                text: qsTrId("plan.lesson_over")
+                text: detail.coupled ? qsTrId("plan.lesson_over_tasks") : qsTrId("plan.lesson_over")
                 color: Theme.textMuted
                 font.family: Theme.fontFamily
                 font.pixelSize: 13
@@ -1561,7 +1628,7 @@ Item {
                 visible: card.plan.due === true
                 kind: "primary"
                 iconName: "file"
-                text: qsTrId("plan.make_note")
+                text: detail.coupled ? qsTrId("plan.make_tasks") : qsTrId("plan.make_note")
                 onClicked: Nav.finishPlan(detail.currentMembership, card.plan.id)
             }
         }

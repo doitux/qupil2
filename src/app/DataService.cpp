@@ -219,6 +219,17 @@ QString DataService::plainText(const QString &note, int maxLength) const
     return text;
 }
 
+QString DataService::homeworkText(const QString &note, const QString &date) const
+{
+    QStringList lines = NoteFormat::toPlainText(note).split(u'\n');
+    for (QString &line : lines)
+        line = line.trimmed();
+    QString body = lines.join(u'\n').trimmed();
+    while (body.contains(u"\n\n\n"_s))
+        body.replace(u"\n\n\n"_s, u"\n\n"_s);
+    return qtTrId("note.share.heading").arg(formatDate(date, true)) + u"\n\n"_s + body;
+}
+
 QString DataService::noteHtml(const QString &note, const QString &markColor) const
 {
     return NoteFormat::toHtml(note, markColor);
@@ -832,7 +843,7 @@ bool DataService::deleteStudent(const QString &id)
     bool ok = true;
     for (const QVariant &v : rows(u"SELECT id FROM membership WHERE deleted = 0 AND student_id = ?"_s, { id })) {
         const QString membership = v.toMap().value(u"id"_s).toString();
-        for (const char *table : { "note", "piece", "plan" })
+        for (const char *table : { "note", "piece", "plan", "task" })
             for (const QVariant &c : rows(u"SELECT id FROM %1 WHERE deleted = 0 AND membership_id = ?"_s.arg(QLatin1StringView(table)), { membership }))
                 ok = ok && m_store->remove(QLatin1StringView(table), c.toMap().value(u"id"_s).toString());
         ok = ok && m_store->remove(u"membership"_s, membership);

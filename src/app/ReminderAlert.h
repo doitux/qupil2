@@ -86,7 +86,7 @@ signals:
 private:
     void check();
     void apply();
-    QVariantList itemsFor(const QVariantMap &lesson, const QVariantList &reminders) const;
+    QVariantList itemsFor(const QVariantMap &lesson, const QVariantList &reminders, bool withBooklet = true) const;
     void add(const QString &title, const QString &subtitle, const QVariantList &items);
 
     DataService *m_data;

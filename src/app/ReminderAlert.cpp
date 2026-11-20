@@ -142,7 +142,7 @@ void ReminderAlert::start(bool withStartReminders)
     reschedule();
 }
 
-QVariantList ReminderAlert::itemsFor(const QVariantMap &lesson, const QVariantList &reminders) const
+QVariantList ReminderAlert::itemsFor(const QVariantMap &lesson, const QVariantList &reminders, bool withBooklet) const
 {
     QStringList students;
     for (const QVariant &s : lesson.value(u"students"_s).toList())
@@ -154,6 +154,15 @@ QVariantList ReminderAlert::itemsFor(const QVariantMap &lesson, const QVariantLi
         if (mode == 1 || (mode == 2 && students.contains(r.value(u"student_id"_s).toString()))
             || (mode == 3 && r.value(u"lesson_id"_s) == lesson.value(u"id"_s)))
             items << r;
+    }
+    // Practice book: what coupled students answered since (mode 4, nothing to tick; only in
+    // the app's pop-up, not in system notifications: not on the lock screen, and current)
+    for (const QVariant &s : withBooklet ? lesson.value(u"students"_s).toList() : QVariantList()) {
+        const QVariantMap student = s.toMap();
+        const QString summary = m_data->bookletSummary(student.value(u"id"_s).toString());
+        if (!summary.isEmpty())
+            items << QVariantMap { { u"id"_s, u"booklet:"_s + student.value(u"id"_s).toString() }, { u"mode"_s, 4 },
+                                   { u"studentName"_s, student.value(u"name"_s) }, { u"text"_s, summary }, { u"sound"_s, 0 } };
     }
     return items;
 }
@@ -246,7 +255,7 @@ void ReminderAlert::apply()
     for (int day = 0; any && day < 7; ++day) {
         for (const QVariant &v : m_data->lessonsOn(day)) {
             const QVariantMap lesson = v.toMap();
-            const QVariantList items = itemsFor(lesson, reminders);
+            const QVariantList items = itemsFor(lesson, reminders, false);
             const int start = minutesOf(lesson.value(u"start_time"_s).toString());
             if (items.isEmpty() || start < 0)
                 continue;

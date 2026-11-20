@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "de.qupil.student",
+      "sha256_cert_fingerprints": [
+        "1B:E6:B8:1E:8A:CF:87:97:12:DF:18:B0:4D:D7:DF:D7:EB:21:8B:7A:A1:08:48:81:26:E3:F8:BD:0E:71:30:4E"
+      ]
+    }
+  }
+]

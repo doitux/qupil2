@@ -4,6 +4,7 @@
 
 #include <QDate>
 #include <QDateTime>
+#include <QJsonObject>
 #include <QObject>
 #include <QUrl>
 #include <QStringList>
@@ -193,6 +194,67 @@ public:
     */
     Q_INVOKABLE QVariantMap ensembleCandidates() const;
 
+    // ------------------------------------------------------------ practice book (DataServiceTasks.cpp)
+    /*!
+        Students coupled with the practice book app get tasks instead of shared notes: one
+        record each, title and hints (one per line), kind 0 practise / 1 to-do. A task belongs
+        to the lesson of its date; an open one moves on to the next lesson (since: the lesson
+        it was first given in). Notes stay private as they are.
+    */
+    //! The active coupling of a student ({} when not coupled)
+    Q_INVOKABLE QVariantMap coupling(const QString &studentId) const;
+    Q_INVOKABLE bool isCoupled(const QString &studentId) const;
+    //! All active couplings (the booklets to write)
+    QVariantList couplings() const;
+    //! All tasks of a student, in all their lessons
+    QVariantList studentTasks(const QString &studentId) const;
+    //! Tasks of a membership (and those kept together with it), newest lesson first:
+    //! id, date, since, title, hints (list), kind, position, closed, feedback (map), shared
+    Q_INVOKABLE QVariantList tasks(const QString &membershipId) const;
+    Q_INVOKABLE QVariantList tasksOn(const QString &membershipId, const QString &date) const;
+    //! Open tasks of earlier lessons (they move on to the lesson of \a date when it is saved)
+    Q_INVOKABLE QVariantList openTasksBefore(const QString &membershipId, const QString &date) const;
+    /*!
+        The tasks of the lesson on \a date as the editor has them, in this order: maps with
+        id (empty: new), title, hints (list or text, one per line), kind, closed (bool).
+        Tasks of that date missing from the list are deleted; open ones of earlier lessons
+        in the list move to this date. forAll: new tasks for every student of the group
+        (each their own, with its own feedback), changes to all copies.
+    */
+    Q_INVOKABLE bool saveTasks(const QString &membershipId, const QString &date, const QVariantList &tasks, bool forAll);
+    //! Done (today) or open again
+    Q_INVOKABLE bool closeTask(const QString &id, bool closed);
+    Q_INVOKABLE bool deleteTask(const QString &id, bool forAll);
+    /*!
+        After the lesson, for a coupled student: what was covered of the plan becomes tasks of
+        the plan's lesson (a block: its heading the title, its lines the hints; a plain point:
+        a task of its own), the rest stays planned for the next lesson.
+    */
+    Q_INVOKABLE bool planToTasks(const QString &planId, const QString &covered, const QString &rest, bool forAll,
+                                 const QString &privateNote = QString());
+    //! Blocks of a plan or note as tasks for the editor: [{ title, hints }] (a block: its
+    //! heading and lines; plain points: one task each)
+    Q_INVOKABLE QVariantList blocksAsTasks(const QString &content) const;
+    //! Tasks back into plan blocks (heading bold, hints as lines, an empty line between)
+    Q_INVOKABLE QString tasksAsBlocks(const QVariantList &tasks) const;
+    //! What is left of a plan after the lesson: planned for the next lesson (empty: the plan goes)
+    Q_INVOKABLE bool finishPlan(const QString &planId, const QString &rest, bool forAll);
+    //! Adds \a text to the note of that lesson (a new note if there is none)
+    Q_INVOKABLE bool appendToNote(const QString &membershipId, const QString &date, const QString &text, bool forAll);
+    //! The student's answers from the practice book: feedback per task id ({practiced,
+    //! works, done, at}, the newer one wins) and questions (they replace the stored ones)
+    bool applyFeedback(const QString &studentId, const QVariantMap &feedback, const QVariantList &questions);
+    /*!
+        What the student's practice book shows (format 1, docs/student-app.md): the next
+        lessons, open tasks with the student's answers,
+        pieces in progress or ready, coming events the student plays in. Never notes, other
+        students, contact data. Empty when the student is not coupled.
+    */
+    QJsonObject bookletContent(const QString &studentId) const;
+    //! For the pop-up at the start of a lesson: what the student answered in the practice book
+    //! (open tasks with an answer, questions of the last two weeks), one line each; "" if nothing
+    QString bookletSummary(const QString &studentId) const;
+
     // ------------------------------------------------------------ sheet music library
     //! mode 0 all, 1 available, 2 lent; filter matches author, title, publisher, borrower
     Q_INVOKABLE QVariantList libraryItems(int mode = 0, const QString &filter = {}) const;
@@ -252,6 +314,9 @@ public:
     Q_INVOKABLE QString noteHtml(const QString &note, const QString &markColor = {}) const;
     //! A lesson note without formatting, shortened with "…" to maxLength
     Q_INVOKABLE QString plainText(const QString &note, int maxLength = 0) const;
+    //! A note as a message for the student ("Homework of Tue, 17.11.2026" and the text,
+    //! lines and empty lines kept, without mark-up): shared through the system's menu
+    Q_INVOKABLE QString homeworkText(const QString &note, const QString &date) const;
     //! "Wed, 07.10.2026" style date in the UI language
     Q_INVOKABLE QString formatDate(const QString &iso, bool withWeekday = false) const;
     //! Today (ISO) and now, as shown: a fixed Tuesday in the screenshots, see Clock

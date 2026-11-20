@@ -505,6 +505,19 @@ E("plan.more_points", src="+ %n more point(s)",
   es=["+ %n punto más", "+ %n puntos más"],
   c="Running lesson: a long plan shows its first 4 points, then this")
 E("plan.make_note", en="Turn into a note", de="Notiz daraus machen", fr="En faire une note", es="Convertir en nota")
+E("plan.make_tasks", en="Turn into tasks", de="Aufgaben daraus machen", fr="En faire des devoirs",
+  es="Convertir en tareas", c="Plan of a student coupled with the practice book")
+E("plan.lesson_over_tasks", en="What did you cover? That becomes the tasks of this lesson.",
+  de="Was davon war dran? Daraus werden die Aufgaben der Stunde.",
+  fr="Qu'avez-vous travaillé ? Cela devient les devoirs du cours.",
+  es="¿Qué se trabajó? Eso pasa a ser las tareas de la clase.")
+E("plan.finish.tasks_info", en="What is ticked becomes the tasks of %1.", de="Was angehakt ist, wird zu Aufgaben vom %1.",
+  fr="Ce qui est coché devient les devoirs du %1.", es="Lo marcado pasa a ser las tareas del %1.")
+E("plan.finish.private_info", en="With the lock: into your private note instead.",
+  de="Mit Schloss: stattdessen in Ihre private Notiz.", fr="Avec le cadenas : dans votre note privée à la place.",
+  es="Con el candado: a su nota privada en su lugar.")
+E("plan.finish.tasks", en="Save as tasks", de="Als Aufgaben speichern", fr="Enregistrer comme devoirs",
+  es="Guardar como tareas")
 E("plan.postpone", en="Move to the next lesson", de="Auf nächste Stunde schieben", fr="Reporter au cours suivant",
   es="Pasar a la próxima clase")
 E("plan.postponed", en="Moved to %1", de="Verschoben auf %1", fr="Reporté au %1", es="Pasado al %1", c="%1 = date")
@@ -584,6 +597,139 @@ E("plan.planned_for", en="Planned for %1", de="Geplant für %1", fr="Prévu pour
   c="Before the points of a plan for a coming lesson (not today's); %1 = weekday and date")
 E("note.new", en="New note", de="Neue Notiz", fr="Nouvelle note", es="Nueva nota")
 E("note.save", en="Save note", de="Notiz speichern", fr="Enregistrer la note", es="Guardar nota")
+# ---- practice book: coupling (BookletSheet)
+E("booklet.title", en="Practice book", de="Übeheft", fr="Cahier d’exercices", es="Cuaderno de práctica")
+E("booklet.menu", en="Practice book …", de="Übeheft …", fr="Cahier d’exercices …", es="Cuaderno de práctica …",
+  c="Student menu: couple the student with the practice book app")
+E("booklet.menu_coupled", en="Practice book (coupled) …", de="Übeheft (gekoppelt) …",
+  fr="Cahier d’exercices (relié) …", es="Cuaderno de práctica (vinculado) …")
+E("booklet.intro",
+  en="With the practice book app %1 sees the tasks of the lessons on their own phone and can say how practising went. "
+     "The data stays in your Nextcloud, end-to-end encrypted.",
+  de="Mit der Übeheft-App sieht %1 die Aufgaben aus dem Unterricht auf dem eigenen Handy und kann sagen, wie das Üben lief. "
+     "Die Daten bleiben in Ihrer Nextcloud, Ende-zu-Ende verschlüsselt.",
+  fr="Avec l’application cahier, %1 voit les devoirs des cours sur son téléphone et peut dire comment s’est passé le travail. "
+     "Les données restent dans votre Nextcloud, chiffrées de bout en bout.",
+  es="Con la aplicación del cuaderno, %1 ve las tareas de las clases en su móvil y puede contar cómo fue la práctica. "
+     "Los datos quedan en su Nextcloud, cifrados de extremo a extremo.")
+E("booklet.coupled_text",
+  en="%1 scans this code with the phone's camera. Tasks you give from now on show in the app.",
+  de="%1 scannt diesen Code mit der Kamera des Handys. Aufgaben, die Sie ab jetzt geben, erscheinen in der App.",
+  fr="%1 scanne ce code avec l’appareil photo du téléphone. Les devoirs donnés désormais apparaissent dans l’application.",
+  es="%1 escanea este código con la cámara del móvil. Las tareas que dé a partir de ahora aparecen en la aplicación.")
+E("booklet.teacher_name", en="Your name in the practice book", de="Ihr Name im Übeheft",
+  fr="Votre nom dans le cahier", es="Su nombre en el cuaderno")
+E("booklet.teacher_name_placeholder", en="e.g. Ms Rau", de="z. B. Frau Rau", fr="p. ex. Mme Rau", es="p. ej. Sra. Rau")
+E("booklet.needs_nextcloud", en="The practice book uses the Nextcloud of the sync. Connect it under More › Settings › Sync first.",
+  de="Das Übeheft nutzt die Nextcloud der Synchronisierung. Verbinden Sie sie zuerst unter Mehr › Einstellungen › Synchronisation.",
+  fr="Le cahier utilise le Nextcloud de la synchronisation. Connectez-le d’abord sous Plus › Paramètres › Synchronisation.",
+  es="El cuaderno usa el Nextcloud de la sincronización. Conéctelo primero en Más › Ajustes › Sincronización.")
+E("booklet.couple", en="Couple", de="Koppeln", fr="Relier", es="Vincular")
+E("booklet.coupling", en="Coupling …", de="Wird gekoppelt …", fr="Liaison …", es="Vinculando …")
+E("booklet.qr", en="QR code for the practice book app", de="QR-Code für die Übeheft-App",
+  fr="Code QR pour l’application cahier", es="Código QR para la aplicación del cuaderno")
+E("booklet.qr_hint", en="The code is the key: show it only to this student (or their parents).",
+  de="Der Code ist der Schlüssel: Zeigen Sie ihn nur diesem Schüler bzw. den Eltern.",
+  fr="Le code est la clé : ne le montrez qu’à cet élève (ou à ses parents).",
+  es="El código es la llave: muéstrelo solo a este alumno (o a sus padres).")
+E("booklet.send_link", en="Send the link instead", de="Stattdessen Link schicken", fr="Envoyer le lien à la place",
+  es="Enviar el enlace en su lugar")
+E("booklet.link_message", en="Your practice book, %1: open this link on your phone (with the app installed).",
+  de="Dein Übeheft, %1: Öffne diesen Link auf deinem Handy (mit installierter App).",
+  fr="Ton cahier, %1 : ouvre ce lien sur ton téléphone (avec l’application installée).",
+  es="Tu cuaderno, %1: abre este enlace en tu móvil (con la aplicación instalada).",
+  c="Message with the coupling link to the student (the student app says du)")
+E("booklet.link_copied", en="Link copied – paste it into a message", de="Link kopiert – zum Einfügen in eine Nachricht",
+  fr="Lien copié – à coller dans un message", es="Enlace copiado: péguelo en un mensaje")
+E("booklet.read_only", en="Your Nextcloud does not allow uploads by link: the student sees the tasks but cannot send anything back.",
+  de="Ihre Nextcloud erlaubt kein Hochladen per Link: Der Schüler sieht die Aufgaben, kann aber nichts zurückschicken.",
+  fr="Votre Nextcloud n’autorise pas l’envoi par lien : l’élève voit les devoirs mais ne peut rien renvoyer.",
+  es="Su Nextcloud no permite subir por enlace: el alumno ve las tareas pero no puede enviar nada.")
+E("booklet.allow_feedback", en="Feedback on tasks", de="Rückmeldung zu Aufgaben", fr="Retour sur les devoirs",
+  es="Respuesta a las tareas")
+E("booklet.allow_feedback_hint", en="Practised: a lot, some, hardly · Works: well, so-so, not yet",
+  de="Geübt: viel, etwas, kaum · Klappt: gut, geht so, noch nicht",
+  fr="Travaillé : beaucoup, un peu, à peine · Ça marche : bien, moyen, pas encore",
+  es="Practicado: mucho, algo, poco · Sale: bien, más o menos, aún no")
+E("booklet.allow_questions", en="Questions", de="Fragen", fr="Questions", es="Preguntas")
+E("booklet.questions", en="Questions from the practice book", de="Fragen aus dem Übeheft",
+  fr="Questions du cahier", es="Preguntas del cuaderno")
+E("booklet.end", en="End coupling", de="Kopplung beenden", fr="Mettre fin à la liaison", es="Terminar el vínculo")
+E("booklet.end_confirm",
+  en="The link stops working and the folder is deleted. %1's app says the coupling has ended. Tasks and notes stay here.",
+  de="Der Link wird ungültig und der Ordner gelöscht. Die App von %1 zeigt, dass die Kopplung beendet ist. Aufgaben und Notizen bleiben hier erhalten.",
+  fr="Le lien ne fonctionne plus et le dossier est supprimé. L’application de %1 indique que la liaison est terminée. Devoirs et notes restent ici.",
+  es="El enlace deja de funcionar y la carpeta se elimina. La aplicación de %1 indica que el vínculo terminó. Tareas y notas se quedan aquí.")
+E("booklet.ended_toast", en="Coupling with %1 ended", de="Kopplung mit %1 beendet", fr="Liaison avec %1 terminée",
+  es="Vínculo con %1 terminado")
+E("booklet.error.links", en="Your Nextcloud does not allow sharing by link. Ask its admin.",
+  de="Ihre Nextcloud erlaubt kein Teilen per Link. Fragen Sie die Administration.",
+  fr="Votre Nextcloud n’autorise pas le partage par lien. Demandez à l’administration.",
+  es="Su Nextcloud no permite compartir por enlace. Pregunte a la administración.")
+E("booklet.error.access", en="The Nextcloud refused access. Connect it again under More › Settings › Sync.",
+  de="Die Nextcloud hat den Zugriff verweigert. Verbinden Sie sie unter Mehr › Einstellungen › Synchronisation neu.",
+  fr="Le Nextcloud a refusé l’accès. Reconnectez-le sous Plus › Paramètres › Synchronisation.",
+  es="El Nextcloud rechazó el acceso. Vuelva a conectarlo en Más › Ajustes › Sincronización.")
+E("booklet.error.offline", en="No connection to the Nextcloud. Try again later.",
+  de="Keine Verbindung zur Nextcloud. Versuchen Sie es später noch einmal.",
+  fr="Pas de connexion au Nextcloud. Réessayez plus tard.", es="Sin conexión con el Nextcloud. Inténtelo más tarde.")
+
+E("booklet.from", en="From %1's practice book", de="Aus dem Übeheft von %1", fr="Du cahier de %1",
+  es="Del cuaderno de %1", c="Lesson-start pop-up: what the student answered")
+E("booklet.question_line", en="Question: %1", de="Frage: %1", fr="Question : %1", es="Pregunta: %1")
+# ---- practice book: tasks of coupled students (TaskEditor)
+E("task.lesson_of", en="Lesson of %1", de="Stunde vom %1", fr="Cours du %1", es="Clase del %1",
+  c="Title of the task editor; %1 is the date with weekday")
+E("task.fab", en="Tasks", de="Aufgaben", fr="Devoirs", es="Tareas",
+  c="Button at a student coupled with the practice book (instead of Note)")
+E("task.save", en="Save", de="Speichern", fr="Enregistrer", es="Guardar")
+E("task.add", en="Task", de="Aufgabe", fr="Devoir", es="Tarea", c="Button above the keyboard with a plus: a new task")
+E("task.add_more", en="Another task", de="Weitere Aufgabe", fr="Autre devoir", es="Otra tarea")
+E("task.add_hint", en="Hint", de="Hinweis", fr="Conseil", es="Consejo", c="Button above the keyboard with a plus: a new hint")
+E("task.private", en="Private", de="Privat", fr="Privé", es="Privado", c="Button above the keyboard: the private note")
+E("task.title", en="Task", de="Aufgabe", fr="Devoir", es="Tarea")
+E("task.title_placeholder", en="Task, e.g. Bourrée bars 17–24", de="Aufgabe, z. B. Bourrée Takt 17–24",
+  fr="Devoir, p. ex. Bourrée mesures 17–24", es="Tarea, p. ej. Bourrée compases 17–24")
+E("task.hint", en="Hint", de="Hinweis", fr="Conseil", es="Consejo")
+E("task.hint_placeholder", en="Hint – Enter: the next one", de="Hinweis – Enter: nächster",
+  fr="Conseil – Entrée : le suivant", es="Consejo – Intro: el siguiente")
+E("task.kind.practice", en="Practise", de="Üben", fr="Travailler", es="Practicar",
+  c="Kind of a task: the student says how it went")
+E("task.kind.todo", en="To do", de="Erledigen", fr="À faire", es="Por hacer",
+  c="Kind of a task (get the music): the student only ticks it")
+E("task.remove", en="Remove task", de="Aufgabe entfernen", fr="Retirer le devoir", es="Quitar la tarea")
+E("task.open_since", en="open since %1", de="offen seit %1", fr="ouvert depuis le %1", es="pendiente desde %1")
+E("task.done", en="Done", de="Erledigt", fr="Terminé", es="Hecho")
+E("task.for_all", src="Tasks for all %n students",
+  en=["Tasks for %n student", "Tasks for all %n students"],
+  de=["Aufgaben für %n Schüler", "Aufgaben für alle %n Schüler"],
+  fr=["Devoirs pour %n élève", "Devoirs pour les %n élèves"],
+  es=["Tareas para %n alumno", "Tareas para los %n alumnos"])
+E("task.for_all_hint", en="Each student gets their own and answers for themselves",
+  de="Jeder bekommt eigene Aufgaben und gibt eigene Rückmeldung",
+  fr="Chacun reçoit les siens et répond pour lui-même", es="Cada uno recibe las suyas y responde por sí mismo")
+E("task.plan_hint", en="Planned as tasks: after the lesson, what was covered becomes the student's tasks.",
+  de="Als Aufgaben geplant: Nach der Stunde wird, was dran war, zu den Aufgaben des Schülers.",
+  fr="Préparé en devoirs : après le cours, ce qui a été travaillé devient les devoirs de l’élève.",
+  es="Planificado como tareas: después de la clase, lo trabajado pasa a ser las tareas del alumno.")
+E("plan.finish.private", en="Keep %1 private", de="„%1“ privat halten", fr="Garder « %1 » privé",
+  es="Mantener «%1» en privado", c="Lock at a block of the plan: it goes into the private note, not to the student")
+E("task.private_add", en="Add a private note", de="Private Notiz hinzufügen", fr="Ajouter une note privée",
+  es="Añadir una nota privada")
+E("task.private_label", en="Private note", de="Private Notiz", fr="Note privée", es="Nota privada")
+E("task.private_hint", en="Only for you – it is never shown in the practice book.",
+  de="Nur für Sie – erscheint nie im Übeheft.", fr="Pour vous seul – n’apparaît jamais dans le cahier.",
+  es="Solo para usted: nunca aparece en el cuaderno.")
+E("task.feedback.practiced", en="Practised: %1", de="Geübt: %1", fr="Travaillé : %1", es="Practicado: %1")
+E("task.feedback.works", en="Works: %1", de="Klappt: %1", fr="Ça marche : %1", es="Sale: %1")
+E("task.feedback.done", en="Reported as done", de="Als erledigt gemeldet", fr="Signalé comme fait",
+  es="Marcado como hecho")
+E("task.practiced.3", en="a lot", de="viel", fr="beaucoup", es="mucho")
+E("task.practiced.2", en="some", de="etwas", fr="un peu", es="algo")
+E("task.practiced.1", en="hardly", de="kaum", fr="à peine", es="poco")
+E("task.works.3", en="well", de="gut", fr="bien", es="bien")
+E("task.works.2", en="so-so", de="geht so", fr="moyen", es="más o menos")
+E("task.works.1", en="not yet", de="noch nicht", fr="pas encore", es="aún no")
 E("note.save_for_all", src="Save for all %n students",
   en=["Save for %n student", "Save for all %n students"],
   de=["Für %n Schüler speichern", "Für alle %n Schüler speichern"],
@@ -1546,6 +1692,13 @@ E("student.add_reminder", en="Set up reminder…", de="Erinnerung einrichten ...
 E("notes.empty", en="No notes yet.", de="Noch keine Notizen.", fr="Aucune note pour l’instant.",
   es="Todavía no hay notas.")
 E("note.edit", en="Edit note", de="Notiz bearbeiten", fr="Modifier la note", es="Editar nota")
+E("note.share", en="Share as a message", de="Als Nachricht teilen", fr="Partager comme message",
+  es="Compartir como mensaje", c="Sends the note to the student through the system's share menu (Messages, WhatsApp …)")
+E("note.share.heading", en="Homework from %1", de="Hausaufgaben vom %1", fr="Devoirs du %1", es="Tareas del %1",
+  c="First line of a shared note; %1 is the date with weekday")
+E("note.share.copied", en="Copied – paste it into a message", de="Kopiert – zum Einfügen in eine Nachricht",
+  fr="Copié – à coller dans un message", es="Copiado: pégalo en un mensaje",
+  c="Toast on desktop systems, which have no share menu")
 E("pieces.empty", en="No pieces yet.", de="Noch keine Werke.", fr="Aucun morceau pour l’instant.",
   es="Todavía no hay obras.")
 E("piece.edit", en="Edit piece", de="Werk bearbeiten", fr="Modifier le morceau", es="Editar obra")

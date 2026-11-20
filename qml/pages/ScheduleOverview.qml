@@ -793,12 +793,17 @@ Item {
                         Layout.fillWidth: true
                         spacing: 8
                         HeroButton {
+                            // A single student coupled with the practice book: the lesson's tasks
+                            readonly property bool tasks: Data.revision >= 0 && overview.running !== null
+                                                          && overview.running.students.length === 1
+                                                          && Data.isCoupled(overview.running.students[0].id)
                             Layout.fillWidth: true
                             lime: true
                             iconName: "plus"
-                            text: qsTrId("common.note")
+                            text: tasks ? qsTrId("task.fab") : qsTrId("common.note")
                             enabled: overview.running !== null && overview.running.students.length > 0
-                            onClicked: Nav.editNote(overview.running.students[0].membership_id, "")
+                            onClicked: tasks ? Nav.editTasks(overview.running.students[0].membership_id, "")
+                                             : Nav.editNote(overview.running.students[0].membership_id, "")
                         }
                         HeroButton {
                             Layout.fillWidth: true

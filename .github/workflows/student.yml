@@ -1,0 +1,279 @@
+# The student app (student/): tests and screenshots on Linux, an installable Android test
+# APK, and the iOS archive. Upload to TestFlight (app de.qupil.student) only when started
+# by hand with "upload" ticked; the teacher app's workflows are not touched by this one.
+name: Student app
+
+on:
+  push:
+    branches: [main, 'fix/**', 'feature/**']
+    paths:
+      - 'student/**'
+      - 'src/shared/**'
+      - 'src/core/Crypto.*'
+      - '3rdparty/monocypher/**'
+      - '.github/workflows/student.yml'
+  workflow_dispatch:
+    inputs:
+      upload:
+        description: 'Upload the iOS build to TestFlight (de.qupil.student)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  QT_VERSION: '6.8.3'
+  ANDROID_NDK_VERSION: '26.1.10909125'
+  ANDROID_PLATFORM: 'android-34'
+  ANDROID_BUILD_TOOLS: '34.0.0'
+  ANDROID_OPENSSL_COMMIT: 'b71f1470962019bd89534a2919f5925f93bc5779'
+
+jobs:
+  linux:
+    name: Tests and screenshots (Linux)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: linux
+          target: desktop
+          arch: linux_gcc_64
+          cache: true
+
+      - name: Install build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build libxkbcommon-dev libgl1-mesa-dev
+
+      - name: Build
+        run: |
+          cmake -S student -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --parallel
+
+      - name: Tests
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: ctest --test-dir build --output-on-failure
+
+      # The example (invented data) in four languages, light; checked by eye before a release
+      - name: Screenshots of the example
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: |
+          mkdir -p shots
+          for lang in de en fr es; do
+            rm -rf "$RUNNER_TEMP/state"
+            ./build/qupil-student --data-dir "$RUNNER_TEMP/state" --today 2026-11-20 --lang "$lang" \
+              --demo --size 390x1800 --screenshot "shots/example-$lang.png"
+            rm -rf "$RUNNER_TEMP/state"
+            ./build/qupil-student --data-dir "$RUNNER_TEMP/state" --lang "$lang" \
+              --size 390x844 --screenshot "shots/welcome-$lang.png"
+          done
+          ls -l shots
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: student-screenshots
+          path: shots/*.png
+          retention-days: 14
+
+  android:
+    name: Android (arm64-v8a)
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install Android NDK and platform
+        run: |
+          yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+          "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --install \
+            "ndk;${ANDROID_NDK_VERSION}" "platforms;${ANDROID_PLATFORM}" "build-tools;${ANDROID_BUILD_TOOLS}" > /dev/null
+          echo "ANDROID_NDK_ROOT=$ANDROID_SDK_ROOT/ndk/${ANDROID_NDK_VERSION}" >> "$GITHUB_ENV"
+
+      - name: Install Qt for Linux (host tools)
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: linux
+          target: desktop
+          arch: linux_gcc_64
+          cache: true
+          set-env: false
+
+      - name: Install Qt for Android
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: all_os
+          target: android
+          arch: android_arm64_v8a
+          cache: true
+
+      - name: Install Ninja
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build
+
+      - name: OpenSSL for Android
+        run: |
+          dir="$RUNNER_TEMP/android_openssl"
+          git init -q "$dir"
+          git -C "$dir" remote add origin https://github.com/KDAB/android_openssl
+          git -C "$dir" sparse-checkout set --no-cone /ssl_3/arm64-v8a/ /LICENSE
+          git -C "$dir" fetch -q --depth 1 --filter=blob:none origin "$ANDROID_OPENSSL_COMMIT"
+          git -C "$dir" checkout -q FETCH_HEAD
+          echo "ANDROID_OPENSSL_DIR=$dir" >> "$GITHUB_ENV"
+
+      - name: Configure
+        run: |
+          "$QT_ROOT_DIR/bin/qt-cmake" -S student -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DQT_HOST_PATH="$RUNNER_WORKSPACE/Qt/$QT_VERSION/gcc_64" \
+            -DANDROID_SDK_ROOT="$ANDROID_SDK_ROOT" \
+            -DANDROID_NDK_ROOT="$ANDROID_NDK_ROOT" \
+            -DQUPIL_ANDROID_OPENSSL="$ANDROID_OPENSSL_DIR" \
+            -DQUPIL_BUILD_NUMBER="$GITHUB_RUN_NUMBER"
+
+      - name: Build APK
+        run: cmake --build build --target apk --parallel
+
+      # The same public test key as the teacher app's nightly (installs over older builds)
+      - name: Sign with the test key
+        run: |
+          out="package/Qupil-Student-Android-arm64-test-${GITHUB_SHA::7}.apk"
+          apk=$(find build -name '*.apk' -path '*release*' | head -n 1)
+          if [ -z "$apk" ]; then apk=$(find build -name '*.apk' | head -n 1); fi
+          echo "Built: $apk"
+          bt="$ANDROID_SDK_ROOT/build-tools/${ANDROID_BUILD_TOOLS}"
+          mkdir -p package
+          "$bt/zipalign" -p -f 4 "$apk" aligned.apk
+          "$bt/apksigner" sign --ks .github/android/qupil-test.keystore --ks-key-alias qupil-test \
+            --ks-pass pass:qupil-test --key-pass pass:qupil-test --out "$out" aligned.apk
+          "$bt/apksigner" verify "$out"
+          "$bt/aapt2" dump badging "$out" | grep -E "^package|application-label" || true
+          ls -l package
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: student-android-arm64-test
+          path: package/*.apk
+          if-no-files-found: error
+          retention-days: 30
+
+  ios:
+    name: iOS archive (→ TestFlight by hand)
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Select Xcode 26
+        run: |
+          xcode=$(ls -d /Applications/Xcode_26*.app | grep -viE 'beta|rc' | sort -V | tail -n 1)
+          if [ -z "$xcode" ]; then echo "::error::No Xcode 26 on this runner"; exit 1; fi
+          sudo xcode-select -s "$xcode"
+          xcodebuild -version
+
+      - name: Install Qt for macOS (host tools)
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: mac
+          target: desktop
+          arch: clang_64
+          cache: true
+          set-env: false
+
+      - name: Install Qt for iOS
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: mac
+          target: ios
+          arch: ios
+          cache: true
+
+      - name: Configure
+        run: |
+          "$QT_ROOT_DIR/bin/qt-cmake" -S student -B build -G Xcode \
+            -DQT_HOST_PATH="$RUNNER_WORKSPACE/Qt/$QT_VERSION/macos" \
+            -DCMAKE_XCODE_GENERATE_SCHEME=ON \
+            -DQUPIL_BUILD_NUMBER="$GITHUB_RUN_NUMBER"
+
+      - name: Archive
+        run: |
+          xcodebuild archive \
+            -project build/qupil-student.xcodeproj -scheme qupil-student -configuration Release \
+            -destination 'generic/platform=iOS' -archivePath "$RUNNER_TEMP/Student.xcarchive" \
+            CODE_SIGNING_ALLOWED=NO -quiet DEBUG_INFORMATION_FORMAT=dwarf-with-dsym
+
+      - name: Check the archive
+        run: |
+          app=$(find "$RUNNER_TEMP/Student.xcarchive/Products/Applications" -maxdepth 1 -name '*.app' | head -n 1)
+          if [ -z "$app" ]; then echo "::error::no app in the archive"; exit 1; fi
+          plist="$app/Info.plist"
+          for key in CFBundleIdentifier CFBundleVersion CFBundleDisplayName CFBundleURLTypes; do
+            /usr/libexec/PlistBuddy -c "Print :$key" "$plist"
+          done
+          [ "$(/usr/libexec/PlistBuddy -c 'Print :CFBundleIdentifier' "$plist")" = "de.qupil.student" ] \
+            || { echo "::error::wrong bundle identifier"; exit 1; }
+          ls "$app" | grep -E 'lproj|Assets.car|PrivacyInfo' || true
+
+      - name: Sign and upload to TestFlight
+        if: github.event_name == 'workflow_dispatch' && inputs.upload
+        env:
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID || '8LBKF4942K' }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+        run: |
+          if [ -z "$ASC_KEY_ID" ] || [ -z "$ASC_ISSUER_ID" ] || [ -z "$ASC_KEY_P8" ]; then
+            echo "::error::App Store Connect secrets are not set"; exit 1
+          fi
+          keydir="$RUNNER_TEMP/asc"
+          mkdir -p "$keydir"
+          trap 'rm -rf "$keydir"' EXIT
+          printf '%s\n' "$ASC_KEY_P8" > "$keydir/AuthKey_$ASC_KEY_ID.p8"
+          cat > "$keydir/ExportOptions.plist" <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>method</key><string>app-store-connect</string>
+              <key>destination</key><string>upload</string>
+              <key>teamID</key><string>$APPLE_TEAM_ID</string>
+              <key>signingStyle</key><string>automatic</string>
+              <key>uploadSymbols</key><true/>
+              <key>manageAppVersionAndBuildNumber</key><false/>
+          </dict>
+          </plist>
+          EOF
+          xcodebuild -exportArchive \
+            -archivePath "$RUNNER_TEMP/Student.xcarchive" \
+            -exportPath "$RUNNER_TEMP/export" \
+            -exportOptionsPlist "$keydir/ExportOptions.plist" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$keydir/AuthKey_$ASC_KEY_ID.p8" \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID" 2>&1 | tee "$RUNNER_TEMP/export.log"
+          status=${PIPESTATUS[0]}
+          {
+            echo "## Upload of student build $GITHUB_RUN_NUMBER: exit $status"
+            echo '```'
+            grep -E "Upload succeeded|EXPORT (SUCCEEDED|FAILED)|^error|ITMS-" "$RUNNER_TEMP/export.log" | tail -n 20
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+          exit $status

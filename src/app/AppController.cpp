@@ -37,6 +37,7 @@
 #include "DemoData.h"
 #include "SystemBars.h"
 #include "FileExport.h"
+#include "TextShare.h"
 #include "FileImport.h"
 #include "LanguageManager.h"
 #include "LegacyImporter.h"
@@ -676,6 +677,16 @@ void AppController::copyText(const QString &text) const
         clipboard->setText(text);
 }
 
+bool AppController::shareText(const QString &text, const QString &title) const
+{
+    // The UI test checks what would be shared without opening the system's menu
+    m_lastShared = text;
+    if (!m_shareToClipboard && TextShare::available() && TextShare::share(text, title))
+        return true;
+    copyText(text);
+    return false;
+}
+
 QString AppController::licenseText() const
 {
     // The texts come with line breaks for 80 columns: paragraphs flow on the screen
@@ -708,6 +719,8 @@ QString AppController::licenseText() const
         + u"\n\nFigtree font: © The Figtree Project Authors\n\n"_s + read(u"LICENSES/OFL-1.1.txt"_s)
         + u"\n\n"_s + rule + u"\n\nMonocypher: © 2017–2020 Loup Vaillant\n\n"_s
         + read(u"3rdparty/monocypher/LICENCE.md"_s) + u"\n\n"_s + rule
+        + u"\n\nQR Code generator library: © Project Nayuki\n\n"_s
+        + read(u"3rdparty/qrcodegen/LICENSE.md"_s) + u"\n\n"_s + rule
         + u"\n\nQt: © The Qt Company Ltd. and other contributors, used under the GNU Lesser General "
           u"Public License version 3 (https://www.gnu.org/licenses/lgpl-3.0.html). "
           u"Source code: https://code.qt.io\n"_s

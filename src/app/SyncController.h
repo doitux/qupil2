@@ -62,6 +62,9 @@ public:
     static SyncController *create(QQmlEngine *qmlEngine, QJSEngine *jsEngine);
 
     bool connected() const { return !m_appPassword.isEmpty(); }
+    //! The Nextcloud account, for the practice book's folders and links (BookletService)
+    struct AccountInfo { QUrl server; QString loginName; QString userId; QString appPassword; };
+    AccountInfo account() const { return { m_server, m_loginName, m_userId, m_appPassword }; }
     QString server() const { return m_server.toString(); }
     QString user() const { return m_loginName; }
     bool loggingIn() const { return m_pollTimer.isActive() || m_loginReply; }

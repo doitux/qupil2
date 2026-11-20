@@ -72,6 +72,11 @@ QtObject {
     signal editPlan(string membershipId, string planId)
     //! After the lesson: tick what was covered, the rest stays planned
     signal finishPlan(string membershipId, string planId)
+    //! Practice book: the tasks (and the private note) of a coupled student's lesson on \a date
+    //! (empty: today)
+    signal editTasks(string membershipId, string date)
+    //! Practice book: coupling, QR code and questions of a student
+    signal showBooklet(string studentId)
     //! Blocks of a note into the plan of the next lesson
     signal planFromNote(string membershipId, string noteId)
     signal editEvent(string eventId)

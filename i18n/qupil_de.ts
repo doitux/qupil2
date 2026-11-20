@@ -948,6 +948,27 @@ Bitte ändern Sie die Schüleranzahl um zu speichern!</translation>
         <source>Turn into a note</source>
         <translation>Notiz daraus machen</translation>
     </message>
+    <message id="plan.make_tasks">
+        <source>Turn into tasks</source>
+        <extracomment>Plan of a student coupled with the practice book</extracomment>
+        <translation>Aufgaben daraus machen</translation>
+    </message>
+    <message id="plan.lesson_over_tasks">
+        <source>What did you cover? That becomes the tasks of this lesson.</source>
+        <translation>Was davon war dran? Daraus werden die Aufgaben der Stunde.</translation>
+    </message>
+    <message id="plan.finish.tasks_info">
+        <source>What is ticked becomes the tasks of %1.</source>
+        <translation>Was angehakt ist, wird zu Aufgaben vom %1.</translation>
+    </message>
+    <message id="plan.finish.private_info">
+        <source>With the lock: into your private note instead.</source>
+        <translation>Mit Schloss: stattdessen in Ihre private Notiz.</translation>
+    </message>
+    <message id="plan.finish.tasks">
+        <source>Save as tasks</source>
+        <translation>Als Aufgaben speichern</translation>
+    </message>
     <message id="plan.postpone">
         <source>Move to the next lesson</source>
         <translation>Auf nächste Stunde schieben</translation>
@@ -1092,6 +1113,260 @@ Bitte ändern Sie die Schüleranzahl um zu speichern!</translation>
     <message id="note.save">
         <source>Save note</source>
         <translation>Notiz speichern</translation>
+    </message>
+    <message id="booklet.title">
+        <source>Practice book</source>
+        <translation>Übeheft</translation>
+    </message>
+    <message id="booklet.menu">
+        <source>Practice book</source>
+        <extracomment>Student menu: couple the student with the practice book app</extracomment>
+        <translation>Übeheft</translation>
+    </message>
+    <message id="booklet.menu_coupled">
+        <source>Practice book (coupled)</source>
+        <translation>Übeheft (gekoppelt)</translation>
+    </message>
+    <message id="booklet.intro">
+        <source>With the practice book app %1 sees the tasks of the lessons on their own phone and can say how practising went. The data stays in your Nextcloud, end-to-end encrypted.</source>
+        <translation>Mit der Übeheft-App sieht %1 die Aufgaben aus dem Unterricht auf dem eigenen Handy und kann sagen, wie das Üben lief. Die Daten bleiben in Ihrer Nextcloud, Ende-zu-Ende verschlüsselt.</translation>
+    </message>
+    <message id="booklet.coupled_text">
+        <source>%1 scans this code with the phone&apos;s camera. Tasks you give from now on show in the app.</source>
+        <translation>%1 scannt diesen Code mit der Kamera des Handys. Aufgaben, die Sie ab jetzt geben, erscheinen in der App.</translation>
+    </message>
+    <message id="booklet.teacher_name">
+        <source>Your name in the practice book</source>
+        <translation>Ihr Name im Übeheft</translation>
+    </message>
+    <message id="booklet.teacher_name_placeholder">
+        <source>e.g. Ms Rau</source>
+        <translation>z. B. Frau Rau</translation>
+    </message>
+    <message id="booklet.needs_nextcloud">
+        <source>The practice book uses the Nextcloud of the sync. Connect it under More › Settings › Sync first.</source>
+        <translation>Das Übeheft nutzt die Nextcloud der Synchronisierung. Verbinden Sie sie zuerst unter Mehr › Einstellungen › Synchronisation.</translation>
+    </message>
+    <message id="booklet.couple">
+        <source>Couple</source>
+        <translation>Koppeln</translation>
+    </message>
+    <message id="booklet.coupling">
+        <source>Coupling</source>
+        <translation>Wird gekoppelt</translation>
+    </message>
+    <message id="booklet.qr">
+        <source>QR code for the practice book app</source>
+        <translation>QR-Code für die Übeheft-App</translation>
+    </message>
+    <message id="booklet.qr_hint">
+        <source>The code is the key: show it only to this student (or their parents).</source>
+        <translation>Der Code ist der Schlüssel: Zeigen Sie ihn nur diesem Schüler bzw. den Eltern.</translation>
+    </message>
+    <message id="booklet.send_link">
+        <source>Send the link instead</source>
+        <translation>Stattdessen Link schicken</translation>
+    </message>
+    <message id="booklet.link_message">
+        <source>Your practice book, %1: open this link on your phone (with the app installed).</source>
+        <extracomment>Message with the coupling link to the student (the student app says du)</extracomment>
+        <translation>Dein Übeheft, %1: Öffne diesen Link auf deinem Handy (mit installierter App).</translation>
+    </message>
+    <message id="booklet.link_copied">
+        <source>Link copied – paste it into a message</source>
+        <translation>Link kopiert – zum Einfügen in eine Nachricht</translation>
+    </message>
+    <message id="booklet.read_only">
+        <source>Your Nextcloud does not allow uploads by link: the student sees the tasks but cannot send anything back.</source>
+        <translation>Ihre Nextcloud erlaubt kein Hochladen per Link: Der Schüler sieht die Aufgaben, kann aber nichts zurückschicken.</translation>
+    </message>
+    <message id="booklet.allow_feedback">
+        <source>Feedback on tasks</source>
+        <translation>Rückmeldung zu Aufgaben</translation>
+    </message>
+    <message id="booklet.allow_feedback_hint">
+        <source>Practised: a lot, some, hardly · Works: well, so-so, not yet</source>
+        <translation>Geübt: viel, etwas, kaum · Klappt: gut, geht so, noch nicht</translation>
+    </message>
+    <message id="booklet.allow_questions">
+        <source>Questions</source>
+        <translation>Fragen</translation>
+    </message>
+    <message id="booklet.questions">
+        <source>Questions from the practice book</source>
+        <translation>Fragen aus dem Übeheft</translation>
+    </message>
+    <message id="booklet.end">
+        <source>End coupling</source>
+        <translation>Kopplung beenden</translation>
+    </message>
+    <message id="booklet.end_confirm">
+        <source>The link stops working and the folder is deleted. %1&apos;s app says the coupling has ended. Tasks and notes stay here.</source>
+        <translation>Der Link wird ungültig und der Ordner gelöscht. Die App von %1 zeigt, dass die Kopplung beendet ist. Aufgaben und Notizen bleiben hier erhalten.</translation>
+    </message>
+    <message id="booklet.ended_toast">
+        <source>Coupling with %1 ended</source>
+        <translation>Kopplung mit %1 beendet</translation>
+    </message>
+    <message id="booklet.error.links">
+        <source>Your Nextcloud does not allow sharing by link. Ask its admin.</source>
+        <translation>Ihre Nextcloud erlaubt kein Teilen per Link. Fragen Sie die Administration.</translation>
+    </message>
+    <message id="booklet.error.access">
+        <source>The Nextcloud refused access. Connect it again under More › Settings › Sync.</source>
+        <translation>Die Nextcloud hat den Zugriff verweigert. Verbinden Sie sie unter Mehr › Einstellungen › Synchronisation neu.</translation>
+    </message>
+    <message id="booklet.error.offline">
+        <source>No connection to the Nextcloud. Try again later.</source>
+        <translation>Keine Verbindung zur Nextcloud. Versuchen Sie es später noch einmal.</translation>
+    </message>
+    <message id="booklet.from">
+        <source>From %1&apos;s practice book</source>
+        <extracomment>Lesson-start pop-up: what the student answered</extracomment>
+        <translation>Aus dem Übeheft von %1</translation>
+    </message>
+    <message id="booklet.question_line">
+        <source>Question: %1</source>
+        <translation>Frage: %1</translation>
+    </message>
+    <message id="task.lesson_of">
+        <source>Lesson of %1</source>
+        <extracomment>Title of the task editor; %1 is the date with weekday</extracomment>
+        <translation>Stunde vom %1</translation>
+    </message>
+    <message id="task.fab">
+        <source>Tasks</source>
+        <extracomment>Button at a student coupled with the practice book (instead of Note)</extracomment>
+        <translation>Aufgaben</translation>
+    </message>
+    <message id="task.save">
+        <source>Save</source>
+        <translation>Speichern</translation>
+    </message>
+    <message id="task.add">
+        <source>Task</source>
+        <extracomment>Button above the keyboard with a plus: a new task</extracomment>
+        <translation>Aufgabe</translation>
+    </message>
+    <message id="task.add_more">
+        <source>Another task</source>
+        <translation>Weitere Aufgabe</translation>
+    </message>
+    <message id="task.add_hint">
+        <source>Hint</source>
+        <extracomment>Button above the keyboard with a plus: a new hint</extracomment>
+        <translation>Hinweis</translation>
+    </message>
+    <message id="task.private">
+        <source>Private</source>
+        <extracomment>Button above the keyboard: the private note</extracomment>
+        <translation>Privat</translation>
+    </message>
+    <message id="task.title">
+        <source>Task</source>
+        <translation>Aufgabe</translation>
+    </message>
+    <message id="task.title_placeholder">
+        <source>Task, e.g. Bourrée bars 17–24</source>
+        <translation>Aufgabe, z. B. Bourrée Takt 17–24</translation>
+    </message>
+    <message id="task.hint">
+        <source>Hint</source>
+        <translation>Hinweis</translation>
+    </message>
+    <message id="task.hint_placeholder">
+        <source>Hint – Enter: the next one</source>
+        <translation>Hinweis – Enter: nächster</translation>
+    </message>
+    <message id="task.kind.practice">
+        <source>Practise</source>
+        <extracomment>Kind of a task: the student says how it went</extracomment>
+        <translation>Üben</translation>
+    </message>
+    <message id="task.kind.todo">
+        <source>To do</source>
+        <extracomment>Kind of a task (get the music): the student only ticks it</extracomment>
+        <translation>Erledigen</translation>
+    </message>
+    <message id="task.remove">
+        <source>Remove task</source>
+        <translation>Aufgabe entfernen</translation>
+    </message>
+    <message id="task.open_since">
+        <source>open since %1</source>
+        <translation>offen seit %1</translation>
+    </message>
+    <message id="task.done">
+        <source>Done</source>
+        <translation>Erledigt</translation>
+    </message>
+    <message id="task.for_all" numerus="yes">
+        <source>Tasks for all %n students</source>
+        <translation>
+            <numerusform>Aufgaben für %n Schüler</numerusform>
+            <numerusform>Aufgaben für alle %n Schüler</numerusform>
+        </translation>
+    </message>
+    <message id="task.for_all_hint">
+        <source>Each student gets their own and answers for themselves</source>
+        <translation>Jeder bekommt eigene Aufgaben und gibt eigene Rückmeldung</translation>
+    </message>
+    <message id="task.plan_hint">
+        <source>Planned as tasks: after the lesson, what was covered becomes the student&apos;s tasks.</source>
+        <translation>Als Aufgaben geplant: Nach der Stunde wird, was dran war, zu den Aufgaben des Schülers.</translation>
+    </message>
+    <message id="plan.finish.private">
+        <source>Keep %1 private</source>
+        <extracomment>Lock at a block of the plan: it goes into the private note, not to the student</extracomment>
+        <translation>„%1“ privat halten</translation>
+    </message>
+    <message id="task.private_add">
+        <source>Add a private note</source>
+        <translation>Private Notiz hinzufügen</translation>
+    </message>
+    <message id="task.private_label">
+        <source>Private note</source>
+        <translation>Private Notiz</translation>
+    </message>
+    <message id="task.private_hint">
+        <source>Only for you – it is never shown in the practice book.</source>
+        <translation>Nur für Sie – erscheint nie im Übeheft.</translation>
+    </message>
+    <message id="task.feedback.practiced">
+        <source>Practised: %1</source>
+        <translation>Geübt: %1</translation>
+    </message>
+    <message id="task.feedback.works">
+        <source>Works: %1</source>
+        <translation>Klappt: %1</translation>
+    </message>
+    <message id="task.feedback.done">
+        <source>Reported as done</source>
+        <translation>Als erledigt gemeldet</translation>
+    </message>
+    <message id="task.practiced.3">
+        <source>a lot</source>
+        <translation>viel</translation>
+    </message>
+    <message id="task.practiced.2">
+        <source>some</source>
+        <translation>etwas</translation>
+    </message>
+    <message id="task.practiced.1">
+        <source>hardly</source>
+        <translation>kaum</translation>
+    </message>
+    <message id="task.works.3">
+        <source>well</source>
+        <translation>gut</translation>
+    </message>
+    <message id="task.works.2">
+        <source>so-so</source>
+        <translation>geht so</translation>
+    </message>
+    <message id="task.works.1">
+        <source>not yet</source>
+        <translation>noch nicht</translation>
     </message>
     <message id="note.save_for_all" numerus="yes">
         <source>Save for all %n students</source>
@@ -2736,6 +3011,21 @@ Vorher legt Qupil ein Backup an, das Sie gleich danach wiederherstellen können.
     <message id="note.edit">
         <source>Edit note</source>
         <translation>Notiz bearbeiten</translation>
+    </message>
+    <message id="note.share">
+        <source>Share as a message</source>
+        <extracomment>Sends the note to the student through the system&apos;s share menu (Messages, WhatsApp …)</extracomment>
+        <translation>Als Nachricht teilen</translation>
+    </message>
+    <message id="note.share.heading">
+        <source>Homework from %1</source>
+        <extracomment>First line of a shared note; %1 is the date with weekday</extracomment>
+        <translation>Hausaufgaben vom %1</translation>
+    </message>
+    <message id="note.share.copied">
+        <source>Copied – paste it into a message</source>
+        <extracomment>Toast on desktop systems, which have no share menu</extracomment>
+        <translation>Kopiert – zum Einfügen in eine Nachricht</translation>
     </message>
     <message id="pieces.empty">
         <source>No pieces yet.</source>
