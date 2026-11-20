@@ -246,7 +246,12 @@ Sheet {
                 spacing: 6
                 Item {
                     width: parent.width
-                    implicitHeight: Math.max(28, pointRow.hasMore ? 28 : pointText.implicitHeight)
+                    implicitHeight: Math.max(28, pointRow.hasMore ? 28 : pointText.y + pointText.implicitHeight)
+                    FontMetrics {
+                        id: pointMetrics
+                        font.family: Theme.fontFamily
+                        font.pixelSize: 15
+                    }
                     Rectangle {
                         id: box
                         anchors.verticalCenter: pointRow.hasMore ? parent.verticalCenter : undefined
@@ -271,6 +276,8 @@ Sheet {
                         id: pointText
                         x: 36
                         anchors.verticalCenter: pointRow.hasMore ? parent.verticalCenter : undefined
+                        // A point without lines: its first line in the middle of the tick box
+                        y: pointRow.hasMore ? 0 : box.y + Math.round((box.height - pointMetrics.height) / 2)
                         width: parent.width - x - (pointRow.hasMore ? peekButton.width + 8 : 0)
                                - (lockButton.visible ? lockButton.width + 4 : 0)
                         wrapMode: pointRow.hasMore ? Text.NoWrap : Text.Wrap
