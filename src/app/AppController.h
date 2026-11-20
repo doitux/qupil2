@@ -133,6 +133,12 @@ public:
     int schemaVersion() const;
     //! Puts text on the clipboard (e.g. the version for a bug report)
     Q_INVOKABLE void copyText(const QString &text) const;
+    //! The system's share menu with the text (iOS, Android); elsewhere the text goes to the
+    //! clipboard. true: the menu opened
+    Q_INVOKABLE bool shareText(const QString &text, const QString &title) const;
+    //! UI test: never open the system's menu (it would cover the app), and what was shared last
+    void setShareToClipboard(bool clipboard) { m_shareToClipboard = clipboard; }
+    QString lastShared() const { return m_lastShared; }
     //! Qupil's license (GPL 3 with the app store permission) and those of the bundled parts
     Q_INVOKABLE QString licenseText() const;
     bool saveDialogAvailable() const;
@@ -304,6 +310,8 @@ private:
     QVariantMap m_lastTakeOver;
     bool m_demoPending = false;
     bool m_testMode = false;
+    bool m_shareToClipboard = false;
+    mutable QString m_lastShared;
     //! The sample data for test mode is being made (no summary, no "data replaced")
     bool m_testPending = false;
     QString testFolder() const;

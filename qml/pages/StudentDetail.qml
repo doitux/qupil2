@@ -13,6 +13,7 @@ import Qupil
 
 Item {
     id: detail
+    objectName: "studentDetail"
 
     property string studentId
     property string membershipId
@@ -971,13 +972,13 @@ Item {
                     leftPadding: 16
                     rightPadding: 16
 
-                    // Plan, edit and delete, rolled in from the right edge over the text
+                    // Plan, share, edit and delete, rolled in from the right edge over the text
                     Rectangle {
                         id: actions
                         z: 2
                         y: 0
-                        // Three round buttons (built only while rolled in, see actionRow)
-                        width: 3 * Theme.touchTarget + 2 * 10 + 28
+                        // Four round buttons (built only while rolled in, see actionRow)
+                        width: 4 * Theme.touchTarget + 3 * 10 + 28
                         height: noteCard.height
                         // How far it is rolled in (0 … width): set by the finger or by slideTo().
                         // Only this value moves, so a new layout (another student) moves nothing.
@@ -1034,6 +1035,22 @@ Item {
                                     onClicked: {
                                         detail.revealedNote = ""
                                         Nav.planFromNote(detail.currentMembership, noteCard.modelData.id)
+                                    }
+                                }
+                                // Homework as a message (Messages, WhatsApp …): for students
+                                // without the practice book app; nothing is synchronised
+                                IconButton {
+                                    objectName: "noteShare"
+                                    iconName: "share"
+                                    text: qsTrId("note.share")
+                                    fill: Theme.surfaceAlt
+                                    tint: Theme.accentText
+                                    onClicked: {
+                                        detail.revealedNote = ""
+                                        const note = noteCard.modelData
+                                        const text = Data.homeworkText(note.content, note.date)
+                                        if (!App.shareText(text, qsTrId("note.share.heading").arg(Data.formatDate(note.date, true))))
+                                            Nav.toast(qsTrId("note.share.copied"))
                                     }
                                 }
                                 IconButton {

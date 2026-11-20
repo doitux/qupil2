@@ -283,6 +283,9 @@ public:
     Q_INVOKABLE QString noteHtml(const QString &note, const QString &markColor = {}) const;
     //! A lesson note without formatting, shortened with "…" to maxLength
     Q_INVOKABLE QString plainText(const QString &note, int maxLength = 0) const;
+    //! A note as a message for the student ("Homework of Tue, 17.11.2026" and the text,
+    //! lines and empty lines kept, without mark-up): shared through the system's menu
+    Q_INVOKABLE QString homeworkText(const QString &note, const QString &date) const;
     //! "Wed, 07.10.2026" style date in the UI language
     Q_INVOKABLE QString formatDate(const QString &iso, bool withWeekday = false) const;
     //! Today (ISO) and now, as shown: a fixed Tuesday in the screenshots, see Clock

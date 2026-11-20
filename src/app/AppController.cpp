@@ -37,6 +37,7 @@
 #include "DemoData.h"
 #include "SystemBars.h"
 #include "FileExport.h"
+#include "TextShare.h"
 #include "FileImport.h"
 #include "LanguageManager.h"
 #include "LegacyImporter.h"
@@ -674,6 +675,16 @@ void AppController::copyText(const QString &text) const
 {
     if (QClipboard *clipboard = QGuiApplication::clipboard())
         clipboard->setText(text);
+}
+
+bool AppController::shareText(const QString &text, const QString &title) const
+{
+    // The UI test checks what would be shared without opening the system's menu
+    m_lastShared = text;
+    if (!m_shareToClipboard && TextShare::available() && TextShare::share(text, title))
+        return true;
+    copyText(text);
+    return false;
 }
 
 QString AppController::licenseText() const
