@@ -103,11 +103,16 @@ Item {
                 Layout.fillWidth: true
                 spacing: 8
                 ActionButton {
+                    // A single student coupled with the practice book: the lesson's tasks
+                    readonly property bool tasks: Data.revision >= 0 && (detail.lesson.studentCount || 0) === 1
+                                                  && Data.isCoupled(detail.lesson.students[0].id)
                     kind: "primary"
                     iconName: "plus"
-                    text: (detail.lesson.studentCount || 0) > 1 ? qsTrId("lesson.note_for_all") : qsTrId("common.note")
+                    text: tasks ? qsTrId("task.fab")
+                                : (detail.lesson.studentCount || 0) > 1 ? qsTrId("lesson.note_for_all") : qsTrId("common.note")
                     enabled: (detail.lesson.studentCount || 0) > 0
-                    onClicked: Nav.editNote(detail.lesson.students[0].membership_id, "")
+                    onClicked: tasks ? Nav.editTasks(detail.lesson.students[0].membership_id, "")
+                                     : Nav.editNote(detail.lesson.students[0].membership_id, "")
                 }
                 ActionButton {
                     iconName: "metronome"

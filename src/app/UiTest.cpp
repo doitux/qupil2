@@ -2363,9 +2363,8 @@ void UiTest::addCases()
                        m_text = m_data->create(u"coupling"_s, { { u"student_id"_s, student },
                                                                 { u"created"_s, m_data->today() } });
                    })
-                << act(u"open the tasks of today's lesson"_s, [this] {
-                       QMetaObject::invokeMethod(m_nav, "editTasks", Q_ARG(QString, m_membership), Q_ARG(QString, QString()));
-                   })
+                << tab(u"Stundenplan"_s)
+                << tap(u"^Aufgaben$"_s, u"the running lesson offers tasks instead of a note"_s)
                 << see(u"^Weitere Aufgabe$"_s)
                 << type(u"UI-Tonleiter G-Dur"_s) << key(Qt::Key_Return, u"Enter: to the first hint"_s)
                 << type(u"zweioktavig"_s) << key(Qt::Key_Return, u"Enter: the next hint"_s)

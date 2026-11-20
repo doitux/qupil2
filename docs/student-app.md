@@ -97,12 +97,29 @@ tests and screenshots of the example in four languages (Linux), an Android test 
 Icons: `python3 -I student/tools/make_icons.py` (Qupil's logo with the colours turned
 round: lime tile, plum figures).
 
+## In the teacher's Qupil
+
+- **Data** (schema 8): `task` (one record per task: title, hints, practise / to-do, the
+  lesson it belongs to, `since`, `closed`, the student's answer) and `coupling` (folder,
+  link, key, what the student may send, questions). `DataServiceTasks.cpp`, `tst_tasks`.
+- **Tasks editor** (`TaskEditor.qml`, variant A): tasks at the top, the private note
+  folded below. Enter / Enter on an empty hint / Ctrl+Enter; bar above the keyboard
+  (+ Hint, + Task, Private). Open tasks of earlier lessons come along ("open since").
+- **Student page**: "Tasks" instead of "Note"; one card per lesson (`TaskLessonCard.qml`);
+  the running lesson's button and the lesson page offer "Tasks" for a coupled student.
+- **Coupling** (student menu › Übeheft …, `BookletSheet.qml`, `BookletService`):
+  folder "Qupil Übeheft/<random>" next to the sync folder, link with password, key;
+  QR code, link to send, switches, questions, ending (link and folder go).
+- **Booklets**: written after each sync and shortly after changes; answers collected
+  and shown at the tasks and in the pop-up at the start of the lesson.
+- **Plans**: "Turn into tasks" for a coupled student.
+- **Homework as a message** (any student): a note through the system's share menu.
+
 ## Still to do
 
-- Teacher app: tasks in the lesson entry for coupled students, QR code, the student's
-  page (couple, end, what is shared), Settings › Practice book, collecting feedback,
-  the start-of-lesson pop-up, sharing homework as a message.
-- qupil.de: `/u` page (opens the app, otherwise store links), `apple-app-site-association`
-  and `assetlinks.json` for links that open the app directly; then
-  `QUPIL_STUDENT_ASSOCIATED_DOMAINS=ON`.
+- Try it against the music school's Nextcloud (link passwords, uploads by link,
+  expiry) and on devices.
+- qupil.de: upload `student/web/`; then `QUPIL_STUDENT_ASSOCIATED_DOMAINS=ON`.
+- The plan editor in task mode for coupled students (now: the plan is written as before,
+  "Turn into tasks" makes the tasks).
 - Scanning the QR code inside the app (now: the phone's camera opens the link).
