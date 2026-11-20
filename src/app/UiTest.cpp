@@ -2318,6 +2318,43 @@ void UiTest::addCases()
                    })
                 << backIfThere(u"^Schüler$"_s);
     }
+    // A plan for next week (made on the day of the lesson): the schedule of this week shows
+    // the clipboard at the student already, as long as the plan is for a coming lesson
+    {
+        const auto plannedNow = [this](const QString &membership) {
+            if (!m_window)
+                return false;
+            for (QObject *o : m_window->findChildren<QObject *>(u"scheduleOverview"_s))
+                if (o->property("planned").toStringList().contains(membership))
+                    return true;
+            return false;
+        };
+        Case &c = add(u"plan-icon-coming"_s, u"a plan for next week shows in the schedule of this week"_s);
+        c.steps << tab(u"Stundenplan"_s)
+                << act(u"a student of today without a plan"_s, [this] {
+                       m_membership.clear();
+                       for (const QVariant &l : m_data->lessonsOn(Qupil::Clock::today().dayOfWeek() - 1)) {
+                           for (const QVariant &st : l.toMap().value(u"students"_s).toList()) {
+                               const QString m = st.toMap().value(u"membership_id"_s).toString();
+                               if (m_membership.isEmpty() && m_data->plans(m).isEmpty())
+                                   m_membership = m;
+                           }
+                       }
+                   })
+                << check(u"no clipboard for that student yet"_s, [this, plannedNow] {
+                       return !m_membership.isEmpty() && !plannedNow(m_membership);
+                   })
+                << act(u"plan the lesson of next week"_s, [this] {
+                       const QString next = m_data->nextLessonDate(m_membership, Qupil::Clock::today().toString(Qt::ISODate));
+                       m_text = m_data->savePlan(m_membership, {}, next, u"UI-Test: Planung für nächste Woche"_s, false);
+                   })
+                << check(u"the clipboard shows in this week"_s, [this, plannedNow] {
+                       return !m_text.isEmpty() && plannedNow(m_membership);
+                   })
+                << snap(u"plan-icon-coming"_s)
+                << act(u"remove the plan again"_s, [this] { m_data->deletePlan(m_text, false); })
+                << check(u"the clipboard is gone"_s, [this, plannedNow] { return !plannedNow(m_membership); });
+    }
     // A piece for a student
     {
         Case &c = add(u"piece-new"_s, u"add a piece for a student"_s);
