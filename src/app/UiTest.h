@@ -209,6 +209,7 @@ private:
     QTimer m_traceTimer;
     QHash<QString, QString> m_traced;
     QString m_textField = QStringLiteral("edit:^Notiz$");
+    QString m_text;   // the id of a plan or note a case made
     QString m_atPress;
     bool m_menuAtPress = false;
     bool m_fingerDone = true;

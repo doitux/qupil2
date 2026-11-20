@@ -2158,6 +2158,166 @@ void UiTest::addCases()
                        return false;
                    });
     }
+    // "What did you cover?": a block opened, one of its two lines unticked. The ticked line
+    // goes into the note under the block's heading, the other stays planned under the same
+    // heading – as a block of its own (bold heading, "+1")
+    {
+        const auto sheet = [this]() -> QObject * {
+            if (!m_window)
+                return nullptr;
+            for (QObject *o : m_window->findChildren<QObject *>())
+                if (o->property("lineChecks").isValid() && o->property("opened").toBool())
+                    return o;
+            return nullptr;
+        };
+        const auto blockState = [sheet](int i) {
+            QObject *o = sheet();
+            QVariant state;
+            if (o)
+                QMetaObject::invokeMethod(o, "blockState", Q_RETURN_ARG(QVariant, state), Q_ARG(QVariant, i));
+            return o ? state.toInt() : -1;
+        };
+        const auto withText = [this](const QVariantList &list, const QString &text) {
+            QStringList out;
+            for (const QVariant &v : list)
+                if (v.toMap().value(u"content"_s).toString().contains(text))
+                    out << v.toMap().value(u"content"_s).toString();
+            return out;
+        };
+        Case &c = add(u"plan-finish-lines"_s, u"what was covered: single lines of a block into the note, the rest planned"_s);
+        c.steps << act(u"a plan in blocks for the running lesson"_s, [this] {
+                       m_membership = runningMembership();
+                       // (a date without a plan: a plan for the same lesson would take the text in)
+                       m_text = m_data->savePlan(m_membership, {}, Qupil::Clock::today().addDays(-70).toString(Qt::ISODate),
+                                                 u"**UI-Sonatine**\nIm Tempo mit Metronom 92\nDynamik: piano wirklich leise\n\n"
+                                                 u"**UI-Technik**\nTonleiter G-Dur"_s,
+                                                 false);
+                   })
+                << openStudent(u"Lena Muster"_s)
+                << act(u"what was covered?"_s, [this] {
+                       QMetaObject::invokeMethod(m_nav, "finishPlan", Q_ARG(QString, m_membership), Q_ARG(QString, m_text));
+                   })
+                << see(u"^Als Notiz speichern$"_s)
+                << check(u"everything ticked at first"_s, [blockState] { return blockState(0) == 2 && blockState(1) == 2; })
+                << act(u"open the sonatina"_s, [sheet] {
+                       if (QObject *o = sheet())
+                           QMetaObject::invokeMethod(o, "peek", Q_ARG(QVariant, 0));
+                   })
+                << tap(u"^Dynamik: piano wirklich leise$"_s, u"untick one line"_s)
+                << check(u"the block shows some lines ticked"_s, [blockState] { return blockState(0) == 1; })
+                << snap(u"plan-finish-lines"_s)
+                << tap(u"^Dynamik: piano wirklich leise$"_s, u"tick it again"_s)
+                << check(u"the block is ticked as a whole again"_s, [blockState] { return blockState(0) == 2; })
+                << tap(u"^Dynamik: piano wirklich leise$"_s, u"untick it once more"_s)
+                << tapAt([this] {
+                             // On the heading (the middle of an open block is one of its lines)
+                             Node n;
+                             if (!find(u"^UI-Sonatine$"_s, &n) || !n.item)
+                                 return QPointF();
+                             return n.item->mapToScene(QPointF(60, 24));
+                         },
+                         u"tap the block's heading: all of it ticked"_s)
+                << check(u"the whole block ticked"_s, [blockState] { return blockState(0) == 2; })
+                << tap(u"^Dynamik: piano wirklich leise$"_s, u"untick the line for the note"_s)
+                << check(u"some lines ticked"_s, [blockState] { return blockState(0) == 1; })
+                << tap(u"^Als Notiz speichern$"_s) << gone(u"^Dynamik: piano wirklich leise$"_s)
+                << check(u"the note: the ticked line under the heading, the whole other block"_s, [this, withText] {
+                       const QStringList notes = withText(m_data->notes(m_membership), u"UI-Sonatine"_s);
+                       return notes.size() == 1
+                              && notes.first() == u"**UI-Sonatine**\nIm Tempo mit Metronom 92\n\n**UI-Technik**\nTonleiter G-Dur"_s;
+                   })
+                << check(u"the plan: the other line under the same heading, a block of its own"_s, [this, withText] {
+                       // (a plan for the next lesson may exist already: then it is added there)
+                       const QStringList plans = withText(m_data->plans(m_membership), u"UI-Sonatine"_s);
+                       if (plans.size() != 1 || !plans.first().contains(u"**UI-Sonatine**\nDynamik: piano wirklich leise"_s)
+                           || plans.first().contains(u"Im Tempo"_s) || plans.first().contains(u"UI-Technik"_s))
+                           return false;
+                       for (const QVariant &b : m_data->blocks(plans.first()))
+                           if (b.toMap().value(u"heading"_s).toString() == u"UI-Sonatine"_s)
+                               return b.toMap().value(u"more"_s).toInt() == 1;
+                       return false;
+                   })
+                << act(u"remove the note and the plan again"_s, [this] {
+                       for (const QVariant &v : m_data->notes(m_membership))
+                           if (v.toMap().value(u"content"_s).toString().contains(u"UI-Sonatine"_s))
+                               m_data->deleteNote(v.toMap().value(u"id"_s).toString(), false);
+                       for (const QVariant &v : m_data->plans(m_membership)) {
+                           const QVariantMap p = v.toMap();
+                           QString content = p.value(u"content"_s).toString();
+                           if (!content.contains(u"UI-Sonatine"_s))
+                               continue;
+                           content.remove(u"**UI-Sonatine**\nDynamik: piano wirklich leise"_s);
+                           if (content.trimmed().isEmpty())
+                               m_data->deletePlan(p.value(u"id"_s).toString(), false);
+                           else
+                               m_data->savePlan(m_membership, p.value(u"id"_s).toString(), p.value(u"date"_s).toString(),
+                                                content.trimmed(), false);
+                       }
+                   })
+                << backIfThere(u"^Schüler$"_s);
+    }
+    // "Plan the next lesson" from a note: one line of a block, under its heading
+    {
+        const auto sheet = [this]() -> QObject * {
+            if (!m_window)
+                return nullptr;
+            for (QObject *o : m_window->findChildren<QObject *>())
+                if (o->property("lineChecks").isValid() && o->property("opened").toBool())
+                    return o;
+            return nullptr;
+        };
+        Case &c = add(u"plan-from-note-lines"_s, u"plan the next lesson from a note: one line of a block"_s);
+        c.steps << act(u"a note in blocks"_s, [this] {
+                       m_membership = runningMembership();
+                       m_text = m_data->addNote(m_membership, Qupil::Clock::today().addDays(-7).toString(Qt::ISODate),
+                                                u"**UI-Bach**\nTakt 1–24\nPedal erst nach dem Akkordwechsel\n\n"
+                                                u"**UI-Etüde**\nNr. 8 ganz"_s,
+                                                false);
+                   })
+                << openStudent(u"Lena Muster"_s)
+                << act(u"plan the next lesson from the note"_s, [this] {
+                       QMetaObject::invokeMethod(m_nav, "planFromNote", Q_ARG(QString, m_membership), Q_ARG(QString, m_text));
+                   })
+                << see(u"^Planen$"_s)
+                << act(u"open Bach"_s, [sheet] {
+                       if (QObject *o = sheet())
+                           QMetaObject::invokeMethod(o, "peek", Q_ARG(QVariant, 0));
+                   })
+                << tap(u"^Pedal erst nach dem Akkordwechsel$"_s, u"tick one line"_s)
+                << snap(u"plan-from-note-lines"_s)
+                << tap(u"^Planen$"_s) << gone(u"^Pedal erst nach dem Akkordwechsel$"_s)
+                << check(u"planned: that line under the heading, nothing else of the note"_s, [this] {
+                       for (const QVariant &v : m_data->plans(m_membership)) {
+                           const QString content = v.toMap().value(u"content"_s).toString();
+                           if (content.contains(u"UI-Bach"_s))
+                               return content.contains(u"**UI-Bach**\nPedal erst nach dem Akkordwechsel"_s)
+                                      && !content.contains(u"Takt 1–24"_s) && !content.contains(u"UI-Etüde"_s);
+                       }
+                       return false;
+                   })
+                << check(u"the note stays as it is"_s, [this] {
+                       for (const QVariant &v : m_data->notes(m_membership))
+                           if (v.toMap().value(u"id"_s).toString() == m_text)
+                               return v.toMap().value(u"content"_s).toString().contains(u"Takt 1–24"_s);
+                       return false;
+                   })
+                << act(u"remove the note and the plan line again"_s, [this] {
+                       m_data->deleteNote(m_text, false);
+                       for (const QVariant &v : m_data->plans(m_membership)) {
+                           const QVariantMap p = v.toMap();
+                           QString content = p.value(u"content"_s).toString();
+                           if (!content.contains(u"UI-Bach"_s))
+                               continue;
+                           content.remove(u"**UI-Bach**\nPedal erst nach dem Akkordwechsel"_s);
+                           if (content.trimmed().isEmpty())
+                               m_data->deletePlan(p.value(u"id"_s).toString(), false);
+                           else
+                               m_data->savePlan(m_membership, p.value(u"id"_s).toString(), p.value(u"date"_s).toString(),
+                                                content.trimmed(), false);
+                       }
+                   })
+                << backIfThere(u"^Schüler$"_s);
+    }
     // A piece for a student
     {
         Case &c = add(u"piece-new"_s, u"add a piece for a student"_s);

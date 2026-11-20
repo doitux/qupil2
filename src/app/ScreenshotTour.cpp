@@ -73,11 +73,6 @@ ScreenshotTour::ScreenshotTour(QQuickWindow *window, QObject *theme, QObject *na
                       {} };
     };
 
-    // Only the pictures of ticking single lines of a plan (QUPIL_TOUR=plan-lines)
-    if (qEnvironmentVariable("QUPIL_TOUR") == u"plan-lines"_s) {
-        addPlanLines(size, mode, snap);
-        return;
-    }
     // Setup screen
     m_steps << size(1180, 800) << mode("light") << snap(u"01-setup-light"_s)
             << mode("dark") << snap(u"02-setup-dark"_s) << mode("light")
@@ -202,7 +197,15 @@ void ScreenshotTour::addDetails(const QString &prefix)
                           setAll("peeked", QVariantList { false, true, false });
                       },
                       {} }
-            << snap(prefix + u"-7d-plan-finish-blocks"_s) << close
+            << snap(prefix + u"-7d-plan-finish-blocks"_s)
+            // Vivaldi opened, one of its lines not covered (it stays planned)
+            << Step { [this] {
+                          setAll("checks", QVariantList { false, true, true });
+                          setAll("lineChecks", QVariantList { QVariantList { true, false, true }, QVariant(), QVariant() });
+                          setAll("peeked", QVariantList { true, false, false });
+                      },
+                      {} }
+            << snap(prefix + u"-7d2-plan-finish-lines"_s) << close
             << Step { [this, nav] { nav("planFromNote", m_longMembership, m_longNote).action(); }, {} }
             << Step { [this] { setAll("checks", QVariantList { false, false, true, false, false }); }, {} }
             << snap(prefix + u"-7e-plan-from-note"_s) << close
@@ -387,96 +390,6 @@ void ScreenshotTour::addLongNote()
             break;
         }
     }
-}
-
-// Leon Meyer (Monday 14:30): the latest note as a plan for yesterday; in "What did you
-// cover?" the sonatina open with one of its two lines ticked; then the note and the plan
-void ScreenshotTour::addPlanLines(const std::function<Step(int, int)> &size, const std::function<Step(const char *)> &mode,
-                                  const std::function<Step(const QString &)> &snap)
-{
-    auto nav = [this](const char *signal, const QString &a, const QString &b) {
-        return Step { [this, signal, a, b] {
-                          if (m_nav)
-                              QMetaObject::invokeMethod(m_nav, signal, Q_ARG(QString, a), Q_ARG(QString, b));
-                      },
-                      {} };
-    };
-    auto close = Step { [this] { QMetaObject::invokeMethod(m_window, "closeEditors"); }, {} };
-    auto student = Step { [this] {
-                              if (m_nav)
-                                  QMetaObject::invokeMethod(m_nav, "showStudent", Q_ARG(QString, m_student),
-                                                            Q_ARG(QString, m_membership));
-                          },
-                          {} };
-    auto finish = Step { [this] {
-                             if (m_nav)
-                                 QMetaObject::invokeMethod(m_nav, "finishPlan", Q_ARG(QString, m_membership), Q_ARG(QString, m_plan));
-                         },
-                         {} };
-    auto lines = Step { [this] {
-                            setAll("peeked", QVariantList { true, false, false, false });
-                            setAll("lineChecks", QVariantList { QVariantList { true, false }, QVariant(), QVariant(), QVariant() });
-                            setAll("checks", QVariantList { false, true, true, true });
-                        },
-                        {} };
-    auto open = Step { [this] { setAll("peeked", QVariantList { true, false, false, false }); }, {} };
-    m_steps << size(1180, 820) << mode("light")
-            << Step { [this] { m_app->loadDemo(); },
-                      [this] { return !m_app->busy() && !m_app->lastTakeOver().isEmpty(); } }
-            << Step { [this] { m_app->finishSetup(); }, [this] { return m_app->phase() == AppController::Ready; } }
-            << Step { [this] {
-                          DataService *data = DataService::instance();
-                          for (const QVariant &v : data->students()) {
-                              const QVariantMap st = v.toMap();
-                              if (st.value(u"forename"_s).toString() != u"Leon"_s)
-                                  continue;
-                              m_student = st.value(u"id"_s).toString();
-                              const QVariantList ms = data->student(m_student).value(u"memberships"_s).toList();
-                              m_membership = ms.value(0).toMap().value(u"id"_s).toString();
-                          }
-                          const QVariantList notes = data->notes(m_membership);
-                          const QString yesterday = Qupil::Clock::today().addDays(-1).toString(Qt::ISODate);
-                          m_plan = data->savePlan(m_membership, {}, yesterday,
-                                                  notes.value(0).toMap().value(u"content"_s).toString(), false);
-                          std::printf("plan-lines: student %s membership %s plan %s\n", qPrintable(m_student),
-                                      qPrintable(m_membership), qPrintable(m_plan));
-                      },
-                      {} }
-            // Phone: the dialog as it opens, the sonatina opened, one line unticked
-            << size(390, 844) << student << snap(u"p1-student-plan"_s)
-            << finish << snap(u"p2-finish-all"_s) << open << snap(u"p3-finish-open"_s) << lines
-            << snap(u"p4-finish-one-line"_s) << close
-            // iPad: the same, then saved
-            << size(1180, 820) << student << snap(u"t1-student-plan"_s)
-            << finish << open << snap(u"t2-finish-open"_s) << lines << snap(u"t3-finish-one-line"_s)
-            << Step { [this] {
-                          for (QObject *o : m_window->findChildren<QObject *>()) {
-                              if (!o->property("lineChecks").isValid())
-                                  continue;
-                              QVariant parts;
-                              QMetaObject::invokeMethod(o, "parts", Q_RETURN_ARG(QVariant, parts));
-                              const QVariantList p = parts.toList();
-                              std::printf("plan-lines: note [%s] rest [%s]\n", qPrintable(p.value(0).toString()),
-                                          qPrintable(p.value(1).toString()));
-                              DataService::instance()->planToNote(m_plan, p.value(0).toString(), p.value(1).toString(), false);
-                          }
-                      },
-                      {} }
-            << close << student << snap(u"t4-student-after"_s)
-            // The rest planned, its block opened; the note's sonatina too
-            << Step { [this] {
-                          DataService *data = DataService::instance();
-                          QVariantMap open;
-                          for (const QVariant &p : data->plans(m_membership))
-                              open.insert(p.toMap().value(u"id"_s).toString() + u"/0"_s, true);
-                          const QVariantList notes = data->notes(m_membership);
-                          if (!notes.isEmpty())
-                              open.insert(notes.first().toMap().value(u"id"_s).toString() + u"/0"_s, true);
-                          setAll("unfolded", open);
-                      },
-                      {} }
-            << snap(u"t5-student-after-open"_s)
-            << size(390, 844) << student << snap(u"p5-student-after"_s);
 }
 
 // Sets a property wherever it exists (e.g. "unfolded" of the student page)
