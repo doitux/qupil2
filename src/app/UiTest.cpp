@@ -31,6 +31,8 @@
 #include <algorithm>
 #include <cstdio>
 
+#include <QJSValue>
+
 #include "AppController.h"
 #include "Database.h"
 #include "Store.h"
@@ -2451,7 +2453,8 @@ void UiTest::addCases()
                 << act(u"remove the coupling record"_s, [this] { m_data->remove(u"coupling"_s, m_text); });
     }
     // A plan for next week (made on the day of the lesson): the schedule of this week shows
-    // the clipboard at the student already, as long as the plan is for a coming lesson
+    // the clipboard at the student already, as long as the plan is for a coming lesson – also
+    // next to a birthday (one sign used to hide the other)
     {
         const auto plannedNow = [this](const QString &membership) {
             if (!m_window)
@@ -2461,31 +2464,100 @@ void UiTest::addCases()
                     return true;
             return false;
         };
-        Case &c = add(u"plan-icon-coming"_s, u"a plan for next week shows in the schedule of this week"_s);
+        // The rows of the schedule on the screen: whose they are (tablet: a student's row;
+        // phone: a lesson's row, only lessons with one student) and whether the clipboard in
+        // them is drawn. Walks the visual tree (delegates have no QObject parent)
+        const auto rows = [this](bool clipboardOnly) {
+            QStringList out;
+            if (!m_window)
+                return out;
+            const auto map = [](const QVariant &v) {
+                return v.canConvert<QJSValue>() ? v.value<QJSValue>().toVariant().toMap() : v.toMap();
+            };
+            // Only the schedule (the lesson or student shown beside it has plans too)
+            QList<QQuickItem *> items;
+            for (QObject *o : m_window->findChildren<QObject *>(u"scheduleOverview"_s))
+                if (auto *item = qobject_cast<QQuickItem *>(o))
+                    items << item;
+            for (int i = 0; i < items.size(); ++i)
+                items += items.at(i)->childItems();
+            for (QQuickItem *item : std::as_const(items)) {
+                // The clipboard (drawn), or its place in a row (the clipboard itself hidden)
+                if (item->property("name").toString() != u"plan"_s || !item->parentItem())
+                    continue;
+                if (clipboardOnly ? !item->isVisible() : !item->parentItem()->isVisible())
+                    continue;
+                // The first row above it says whose it is
+                for (QQuickItem *p = item->parentItem(); p; p = p->parentItem()) {
+                    const QVariantMap data = map(p->property("modelData"));
+                    if (data.contains(u"membership_id"_s)) {
+                        out << data.value(u"membership_id"_s).toString();
+                        break;
+                    }
+                    const QVariantList students = map(p->property("lesson")).value(u"students"_s).toList();
+                    if (!students.isEmpty()) {
+                        if (students.size() == 1)
+                            out << students.first().toMap().value(u"membership_id"_s).toString();
+                        break;
+                    }
+                }
+            }
+            return out;
+        };
+        const auto clipboardShown = [rows](const QString &membership) { return rows(true).contains(membership); };
+        Case &c = add(u"plan-icon-coming"_s, u"a plan for next week shows in the schedule of this week, next to a birthday too"_s);
         c.steps << tab(u"Stundenplan"_s)
-                << act(u"a student of today without a plan"_s, [this] {
+                << act(u"a student on the screen without a plan, with a birthday since the last lesson if there is one"_s, [this, rows] {
                        m_membership.clear();
+                       bool birthday = false;
+                       const QStringList shown = rows(false);
                        for (const QVariant &l : m_data->lessonsOn(Qupil::Clock::today().dayOfWeek() - 1)) {
-                           for (const QVariant &st : l.toMap().value(u"students"_s).toList()) {
+                           const QVariantList students = l.toMap().value(u"students"_s).toList();
+                           for (const QVariant &st : students) {
                                const QString m = st.toMap().value(u"membership_id"_s).toString();
-                               if (m_membership.isEmpty() && m_data->plans(m).isEmpty())
+                               if (!m_data->plans(m).isEmpty() || students.size() != 1 || !shown.contains(m))
+                                   continue;
+                               const QString student = m_data->membershipInfo(m).value(u"student_id"_s).toString();
+                               const QString kind = m_data->birthdayNote(student).value(u"kind"_s).toString();
+                               const bool has = kind == u"today"_s || kind == u"past"_s;
+                               if (m_membership.isEmpty() || (has && !birthday)) {
                                    m_membership = m;
+                                   birthday = has;
+                               }
                            }
                        }
+                       qInfo("plan-icon-coming: %s, birthday %d", qPrintable(m_membership), birthday);
                    })
-                << check(u"no clipboard for that student yet"_s, [this, plannedNow] {
-                       return !m_membership.isEmpty() && !plannedNow(m_membership);
+                << check(u"no clipboard for that student yet"_s, [this, plannedNow, clipboardShown] {
+                       return !m_membership.isEmpty() && !plannedNow(m_membership) && !clipboardShown(m_membership);
+                   })
+                // A birthday today as well (the cake used to hide the clipboard)
+                << act(u"the student has a birthday today"_s, [this] {
+                       const QString student = m_data->membershipInfo(m_membership).value(u"student_id"_s).toString();
+                       m_oldBirthday = m_data->student(student).value(u"birthday"_s).toString();
+                       m_data->updateStudent(student, { { u"birthday"_s,
+                                                          Qupil::Clock::today().addYears(-12).toString(Qt::ISODate) } });
+                   })
+                << check(u"the birthday shows"_s, [this] {
+                       const QString student = m_data->membershipInfo(m_membership).value(u"student_id"_s).toString();
+                       return m_data->birthdayNote(student).value(u"kind"_s).toString() == u"today"_s;
                    })
                 << act(u"plan the lesson of next week"_s, [this] {
                        const QString next = m_data->nextLessonDate(m_membership, Qupil::Clock::today().toString(Qt::ISODate));
                        m_text = m_data->savePlan(m_membership, {}, next, u"UI-Test: Planung für nächste Woche"_s, false);
                    })
-                << check(u"the clipboard shows in this week"_s, [this, plannedNow] {
-                       return !m_text.isEmpty() && plannedNow(m_membership);
+                << check(u"the clipboard shows in this week"_s, [this, plannedNow, clipboardShown] {
+                       return !m_text.isEmpty() && plannedNow(m_membership) && clipboardShown(m_membership);
                    })
                 << snap(u"plan-icon-coming"_s)
-                << act(u"remove the plan again"_s, [this] { m_data->deletePlan(m_text, false); })
-                << check(u"the clipboard is gone"_s, [this, plannedNow] { return !plannedNow(m_membership); });
+                << act(u"remove the plan and the birthday again"_s, [this] {
+                       m_data->deletePlan(m_text, false);
+                       m_data->updateStudent(m_data->membershipInfo(m_membership).value(u"student_id"_s).toString(),
+                                             { { u"birthday"_s, m_oldBirthday } });
+                   })
+                << check(u"the clipboard is gone"_s, [this, plannedNow, clipboardShown] {
+                       return !plannedNow(m_membership) && !clipboardShown(m_membership);
+                   });
     }
     // A piece for a student
     {
