@@ -1,0 +1,22 @@
+button       12    12    78    44  Mehr
+button      326    70    44    44  Hinzufügen
+button       20   128   350    78  Anmeldung Musizierfreizeit: alle Eltern informieren
+button       20   218   350    60  Noten für das Ensemble bestellen
+button       20   290   350    60  Sommerkonzert: abfragen, wer mitspielt
+button       20   362   350    78  Anmeldebogen Musizierfreizeit einsammeln
+button       20   452   350    78  Anmeldung zur Prüfung (Stufe 1) mitgeben
+button       20   542   350    78  Anmeldung „Jugend musiziert“ besprechen
+button       20   632   350    60  Duett-Stimmen kopieren
+button       20   704   350    60  E-Saite wechseln
+button       20   776   350     4  Elternbrief zum Vorspiel mitgeben
+button       20   848   350    60  Fotos für den Wettbewerb machen  (scrolled out of sight)
+button       20   920   350    60  Geliehene Noten zurückgeben lassen  (scrolled out of sight)
+button       20   992   350    60  Größeres Cello ausprobieren (3/4)  (scrolled out of sight)
+button       20  1064   350    78  Leihinstrument zur Kontrolle mitbringen lassen  (scrolled out of sight)
+button       20  1154   350    78  Probe mit der Klavierbegleitung absprechen  (scrolled out of sight)
+button       20  1244   350    60  Übe-Tagebuch ansehen  (scrolled out of sight)
+tab           4   784    76    60  Stundenplan
+tab          80   784    77    60  Schüler
+tab         157   784    76    60  Veranstaltungen
+tab         233   784    77    60  Metronom
+tab         310   784    76    60  Mehr

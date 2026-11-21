@@ -1,0 +1,37 @@
+button      311    55    44    44  Neu
+button       20   117    43    60  Montag
+button       69   117    42    60  Dienstag
+button      117   117    43    60  Mittwoch
+button      166   117    43    60  Donnerstag
+button      215   117    43    60  Freitag
+button      264   117    42    60  Samstag
+button      312   117    43    60  Sonntag
+button       20   -15   335    46  Heute Geburtstag: Lina wird 15 18:30  (scrolled out of sight)
+button       20    31   335    46  Geburtstag: Karl (Sonntag, 12) 16:30  (scrolled out of sight)
+button       20    77   335    46  Karl: Probe mit der Klavierbegleitung absprechen 16:30  (scrolled out of sight)
+button       20   123   335    46  + 4 weitere Hinweise  (scrolled out of sight)
+button       36   207   303    53  EU-45-Rau-LenMus
+button       36   272   303    66  Lena Muster
+button       36   346   303    87  Geplant für heute: UI-Etüde Nr. 8, UI-Tonleiter G-Dur
+button       36   445   148    46  Aufgaben
+button      192   445   147    46  Metronom
+button       20   549   335    43  11:00 Streicherklasse 4a
+button       20   613   335    64  13:30 EU-30-Rau-RomWer  (scrolled out of sight)
+40          291   636    18    18  Geplant  (scrolled out of sight)
+button       20   677   335    64  14:45 EU-30-Rau-SopKle  (scrolled out of sight)
+button       20   741   335    64  15:30 GU-60-Rau-JM  (scrolled out of sight)
+button       20   805   335    64  16:30 EU-30-Rau-KarKöh  (scrolled out of sight)
+40          225   825    24    24  Hatte Geburtstag  (scrolled out of sight)
+40          291   828    18    18  Geplant  (scrolled out of sight)
+button       20   869   335    64  17:00 Streicherensemble  (scrolled out of sight)
+button       20   933   335    64  18:30 EU-30-Rau-LinFuc  (scrolled out of sight)
+40          225   953    24    24  Heute Geburtstag  (scrolled out of sight)
+40          291   956    18    18  Geplant  (scrolled out of sight)
+button       20   997   335    64  19:00 EU-30-Rau-MicHah  (scrolled out of sight)
+button       20  1061   335    64  19:30 EU-30-Rau-SabWin  (scrolled out of sight)
+button       20  1133   283    44  Unregelmäßige Termine (1) anzeigen  (scrolled out of sight)
+tab           4   596    73    60  Stundenplan
+tab          77   596    74    60  Schüler
+tab         151   596    73    60  Veranstaltungen
+tab         224   596    74    60  Metronom
+tab         298   596    73    60  Mehr
