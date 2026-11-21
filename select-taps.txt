@@ -1,0 +1,3 @@
+double tap: 181 ms for both
+double tap: 174 ms for both
+double tap: 172 ms for both

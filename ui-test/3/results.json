@@ -1,0 +1,178 @@
+{
+    "cases": [
+        {
+            "failure": "",
+            "ms": 4570,
+            "name": "start",
+            "note": "",
+            "passed": true,
+            "title": "close the reminders shown at the start",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 11093,
+            "name": "plan-save",
+            "note": "",
+            "passed": true,
+            "title": "plan the next lesson of a student",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 11028,
+            "name": "plan-finish-lines",
+            "note": "",
+            "passed": true,
+            "title": "what was covered: single lines of a block into the note, the rest planned",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 8652,
+            "name": "plan-from-note-lines",
+            "note": "",
+            "passed": true,
+            "title": "plan the next lesson from a note: one line of a block",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 3413,
+            "name": "plan-icon-coming",
+            "note": "",
+            "passed": true,
+            "title": "a plan for next week shows in the schedule of this week, next to a birthday too",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 14672,
+            "name": "piece-new",
+            "note": "",
+            "passed": true,
+            "title": "add a piece for a student",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 3534,
+            "name": "lesson-new",
+            "note": "",
+            "passed": true,
+            "title": "add a lesson from the schedule",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6373,
+            "name": "lesson-times",
+            "note": "",
+            "passed": true,
+            "title": "a lesson of 11 minutes, times typed and saved at once",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 11204,
+            "name": "together",
+            "note": "",
+            "passed": true,
+            "title": "two individual lessons of a student kept together",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9039,
+            "name": "together-new",
+            "note": "",
+            "passed": true,
+            "title": "new lesson for a student who has one: kept together",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7079,
+            "name": "reminder-new",
+            "note": "",
+            "passed": true,
+            "title": "add a reminder",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9926,
+            "name": "lesson-plan-for-all",
+            "note": "",
+            "passed": true,
+            "title": "plan for a whole ensemble from the lesson view",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 25952,
+            "name": "lesson-reminder",
+            "note": "",
+            "passed": true,
+            "title": "reminders for one lesson",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 8770,
+            "name": "loan-return",
+            "note": "",
+            "passed": true,
+            "title": "return sheet music from the student's page",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 3136,
+            "name": "more-pages",
+            "note": "",
+            "passed": true,
+            "title": "birthdays and data pages open",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 2816,
+            "name": "alert-volume",
+            "note": "",
+            "passed": true,
+            "title": "volume of alert sounds (iOS: hint to the system setting)",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 5141,
+            "name": "restart-prepare",
+            "note": "",
+            "passed": true,
+            "title": "an unsaved note when Qupil quits",
+            "warnings": [
+            ]
+        }
+    ],
+    "failed": 0,
+    "platform": "Android 13 (13.0)",
+    "qpa": "android",
+    "qt": "6.8.3"
+}

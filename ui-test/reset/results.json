@@ -1,0 +1,38 @@
+{
+    "cases": [
+        {
+            "failure": "",
+            "ms": 4638,
+            "name": "start",
+            "note": "",
+            "passed": true,
+            "title": "close the reminders shown at the start",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 8277,
+            "name": "reset",
+            "note": "",
+            "passed": true,
+            "title": "reset Qupil on this device, then restore the data from before",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 2242,
+            "name": "update-hint",
+            "note": "",
+            "passed": true,
+            "title": "changes from a newer Qupil: More asks for an update",
+            "warnings": [
+            ]
+        }
+    ],
+    "failed": 0,
+    "platform": "Android 13 (13.0)",
+    "qpa": "android",
+    "qt": "6.8.3"
+}

@@ -1,0 +1,58 @@
+{
+    "cases": [
+        {
+            "failure": "",
+            "ms": 4589,
+            "name": "start",
+            "note": "",
+            "passed": true,
+            "title": "close the reminders shown at the start",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 10450,
+            "name": "text-menu",
+            "note": "",
+            "passed": true,
+            "title": "finger: Kopieren, Einsetzen, Alles auswählen, Ausschneiden",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 5659,
+            "name": "text-wipe",
+            "note": "",
+            "passed": true,
+            "title": "finger: wiping over the text scrolls and selects nothing",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 14974,
+            "name": "text-field",
+            "note": "",
+            "passed": true,
+            "title": "finger: the same in a one-line field (title of a piece)",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6238,
+            "name": "text-mouse",
+            "note": "",
+            "passed": true,
+            "title": "mouse: double click at the start of a paragraph takes the word; B, B again; triple click",
+            "warnings": [
+            ]
+        }
+    ],
+    "failed": 0,
+    "platform": "Android 13 (13.0)",
+    "qpa": "android",
+    "qt": "6.8.3"
+}

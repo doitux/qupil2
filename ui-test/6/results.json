@@ -1,0 +1,228 @@
+{
+    "cases": [
+        {
+            "failure": "",
+            "ms": 4601,
+            "name": "start",
+            "note": "",
+            "passed": true,
+            "title": "close the reminders shown at the start",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "step 1: no editor left out",
+            "ms": 1044,
+            "name": "dialogs-all",
+            "note": "No editor found in the resources. ",
+            "passed": false,
+            "title": "every editor sheet is in the keyboard test",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 1204,
+            "name": "dialogs-prepare",
+            "note": "",
+            "passed": true,
+            "title": "sample data for the editors",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 16829,
+            "name": "dialogs-note",
+            "note": "",
+            "passed": true,
+            "title": "NoteEditor (edit) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 16745,
+            "name": "dialogs-plan",
+            "note": "",
+            "passed": true,
+            "title": "NoteEditor (editPlan) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 16567,
+            "name": "dialogs-tasks",
+            "note": "",
+            "passed": true,
+            "title": "TaskEditor (edit) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 16398,
+            "name": "dialogs-plan-finish",
+            "note": "",
+            "passed": true,
+            "title": "PlanFinish (start) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 16460,
+            "name": "dialogs-plan-from-note",
+            "note": "",
+            "passed": true,
+            "title": "PlanFinish (startFromNote) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 16494,
+            "name": "dialogs-booklet",
+            "note": "",
+            "passed": true,
+            "title": "BookletSheet (show) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 16591,
+            "name": "dialogs-piece",
+            "note": "",
+            "passed": true,
+            "title": "PieceEditor (edit) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 16706,
+            "name": "dialogs-student",
+            "note": "",
+            "passed": true,
+            "title": "NewStudent (start) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 16602,
+            "name": "dialogs-lesson",
+            "note": "",
+            "passed": true,
+            "title": "LessonEditor (edit) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 16581,
+            "name": "dialogs-activity",
+            "note": "",
+            "passed": true,
+            "title": "ActivityEditor (edit) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 16476,
+            "name": "dialogs-reminder",
+            "note": "",
+            "passed": true,
+            "title": "ReminderEditor (edit) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 16654,
+            "name": "dialogs-event",
+            "note": "",
+            "passed": true,
+            "title": "EventEditor (edit) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 16569,
+            "name": "dialogs-external",
+            "note": "",
+            "passed": true,
+            "title": "ExternalEditor (start) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 16476,
+            "name": "dialogs-ready-pieces",
+            "note": "",
+            "passed": true,
+            "title": "ReadyPiecesPicker (start) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 16610,
+            "name": "dialogs-library",
+            "note": "",
+            "passed": true,
+            "title": "LibraryItemEditor (edit) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 16754,
+            "name": "dialogs-pairing",
+            "note": "",
+            "passed": true,
+            "title": "PairingSheet (start) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 16416,
+            "name": "dialogs-day-overview",
+            "note": "",
+            "passed": true,
+            "title": "DayOverviewSheet (start) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 16484,
+            "name": "dialogs-csv-import",
+            "note": "",
+            "passed": true,
+            "title": "CsvImportSheet (picked) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 1232,
+            "name": "dialogs-cleanup",
+            "note": "",
+            "passed": true,
+            "title": "the editors' sample data goes again",
+            "warnings": [
+            ]
+        }
+    ],
+    "failed": 1,
+    "platform": "Android 13 (13.0)",
+    "qpa": "android",
+    "qt": "6.8.3"
+}
