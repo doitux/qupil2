@@ -89,6 +89,18 @@ qt_add_executable(qupil src/main.cpp src/app/ScreenshotTour.h src/app/Screenshot
     src/app/UiTest.h src/app/UiTest.cpp src/app/UiTestDialogs.cpp)
 
 target_compile_definitions(qupil PRIVATE QUPIL_VERSION="${PROJECT_VERSION}")
+# The editor sheets (qml/editors, root "Sheet {"): the UI test has to cover each of them
+file(GLOB qupil_editor_files CONFIGURE_DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/qml/editors/*.qml)
+set(qupil_editor_sheets "")
+foreach(f IN LISTS qupil_editor_files)
+    file(STRINGS ${f} qupil_sheet_root REGEX "^Sheet \\{")
+    if(qupil_sheet_root)
+        get_filename_component(n ${f} NAME_WE)
+        list(APPEND qupil_editor_sheets ${n})
+    endif()
+endforeach()
+list(JOIN qupil_editor_sheets "," qupil_editor_sheets)
+target_compile_definitions(qupil PRIVATE QUPIL_EDITOR_SHEETS="${qupil_editor_sheets}")
 # Which build this is (shown under "About"): the commit on CI, "dev" otherwise
 if(DEFINED ENV{GITHUB_SHA})
     string(SUBSTRING "$ENV{GITHUB_SHA}" 0 7 QUPIL_BUILD)
@@ -604,6 +616,8 @@ if(QUPIL_BUILD_TESTS AND NOT ANDROID AND NOT IOS)
                  COMMAND ${CMAKE_COMMAND} -DQUPIL=$<TARGET_FILE:qupil> -DSIZE=${_size}
                          -DOUT=${CMAKE_BINARY_DIR}/ui-test/${layout} -P ${CMAKE_CURRENT_SOURCE_DIR}/tests/ui-test.cmake)
     endforeach()
+    # (the editor sheets with the keyboard only at the window's own size here: the nightly
+    # UI test on real desktops also goes through an iPhone SE and a phone held sideways)
     set_tests_properties(languagemanager core notes tasks qml_smoke ui_test_phone ui_test_wide
-                         PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+                         PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen;QUPIL_UITEST_OWN_SIZE=1")
 endif()

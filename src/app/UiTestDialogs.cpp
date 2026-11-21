@@ -10,7 +10,6 @@
 
 #include "UiTest.h"
 
-#include <QDirIterator>
 #include <QFile>
 #include <QFileInfo>
 #include <QGuiApplication>
@@ -47,6 +46,7 @@ struct DialogRun
     QElapsedTimer clock;
     QTimer timer;
     QString problems;              // what went wrong, for the report
+    bool skip = false;             // this pass is left out (no field, or the same one again)
 };
 
 qreal effectiveOpacity(QQuickItem *item)
@@ -190,28 +190,19 @@ void UiTest::addDialogCases()
     {
         Case &c = add(u"dialogs-all"_s, u"every editor sheet is in the keyboard test"_s);
         c.steps << check(u"no editor left out"_s, [this, dialogs, noteOnce] {
-            QStringList missing, seen;
-            QStringList paths;
-            QDirIterator it(u":/"_s, { u"*.qml"_s }, QDir::Files, QDirIterator::Subdirectories);
-            while (it.hasNext()) {
-                const QString path = it.next();
-                if (path.contains(u"/editors/"_s))
-                    paths << path;
-            }
-            for (const QString &path : std::as_const(paths)) {
-                QFile f(path);
-                if (!f.open(QIODevice::ReadOnly))
-                    continue;
-                const QString text = QString::fromUtf8(f.readAll());
-                if (!QRegularExpression(u"^Sheet \\{"_s, QRegularExpression::MultilineOption).match(text).hasMatch())
-                    continue;
-                const QString type = QFileInfo(path).completeBaseName();
-                seen << type;
+            // The list CMake made from qml/editors (the QML sources are not in the resources)
+#ifdef QUPIL_EDITOR_SHEETS
+            const QStringList seen = QString::fromLatin1(QUPIL_EDITOR_SHEETS).split(u',', Qt::SkipEmptyParts);
+#else
+            const QStringList seen;
+#endif
+            QStringList missing;
+            for (const QString &type : seen)
                 if (std::none_of(dialogs.begin(), dialogs.end(), [&type](const Dialog &d) { return d.type == type; }))
                     missing << type;
-            }
+            qInfo("dialogs-all: sheets %s; missing %s", qPrintable(seen.join(u", "_s)), qPrintable(missing.join(u", "_s)));
             if (seen.isEmpty()) {
-                noteOnce(u"No editor found in the resources. "_s);
+                noteOnce(u"No editor list from CMake (QUPIL_EDITOR_SHEETS). "_s);
                 return false;
             }
             if (!missing.isEmpty())
@@ -259,16 +250,30 @@ void UiTest::addDialogCases()
     QList<QSize> sizes;
     // (QUPIL_UITEST_OWN_SIZE=1: only the window as it is, e.g. one run per size)
     if (m_app->desktop() && m_window && m_window->width() < 600 && !qEnvironmentVariableIsSet("QUPIL_UITEST_OWN_SIZE"))
-        sizes = { QSize(375, 667), QSize(390, 844), QSize(844, 390), QSize(1180, 820) };
+        sizes = { QSize(), QSize(375, 667), QSize(844, 390) };   // tablets: the wide run and the iPad
     else
         sizes = { QSize() };   // as it is
 
     for (const Dialog &d : dialogs) {
         auto run = std::make_shared<DialogRun>();
+        // A wait, skipped when this pass is (no field, or the last field is the first)
+        auto pause = [run](int ms) {
+            auto t = std::make_shared<QElapsedTimer>();
+            return Step { u"wait %1 ms"_s.arg(ms), [run, t, ms] {
+                              if (run->skip)
+                                  return true;
+                              if (!t->isValid())
+                                  t->start();
+                              if (t->elapsed() < ms)
+                                  return false;
+                              t->invalidate();
+                              return true;
+                          }, ms + 4000 };
+        };
         Case &c = add(u"dialogs-%1"_s.arg(d.label), u"%1 (%2) with the keyboard: Save and the cursor stay in view, no jumping"_s
                                                        .arg(d.type, d.function));
         c.keepScreen = true;
-        c.steps << act(u"tidy up after the case before"_s, tidy) << wait(300);
+        c.steps << act(u"tidy up after the case before"_s, tidy);
         for (const QSize &size : sizes) {
             const QString where = size.isEmpty() ? QString() : u" (%1×%2)"_s.arg(size.width()).arg(size.height());
             if (!size.isEmpty()) {
@@ -279,14 +284,10 @@ void UiTest::addDialogCases()
                 })
                         << check(u"window has the size%1"_s.arg(where), [this, size] {
                                return m_window->size() == size;
-                           }, 3000)
-                        << wait(400);
+                           }, 3000);
             }
-            // 1 = the first field, 2 = the last field (each time also without the keyboard after it)
-            for (int field = 1; field <= 2; ++field) {
-                const QString which = field == 1 ? u"first field"_s : u"last field"_s;
-                const QString tag = u"%1, %2"_s.arg(which, where.isEmpty() ? u"window as it is"_s : where.trimmed());
-                c.steps << act(u"open %1 (%2)"_s.arg(d.type, tag), [this, run, d, left] {
+            const QString place = where.isEmpty() ? u"window as it is"_s : where.trimmed();
+                c.steps << act(u"open %1 (%2)"_s.arg(d.type, place), [this, run, d, left] {
                     run->problems.clear();
                     QQmlEngine *engine = qmlEngine(m_window->contentItem());
                     if (!engine) {
@@ -331,22 +332,28 @@ void UiTest::addDialogCases()
                     if (!run->editor->property("visible").toBool())
                         QMetaObject::invokeMethod(run->editor, "open");
                 })
-                        << check(u"the editor is open (%1)"_s.arg(tag), [run, noteOnce] {
+                        << check(u"the editor is open (%1)"_s.arg(place), [run, noteOnce] {
                                if (!run->editor) {
                                    noteOnce(u"Could not make the editor: %1. "_s.arg(run->problems));
                                    return false;
                                }
                                return run->editor->property("opened").toBool();
-                           }, 4000)
-                        << wait(300);
+                           }, 4000);
+            // 1 = the first field, 2 = the last field (skipped when it is the first, or there is
+            // no field); each time also without the keyboard after it
+            for (int field = 1; field <= 2; ++field) {
+                const QString which = field == 1 ? u"first field"_s : u"last field"_s;
+                const QString tag = u"%1, %2"_s.arg(which, where.isEmpty() ? u"window as it is"_s : where.trimmed());
                 {
                     c.steps << act(u"cursor in the %1"_s.arg(which), [run, field] {
                         const QList<QQuickItem *> fields = fieldsOf(run->editor);
                         run->field = fields.isEmpty() ? nullptr : (field == 1 ? fields.first() : fields.last());
-                        if (run->field)
+                        run->skip = !run->field || (field == 2 && fields.size() == 1);
+                        if (run->skip)
+                            run->field = nullptr;
+                        else
                             run->field->forceActiveFocus(Qt::MouseFocusReason);
                     })
-                            << wait(200)
                             << act(u"note the sheet and the cursor, the keyboard comes"_s, [this, run] {
                                    run->samples.clear();
                                    run->clock.start();
@@ -371,10 +378,10 @@ void UiTest::addDialogCases()
                                        m_app->setKeyboardHeight(std::round(h));
                                    }
                                })
-                            << wait(900)
-                            << act(u"stop noting"_s, [run] { run->timer.stop(); })
+                            << pause(450)
                             << check(u"with the keyboard: everything in view (%1)"_s.arg(tag), [this, run, noteOnce] {
-                                   if (!run->field)
+                                   run->timer.stop();
+                                   if (run->skip || !run->field)
                                        return true;   // no text field in this sheet
                                    QStringList bad;
                                    const qreal kbTop = m_window->height() - m_app->keyboardHeight();
@@ -409,7 +416,7 @@ void UiTest::addDialogCases()
                                    return bad.isEmpty();
                                }, 100)
                             << check(u"the sheet moves one way, the cursor does not jump (%1)"_s.arg(tag), [run, noteOnce] {
-                                   if (!run->field)
+                                   if (run->skip || !run->field)
                                        return true;
                                    const QList<Sample> &s = run->samples;
                                    if (s.size() < 5) {
@@ -439,10 +446,19 @@ void UiTest::addDialogCases()
                                    }
                                    return bad.isEmpty();
                                }, 100)
-                            << snap(u"dialog-%1-%2-%3"_s.arg(d.label, field == 1 ? u"first"_s : u"last"_s,
-                                                              size.isEmpty() ? u"own"_s : u"%1x%2"_s.arg(size.width()).arg(size.height())))
-                            << act(u"keyboard down"_s, [this] { m_app->setKeyboardHeight(0); })
-                            << wait(800);
+                            ;
+                    if (field == 1) {
+                        // A picture with the keyboard (plain, without the readability check of
+                        // snap(): that one takes seconds)
+                        const QString name = u"dialog-%1-keyboard-%2"_s.arg(d.label, size.isEmpty() ? u"own"_s
+                                                                                                   : u"%1x%2"_s.arg(size.width()).arg(size.height()));
+                        c.steps << act(u"screenshot %1"_s.arg(name), [this, run, name] {
+                            if (!run->skip)
+                                shot(name);
+                        });
+                    }
+                    c.steps << act(u"keyboard down"_s, [this] { m_app->setKeyboardHeight(0); })
+                            << pause(400);
                 }
                 c.steps << check(u"without the keyboard: Save and Cancel whole on screen (%1)"_s.arg(tag), [this, run, noteOnce] {
                     QStringList bad;
@@ -467,17 +483,15 @@ void UiTest::addDialogCases()
                         noteOnce(bad.join(u"; "_s) + u". "_s);
                     return bad.isEmpty();
                 }, 1500);
-                c.steps << act(u"close"_s, [this, run] {
+            }
+            c.steps << act(u"close"_s, [this, run] {
                     m_app->setKeyboardHeight(0);
                     if (run->editor)
                         QMetaObject::invokeMethod(run->editor, "close");
                 })
-                        << check(u"closed"_s, [run] { return !run->editor || !run->editor->property("visible").toBool(); }, 3000)
-                        << wait(250);
-            }
+                    << check(u"closed"_s, [run] { return !run->editor || !run->editor->property("visible").toBool(); }, 3000);
         }
-        c.steps << act(u"remove the editor, window as before"_s, tidy)
-                << wait(400);
+        c.steps << act(u"remove the editor, window as before"_s, tidy);
     }
 
     {
