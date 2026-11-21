@@ -1,8 +1,8 @@
 # TestFlight-Sammellauf 2026-11-20 22:05
 
-**Build 54 gestartet**
+**Build 54 hochgeladen**
 
-- Build 54 (Commit dda1b7e): in_progress, Upload: -, Testtext: -
+- Build 54 (Commit dda1b7e): success, Upload: success, Testtext: success
 - https://github.com/doitux/qupil2/actions/runs/44853951733
 - Seit Build 53 (Commit 37eb400)
 

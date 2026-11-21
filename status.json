@@ -186,17 +186,20 @@
     "student/assets/icons/student-android-foreground.svg",
     "student/assets/icons/student-android-monochrome.svg"
   ],
-  "result": "started",
+  "result": "uploaded",
   "build": {
     "number": 54,
     "run_id": 44853951733,
     "sha": "dda1b7e7d2f915a9f933065ec34c266c28c941ca",
     "url": "https://github.com/doitux/qupil2/actions/runs/44853951733",
     "created": "2026-11-21T02:05:48Z",
-    "status": "in_progress",
-    "conclusion": null,
-    "attempt": 1
+    "status": "completed",
+    "conclusion": "success",
+    "attempt": 1,
+    "rerun": false,
+    "upload": "success",
+    "whats_new": "success"
   },
-  "written": "2026-11-21T03:05:59+01:00",
-  "headline": "Build 54 gestartet"
+  "written": "2026-11-21T03:17:05+01:00",
+  "headline": "Build 54 hochgeladen"
 }
