@@ -133,7 +133,8 @@ adb shell am broadcast -a android.intent.action.CLOSE_SYSTEM_DIALOGS > /dev/null
 adb shell settings put global auto_time 0
 adb shell settings put global auto_time_zone 0
 adb shell service call alarm 3 s16 Europe/Berlin > /dev/null 2>&1
-days=$(( ($(date +%u) + 5) % 7 ))
+# the weekday in Berlin (the runner's clock is UTC: between 23:00 and 24:00 it was a day off)
+days=$(( ($(TZ=Europe/Berlin date +%u) + 5) % 7 ))
 set_date=$(TZ=Europe/Berlin date -d "$days days ago" +%m%d1420%Y.00)
 adb shell date "$set_date" > /dev/null
 say "- device: $(adb shell getprop ro.product.model | tr -d '\r'), Android $(adb shell getprop ro.build.version.release | tr -d '\r'), $(adb shell wm size | tr -d '\r' | sed 's/Physical size: //'), $(adb shell wm density | tr -d '\r' | sed 's/Physical density: //') dpi"
@@ -164,7 +165,7 @@ PARTS="1:pages,today,note-save,note-cancel,keyboard-smooth,note-touch-select,stu
 2:event-open,metronome,appearance,language,reminders,test-mode
 4:text-tap,text-double-tap,text-triple-tap,text-long-press,text-handles,text-tap-selection
 5:text-menu,text-wipe,text-field,text-mouse
-3:plan-save,plan-finish-lines,plan-from-note-lines,plan-icon-coming,piece-new,lesson-new,together,together-new,reminder-new,lesson-reminder,loan-return,lesson-times,more-pages,alert-volume,restart-prepare
+3:plan-save,plan-finish-lines,plan-from-note-lines,plan-icon-coming,lesson-plan-for-all,piece-new,lesson-new,together,together-new,reminder-new,lesson-reminder,loan-return,lesson-times,more-pages,alert-volume,restart-prepare
 restart:
 reset:"
 while IFS= read -r part <&3; do
@@ -232,8 +233,8 @@ shot after-process-end
 notes
 
 step "Draft: typing in the note editor, Android ends Qupil, back"
-tap '^OK$' && sleep 2
-tap '^Notiz$'
+dismiss
+tap_until '^Notiz$' '^Notiz speichern$'
 sleep 3
 adb shell input text 'Entwurf%saus%sdem%sEmulator'
 sleep 2

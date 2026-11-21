@@ -890,6 +890,11 @@ Bitte ändern Sie die Schüleranzahl um zu speichern!</translation>
         <extracomment>Lesson plan: what the teacher plans before a lesson (button, field label)</extracomment>
         <translation>Planung</translation>
     </message>
+    <message id="plan.for_all">
+        <source>Plan for everybody</source>
+        <extracomment>Button in a group&apos;s or ensemble&apos;s lesson view, next to lesson.note_for_all</extracomment>
+        <translation>Planung für alle</translation>
+    </message>
     <message id="plan.new">
         <source>New plan</source>
         <translation>Neue Planung</translation>
@@ -3147,6 +3152,11 @@ Vorher legt Qupil ein Backup an, das Sie gleich danach wiederherstellen können.
     <message id="plan.planned_today_all">
         <source>Planned for today · for everybody</source>
         <translation>Geplant für heute · für alle</translation>
+    </message>
+    <message id="plan.planned_for_all">
+        <source>Planned for %1 · for everybody</source>
+        <extracomment>Above a group&apos;s plan for a coming lesson (not today&apos;s); %1 = weekday and date</extracomment>
+        <translation>Geplant für %1 · für alle</translation>
     </message>
     <message id="lesson.note_for_all">
         <source>Note for everybody</source>
