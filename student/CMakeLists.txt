@@ -116,7 +116,7 @@ target_link_libraries(qupil-student PRIVATE qupilstudentui qupilstudentuiplugin)
 set_target_properties(qupil-student PROPERTIES
     WIN32_EXECUTABLE TRUE
     MACOSX_BUNDLE TRUE
-    MACOSX_BUNDLE_BUNDLE_NAME "Qupil Student"
+    MACOSX_BUNDLE_BUNDLE_NAME "Qupil Practice"
     MACOSX_BUNDLE_GUI_IDENTIFIER de.qupil.student
     MACOSX_BUNDLE_BUNDLE_VERSION ${QUPIL_BUNDLE_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION}

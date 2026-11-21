@@ -1,9 +1,16 @@
 # The student app (practice book)
 
-`student/` holds a second, small app for students and parents: the **practice book**
-(German "Übeheft"). The teacher's Qupil writes it; the student app shows it and sends
-short feedback back. It is a CMake project of its own and shares only the booklet
-format and the encryption with Qupil.
+`student/` holds a second, small app for students and parents: the **practice book**.
+The teacher's Qupil writes it; the student app shows it and sends short feedback back.
+It is a CMake project of its own and shares only the booklet format and the encryption
+with Qupil.
+
+Names (decided 20.11.2026): in the stores "Qupil – Musik üben" / "Qupil – Music Practice",
+under the icon "Qupil Üben" / "Qupil Practice" (French and Spanish: the English name).
+In the teacher's Qupil the practice book is called "Qupil Üben" ("Mit Qupil Üben koppeln …");
+in the student app the area is "Aufgaben" / "Tasks", and each teacher is an entry in the
+settings. "Practice book" and "booklet" stay the names in the code; the Nextcloud folder
+keeps the name "Qupil Übeheft", and the identifiers (`de.qupil.student`) stay.
 
 ```
 cmake -S student -B build-student -G Ninja && cmake --build build-student
@@ -107,7 +114,7 @@ round: lime tile, plum figures).
   (+ Hint, + Task, Private). Open tasks of earlier lessons come along ("open since").
 - **Student page**: "Tasks" instead of "Note"; one card per lesson (`TaskLessonCard.qml`);
   the running lesson's button and the lesson page offer "Tasks" for a coupled student.
-- **Coupling** (student menu › Übeheft …, `BookletSheet.qml`, `BookletService`):
+- **Coupling** (student menu › Mit Qupil Üben koppeln …, `BookletSheet.qml`, `BookletService`):
   folder "Qupil Übeheft/<random>" next to the sync folder, link with password, key;
   QR code, link to send, switches, questions, ending (link and folder go).
 - **Booklets**: written after each sync and shortly after changes; answers collected
