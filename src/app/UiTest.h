@@ -150,6 +150,12 @@ private:
     Step clearField();
     Step typeTime(const QString &time);
     QList<Step> openStudent(const QString &name);
+    //! The on-screen keyboard in the open editor, simulated the Android way (Qupil makes the
+    //! room itself): the editor ends above the keyboard, "Save" (\a accept, empty when the
+    //! editor has none) is up in the header and whole, the cursor stays in view
+    QList<Step> keyboardRoom(const QString &accept, const QString &snapName);
+    //! The cursor into the last text field of the open editor (at its end)
+    Step focusLastField(const QString &what);
 
     // ---- the screen
     QList<Node> nodes() const;

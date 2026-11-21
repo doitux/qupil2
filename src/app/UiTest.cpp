@@ -682,6 +682,98 @@ UiTest::Step UiTest::backIfThere(const QString &pattern)
                   } };
 }
 
+UiTest::Step UiTest::focusLastField(const QString &what)
+{
+    return act(what, [this] {
+        // The lowest text field of the open editor (also scrolled out of sight)
+        QQuickItem *last = nullptr;
+        qreal lastY = -1e9;
+        int fields = 0;
+        for (const Node &n : nodes()) {
+            if (n.role != u"edit"_s || !n.item || n.item->property("readOnly").toBool() || !n.item->isVisible())
+                continue;
+            ++fields;
+            const qreal y = n.item->mapToScene(QPointF(0, 0)).y();
+            if (y > lastY) {
+                lastY = y;
+                last = n.item;
+            }
+        }
+        if (last) {
+            last->forceActiveFocus();
+            last->setProperty("cursorPosition", last->property("length"));
+        }
+        if (!m_results.isEmpty())
+            m_results.last().note += u"Cursor in \"%1\" (%2 fields, y %3). "_s
+                                         .arg(last ? last->property("text").toString() : u"–"_s).arg(fields).arg(int(lastY));
+    });
+}
+
+QList<UiTest::Step> UiTest::keyboardRoom(const QString &accept, const QString &snapName)
+{
+    // A phone's keyboard in portrait (iPhone 14: 336 points with the suggestions bar)
+    constexpr qreal kKeyboard = 336;
+    auto sheetOf = [this]() -> QQuickItem * {
+        QQuickItem *item = m_window ? m_window->activeFocusItem() : nullptr;
+        if (!item)
+            return nullptr;
+        while (item->parentItem() && !item->parentItem()->inherits("QQuickOverlay"))
+            item = item->parentItem();
+        return item->parentItem() ? item : nullptr;
+    };
+    auto room = [this] { return m_window->height() - kKeyboard; };
+    QList<Step> steps;
+    steps << check(u"a field of the editor has the cursor"_s, [this, sheetOf] {
+                 QQuickItem *f = m_window->activeFocusItem();
+                 return f && !f->property("cursorRectangle").isNull() && sheetOf();
+             })
+          << act(u"the keyboard comes"_s, [this] { m_app->setKeyboardHeight(kKeyboard); })
+          << check(u"the editor ends above the keyboard and starts in the window"_s, [sheetOf, room] {
+                 QQuickItem *sheet = sheetOf();
+                 if (!sheet)
+                     return false;
+                 const QRectF r = sheet->mapRectToScene(QRectF(0, 0, sheet->width(), sheet->height()));
+                 return r.top() >= -0.5 && r.bottom() <= room() + 0.5;
+             }, 3000)
+          << wait(500);   // the cursor comes into view (revealCursor), Save comes in
+    if (!accept.isEmpty()) {
+        const QString pattern = u"button:^"_s + QRegularExpression::escape(accept) + u"$"_s;
+        steps << check(u"\"%1\" is up in the header, whole, next to Cancel"_s.arg(accept), [this, pattern, sheetOf] {
+                     Node save;
+                     Node cancel;
+                     QQuickItem *sheet = sheetOf();
+                     if (!sheet || !find(pattern, &save) || !find(u"button:^Abbrechen$"_s, &cancel))
+                         return false;
+                     const qreal top = sheet->mapToScene(QPointF(0, 0)).y();
+                     const QRectF w(0, 0, m_window->width(), m_window->height());
+                     return save.rect == save.full && w.contains(save.full) && save.full.top() < top + 80
+                            && cancel.full.right() <= save.full.left();
+                 });
+    }
+    steps << check(u"the cursor is in view, above the keyboard"_s, [this, sheetOf, room] {
+                 QQuickItem *f = m_window->activeFocusItem();
+                 QQuickItem *sheet = sheetOf();
+                 if (!f || !sheet)
+                     return false;
+                 const QRectF c = f->mapRectToScene(f->property("cursorRectangle").toRectF());
+                 const qreal top = sheet->mapToScene(QPointF(0, 0)).y();
+                 if (c.top() < top || c.bottom() > room()) {
+                     qInfo("keyboard-room: cursor %.0f..%.0f, sheet top %.0f, room %.0f", c.top(), c.bottom(), top, room());
+                     return false;
+                 }
+                 return true;
+             })
+          << snap(snapName)
+          << act(u"the keyboard goes"_s, [this] { m_app->setKeyboardHeight(0); })
+          << check(u"the editor takes the room again"_s, [this, sheetOf] {
+                 QQuickItem *sheet = sheetOf();
+                 return !sheet || sheet->mapRectToScene(QRectF(0, 0, sheet->width(), sheet->height())).bottom()
+                                      > m_window->height() - kKeyboard + 100;
+             }, 3000)
+          << wait(600);   // Save back at the bottom (after the short wait for a field change)
+    return steps;
+}
+
 UiTest::Step UiTest::see(const QString &pattern)
 {
     return Step { u"see \"%1\""_s.arg(pattern), [this, pattern] { return find(pattern); } };
@@ -2540,6 +2632,53 @@ void UiTest::addCases()
                            m_data->deleteTask(v.toMap().value(u"id"_s).toString(), false);
                        m_data->remove(u"coupling"_s, m_text);
                    });
+    }
+    // Practice book editors with the on-screen keyboard (simulated): the tasks of a lesson
+    // with many tasks (the field with the cursor far down), a plan as tasks, the student's
+    // sheet (its name field). Save stays reachable at the top, nothing ends under the keyboard
+    {
+        const auto planId = std::make_shared<QString>();
+        Case &c = add(u"tasks-keyboard"_s, u"practice book editors with the keyboard: Save at the top, the cursor in view"_s);
+        c.steps << act(u"coupled, six tasks with hints in the running lesson"_s, [this] {
+                       m_membership = runningMembership();
+                       m_other = m_data->get(u"membership"_s, m_membership).value(u"student_id"_s).toString();
+                       m_text = m_data->create(u"coupling"_s, {
+                           { u"student_id"_s, m_other }, { u"server"_s, u"https://cloud.example.org"_s },
+                           { u"folder"_s, u"Qupil Üben/uitest-kb"_s }, { u"share_id"_s, u"2"_s },
+                           { u"token"_s, u"UiTestToken456"_s }, { u"password"_s, u"Qp-7UiTestPassword"_s },
+                           { u"key"_s, QString::fromLatin1(QByteArray(32, '\x06').toBase64()) },
+                           { u"created"_s, m_data->today() } });
+                       QVariantList list;
+                       for (int i = 1; i <= 6; ++i)
+                           list << QVariantMap { { u"title"_s, u"UI-KB Aufgabe %1"_s.arg(i) },
+                                                 { u"hints"_s, QStringList { u"erster Hinweis"_s, u"zweiter Hinweis"_s } } };
+                       m_data->saveTasks(m_membership, m_data->today(), list, false);
+                       QMetaObject::invokeMethod(m_nav, "editTasks", Q_ARG(QString, m_membership), Q_ARG(QString, m_data->today()));
+                   })
+                << see(u"^Weitere Aufgabe$"_s)
+                << focusLastField(u"the cursor into the last hint (far down)"_s);
+        c.steps << keyboardRoom(u"Speichern"_s, u"tasks-keyboard"_s);
+        c.steps << tap(u"^Speichern$"_s) << gone(u"^Weitere Aufgabe$"_s)
+                << act(u"a plan of an earlier lesson, in the tasks editor"_s, [this, planId] {
+                       for (const QVariant &v : m_data->tasksOn(m_membership, m_data->today()))
+                           m_data->deleteTask(v.toMap().value(u"id"_s).toString(), false);
+                       *planId = m_data->savePlan(m_membership, {}, Qupil::Clock::today().addDays(-91).toString(Qt::ISODate),
+                                                   u"**UI-KB Plan**\nTakt 9 bis 16"_s, false);
+                       QMetaObject::invokeMethod(m_nav, "editPlan", Q_ARG(QString, m_membership), Q_ARG(QString, *planId));
+                   })
+                << see(u"^Planung speichern$"_s)
+                << focusLastField(u"the cursor into the plan's last field"_s);
+        c.steps << keyboardRoom(u"Planung speichern"_s, u"plan-tasks-keyboard"_s);
+        c.steps << tap(u"^Planung speichern$"_s) << gone(u"^Planung speichern$"_s)
+                << act(u"the student's sheet (coupled)"_s, [this, planId] {
+                       m_data->remove(u"plan"_s, *planId);
+                       QMetaObject::invokeMethod(m_nav, "showBooklet", Q_ARG(QString, m_other));
+                   })
+                << see(u"^Kopplung beenden$"_s)
+                << tap(u"edit:^Ihr Name (im|in) "_s, u"into the name field (the label names the app)"_s);
+        c.steps << keyboardRoom(QString(), u"booklet-keyboard"_s);
+        c.steps << tap(u"^Schließen$"_s) << gone(u"^Kopplung beenden$"_s)
+                << act(u"remove the coupling again"_s, [this] { m_data->remove(u"coupling"_s, m_text); });
     }
     // A plan for next week (made on the day of the lesson): the schedule of this week shows
     // the clipboard at the student already, as long as the plan is for a coming lesson – also
