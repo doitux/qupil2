@@ -1,0 +1,106 @@
+objc[60732]: Class LACUISecureTextField is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/LocalAuthenticationCoreUI.framework/LocalAuthenticationCoreUI (0x18b1b1638) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/Frameworks/LocalAuthenticationEmbeddedUI.framework/LocalAuthenticationEmbeddedUI (0x187266738). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+objc[60732]: Class AKAlertImageURLProvider is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/AuthKit.framework/AuthKit (0x129644c30) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/AuthKitUI.framework/AuthKitUI (0x18b09d090). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+objc[60732]: Class AKBiometricRatchetUtility is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/AuthKit.framework/AuthKit (0x129646aa8) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/AuthKitUI.framework/AuthKitUI (0x18b09d108). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+stale focus object 0x0 , doing manual update
+Device id changed: the old one leaves the device list at the next sync
+2026-11-21 13:40:28.652 Qupil[60732:154979] void * _Nullable NSMapGet(NSMapTable * _Nonnull, const void * _Nullable): map table argument is NULL
+ui test: start
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+objc[60732]: Class UIAccessibilityLoaderWebShared is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebCore.axbundle/WebCore (0x1c48d2328) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebKit.axbundle/WebKit (0x1c398a398). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+ui test: start passed
+ui test: select-prepare
+stale focus object 0x600000d1f000 , doing manual update
+stale focus object 0x6000034e1ea0 , doing manual update
+stale focus object 0x600000c29500 , doing manual update
+select: dpr 3
+select: field 20.0 220.0 373.0 388.0
+select: word Tonleitern 38.0 234.0 110.1 254.0
+select: word G-Dur 113.0 234.0 158.2 254.0
+select: word D-Dur 192.3 234.0 236.3 254.0
+select: word Etüde 38.0 266.0 81.5 286.0
+select: word Metronom 227.2 266.0 303.0 286.0
+select: word Bogeneinteilung 146.4 298.0 264.0 318.0
+select: word Mittelteil 288.2 298.0 352.7 318.0
+select: button Fett 42.0 790.0
+select: button Kursiv 92.0 790.0
+select: button Unterstrichen 142.0 790.0
+select: button Textfarbe 192.0 790.0
+select: sel 121 121 
+select: cursor 121
+select: preedit ''
+select: menu 
+select: handle start -
+select: handle end -
+select: markup Tonleitern G-Dur und D-Dur langsam üben / Etüde Nr. 3 bis Takt 16 mit Metronom / Vortragsstück: Bogeneinteilung im Mittelteil
+select: button Fett 42.0 708.0
+select: button Kursiv 92.0 708.0
+select: button Unterstrichen 142.0 708.0
+select: button Textfarbe 192.0 708.0
+ui test: select-prepare passed
+ui test: 2 of 2 cases passed (/Users/runner/Library/Developer/CoreSimulator/Devices/3AF28461-937F-429D-A836-35990CD2CD3D/data/Containers/Data/Application/2B51866D-941A-4591-808D-2A8D2FFB360B/Documents/select)
+objc[60732]: Class UIKBRenderer is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore (0x1576cf708) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/TextInputUI.framework/TextInputUI (0x1d17d1370). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+objc[60732]: Class UIKBCachedImage is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore (0x1576cf8c0) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/TextInputUI.framework/TextInputUI (0x1d17d1320). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+objc[60732]: Class UIKeyboardCache is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore (0x1576cf8e8) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/TextInputUI.framework/TextInputUI (0x1d17d1348). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+objc[60732]: Class UIKeyboardSupplementaryControlKeyTransformation is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore (0x1576d5590) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/TextInputUI.framework/TextInputUI (0x1d17d13e8). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+objc[60732]: Class UIKBFloatingKeyplaneTransformation is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore (0x1576b6690) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/TextInputUI.framework/TextInputUI (0x1d17d1438). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+objc[60732]: Class _UIKBVoidSpace is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore (0x1576d5338) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/TextInputUI.framework/TextInputUI (0x1d17d1460). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+objc[60732]: Class UIKBContinuousPathModalKeysTransformation is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore (0x1576d53b0) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/TextInputUI.framework/TextInputUI (0x1d17d14d8). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+objc[60732]: Class UIKBKeyplaneTransformationContext is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore (0x1576d5540) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/TextInputUI.framework/TextInputUI (0x1d17d1528). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+objc[60732]: Class UIKBPhoneToCarPlayTransformation is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore (0x1576dae00) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/TextInputUI.framework/TextInputUI (0x1d17d1578). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+objc[60732]: Class UIKBRemoteEmojiKeyplaneTransformation is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore (0x1576a78c0) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/TextInputUI.framework/TextInputUI (0x1d17d15c8). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+objc[60732]: Class UIKBWatch10KeyLayout is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore (0x1576f9878) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/TextInputUI.framework/TextInputUI (0x1d17d15f0). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+objc[60732]: Class UIKBResizingOffsetKeyplaneTransformation is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore (0x1576c0280) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/TextInputUI.framework/TextInputUI (0x1d17d1668). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+objc[60732]: Class UIKBResizableKeyplaneTransformation is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/UIKitCore.framework/UIKitCore (0x1576c0f50) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/TextInputUI.framework/TextInputUI (0x1d17d1730). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+select: sel 99 99 
+select: cursor 99
+select: button Fett 42.0 614.0
+select: button Kursiv 92.0 614.0
+select: button Unterstrichen 142.0 614.0
+select: button Textfarbe 192.0 614.0
+select: button Fett 42.0 538.0
+select: button Kursiv 92.0 538.0
+select: button Unterstrichen 142.0 538.0
+select: button Textfarbe 192.0 538.0
+select: button Fett 42.0 453.0
+select: button Kursiv 92.0 453.0
+select: button Unterstrichen 142.0 453.0
+select: button Textfarbe 192.0 453.0
+select: button Fett 42.0 454.0
+select: button Kursiv 92.0 454.0
+select: button Unterstrichen 142.0 454.0
+select: button Textfarbe 192.0 454.0
+select: sel 121 121 
+select: cursor 121
+select: ime commit '' preedit '' replace 0 0 cursor 121
+select: sel 5 5 
+select: cursor 5
+select: sel 121 121 
+select: cursor 121
+select: ime commit '' preedit '' replace 0 0 cursor 121
+select: sel 72 72 
+select: cursor 72
+select: sel 121 121 
+select: cursor 121
+select: ime commit '' preedit '' replace 0 0 cursor 121
+select: sel 13 13 
+select: cursor 13
+select: sel 121 121 
+select: cursor 121
+select: ime commit '' preedit '' replace 0 0 cursor 121
+select: sel 115 115 
+select: cursor 115
+select: sel 121 121 
+select: cursor 121
+select: ime commit '' preedit '' replace 0 0 cursor 121
+select: sel 43 43 
+select: cursor 43
+select: sel 121 121 
+select: cursor 121
+select: sel 107 107 
+select: cursor 107
+select: sel 121 121 
+select: cursor 121
+de.qupil.app: 60732

@@ -1,0 +1,37 @@
+stale focus object 0x0 , doing manual update
+stale focus object 0x60000100ca60 , doing manual update
+ui test: start
+stale focus object 0x60000100b460 , doing manual update
+stale focus object 0x6000010e5780 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+ui test: start passed
+ui test: reset
+stale focus object 0x60000100ca60 , doing manual update
+stale focus object 0x6000029c9ea0 , doing manual update
+stale focus object 0x600002904700 , doing manual update
+stale focus object 0x600002902920 , doing manual update
+stale focus object 0x600002909880 , doing manual update
+stale focus object 0x600002934380 , doing manual update
+stale focus object 0x6000011d80a0 , doing manual update
+stale focus object 0x6000029350a0 , doing manual update
+stale focus object 0x6000010e5780 , doing manual update
+stale focus object 0x600002934380 , doing manual update
+Reset: Qupil on this device is as newly installed
+stale focus object 0x6000029956c0 , doing manual update
+stale focus object 0x600002928540 , doing manual update
+stale focus object 0x6000029956c0 , doing manual update
+stale focus object 0x600002928540 , doing manual update
+Device id changed: the old one leaves the device list at the next sync
+stale focus object 0x60000292e220 , doing manual update
+ui test: reset passed
+ui test: update-hint
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+ui test: update-hint passed
+ui test: 3 of 3 cases passed (/Users/runner/Library/Developer/CoreSimulator/Devices/3AF28461-937F-429D-A836-35990CD2CD3D/data/Containers/Data/Application/2B51866D-941A-4591-808D-2A8D2FFB360B/Documents/ui-test/reset)
+de.qupil.app: 42603

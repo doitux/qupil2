@@ -1,0 +1,38 @@
+{
+    "cases": [
+        {
+            "failure": "",
+            "ms": 10608,
+            "name": "start",
+            "note": "",
+            "passed": true,
+            "title": "close the reminders shown at the start",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 8214,
+            "name": "reset",
+            "note": "",
+            "passed": true,
+            "title": "reset Qupil on this device, then restore the data from before",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 2451,
+            "name": "update-hint",
+            "note": "",
+            "passed": true,
+            "title": "changes from a newer Qupil: More asks for an update",
+            "warnings": [
+            ]
+        }
+    ],
+    "failed": 0,
+    "platform": "iOS 26.2",
+    "qpa": "ios",
+    "qt": "6.8.3"
+}

@@ -1,0 +1,17 @@
+objc[12535]: Class LACUISecureTextField is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/LocalAuthenticationCoreUI.framework/LocalAuthenticationCoreUI (0x189aa6638) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/Frameworks/LocalAuthenticationEmbeddedUI.framework/LocalAuthenticationEmbeddedUI (0x185b5b738). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+objc[12535]: Class AKAlertImageURLProvider is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/AuthKit.framework/AuthKit (0x127f39c30) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/AuthKitUI.framework/AuthKitUI (0x189992090). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+objc[12535]: Class AKBiometricRatchetUtility is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/AuthKit.framework/AuthKit (0x127f3baa8) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/AuthKitUI.framework/AuthKitUI (0x189992108). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+stale focus object 0x0 , doing manual update
+stale focus object 0x60000310c820 , doing manual update
+ui test: restart-draft
+2026-11-21 13:56:48.435 Qupil[12535:275141] void * _Nullable NSMapGet(NSMapTable * _Nonnull, const void * _Nullable): map table argument is NULL
+qml: Draft: note editor opened again
+stale focus object 0x600003118d60 , doing manual update
+stale focus object 0x6000030847a0 , doing manual update
+objc[12535]: Class UIAccessibilityLoaderWebShared is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebCore.axbundle/WebCore (0x1c2451328) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebKit.axbundle/WebKit (0x1c2308398). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+stale focus object 0x6000008d4fc0 , doing manual update
+stale focus object 0x600003110b60 , doing manual update
+Draft note: removed
+ui test: restart-draft passed
+ui test: 1 of 1 cases passed (/Users/runner/Library/Developer/CoreSimulator/Devices/4A7CF866-5944-4381-ADB7-218E979692D1/data/Containers/Data/Application/D9C77832-F4B6-4F79-8848-A89F6081C185/Documents/draft/back)
+de.qupil.app: 12535

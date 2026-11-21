@@ -1,0 +1,38 @@
+stale focus object 0x0 , doing manual update
+ui test: start
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x600002819000 , doing manual update
+stale focus object 0x60000281dd60 , doing manual update
+stale focus object 0x600001195ce0 , doing manual update
+stale focus object 0x6000028182e0 , doing manual update
+ui test: start passed
+ui test: reset
+stale focus object 0x600002819000 , doing manual update
+stale focus object 0x6000011d88c0 , doing manual update
+stale focus object 0x600001116ca0 , doing manual update
+stale focus object 0x600001128460 , doing manual update
+stale focus object 0x600001128c40 , doing manual update
+stale focus object 0x6000011273a0 , doing manual update
+stale focus object 0x6000029c05c0 , doing manual update
+stale focus object 0x6000011380e0 , doing manual update
+stale focus object 0x6000028182e0 , doing manual update
+stale focus object 0x6000011273a0 , doing manual update
+Reset: Qupil on this device is as newly installed
+stale focus object 0x60000118d960 , doing manual update
+stale focus object 0x600001133d40 , doing manual update
+stale focus object 0x60000118d960 , doing manual update
+stale focus object 0x600001133d40 , doing manual update
+Device id changed: the old one leaves the device list at the next sync
+stale focus object 0x600001131a40 , doing manual update
+ui test: reset passed
+ui test: update-hint
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+ui test: update-hint passed
+ui test: 3 of 3 cases passed (/Users/runner/Library/Developer/CoreSimulator/Devices/4A7CF866-5944-4381-ADB7-218E979692D1/data/Containers/Data/Application/D9C77832-F4B6-4F79-8848-A89F6081C185/Documents/ui-test/reset)
+de.qupil.app: 8100
