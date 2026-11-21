@@ -2040,6 +2040,7 @@ void UiTest::addCases()
     }
 #endif
     addTextTouchCases();
+    addDialogCases();
 
     // Students: search, open one, back
     {
