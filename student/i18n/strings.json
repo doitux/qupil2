@@ -42,10 +42,10 @@
   "fr": "Coller"
  },
  "s.add.scan.text": {
-  "de": "Deine Lehrkraft zeigt dir in Qupil einen Code. Halte die Kamera deines Handys darauf – das Übeheft öffnet sich dann von selbst hier.",
-  "en": "Your teacher shows you a code in Qupil. Point your phone's camera at it – the practice book opens here by itself.",
-  "es": "Tu profesor te muestra un código en Qupil. Apunta la cámara del móvil hacia él y el cuaderno se abre aquí solo.",
-  "fr": "Ton professeur te montre un code dans Qupil. Vise-le avec l'appareil photo de ton téléphone – le cahier s'ouvre ici tout seul."
+  "de": "Deine Lehrkraft zeigt dir in Qupil einen Code. Halte die Kamera deines Handys darauf – deine Aufgaben erscheinen dann von selbst hier.",
+  "en": "Your teacher shows you a code in Qupil. Point your phone's camera at it – your tasks then show up here by themselves.",
+  "es": "Tu profesor te muestra un código en Qupil. Apunta la cámara del móvil hacia él y tus tareas aparecen aquí solas.",
+  "fr": "Ton professeur te montre un code dans Qupil. Vise-le avec l'appareil photo de ton téléphone – tes devoirs s'affichent alors ici tout seuls."
  },
  "s.add.scan.title": {
   "de": "QR-Code scannen",
@@ -54,16 +54,16 @@
   "fr": "Scanner le code QR"
  },
  "s.app.name": {
-  "de": "Qupil für Schüler",
-  "en": "Qupil for students",
-  "es": "Qupil para alumnos",
-  "fr": "Qupil pour élèves"
+  "de": "Qupil – Musik üben",
+  "en": "Qupil – Music Practice",
+  "es": "Qupil – Music Practice",
+  "fr": "Qupil – Music Practice"
  },
  "s.app.section": {
-  "de": "Übeheft",
-  "en": "Practice book",
-  "es": "Cuaderno",
-  "fr": "Cahier"
+  "de": "Aufgaben",
+  "en": "Tasks",
+  "es": "Tareas",
+  "fr": "Devoirs"
  },
  "s.back": {
   "de": "Zurück",
@@ -72,10 +72,10 @@
   "fr": "Retour"
  },
  "s.coupled": {
-  "de": "Übeheft hinzugefügt",
-  "en": "Practice book added",
-  "es": "Cuaderno añadido",
-  "fr": "Cahier ajouté"
+  "de": "Lehrkraft hinzugefügt",
+  "en": "Teacher added",
+  "es": "Profesor añadido",
+  "fr": "Professeur ajouté"
  },
  "s.demo.banner": {
   "de": "Beispiel mit ausgedachten Daten – es wird nichts gesendet.",
@@ -90,16 +90,16 @@
   "fr": "Fermer"
  },
  "s.error.gone": {
-  "de": "%1 hat die Verbindung beendet. Du kannst dieses Übeheft in den Einstellungen entfernen.",
-  "en": "%1 has ended the connection. You can remove this practice book in the settings.",
-  "es": "%1 ha terminado la conexión. Puedes quitar este cuaderno en los ajustes.",
-  "fr": "%1 a mis fin à la connexion. Tu peux retirer ce cahier dans les réglages."
+  "de": "%1 hat die Verbindung beendet. Du kannst den Eintrag in den Einstellungen entfernen.",
+  "en": "%1 has ended the connection. You can remove the entry in the settings.",
+  "es": "%1 ha terminado la conexión. Puedes quitar la entrada en los ajustes.",
+  "fr": "%1 a mis fin à la connexion. Tu peux retirer l'entrée dans les réglages."
  },
  "s.error.key": {
-  "de": "Das Übeheft lässt sich nicht öffnen. Frag deine Lehrkraft nach einem neuen Code.",
-  "en": "The practice book cannot be opened. Ask your teacher for a new code.",
-  "es": "No se puede abrir el cuaderno. Pide un código nuevo a tu profesor.",
-  "fr": "Impossible d'ouvrir le cahier. Demande un nouveau code à ton professeur."
+  "de": "Die Aufgaben lassen sich nicht öffnen. Frag deine Lehrkraft nach einem neuen Code.",
+  "en": "Your tasks cannot be opened. Ask your teacher for a new code.",
+  "es": "No se pueden abrir las tareas. Pide un código nuevo a tu profesor.",
+  "fr": "Impossible d'ouvrir les devoirs. Demande un nouveau code à ton professeur."
  },
  "s.error.newer": {
   "de": "Deine Lehrkraft nutzt ein neueres Qupil. Bitte aktualisiere diese App.",
@@ -204,10 +204,10 @@
   "fr": "ddd d MMM"
  },
  "s.home.loading": {
-  "de": "Übeheft wird geladen …",
-  "en": "Loading the practice book …",
-  "es": "Cargando el cuaderno …",
-  "fr": "Chargement du cahier …"
+  "de": "Aufgaben werden geladen …",
+  "en": "Loading your tasks …",
+  "es": "Cargando las tareas …",
+  "fr": "Chargement des devoirs …"
  },
  "s.home.not_loaded": {
   "de": "Noch nicht geladen. Zum Aktualisieren nach unten ziehen.",
@@ -318,10 +318,10 @@
   "fr": "Confidentialité"
  },
  "s.settings.privacy_text": {
-  "de": "Das Übeheft liegt verschlüsselt in der Cloud deiner Lehrkraft. Lesen können es nur diese App und das Qupil deiner Lehrkraft. Was du zurückschickst (geübt, klappt, Fragen), geht verschlüsselt nur an deine Lehrkraft. Die App hat kein Konto, keine Werbung und kein Tracking.",
-  "en": "The practice book lies encrypted in your teacher's cloud. Only this app and your teacher's Qupil can read it. What you send back (practised, works, questions) goes encrypted to your teacher only. The app has no account, no advertising and no tracking.",
-  "es": "El cuaderno está cifrado en la nube de tu profesor. Solo esta aplicación y el Qupil de tu profesor pueden leerlo. Lo que envías (practicado, sale, preguntas) llega cifrado solo a tu profesor. La aplicación no tiene cuenta, ni publicidad, ni rastreo.",
-  "fr": "Le cahier est stocké chiffré dans le cloud de ton professeur. Seuls cette application et le Qupil de ton professeur peuvent le lire. Ce que tu renvoies (travaillé, ça marche, questions) va, chiffré, uniquement à ton professeur. L'application n'a ni compte, ni publicité, ni pistage."
+  "de": "Deine Aufgaben liegen verschlüsselt in der Cloud deiner Lehrkraft. Lesen können sie nur diese App und das Qupil deiner Lehrkraft. Was du zurückschickst (geübt, klappt, Fragen), geht verschlüsselt nur an deine Lehrkraft. Die App hat kein Konto, keine Werbung und kein Tracking.",
+  "en": "Your tasks lie encrypted in your teacher's cloud. Only this app and your teacher's Qupil can read them. What you send back (practised, works, questions) goes encrypted to your teacher only. The app has no account, no advertising and no tracking.",
+  "es": "Tus tareas están cifradas en la nube de tu profesor. Solo esta aplicación y el Qupil de tu profesor pueden leerlas. Lo que envías (practicado, sale, preguntas) llega cifrado solo a tu profesor. La aplicación no tiene cuenta, ni publicidad, ni rastreo.",
+  "fr": "Tes devoirs sont stockés chiffrés dans le cloud de ton professeur. Seuls cette application et le Qupil de ton professeur peuvent les lire. Ce que tu renvoies (travaillé, ça marche, questions) va, chiffré, uniquement à ton professeur. L'application n'a ni compte, ni publicité, ni pistage."
  },
  "s.settings.remove": {
   "de": "Entfernen",
@@ -336,16 +336,16 @@
   "fr": "Vraiment retirer"
  },
  "s.settings.remove_hint": {
-  "de": "Das entfernt das Übeheft nur von diesem Handy. Deine Lehrkraft kann dir jederzeit einen neuen Code geben.",
-  "en": "This removes the practice book from this phone only. Your teacher can give you a new code at any time.",
-  "es": "Solo se quita el cuaderno de este móvil. Tu profesor puede darte un código nuevo cuando quieras.",
-  "fr": "Le cahier n'est retiré que de ce téléphone. Ton professeur peut te donner un nouveau code à tout moment."
+  "de": "Das entfernt die Verbindung zu dieser Lehrkraft nur von diesem Handy. Deine Lehrkraft kann dir jederzeit einen neuen Code geben.",
+  "en": "This removes the connection to this teacher from this phone only. Your teacher can give you a new code at any time.",
+  "es": "Solo se quita la conexión con este profesor de este móvil. Tu profesor puede darte un código nuevo cuando quieras.",
+  "fr": "La connexion à ce professeur n'est retirée que de ce téléphone. Ton professeur peut te donner un nouveau code à tout moment."
  },
  "s.settings.teachers": {
-  "de": "Übehefte",
-  "en": "Practice books",
-  "es": "Cuadernos",
-  "fr": "Cahiers"
+  "de": "Lehrkräfte",
+  "en": "Teachers",
+  "es": "Profesores",
+  "fr": "Professeurs"
  },
  "s.settings.title": {
   "de": "Einstellungen",
@@ -354,10 +354,10 @@
   "fr": "Réglages"
  },
  "s.settings.unknown_teacher": {
-  "de": "Übeheft",
-  "en": "Practice book",
-  "es": "Cuaderno",
-  "fr": "Cahier"
+  "de": "Lehrkraft",
+  "en": "Teacher",
+  "es": "Profesor",
+  "fr": "Professeur"
  },
  "s.task.hints": {
   "de": "%1 Hinweise",
@@ -402,10 +402,10 @@
   "fr": "Ici, ton professeur note ce que tu travailles jusqu'au prochain cours – avec des conseils si tu veux. Tu lui dis comment ça s'est passé."
  },
  "s.welcome.title": {
-  "de": "Dein Übeheft",
-  "en": "Your practice book",
-  "es": "Tu cuaderno de práctica",
-  "fr": "Ton cahier d'exercices"
+  "de": "Willkommen bei Qupil Üben",
+  "en": "Welcome to Qupil Practice",
+  "es": "Te damos la bienvenida a Qupil Practice",
+  "fr": "Bienvenue dans Qupil Practice"
  },
  "s.when.in_days": {
   "de": {

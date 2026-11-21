@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Name under the icon (short: the launcher cuts long names) -->
 <resources>
-    <string name="app_name">Übeheft</string>
+    <string name="app_name">Qupil Üben</string>
 </resources>

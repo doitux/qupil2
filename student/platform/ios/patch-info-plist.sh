@@ -9,7 +9,7 @@ plist="${1:-$TARGET_BUILD_DIR/$INFOPLIST_PATH}"
 echo "Adding Qupil student keys to $plist"
 
 # Name under the icon (translations in <lang>.lproj/InfoPlist.strings)
-plutil -replace CFBundleDisplayName -string "Practice" "$plist"
+plutil -replace CFBundleDisplayName -string "Qupil Practice" "$plist"
 plutil -replace CFBundleDevelopmentRegion -string en "$plist"
 plutil -replace CFBundleLocalizations -json '["en","de","fr","es"]' "$plist"
 plutil -replace UIPrefersShowingLanguageSettings -bool YES "$plist"

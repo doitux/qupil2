@@ -2429,7 +2429,7 @@ void UiTest::addCases()
                            { u"created"_s, m_data->today() } });
                        QMetaObject::invokeMethod(m_nav, "showBooklet", Q_ARG(QString, m_other));
                    })
-                << see(u"^QR-Code für die Übeheft-App$"_s) << see(u"^Stattdessen Link schicken$"_s)
+                << see(u"^QR-Code für Qupil Üben$"_s) << see(u"^Stattdessen Link schicken$"_s)
                 << see(u"^Rückmeldung zu Aufgaben$"_s)
                 << snap(u"booklet-sheet"_s)
                 << tap(u"^Kopplung beenden$"_s) << see(u"^Abbrechen$"_s)

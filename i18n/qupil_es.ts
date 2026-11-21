@@ -1119,37 +1119,38 @@
         <translation>Guardar nota</translation>
     </message>
     <message id="booklet.title">
-        <source>Practice book</source>
-        <translation>Cuaderno de práctica</translation>
+        <source>Qupil Practice</source>
+        <extracomment>Name of the student app under its icon (brand name; French and Spanish use the English one)</extracomment>
+        <translation>Qupil Practice</translation>
     </message>
     <message id="booklet.menu">
-        <source>Practice book</source>
+        <source>Couple with Qupil Practice</source>
         <extracomment>Student menu: couple the student with the practice book app</extracomment>
-        <translation>Cuaderno de práctica</translation>
+        <translation>Vincular con Qupil Practice</translation>
     </message>
     <message id="booklet.menu_coupled">
-        <source>Practice book (coupled)</source>
-        <translation>Cuaderno de práctica (vinculado)</translation>
+        <source>Qupil Practice (coupled)</source>
+        <translation>Qupil Practice (vinculado)</translation>
     </message>
     <message id="booklet.intro">
-        <source>With the practice book app %1 sees the tasks of the lessons on their own phone and can say how practising went. The data stays in your Nextcloud, end-to-end encrypted.</source>
-        <translation>Con la aplicación del cuaderno, %1 ve las tareas de las clases en su móvil y puede contar cómo fue la práctica. Los datos quedan en su Nextcloud, cifrados de extremo a extremo.</translation>
+        <source>With the Qupil Practice app %1 sees the tasks of the lessons on their own phone and can say how practising went. The data stays in your Nextcloud, end-to-end encrypted.</source>
+        <translation>Con la aplicación Qupil Practice, %1 ve las tareas de las clases en su móvil y puede contar cómo fue la práctica. Los datos quedan en su Nextcloud, cifrados de extremo a extremo.</translation>
     </message>
     <message id="booklet.coupled_text">
         <source>%1 scans this code with the phone&apos;s camera. Tasks you give from now on show in the app.</source>
         <translation>%1 escanea este código con la cámara del móvil. Las tareas que dé a partir de ahora aparecen en la aplicación.</translation>
     </message>
     <message id="booklet.teacher_name">
-        <source>Your name in the practice book</source>
-        <translation>Su nombre en el cuaderno</translation>
+        <source>Your name in Qupil Practice</source>
+        <translation>Su nombre en Qupil Practice</translation>
     </message>
     <message id="booklet.teacher_name_placeholder">
         <source>e.g. Ms Rau</source>
         <translation>p. ej. Sra. Rau</translation>
     </message>
     <message id="booklet.needs_nextcloud">
-        <source>The practice book uses the Nextcloud of the sync. Connect it under More › Settings › Sync first.</source>
-        <translation>El cuaderno usa el Nextcloud de la sincronización. Conéctelo primero en Más › Ajustes › Sincronización.</translation>
+        <source>Qupil Practice uses the Nextcloud of the sync. Connect it under More › Settings › Sync first.</source>
+        <translation>Qupil Practice usa el Nextcloud de la sincronización. Conéctelo primero en Más › Ajustes › Sincronización.</translation>
     </message>
     <message id="booklet.couple">
         <source>Couple</source>
@@ -1160,8 +1161,8 @@
         <translation>Vinculando</translation>
     </message>
     <message id="booklet.qr">
-        <source>QR code for the practice book app</source>
-        <translation>Código QR para la aplicación del cuaderno</translation>
+        <source>QR code for Qupil Practice</source>
+        <translation>Código QR para Qupil Practice</translation>
     </message>
     <message id="booklet.qr_hint">
         <source>The code is the key: show it only to this student (or their parents).</source>
@@ -1172,9 +1173,9 @@
         <translation>Enviar el enlace en su lugar</translation>
     </message>
     <message id="booklet.link_message">
-        <source>Your practice book, %1: open this link on your phone (with the app installed).</source>
+        <source>%1, here is your link for Qupil Practice: open it on your phone (with the app installed).</source>
         <extracomment>Message with the coupling link to the student (the student app says du)</extracomment>
-        <translation>Tu cuaderno, %1: abre este enlace en tu móvil (con la aplicación instalada).</translation>
+        <translation>%1, aquí tienes tu enlace para Qupil Practice: ábrelo en tu móvil (con la aplicación instalada).</translation>
     </message>
     <message id="booklet.link_copied">
         <source>Link copied – paste it into a message</source>
@@ -1197,8 +1198,8 @@
         <translation>Preguntas</translation>
     </message>
     <message id="booklet.questions">
-        <source>Questions from the practice book</source>
-        <translation>Preguntas del cuaderno</translation>
+        <source>Questions from Qupil Practice</source>
+        <translation>Preguntas de Qupil Practice</translation>
     </message>
     <message id="booklet.end">
         <source>End coupling</source>
@@ -1225,9 +1226,9 @@
         <translation>Sin conexión con el Nextcloud. Inténtelo más tarde.</translation>
     </message>
     <message id="booklet.from">
-        <source>From %1&apos;s practice book</source>
+        <source>From %1 in Qupil Practice</source>
         <extracomment>Lesson-start pop-up: what the student answered</extracomment>
-        <translation>Del cuaderno de %1</translation>
+        <translation>De %1 en Qupil Practice</translation>
     </message>
     <message id="booklet.question_line">
         <source>Question: %1</source>
@@ -1333,8 +1334,8 @@
         <translation>Nota privada</translation>
     </message>
     <message id="task.private_hint">
-        <source>Only for you – it is never shown in the practice book.</source>
-        <translation>Solo para usted: nunca aparece en el cuaderno.</translation>
+        <source>Only for you – it is never shown in Qupil Practice.</source>
+        <translation>Solo para usted: nunca aparece en Qupil Practice.</translation>
     </message>
     <message id="task.feedback.practiced">
         <source>Practised: %1</source>

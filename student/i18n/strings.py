@@ -16,8 +16,8 @@ def E(id, en, de, fr, es):
     S[id] = {"en": en, "de": de, "fr": fr, "es": es}
 
 
-E("s.app.name", "Qupil for students", "Qupil für Schüler", "Qupil pour élèves", "Qupil para alumnos")
-E("s.app.section", "Practice book", "Übeheft", "Cahier", "Cuaderno")
+E("s.app.name", "Qupil – Music Practice", "Qupil – Musik üben", "Qupil – Music Practice", "Qupil – Music Practice")
+E("s.app.section", "Tasks", "Aufgaben", "Devoirs", "Tareas")
 E("s.back", "Back", "Zurück", "Retour", "Atrás")
 
 # Date patterns (Qt date format)
@@ -33,7 +33,8 @@ E("s.when.in_days", {"one": "in %n day", "other": "in %n days"}, {"one": "in %n 
 E("s.when.today_at", "today, %1", "heute, %1", "aujourd'hui, %1", "hoy, %1")
 
 # Welcome and coupling
-E("s.welcome.title", "Your practice book", "Dein Übeheft", "Ton cahier d'exercices", "Tu cuaderno de práctica")
+E("s.welcome.title", "Welcome to Qupil Practice", "Willkommen bei Qupil Üben", "Bienvenue dans Qupil Practice",
+  "Te damos la bienvenida a Qupil Practice")
 E("s.welcome.text",
   "Your teacher writes down here what to practise until the next lesson – with tips if you like. You tell them how it went.",
   "Hier schreibt deine Lehrerin oder dein Lehrer auf, was du bis zur nächsten Stunde übst – auf Wunsch mit Tipps. Du sagst kurz, wie es lief.",
@@ -46,10 +47,10 @@ E("s.welcome.privacy",
   "Sin cuenta ni correo electrónico. Lo que escribes llega cifrado solo a tu profesor o profesora.")
 E("s.add.scan.title", "Scan the QR code", "QR-Code scannen", "Scanner le code QR", "Escanear el código QR")
 E("s.add.scan.text",
-  "Your teacher shows you a code in Qupil. Point your phone's camera at it – the practice book opens here by itself.",
-  "Deine Lehrkraft zeigt dir in Qupil einen Code. Halte die Kamera deines Handys darauf – das Übeheft öffnet sich dann von selbst hier.",
-  "Ton professeur te montre un code dans Qupil. Vise-le avec l'appareil photo de ton téléphone – le cahier s'ouvre ici tout seul.",
-  "Tu profesor te muestra un código en Qupil. Apunta la cámara del móvil hacia él y el cuaderno se abre aquí solo.")
+  "Your teacher shows you a code in Qupil. Point your phone's camera at it – your tasks then show up here by themselves.",
+  "Deine Lehrkraft zeigt dir in Qupil einen Code. Halte die Kamera deines Handys darauf – deine Aufgaben erscheinen dann von selbst hier.",
+  "Ton professeur te montre un code dans Qupil. Vise-le avec l'appareil photo de ton téléphone – tes devoirs s'affichent alors ici tout seuls.",
+  "Tu profesor te muestra un código en Qupil. Apunta la cámara del móvil hacia él y tus tareas aparecen aquí solas.")
 E("s.add.link.title", "Got a link?", "Link bekommen?", "Tu as reçu un lien ?", "¿Te enviaron un enlace?")
 E("s.add.link.text", "If your teacher sent you the link, paste it here.",
   "Wenn deine Lehrkraft dir den Link geschickt hat, füge ihn hier ein.",
@@ -64,7 +65,7 @@ E("s.add.invalid", "This is not a Qupil link. Ask your teacher for a new one.",
 E("s.add.clipboard_empty", "There is no link on the clipboard.", "In der Zwischenablage ist kein Link.",
   "Aucun lien dans le presse-papiers.", "No hay ningún enlace en el portapapeles.")
 E("s.add.demo", "See an example", "Beispiel ansehen", "Voir un exemple", "Ver un ejemplo")
-E("s.coupled", "Practice book added", "Übeheft hinzugefügt", "Cahier ajouté", "Cuaderno añadido")
+E("s.coupled", "Teacher added", "Lehrkraft hinzugefügt", "Professeur ajouté", "Profesor añadido")
 
 # Booklet
 E("s.demo.banner", "Example with made-up data – nothing is sent.",
@@ -73,20 +74,20 @@ E("s.demo.banner", "Example with made-up data – nothing is sent.",
   "Ejemplo con datos inventados: no se envía nada.")
 E("s.demo.end", "Close", "Beenden", "Fermer", "Cerrar")
 E("s.home.refresh", "Update", "Aktualisieren", "Actualiser", "Actualizar")
-E("s.home.loading", "Loading the practice book …", "Übeheft wird geladen …", "Chargement du cahier …", "Cargando el cuaderno …")
+E("s.home.loading", "Loading your tasks …", "Aufgaben werden geladen …", "Chargement des devoirs …", "Cargando las tareas …")
 E("s.home.not_loaded", "Not loaded yet. Pull down to try again.", "Noch nicht geladen. Zum Aktualisieren nach unten ziehen.",
   "Pas encore chargé. Tire vers le bas pour réessayer.", "Aún no se ha cargado. Desliza hacia abajo para reintentar.")
 E("s.home.updated", "Updated %1", "Aktualisiert %1", "Mis à jour %1", "Actualizado %1")
 E("s.error.offline", "No connection – you see the last state.", "Keine Verbindung – du siehst den letzten Stand.",
   "Pas de connexion – tu vois le dernier état.", "Sin conexión: ves el último estado.")
-E("s.error.gone", "%1 has ended the connection. You can remove this practice book in the settings.",
-  "%1 hat die Verbindung beendet. Du kannst dieses Übeheft in den Einstellungen entfernen.",
-  "%1 a mis fin à la connexion. Tu peux retirer ce cahier dans les réglages.",
-  "%1 ha terminado la conexión. Puedes quitar este cuaderno en los ajustes.")
-E("s.error.key", "The practice book cannot be opened. Ask your teacher for a new code.",
-  "Das Übeheft lässt sich nicht öffnen. Frag deine Lehrkraft nach einem neuen Code.",
-  "Impossible d'ouvrir le cahier. Demande un nouveau code à ton professeur.",
-  "No se puede abrir el cuaderno. Pide un código nuevo a tu profesor.")
+E("s.error.gone", "%1 has ended the connection. You can remove the entry in the settings.",
+  "%1 hat die Verbindung beendet. Du kannst den Eintrag in den Einstellungen entfernen.",
+  "%1 a mis fin à la connexion. Tu peux retirer l'entrée dans les réglages.",
+  "%1 ha terminado la conexión. Puedes quitar la entrada en los ajustes.")
+E("s.error.key", "Your tasks cannot be opened. Ask your teacher for a new code.",
+  "Die Aufgaben lassen sich nicht öffnen. Frag deine Lehrkraft nach einem neuen Code.",
+  "Impossible d'ouvrir les devoirs. Demande un nouveau code à ton professeur.",
+  "No se pueden abrir las tareas. Pide un código nuevo a tu profesor.")
 E("s.error.newer", "Your teacher uses a newer Qupil. Please update this app.",
   "Deine Lehrkraft nutzt ein neueres Qupil. Bitte aktualisiere diese App.",
   "Ton professeur utilise un Qupil plus récent. Mets cette application à jour.",
@@ -124,29 +125,29 @@ E("s.events.you_play", "You play: %1", "Du spielst: %1", "Tu joues : %1", "Tocas
 
 # Settings
 E("s.settings.title", "Settings", "Einstellungen", "Réglages", "Ajustes")
-E("s.settings.teachers", "Practice books", "Übehefte", "Cahiers", "Cuadernos")
-E("s.settings.unknown_teacher", "Practice book", "Übeheft", "Cahier", "Cuaderno")
+E("s.settings.teachers", "Teachers", "Lehrkräfte", "Professeurs", "Profesores")
+E("s.settings.unknown_teacher", "Teacher", "Lehrkraft", "Professeur", "Profesor")
 E("s.settings.demo", "Example", "Beispiel", "Exemple", "Ejemplo")
 E("s.settings.remove", "Remove", "Entfernen", "Retirer", "Quitar")
 E("s.settings.remove_confirm", "Really remove", "Wirklich entfernen", "Vraiment retirer", "Quitar de verdad")
 E("s.settings.remove_hint",
-  "This removes the practice book from this phone only. Your teacher can give you a new code at any time.",
-  "Das entfernt das Übeheft nur von diesem Handy. Deine Lehrkraft kann dir jederzeit einen neuen Code geben.",
-  "Le cahier n'est retiré que de ce téléphone. Ton professeur peut te donner un nouveau code à tout moment.",
-  "Solo se quita el cuaderno de este móvil. Tu profesor puede darte un código nuevo cuando quieras.")
+  "This removes the connection to this teacher from this phone only. Your teacher can give you a new code at any time.",
+  "Das entfernt die Verbindung zu dieser Lehrkraft nur von diesem Handy. Deine Lehrkraft kann dir jederzeit einen neuen Code geben.",
+  "La connexion à ce professeur n'est retirée que de ce téléphone. Ton professeur peut te donner un nouveau code à tout moment.",
+  "Solo se quita la conexión con este profesor de este móvil. Tu profesor puede darte un código nuevo cuando quieras.")
 E("s.settings.add", "Add another teacher", "Weitere Lehrkraft hinzufügen", "Ajouter un autre professeur", "Añadir otro profesor")
 E("s.settings.privacy", "Privacy", "Datenschutz", "Confidentialité", "Privacidad")
 E("s.settings.privacy_text",
-  "The practice book lies encrypted in your teacher's cloud. Only this app and your teacher's Qupil can read it. "
+  "Your tasks lie encrypted in your teacher's cloud. Only this app and your teacher's Qupil can read them. "
   "What you send back (practised, works, questions) goes encrypted to your teacher only. The app has no account, "
   "no advertising and no tracking.",
-  "Das Übeheft liegt verschlüsselt in der Cloud deiner Lehrkraft. Lesen können es nur diese App und das Qupil deiner Lehrkraft. "
+  "Deine Aufgaben liegen verschlüsselt in der Cloud deiner Lehrkraft. Lesen können sie nur diese App und das Qupil deiner Lehrkraft. "
   "Was du zurückschickst (geübt, klappt, Fragen), geht verschlüsselt nur an deine Lehrkraft. Die App hat kein Konto, "
   "keine Werbung und kein Tracking.",
-  "Le cahier est stocké chiffré dans le cloud de ton professeur. Seuls cette application et le Qupil de ton professeur peuvent le lire. "
+  "Tes devoirs sont stockés chiffrés dans le cloud de ton professeur. Seuls cette application et le Qupil de ton professeur peuvent les lire. "
   "Ce que tu renvoies (travaillé, ça marche, questions) va, chiffré, uniquement à ton professeur. L'application n'a ni compte, "
   "ni publicité, ni pistage.",
-  "El cuaderno está cifrado en la nube de tu profesor. Solo esta aplicación y el Qupil de tu profesor pueden leerlo. "
+  "Tus tareas están cifradas en la nube de tu profesor. Solo esta aplicación y el Qupil de tu profesor pueden leerlas. "
   "Lo que envías (practicado, sale, preguntas) llega cifrado solo a tu profesor. La aplicación no tiene cuenta, "
   "ni publicidad, ni rastreo.")
 
