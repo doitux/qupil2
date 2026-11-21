@@ -47,6 +47,8 @@ struct DialogRun
     QTimer timer;
     QString problems;              // what went wrong, for the report
     bool skip = false;             // this pass is left out (no field, or the same one again)
+    bool sizeSkipped = false;      // the window could not take this size
+    QElapsedTimer sizeClock;
 };
 
 qreal effectiveOpacity(QQuickItem *item)
@@ -282,13 +284,30 @@ void UiTest::addDialogCases()
                         left->original = m_window->size();
                     m_window->resize(size);
                 })
-                        << check(u"window has the size%1"_s.arg(where), [this, size] {
-                               return m_window->size() == size;
-                           }, 3000);
+                        << check(u"window has the size%1"_s.arg(where), [this, run, size, noteOnce] {
+                               // A real desktop may refuse a phone's size (a minimum window size
+                               // of the system, a small screen): then this size is left out
+                               if (m_window->size() == size) {
+                                   run->sizeSkipped = false;
+                                   run->sizeClock.invalidate();
+                                   return true;
+                               }
+                               if (!run->sizeClock.isValid())
+                                   run->sizeClock.start();
+                               if (run->sizeClock.elapsed() < 2000)
+                                   return false;
+                               run->sizeClock.invalidate();
+                               run->sizeSkipped = true;
+                               noteOnce(u"The window cannot be %1×%2 here (it stays %3×%4): that size left out. "_s
+                                            .arg(size.width()).arg(size.height()).arg(m_window->width()).arg(m_window->height()));
+                               return true;
+                           }, 4000);
             }
             const QString place = where.isEmpty() ? u"window as it is"_s : where.trimmed();
                 c.steps << act(u"open %1 (%2)"_s.arg(d.type, place), [this, run, d, left] {
                     run->problems.clear();
+                    if (run->sizeSkipped)
+                        return;
                     QQmlEngine *engine = qmlEngine(m_window->contentItem());
                     if (!engine) {
                         const auto all = m_window->contentItem()->childItems();
@@ -333,6 +352,8 @@ void UiTest::addDialogCases()
                         QMetaObject::invokeMethod(run->editor, "open");
                 })
                         << check(u"the editor is open (%1)"_s.arg(place), [run, noteOnce] {
+                               if (run->sizeSkipped)
+                                   return true;
                                if (!run->editor) {
                                    noteOnce(u"Could not make the editor: %1. "_s.arg(run->problems));
                                    return false;
@@ -348,7 +369,7 @@ void UiTest::addDialogCases()
                     c.steps << act(u"cursor in the %1"_s.arg(which), [run, field] {
                         const QList<QQuickItem *> fields = fieldsOf(run->editor);
                         run->field = fields.isEmpty() ? nullptr : (field == 1 ? fields.first() : fields.last());
-                        run->skip = !run->field || (field == 2 && fields.size() == 1);
+                        run->skip = run->sizeSkipped || !run->field || (field == 2 && fields.size() == 1);
                         if (run->skip)
                             run->field = nullptr;
                         else
@@ -461,6 +482,8 @@ void UiTest::addDialogCases()
                             << pause(400);
                 }
                 c.steps << check(u"without the keyboard: Save and Cancel whole on screen (%1)"_s.arg(tag), [this, run, noteOnce] {
+                    if (run->sizeSkipped)
+                        return true;
                     QStringList bad;
                     const qreal top = run->editor->property("y").toReal();
                     const qreal bottom = top + run->editor->property("height").toReal();
