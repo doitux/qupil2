@@ -316,11 +316,17 @@ void UiTest::addDialogCases()
                     }
                     if (!run->editor)
                         return;
-                    QVariantList args = d.args();
-                    QGenericArgument a[4];
-                    for (int i = 0; i < args.size() && i < 4; ++i)
-                        a[i] = Q_ARG(QVariant, args[i]);
-                    QMetaObject::invokeMethod(run->editor, d.function.toLatin1().constData(), a[0], a[1], a[2], a[3]);
+                    const QVariantList args = d.args();
+                    const QByteArray name = d.function.toLatin1();
+                    QObject *e = run->editor;
+                    switch (args.size()) {
+                    case 0: QMetaObject::invokeMethod(e, name.constData()); break;
+                    case 1: QMetaObject::invokeMethod(e, name.constData(), Q_ARG(QVariant, args[0])); break;
+                    case 2: QMetaObject::invokeMethod(e, name.constData(), Q_ARG(QVariant, args[0]), Q_ARG(QVariant, args[1])); break;
+                    default:
+                        QMetaObject::invokeMethod(e, name.constData(), Q_ARG(QVariant, args[0]), Q_ARG(QVariant, args[1]),
+                                                  Q_ARG(QVariant, args[2]));
+                    }
                     // Some editors open themselves only when it makes sense (start() of the plan)
                     if (!run->editor->property("visible").toBool())
                         QMetaObject::invokeMethod(run->editor, "open");
