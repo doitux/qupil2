@@ -154,7 +154,7 @@ jobs:
       # The same public test key as the teacher app's nightly (installs over older builds)
       - name: Sign with the test key
         run: |
-          out="package/Qupil-Student-Android-arm64-test-${GITHUB_SHA::7}.apk"
+          out="package/Qupil-Practice-Android-arm64-nightly-${GITHUB_SHA::7}.apk"
           apk=$(find build -name '*.apk' -path '*release*' | head -n 1)
           if [ -z "$apk" ]; then apk=$(find build -name '*.apk' | head -n 1); fi
           echo "Built: $apk"
@@ -173,6 +173,32 @@ jobs:
           path: package/*.apk
           if-no-files-found: error
           retention-days: 30
+
+  publish:
+    name: Publish to "nightly" release
+    # The Android test build next to the teacher app's, so it can be installed on a phone
+    # without logging in to GitHub (iPhone: TestFlight)
+    if: github.ref == 'refs/heads/main'
+    needs: [android]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          sparse-checkout: .github/scripts
+
+      - uses: actions/download-artifact@v7
+        with:
+          name: student-android-arm64-test
+          path: artifacts/student-android-arm64-test
+
+      - name: Update the nightly pre-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          bash .github/scripts/publish-nightly.sh \
+            'artifacts/student-android-arm64-test/*.apk=Qupil-Practice-Android-arm64-nightly-*.apk'
 
   ios:
     name: iOS archive (→ TestFlight by hand)
