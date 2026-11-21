@@ -22,6 +22,14 @@ env:
   QT_VERSION: '6.8.3'
 
 jobs:
+  testflight-text:
+    # TestFlight's "What to Test" takes at most 4000 characters; Apple cuts the rest off
+    name: TestFlight text length
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 -I .github/scripts/testflight-collect.py --check-text
+
   build:
     name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}

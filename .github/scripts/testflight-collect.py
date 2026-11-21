@@ -39,6 +39,13 @@ MODE = os.environ.get("COLLECT_MODE", "schedule")
 CRON = os.environ.get("CRON", "")
 WHATS_NEW_FILE = os.environ.get("WHATS_NEW_FILE", ".github/testflight/whats-new.txt")
 NO_STATUS = os.environ.get("NO_STATUS") == "1"
+# TestFlight's "What to Test" takes at most 4000 characters; Apple cuts off the rest
+WHATS_NEW_MAX = 4000
+
+
+def read_whats_new():
+    with open(WHATS_NEW_FILE, encoding="utf-8") as f:
+        return f.read().strip()
 
 WORKFLOW = "testflight.yml"
 STATUS_BRANCH = "testflight-status"
@@ -368,6 +375,16 @@ def write_status(status):
 # --------------------------------------------------------------------------- main
 
 
+def check_text():
+    """--check-text: fails when the test text is longer than TestFlight takes."""
+    n = len(read_whats_new())
+    print(f"{WHATS_NEW_FILE}: {n} of {WHATS_NEW_MAX} characters")
+    if n > WHATS_NEW_MAX:
+        print(f"::error file={WHATS_NEW_FILE}::Test text too long: {n} characters, TestFlight takes "
+              f"{WHATS_NEW_MAX} and cuts off the rest")
+        sys.exit(1)
+
+
 def main():
     t = now()
     status = {"mode": MODE, "started_at": t.isoformat(timespec="seconds")}
@@ -440,8 +457,10 @@ def main():
             next((r for r in runs if uploaded(r)), base)["id"] != base["id"]:
         raise RuntimeError("another TestFlight run appeared meanwhile; nothing started")
 
-    with open(WHATS_NEW_FILE, encoding="utf-8") as f:
-        whats_new = f.read().strip()
+    whats_new = read_whats_new()
+    if len(whats_new) > WHATS_NEW_MAX:
+        status["note"] = (f"Testtext zu lang ({len(whats_new)} von {WHATS_NEW_MAX} Zeichen): "
+                          "Apple schneidet das Ende ab.")
     started = dt.datetime.now(dt.timezone.utc) - dt.timedelta(seconds=5)
     api("POST", f"/repos/{REPO}/actions/workflows/{WORKFLOW}/dispatches",
         {"ref": "main", "inputs": {"whats_new": whats_new}})
@@ -480,6 +499,9 @@ def finish(status, run_id, rerun_done=False):
 
 
 if __name__ == "__main__":
+    if sys.argv[1:] == ["--check-text"]:
+        check_text()
+        sys.exit(0)
     try:
         main()
     except Exception as e:  # report the failure on the status branch too
