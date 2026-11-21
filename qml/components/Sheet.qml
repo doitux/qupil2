@@ -159,9 +159,14 @@ Popup {
         if (!p)
             return
         const r = item.cursorRectangle
-        // Room below for the next line (iOS checks the cursor with a margin of its own)
-        const top = item.mapToItem(flick.contentItem, r.x, r.y).y - 16
-        const bottom = top + r.height + 16 + 48
+        const cursorTop = item.mapToItem(flick.contentItem, r.x, r.y).y
+        const cursorBottom = cursorTop + r.height
+        // Room below for the next line (iOS checks the cursor with a margin of its own).
+        // Only a strip left (a phone held sideways, keyboard up): the margins do not fit,
+        // just the cursor (with both rules at once the view went back and forth)
+        const roomy = cursorBottom + 48 - (cursorTop - 16) <= flick.height
+        const top = roomy ? cursorTop - 16 : cursorTop
+        const bottom = roomy ? cursorBottom + 48 : cursorBottom
         let y = flick.contentY
         if (top < y)
             y = top
@@ -247,8 +252,12 @@ Popup {
     width: compact ? parent.width : Math.min(620, parent.width - 48)
     //! Room taken at the bottom by the on-screen keyboard (moves with it)
     readonly property real keyboardInset: Nav.keyboardInset
-    height: compact ? parent.height - 24 - keyboardInset
-                    : Math.min(parent.height - 48 - keyboardInset, header.implicitHeight + column.implicitHeight + 40
+    //! A low window (a phone held sideways): with the keyboard up only a strip is left, so
+    //! the sheet keeps just a small gap at the top (the field with the cursor stays in view)
+    readonly property bool lowWindow: parent ? parent.height < 500 : false
+    readonly property real gap: lowWindow ? 8 : compact ? 24 : 48
+    height: compact ? parent.height - gap - keyboardInset
+                    : Math.min(parent.height - gap - keyboardInset, header.implicitHeight + column.implicitHeight + 40
                                                                    + (sheet.bottomButton ? 76 : 0)
                                                                    // grows with the bar (it comes with the keyboard)
                                                                    + toolbarArea.shown * (toolbarRow.implicitHeight + 24))

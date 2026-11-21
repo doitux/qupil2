@@ -125,6 +125,8 @@ private:
     bool menuShown() const;
     QString menuItems() const;
     void addTextTouchCases();
+    //! Every editor sheet with the on-screen keyboard (UiTestDialogs.cpp)
+    void addDialogCases();
     void traceSelection();
     Case &add(const QString &name, const QString &title);
 
