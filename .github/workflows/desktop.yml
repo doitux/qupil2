@@ -27,7 +27,7 @@ jobs:
     name: TestFlight text length
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - run: python3 -I .github/scripts/testflight-collect.py --check-text
 
   build:
@@ -408,7 +408,7 @@ jobs:
         with:
           sparse-checkout: .github/scripts
 
-      - uses: actions/download-artifact@v7
+      - uses: actions/download-artifact@v8
         with:
           path: artifacts
 
