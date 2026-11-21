@@ -1,9 +1,202 @@
 {
   "mode": "schedule",
-  "started_at": "2026-11-20T20:41:32+01:00",
-  "slot": "2026-11-20 13:05",
-  "result": "late",
-  "note": "GitHub hat den Lauf erst um 20:41 gestartet (geplant 13:05); die Änderungen kommen in den nächsten Sammel-Lauf.",
-  "written": "2026-11-20T20:41:32+01:00",
-  "headline": "Verspätet gestartet, kein Build"
+  "started_at": "2026-11-21T03:05:36+01:00",
+  "slot": "2026-11-20 22:05",
+  "tests": {
+    "android-test.yml": {
+      "name": "Android",
+      "since": "2df98ae",
+      "last": "success",
+      "files": 8,
+      "result": "started"
+    },
+    "ui-test.yml": {
+      "name": "Desktop",
+      "since": "e55d6c2",
+      "last": "success",
+      "files": 123,
+      "result": "started"
+    },
+    "ios-test.yml": {
+      "name": "iOS",
+      "since": "e55d6c2",
+      "last": "success",
+      "files": 124,
+      "result": "started"
+    }
+  },
+  "since": "37eb400cbcc1ea6f29b2d467cf7a1ee31aa6e889",
+  "since_build": 53,
+  "main": "dda1b7e7d2f915a9f933065ec34c266c28c941ca",
+  "commits": [
+    {
+      "sha": "d00ea69",
+      "subject": "Student app: booklet format, app skeleton, interface and tests"
+    },
+    {
+      "sha": "3812bb2",
+      "subject": "Student app: icons, Android and iOS packaging, own workflow"
+    },
+    {
+      "sha": "9526dd4",
+      "subject": "Practice book, teacher's side: links in Nextcloud and the inbox (not wired in yet)"
+    },
+    {
+      "sha": "928b75e",
+      "subject": "Student app: old Nextcloud through the old public WebDAV (both ways); docs/student-app.md"
+    },
+    {
+      "sha": "940fe03",
+      "subject": "Practice book: QR code for the coupling link (Nayuki qrcodegen, MIT)"
+    },
+    {
+      "sha": "233be8c",
+      "subject": "Student app: qupil.de files for the coupling link (/u page, app and asset links)"
+    },
+    {
+      "sha": "4ffff2a",
+      "subject": "Homework as a message: share a note through the system's share menu"
+    },
+    {
+      "sha": "fa714b1",
+      "subject": "Practice book data: tasks and coupling (schema 8)"
+    },
+    {
+      "sha": "b5ed62a",
+      "subject": "Merge branch 'feature/homework-share' into feature/uebeheft"
+    },
+    {
+      "sha": "f3b3e6e",
+      "subject": "Schedule: the clipboard in a fixed column on the right, never hidden by a birthday"
+    },
+    {
+      "sha": "043d511",
+      "subject": "Practice book: tasks editor, lesson cards, booklets in the Nextcloud"
+    },
+    {
+      "sha": "958cc1a",
+      "subject": "What's new: the clipboard column"
+    },
+    {
+      "sha": "7652655",
+      "subject": "Merge fix/plan-icon-with-birthday: the clipboard in a fixed column, never hidden by a birthday"
+    },
+    {
+      "sha": "55471cf",
+      "subject": "Practice book: coupling sheet, answers at lesson start, plan to tasks"
+    },
+    {
+      "sha": "7c4883e",
+      "subject": "Practice book: \"Tasks\" at the running lesson and on the lesson page; docs"
+    },
+    {
+      "sha": "9e30341",
+      "subject": "Merge remote-tracking branch 'origin/main' into feature/uebeheft"
+    },
+    {
+      "sha": "b488066",
+      "subject": "Practice book: plans of coupled students as tasks, private blocks, edit before saving"
+    },
+    {
+      "sha": "35d9c4a",
+      "subject": "What did you cover?: the lock centred on the tick box, the lock glyph centred in its box"
+    },
+    {
+      "sha": "76e50fd",
+      "subject": "What did you cover?: open lock (goes to the student), closed lock (private)"
+    },
+    {
+      "sha": "e044c0f",
+      "subject": "What did you cover?: a point without lines sits in the middle of its row"
+    },
+    {
+      "sha": "85f9c3b",
+      "subject": "What's new: share a note as a message; practice book (preparation)"
+    },
+    {
+      "sha": "2df98ae",
+      "subject": "Merge feature/uebeheft: practice book (teacher's side and student app), share a note as a message"
+    },
+    {
+      "sha": "0193d34",
+      "subject": "Lesson view: \"Plan\" (\"Plan for everybody\" for groups and ensembles)"
+    },
+    {
+      "sha": "2b1ffae",
+      "subject": "What's new: plan from the lesson view"
+    },
+    {
+      "sha": "cf9ee20",
+      "subject": "Android test: the weekday in Berlin time, the draft step closes every reminder dialog first"
+    },
+    {
+      "sha": "dda1b7e",
+      "subject": "Merge feature/lesson-plan-button: \"Planung\" in the lesson view, \"Planung für alle\" for groups and ensembles"
+    }
+  ],
+  "relevant_files": [
+    ".github/scripts/android-test.sh",
+    ".github/workflows/student.yml",
+    "3rdparty/qrcodegen/qrcodegen.cpp",
+    "3rdparty/qrcodegen/qrcodegen.hpp",
+    "CMakeLists.txt",
+    "i18n/qupil_de.ts",
+    "i18n/qupil_en.ts",
+    "i18n/qupil_es.ts",
+    "i18n/qupil_fr.ts",
+    "qml/Icon.qml",
+    "qml/Labels.qml",
+    "qml/Main.qml",
+    "qml/Nav.qml",
+    "qml/components/TaskLessonCard.qml",
+    "qml/editors/BookletSheet.qml",
+    "qml/editors/PlanFinish.qml",
+    "qml/editors/TaskEditor.qml",
+    "qml/pages/LessonDetail.qml",
+    "qml/pages/ScheduleOverview.qml",
+    "qml/pages/StudentDetail.qml",
+    "src/app/AppController.cpp",
+    "src/app/AppController.h",
+    "src/app/BookletService.cpp",
+    "src/app/BookletService.h",
+    "src/app/DataService.cpp",
+    "src/app/DataService.h",
+    "src/app/DataServiceTasks.cpp",
+    "src/app/ReminderAlert.cpp",
+    "src/app/ReminderAlert.h",
+    "src/app/SyncController.h",
+    "src/app/TextShare.h",
+    "src/app/TextShare_ios.mm",
+    "src/app/TextShare_none.cpp",
+    "src/app/UiTest.cpp",
+    "src/app/UiTest.h",
+    "src/core/Schema.cpp",
+    "src/core/Schema.h",
+    "src/main.cpp",
+    "src/shared/Booklet.cpp",
+    "src/shared/Booklet.h",
+    "src/shared/BookletInbox.cpp",
+    "src/shared/BookletInbox.h",
+    "src/shared/NextcloudShares.cpp",
+    "src/shared/NextcloudShares.h",
+    "src/shared/QrCode.cpp",
+    "src/shared/QrCode.h",
+    "student/CMakeLists.txt",
+    "student/assets/icons/student-256.png",
+    "student/assets/icons/student-android-foreground.svg",
+    "student/assets/icons/student-android-monochrome.svg"
+  ],
+  "result": "started",
+  "build": {
+    "number": 54,
+    "run_id": 44853951733,
+    "sha": "dda1b7e7d2f915a9f933065ec34c266c28c941ca",
+    "url": "https://github.com/doitux/qupil2/actions/runs/44853951733",
+    "created": "2026-11-21T02:05:48Z",
+    "status": "in_progress",
+    "conclusion": null,
+    "attempt": 1
+  },
+  "written": "2026-11-21T03:05:59+01:00",
+  "headline": "Build 54 gestartet"
 }
