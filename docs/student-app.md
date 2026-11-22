@@ -77,6 +77,36 @@ share API), `src/shared/QrCode` (teacher: the QR code, `3rdparty/qrcodegen`),
   stays readable.
 - Only what the teacher marked for the student goes in; private notes never do.
 
+## Getting the code into the app
+
+- **The scanner in the app** ("Open camera" on the welcome page and in the settings,
+  `src/QrScanner*`): iOS shows the camera in a full-screen sheet and lets AVFoundation
+  recognise the QR code (`QrScanner_ios.mm`, `NSCameraUsageDescription`); Android opens
+  the scanner of zxing-android-embedded from `StudentActivity.startScan()` (its own
+  activity, it asks for the camera permission itself; dependency in
+  `platform/android/build.gradle`). The picture stays on the phone. Another QR code or a
+  refused camera is said beside the button. Desktop: no scanner (`--pretend-scan <text>`
+  for tests and screenshots).
+- **The phone's own camera, or a link in a message**: `https://qupil.de/u#…` opens the app
+  (Android App Links with `assetlinks.json`, iOS universal links with the Associated
+  Domains entitlement; `qupil-student:…` as the fallback the page qupil.de/u uses).
+  `src/IncomingLinks*`: iOS and desktop through Qt's URL handlers; Android through
+  `StudentActivity` (the intent of the start waits for the native part, later ones go
+  straight on), because Qt's handlers did not deliver the links there.
+  `StudentApp::openUrl()` may be called on any thread.
+- **Paste** the link.
+
+`platform/android/build.gradle` is Qt 6.8.3's template with the scanner's dependency and
+the app's four languages kept in the package (the template keeps English only: the name
+under the icon was English on a German phone). Compare it when Qt is updated.
+
+## The keyboard
+
+`qml/components/PageFlickable.qml`: when a page gets lower (Android makes the window
+smaller for the keyboard), the field with the cursor and what belongs to it below stay in
+view; a tap beside the fields puts the keyboard away. "Send" sits beside the question
+field, so both are in view together (iOS moves the view to the cursor itself).
+
 ## The example
 
 `--demo` or "See an example" on the welcome page: an invented booklet (Ms Rau, Jonas,
@@ -89,7 +119,8 @@ since a review cannot scan a teacher's code.
 |---|---|
 | `tst_booklet` | link round trip and forms, invalid links, sealing (wrong key, wrong purpose, tampered), file names, URLs |
 | `tst_teacherside` | links via OCS (read + create; read only; enforced expiry and renewal; wrong login), the QR code (size, quiet zone; `QUPIL_QR_OUT=x.png` saves it for a check with a real reader), the inbox (newest per device, newer answer wins, values cleaned) |
-| `tst_studentapp` | the app against a fake Nextcloud: coupling, feedback upload and its content, echo from the teacher, wrong key, newer format, ended link, wrong password, old Nextcloud, state kept; the interface by tap: example, hints, feedback, to-do, closing the example, removing a teacher (asks first) |
+| `tst_studentapp` | the app against a fake Nextcloud: coupling, feedback upload and its content, echo from the teacher, wrong key, newer format, ended link, wrong password, old Nextcloud, state kept; the interface by tap: example, hints, feedback, to-do, closing the example, removing a teacher (asks first); a link through the system and from another thread; the scanner (another code, camera refused, closed, the teacher's code); fields in view with the keyboard; texts without "an <name>" |
+| `.github/scripts/student-android-test.sh` (emulator, job "Android emulator") | a link starts the app and adds the teacher; links while the app is running (https, `qupil-student:`, from the background); "Open camera" opens the scanner, "back" closes it |
 
 `student/tests/FakeNextcloud` is the stand-in for Nextcloud (public links with
 permissions, OCS share API, capabilities).
@@ -98,8 +129,11 @@ permissions, OCS share API, capabilities).
 
 `.github/workflows/student.yml` (only when `student/` or the shared code changes):
 tests and screenshots of the example in four languages (Linux), an Android test APK
-(signed with the public test key), the iOS archive. Upload to TestFlight
-(`de.qupil.student`) only when started by hand with "upload".
+(signed with the public test key; on main it goes to the "nightly" release as
+`Qupil-Practice-Android-arm64-nightly-<commit>.apk`), the emulator run, the iOS archive.
+Upload to TestFlight (`de.qupil.student`) only when started by hand with "upload".
+The archive is built unsigned; before the export it gets an ad-hoc signature with the
+Associated Domains entitlement, which the export's signing keeps.
 
 Icons: `python3 -I student/tools/make_icons.py` (Qupil's logo with the colours turned
 round: lime tile, plum figures).
@@ -116,7 +150,12 @@ round: lime tile, plum figures).
   the running lesson's button and the lesson page offer "Tasks" for a coupled student.
 - **Coupling** (student menu › Mit Qupil Üben koppeln …, `BookletSheet.qml`, `BookletService`):
   folder "Qupil Übeheft/<random>" next to the sync folder, link with password, key;
-  QR code, link to send, switches, questions, ending (link and folder go).
+  QR code, link to send (desktop: copied to the clipboard, and said so), switches,
+  all questions with their dates, ending (link and folder go).
+- **Questions**: unread ones stand on the card of the newest lesson on the student's
+  page, with their date; "Gelesen" marks them as read (`read` in the coupling's
+  `questions`; kept when the answers are fetched again). The pop-up at the start of the
+  lesson shows unread ones of the last two weeks.
 - **Booklets**: written after each sync and shortly after changes; answers collected
   and shown at the tasks and in the pop-up at the start of the lesson.
 - **Plans** of a coupled student: written in the tasks editor (tasks and hints, saved as
@@ -129,5 +168,5 @@ round: lime tile, plum figures).
 
 - Try it against the music school's Nextcloud (link passwords, uploads by link,
   expiry) and on devices.
-- qupil.de: upload `student/web/`; then `QUPIL_STUDENT_ASSOCIATED_DOMAINS=ON`.
-- Scanning the QR code inside the app (now: the phone's camera opens the link).
+- On devices: the scanner (iPhone, iPad, Android), links from the phone's camera
+  (iOS: universal links need Apple to have fetched qupil.de's association file).
