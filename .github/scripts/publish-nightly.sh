@@ -19,7 +19,16 @@ if ! gh release view "$tag" --repo "$repo" > /dev/null 2>&1; then
         --title "Nightly test builds" --notes "Test builds of the latest commit on main." || true
 fi
 log="$(dirname "$0")/run-logged.sh"
-bash "$log" gh api -X PATCH "repos/$repo/git/refs/tags/$tag" -f sha="$GITHUB_SHA" -F force=true > /dev/null
+# Desktop, Mobile and the student app move the tag, now and then at the same
+# moment: try again before giving up. --silent drops the answer only, so the
+# reason of a failure still shows (redirecting to /dev/null swallowed it).
+for attempt in 1 2 3; do
+    if bash "$log" gh api --silent -X PATCH "repos/$repo/git/refs/tags/$tag" -f sha="$GITHUB_SHA" -F force=true; then
+        break
+    fi
+    if [ "$attempt" -eq 3 ]; then exit 1; fi
+    sleep 10
+done
 
 staging="$(mktemp -d)"
 for pair in "$@"; do
