@@ -88,7 +88,10 @@ Page {
                             font.pixelSize: 14
                             font.weight: Font.Bold
                             color: index === StudentApp.currentIndex ? Theme.text : Theme.textMuted
-                            text: modelData.instrument !== "" ? modelData.instrument : modelData.teacher
+                            // Not loaded yet (no connection at the first start): still a name to tap
+                            text: modelData.instrument !== "" ? modelData.instrument
+                                : modelData.teacher !== "" ? modelData.teacher
+                                : qsTrId("s.settings.unknown_teacher") + " " + (index + 1)
                         }
                         MouseArea { anchors.fill: parent; onClicked: StudentApp.currentIndex = index }
                     }
