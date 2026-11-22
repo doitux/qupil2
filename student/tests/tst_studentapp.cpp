@@ -336,6 +336,10 @@ private slots:
         QTRY_COMPARE(m_app->current().value(u"teacher"_s).toString(), u"Herr Test"_s);
         QCOMPARE(notices.size(), 1);
 
+        // The same link handed over a second time right away: once is enough
+        m_app->openUrl(url);
+        QCOMPARE(notices.size(), 1);
+
         // Something else that opens the app is no coupling link
         m_app->openUrl(QUrl(u"https://qupil.de/u"_s));
         QCOMPARE(m_app->teachers().size(), 1);

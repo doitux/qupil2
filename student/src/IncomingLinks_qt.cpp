@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2006-2026 Felix Hammer
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 //
-// iOS and desktop: Qt's URL handlers; the receiver has the slot openUrl(QUrl).
+// Desktop: Qt's URL handlers; the receiver has the slot openUrl(QUrl).
 
 #include "IncomingLinks.h"
 

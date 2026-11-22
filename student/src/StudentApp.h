@@ -3,12 +3,14 @@
 #pragma once
 
 #include <QDateTime>
+#include <QElapsedTimer>
 #include <QJsonArray>
 #include <QJsonObject>
 #include <QList>
 #include <QObject>
 #include <QQmlEngine>
 #include <QTimer>
+#include <QUrl>
 #include <QVariantList>
 #include <QVariantMap>
 
@@ -132,6 +134,8 @@ private:
     int m_current = 0;
     int m_busy = 0;
     QString m_scanError;
+    QUrl m_lastUrl;            // a link may be handed over twice (IncomingLinks)
+    QElapsedTimer m_lastUrlAt;
     QString m_deviceId;
     QNetworkAccessManager *m_net = nullptr;
     QTimer m_uploadTimer;

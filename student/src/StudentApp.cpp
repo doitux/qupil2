@@ -351,6 +351,11 @@ void StudentApp::openUrl(const QUrl &url)
         QMetaObject::invokeMethod(this, [this, url] { openUrl(url); }, Qt::QueuedConnection);
         return;
     }
+    // Handed over twice (iOS at the app's start: by Qt and by the scene's start options)
+    if (url == m_lastUrl && m_lastUrlAt.isValid() && m_lastUrlAt.elapsed() < 5000)
+        return;
+    m_lastUrl = url;
+    m_lastUrlAt.start();
     const QString text = url.toString();
     const bool ok = Booklet::decodeLink(text) && addLink(text).isEmpty();
     // For the tests on a device (adb logcat); never the link itself, it is the key

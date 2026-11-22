@@ -12,8 +12,10 @@ class QObject;
     The links the system hands to the app: https://qupil.de/u#… (the QR code read by the
     phone's camera, a link in a message) and qupil-student:…
 
-    iOS and desktop: Qt's URL handlers (QDesktopServices). Android: StudentActivity, because
-    Qt's way did not deliver them there. \a received may be called on any thread.
+    Desktop: Qt's URL handlers (QDesktopServices; the receiver's slot openUrl(QUrl)).
+    iOS: the same, plus the link the app is started with (IncomingLinks_ios.mm).
+    Android: StudentActivity, because Qt's way did not deliver the links there.
+    \a received may be called on any thread, and the same link may come twice.
 */
 namespace IncomingLinks {
 

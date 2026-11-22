@@ -13,6 +13,7 @@ on:
       - '3rdparty/monocypher/**'
       - '.github/workflows/student.yml'
       - '.github/scripts/student-android-test.sh'
+      - '.github/scripts/student-ios-test.sh'
   workflow_dispatch:
     inputs:
       upload:
@@ -184,6 +185,8 @@ jobs:
     # and the QR code scanner opens: on an emulator, built for its x86_64
     runs-on: ubuntu-24.04
     timeout-minutes: 60
+    permissions:
+      contents: write    # the screenshots go to the branch student-test-android
     steps:
       - uses: actions/checkout@v7
 
@@ -270,6 +273,22 @@ jobs:
           path: student-android-out
           retention-days: 14
 
+      # Screenshots and summary where they can be looked at without a download
+      - name: Results to the branch student-test-android
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          [ -d student-android-out ] || exit 0
+          cd student-android-out
+          rm -f logcat-full.txt
+          git init -q
+          git checkout -q -b student-test-android
+          git add -A
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -q -m "Student app on the Android emulator, run ${GITHUB_RUN_NUMBER} (${GITHUB_SHA::7})"
+          git push -q -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" student-test-android
+
   publish:
     name: Publish to "nightly" release
     # The Android test build next to the teacher app's, so it can be installed on a phone
@@ -295,6 +314,80 @@ jobs:
         run: |
           bash .github/scripts/publish-nightly.sh \
             'artifacts/student-android-arm64-test/*.apk=Qupil-Practice-Android-arm64-nightly-*.apk'
+
+  ios-simulator:
+    name: iOS simulator (start, links, scanner sheet)
+    # The app starts, qupil-student:… links arrive (at the start and while running), the
+    # scanner's sheet opens: in the simulator, without signing
+    runs-on: macos-15
+    timeout-minutes: 60
+    permissions:
+      contents: write    # the screenshots go to the branch student-test-ios
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Select Xcode 26
+        run: |
+          xcode=$(ls -d /Applications/Xcode_26*.app | grep -viE 'beta|rc' | sort -V | tail -n 1)
+          if [ -z "$xcode" ]; then echo "::error::No Xcode 26 on this runner"; exit 1; fi
+          sudo xcode-select -s "$xcode"
+          xcodebuild -version
+
+      - name: Install Qt for macOS (host tools)
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: mac
+          target: desktop
+          arch: clang_64
+          cache: true
+          set-env: false
+
+      - name: Install Qt for iOS
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          host: mac
+          target: ios
+          arch: ios
+          cache: true
+
+      - name: Configure
+        run: |
+          "$QT_ROOT_DIR/bin/qt-cmake" -S student -B build -G Xcode \
+            -DQT_HOST_PATH="$RUNNER_WORKSPACE/Qt/$QT_VERSION/macos"
+
+      - name: Build for the simulator
+        run: |
+          cmake --build build --config Release --target qupil-student -- \
+            -sdk iphonesimulator ARCHS=x86_64 ONLY_ACTIVE_ARCH=NO \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" -quiet
+
+      - name: Start, links and scanner sheet in the simulator
+        run: bash .github/scripts/student-ios-test.sh student-ios-out
+
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: student-ios-simulator
+          path: student-ios-out
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Results to the branch student-test-ios
+        if: always()
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          [ -d student-ios-out ] || exit 0
+          cd student-ios-out
+          find . -name '*.log' -size +2M -delete
+          git init -q
+          git checkout -q -b student-test-ios
+          git add -A
+          git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+            commit -q -m "Student app in the iOS simulator, run ${GITHUB_RUN_NUMBER} (${GITHUB_SHA::7})"
+          git push -q -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" student-test-ios
 
   ios:
     name: iOS archive (→ TestFlight by hand)
