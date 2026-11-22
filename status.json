@@ -1,9 +1,113 @@
 {
   "mode": "schedule",
-  "started_at": "2026-11-21T19:47:10+01:00",
-  "slot": "2026-11-21 13:05",
-  "result": "late",
-  "note": "GitHub hat den Lauf erst um 19:47 gestartet (geplant 13:05); die Änderungen kommen in den nächsten Sammel-Lauf.",
-  "written": "2026-11-21T19:47:10+01:00",
-  "headline": "Verspätet gestartet, kein Build"
+  "started_at": "2026-11-22T02:08:20+01:00",
+  "slot": "2026-11-21 22:05",
+  "tests": {
+    "android-test.yml": {
+      "name": "Android",
+      "since": "dda1b7e",
+      "last": "success",
+      "files": 25,
+      "result": "started"
+    },
+    "ui-test.yml": {
+      "name": "Desktop",
+      "since": "dda1b7e",
+      "last": "success",
+      "files": 24,
+      "result": "started"
+    },
+    "ios-test.yml": {
+      "name": "iOS",
+      "since": "dda1b7e",
+      "last": "success",
+      "files": 24,
+      "result": "started"
+    }
+  },
+  "since": "dda1b7e7d2f915a9f933065ec34c266c28c941ca",
+  "since_build": 54,
+  "main": "81d205f980cd73c5580bd99a1961636c35c5f616",
+  "commits": [
+    {
+      "sha": "b710a1b",
+      "subject": "Names of the apps: \"Qupil Üben\" / \"Qupil Practice\" instead of \"Übeheft\""
+    },
+    {
+      "sha": "6a3d18f",
+      "subject": "TestFlight text: shorter (3957 of 4000 characters), length checked on every push"
+    },
+    {
+      "sha": "03f3530",
+      "subject": "Merge feature/app-names: \"Qupil Üben\" / \"Qupil Practice\" in both apps, shorter TestFlight text with a length check"
+    },
+    {
+      "sha": "cd48790",
+      "subject": "UI test: every editor sheet with the keyboard; sheets in a low window keep the cursor in view"
+    },
+    {
+      "sha": "9c740d7",
+      "subject": "UI test dialogs: invokeMethod with Q_ARG per number of arguments (Qt 6.5+)"
+    },
+    {
+      "sha": "fc3dfb8",
+      "subject": "Student app: Android test build on the nightly page"
+    },
+    {
+      "sha": "d43bf0b",
+      "subject": "Merge fix/student-apk-nightly: the student app's Android test build on the nightly page"
+    },
+    {
+      "sha": "ba729fa",
+      "subject": "UI test dialogs: editor list from CMake, faster (one opening per size, fewer waits)"
+    },
+    {
+      "sha": "593182f",
+      "subject": "UI test dialogs: a size the desktop's window cannot take is left out with a note"
+    },
+    {
+      "sha": "81d205f",
+      "subject": "Merge fix/sheet-keyboard-test: UI test of every editor sheet with the keyboard; phone held sideways keeps the cursor in view"
+    }
+  ],
+  "relevant_files": [
+    ".github/scripts/android-test.sh",
+    ".github/workflows/student.yml",
+    "CMakeLists.txt",
+    "i18n/qupil_de.ts",
+    "i18n/qupil_en.ts",
+    "i18n/qupil_es.ts",
+    "i18n/qupil_fr.ts",
+    "qml/components/Sheet.qml",
+    "src/app/UiTest.cpp",
+    "src/app/UiTest.h",
+    "src/app/UiTestDialogs.cpp",
+    "student/CMakeLists.txt",
+    "student/i18n/strings.json",
+    "student/i18n/strings.py",
+    "student/platform/android/res/values-de/strings.xml",
+    "student/platform/android/res/values-es/strings.xml",
+    "student/platform/android/res/values-fr/strings.xml",
+    "student/platform/android/res/values/strings.xml",
+    "student/platform/ios/de.lproj/InfoPlist.strings",
+    "student/platform/ios/en.lproj/InfoPlist.strings",
+    "student/platform/ios/es.lproj/InfoPlist.strings",
+    "student/platform/ios/fr.lproj/InfoPlist.strings",
+    "student/platform/ios/patch-info-plist.sh",
+    "student/web/u/index.html",
+    "tools/i18n/catalog.py"
+  ],
+  "result": "started",
+  "build": {
+    "number": 55,
+    "run_id": 44970033800,
+    "sha": "81d205f980cd73c5580bd99a1961636c35c5f616",
+    "url": "https://github.com/doitux/qupil2/actions/runs/44970033800",
+    "created": "2026-11-22T01:08:34Z",
+    "status": "in_progress",
+    "conclusion": null,
+    "attempt": 1
+  },
+  "written": "2026-11-22T02:08:45+01:00",
+  "headline": "Build 55 gestartet"
 }
