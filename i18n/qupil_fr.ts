@@ -1177,6 +1177,25 @@
         <extracomment>Message with the coupling link to the student (the student app says du)</extracomment>
         <translation>%1, voici ton lien pour Qupil Practice : ouvre-le sur ton téléphone (avec l’application installée).</translation>
     </message>
+    <message id="booklet.copy_link">
+        <source>Copy the coupling link to the clipboard</source>
+        <extracomment>Desktop, instead of “Send the link instead”: there is no share menu, the link goes to the clipboard</extracomment>
+        <translation>Copier le lien dans le presse-papiers</translation>
+    </message>
+    <message id="booklet.link_copied_desktop">
+        <source>Coupling link copied</source>
+        <translation>Lien copié</translation>
+    </message>
+    <message id="task.question_from">
+        <source>Question from %1</source>
+        <extracomment>A question the student sent from the students&apos; app; %1 is the date</extracomment>
+        <translation>Question du %1</translation>
+    </message>
+    <message id="task.questions_read">
+        <source>Read</source>
+        <extracomment>Button: the student&apos;s questions are read (past participle), they leave the lesson&apos;s card</extracomment>
+        <translation>Lu</translation>
+    </message>
     <message id="booklet.link_copied">
         <source>Link copied – paste it into a message</source>
         <translation>Lien copié – à coller dans un message</translation>

@@ -19,9 +19,8 @@ Sheet {
     readonly property var coupling: { if (Data.revision < 0) return undefined; return studentId ? Data.coupling(studentId) : ({}) }
     readonly property bool coupled: !!coupling.id
     readonly property var qr: coupled ? Booklet.qrCode(studentId) : ({})
-    readonly property var questions: {
-        try { return coupled && coupling.questions ? JSON.parse(coupling.questions) : [] } catch (e) { return [] }
-    }
+    //! Newest first: { text, date, read }
+    readonly property var questions: { if (Data.revision < 0) return undefined; return coupled ? Data.questions(studentId) : [] }
     property string error
     property bool confirmEnd: false
 
@@ -133,12 +132,14 @@ Sheet {
             spacing: 8
             ActionButton {
                 Layout.fillWidth: true
+                objectName: "bookletLink"
                 iconName: "share"
-                text: qsTrId("booklet.send_link")
+                // The desktop has no share menu: the link goes to the clipboard, and says so
+                text: App.desktop ? qsTrId("booklet.copy_link") : qsTrId("booklet.send_link")
                 onClicked: {
                     const text = qsTrId("booklet.link_message").arg(sheet.student.forename || "") + "\n\n" + Booklet.link(sheet.studentId)
                     if (!App.shareText(text, qsTrId("booklet.title")))
-                        Nav.toast(qsTrId("booklet.link_copied"))
+                        Nav.toast(App.desktop ? qsTrId("booklet.link_copied_desktop") : qsTrId("booklet.link_copied"))
                 }
             }
         }
@@ -168,23 +169,40 @@ Sheet {
             label: qsTrId("booklet.questions")
         }
         Repeater {
-            model: sheet.questions.slice().reverse()
+            model: sheet.questions
             delegate: Rectangle {
+                id: questionBox
                 required property var modelData
+                readonly property string label: qsTrId("task.question_from").arg(Data.formatDate(modelData.date || "", true))
                 Layout.fillWidth: true
-                implicitHeight: questionText.implicitHeight + 20
+                implicitHeight: questionColumn.implicitHeight + 20
                 radius: 12
                 color: Theme.surfaceAlt
-                Text {
-                    id: questionText
+                Accessible.role: Accessible.StaticText
+                Accessible.name: label + ": " + (modelData.text || "")
+                Column {
+                    id: questionColumn
                     x: 12
                     y: 10
                     width: parent.width - 24
-                    wrapMode: Text.WordWrap
-                    text: modelData.text
-                    color: Theme.text
-                    font.family: Theme.fontFamily
-                    font.pixelSize: 15
+                    spacing: 2
+                    Text {
+                        width: parent.width
+                        text: questionBox.label
+                        // Not read yet: in the accent colour
+                        color: questionBox.modelData.read ? Theme.textMuted : Theme.accentText
+                        font.family: Theme.fontFamily
+                        font.pixelSize: 12
+                        font.weight: Font.Bold
+                    }
+                    Text {
+                        width: parent.width
+                        wrapMode: Text.WordWrap
+                        text: questionBox.modelData.text || ""
+                        color: Theme.text
+                        font.family: Theme.fontFamily
+                        font.pixelSize: 15
+                    }
                 }
             }
         }

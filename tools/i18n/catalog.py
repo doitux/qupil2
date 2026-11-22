@@ -643,6 +643,15 @@ E("booklet.link_message", en="%1, here is your link for Qupil Practice: open it 
   fr="%1, voici ton lien pour Qupil Practice : ouvre-le sur ton téléphone (avec l’application installée).",
   es="%1, aquí tienes tu enlace para Qupil Practice: ábrelo en tu móvil (con la aplicación instalada).",
   c="Message with the coupling link to the student (the student app says du)")
+E("booklet.copy_link", en="Copy the coupling link to the clipboard", de="Kopplungslink in Zwischenablage kopieren",
+  fr="Copier le lien dans le presse-papiers", es="Copiar el enlace al portapapeles",
+  c="Desktop, instead of “Send the link instead”: there is no share menu, the link goes to the clipboard")
+E("booklet.link_copied_desktop", en="Coupling link copied", de="Kopplungslink kopiert", fr="Lien copié",
+  es="Enlace copiado")
+E("task.question_from", en="Question from %1", de="Frage vom %1", fr="Question du %1", es="Pregunta del %1",
+  c="A question the student sent from the students' app; %1 is the date")
+E("task.questions_read", en="Read", de="Gelesen", fr="Lu", es="Leído",
+  c="Button: the student's questions are read (past participle), they leave the lesson's card")
 E("booklet.link_copied", en="Link copied – paste it into a message", de="Link kopiert – zum Einfügen in eine Nachricht",
   fr="Lien copié – à coller dans un message", es="Enlace copiado: péguelo en un mensaje")
 E("booklet.read_only", en="Your Nextcloud does not allow uploads by link: the student sees the tasks but cannot send anything back.",

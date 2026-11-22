@@ -54,6 +54,10 @@ Item {
     //! Coupled with the practice book app: tasks instead of notes (a card per lesson, the
     //! note of that day as its private line)
     readonly property bool coupled: { if (Data.revision < 0) return undefined; return studentId ? Data.isCoupled(studentId) : false }
+    readonly property var openQuestions: {
+        if (Data.revision < 0) return undefined
+        return coupled ? Data.openQuestions(studentId) : []
+    }
     readonly property var taskLessons: {
         if (Data.revision < 0) return undefined
         if (!coupled || !currentMembership)
@@ -841,10 +845,14 @@ Item {
                 model: detail.taskLessons
                 delegate: TaskLessonCard {
                     required property var modelData
+                    required property int index
                     Layout.fillWidth: true
                     lesson: modelData
                     relative: detail.relative(modelData.date)
+                    // What the student asked: on the newest lesson, until marked as read
+                    questions: index === 0 ? detail.openQuestions : []
                     onOpened: Nav.editTasks(detail.currentMembership, modelData.date)
+                    onQuestionsRead: Data.markQuestionsRead(detail.studentId)
                 }
             }
             EmptyHint {

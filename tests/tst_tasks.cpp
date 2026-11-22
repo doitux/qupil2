@@ -182,6 +182,44 @@ private slots:
         QVERIFY(!m_data->isCoupled(m_student));
     }
 
+    void questionsAndRead()
+    {
+        // What the student asks: listed with its date, unread until marked; a read mark
+        // survives the next fetch of the answers (which brings the same questions again)
+        QVERIFY(m_store->create(u"coupling"_s, { { u"student_id"_s, m_student }, { u"created"_s, u"2026-11-01"_s } }) != QString());
+        const double now = double(Qupil::Clock::now().toMSecsSinceEpoch());
+        const double day = 24.0 * 3600 * 1000;
+        const QVariantMap q1 { { u"id"_s, u"q1"_s }, { u"text"_s, u"Wie schnell?"_s }, { u"at"_s, now - 2 * day } };
+        const QVariantMap q2 { { u"id"_s, u"q2"_s }, { u"text"_s, u"Welcher Fingersatz?"_s }, { u"at"_s, now - day } };
+        QVERIFY(m_data->applyFeedback(m_student, {}, { q1, q2 }));
+        QCOMPARE(m_data->questions(m_student).size(), 2);
+        QCOMPARE(m_data->questions(m_student).value(0).toMap().value(u"text"_s).toString(), u"Welcher Fingersatz?"_s);   // newest first
+        QCOMPARE(m_data->questions(m_student).value(0).toMap().value(u"date"_s).toString(),
+                 QDateTime::fromMSecsSinceEpoch(qint64(now - day)).date().toString(Qt::ISODate));
+        QCOMPARE(m_data->openQuestions(m_student).size(), 2);
+        QCOMPARE(m_data->openQuestions(m_student).value(0).toMap().value(u"text"_s).toString(), u"Wie schnell?"_s);      // oldest first
+        // The pop-up at the start of the lesson: a line per unread question (no texts loaded
+        // here, so the lines are counted)
+        const auto lines = [this] { return m_data->bookletSummary(m_student).split(u'\n', Qt::SkipEmptyParts).size(); };
+        QCOMPARE(lines(), 2);
+
+        QVERIFY(m_data->markQuestionsRead(m_student));
+        QVERIFY(m_data->openQuestions(m_student).isEmpty());
+        QCOMPARE(m_data->questions(m_student).size(), 2);
+        QCOMPARE(lines(), 0);
+
+        // The next fetch: the two again (as the student's file has them), and a new one
+        const QVariantMap q3 { { u"id"_s, u"q3"_s }, { u"text"_s, u"Und das Tempo?"_s }, { u"at"_s, now } };
+        QVERIFY(m_data->applyFeedback(m_student, {}, { q1, q2, q3 }));
+        QCOMPARE(m_data->questions(m_student).size(), 3);
+        QCOMPARE(m_data->openQuestions(m_student).size(), 1);
+        QCOMPARE(m_data->openQuestions(m_student).value(0).toMap().value(u"id"_s).toString(), u"q3"_s);
+        QCOMPARE(lines(), 1);
+        // Not coupled: nothing
+        QVERIFY(m_data->questions(u"nobody"_s).isEmpty());
+        QVERIFY(!m_data->markQuestionsRead(u"nobody"_s));
+    }
+
     void planToTasks()
     {
         const QString plan = m_data->savePlan(m_membership, QString(), u"2026-11-17"_s,

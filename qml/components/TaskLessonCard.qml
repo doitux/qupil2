@@ -15,7 +15,11 @@ Control {
     //! { date, tasks: [...], note: {…} or null }
     property var lesson: ({})
     property string relative
+    //! What the student asked and nobody has marked as read yet: [{ text, date }] (the
+    //! student page gives them to the newest lesson's card only)
+    property var questions: []
     signal opened()
+    signal questionsRead()
 
     topPadding: 16
     bottomPadding: 16
@@ -143,6 +147,57 @@ Control {
                     font.pixelSize: 13
                 }
             }
+        }
+
+        // The student's questions, until they are marked as read (they stay in the sheet
+        // "Qupil Practice" of the student)
+        Repeater {
+            model: card.questions
+            delegate: Rectangle {
+                id: questionBox
+                required property var modelData
+                readonly property string label: qsTrId("task.question_from").arg(Data.formatDate(modelData.date || "", true))
+                Layout.fillWidth: true
+                Layout.topMargin: 2
+                implicitHeight: questionColumn.implicitHeight + 16
+                radius: Theme.radiusSmall + 2
+                color: Theme.accentSoft
+                Accessible.role: Accessible.StaticText
+                Accessible.name: label + ": " + (modelData.text || "")
+                Column {
+                    id: questionColumn
+                    x: 12
+                    y: 8
+                    width: parent.width - 24
+                    spacing: 2
+                    Text {
+                        width: parent.width
+                        text: questionBox.label
+                        color: Theme.accentText
+                        font.family: Theme.fontFamily
+                        font.pixelSize: 12
+                        font.weight: Font.Bold
+                    }
+                    Text {
+                        width: parent.width
+                        wrapMode: Text.WordWrap
+                        text: questionBox.modelData.text || ""
+                        color: Theme.text
+                        font.family: Theme.fontFamily
+                        font.pixelSize: 15
+                    }
+                }
+            }
+        }
+        ActionButton {
+            objectName: "questionsRead"
+            visible: card.questions.length > 0
+            Layout.alignment: Qt.AlignRight
+            implicitHeight: 40
+            kind: "quiet"
+            iconName: "check"
+            text: qsTrId("task.questions_read")
+            onClicked: card.questionsRead()
         }
 
         // The private note: only its first line here

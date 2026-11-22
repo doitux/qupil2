@@ -197,6 +197,54 @@ bool DataService::deleteTask(const QString &id, bool forAll)
     return m_store->endBatch(ok) && ok;
 }
 
+QVariantList DataService::questions(const QString &studentId) const
+{
+    QVariantList out;
+    const QJsonArray stored = QJsonDocument::fromJson(coupling(studentId).value(u"questions"_s).toString().toUtf8()).array();
+    for (const QJsonValue &v : stored) {
+        const QJsonObject o = v.toObject();
+        if (o.value(u"text"_s).toString().trimmed().isEmpty())
+            continue;
+        const double at = o.value(u"at"_s).toDouble();
+        QVariantMap q { { u"id"_s, o.value(u"id"_s).toString() }, { u"text"_s, o.value(u"text"_s).toString() },
+                        { u"at"_s, at }, { u"read"_s, o.value(u"read"_s).toBool() } };
+        if (at > 0)
+            q.insert(u"date"_s, QDateTime::fromMSecsSinceEpoch(qint64(at)).date().toString(Qt::ISODate));
+        out.prepend(q);   // stored oldest first
+    }
+    return out;
+}
+
+QVariantList DataService::openQuestions(const QString &studentId) const
+{
+    QVariantList out;
+    for (const QVariant &v : questions(studentId))
+        if (!v.toMap().value(u"read"_s).toBool())
+            out.prepend(v);
+    return out;
+}
+
+bool DataService::markQuestionsRead(const QString &studentId)
+{
+    const QVariantMap c = coupling(studentId);
+    if (c.isEmpty())
+        return false;
+    QJsonArray stored = QJsonDocument::fromJson(c.value(u"questions"_s).toString().toUtf8()).array();
+    bool changed = false;
+    for (qsizetype i = 0; i < stored.size(); ++i) {
+        QJsonObject o = stored.at(i).toObject();
+        if (o.value(u"read"_s).toBool())
+            continue;
+        o.insert(u"read"_s, true);
+        stored.replace(i, o);
+        changed = true;
+    }
+    if (!changed)
+        return true;
+    return m_store->update(u"coupling"_s, c.value(u"id"_s).toString(),
+                           { { u"questions"_s, QString::fromUtf8(QJsonDocument(stored).toJson(QJsonDocument::Compact)) } });
+}
+
 bool DataService::applyFeedback(const QString &studentId, const QVariantMap &feedback, const QVariantList &questions)
 {
     const QVariantMap c = coupling(studentId);
@@ -220,7 +268,20 @@ bool DataService::applyFeedback(const QString &studentId, const QVariantMap &fee
                                    { { u"feedback"_s, QString::fromUtf8(QJsonDocument(QJsonObject::fromVariantMap(theirs))
                                                                              .toJson(QJsonDocument::Compact)) } });
     }
-    const QString q = QString::fromUtf8(QJsonDocument(QJsonArray::fromVariantList(questions)).toJson(QJsonDocument::Compact));
+    // Read meanwhile (while the answers were being fetched): stays read
+    QSet<QString> read;
+    for (const QJsonValue &v : QJsonDocument::fromJson(c.value(u"questions"_s).toString().toUtf8()).array())
+        if (v.toObject().value(u"read"_s).toBool())
+            read.insert(v.toObject().value(u"id"_s).toString());
+    QJsonArray merged = QJsonArray::fromVariantList(questions);
+    for (qsizetype i = 0; i < merged.size(); ++i) {
+        QJsonObject o = merged.at(i).toObject();
+        if (read.contains(o.value(u"id"_s).toString()) && !o.value(u"read"_s).toBool()) {
+            o.insert(u"read"_s, true);
+            merged.replace(i, o);
+        }
+    }
+    const QString q = QString::fromUtf8(QJsonDocument(merged).toJson(QJsonDocument::Compact));
     if (q != c.value(u"questions"_s).toString())
         ok = ok && m_store->update(u"coupling"_s, c.value(u"id"_s).toString(), { { u"questions"_s, q } });
     return m_store->endBatch(ok) && ok;
@@ -365,7 +426,7 @@ QString DataService::bookletSummary(const QString &studentId) const
     const double since = double(Qupil::Clock::now().addDays(-14).toMSecsSinceEpoch());
     for (const QJsonValue &q : QJsonDocument::fromJson(c.value(u"questions"_s).toString().toUtf8()).array()) {
         const QJsonObject o = q.toObject();
-        if (o.value(u"at"_s).toDouble() >= since)
+        if (o.value(u"at"_s).toDouble() >= since && !o.value(u"read"_s).toBool())
             lines << qtTrId("booklet.question_line").arg(o.value(u"text"_s).toString());
     }
     return lines.join(u'\n');
