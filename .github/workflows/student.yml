@@ -526,5 +526,5 @@ jobs:
             else
               echo "**Associated Domains is NOT in the uploaded app** (links open qupil.de/u first)."
             fi
-          } >> "$GITHUB_STEP_SUMMARY"
+          } | tee -a "$GITHUB_STEP_SUMMARY"
           exit $status
