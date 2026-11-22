@@ -5,6 +5,8 @@
 # - qupil-student:… starts the app and adds the teacher; the same while the app runs
 # - "Open camera" (--scan) shows the scanner's sheet (the simulator has no camera: black,
 #   with the hint and Cancel), and the app goes on working behind it
+# The system asks "Open in “Qupil Practice”?" for a link from outside: idb taps "Open"
+# (without idb the links are not checked, and the summary says so).
 # Universal links (https://qupil.de/u#…) need the signed app and Apple's copy of
 # qupil.de's association file: on a device only. Invented links only.
 set -u
@@ -48,6 +50,30 @@ j = json.dumps({'v': 1, 's': 'https://cloud.example.org', 't': sys.argv[1], 'p':
 print(base64.urlsafe_b64encode(j.encode()).decode().rstrip('='))" "$1"
 }
 running() { xcrun simctl spawn "$UDID" launchctl list 2> /dev/null | grep -q "$BUNDLE"; }
+HERE=$(cd "$(dirname "$0")" && pwd)
+HAVE_IDB=0
+command -v idb > /dev/null 2>&1 && HAVE_IDB=1
+# tap_label <pattern> <seconds>: taps what the system's accessibility shows under that label
+tap_label() {
+    local i xy
+    for ((i = 0; i < $2; i += 2)); do
+        idb ui describe-all --udid "$UDID" > "$OUT/now.json" 2> /dev/null
+        if xy=$(python3 "$HERE/ios-ui.py" "$OUT/now.json" "$1" 2> /dev/null); then
+            idb ui tap --udid "$UDID" $xy
+            say "- tapped \`$1\` at $xy"
+            return 0
+        fi
+        sleep 2
+    done
+    say "- **not on the screen:** \`$1\`"
+    FAILED=1
+    return 1
+}
+# open_link <url>: as a link tapped elsewhere; the system asks first
+open_link() {
+    xcrun simctl openurl "$UDID" "$1"
+    tap_label '^(Open|Öffnen)$' 30
+}
 
 APP=$(find build -type d -name 'QupilStudent.app' -path '*iphonesimulator*' | head -n 1)
 [ -n "$APP" ] || { say "**no simulator build of the app**"; exit 1; }
@@ -85,26 +111,34 @@ say ""
 say "## The app starts"
 mark
 xcrun simctl launch "$UDID" $BUNDLE > /dev/null
-sleep 12
+# Under Rosetta the first picture takes its time
+wait_for "Qupil student: started" 90
+sleep 15
 if running; then say "- the app is running"; else say "- **the app is not running (crashed at the start?)**"; FAILED=1; fi
 shot welcome
+[ "$HAVE_IDB" = 1 ] && idb connect "$UDID" > /dev/null 2>&1
 
-say ""
-say "## A link starts the app (qupil-student:)"
-xcrun simctl terminate "$UDID" $BUNDLE > /dev/null 2>&1
-sleep 2
-mark
-xcrun simctl openurl "$UDID" "qupil-student:$(link TestTokenAAAA1111)"
-wait_for "link received, teacher added" 60
-sleep 4
-shot link-at-start
+if [ "$HAVE_IDB" = 1 ]; then
+    say ""
+    say "## A link starts the app (qupil-student:)"
+    xcrun simctl terminate "$UDID" $BUNDLE > /dev/null 2>&1
+    sleep 2
+    mark
+    open_link "qupil-student:$(link TestTokenAAAA1111)"
+    wait_for "link received, teacher added" 90
+    sleep 10
+    shot link-at-start
 
-say ""
-say "## A link while the app is running"
-mark
-xcrun simctl openurl "$UDID" "qupil-student:$(link TestTokenBBBB2222)"
-wait_for "link received, teacher added" 30
-sleep 2
+    say ""
+    say "## A link while the app is running"
+    mark
+    open_link "qupil-student:$(link TestTokenBBBB2222)"
+    wait_for "link received, teacher added" 30
+    sleep 2
+else
+    say ""
+    say "## Links: not checked (no idb on this runner to answer the system's question)"
+fi
 
 say ""
 say "## The scanner's sheet"
@@ -114,12 +148,17 @@ xcrun simctl install "$UDID" "$APP"
 xcrun simctl privacy "$UDID" grant camera $BUNDLE > /dev/null 2>&1
 mark
 xcrun simctl launch "$UDID" $BUNDLE --scan > /dev/null
-sleep 12
+wait_for "Qupil student: started" 90
+sleep 15
 shot scanner
 if running; then say "- the app is running with the scanner open"; else say "- **the app is not running (crashed with the scanner?)**"; FAILED=1; fi
-mark
-xcrun simctl openurl "$UDID" "qupil-student:$(link TestTokenCCCC3333)"
-wait_for "link received, teacher added" 30
+if [ "$HAVE_IDB" = 1 ]; then
+    # The sheet's own button closes it, and the app says so
+    mark
+    tap_label '^(Cancel|Abbrechen)$' 20 && wait_for "scanner closed, no code" 20
+    sleep 3
+    shot after-scanner
+fi
 
 kill $STREAM 2> /dev/null
 xcrun simctl shutdown "$UDID" > /dev/null 2>&1

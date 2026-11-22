@@ -363,6 +363,21 @@ jobs:
             -sdk iphonesimulator ARCHS=x86_64 ONLY_ACTIVE_ARCH=NO \
             CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" -quiet
 
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # idb answers the system's "Open in …?" for a link and taps the scanner's Cancel
+      - name: Install idb
+        continue-on-error: true
+        run: |
+          brew tap facebook/fb > /dev/null
+          brew trust facebook/fb > /dev/null 2>&1 || true
+          brew install idb-companion || true
+          python3 -m pip install --break-system-packages --quiet fb-idb || python3 -m pip install --user --quiet fb-idb
+          echo "$(python3 -c 'import sysconfig; print(sysconfig.get_path("scripts"))')" >> "$GITHUB_PATH"
+          echo "$(python3 -m site --user-base)/bin" >> "$GITHUB_PATH"
+
       - name: Start, links and scanner sheet in the simulator
         run: bash .github/scripts/student-ios-test.sh student-ios-out
 

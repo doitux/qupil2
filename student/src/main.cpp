@@ -93,6 +93,9 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    // For the tests on devices and simulators: the interface is loaded
+    qInfo("Qupil student: started (%d teacher(s))", int(studentApp->teachers().size()));
+
     if (parser.isSet(size)) {
         auto *window = qobject_cast<QQuickWindow *>(engine.rootObjects().constFirst());
         const QStringList wh = parser.value(size).split(u'x');
