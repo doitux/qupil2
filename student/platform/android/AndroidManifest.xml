@@ -3,11 +3,15 @@
     Manifest of Qupil for students: Qt 6.8's template plus
     - links that open the app: https://qupil.de/u#… (QR code in the teacher's Qupil,
       verified with assetlinks.json on qupil.de) and qupil-student:… (fallback)
-    - only internet access; no notifications, no camera (the system camera reads the QR code)
+    - internet access and the camera for the QR code scanner in the app (the permission comes
+      from zxing-android-embedded; its scanner follows the phone's orientation instead of
+      turning to landscape); no notifications
+    - StudentActivity: Qt's activity plus the scanner
     - launcher icon (res/mipmap-*: adaptive on Android 8+, themed on 13+), per-app language
     - no Android cloud backup: the coupling key stays on the device
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="de.qupil.student"
     android:installLocation="auto"
     android:versionCode="-- %%INSERT_VERSION_CODE%% --"
@@ -30,7 +34,7 @@
         android:allowBackup="false"
         android:fullBackupOnly="false">
         <activity
-            android:name="org.qtproject.qt.android.bindings.QtActivity"
+            android:name="de.qupil.student.StudentActivity"
             android:theme="@style/StudentTheme"
             android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|layoutDirection|locale|fontScale|keyboard|keyboardHidden|navigation|mcc|mnc|density"
             android:launchMode="singleTop"
@@ -62,6 +66,12 @@
                 android:name="android.app.arguments"
                 android:value="-- %%INSERT_APP_ARGUMENTS%% --" />
         </activity>
+
+        <!-- The scanner upright on a phone held upright (the library's own entry asks for landscape) -->
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="fullSensor"
+            tools:replace="screenOrientation" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

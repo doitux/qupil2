@@ -1,3 +1,6 @@
 /* Name under the icon */
 "CFBundleDisplayName" = "Qupil Practice";
 "CFBundleName" = "Qupil Practice";
+
+/* Why the app asks for the camera (the QR code scanner) */
+"NSCameraUsageDescription" = "To scan the QR code your teacher shows you.";

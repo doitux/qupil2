@@ -10,7 +10,8 @@ import QupilStudent
 Page {
     background: Rectangle { color: Theme.bg }
 
-    Flickable {
+    PageFlickable {
+        revealBelow: 120
         anchors.fill: parent
         contentHeight: column.implicitHeight + window.topInset + window.bottomInset + 48
         boundsBehavior: Flickable.StopAtBounds
@@ -22,11 +23,7 @@ Page {
             width: parent.width - 2 * Theme.gutter
             spacing: 18
 
-            Rectangle {
-                width: 72; height: 72; radius: 20
-                color: Theme.lime
-                Icon { anchors.centerIn: parent; width: 38; height: 38; name: "book"; color: "#6E3C5A"; strokeWidth: 2.2 }
-            }
+            Logo { objectName: "logo"; width: 72; height: 72 }
             Column {
                 width: parent.width
                 spacing: 8

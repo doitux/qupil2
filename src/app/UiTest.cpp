@@ -2430,7 +2430,8 @@ void UiTest::addCases()
                            { u"created"_s, m_data->today() } });
                        QMetaObject::invokeMethod(m_nav, "showBooklet", Q_ARG(QString, m_other));
                    })
-                << see(u"^QR-Code für Qupil Üben$"_s) << see(u"^Stattdessen Link schicken$"_s)
+                << see(u"^QR-Code für Qupil Üben$"_s)
+                << see(u"^(Stattdessen Link schicken|Kopplungslink in Zwischenablage kopieren)$"_s)
                 << see(u"^Rückmeldung zu Aufgaben$"_s)
                 << snap(u"booklet-sheet"_s)
                 << tap(u"^Kopplung beenden$"_s) << see(u"^Abbrechen$"_s)
@@ -2452,6 +2453,74 @@ void UiTest::addCases()
                 << see(u"^Koppeln$"_s)
                 << tap(u"^Schließen$"_s)
                 << act(u"remove the coupling record"_s, [this] { m_data->remove(u"coupling"_s, m_text); });
+    }
+    // Practice book: what the student asked stands on the card of the newest lesson, with
+    // its date, until "Gelesen"; the sheet keeps all questions. The link button of the sheet
+    // says what it did (on the desktop it copies; the message was hidden under the sheet)
+    {
+        Case &c = add(u"booklet-questions"_s, u"practice book: the student's questions on the lesson's card, \"Gelesen\" takes them away; link copied is said"_s);
+        c.steps << act(u"coupled, a task today, three questions (one of them read already)"_s, [this] {
+                       m_membership = runningMembership();
+                       m_other = m_data->get(u"membership"_s, m_membership).value(u"student_id"_s).toString();
+                       const qint64 now = Qupil::Clock::now().toMSecsSinceEpoch();
+                       const qint64 day = 24LL * 3600 * 1000;
+                       const QJsonArray questions {
+                           QJsonObject { { u"id"_s, u"uiq1"_s }, { u"text"_s, u"UI-Frage alt"_s }, { u"at"_s, double(now - 3 * day) }, { u"read"_s, true } },
+                           QJsonObject { { u"id"_s, u"uiq2"_s }, { u"text"_s, u"UI-Frage: Wie schnell soll ich üben?"_s }, { u"at"_s, double(now - day) } },
+                           QJsonObject { { u"id"_s, u"uiq3"_s }, { u"text"_s, u"UI-Frage zwei"_s }, { u"at"_s, double(now) } },
+                       };
+                       m_text = m_data->create(u"coupling"_s, {
+                           { u"student_id"_s, m_other }, { u"server"_s, u"https://cloud.example.org"_s },
+                           { u"folder"_s, u"Qupil Üben/uitest-q"_s }, { u"share_id"_s, u"3"_s },
+                           { u"token"_s, u"UiTestToken789"_s }, { u"password"_s, u"Qp-7UiTestPassword"_s },
+                           { u"key"_s, QString::fromLatin1(QByteArray(32, '\x07').toBase64()) },
+                           { u"created"_s, m_data->today() },
+                           { u"questions"_s, QString::fromUtf8(QJsonDocument(questions).toJson(QJsonDocument::Compact)) } });
+                       m_data->saveTasks(m_membership, m_data->today(),
+                                         { QVariantMap { { u"title"_s, u"UI-Fragen-Aufgabe"_s } } }, false);
+                   })
+                << openStudent(u"Lena Muster"_s)
+                << see(u"^Stunde vom .*: UI-Fragen-Aufgabe$"_s)
+                << see(u"^Frage vom .*: UI-Frage: Wie schnell soll ich üben\\?$"_s) << see(u"^Frage vom .*: UI-Frage zwei$"_s)
+                << check(u"the question read already is not on the card"_s, [this] { return !find(u"UI-Frage alt"_s); })
+                << check(u"the pop-up of the lesson has the two unread ones"_s, [this] {
+                       const QString summary = m_data->bookletSummary(m_other);
+                       return summary.contains(u"UI-Frage zwei"_s) && summary.contains(u"Wie schnell"_s) && !summary.contains(u"UI-Frage alt"_s);
+                   })
+                << snap(u"booklet-questions"_s)
+                << tap(u"^Gelesen$"_s) << gone(u"^Frage vom .*: UI-Frage zwei$"_s)
+                << wait(400)
+                << check(u"all read, nothing lost, and the tap did not open the lesson's tasks"_s, [this] {
+                       return m_data->openQuestions(m_other).isEmpty() && m_data->questions(m_other).size() == 3
+                              && !find(u"^Weitere Aufgabe$"_s) && !find(u"^Gelesen$"_s);
+                   })
+                << check(u"the pop-up of the lesson leaves the read questions out"_s,
+                         [this] { return !m_data->bookletSummary(m_other).contains(u"UI-Frage"_s); })
+                << act(u"the student's sheet: all questions, with their dates"_s,
+                       [this] { QMetaObject::invokeMethod(m_nav, "showBooklet", Q_ARG(QString, m_other)); })
+                << see(u"^Kopplung beenden$"_s)
+                << see(u"^Frage vom .*: UI-Frage alt$"_s) << see(u"^Frage vom .*: UI-Frage zwei$"_s)
+                << act(u"the link button (without the system's share menu)"_s, [this] { m_app->setShareToClipboard(true); })
+                << tap(u"^(Stattdessen Link schicken|Kopplungslink in Zwischenablage kopieren)$"_s)
+                << see(u"^(Kopplungslink kopiert|Link kopiert – zum Einfügen in eine Nachricht)$"_s)
+                << check(u"the message lies above the sheet, the link was handed on"_s, [this] {
+                       QQuickItem *toast = m_window->findChild<QQuickItem *>(u"toast"_s);
+                       if (!toast || !toast->isVisible() || !toast->parentItem() || !m_app->lastShared().contains(u"https://qupil.de/u#"_s))
+                           return false;
+                       for (QQuickItem *sibling : toast->parentItem()->childItems())
+                           if (sibling != toast && sibling->isVisible() && sibling->z() >= toast->z())
+                               return false;
+                       return toast->parentItem()->inherits("QQuickOverlay");
+                   })
+                << snap(u"booklet-link-copied"_s)
+                << act(u"sharing as usual again"_s, [this] { m_app->setShareToClipboard(false); })
+                << tap(u"^Schließen$"_s) << gone(u"^Kopplung beenden$"_s)
+                << backIfThere(u"^Schüler$"_s)
+                << act(u"remove the task and the coupling again"_s, [this] {
+                       for (const QVariant &v : m_data->tasksOn(m_membership, m_data->today()))
+                           m_data->deleteTask(v.toMap().value(u"id"_s).toString(), false);
+                       m_data->remove(u"coupling"_s, m_text);
+                   });
     }
     // Practice book, plans of a coupled student: written as tasks (the tasks editor), saved as
     // plan blocks. After the lesson the covered blocks become tasks; a block marked private

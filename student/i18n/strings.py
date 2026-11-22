@@ -36,10 +36,10 @@ E("s.when.today_at", "today, %1", "heute, %1", "aujourd'hui, %1", "hoy, %1")
 E("s.welcome.title", "Welcome to Qupil Practice", "Willkommen bei Qupil Üben", "Bienvenue dans Qupil Practice",
   "Te damos la bienvenida a Qupil Practice")
 E("s.welcome.text",
-  "Your teacher writes down here what to practise until the next lesson – with tips if you like. You tell them how it went.",
-  "Hier schreibt deine Lehrerin oder dein Lehrer auf, was du bis zur nächsten Stunde übst – auf Wunsch mit Tipps. Du sagst kurz, wie es lief.",
-  "Ici, ton professeur note ce que tu travailles jusqu'au prochain cours – avec des conseils si tu veux. Tu lui dis comment ça s'est passé.",
-  "Aquí tu profesor o profesora apunta lo que practicas hasta la próxima clase, con consejos si quieres. Tú le cuentas qué tal te fue.")
+  "Here you'll find what your teacher gives you to practise – often with tips. If you like, you can let them know how it went.",
+  "Hier findest du, was deine Lehrerin oder dein Lehrer dir zum Üben mitgibt – oft mit Tipps. Wenn du magst, kannst du kurz zurückmelden, wie es lief.",
+  "Ici, tu trouves ce que ton professeur te donne à travailler – souvent avec des conseils. Si tu veux, tu peux lui dire comment ça s'est passé.",
+  "Aquí encuentras lo que tu profesor o profesora te da para practicar, a menudo con consejos. Si quieres, puedes contarle qué tal te fue.")
 E("s.welcome.privacy",
   "No account, no e-mail address. What you write goes encrypted to your teacher only.",
   "Kein Konto, keine E-Mail-Adresse. Was du schreibst, geht verschlüsselt nur an deine Lehrkraft.",
@@ -51,6 +51,26 @@ E("s.add.scan.text",
   "Deine Lehrkraft zeigt dir in Qupil einen Code. Halte die Kamera deines Handys darauf – deine Aufgaben erscheinen dann von selbst hier.",
   "Ton professeur te montre un code dans Qupil. Vise-le avec l'appareil photo de ton téléphone – tes devoirs s'affichent alors ici tout seuls.",
   "Tu profesor te muestra un código en Qupil. Apunta la cámara del móvil hacia él y tus tareas aparecen aquí solas.")
+# With the scanner in the app (phones and tablets)
+E("s.add.scan.text_app",
+  "Your teacher shows you a code in Qupil. Scan it here – your tasks then show up by themselves.",
+  "Deine Lehrkraft zeigt dir in Qupil einen Code. Scanne ihn hier – deine Aufgaben erscheinen dann von selbst.",
+  "Ton professeur te montre un code dans Qupil. Scanne-le ici – tes devoirs s'affichent alors tout seuls.",
+  "Tu profesor te muestra un código en Qupil. Escanéalo aquí y tus tareas aparecen solas.")
+E("s.add.scan.button", "Open camera", "Kamera öffnen", "Ouvrir l'appareil photo", "Abrir la cámara")
+E("s.add.scan.prompt", "Point the camera at the code in your teacher's Qupil.",
+  "Halte die Kamera auf den Code im Qupil deiner Lehrkraft.",
+  "Vise le code dans le Qupil de ton professeur.", "Apunta la cámara al código en el Qupil de tu profesor.")
+E("s.add.scan.cancel", "Cancel", "Abbrechen", "Annuler", "Cancelar")
+E("s.add.scan.invalid", "This is not a Qupil code. Ask your teacher to show you the code again.",
+  "Das ist kein Qupil-Code. Lass dir den Code noch einmal von deiner Lehrkraft zeigen.",
+  "Ce n'est pas un code Qupil. Demande à ton professeur de te remontrer le code.",
+  "Esto no es un código de Qupil. Pide a tu profesor que te lo muestre de nuevo.")
+E("s.add.scan.denied",
+  "The camera is not allowed for this app. You can allow it in your phone's settings – or paste the link below.",
+  "Die Kamera ist für diese App nicht erlaubt. Du kannst sie in den Einstellungen deines Handys erlauben – oder unten den Link einfügen.",
+  "L'appareil photo n'est pas autorisé pour cette application. Tu peux l'autoriser dans les réglages de ton téléphone – ou coller le lien ci-dessous.",
+  "La cámara no está permitida para esta aplicación. Puedes permitirla en los ajustes del móvil o pegar el enlace abajo.")
 E("s.add.link.title", "Got a link?", "Link bekommen?", "Tu as reçu un lien ?", "¿Te enviaron un enlace?")
 E("s.add.link.text", "If your teacher sent you the link, paste it here.",
   "Wenn deine Lehrkraft dir den Link geschickt hat, füge ihn hier ein.",
@@ -108,9 +128,14 @@ E("s.fb.works", "Works", "Klappt", "Ça marche", "Sale")
 E("s.fb.works.3", "well", "gut", "bien", "bien")
 E("s.fb.works.2", "so-so", "geht so", "moyen", "más o menos")
 E("s.fb.works.1", "not yet", "noch nicht", "pas encore", "aún no")
-E("s.send.sent", "Sent to %1 · %2", "An %1 geschickt · %2", "Envoyé à %1 · %2", "Enviado a %1 · %2")
+# The teacher types the name freely ("Herr Hammer"); German cannot decline it, so no "an %1" there
+E("s.send.sent", "Sent to %1 · %2", "Geschickt · %1 · %2", "Envoyé à %1 · %2", "Enviado a %1 · %2")
+E("s.send.sent_plain", "Sent to your teacher · %1", "An deine Lehrkraft geschickt · %1", "Envoyé à ton professeur · %1",
+  "Enviado a tu profesor · %1")
 E("s.send.pending", "Will be sent …", "Wird gesendet …", "Envoi en cours …", "Se enviará …")
-E("s.question.title", "Question to %1", "Frage an %1", "Question à %1", "Pregunta para %1")
+E("s.question.title", "Question to %1", "Deine Frage · %1", "Question à %1", "Pregunta para %1")
+E("s.question.title_plain", "Question to your teacher", "Frage an deine Lehrkraft", "Question à ton professeur",
+  "Pregunta para tu profesor")
 E("s.question.placeholder", "Something unclear? Ask here …", "Etwas unklar? Frag hier …",
   "Quelque chose n'est pas clair ? Demande ici …", "¿Algo no está claro? Pregunta aquí …")
 E("s.question.hint", "Your teacher reads it before the next lesson.", "Deine Lehrkraft liest das vor der nächsten Stunde.",

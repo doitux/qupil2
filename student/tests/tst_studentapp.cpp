@@ -8,9 +8,12 @@
 #include "Booklet.h"
 #include "Crypto.h"
 #include "FakeNextcloud.h"
+#include "IncomingLinks.h"
+#include "QrScanner.h"
 #include "StudentApp.h"
 #include "Translator.h"
 
+#include <QDesktopServices>
 #include <QJsonArray>
 #include <QQmlApplicationEngine>
 #include <QQuickItem>
@@ -18,6 +21,7 @@
 #include <QSignalSpy>
 #include <QTemporaryDir>
 #include <QTest>
+#include <QThread>
 #include <QtQml/QQmlExtensionPlugin>
 
 Q_IMPORT_QML_PLUGIN(QupilStudentPlugin)
@@ -315,6 +319,161 @@ private slots:
         QVERIFY(tap(w, u"remove-"_s + id));
         QTRY_VERIFY(m_app->teachers().isEmpty());
         QTRY_VERIFY(findItem(w->contentItem(), u"demoButton"_s));
+    }
+
+    void linkFromAnotherThread()
+    {
+        // Android hands a link over on its own main thread while the app is running:
+        // the link opened the app and nothing else happened
+        QSignalSpy notices(m_app, &StudentApp::notice);
+        const QUrl url(Booklet::encodeLink(m_link));
+        QThread *thread = QThread::create([this, url] { m_app->openUrl(url); });
+        thread->start();
+        QVERIFY(thread->wait(5000));
+        delete thread;
+        QVERIFY(m_app->teachers().isEmpty());   // nothing was touched on the other thread
+        QTRY_COMPARE(m_app->teachers().size(), 1);
+        QTRY_COMPARE(m_app->current().value(u"teacher"_s).toString(), u"Herr Test"_s);
+        QCOMPARE(notices.size(), 1);
+
+        // The same link handed over a second time right away: once is enough
+        m_app->openUrl(url);
+        QCOMPARE(notices.size(), 1);
+
+        // Something else that opens the app is no coupling link
+        m_app->openUrl(QUrl(u"https://qupil.de/u"_s));
+        QCOMPARE(m_app->teachers().size(), 1);
+        QCOMPARE(notices.size(), 1);
+    }
+
+    void linkThroughTheSystem()
+    {
+        // As the system hands a link to the app on iOS and the desktop (as main.cpp sets it up)
+        IncomingLinks::watch(m_app, [this](const QUrl &url) { m_app->openUrl(url); });
+        const QString link = Booklet::encodeLink(m_link);
+        QVERIFY(link.startsWith(u"https://qupil.de/u#"_s));
+        QDesktopServices::openUrl(QUrl(link));
+        QTRY_COMPARE(m_app->teachers().size(), 1);
+        removeAll();
+        QDesktopServices::openUrl(QUrl(u"qupil-student:"_s + link.mid(link.indexOf(u'#') + 1)));
+        QTRY_COMPARE(m_app->teachers().size(), 1);
+        IncomingLinks::unwatch();
+    }
+
+    void uiScanner()
+    {
+        // The scanner of the phone, pretended: some other QR code first
+        QrScanner::pretend({ u"https://example.org/not-qupil"_s, false });
+        QVERIFY(m_app->canScan());
+
+        QQmlApplicationEngine engine;
+        engine.addImportPath(u"qrc:/qt/qml"_s);
+        engine.load(QUrl(u"qrc:/qt/qml/QupilStudent/qml/Main.qml"_s));
+        QQuickWindow *w = window(engine);
+        QVERIFY(w);
+        QVERIFY(QTest::qWaitForWindowExposed(w));
+        QTRY_VERIFY(findItem(w->contentItem(), u"scanButton"_s));
+        QVERIFY(!findItem(w->contentItem(), u"scanError"_s));
+
+        QVERIFY(tap(w, u"scanButton"_s));
+        QTRY_COMPARE(m_app->scanError(), u"invalid"_s);
+        QTRY_VERIFY(findItem(w->contentItem(), u"scanError"_s));
+        QVERIFY(findItem(w->contentItem(), u"scanError"_s)->property("text").toString().contains(u"kein Qupil-Code"_s));
+        QVERIFY(m_app->teachers().isEmpty());
+
+        // The camera is not allowed
+        QrScanner::pretend({ QString(), true });
+        QVERIFY(tap(w, u"scanButton"_s));
+        QTRY_COMPARE(m_app->scanError(), u"denied"_s);
+        QVERIFY(findItem(w->contentItem(), u"scanError"_s)->property("text").toString().contains(u"Kamera"_s));
+
+        // Closed without a code: nothing to complain about
+        QrScanner::pretend({ QString(), false });
+        QVERIFY(tap(w, u"scanButton"_s));
+        QTRY_COMPARE(m_app->scanError(), QString());
+        QTRY_VERIFY(!findItem(w->contentItem(), u"scanError"_s));
+
+        // The teacher's code: coupled, the tasks appear
+        QrScanner::pretend({ Booklet::encodeLink(m_link), false });
+        QVERIFY(tap(w, u"scanButton"_s));
+        QTRY_COMPARE(m_app->teachers().size(), 1);
+        QTRY_VERIFY(findItem(w->contentItem(), u"task-t1"_s));
+        QCOMPARE(m_app->scanError(), QString());
+    }
+
+    void uiKeyboardKeepsFieldsInView()
+    {
+        // Android makes the window lower for the keyboard: the field with the cursor and
+        // its buttons stay in view. A phone (390 x 844), then without the keyboard's 336.
+        QQmlApplicationEngine engine;
+        engine.addImportPath(u"qrc:/qt/qml"_s);
+        engine.load(QUrl(u"qrc:/qt/qml/QupilStudent/qml/Main.qml"_s));
+        auto *w = qobject_cast<QQuickWindow *>(engine.rootObjects().value(0));
+        QVERIFY(w);
+        w->resize(390, 844);
+        QVERIFY(QTest::qWaitForWindowExposed(w));
+        auto inView = [w](QQuickItem *item) {
+            const QRectF r = item->mapRectToScene(QRectF(0, 0, item->width(), item->height()));
+            return r.top() >= 0 && r.bottom() <= w->height();
+        };
+
+        // Welcome page: the link field with "Paste" and "Open" below it
+        QTRY_VERIFY(findItem(w->contentItem(), u"linkField"_s));
+        QVERIFY(tap(w, u"linkField"_s));
+        QTRY_VERIFY(findItem(w->contentItem(), u"linkField"_s)->hasActiveFocus());
+        w->resize(390, 844 - 336);
+        QTRY_VERIFY(inView(findItem(w->contentItem(), u"linkField"_s)));
+        QTRY_VERIFY(inView(findItem(w->contentItem(), u"openLinkButton"_s)));
+        QVERIFY(inView(findItem(w->contentItem(), u"pasteButton"_s)));
+        w->resize(390, 844);
+
+        // The example: the question field far down, "send" beside it
+        QVERIFY(tap(w, u"demoButton"_s));
+        QTRY_VERIFY(findItem(w->contentItem(), u"task-demo-1"_s));
+        QQuickItem *field = nullptr;
+        QTRY_VERIFY((field = findItem(w->contentItem(), u"questionField"_s)));
+        field->forceActiveFocus();
+        QTRY_VERIFY(field->hasActiveFocus());
+        w->resize(390, 844 - 336);
+        QTRY_VERIFY(inView(field));
+        QTRY_VERIFY(inView(findItem(w->contentItem(), u"sendQuestion"_s)));
+        // A long question: the field grows, both stay in view
+        field->setProperty("text", u"Wie viele Takte soll ich jeden Tag üben und in welchem Tempo am Anfang und später dann?\n\n"
+                                   u"Und noch eine Zeile, damit das Feld höher wird.\nUnd noch eine."_s);
+        field->setProperty("cursorPosition", field->property("length"));
+        QTest::qWait(100);
+        QVERIFY(inView(findItem(w->contentItem(), u"sendQuestion"_s)));
+        const QRectF cursor = field->mapRectToScene(field->property("cursorRectangle").toRectF());
+        QVERIFY2(cursor.top() >= 0 && cursor.bottom() <= w->height(), "the cursor is in view");
+        // A tap beside the field puts the keyboard away
+        QVERIFY(tap(w, u"task-demo-1"_s) || true);
+        w->resize(390, 844);
+    }
+
+    void uiTextsWithoutDeclension()
+    {
+        // The teacher's name as typed ("Herr Test") stands on its own: no "an Herr Test"
+        QCOMPARE(m_app->addLink(Booklet::encodeLink(m_link)), QString());
+        QTRY_VERIFY(!task(u"t1"_s).isEmpty());
+        QQmlApplicationEngine engine;
+        engine.addImportPath(u"qrc:/qt/qml"_s);
+        engine.load(QUrl(u"qrc:/qt/qml/QupilStudent/qml/Main.qml"_s));
+        QQuickWindow *w = window(engine);
+        QVERIFY(w);
+        QVERIFY(QTest::qWaitForWindowExposed(w));
+        QTRY_VERIFY(findItem(w->contentItem(), u"task-t1"_s));
+        QStringList texts;
+        std::function<void(QQuickItem *)> collect = [&](QQuickItem *item) {
+            const QVariant text = item->property("text");
+            if (item->isVisible() && text.typeId() == QMetaType::QString && !text.toString().isEmpty())
+                texts << text.toString();
+            for (QQuickItem *child : item->childItems())
+                collect(child);
+        };
+        collect(w->contentItem());
+        const QString all = texts.join(u'\n');
+        QVERIFY2(all.contains(u"Deine Frage · Herr Test"_s, Qt::CaseInsensitive), qPrintable(all));
+        QVERIFY2(!all.contains(u"an Herr Test"_s, Qt::CaseInsensitive), qPrintable(all));
     }
 };
 

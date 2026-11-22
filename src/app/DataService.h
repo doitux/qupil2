@@ -241,8 +241,16 @@ public:
     Q_INVOKABLE bool finishPlan(const QString &planId, const QString &rest, bool forAll);
     //! Adds \a text to the note of that lesson (a new note if there is none)
     Q_INVOKABLE bool appendToNote(const QString &membershipId, const QString &date, const QString &text, bool forAll);
+    //! The student's questions from the practice book, newest first: id, text, at (ms),
+    //! date (ISO), read (bool)
+    Q_INVOKABLE QVariantList questions(const QString &studentId) const;
+    //! Those not marked as read yet, oldest first
+    Q_INVOKABLE QVariantList openQuestions(const QString &studentId) const;
+    //! Marks all questions of the student as read (they stay in the practice book sheet)
+    Q_INVOKABLE bool markQuestionsRead(const QString &studentId);
     //! The student's answers from the practice book: feedback per task id ({practiced,
-    //! works, done, at}, the newer one wins) and questions (they replace the stored ones)
+    //! works, done, at}, the newer one wins) and questions (they replace the stored ones;
+    //! what is marked as read here stays so)
     bool applyFeedback(const QString &studentId, const QVariantMap &feedback, const QVariantList &questions);
     /*!
         What the student's practice book shows (format 1, docs/student-app.md): the next
@@ -252,7 +260,7 @@ public:
     */
     QJsonObject bookletContent(const QString &studentId) const;
     //! For the pop-up at the start of a lesson: what the student answered in the practice book
-    //! (open tasks with an answer, questions of the last two weeks), one line each; "" if nothing
+    //! (open tasks with an answer, unread questions of the last two weeks), one line each; "" if nothing
     QString bookletSummary(const QString &studentId) const;
 
     // ------------------------------------------------------------ sheet music library

@@ -829,8 +829,12 @@ ApplicationWindow {
     }
 
     // ---------------------------------------------------------------- short messages
+    // Above the editors (they are popups): a message from a sheet, e.g. "Coupling link
+    // copied", stayed hidden under it
     Rectangle {
         id: toast
+        objectName: "toast"
+        parent: Overlay.overlay
         property alias text: toastText.text
         property bool show: false
         //! With a function: an "Undo" button that runs it
