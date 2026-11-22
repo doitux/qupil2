@@ -16,6 +16,8 @@ project(qupil-student
     LANGUAGES C CXX)
 
 if(IOS)
+    # Objective-C++ for the QR code scanner (QrScanner_ios.mm)
+    enable_language(OBJCXX)
     set(CMAKE_XCODE_ATTRIBUTE_SKIP_INSTALL YES)
 endif()
 
@@ -75,6 +77,8 @@ qt_add_qml_module(qupilstudentui
         src/StudentApp.cpp
         src/Translator.h
         src/Translator.cpp
+        src/QrScanner.h
+        src/QrScanner.cpp
     QML_FILES
         qml/Main.qml
         qml/Theme.qml
@@ -91,7 +95,9 @@ qt_add_qml_module(qupilstudentui
         qml/components/TaskCard.qml
         qml/components/AppButton.qml
         qml/components/IconButton.qml
-        qml/components/AddTeacher.qml)
+        qml/components/AddTeacher.qml
+        qml/components/Logo.qml
+        qml/components/PageFlickable.qml)
 qt_add_resources(qupilstudentui "student_assets"
     PREFIX /
     BASE ${CMAKE_CURRENT_SOURCE_DIR}
@@ -108,6 +114,17 @@ target_include_directories(qupilstudentui PUBLIC src)
 target_compile_definitions(qupilstudentui PUBLIC QUPIL_STUDENT_VERSION="${PROJECT_VERSION}")
 target_link_libraries(qupilstudentui PUBLIC qupilbooklet
     Qt6::Core Qt6::Gui Qt6::Qml Qt6::Quick Qt6::QuickControls2 Qt6::Network)
+# The QR code scanner: the phone's camera (iOS: AVFoundation; Android: StudentActivity
+# with zxing-android-embedded, see platform/android/build.gradle); none on the desktop
+if(IOS)
+    target_sources(qupilstudentui PRIVATE src/QrScanner_ios.mm)
+    set_source_files_properties(src/QrScanner_ios.mm PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
+    target_link_libraries(qupilstudentui PUBLIC "-framework AVFoundation" "-framework UIKit")
+elseif(ANDROID)
+    target_sources(qupilstudentui PRIVATE src/QrScanner_android.cpp)
+else()
+    target_sources(qupilstudentui PRIVATE src/QrScanner_none.cpp)
+endif()
 
 # ---- the app
 qt_add_executable(qupil-student src/main.cpp)
@@ -143,8 +160,9 @@ if(IOS)
     set(_privacy ${QUPIL_ROOT}/platform/ios/PrivacyInfo.xcprivacy)
     target_sources(qupil-student PRIVATE ${_privacy})
     set_source_files_properties(${_privacy} PROPERTIES MACOSX_PACKAGE_LOCATION Resources)
-    # Universal links (https://qupil.de/u#…) need the Associated Domains capability on the
-    # App ID and apple-app-site-association on qupil.de; until then the qupil-student: scheme
+    # Universal links (https://qupil.de/u#…): the Associated Domains entitlement. The CI builds
+    # the archive unsigned and puts the entitlement in before the export (student.yml); this
+    # option is for a build signed by Xcode itself.
     option(QUPIL_STUDENT_ASSOCIATED_DOMAINS "iOS: open https://qupil.de/u links in the app" OFF)
     if(QUPIL_STUDENT_ASSOCIATED_DOMAINS)
         set_target_properties(qupil-student PROPERTIES XCODE_ATTRIBUTE_CODE_SIGN_ENTITLEMENTS

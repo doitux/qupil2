@@ -36,6 +36,11 @@ class StudentApp : public QObject
     Q_PROPERTY(QVariantMap current READ current NOTIFY changed)
     Q_PROPERTY(bool busy READ busy NOTIFY busyChanged)
     Q_PROPERTY(QString version READ version CONSTANT)
+    //! The phone's QR code scanner can be opened (scan())
+    Q_PROPERTY(bool canScan READ canScan CONSTANT)
+    //! Why the last scan added nothing: "" (fine, or closed), "invalid" (not a Qupil code),
+    //! "denied" (the camera is not allowed)
+    Q_PROPERTY(QString scanError READ scanError NOTIFY scanErrorChanged)
 
 public:
     ~StudentApp() override;
@@ -57,6 +62,8 @@ public:
     QVariantMap current() const;
     bool busy() const { return m_busy > 0; }
     QString version() const;
+    bool canScan() const;
+    QString scanError() const { return m_scanError; }
 
     //! A coupling link from the QR code, a message or the clipboard.
     //! Returns "" (added or already there), "invalid" or "demo-only".
@@ -71,6 +78,9 @@ public:
     Q_INVOKABLE void setDone(const QString &taskId, bool done);
     Q_INVOKABLE void askQuestion(const QString &text, const QString &taskId = {});
 
+    //! Opens the QR code scanner; a coupling code is added like a link (addLink)
+    Q_INVOKABLE void scan();
+
     //! The text of the clipboard, if it is a coupling link (for "Paste link")
     Q_INVOKABLE QString clipboardLink() const;
 
@@ -80,6 +90,7 @@ public:
 signals:
     void changed();
     void busyChanged();
+    void scanErrorChanged();
     //! A short message for the user (e.g. "coupled with …", "could not update")
     void notice(const QString &text);
 
@@ -112,6 +123,7 @@ private:
     void sendPending();
     void touch(Teacher &teacher);
     void setBusy(bool on);
+    void setScanError(const QString &error);
     QJsonObject feedbackFor(const Teacher &teacher, const QString &taskId) const;
     void updateFeedback(const QString &taskId, const QString &field, const QJsonValue &value);
     static QJsonObject demoBooklet();
@@ -119,6 +131,7 @@ private:
     QList<Teacher> m_teachers;
     int m_current = 0;
     int m_busy = 0;
+    QString m_scanError;
     QString m_deviceId;
     QNetworkAccessManager *m_net = nullptr;
     QTimer m_uploadTimer;

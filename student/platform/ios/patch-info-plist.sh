@@ -17,6 +17,9 @@ plutil -replace UIPrefersShowingLanguageSettings -bool YES "$plist"
 # qupil-student:… opens the app (fallback until universal links for qupil.de/u are set up)
 plutil -replace CFBundleURLTypes -json '[{"CFBundleURLName":"de.qupil.student","CFBundleURLSchemes":["qupil-student"]}]' "$plist"
 
+# The QR code scanner (translations in <lang>.lproj/InfoPlist.strings)
+plutil -replace NSCameraUsageDescription -string "To scan the QR code your teacher shows you." "$plist"
+
 # Portrait on iPhone; iPad all orientations (required for iPad multitasking)
 plutil -replace UISupportedInterfaceOrientations -json '["UIInterfaceOrientationPortrait"]' "$plist"
 plutil -replace UISupportedInterfaceOrientations~ipad -json '["UIInterfaceOrientationPortrait","UIInterfaceOrientationPortraitUpsideDown","UIInterfaceOrientationLandscapeLeft","UIInterfaceOrientationLandscapeRight"]' "$plist"

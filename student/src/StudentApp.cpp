@@ -3,6 +3,7 @@
 #include "StudentApp.h"
 
 #include "Crypto.h"
+#include "QrScanner.h"
 
 #include <QClipboard>
 #include <QDir>
@@ -15,6 +16,7 @@
 #include <QNetworkRequest>
 #include <QSaveFile>
 #include <QStandardPaths>
+#include <QThread>
 #include <QUuid>
 
 using namespace Qt::StringLiterals;
@@ -342,11 +344,52 @@ void StudentApp::removeTeacher(const QString &id)
 
 void StudentApp::openUrl(const QUrl &url)
 {
-    const QString text = url.toString();
-    if (Booklet::decodeLink(text)) {
-        if (addLink(text).isEmpty())
-            emit notice(qtTrId("s.coupled"));
+    // Android hands a link over on its own main thread while the app is running (only at
+    // the app's start it comes on Qt's thread): go on where the app's state lives. Without
+    // this the link opened the app and nothing else happened.
+    if (QThread::currentThread() != thread()) {
+        QMetaObject::invokeMethod(this, [this, url] { openUrl(url); }, Qt::QueuedConnection);
+        return;
     }
+    const QString text = url.toString();
+    const bool ok = Booklet::decodeLink(text) && addLink(text).isEmpty();
+    // For the tests on a device (adb logcat); never the link itself, it is the key
+    qInfo("Qupil student: link received, %s", ok ? "teacher added" : "not a coupling link");
+    if (ok) {
+        setScanError({});
+        emit notice(qtTrId("s.coupled"));
+    }
+}
+
+bool StudentApp::canScan() const
+{
+    return QrScanner::available();
+}
+
+void StudentApp::setScanError(const QString &error)
+{
+    if (m_scanError == error)
+        return;
+    m_scanError = error;
+    emit scanErrorChanged();
+}
+
+void StudentApp::scan()
+{
+    setScanError({});
+    QrScanner::scan({ qtTrId("s.add.scan.prompt"), qtTrId("s.add.scan.cancel") }, [this](const QrScanner::Result &result) {
+        if (result.denied) {
+            setScanError(u"denied"_s);
+        } else if (result.text.isEmpty()) {
+            // closed without a code
+        } else if (addLink(result.text).isEmpty()) {
+            emit notice(qtTrId("s.coupled"));
+        } else {
+            setScanError(u"invalid"_s);
+        }
+        qInfo("Qupil student: scanner closed, %s", result.denied ? "camera refused" : result.text.isEmpty() ? "no code"
+                  : m_scanError.isEmpty() ? "teacher added" : "not a coupling code");
+    });
 }
 
 QString StudentApp::clipboardLink() const

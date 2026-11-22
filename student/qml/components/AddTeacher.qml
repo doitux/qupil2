@@ -1,8 +1,9 @@
 // SPDX-FileCopyrightText: 2006-2026 Felix Hammer
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 //
-// How a teacher gets into the app: scan the QR code with the phone's camera (opens the
-// app by itself), or paste the link the teacher sent.
+// How a teacher gets into the app: scan the QR code the teacher's Qupil shows (with the
+// scanner in the app, or with the phone's camera, which opens the app with the link),
+// or paste the link the teacher sent.
 
 import QtQuick
 import QtQuick.Controls
@@ -37,8 +38,32 @@ Column {
                 width: parent.width - 56
                 spacing: 3
                 T { width: parent.width; text: qsTrId("s.add.scan.title"); font.weight: Font.Bold; font.pixelSize: 16 }
-                T { width: parent.width; text: qsTrId("s.add.scan.text"); color: Theme.textMuted; font.pixelSize: 14 }
+                T {
+                    width: parent.width
+                    // Without a scanner in the app (desktop): the phone's own camera reads the code
+                    text: StudentApp.canScan ? qsTrId("s.add.scan.text_app") : qsTrId("s.add.scan.text")
+                    color: Theme.textMuted
+                    font.pixelSize: 14
+                }
             }
+        }
+        AppButton {
+            objectName: "scanButton"
+            visible: StudentApp.canScan
+            width: parent.width
+            primary: true
+            icon: "camera"
+            text: qsTrId("s.add.scan.button")
+            onClicked: StudentApp.scan()
+        }
+        T {
+            objectName: "scanError"
+            visible: StudentApp.scanError !== ""
+            width: parent.width
+            text: StudentApp.scanError === "denied" ? qsTrId("s.add.scan.denied") : qsTrId("s.add.scan.invalid")
+            color: Theme.danger
+            font.pixelSize: 14
+            font.weight: Font.DemiBold
         }
     }
 

@@ -36,7 +36,8 @@ Page {
         }
     }
 
-    Flickable {
+    PageFlickable {
+        revealBelow: 120
         anchors.fill: parent
         anchors.topMargin: bar.height
         contentHeight: column.implicitHeight + window.bottomInset + 40

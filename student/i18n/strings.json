@@ -41,11 +41,47 @@
   "es": "Pegar",
   "fr": "Coller"
  },
+ "s.add.scan.button": {
+  "de": "Kamera öffnen",
+  "en": "Open camera",
+  "es": "Abrir la cámara",
+  "fr": "Ouvrir l'appareil photo"
+ },
+ "s.add.scan.cancel": {
+  "de": "Abbrechen",
+  "en": "Cancel",
+  "es": "Cancelar",
+  "fr": "Annuler"
+ },
+ "s.add.scan.denied": {
+  "de": "Die Kamera ist für diese App nicht erlaubt. Du kannst sie in den Einstellungen deines Handys erlauben – oder unten den Link einfügen.",
+  "en": "The camera is not allowed for this app. You can allow it in your phone's settings – or paste the link below.",
+  "es": "La cámara no está permitida para esta aplicación. Puedes permitirla en los ajustes del móvil o pegar el enlace abajo.",
+  "fr": "L'appareil photo n'est pas autorisé pour cette application. Tu peux l'autoriser dans les réglages de ton téléphone – ou coller le lien ci-dessous."
+ },
+ "s.add.scan.invalid": {
+  "de": "Das ist kein Qupil-Code. Lass dir den Code noch einmal von deiner Lehrkraft zeigen.",
+  "en": "This is not a Qupil code. Ask your teacher to show you the code again.",
+  "es": "Esto no es un código de Qupil. Pide a tu profesor que te lo muestre de nuevo.",
+  "fr": "Ce n'est pas un code Qupil. Demande à ton professeur de te remontrer le code."
+ },
+ "s.add.scan.prompt": {
+  "de": "Halte die Kamera auf den Code im Qupil deiner Lehrkraft.",
+  "en": "Point the camera at the code in your teacher's Qupil.",
+  "es": "Apunta la cámara al código en el Qupil de tu profesor.",
+  "fr": "Vise le code dans le Qupil de ton professeur."
+ },
  "s.add.scan.text": {
   "de": "Deine Lehrkraft zeigt dir in Qupil einen Code. Halte die Kamera deines Handys darauf – deine Aufgaben erscheinen dann von selbst hier.",
   "en": "Your teacher shows you a code in Qupil. Point your phone's camera at it – your tasks then show up here by themselves.",
   "es": "Tu profesor te muestra un código en Qupil. Apunta la cámara del móvil hacia él y tus tareas aparecen aquí solas.",
   "fr": "Ton professeur te montre un code dans Qupil. Vise-le avec l'appareil photo de ton téléphone – tes devoirs s'affichent alors ici tout seuls."
+ },
+ "s.add.scan.text_app": {
+  "de": "Deine Lehrkraft zeigt dir in Qupil einen Code. Scanne ihn hier – deine Aufgaben erscheinen dann von selbst.",
+  "en": "Your teacher shows you a code in Qupil. Scan it here – your tasks then show up by themselves.",
+  "es": "Tu profesor te muestra un código en Qupil. Escanéalo aquí y tus tareas aparecen solas.",
+  "fr": "Ton professeur te montre un code dans Qupil. Scanne-le ici – tes devoirs s'affichent alors tout seuls."
  },
  "s.add.scan.title": {
   "de": "QR-Code scannen",
@@ -282,10 +318,16 @@
   "fr": "Envoyer"
  },
  "s.question.title": {
-  "de": "Frage an %1",
+  "de": "Deine Frage · %1",
   "en": "Question to %1",
   "es": "Pregunta para %1",
   "fr": "Question à %1"
+ },
+ "s.question.title_plain": {
+  "de": "Frage an deine Lehrkraft",
+  "en": "Question to your teacher",
+  "es": "Pregunta para tu profesor",
+  "fr": "Question à ton professeur"
  },
  "s.send.pending": {
   "de": "Wird gesendet …",
@@ -294,10 +336,16 @@
   "fr": "Envoi en cours …"
  },
  "s.send.sent": {
-  "de": "An %1 geschickt · %2",
+  "de": "Geschickt · %1 · %2",
   "en": "Sent to %1 · %2",
   "es": "Enviado a %1 · %2",
   "fr": "Envoyé à %1 · %2"
+ },
+ "s.send.sent_plain": {
+  "de": "An deine Lehrkraft geschickt · %1",
+  "en": "Sent to your teacher · %1",
+  "es": "Enviado a tu profesor · %1",
+  "fr": "Envoyé à ton professeur · %1"
  },
  "s.settings.add": {
   "de": "Weitere Lehrkraft hinzufügen",
@@ -396,10 +444,10 @@
   "fr": "Pas de compte, pas d'adresse e-mail. Ce que tu écris va, chiffré, uniquement à ton professeur."
  },
  "s.welcome.text": {
-  "de": "Hier schreibt deine Lehrerin oder dein Lehrer auf, was du bis zur nächsten Stunde übst – auf Wunsch mit Tipps. Du sagst kurz, wie es lief.",
-  "en": "Your teacher writes down here what to practise until the next lesson – with tips if you like. You tell them how it went.",
-  "es": "Aquí tu profesor o profesora apunta lo que practicas hasta la próxima clase, con consejos si quieres. Tú le cuentas qué tal te fue.",
-  "fr": "Ici, ton professeur note ce que tu travailles jusqu'au prochain cours – avec des conseils si tu veux. Tu lui dis comment ça s'est passé."
+  "de": "Hier findest du, was deine Lehrerin oder dein Lehrer dir zum Üben mitgibt – oft mit Tipps. Wenn du magst, kannst du kurz zurückmelden, wie es lief.",
+  "en": "Here you'll find what your teacher gives you to practise – often with tips. If you like, you can let them know how it went.",
+  "es": "Aquí encuentras lo que tu profesor o profesora te da para practicar, a menudo con consejos. Si quieres, puedes contarle qué tal te fue.",
+  "fr": "Ici, tu trouves ce que ton professeur te donne à travailler – souvent avec des conseils. Si tu veux, tu peux lui dire comment ça s'est passé."
  },
  "s.welcome.title": {
   "de": "Willkommen bei Qupil Üben",

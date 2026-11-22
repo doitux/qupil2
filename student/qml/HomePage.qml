@@ -18,7 +18,8 @@ Page {
     readonly property bool allowQuestions: allow.questions ?? true
     readonly property var nextLesson: (b.next ?? []).length > 0 ? b.next[0] : null
     // Without a name set in the teacher's Qupil: "your teacher"
-    readonly property string teacherName: (b.teacher ?? "") !== "" ? b.teacher : qsTrId("s.teacher_fallback")
+    readonly property bool teacherNamed: (b.teacher ?? "") !== ""
+    readonly property string teacherName: teacherNamed ? b.teacher : qsTrId("s.teacher_fallback")
     property var openTasks: ({})       // task id -> hints shown
 
     // ---- top bar
@@ -96,10 +97,11 @@ Page {
         }
     }
 
-    Flickable {
+    PageFlickable {
         id: flick
         anchors.fill: parent
         anchors.topMargin: bar.height
+        revealBelow: 40
         contentHeight: column.implicitHeight + window.bottomInset + 40
         boundsBehavior: Flickable.DragOverBounds
         onDragEnded: if (contentY < -70 && !page.b.demo) StudentApp.refresh()
@@ -341,7 +343,8 @@ Page {
                     font.pixelSize: 13
                     color: parent.state === "sent" ? Theme.success : Theme.textMuted
                     font.weight: Font.DemiBold
-                    text: parent.state === "sent" ? qsTrId("s.send.sent").arg(page.teacherName).arg(Fmt.dateTime(page.b.sentAt))
+                    text: parent.state === "sent" ? (page.teacherNamed ? qsTrId("s.send.sent").arg(page.teacherName).arg(Fmt.dateTime(page.b.sentAt))
+                                                                    : qsTrId("s.send.sent_plain").arg(Fmt.dateTime(page.b.sentAt)))
                                                   : qsTrId("s.send.pending")
                 }
             }
@@ -352,53 +355,45 @@ Page {
                 width: parent.width
                 spacing: 8
                 topPadding: 8
-                SectionLabel { text: qsTrId("s.question.title").arg(page.teacherName) }
+                SectionLabel { text: page.teacherNamed ? qsTrId("s.question.title").arg(page.teacherName) : qsTrId("s.question.title_plain") }
                 Card {
                     width: parent.width
                     spacing: 10
-                    Rectangle {
-                        width: parent.width
-                        height: Math.max(84, question.implicitHeight + 8)
-                        radius: 12
-                        color: Theme.surfaceAlt
-                        border.width: question.activeFocus ? 2 : 0
-                        border.color: Theme.accent
-                        TextArea {
-                            id: question
-                            objectName: "questionField"
-                            anchors.fill: parent
-                            placeholderText: qsTrId("s.question.placeholder")
-                            placeholderTextColor: Theme.textMuted
-                            color: Theme.text
-                            font.family: Theme.fontFamily
-                            font.pixelSize: 15
-                            wrapMode: TextEdit.Wrap
-                            background: null
-                        }
-                    }
+                    // The field with "send" beside it, at the field's lower edge: both stay
+                    // in view together when the keyboard is up
                     Item {
                         width: parent.width
-                        height: 40
-                        T {
-                            anchors.verticalCenter: parent.verticalCenter
+                        height: fieldBox.height
+                        Rectangle {
+                            id: fieldBox
                             width: parent.width - sendButton.width - 10
-                            text: page.b.demo ? qsTrId("s.question.demo") : qsTrId("s.question.hint")
-                            color: Theme.textMuted
-                            font.pixelSize: 12
+                            height: Math.max(72, question.implicitHeight + 8)
+                            radius: 12
+                            color: Theme.surfaceAlt
+                            border.width: question.activeFocus ? 2 : 0
+                            border.color: Theme.accent
+                            TextArea {
+                                id: question
+                                objectName: "questionField"
+                                anchors.fill: parent
+                                placeholderText: qsTrId("s.question.placeholder")
+                                placeholderTextColor: Theme.textMuted
+                                color: Theme.text
+                                font.family: Theme.fontFamily
+                                font.pixelSize: 15
+                                wrapMode: TextEdit.Wrap
+                                background: null
+                                onCursorRectangleChanged: if (activeFocus) flick.reveal()
+                            }
                         }
                         Rectangle {
                             id: sendButton
                             objectName: "sendQuestion"
                             anchors.right: parent.right
-                            width: sendRow.implicitWidth + 28; height: 40; radius: 20
+                            anchors.bottom: parent.bottom
+                            width: 48; height: 48; radius: 24
                             color: question.text.trim() === "" ? Theme.border : Theme.accent
-                            Row {
-                                id: sendRow
-                                anchors.centerIn: parent
-                                spacing: 6
-                                Icon { name: "send"; width: 17; height: 17; color: "white"; strokeWidth: 2.2; anchors.verticalCenter: parent.verticalCenter }
-                                T { text: qsTrId("s.question.send"); color: "white"; font.weight: Font.Bold; wrapMode: Text.NoWrap; anchors.verticalCenter: parent.verticalCenter }
-                            }
+                            Icon { anchors.centerIn: parent; name: "send"; width: 20; height: 20; color: "white"; strokeWidth: 2.2 }
                             Accessible.role: Accessible.Button
                             Accessible.name: qsTrId("s.question.send")
                             MouseArea {
@@ -411,6 +406,12 @@ Page {
                                 }
                             }
                         }
+                    }
+                    T {
+                        width: parent.width
+                        text: page.b.demo ? qsTrId("s.question.demo") : qsTrId("s.question.hint")
+                        color: Theme.textMuted
+                        font.pixelSize: 12
                     }
                     // Already asked (newest first)
                     Repeater {

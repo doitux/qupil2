@@ -1,7 +1,7 @@
 // SPDX-FileCopyrightText: 2006-2026 Felix Hammer
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 //
-// Qupil for students: the practice book the teacher's Qupil writes.
+// Qupil Practice ("Qupil – Musik üben"): the students' app for the tasks the teacher's Qupil writes.
 //
 //   --data-dir <dir>     keep the app's state there (tests, screenshots)
 //   --today <yyyy-MM-dd> pretend it is that day (example data and screenshots)
@@ -10,7 +10,10 @@
 //   --screenshot <file>  save the window after loading and quit
 //   --size <WxH>         window size (screenshots)
 //   --smoke-test         load the interface and quit (CI)
+//   --scan               open the QR code scanner at the start (tests on a device)
+//   --pretend-scan <text> the scanner counts as there and reads this text (screenshots, tests)
 
+#include "QrScanner.h"
 #include "StudentApp.h"
 #include "Translator.h"
 
@@ -47,7 +50,9 @@ int main(int argc, char *argv[])
     const QCommandLineOption screenshot(u"screenshot"_s, u"Save the window and quit"_s, u"file"_s);
     const QCommandLineOption smoke(u"smoke-test"_s, u"Load and quit"_s);
     const QCommandLineOption size(u"size"_s, u"Window size (screenshots)"_s, u"WxH"_s);
-    parser.addOptions({dataDir, today, lang, demo, screenshot, smoke, size});
+    const QCommandLineOption scan(u"scan"_s, u"Open the QR code scanner at the start"_s);
+    const QCommandLineOption pretendScan(u"pretend-scan"_s, u"The scanner reads this text"_s, u"text"_s);
+    parser.addOptions({dataDir, today, lang, demo, screenshot, smoke, size, scan, pretendScan});
     parser.process(app);
 
     if (parser.isSet(lang))
@@ -56,6 +61,8 @@ int main(int argc, char *argv[])
         StudentApp::setDataDir(parser.value(dataDir));
     if (parser.isSet(today))
         StudentApp::setToday(QDate::fromString(parser.value(today), Qt::ISODate));
+    if (parser.isSet(pretendScan))
+        QrScanner::pretend({ parser.value(pretendScan), false });
 
     Translator translator;
     const QString language = QLocale().name().section(u'_', 0, 0);
@@ -94,6 +101,8 @@ int main(int argc, char *argv[])
         if (window && wh.size() == 2)
             window->resize(wh.at(0).toInt(), wh.at(1).toInt());
     }
+    if (parser.isSet(scan))
+        QTimer::singleShot(1500, studentApp, &StudentApp::scan);
     if (parser.isSet(smoke))
         QTimer::singleShot(500, &app, &QCoreApplication::quit);
     if (parser.isSet(screenshot)) {
