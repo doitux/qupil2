@@ -53,7 +53,8 @@ running() { xcrun simctl spawn "$UDID" launchctl list 2> /dev/null | grep -q "$B
 HERE=$(cd "$(dirname "$0")" && pwd)
 HAVE_IDB=0
 command -v idb > /dev/null 2>&1 && HAVE_IDB=1
-# tap_label <pattern> <seconds>: taps what the system's accessibility shows under that label
+# tap_label <pattern> <seconds> [optional]: taps what the system's accessibility shows under
+# that label; "optional": fine if it does not come
 tap_label() {
     local i xy
     for ((i = 0; i < $2; i += 2)); do
@@ -65,14 +66,19 @@ tap_label() {
         fi
         sleep 2
     done
+    if [ "${3:-}" = optional ]; then
+        say "- no \`$1\` to tap"
+        return 0
+    fi
     say "- **not on the screen:** \`$1\`"
     FAILED=1
     return 1
 }
-# open_link <url>: as a link tapped elsewhere; the system asks first
+# open_link <url>: as a link tapped elsewhere. The system asks "Open in …?" when the link
+# starts the app; for the running app it hands the link over at once.
 open_link() {
     xcrun simctl openurl "$UDID" "$1"
-    tap_label '^(Open|Öffnen)$' 30
+    tap_label '^(Open|Öffnen)$' 12 optional
 }
 
 APP=$(find build -type d -name 'QupilStudent.app' -path '*iphonesimulator*' | head -n 1)
