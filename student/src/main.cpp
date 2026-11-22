@@ -13,12 +13,12 @@
 //   --scan               open the QR code scanner at the start (tests on a device)
 //   --pretend-scan <text> the scanner counts as there and reads this text (screenshots, tests)
 
+#include "IncomingLinks.h"
 #include "QrScanner.h"
 #include "StudentApp.h"
 #include "Translator.h"
 
 #include <QCommandLineParser>
-#include <QDesktopServices>
 #include <QDir>
 #include <QFontDatabase>
 #include <QGuiApplication>
@@ -78,8 +78,7 @@ int main(int argc, char *argv[])
     StudentApp *studentApp = StudentApp::instance();
 
     // Links from the camera (QR code) and from messages: https://qupil.de/u#… and qupil-student:…
-    QDesktopServices::setUrlHandler(u"https"_s, studentApp, "openUrl");
-    QDesktopServices::setUrlHandler(u"qupil-student"_s, studentApp, "openUrl");
+    IncomingLinks::watch(studentApp, [studentApp](const QUrl &url) { studentApp->openUrl(url); });
     // Opened with a link on the desktop (handy for trying it out)
     for (const QString &argument : parser.positionalArguments())
         studentApp->openUrl(QUrl(argument));
@@ -90,8 +89,7 @@ int main(int argc, char *argv[])
                      [] { QCoreApplication::exit(1); }, Qt::QueuedConnection);
     engine.load(QUrl(u"qrc:/qt/qml/QupilStudent/qml/Main.qml"_s));
     if (engine.rootObjects().isEmpty()) {
-        QDesktopServices::unsetUrlHandler(u"https"_s);
-        QDesktopServices::unsetUrlHandler(u"qupil-student"_s);
+        IncomingLinks::unwatch();
         return 1;
     }
 
@@ -114,7 +112,6 @@ int main(int argc, char *argv[])
         });
     }
     const int result = app.exec();
-    QDesktopServices::unsetUrlHandler(u"https"_s);
-    QDesktopServices::unsetUrlHandler(u"qupil-student"_s);
+    IncomingLinks::unwatch();
     return result;
 }

@@ -8,10 +8,12 @@
 #include "Booklet.h"
 #include "Crypto.h"
 #include "FakeNextcloud.h"
+#include "IncomingLinks.h"
 #include "QrScanner.h"
 #include "StudentApp.h"
 #include "Translator.h"
 
+#include <QDesktopServices>
 #include <QJsonArray>
 #include <QQmlApplicationEngine>
 #include <QQuickItem>
@@ -338,6 +340,20 @@ private slots:
         m_app->openUrl(QUrl(u"https://qupil.de/u"_s));
         QCOMPARE(m_app->teachers().size(), 1);
         QCOMPARE(notices.size(), 1);
+    }
+
+    void linkThroughTheSystem()
+    {
+        // As the system hands a link to the app on iOS and the desktop (as main.cpp sets it up)
+        IncomingLinks::watch(m_app, [this](const QUrl &url) { m_app->openUrl(url); });
+        const QString link = Booklet::encodeLink(m_link);
+        QVERIFY(link.startsWith(u"https://qupil.de/u#"_s));
+        QDesktopServices::openUrl(QUrl(link));
+        QTRY_COMPARE(m_app->teachers().size(), 1);
+        removeAll();
+        QDesktopServices::openUrl(QUrl(u"qupil-student:"_s + link.mid(link.indexOf(u'#') + 1)));
+        QTRY_COMPARE(m_app->teachers().size(), 1);
+        IncomingLinks::unwatch();
     }
 
     void uiScanner()

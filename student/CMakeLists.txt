@@ -79,6 +79,7 @@ qt_add_qml_module(qupilstudentui
         src/Translator.cpp
         src/QrScanner.h
         src/QrScanner.cpp
+        src/IncomingLinks.h
     QML_FILES
         qml/Main.qml
         qml/Theme.qml
@@ -120,10 +121,12 @@ if(IOS)
     target_sources(qupilstudentui PRIVATE src/QrScanner_ios.mm)
     set_source_files_properties(src/QrScanner_ios.mm PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
     target_link_libraries(qupilstudentui PUBLIC "-framework AVFoundation" "-framework UIKit")
+    target_sources(qupilstudentui PRIVATE src/IncomingLinks_qt.cpp)
 elseif(ANDROID)
-    target_sources(qupilstudentui PRIVATE src/QrScanner_android.cpp)
+    # The links that open the app come through StudentActivity as well (IncomingLinks.h)
+    target_sources(qupilstudentui PRIVATE src/QrScanner_android.cpp src/IncomingLinks_android.cpp)
 else()
-    target_sources(qupilstudentui PRIVATE src/QrScanner_none.cpp)
+    target_sources(qupilstudentui PRIVATE src/QrScanner_none.cpp src/IncomingLinks_qt.cpp)
 endif()
 
 # ---- the app

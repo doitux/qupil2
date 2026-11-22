@@ -85,6 +85,7 @@ say "## A link starts the app"
 adb shell am force-stop $PKG
 mark
 open_link "https://qupil.de/u#$(link TestTokenAAAA1111)"
+wait_for "kept until the app is ready" 30
 wait_for "link received, teacher added" 60
 sleep 3
 shot link-at-start
@@ -131,6 +132,10 @@ if tap '^(Open camera|Kamera öffnen)$'; then
 fi
 
 kill $LOGCAT 2> /dev/null
+# What the app said (the artifacts are not always at hand)
+echo "---- the app's lines in the device log"
+grep -E 'Qupil student|QupilStudent|Incoming links|QR scanner' "$LOG" | cut -c1-240
+echo "----"
 grep -E 'Qupil|QupilStudent|FATAL|F DEBUG|F libc|ANR in|de\.qupil' "$LOG" > "$OUT/logcat-qupil.txt"
 if grep -qE 'FATAL EXCEPTION|F DEBUG|ANR in de\.qupil' "$LOG"; then
     say "- **a crash or ANR in the log**"
