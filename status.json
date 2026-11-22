@@ -97,17 +97,20 @@
     "student/web/u/index.html",
     "tools/i18n/catalog.py"
   ],
-  "result": "started",
+  "result": "uploaded",
   "build": {
     "number": 55,
     "run_id": 44970033800,
     "sha": "81d205f980cd73c5580bd99a1961636c35c5f616",
     "url": "https://github.com/doitux/qupil2/actions/runs/44970033800",
     "created": "2026-11-22T01:08:34Z",
-    "status": "in_progress",
-    "conclusion": null,
-    "attempt": 1
+    "status": "completed",
+    "conclusion": "success",
+    "attempt": 1,
+    "rerun": false,
+    "upload": "success",
+    "whats_new": "success"
   },
-  "written": "2026-11-22T02:08:45+01:00",
-  "headline": "Build 55 gestartet"
+  "written": "2026-11-22T02:25:55+01:00",
+  "headline": "Build 55 hochgeladen"
 }
