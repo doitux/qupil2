@@ -14,7 +14,8 @@ AbstractButton {
 
     implicitHeight: 34
     implicitWidth: row.implicitWidth + 4
-    focusPolicy: Qt.StrongFocus
+    // Also used in a window with fields: a tap must not close the on-screen keyboard
+    focusPolicy: Qt.TabFocus
     Accessible.role: Accessible.Button
     Accessible.name: text
 

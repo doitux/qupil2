@@ -239,6 +239,7 @@ Sheet {
             onAccepted: sheet.addTask()
         }
         IconButton {
+            focusPolicy: Qt.TabFocus
             Layout.alignment: Qt.AlignVCenter
             iconName: "plus"
             enabled: sheet.newTitle.trim() !== ""
@@ -326,6 +327,7 @@ Sheet {
             onAccepted: sheet.addExtra()
         }
         IconButton {
+            focusPolicy: Qt.TabFocus
             Layout.alignment: Qt.AlignVCenter
             iconName: "plus"
             enabled: sheet.newExtra.trim() !== ""

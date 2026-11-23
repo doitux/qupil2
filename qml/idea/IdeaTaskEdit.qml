@@ -45,7 +45,9 @@ ColumnLayout {
             Layout.alignment: Qt.AlignTop
             implicitWidth: 30
             implicitHeight: 30
-            focusPolicy: Qt.StrongFocus
+            // (like the buttons of the other editors: a tap does not take the cursor out of a
+            // field – the on-screen keyboard would go, the window move, and the tap be lost)
+            focusPolicy: Qt.TabFocus
             Accessible.role: Accessible.CheckBox
             Accessible.checked: task.ticked
             Accessible.name: qsTrId("idea.tick.done").arg(task.title)
@@ -125,6 +127,7 @@ ColumnLayout {
             TapHandler { onTapped: task.win.setTask(task.index, "open", !task.open) }
         }
         Chip {
+            focusPolicy: Qt.TabFocus
             visible: task.win.prepare
             Layout.alignment: Qt.AlignTop
             kind: "filter"
@@ -190,6 +193,7 @@ ColumnLayout {
                 onAccepted: task.win.addPoint(task.index)
             }
             IconButton {
+                focusPolicy: Qt.TabFocus
                 Layout.alignment: Qt.AlignVCenter
                 iconName: task.pendingPriv ? "lock" : "lockOpen"
                 filled: task.pendingPriv
@@ -199,6 +203,7 @@ ColumnLayout {
                 onClicked: task.win.setTask(task.index, "pendingPriv", !task.pendingPriv)
             }
             IconButton {
+                focusPolicy: Qt.TabFocus
                 Layout.alignment: Qt.AlignVCenter
                 iconName: "plus"
                 enabled: task.pending.trim() !== ""
