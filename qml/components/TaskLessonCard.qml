@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 //
 // One lesson of a student coupled with the practice book (variant A): its tasks with the
-// student's answers, and a line "Private" for the private note. A tap opens the lesson.
+// student's answers, and a line "Private" for the private note. A tap on a task shows its
+// hints; editing, planning and deleting are in the menu ("⋯", press and hold, right click).
 
 import QtQuick
 import QtQuick.Controls
@@ -18,8 +19,19 @@ Control {
     //! What the student asked and nobody has marked as read yet: [{ text, date }] (the
     //! student page gives them to the newest lesson's card only)
     property var questions: []
-    signal opened()
+    //! Tasks whose hints are shown (key → true), kept by the page; key: date/task id
+    property var unfolded: ({})
+    signal foldToggled(string key)
+    //! The page shows its menu for this lesson at x, y of \a item (alignRight: the menu's
+    //! right edge at x)
+    signal menuRequested(Item item, real x, real y, bool alignRight)
     signal questionsRead()
+    function openMenu(x, y) {
+        if (x === undefined)
+            menuRequested(more, more.width, more.height, true)
+        else
+            menuRequested(card, x, y, false)
+    }
 
     topPadding: 16
     bottomPadding: 16
@@ -30,23 +42,26 @@ Control {
     // The date and the tasks (a screen reader reads the card as one button)
     Accessible.name: qsTrId("task.lesson_of").arg(Data.formatDate(lesson.date || "", true)) + ": "
                      + (lesson.tasks || []).map(t => t.title).join(", ")
-    Accessible.onPressAction: opened()
-    Keys.onReturnPressed: opened()
-    Keys.onSpacePressed: opened()
+    Accessible.onPressAction: openMenu()
+    Keys.onReturnPressed: openMenu()
+    Keys.onEnterPressed: openMenu()
+    Keys.onSpacePressed: openMenu()
+    Keys.onMenuPressed: openMenu()
 
-    TapHandler { id: tap; onTapped: card.opened() }
+    TapHandler {
+        acceptedButtons: Qt.LeftButton | Qt.RightButton
+        onTapped: (eventPoint, button) => {
+            if (button === Qt.RightButton)
+                card.openMenu(eventPoint.position.x, eventPoint.position.y)
+        }
+        onLongPressed: card.openMenu(point.position.x, point.position.y)
+    }
 
     background: Rectangle {
         radius: Theme.radius
         color: Theme.surface
         border.width: card.visualFocus ? 2 : 0
         border.color: Theme.accentText
-        Rectangle {
-            anchors.fill: parent
-            radius: parent.radius
-            color: Theme.text
-            opacity: tap.pressed ? 0.06 : 0
-        }
     }
 
     contentItem: ColumnLayout {
@@ -73,6 +88,19 @@ Control {
                 font.family: Theme.fontFamily
                 font.pixelSize: 12
             }
+            IconButton {
+                id: more
+                objectName: "taskMore:" + (card.lesson.date || "")
+                Layout.topMargin: -8
+                Layout.bottomMargin: -8
+                Layout.rightMargin: -8
+                size: 36
+                iconName: "more"
+                text: qsTrId("common.more_actions")
+                fill: "transparent"
+                tint: Theme.textMuted
+                onClicked: card.openMenu()
+            }
         }
 
         Repeater {
@@ -82,11 +110,23 @@ Control {
                 required property var modelData
                 readonly property var fb: modelData.feedback || {}
                 readonly property bool closed: (modelData.closed || "") !== ""
+                readonly property var hints: modelData.hints || []
+                readonly property string key: (card.lesson.date || "") + "/" + (modelData.id || "")
+                readonly property bool open: hints.length > 0 && card.unfolded[key] === true
                 Layout.fillWidth: true
                 spacing: 2
+                // A tap on the task (its title, its hints) shows or hides the hints
+                TapHandler {
+                    enabled: row.hints.length > 0
+                    onTapped: card.foldToggled(row.key)
+                }
                 RowLayout {
+                    id: head
                     Layout.fillWidth: true
                     spacing: 8
+                    Accessible.role: row.hints.length > 0 ? Accessible.Button : Accessible.StaticText
+                    Accessible.name: row.modelData.title + (row.hints.length > 0 ? ", " + qsTrId("block.more_lines", row.hints.length) : "")
+                    Accessible.onPressAction: if (row.hints.length > 0) card.foldToggled(row.key)
                     // To do (get the music): a box; ticked when done
                     Rectangle {
                         visible: row.modelData.kind === 1
@@ -114,13 +154,26 @@ Control {
                         font.pixelSize: 15
                         font.weight: Font.DemiBold
                     }
-                    Text {
-                        visible: (row.modelData.hints || []).length > 0
-                        text: "+" + (row.modelData.hints || []).length
-                        color: Theme.textMuted
+                    MoreBadge {
+                        visible: row.hints.length > 0
+                        count: row.hints.length
+                        open: row.open
+                    }
+                }
+                // The hints, shown by a tap
+                Repeater {
+                    model: row.open ? row.hints : []
+                    delegate: Text {
+                        required property string modelData
+                        Layout.fillWidth: true
+                        Layout.leftMargin: 14
+                        wrapMode: Text.WordWrap
+                        text: "–  " + modelData
+                        color: Theme.text
                         font.family: Theme.fontFamily
-                        font.pixelSize: 12
-                        font.weight: Font.Bold
+                        font.pixelSize: 14
+                        Accessible.role: Accessible.StaticText
+                        Accessible.name: modelData
                     }
                 }
                 // Carried over, and what the student answered

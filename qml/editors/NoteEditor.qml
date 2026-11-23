@@ -292,9 +292,7 @@ Sheet {
                 wrapMode: Text.WordWrap
                 text: editor.copiedText !== "" ? editor.copiedText
                       : editor.tight ? qsTrId("note.copied_short").arg(Data.formatDate(copiedBar.from))
-                                               // Desktop: right click; phones and tablets: press and hold
-                                               : (App.desktop ? qsTrId("note.copied_from_desktop") : qsTrId("note.copied_from"))
-                                                     .arg(Data.formatDate(copiedBar.from))
+                                               : qsTrId("note.copied_from").arg(Data.formatDate(copiedBar.from))
                 color: Theme.textMuted
                 font.family: Theme.fontFamily
                 font.pixelSize: 13

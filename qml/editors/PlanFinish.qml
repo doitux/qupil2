@@ -34,6 +34,8 @@ Sheet {
     property var privates: []
     //! Set when blocks of this note go into the plan of the next lesson
     property string fromNoteId
+    //! … from a lesson's tasks (startFromTasks) instead of a note
+    property bool fromTasks: false
     property bool forAll: false
     //! The next lesson: where the rest (or the blocks of the note) is planned
     property string nextDate
@@ -78,6 +80,7 @@ Sheet {
     function start(membership, id) {
         membershipId = membership
         fromNoteId = ""
+        fromTasks = false
         plan = Data.plans(membership).find(p => p.id === id) || ({})
         blocks = plan.blocks || []
         checks = blocks.map(() => true)
@@ -91,6 +94,7 @@ Sheet {
     function startFromNote(membership, noteId) {
         membershipId = membership
         fromNoteId = noteId
+        fromTasks = false
         const n = Data.notes(membership).find(x => x.id === noteId) || ({})
         plan = ({ id: "", date: n.date || "" })
         blocks = Data.blocks(n.content || "")
@@ -99,6 +103,23 @@ Sheet {
         peeked = blocks.map(() => false)
         privates = blocks.map(() => false)
         forAll = Data.setting("save_for_all_students", 1) !== 0 && (n.shared || 1) > 1
+        nextDate = Data.nextLessonDate(membership, "")
+        open()
+    }
+    //! The same from the tasks of a coupled student's lesson: a task is a block, its hints
+    //! are the lines
+    function startFromTasks(membership, date) {
+        membershipId = membership
+        fromNoteId = "tasks"
+        fromTasks = true
+        const list = Data.tasksOn(membership, date)
+        plan = ({ id: "", date: date })
+        blocks = Data.blocks(Data.tasksAsBlocks(list))
+        checks = blocks.map(() => false)
+        lineChecks = blocks.map(() => null)
+        peeked = blocks.map(() => false)
+        privates = blocks.map(() => false)
+        forAll = Data.setting("save_for_all_students", 1) !== 0 && list.some(t => (t.shared || 1) > 1)
         nextDate = Data.nextLessonDate(membership, "")
         open()
     }
@@ -210,7 +231,7 @@ Sheet {
     Text {
         Layout.fillWidth: true
         wrapMode: Text.WordWrap
-        text: sheet.fromNoteId ? qsTrId("plan.from_note.source").arg(Data.formatDate(sheet.plan.date || "", true))
+        text: sheet.fromNoteId ? qsTrId(sheet.fromTasks ? "plan.from_tasks.source" : "plan.from_note.source").arg(Data.formatDate(sheet.plan.date || "", true))
                                : qsTrId("plan.title_for").arg((sheet.plan.when || ""))
         color: Theme.textMuted
         font.family: Theme.fontFamily

@@ -848,17 +848,13 @@
         <translation>Eliminar nota</translation>
     </message>
     <message id="note.copied_from">
-        <source>New note with the text of %1. To change or delete the old note, press and hold it.</source>
-        <extracomment>Note editor, after tapping an older note; %1 = date of that note</extracomment>
-        <translation>Nueva nota con el texto del %1. Para cambiar o eliminar la nota anterior, manténgala pulsada.</translation>
-    </message>
-    <message id="note.copied_from_desktop">
-        <source>New note with the text of %1. To change or delete the old note, right-click it.</source>
-        <translation>Nueva nota con el texto del %1. Para cambiar o eliminar la nota anterior, haga clic derecho sobre ella.</translation>
+        <source>New note with the text of %1. The old note stays as it is.</source>
+        <extracomment>Note editor, after &apos;New note from this&apos; in an older note&apos;s menu; %1 = date of that note</extracomment>
+        <translation>Nueva nota con el texto del %1. La nota anterior queda como está.</translation>
     </message>
     <message id="note.copied_short">
         <source>Text of %1 taken over</source>
-        <extracomment>Note editor on phones, after tapping an older note; %1 = its date</extracomment>
+        <extracomment>Note editor on phones, after &apos;New note from this&apos;; %1 = its date</extracomment>
         <translation>Texto del %1 copiado</translation>
     </message>
     <message id="note.draft_restored">
@@ -3031,6 +3027,29 @@ Antes, Qupil hace una copia de seguridad que podrá restaurar justo después. En
     <message id="notes.empty">
         <source>No notes yet.</source>
         <translation>Todavía no hay notas.</translation>
+    </message>
+    <message id="note.new_from">
+        <source>New note from this (today)</source>
+        <extracomment>Menu of a note: a new note for today that starts with this note&apos;s text</extracomment>
+        <translation>Nueva nota a partir de esta (hoy)</translation>
+    </message>
+    <message id="plan.from_tasks.source">
+        <source>From the tasks of %1</source>
+        <extracomment>%1 = date with weekday</extracomment>
+        <translation>De las tareas del %1</translation>
+    </message>
+    <message id="task.delete.title">
+        <source>Delete tasks</source>
+        <translation>Eliminar tareas</translation>
+    </message>
+    <message id="task.delete.confirm">
+        <source>The tasks of %1 will be deleted, in the student&apos;s app as well.</source>
+        <extracomment>%1 = date of the lesson</extracomment>
+        <translation>Se eliminarán las tareas del %1, también en la aplicación del alumno.</translation>
+    </message>
+    <message id="task.delete.private">
+        <source>The private note of this lesson goes with them.</source>
+        <translation>La nota privada de esta clase se elimina con ellas.</translation>
     </message>
     <message id="note.edit">
         <source>Edit note</source>

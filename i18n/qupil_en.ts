@@ -848,17 +848,13 @@
         <translation>Delete note</translation>
     </message>
     <message id="note.copied_from">
-        <source>New note with the text of %1. To change or delete the old note, press and hold it.</source>
-        <extracomment>Note editor, after tapping an older note; %1 = date of that note</extracomment>
-        <translation>New note with the text of %1. To change or delete the old note, press and hold it.</translation>
-    </message>
-    <message id="note.copied_from_desktop">
-        <source>New note with the text of %1. To change or delete the old note, right-click it.</source>
-        <translation>New note with the text of %1. To change or delete the old note, right-click it.</translation>
+        <source>New note with the text of %1. The old note stays as it is.</source>
+        <extracomment>Note editor, after &apos;New note from this&apos; in an older note&apos;s menu; %1 = date of that note</extracomment>
+        <translation>New note with the text of %1. The old note stays as it is.</translation>
     </message>
     <message id="note.copied_short">
         <source>Text of %1 taken over</source>
-        <extracomment>Note editor on phones, after tapping an older note; %1 = its date</extracomment>
+        <extracomment>Note editor on phones, after &apos;New note from this&apos;; %1 = its date</extracomment>
         <translation>Text of %1 taken over</translation>
     </message>
     <message id="note.draft_restored">
@@ -3031,6 +3027,29 @@ Qupil first makes a backup that you can restore right afterwards. Nothing change
     <message id="notes.empty">
         <source>No notes yet.</source>
         <translation>No notes yet.</translation>
+    </message>
+    <message id="note.new_from">
+        <source>New note from this (today)</source>
+        <extracomment>Menu of a note: a new note for today that starts with this note&apos;s text</extracomment>
+        <translation>New note from this (today)</translation>
+    </message>
+    <message id="plan.from_tasks.source">
+        <source>From the tasks of %1</source>
+        <extracomment>%1 = date with weekday</extracomment>
+        <translation>From the tasks of %1</translation>
+    </message>
+    <message id="task.delete.title">
+        <source>Delete tasks</source>
+        <translation>Delete tasks</translation>
+    </message>
+    <message id="task.delete.confirm">
+        <source>The tasks of %1 will be deleted, in the student&apos;s app as well.</source>
+        <extracomment>%1 = date of the lesson</extracomment>
+        <translation>The tasks of %1 will be deleted, in the student&apos;s app as well.</translation>
+    </message>
+    <message id="task.delete.private">
+        <source>The private note of this lesson goes with them.</source>
+        <translation>The private note of this lesson goes with them.</translation>
     </message>
     <message id="note.edit">
         <source>Edit note</source>

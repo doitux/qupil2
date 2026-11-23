@@ -79,6 +79,8 @@ QtObject {
     signal showBooklet(string studentId)
     //! Blocks of a note into the plan of the next lesson
     signal planFromNote(string membershipId, string noteId)
+    //! The same from the tasks a coupled student got in the lesson on \a date
+    signal planFromTasks(string membershipId, string date)
     signal editEvent(string eventId)
     signal editActivity(string studentId, string activityId, bool continuous)
     //! studentId / lessonId: a new reminder for this student (mode 2) or this lesson (mode 3)

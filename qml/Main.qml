@@ -589,6 +589,7 @@ ApplicationWindow {
         function onShowBooklet(student) { window.sheet("booklet").show(student) }
         function onFinishPlan(membership, plan) { window.sheet("planFinish").start(membership, plan) }
         function onPlanFromNote(membership, note) { window.sheet("planFinish").startFromNote(membership, note) }
+        function onPlanFromTasks(membership, date) { window.sheet("planFinish").startFromTasks(membership, date) }
         function onEditPiece(membership, piece) { window.sheet("piece").edit(membership, piece) }
         function onEditActivity(student, activity, continuous) { window.sheet("activity").edit(student, activity, continuous) }
         function onEditReminder(reminder, student, lesson) { window.sheet("reminder").edit(reminder, student, lesson) }
