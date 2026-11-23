@@ -3,7 +3,8 @@
 #   student-ios-test.sh <output folder>
 # - the app starts (welcome page), also with the hook for the start's links in place
 # - qupil-student:… starts the app and adds the teacher; the same while the app runs
-# - the button on the page qupil.de/u (student/web, in Safari) hands its link to the app
+# - the button on the page qupil.de/u (student/web, in Safari) hands its link to the app;
+#   without the app Safari says "the address is invalid" (checked too, as the control)
 # - "Open camera" (--scan) shows the scanner's sheet (the simulator has no camera: black,
 #   with the hint and Cancel), and the app goes on working behind it
 # The system asks "Open in “Qupil Practice”?" for a link from outside: idb taps "Open"
@@ -185,6 +186,9 @@ if [ "$HAVE_IDB" = 1 ]; then
     sleep 15
     tap_label '^(Continue|Weiter|Not Now|Jetzt nicht)$' 6 optional    # Safari's first start
     PAGE_BUTTON='(Open in Qupil Practice|In Qupil Üben öffnen)'
+    # idb does not see into Safari's page nor its alerts: both are found in screenshots
+    python3 -c 'import PIL' 2> /dev/null || python3 -m pip install --quiet --break-system-packages pillow > /dev/null 2>&1 \
+        || python3 -m pip install --quiet --user pillow > /dev/null 2>&1
     xy=""
     for ((i = 0; i < 60; i += 4)); do
         idb ui describe-all --udid "$UDID" > "$OUT/now.json" 2> /dev/null
@@ -195,8 +199,6 @@ if [ "$HAVE_IDB" = 1 ]; then
     shot page
     if [ -z "$xy" ]; then
         # idb does not always see into a web page: the button is the only wide bar in the accent colour
-        python3 -c 'import PIL' 2> /dev/null || python3 -m pip install --quiet --break-system-packages pillow > /dev/null 2>&1 \
-            || python3 -m pip install --quiet --user pillow > /dev/null 2>&1
         xcrun simctl io "$UDID" screenshot "$OUT/page.png" > /dev/null 2>&1
         xy=$(python3 "$HERE/ios-find-colour.py" "$OUT/page.png" "$OUT/now.json" 6E3C5A 2> /dev/null) \
             && say "- the button found by its colour (idb does not see into the page)"
@@ -219,16 +221,18 @@ if [ "$HAVE_IDB" = 1 ]; then
                     HANDED=1
                     break
                 fi
-                idb ui describe-all --udid "$UDID" > "$OUT/now.json" 2> /dev/null
-                if python3 "$HERE/ios-ui.py" "$OUT/now.json" '(invalid|ungültig)' > /dev/null 2>&1; then
-                    say "- **Safari: the address is invalid (no app answers to qupil-student:)**"
-                    HANDED=2
-                elif open=$(python3 "$HERE/ios-ui.py" "$OUT/now.json" '^(Open|Öffnen)$' 2> /dev/null); then
-                    shot safari-asks
-                    idb ui tap --udid "$UDID" $open
-                    say "- Safari asked, tapped \`Open\` at $open"
+                # Safari's alert is not in idb's view of the screen: found in the picture
+                xcrun simctl io "$UDID" screenshot "$OUT/page.png" > /dev/null 2>&1
+                alert=$(python3 "$HERE/ios-find-alert.py" "$OUT/page.png" "$OUT/now.json" 2> /dev/null) || continue
+                shot safari-alert
+                if [ "${alert%% *}" = question ]; then
+                    idb ui tap --udid "$UDID" ${alert#* }
+                    say "- Safari asked \"Open in …?\", tapped \`Open\` at ${alert#* }"
                     # From here the app is in front: no more taps at the page's button
                     if wait_for "link received, teacher added" 90; then HANDED=1; else HANDED=3; fi
+                else
+                    say "- **Safari shows a message instead of its question (the address is invalid: no app answers to qupil-student:)**"
+                    HANDED=2
                 fi
             done
             [ "$HANDED" != 0 ] && break
@@ -241,6 +245,34 @@ if [ "$HAVE_IDB" = 1 ]; then
     fi
     sleep 3
     shot page-button
+
+    if [ -n "$xy" ]; then
+        say ""
+        say "## The same button without the app: Safari's message (the check of the check)"
+        # What the iPad showed on 23.11.2026. The page says what to do then (copy the link).
+        xcrun simctl terminate "$UDID" $BUNDLE > /dev/null 2>&1
+        xcrun simctl uninstall "$UDID" $BUNDLE > /dev/null 2>&1
+        xcrun simctl openurl "$UDID" "http://127.0.0.1:8765/u/#$(link TestTokenEEEE5555)"
+        sleep 12
+        SEEN=""
+        for attempt in 1 2 3; do
+            idb ui tap --udid "$UDID" $xy
+            for ((i = 0; i < 15; i += 3)); do
+                sleep 3
+                xcrun simctl io "$UDID" screenshot "$OUT/page.png" > /dev/null 2>&1
+                SEEN=$(python3 "$HERE/ios-find-alert.py" "$OUT/page.png" "$OUT/now.json" 2> /dev/null) && break
+                SEEN=""
+            done
+            [ -n "$SEEN" ] && break
+        done
+        shot page-button-without-app
+        case "$SEEN" in
+            message*) say "- Safari's message with one button, as expected"
+                      idb ui tap --udid "$UDID" ${SEEN#* } ;;
+            question*) say "- **Safari asks \"Open in …?\" although the app is gone**"; FAILED=1 ;;
+            *) say "- **no message from Safari seen**"; FAILED=1 ;;
+        esac
+    fi
     kill $SERVER 2> /dev/null
 else
     say ""
