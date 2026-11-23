@@ -91,19 +91,15 @@ void UiTest::addNoteMenuCases()
                    })
                 << see(u"^Neue Notiz daraus \\(heute\\)$"_s) << key(Qt::Key_Escape, u"Escape closes the menu"_s)
                 << gone(u"^Neue Notiz daraus \\(heute\\)$"_s)
-                << act(u"press and hold on the card"_s, [this, beside, moreName, mouse] {
-                       mouse(QEvent::MouseButtonPress, beside(moreName())(), Qt::LeftButton);
+                // With a finger, as on a phone: press and hold, lift, then a tap beside the
+                // menu closes it (a phone has no Escape key)
+                << act(u"press and hold on the card with a finger"_s, [this, beside, moreName] {
+                       touchTap(beside(moreName())(), 1100);
                    })
-                << wait(1100)
-                << act(u"let go"_s, [this, beside, moreName, mouse] {
-                       mouse(QEvent::MouseButtonRelease, beside(moreName())(), Qt::LeftButton);
-                   })
+                << wait(1400)
                 << see(u"^Neue Notiz daraus \\(heute\\)$"_s)
-                // A phone has no Escape key: there a tap beside the menu closes it
-                << act(u"a tap beside the menu closes it"_s, [this, beside, moreName, mouse] {
-                       const QPointF p(5, beside(moreName())().y());
-                       mouse(QEvent::MouseButtonPress, p, Qt::LeftButton);
-                       mouse(QEvent::MouseButtonRelease, p, Qt::LeftButton);
+                << act(u"a tap beside the menu closes it"_s, [this, beside, moreName] {
+                       touchTap(QPointF(5, beside(moreName())().y()), 0);
                    })
                 << gone(u"^Neue Notiz daraus \\(heute\\)$"_s)
                 << tapAt([centre, moreName] { return centre(moreName())(); }, u"the note's ⋯"_s)
