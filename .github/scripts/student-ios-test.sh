@@ -74,6 +74,27 @@ tap_label() {
     FAILED=1
     return 1
 }
+# wait_for_answering <pattern> <seconds>: as wait_for, for a link that starts the app. On a
+# slow runner the system's question comes late or the first tap gets lost: "Open" is tapped
+# again whenever it is (still) on the screen.
+wait_for_answering() {
+    local i xy
+    for ((i = 0; i < $2; i += 5)); do
+        if since | grep -q -- "$1"; then
+            say "- logged: \`$1\`"
+            return 0
+        fi
+        idb ui describe-all --udid "$UDID" > "$OUT/now.json" 2> /dev/null
+        if xy=$(python3 "$HERE/ios-ui.py" "$OUT/now.json" '^(Open|Öffnen)$' 2> /dev/null); then
+            idb ui tap --udid "$UDID" $xy
+            say "- the question is (still) there: tapped at $xy"
+        fi
+        sleep 5
+    done
+    say "- **waited ${2}s in vain for:** \`$1\`"
+    FAILED=1
+    return 1
+}
 # open_link <url>: as a link tapped elsewhere. The system asks "Open in …?" when the link
 # starts the app; for the running app it hands the link over at once.
 open_link() {
@@ -131,16 +152,23 @@ if [ "$HAVE_IDB" = 1 ]; then
     sleep 2
     mark
     open_link "qupil-student:$(link TestTokenAAAA1111)"
-    wait_for "link received, teacher added" 90
+    # Under Rosetta this start took more than three minutes once (the link arrived then)
+    STARTED_BY_LINK=0
+    wait_for_answering "link received, teacher added" 300 && STARTED_BY_LINK=1
     sleep 10
     shot link-at-start
 
     say ""
     say "## A link while the app is running"
-    mark
-    open_link "qupil-student:$(link TestTokenBBBB2222)"
-    wait_for "link received, teacher added" 30
-    sleep 2
+    if [ "$STARTED_BY_LINK" = 1 ]; then
+        mark
+        open_link "qupil-student:$(link TestTokenBBBB2222)"
+        wait_for "link received, teacher added" 60
+        sleep 2
+    else
+        # A second link on top of an unanswered start says nothing
+        say "- not checked: the app did not start with the first link"
+    fi
 else
     say ""
     say "## Links: not checked (no idb on this runner to answer the system's question)"
