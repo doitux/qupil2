@@ -2489,6 +2489,28 @@ void UiTest::addCases()
                        return summary.contains(u"UI-Frage zwei"_s) && summary.contains(u"Wie schnell"_s) && !summary.contains(u"UI-Frage alt"_s);
                    })
                 << snap(u"booklet-questions"_s)
+                // With a plan card above, "Gelesen" lay under the floating "Planung" button
+                // and the tap opened the plan: the page scrolls it up first
+                << act(u"scroll \"Gelesen\" clear of the floating buttons"_s, [this] {
+                       QQuickItem *button = nullptr;
+                       std::function<void(QQuickItem *)> walk = [&](QQuickItem *i) {
+                           if (!button && i->objectName() == u"questionsRead"_s && i->isVisible())
+                               button = i;
+                           for (QQuickItem *c : i->childItems())
+                               walk(c);
+                       };
+                       walk(m_window->contentItem());
+                       for (QQuickItem *p = button ? button->parentItem() : nullptr; p; p = p->parentItem()) {
+                           if (!p->inherits("QQuickFlickable"))
+                               continue;
+                           auto *content = p->property("contentItem").value<QQuickItem *>();
+                           const qreal y = button->mapToItem(content, QPointF(0, 0)).y();
+                           const qreal most = std::max<qreal>(0, p->property("contentHeight").toReal() - p->height());
+                           p->setProperty("contentY", std::clamp<qreal>(y - 160, 0, most));
+                           break;
+                       }
+                   })
+                << wait(300)
                 << tap(u"^Gelesen$"_s) << gone(u"^Frage vom .*: UI-Frage zwei$"_s)
                 << wait(400)
                 << check(u"all read, nothing lost, and the tap did not open the lesson's tasks"_s, [this] {
