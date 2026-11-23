@@ -849,17 +849,13 @@ Bitte ändern Sie die Schüleranzahl um zu speichern!</translation>
         <translation>Notiz löschen</translation>
     </message>
     <message id="note.copied_from">
-        <source>New note with the text of %1. To change or delete the old note, press and hold it.</source>
-        <extracomment>Note editor, after tapping an older note; %1 = date of that note</extracomment>
-        <translation>Neue Notiz mit dem Text vom %1. Um die alte Notiz zu ändern oder zu löschen, halten Sie sie gedrückt.</translation>
-    </message>
-    <message id="note.copied_from_desktop">
-        <source>New note with the text of %1. To change or delete the old note, right-click it.</source>
-        <translation>Neue Notiz mit dem Text vom %1. Um die alte Notiz zu ändern oder zu löschen, klicken Sie sie mit der rechten Maustaste an.</translation>
+        <source>New note with the text of %1. The old note stays as it is.</source>
+        <extracomment>Note editor, after &apos;New note from this&apos; in an older note&apos;s menu; %1 = date of that note</extracomment>
+        <translation>Neue Notiz mit dem Text vom %1. Die alte Notiz bleibt, wie sie ist.</translation>
     </message>
     <message id="note.copied_short">
         <source>Text of %1 taken over</source>
-        <extracomment>Note editor on phones, after tapping an older note; %1 = its date</extracomment>
+        <extracomment>Note editor on phones, after &apos;New note from this&apos;; %1 = its date</extracomment>
         <translation>Text vom %1 übernommen</translation>
     </message>
     <message id="note.draft_restored">
@@ -3032,6 +3028,29 @@ Vorher legt Qupil ein Backup an, das Sie gleich danach wiederherstellen können.
     <message id="notes.empty">
         <source>No notes yet.</source>
         <translation>Noch keine Notizen.</translation>
+    </message>
+    <message id="note.new_from">
+        <source>New note from this (today)</source>
+        <extracomment>Menu of a note: a new note for today that starts with this note&apos;s text</extracomment>
+        <translation>Neue Notiz daraus (heute)</translation>
+    </message>
+    <message id="plan.from_tasks.source">
+        <source>From the tasks of %1</source>
+        <extracomment>%1 = date with weekday</extracomment>
+        <translation>Aus den Aufgaben vom %1</translation>
+    </message>
+    <message id="task.delete.title">
+        <source>Delete tasks</source>
+        <translation>Aufgaben löschen</translation>
+    </message>
+    <message id="task.delete.confirm">
+        <source>The tasks of %1 will be deleted, in the student&apos;s app as well.</source>
+        <extracomment>%1 = date of the lesson</extracomment>
+        <translation>Die Aufgaben vom %1 werden gelöscht, auch in der App des Schülers.</translation>
+    </message>
+    <message id="task.delete.private">
+        <source>The private note of this lesson goes with them.</source>
+        <translation>Die private Notiz dieser Stunde wird mit gelöscht.</translation>
     </message>
     <message id="note.edit">
         <source>Edit note</source>

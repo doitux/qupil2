@@ -127,6 +127,8 @@ private:
     void addTextTouchCases();
     //! Every editor sheet with the on-screen keyboard (UiTestDialogs.cpp)
     void addDialogCases();
+    //! The menu of a note and of a lesson's tasks (UiTestNoteMenu.cpp)
+    void addNoteMenuCases();
     void traceSelection();
     Case &add(const QString &name, const QString &title);
 

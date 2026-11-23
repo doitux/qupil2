@@ -445,18 +445,13 @@ E("archive.doc.activities", old="Activities of the student", en="Student’s act
 E("note.add", old="&Add new note", en="Add new note", fr="Ajouter une note", es="Añadir nota")
 E("note.delete", old="&Delete note", en="Delete note", fr="Supprimer la note", es="Eliminar nota")
 E("note.copied_from",
-  en="New note with the text of %1. To change or delete the old note, press and hold it.",
-  de="Neue Notiz mit dem Text vom %1. Um die alte Notiz zu ändern oder zu löschen, halten Sie sie gedrückt.",
-  fr="Nouvelle note avec le texte du %1. Pour modifier ou supprimer l’ancienne note, maintenez-la appuyée.",
-  es="Nueva nota con el texto del %1. Para cambiar o eliminar la nota anterior, manténgala pulsada.",
-  c="Note editor, after tapping an older note; %1 = date of that note")
-E("note.copied_from_desktop",
-  en="New note with the text of %1. To change or delete the old note, right-click it.",
-  de="Neue Notiz mit dem Text vom %1. Um die alte Notiz zu ändern oder zu löschen, klicken Sie sie mit der rechten Maustaste an.",
-  fr="Nouvelle note avec le texte du %1. Pour modifier ou supprimer l’ancienne note, faites un clic droit dessus.",
-  es="Nueva nota con el texto del %1. Para cambiar o eliminar la nota anterior, haga clic derecho sobre ella.")
+  en="New note with the text of %1. The old note stays as it is.",
+  de="Neue Notiz mit dem Text vom %1. Die alte Notiz bleibt, wie sie ist.",
+  fr="Nouvelle note avec le texte du %1. L’ancienne note reste telle quelle.",
+  es="Nueva nota con el texto del %1. La nota anterior queda como está.",
+  c="Note editor, after 'New note from this' in an older note's menu; %1 = date of that note")
 E("note.copied_short", en="Text of %1 taken over", de="Text vom %1 übernommen", fr="Texte du %1 repris",
-  es="Texto del %1 copiado", c="Note editor on phones, after tapping an older note; %1 = its date")
+  es="Texto del %1 copiado", c="Note editor on phones, after 'New note from this'; %1 = its date")
 E("note.draft_restored", en="Not saved yet – draft of %1, %2", de="Noch nicht gespeichert – Entwurf vom %1, %2",
   fr="Pas encore enregistré – brouillon du %1, %2", es="Aún no guardado – borrador del %1, %2",
   c="Note editor opened again at the start with text that was not saved when Qupil was closed; %1 = date, %2 = time")
@@ -1704,6 +1699,18 @@ E("student.add_reminder", en="Set up reminder…", de="Erinnerung einrichten ...
   es="Crear recordatorio…")
 E("notes.empty", en="No notes yet.", de="Noch keine Notizen.", fr="Aucune note pour l’instant.",
   es="Todavía no hay notas.")
+E("note.new_from", en="New note from this (today)", de="Neue Notiz daraus (heute)", fr="Nouvelle note à partir de celle-ci (aujourd’hui)",
+  es="Nueva nota a partir de esta (hoy)", c="Menu of a note: a new note for today that starts with this note's text")
+E("plan.from_tasks.source", en="From the tasks of %1", de="Aus den Aufgaben vom %1", fr="Des devoirs du %1",
+  es="De las tareas del %1", c="%1 = date with weekday")
+E("task.delete.title", en="Delete tasks", de="Aufgaben löschen", fr="Supprimer les devoirs", es="Eliminar tareas")
+E("task.delete.confirm", en="The tasks of %1 will be deleted, in the student's app as well.",
+  de="Die Aufgaben vom %1 werden gelöscht, auch in der App des Schülers.",
+  fr="Les devoirs du %1 seront supprimés, aussi dans l’application de l’élève.",
+  es="Se eliminarán las tareas del %1, también en la aplicación del alumno.", c="%1 = date of the lesson")
+E("task.delete.private", en="The private note of this lesson goes with them.",
+  de="Die private Notiz dieser Stunde wird mit gelöscht.", fr="La note privée de ce cours est supprimée avec eux.",
+  es="La nota privada de esta clase se elimina con ellas.")
 E("note.edit", en="Edit note", de="Notiz bearbeiten", fr="Modifier la note", es="Editar nota")
 E("note.share", en="Share as a message", de="Als Nachricht teilen", fr="Partager comme message",
   es="Compartir como mensaje", c="Sends the note to the student through the system's share menu (Messages, WhatsApp …)")

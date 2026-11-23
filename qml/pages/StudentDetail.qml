@@ -21,7 +21,7 @@ Item {
     property string backText: qsTrId("common.back")
     property int tab: 0
     property int pieceFilter: -1
-    //! Note whose edit and delete buttons are shown ("" for none)
+    //! Note whose menu is asked for ("" for none): set by tests and the screenshot tour
     property string revealedNote
     onCurrentMembershipChanged: revealedNote = ""
     onTabChanged: revealedNote = ""
@@ -781,7 +781,6 @@ Item {
         acceptText: qsTrId("common.delete")
         onAccepted: {
             Data.deleteNote(noteId, forAll && shared > 1)
-            detail.revealedNote = ""
         }
         CheckBox {
             visible: deleteNoteDialog.shared > 1
@@ -789,6 +788,117 @@ Item {
             text: qsTrId("note.delete.for_all", deleteNoteDialog.shared)
             checked: deleteNoteDialog.forAll
             onToggled: deleteNoteDialog.forAll = checked
+            font.family: Theme.fontFamily
+            font.pixelSize: 14
+        }
+    }
+
+    //! What one can do with a note: one menu for all cards (made once, not per note)
+    AppMenu {
+        id: noteMenu
+        property var note: ({})
+        function show(n, item, x, y) {
+            note = n
+            popup(item, x, y)
+        }
+        onClosed: if (detail.revealedNote === note.id) detail.revealedNote = ""
+        AppMenuItem {
+            iconName: "newfrom"
+            text: qsTrId("note.new_from")
+            onTriggered: Nav.newNoteFrom(detail.currentMembership, noteMenu.note.id)
+        }
+        AppMenuItem {
+            iconName: "plan"
+            text: qsTrId("plan.from_note.title")
+            onTriggered: Nav.planFromNote(detail.currentMembership, noteMenu.note.id)
+        }
+        AppMenuItem {
+            iconName: "edit"
+            text: qsTrId("common.edit")
+            onTriggered: Nav.editNote(detail.currentMembership, noteMenu.note.id)
+        }
+        // Homework as a message (Messages, WhatsApp …): for students without the practice
+        // book app; nothing is synchronised
+        AppMenuItem {
+            objectName: "noteShare"
+            iconName: "share"
+            text: qsTrId("note.share")
+            onTriggered: {
+                const note = noteMenu.note
+                const text = Data.homeworkText(note.content, note.date)
+                if (!App.shareText(text, qsTrId("note.share.heading").arg(Data.formatDate(note.date, true))))
+                    Nav.toast(qsTrId("note.share.copied"))
+            }
+        }
+        AppMenuSeparator {}
+        AppMenuItem {
+            iconName: "trash"
+            destructive: true
+            text: qsTrId("common.delete")
+            onTriggered: deleteNoteDialog.ask(noteMenu.note)
+        }
+    }
+    //! The same for the tasks of a coupled student's lesson. ("New tasks from these" waits
+    //! for the decision on how open tasks go on from lesson to lesson.)
+    AppMenu {
+        id: taskMenu
+        property var lesson: ({})
+        function show(l, item, x, y) {
+            lesson = l
+            popup(item, x, y)
+        }
+        AppMenuItem {
+            iconName: "plan"
+            text: qsTrId("plan.from_note.title")
+            onTriggered: Nav.planFromTasks(detail.currentMembership, taskMenu.lesson.date)
+        }
+        AppMenuItem {
+            iconName: "edit"
+            text: qsTrId("common.edit")
+            onTriggered: Nav.editTasks(detail.currentMembership, taskMenu.lesson.date)
+        }
+        AppMenuSeparator {}
+        AppMenuItem {
+            iconName: "trash"
+            destructive: true
+            text: qsTrId("common.delete")
+            onTriggered: deleteTasksDialog.ask(taskMenu.lesson)
+        }
+    }
+
+    //! The tasks of one lesson of a coupled student (and its private note)
+    AppDialog {
+        id: deleteTasksDialog
+        objectName: "deleteTasksDialog"
+        property var lesson: ({})
+        property int shared: 1
+        property bool forAll: true
+        function ask(l) {
+            lesson = l
+            shared = Math.max(1, ...(l.tasks || []).map(t => t.shared || 1), l.note ? (l.note.shared || 1) : 1)
+            forAll = Data.setting("save_for_all_students", 1) !== 0
+            open()
+        }
+        iconName: "trash"
+        destructive: true
+        title: qsTrId("task.delete.title")
+        text: qsTrId("task.delete.confirm").arg(Data.formatDate(lesson.date || ""))
+              + (lesson.note ? " " + qsTrId("task.delete.private") : "")
+        rejectText: qsTrId("common.cancel")
+        acceptText: qsTrId("common.delete")
+        onAccepted: {
+            const all = forAll && shared > 1
+            for (const t of lesson.tasks || [])
+                Data.deleteTask(t.id, all)
+            if (lesson.note)
+                Data.deleteNote(lesson.note.id, all)
+        }
+        CheckBox {
+            visible: deleteTasksDialog.shared > 1
+            Layout.leftMargin: -6
+            text: qsTrId("note.delete.for_all", deleteTasksDialog.shared)
+            checked: deleteTasksDialog.forAll
+            onToggled: deleteTasksDialog.forAll = checked
             font.family: Theme.fontFamily
             font.pixelSize: 14
         }
@@ -844,6 +954,7 @@ Item {
             Repeater {
                 model: detail.taskLessons
                 delegate: TaskLessonCard {
+                    id: taskCard
                     required property var modelData
                     required property int index
                     Layout.fillWidth: true
@@ -851,7 +962,9 @@ Item {
                     relative: detail.relative(modelData.date)
                     // What the student asked: on the newest lesson, until marked as read
                     questions: index === 0 ? detail.openQuestions : []
-                    onOpened: Nav.editTasks(detail.currentMembership, modelData.date)
+                    unfolded: detail.unfolded
+                    onFoldToggled: key => detail.toggleFold(key, taskCard)
+                    onMenuRequested: (item, x, y, alignRight) => taskMenu.show(modelData, item, alignRight ? x - taskMenu.width : x, y)
                     onQuestionsRead: Data.markQuestionsRead(detail.studentId)
                 }
             }
@@ -861,28 +974,28 @@ Item {
             }
             Repeater {
                 model: detail.plainNotes
-                // Tap: a new note for today with this text, to adjust for the next lesson (as in
-                // Qupil 1.x). Swipe left, press and hold or right click: edit and delete roll in
-                // on the right; swipe right or tap hides them again.
-                // Pointer handlers (not a button): a button would also react to swipes and to the
-                // right-click handler on touch screens.
+                // A tap on a block shows its lines, nothing else happens on a tap (it used to make
+                // a new note for today, which surprised people). Everything one can do with the
+                // note is in its menu: "⋯", press and hold, or right click.
                 delegate: Control {
                     id: noteCard
                     required property var modelData
                     // A note with blocks (Haltung, Technik, Mozart …): one line per block
                     readonly property var noteBlocks: Data.blocks(modelData.content)
                     readonly property bool asBlocks: noteBlocks.some(b => b.more > 0)
+                    // The page asks for this note's menu (tests, screenshot tour)
                     readonly property bool revealed: detail.revealedNote === modelData.id
-                    // A finger moves the buttons sideways: they follow it, nothing else moves them
-                    property bool dragging: false
-                    function toggle() { detail.revealedNote = revealed ? "" : modelData.id }
-                    onRevealedChanged: if (!dragging) actions.slideTo(revealed)
-                    Component.onCompleted: actions.shown = revealed ? actions.width : 0
-                    function copy() {
-                        if (detail.revealedNote !== "")
-                            detail.revealedNote = ""
+                    onRevealedChanged: {
+                        if (revealed)
+                            openMenu()
+                        else if (noteMenu.note.id === modelData.id)
+                            noteMenu.close()
+                    }
+                    function openMenu(x, y) {
+                        if (x === undefined)
+                            noteMenu.show(modelData, noteMore, noteMore.width - noteMenu.width, noteMore.height)
                         else
-                            Nav.newNoteFrom(detail.currentMembership, modelData.id)
+                            noteMenu.show(modelData, noteCard, x, y)
                     }
                     Layout.fillWidth: true
                     implicitHeight: Math.max(implicitContentHeight + topPadding + bottomPadding, Theme.touchTarget + 20)
@@ -893,84 +1006,26 @@ Item {
                     hoverEnabled: true
                     Accessible.role: Accessible.Button
                     Accessible.name: Data.formatDate(modelData.date) + " " + Data.plainText(modelData.content, 120)
-                    Accessible.onPressAction: copy()
-                    Keys.onReturnPressed: copy()
-                    Keys.onEnterPressed: copy()
-                    Keys.onSpacePressed: copy()
-                    Keys.onMenuPressed: toggle()
+                    Accessible.onPressAction: openMenu()
+                    Keys.onReturnPressed: openMenu()
+                    Keys.onEnterPressed: openMenu()
+                    Keys.onSpacePressed: openMenu()
+                    Keys.onMenuPressed: openMenu()
 
                     TapHandler {
                         id: tap
                         acceptedButtons: Qt.LeftButton | Qt.RightButton
                         onTapped: (eventPoint, button) => {
                             if (button === Qt.RightButton)
-                                noteCard.toggle()
-                            else
-                                noteCard.copy()
+                                noteCard.openMenu(eventPoint.position.x, eventPoint.position.y)
                         }
-                        onLongPressed: noteCard.toggle()
-                    }
-                    // Only watches (passive): the page keeps scrolling up and down. Sideways, the
-                    // buttons follow the finger; on release they stay when more than half is in
-                    // (or after a flick to the left) and slide back otherwise.
-                    PointHandler {
-                        id: swipeTracker
-                        property real startX
-                        property real startY
-                        property real base      // how far they were in when the finger started
-                        property real velocity  // px per ms, last movement
-                        property real lastX
-                        property double lastTime
-                        onPointChanged: {
-                            if (!active)
-                                return
-                            const x = point.position.x
-                            const dx = x - startX
-                            const now = Date.now()
-                            if (now > lastTime)
-                                velocity = 0.5 * velocity + 0.5 * (x - lastX) / (now - lastTime)
-                            lastX = x
-                            lastTime = now
-                            if (!noteCard.dragging && Math.abs(dx) > Qt.styleHints.startDragDistance && Math.abs(dx) > Math.abs(point.position.y - startY)) {
-                                noteCard.dragging = true
-                                actions.stopSliding()
-                                base = actions.shown
-                            }
-                            if (noteCard.dragging)
-                                actions.shown = Math.max(0, Math.min(actions.width, base - dx))
-                        }
-                        onActiveChanged: {
-                            if (active) {
-                                startX = lastX = point.position.x
-                                startY = point.position.y
-                                lastTime = Date.now()
-                                velocity = 0
-                                return
-                            }
-                            if (!noteCard.dragging)
-                                return
-                            const open = velocity < -0.5 ? true
-                                       : velocity > 0.5 ? false
-                                       : actions.shown > actions.width / 2
-                            if (open)
-                                detail.revealedNote = noteCard.modelData.id
-                            else if (noteCard.revealed)
-                                detail.revealedNote = ""
-                            noteCard.dragging = false
-                            actions.slideTo(open)
-                        }
+                        onLongPressed: noteCard.openMenu(point.position.x, point.position.y)
                     }
                     background: Rectangle {
                         radius: Theme.radius
                         color: Theme.surface
                         border.width: noteCard.visualFocus ? 2 : 0
                         border.color: Theme.accentText
-                        Rectangle {
-                            anchors.fill: parent
-                            radius: parent.radius
-                            color: Theme.text
-                            opacity: tap.pressed ? 0.06 : 0
-                        }
                     }
                     contentItem: ColumnLayout {
                         id: noteColumn
@@ -998,6 +1053,19 @@ Item {
                                 font.family: Theme.fontFamily
                                 font.pixelSize: 12
                             }
+                            IconButton {
+                                id: noteMore
+                                objectName: "noteMore:" + noteCard.modelData.id
+                                Layout.topMargin: -8
+                                Layout.bottomMargin: -8
+                                Layout.rightMargin: -8
+                                size: 36
+                                iconName: "more"
+                                text: qsTrId("common.more_actions")
+                                fill: "transparent"
+                                tint: Theme.textMuted
+                                onClicked: noteCard.openMenu()
+                            }
                         }
                         // Blocks: one line each, a tap shows one of them
                         BlockList {
@@ -1005,14 +1073,14 @@ Item {
                             Layout.fillWidth: true
                             blocks: noteCard.asBlocks ? noteCard.noteBlocks : []
                             keyPrefix: noteCard.modelData.id
+                            onHeld: noteCard.openMenu()
                         }
                         // Otherwise a long note shows its first lines and "Show more"
                         Foldable {
                             visible: !noteCard.asBlocks
                             Layout.fillWidth: true
                             lineHeight: detail.noteLine
-                            fadeColor: tap.pressed ? Qt.tint(Theme.surface, Qt.rgba(Theme.text.r, Theme.text.g, Theme.text.b, 0.06))
-                                                   : Theme.surface
+                            fadeColor: Theme.surface
                             expanded: detail.unfolded[noteCard.modelData.id] === true
                             onToggled: detail.toggleFold(noteCard.modelData.id, noteCard)
                             Text {
@@ -1030,107 +1098,7 @@ Item {
                     leftPadding: 16
                     rightPadding: 16
 
-                    // Plan, share, edit and delete, rolled in from the right edge over the text
-                    Rectangle {
-                        id: actions
-                        z: 2
-                        y: 0
-                        // Four round buttons (built only while rolled in, see actionRow)
-                        width: 4 * Theme.touchTarget + 3 * 10 + 28
-                        height: noteCard.height
-                        // How far it is rolled in (0 … width): set by the finger or by slideTo().
-                        // Only this value moves, so a new layout (another student) moves nothing.
-                        property real shown: 0
-                        function slideTo(open) {
-                            slide.stop()
-                            slide.to = open ? width : 0
-                            if (shown !== slide.to)
-                                slide.start()
-                        }
-                        function stopSliding() { slide.stop() }
-                        x: noteCard.width - shown
-                        visible: shown > 0.5
-                        radius: Theme.radius
-                        color: Theme.surface
-                        NumberAnimation {
-                            id: slide
-                            target: actions
-                            property: "shown"
-                            duration: 200
-                            easing.type: Easing.OutCubic
-                        }
-                        // Soft edge towards the text
-                        Rectangle {
-                            anchors.right: parent.left
-                            anchors.rightMargin: -Theme.radius
-                            width: 28
-                            height: parent.height
-                            gradient: Gradient {
-                                orientation: Gradient.Horizontal
-                                GradientStop { position: 0; color: Qt.rgba(Theme.surface.r, Theme.surface.g, Theme.surface.b, 0) }
-                                GradientStop { position: 1; color: Theme.surface }
-                            }
-                        }
-                        // Most notes never show their buttons: they are made when a finger or
-                        // the mouse rolls them in, not for every note when the student opens
-                        Loader {
-                            id: actionRow
-                            anchors.verticalCenter: parent.verticalCenter
-                            anchors.right: parent.right
-                            anchors.rightMargin: 14
-                            active: actions.visible
-                            sourceComponent: actionButtons
-                        }
-                        Component {
-                            id: actionButtons
-                            Row {
-                                spacing: 10
-                                IconButton {
-                                    iconName: "plan"
-                                    text: qsTrId("plan.from_note")
-                                    fill: Theme.surfaceAlt
-                                    tint: Theme.accentText
-                                    onClicked: {
-                                        detail.revealedNote = ""
-                                        Nav.planFromNote(detail.currentMembership, noteCard.modelData.id)
-                                    }
-                                }
-                                // Homework as a message (Messages, WhatsApp …): for students
-                                // without the practice book app; nothing is synchronised
-                                IconButton {
-                                    objectName: "noteShare"
-                                    iconName: "share"
-                                    text: qsTrId("note.share")
-                                    fill: Theme.surfaceAlt
-                                    tint: Theme.accentText
-                                    onClicked: {
-                                        detail.revealedNote = ""
-                                        const note = noteCard.modelData
-                                        const text = Data.homeworkText(note.content, note.date)
-                                        if (!App.shareText(text, qsTrId("note.share.heading").arg(Data.formatDate(note.date, true))))
-                                            Nav.toast(qsTrId("note.share.copied"))
-                                    }
-                                }
-                                IconButton {
-                                    iconName: "edit"
-                                    text: qsTrId("note.edit")
-                                    fill: Theme.accent
-                                    tint: Theme.textOnAccent
-                                    onClicked: {
-                                        detail.revealedNote = ""
-                                        Nav.editNote(detail.currentMembership, noteCard.modelData.id)
-                                    }
-                                }
-                                IconButton {
-                                    iconName: "trash"
-                                    text: qsTrId("note.delete")
-                                    fill: Theme.dangerFill
-                                    tint: Theme.textOnAccent
-                                    onClicked: deleteNoteDialog.ask(noteCard.modelData)
-                                }
-                            }
-                        }
-                    }
+
                 }
             }
         }
@@ -1673,6 +1641,8 @@ Item {
         id: list
         property var blocks: []
         property string keyPrefix
+        //! Press and hold on a block's line (the card opens its menu)
+        signal held()
         spacing: 8
         Repeater {
             model: list.blocks
@@ -1724,6 +1694,7 @@ Item {
                     Accessible.role: Accessible.Button
                     Accessible.name: block.modelData.heading + ", " + qsTrId("block.more_lines", block.modelData.more)
                     onClicked: detail.toggleFold(block.key, block)
+                    onPressAndHold: list.held()
                     background: Rectangle {
                         x: -6
                         width: parent.width + 6 - 4

@@ -86,7 +86,7 @@ target_link_libraries(qupilcore PUBLIC Qt6::Core Qt6::Sql)
 # ---------------------------------------------------------------------------- app
 
 qt_add_executable(qupil src/main.cpp src/app/ScreenshotTour.h src/app/ScreenshotTour.cpp
-    src/app/UiTest.h src/app/UiTest.cpp src/app/UiTestDialogs.cpp)
+    src/app/UiTest.h src/app/UiTest.cpp src/app/UiTestDialogs.cpp src/app/UiTestNoteMenu.cpp)
 
 target_compile_definitions(qupil PRIVATE QUPIL_VERSION="${PROJECT_VERSION}")
 # The editor sheets (qml/editors, root "Sheet {"): the UI test has to cover each of them

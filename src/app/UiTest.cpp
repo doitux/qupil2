@@ -2041,6 +2041,7 @@ void UiTest::addCases()
 #endif
     addTextTouchCases();
     addDialogCases();
+    addNoteMenuCases();
 
     // Students: search, open one, back
     {
@@ -2332,7 +2333,7 @@ void UiTest::addCases()
                                                 u"**UI-Teilen Tonleiter**\nG-Dur ==zweioktavig==\n\n\n\n*Etüde* Nr. 3"_s, false);
                    })
                 << openStudent(u"Lena Muster"_s)
-                << act(u"roll in the buttons of the note"_s, [this] {
+                << act(u"ask for the menu of the note"_s, [this] {
                        for (QObject *o : m_window->findChildren<QObject *>(u"studentDetail"_s))
                            o->setProperty("revealedNote", m_text);
                    })
@@ -2344,7 +2345,7 @@ void UiTest::addCases()
                               == u"Hausaufgaben vom %1\n\nUI-Teilen Tonleiter\nG-Dur zweioktavig\n\nEtüde Nr. 3"_s.arg(date);
                    })
                 << see(u"^Kopiert – zum Einfügen in eine Nachricht$"_s)
-                << check(u"the buttons rolled back"_s, [this] {
+                << check(u"the menu closed"_s, [this] {
                        for (QObject *o : m_window->findChildren<QObject *>(u"studentDetail"_s))
                            if (!o->property("revealedNote").toString().isEmpty())
                                return false;
