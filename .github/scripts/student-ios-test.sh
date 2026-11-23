@@ -305,7 +305,14 @@ echo "---- the app's lines in the log"
 grep -E 'Qupil student' "$LOG" | cut -c1-240
 echo "----"
 # Crash reports of this run, if any
-ls ~/Library/Logs/DiagnosticReports/ 2> /dev/null | grep -i QupilStudent && { say "- **a crash report was written**"; FAILED=1; }
+for report in ~/Library/Logs/DiagnosticReports/*QupilStudent*; do
+    [ -f "$report" ] || continue
+    say "- **a crash report was written:** \`crash/$(basename "$report")\`"
+    mkdir -p "$OUT/crash"
+    cp "$report" "$OUT/crash/"
+    python3 "$HERE/ios-crash-summary.py" "$report" | tee "$OUT/crash/$(basename "$report").txt"
+    FAILED=1
+done
 say ""
 if [ "$FAILED" = 0 ]; then say "**All fine.**"; else say "**Something failed.**"; fi
 [ -n "${GITHUB_STEP_SUMMARY:-}" ] && cat "$SUMMARY" >> "$GITHUB_STEP_SUMMARY"
