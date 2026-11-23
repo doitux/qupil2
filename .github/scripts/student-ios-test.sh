@@ -206,15 +206,37 @@ if [ "$HAVE_IDB" = 1 ]; then
         python3 "$HERE/ios-ui.py" "$OUT/now.json" --list 2> /dev/null | head -n 40
         FAILED=1
     else
-        idb ui tap --udid "$UDID" $xy
-        say "- tapped the page's button at $xy"
-        # Safari asks "Open in “Qupil Practice”?"
-        if ! wait_for_answering "link received, teacher added" 90; then
-            idb ui describe-all --udid "$UDID" > "$OUT/now.json" 2> /dev/null
-            if python3 "$HERE/ios-ui.py" "$OUT/now.json" '(invalid|ungültig)' > /dev/null 2>&1; then
-                say "- **Safari: the address is invalid (no app answers to qupil-student:)**"
-            fi
+        # Safari's own hints (first start) take the first tap: tap until Safari reacts
+        HANDED=0
+        for attempt in 1 2 3 4; do
+            idb ui tap --udid "$UDID" $xy
+            say "- tapped the page's button at $xy"
+            # Safari asks "Open in “Qupil Practice”?"
+            for ((i = 0; i < 30 && HANDED == 0; i += 3)); do
+                sleep 3
+                if since | grep -q -- "link received, teacher added"; then
+                    say "- logged: \`link received, teacher added\`"
+                    HANDED=1
+                    break
+                fi
+                idb ui describe-all --udid "$UDID" > "$OUT/now.json" 2> /dev/null
+                if python3 "$HERE/ios-ui.py" "$OUT/now.json" '(invalid|ungültig)' > /dev/null 2>&1; then
+                    say "- **Safari: the address is invalid (no app answers to qupil-student:)**"
+                    HANDED=2
+                elif open=$(python3 "$HERE/ios-ui.py" "$OUT/now.json" '^(Open|Öffnen)$' 2> /dev/null); then
+                    shot safari-asks
+                    idb ui tap --udid "$UDID" $open
+                    say "- Safari asked, tapped \`Open\` at $open"
+                    # From here the app is in front: no more taps at the page's button
+                    if wait_for "link received, teacher added" 90; then HANDED=1; else HANDED=3; fi
+                fi
+            done
+            [ "$HANDED" != 0 ] && break
+        done
+        if [ "$HANDED" != 1 ]; then
+            [ "$HANDED" = 0 ] && say "- **the button did nothing: no question from Safari, no link in the app**"
             python3 "$HERE/ios-ui.py" "$OUT/now.json" --list 2> /dev/null | head -n 40
+            FAILED=1
         fi
     fi
     sleep 3
