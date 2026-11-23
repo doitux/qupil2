@@ -998,6 +998,19 @@ Item {
                                 font.family: Theme.fontFamily
                                 font.pixelSize: 12
                             }
+                            IconButton {
+                                id: noteMore
+                                objectName: "noteMore"
+                                Layout.topMargin: -8
+                                Layout.bottomMargin: -8
+                                Layout.rightMargin: -8
+                                size: 36
+                                iconName: "more"
+                                text: qsTrId("common.more_actions")
+                                fill: "transparent"
+                                tint: Theme.textMuted
+                                onClicked: noteMenu.popup(noteMore, noteMore.width - noteMenu.width, noteMore.height)
+                            }
                         }
                         // Blocks: one line each, a tap shows one of them
                         BlockList {
@@ -1029,6 +1042,36 @@ Item {
                     }
                     leftPadding: 16
                     rightPadding: 16
+
+                    AppMenu {
+                        id: noteMenu
+                        AppMenuItem {
+                            iconName: "newfrom"
+                            text: qsTrId("note.new_from")
+                            onTriggered: Nav.newNoteFrom(detail.currentMembership, noteCard.modelData.id)
+                        }
+                        AppMenuItem {
+                            iconName: "plan"
+                            text: qsTrId("plan.from_note.title")
+                            onTriggered: Nav.planFromNote(detail.currentMembership, noteCard.modelData.id)
+                        }
+                        AppMenuItem {
+                            iconName: "edit"
+                            text: qsTrId("common.edit")
+                            onTriggered: Nav.editNote(detail.currentMembership, noteCard.modelData.id)
+                        }
+                        AppMenuItem {
+                            iconName: "share"
+                            text: qsTrId("note.share")
+                        }
+                        AppMenuSeparator {}
+                        AppMenuItem {
+                            iconName: "trash"
+                            destructive: true
+                            text: qsTrId("common.delete")
+                            onTriggered: deleteNoteDialog.ask(noteCard.modelData)
+                        }
+                    }
 
                     // Plan, share, edit and delete, rolled in from the right edge over the text
                     Rectangle {

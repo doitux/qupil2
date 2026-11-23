@@ -1704,6 +1704,10 @@ E("student.add_reminder", en="Set up reminder…", de="Erinnerung einrichten ...
   es="Crear recordatorio…")
 E("notes.empty", en="No notes yet.", de="Noch keine Notizen.", fr="Aucune note pour l’instant.",
   es="Todavía no hay notas.")
+E("note.new_from", en="New note from this (today)", de="Neue Notiz daraus (heute)", fr="Nouvelle note à partir de celle-ci (aujourd’hui)",
+  es="Nueva nota a partir de esta (hoy)", c="Menu of a note: a new note for today that starts with this note's text")
+E("task.new_from", en="New tasks from these (today)", de="Neue Aufgaben daraus (heute)", fr="Nouveaux devoirs à partir de ceux-ci (aujourd’hui)",
+  es="Nuevas tareas a partir de estas (hoy)", c="Menu of a lesson's tasks: tasks for today that start with these")
 E("note.edit", en="Edit note", de="Notiz bearbeiten", fr="Modifier la note", es="Editar nota")
 E("note.share", en="Share as a message", de="Als Nachricht teilen", fr="Partager comme message",
   es="Compartir como mensaje", c="Sends the note to the student through the system's share menu (Messages, WhatsApp …)")

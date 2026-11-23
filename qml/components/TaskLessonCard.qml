@@ -49,6 +49,15 @@ Control {
         }
     }
 
+    AppMenu {
+        id: menu
+        AppMenuItem { iconName: "newfrom"; text: qsTrId("task.new_from") }
+        AppMenuItem { iconName: "plan"; text: qsTrId("plan.from_note.title") }
+        AppMenuItem { iconName: "edit"; text: qsTrId("common.edit"); onTriggered: card.opened() }
+        AppMenuSeparator {}
+        AppMenuItem { iconName: "trash"; destructive: true; text: qsTrId("common.delete") }
+    }
+
     contentItem: ColumnLayout {
         spacing: 8
         RowLayout {
@@ -72,6 +81,19 @@ Control {
                 color: Theme.textMuted
                 font.family: Theme.fontFamily
                 font.pixelSize: 12
+            }
+            IconButton {
+                id: more
+                objectName: "taskMore"
+                Layout.topMargin: -8
+                Layout.bottomMargin: -8
+                Layout.rightMargin: -8
+                size: 36
+                iconName: "more"
+                text: qsTrId("common.more_actions")
+                fill: "transparent"
+                tint: Theme.textMuted
+                onClicked: menu.popup(more, more.width - menu.width, more.height)
             }
         }
 

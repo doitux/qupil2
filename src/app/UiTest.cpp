@@ -2041,6 +2041,47 @@ void UiTest::addCases()
 #endif
     addTextTouchCases();
     addDialogCases();
+    // DRAFT (pictures for the note menu, not for main)
+    {
+        auto more = [this](const QString &name) {
+            return [this, name] {
+                QQuickItem *found = nullptr;
+                std::function<void(QQuickItem *)> walk = [&](QQuickItem *i) {
+                    if (!found && i->objectName() == name && i->isVisible())
+                        found = i;
+                    for (QQuickItem *c : i->childItems())
+                        walk(c);
+                };
+                walk(m_window->contentItem());
+                return found ? found->mapToScene(QPointF(found->width() / 2, found->height() / 2)) : QPointF(-1, -1);
+            };
+        };
+        Case &c = add(u"mock-note-menu"_s, u"draft: the menu of a note"_s);
+        c.keepScreen = true;
+        c.steps << act(u"a note with blocks"_s, [this] {
+                       m_membership = runningMembership();
+                       m_text = m_data->addNote(m_membership, Qupil::Clock::today().addDays(-7).toString(Qt::ISODate),
+                                                u"**Tonleiter G-Dur**\nzweioktavig\nMetronom 60\n\n**Sonatine, 1. Satz**\nTakt 1–16 auswendig\n\nNoten für das Vorspiel besorgen"_s, false);
+                   })
+                << openStudent(u"Lena Muster"_s)
+                << wait(500) << snap(u"mock-note-card"_s)
+                << tapAt(more(u"noteMore"_s), u"the note's menu"_s)
+                << see(u"^Neue Notiz daraus \\(heute\\)$"_s) << wait(400) << snap(u"mock-note-menu"_s)
+                << key(Qt::Key_Escape, u"close the menu"_s) << wait(300)
+                << act(u"coupled, with tasks instead"_s, [this] {
+                       m_data->deleteNote(m_text, false);
+                       const QString student = m_data->get(u"membership"_s, m_membership).value(u"student_id"_s).toString();
+                       m_data->create(u"coupling"_s, { { u"student_id"_s, student }, { u"created"_s, m_data->today() } });
+                       m_data->saveTasks(m_membership, Qupil::Clock::today().addDays(-7).toString(Qt::ISODate),
+                                         { QVariantMap { { u"title"_s, u"Tonleiter G-Dur"_s }, { u"hints"_s, QStringList { u"zweioktavig"_s, u"Metronom 60"_s } } },
+                                           QVariantMap { { u"title"_s, u"Sonatine, 1. Satz"_s }, { u"hints"_s, QStringList { u"Takt 1–16 auswendig"_s } } },
+                                           QVariantMap { { u"title"_s, u"Noten für das Vorspiel besorgen"_s }, { u"kind"_s, 1 } } },
+                                         false);
+                   })
+                << wait(600) << snap(u"mock-task-card"_s)
+                << tapAt(more(u"taskMore"_s), u"the tasks' menu"_s)
+                << see(u"^Neue Aufgaben daraus \\(heute\\)$"_s) << wait(400) << snap(u"mock-task-menu"_s);
+    }
 
     // Students: search, open one, back
     {

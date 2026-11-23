@@ -3033,6 +3033,16 @@ Vorher legt Qupil ein Backup an, das Sie gleich danach wiederherstellen können.
         <source>No notes yet.</source>
         <translation>Noch keine Notizen.</translation>
     </message>
+    <message id="note.new_from">
+        <source>New note from this (today)</source>
+        <extracomment>Menu of a note: a new note for today that starts with this note&apos;s text</extracomment>
+        <translation>Neue Notiz daraus (heute)</translation>
+    </message>
+    <message id="task.new_from">
+        <source>New tasks from these (today)</source>
+        <extracomment>Menu of a lesson&apos;s tasks: tasks for today that start with these</extracomment>
+        <translation>Neue Aufgaben daraus (heute)</translation>
+    </message>
     <message id="note.edit">
         <source>Edit note</source>
         <translation>Notiz bearbeiten</translation>

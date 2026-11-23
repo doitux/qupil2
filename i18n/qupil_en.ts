@@ -3032,6 +3032,16 @@ Qupil first makes a backup that you can restore right afterwards. Nothing change
         <source>No notes yet.</source>
         <translation>No notes yet.</translation>
     </message>
+    <message id="note.new_from">
+        <source>New note from this (today)</source>
+        <extracomment>Menu of a note: a new note for today that starts with this note&apos;s text</extracomment>
+        <translation>New note from this (today)</translation>
+    </message>
+    <message id="task.new_from">
+        <source>New tasks from these (today)</source>
+        <extracomment>Menu of a lesson&apos;s tasks: tasks for today that start with these</extracomment>
+        <translation>New tasks from these (today)</translation>
+    </message>
     <message id="note.edit">
         <source>Edit note</source>
         <translation>Edit note</translation>

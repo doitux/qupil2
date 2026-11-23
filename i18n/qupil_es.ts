@@ -3032,6 +3032,16 @@ Antes, Qupil hace una copia de seguridad que podrá restaurar justo después. En
         <source>No notes yet.</source>
         <translation>Todavía no hay notas.</translation>
     </message>
+    <message id="note.new_from">
+        <source>New note from this (today)</source>
+        <extracomment>Menu of a note: a new note for today that starts with this note&apos;s text</extracomment>
+        <translation>Nueva nota a partir de esta (hoy)</translation>
+    </message>
+    <message id="task.new_from">
+        <source>New tasks from these (today)</source>
+        <extracomment>Menu of a lesson&apos;s tasks: tasks for today that start with these</extracomment>
+        <translation>Nuevas tareas a partir de estas (hoy)</translation>
+    </message>
     <message id="note.edit">
         <source>Edit note</source>
         <translation>Editar nota</translation>

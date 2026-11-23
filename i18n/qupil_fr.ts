@@ -3032,6 +3032,16 @@ Qupil crée d’abord une sauvegarde que vous pourrez restaurer juste après. Ri
         <source>No notes yet.</source>
         <translation>Aucune note pour l’instant.</translation>
     </message>
+    <message id="note.new_from">
+        <source>New note from this (today)</source>
+        <extracomment>Menu of a note: a new note for today that starts with this note&apos;s text</extracomment>
+        <translation>Nouvelle note à partir de celle-ci (aujourd’hui)</translation>
+    </message>
+    <message id="task.new_from">
+        <source>New tasks from these (today)</source>
+        <extracomment>Menu of a lesson&apos;s tasks: tasks for today that start with these</extracomment>
+        <translation>Nouveaux devoirs à partir de ceux-ci (aujourd’hui)</translation>
+    </message>
     <message id="note.edit">
         <source>Edit note</source>
         <translation>Modifier la note</translation>
