@@ -89,7 +89,15 @@ void UiTest::addNoteMenuCases()
                        mouse(QEvent::MouseButtonPress, p, Qt::RightButton);
                        mouse(QEvent::MouseButtonRelease, p, Qt::RightButton);
                    })
-                << see(u"^Neue Notiz daraus \\(heute\\)$"_s) << key(Qt::Key_Escape, u"Escape closes the menu"_s)
+                << see(u"^Neue Notiz daraus \\(heute\\)$"_s)
+#ifdef Q_OS_IOS
+                // (the iOS simulator does not hand the Escape key to the menu)
+                << act(u"a tap beside the menu closes it"_s, [this, beside, moreName] {
+                       touchTap(QPointF(5, beside(moreName())().y()), 0);
+                   })
+#else
+                << key(Qt::Key_Escape, u"Escape closes the menu"_s)
+#endif
                 << gone(u"^Neue Notiz daraus \\(heute\\)$"_s)
                 // With a finger, as on a phone: press and hold, lift, then a tap beside the
                 // menu closes it (a phone has no Escape key)
