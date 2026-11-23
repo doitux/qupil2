@@ -254,6 +254,7 @@ StackView {
             onOpenLists: stack.push(listsPage)
             onOpenData: stack.push(dataPage)
             onOpenAbout: stack.push(aboutPage)
+            onOpenIdea: stack.push(ideaPage)
         }
     }
     Component { id: appearancePage; AppearancePage { onBack: stack.pop() } }
@@ -263,6 +264,15 @@ StackView {
     Component { id: dataPage; DataPage { onBack: stack.pop(); onImportCsv: csvSheet.start() } }
     Component { id: aboutPage; AboutPage { backText: qsTrId("settings.title"); onBack: stack.pop(); onShowLicense: stack.push(licensePage) } }
     Component { id: licensePage; LicensePage { onBack: stack.pop() } }
+    // The trial of the new idea (invented students, in memory only)
+    Component {
+        id: ideaPage
+        IdeaPage {
+            onBack: stack.pop()
+            onOpenStudent: (demo, studentId) => stack.push(ideaStudentPage, { demo: demo, studentId: studentId })
+        }
+    }
+    Component { id: ideaStudentPage; IdeaStudentPage { onBack: stack.pop() } }
     Component { id: syncPage; SyncPage { backText: qsTrId("settings.title"); onBack: stack.pop() } }
     Component { id: libraryPage; LibraryPage { onBack: stack.pop() } }
     Component { id: instrumentsPage; InstrumentsPage { onBack: stack.pop() } }

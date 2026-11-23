@@ -21,6 +21,7 @@ SubPage {
     signal openLists()
     signal openData()
     signal openAbout()
+    signal openIdea()
 
     SyncCard {
         Layout.fillWidth: true
@@ -70,6 +71,17 @@ SubPage {
             tile: Theme.tile.green
             text: qsTrId("settings.data")
             onClicked: page.openData()
+        }
+    }
+
+    // A proposal to be judged by the test team: invented students, nothing is stored
+    SectionLabel { Layout.topMargin: 6; text: qsTrId("idea.settings.section") }
+    MenuGroup {
+        MenuRow {
+            iconName: "star"
+            tile: Theme.tile.plum
+            text: qsTrId("idea.title")
+            onClicked: page.openIdea()
         }
     }
 

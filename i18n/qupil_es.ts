@@ -4474,5 +4474,370 @@ Autor: %2</translation>
         <extracomment>%1 = contact e-mail address</extracomment>
         <translation>Si desea ayudar a traducir Qupil, póngase en contacto con el autor en %1.</translation>
     </message>
+    <message id="idea.settings.section">
+        <source>For the test team</source>
+        <translation>Para el equipo de prueba</translation>
+    </message>
+    <message id="idea.title">
+        <source>Try the new idea</source>
+        <translation>Probar la nueva idea</translation>
+    </message>
+    <message id="idea.intro.head">
+        <source>A trial, not the real thing</source>
+        <translation>Una prueba, no el Qupil real</translation>
+    </message>
+    <message id="idea.intro.text">
+        <source>Tasks, lesson, history: this is how notes, plan and tasks could work together. The students here are invented. Nothing is stored, nothing reaches your real data, and everything starts afresh when you leave this page.</source>
+        <translation>Tareas, clase, historial: así podrían funcionar juntas las notas, la planificación y las tareas. Los alumnos son inventados. No se guarda nada, nada toca sus datos reales y todo empieza de nuevo al salir de esta página.</translation>
+    </message>
+    <message id="idea.students">
+        <source>Invented students</source>
+        <translation>Alumnos inventados</translation>
+    </message>
+    <message id="idea.student.jonas">
+        <source>15 years · large pieces over weeks · reads along in the app</source>
+        <translation>15 años · obras grandes durante semanas · sigue en la aplicación</translation>
+    </message>
+    <message id="idea.student.mia">
+        <source>7 years · many small tasks · reads along in the app</source>
+        <translation>7 años · muchas tareas pequeñas · sigue en la aplicación</translation>
+    </message>
+    <message id="idea.student.paul">
+        <source>11 years · notes only, as today</source>
+        <translation>11 años · solo notas, como hoy</translation>
+    </message>
+    <message id="idea.setting">
+        <source>Setting</source>
+        <translation>Ajuste</translation>
+    </message>
+    <message id="idea.use_tasks">
+        <source>Use tasks</source>
+        <translation>Usar tareas</translation>
+    </message>
+    <message id="idea.use_tasks.hint">
+        <source>Off: a lesson is just its note, as today. Students who already have tasks or read along in the app keep them.</source>
+        <translation>Desactivado: una clase es solo su nota, como hoy. Los alumnos que ya tienen tareas o siguen en la aplicación las conservan.</translation>
+    </message>
+    <message id="idea.reset">
+        <source>Start afresh</source>
+        <translation>Empezar de nuevo</translation>
+    </message>
+    <message id="idea.today">
+        <source>today</source>
+        <translation>hoy</translation>
+    </message>
+    <message id="idea.new">
+        <source>new</source>
+        <extracomment>Small badge at a new task or point</extracomment>
+        <translation>nuevo</translation>
+    </message>
+    <message id="idea.done">
+        <source>done</source>
+        <extracomment>A whole task is done (ticked in the lesson)</extracomment>
+        <translation>logrado</translation>
+    </message>
+    <message id="idea.practised">
+        <source>practised</source>
+        <extracomment>Before the small bars of the last weeks (how much was practised)</extracomment>
+        <translation>practicado</translation>
+    </message>
+    <message id="idea.points_open" numerus="yes">
+        <source>%n point(s) open</source>
+        <translation>
+            <numerusform>%n punto abierto</numerusform>
+            <numerusform>%n puntos abiertos</numerusform>
+        </translation>
+    </message>
+    <message id="idea.points_new" numerus="yes">
+        <source>%n new point(s)</source>
+        <translation>
+            <numerusform>%n punto nuevo</numerusform>
+            <numerusform>%n puntos nuevos</numerusform>
+        </translation>
+    </message>
+    <message id="idea.points.done">
+        <source>done (%1)</source>
+        <extracomment>Folded: the points of a task that are done; %1 = how many</extracomment>
+        <translation>hechos (%1)</translation>
+    </message>
+    <message id="idea.fb.little">
+        <source>hardly practised</source>
+        <translation>poco practicado</translation>
+    </message>
+    <message id="idea.fb.some">
+        <source>practised some</source>
+        <translation>algo practicado</translation>
+    </message>
+    <message id="idea.fb.much">
+        <source>practised a lot</source>
+        <translation>muy practicado</translation>
+    </message>
+    <message id="idea.fb.not_yet">
+        <source>not yet</source>
+        <translation>todavía no</translation>
+    </message>
+    <message id="idea.fb.so_so">
+        <source>so-so</source>
+        <translation>regular</translation>
+    </message>
+    <message id="idea.fb.well">
+        <source>works well</source>
+        <translation>sale bien</translation>
+    </message>
+    <message id="idea.fb.none">
+        <source>no answer yet</source>
+        <translation>aún sin respuesta</translation>
+    </message>
+    <message id="idea.fb.of">
+        <source>%1 this week: %2</source>
+        <extracomment>%1 = the student&apos;s first name, %2 = their answer (practised some, so-so)</extracomment>
+        <translation>%1 esta semana: %2</translation>
+    </message>
+    <message id="idea.tasks.heading">
+        <source>Tasks</source>
+        <translation>Tareas</translation>
+    </message>
+    <message id="idea.tasks.running" numerus="yes">
+        <source>%n running</source>
+        <translation>
+            <numerusform>%n en curso</numerusform>
+            <numerusform>%n en curso</numerusform>
+        </translation>
+    </message>
+    <message id="idea.tasks.count" numerus="yes">
+        <source>%n task(s)</source>
+        <translation>
+            <numerusform>%n tarea</numerusform>
+            <numerusform>%n tareas</numerusform>
+        </translation>
+    </message>
+    <message id="idea.tasks.none">
+        <source>No running tasks.</source>
+        <translation>Ninguna tarea en curso.</translation>
+    </message>
+    <message id="idea.paused.count">
+        <source>Paused (%1)</source>
+        <translation>En pausa (%1)</translation>
+    </message>
+    <message id="idea.done.count">
+        <source>Done (%1)</source>
+        <translation>Logradas (%1)</translation>
+    </message>
+    <message id="idea.until">
+        <source>until about %1</source>
+        <extracomment>%1 = date</extracomment>
+        <translation>hasta aprox. %1</translation>
+    </message>
+    <message id="idea.resume">
+        <source>Take up again</source>
+        <translation>Retomar</translation>
+    </message>
+    <message id="idea.resume.name">
+        <source>Take up again: %1</source>
+        <translation>Retomar: %1</translation>
+    </message>
+    <message id="idea.pause">
+        <source>Pause</source>
+        <translation>Pausar</translation>
+    </message>
+    <message id="idea.pause.name">
+        <source>Pause: %1</source>
+        <translation>Pausar: %1</translation>
+    </message>
+    <message id="idea.pause.until">
+        <source>Until about (optional)</source>
+        <translation>Hasta aprox. (opcional)</translation>
+    </message>
+    <message id="idea.pause.over">
+        <source>The pause is over: %1</source>
+        <translation>La pausa terminó: %1</translation>
+    </message>
+    <message id="idea.remove">
+        <source>Remove</source>
+        <translation>Quitar</translation>
+    </message>
+    <message id="idea.history">
+        <source>History</source>
+        <translation>Historial</translation>
+    </message>
+    <message id="idea.next">
+        <source>Next lesson: %1</source>
+        <extracomment>%1 = date with weekday</extracomment>
+        <translation>Próxima clase: %1</translation>
+    </message>
+    <message id="idea.week_passed">
+        <source>A week has passed.</source>
+        <translation>Ha pasado una semana.</translation>
+    </message>
+    <message id="idea.week_passed.answered">
+        <source>A week has passed, %1 has practised and answered.</source>
+        <extracomment>%1 = the student&apos;s first name</extracomment>
+        <translation>Ha pasado una semana, %1 ha practicado y respondido.</translation>
+    </message>
+    <message id="idea.log.new">
+        <source>New</source>
+        <extracomment>History of a lesson: this task is new (a colon and the task follow)</extracomment>
+        <translation>Nuevo</translation>
+    </message>
+    <message id="idea.log.done">
+        <source>Done</source>
+        <translation>Logrado</translation>
+    </message>
+    <message id="idea.log.on">
+        <source>Goes on</source>
+        <translation>Sigue</translation>
+    </message>
+    <message id="idea.log.paused">
+        <source>Paused</source>
+        <translation>En pausa</translation>
+    </message>
+    <message id="idea.log.resumed">
+        <source>Taken up again</source>
+        <translation>Retomado</translation>
+    </message>
+    <message id="idea.log.unchanged">
+        <source>no change</source>
+        <translation>sin cambios</translation>
+    </message>
+    <message id="idea.prepare">
+        <source>Prepare</source>
+        <translation>Preparar</translation>
+    </message>
+    <message id="idea.prepare.hint">
+        <source>What is due? In the lesson the same list opens. With the lock: only for me.</source>
+        <translation>¿Qué toca? En la clase se abre la misma lista. Con el candado: solo para mí.</translation>
+    </message>
+    <message id="idea.prepared.for">
+        <source>Prepared for %1</source>
+        <translation>Preparado para %1</translation>
+    </message>
+    <message id="idea.lesson">
+        <source>Lesson</source>
+        <extracomment>Button: write down a lesson (plus sign before it)</extracomment>
+        <translation>Clase</translation>
+    </message>
+    <message id="idea.lesson.title">
+        <source>Lesson</source>
+        <translation>Clase</translation>
+    </message>
+    <message id="idea.lesson.hint">
+        <source>What is ticked is done. Everything else goes on.</source>
+        <translation>Lo marcado está logrado. Todo lo demás sigue.</translation>
+    </message>
+    <message id="idea.lesson.hint_note">
+        <source>Just the note, as today.</source>
+        <translation>Solo la nota, como hoy.</translation>
+    </message>
+    <message id="idea.section.prepared">
+        <source>Prepared</source>
+        <translation>Preparado</translation>
+    </message>
+    <message id="idea.section.also">
+        <source>Also open</source>
+        <translation>También en curso</translation>
+    </message>
+    <message id="idea.section.running">
+        <source>Running tasks</source>
+        <translation>Tareas en curso</translation>
+    </message>
+    <message id="idea.section.new">
+        <source>New tasks</source>
+        <translation>Tareas nuevas</translation>
+    </message>
+    <message id="idea.section.paused">
+        <source>Paused</source>
+        <translation>En pausa</translation>
+    </message>
+    <message id="idea.section.extra">
+        <source>Besides · only for me</source>
+        <translation>Además · solo para mí</translation>
+    </message>
+    <message id="idea.tick.done">
+        <source>Done: %1</source>
+        <extracomment>Tick box of a whole task; %1 = its title</extracomment>
+        <translation>Logrado: %1</translation>
+    </message>
+    <message id="idea.tick.all">
+        <source>Tick all</source>
+        <translation>Marcar todas</translation>
+    </message>
+    <message id="idea.tick.none">
+        <source>Untick all</source>
+        <translation>Desmarcar todas</translation>
+    </message>
+    <message id="idea.due">
+        <source>due</source>
+        <extracomment>Preparation: this task is due in the lesson</extracomment>
+        <translation>toca</translation>
+    </message>
+    <message id="idea.due.name">
+        <source>Due: %1</source>
+        <translation>Toca: %1</translation>
+    </message>
+    <message id="idea.point.add">
+        <source>Add a point</source>
+        <translation>Añadir un punto</translation>
+    </message>
+    <message id="idea.point.add_private">
+        <source>Add a point, only for me</source>
+        <translation>Añadir un punto, solo para mí</translation>
+    </message>
+    <message id="idea.point.private">
+        <source>Only for me</source>
+        <translation>Solo para mí</translation>
+    </message>
+    <message id="idea.point.add_button">
+        <source>Add the point</source>
+        <translation>Añadir el punto</translation>
+    </message>
+    <message id="idea.task.add">
+        <source>New task</source>
+        <translation>Tarea nueva</translation>
+    </message>
+    <message id="idea.task.another">
+        <source>Another task</source>
+        <translation>Otra tarea</translation>
+    </message>
+    <message id="idea.task.add_button">
+        <source>Add the task</source>
+        <translation>Añadir la tarea</translation>
+    </message>
+    <message id="idea.extra.add">
+        <source>Another point, e.g. talk about new strings</source>
+        <translation>Otro punto, p. ej. hablar de cuerdas nuevas</translation>
+    </message>
+    <message id="idea.extra.add_button">
+        <source>Add the point for me</source>
+        <translation>Añadir el punto para mí</translation>
+    </message>
+    <message id="idea.note.label">
+        <source>Note of the lesson · only for me</source>
+        <translation>Nota de la clase · solo para mí</translation>
+    </message>
+    <message id="idea.pupil.open">
+        <source>How %1 sees it in the app</source>
+        <extracomment>%1 = the student&apos;s first name</extracomment>
+        <translation>Así lo ve %1 en la aplicación</translation>
+    </message>
+    <message id="idea.pupil.hint">
+        <source>This is what %1 would see. An answer tapped here arrives on your side.</source>
+        <translation>Esto vería %1. Una respuesta elegida aquí llega a usted.</translation>
+    </message>
+    <message id="idea.pupil.running">
+        <source>In progress</source>
+        <translation>En curso</translation>
+    </message>
+    <message id="idea.pupil.question">
+        <source>How did it go this week?</source>
+        <translation>¿Cómo fue esta semana?</translation>
+    </message>
+    <message id="idea.pupil.paused_hint">
+        <source>On pause for now: no question about them.</source>
+        <translation>En pausa por ahora: no se pregunta por ellas.</translation>
+    </message>
+    <message id="idea.pupil.done">
+        <source>Done</source>
+        <translation>Logrado</translation>
+    </message>
 </context>
 </TS>
