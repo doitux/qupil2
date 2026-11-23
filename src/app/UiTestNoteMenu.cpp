@@ -98,7 +98,13 @@ void UiTest::addNoteMenuCases()
                 << act(u"let go"_s, [this, beside, moreName, mouse] {
                        mouse(QEvent::MouseButtonRelease, beside(moreName())(), Qt::LeftButton);
                    })
-                << see(u"^Neue Notiz daraus \\(heute\\)$"_s) << key(Qt::Key_Escape, u"Escape closes the menu"_s)
+                << see(u"^Neue Notiz daraus \\(heute\\)$"_s)
+                // A phone has no Escape key: there a tap beside the menu closes it
+                << act(u"a tap beside the menu closes it"_s, [this, beside, moreName, mouse] {
+                       const QPointF p(5, beside(moreName())().y());
+                       mouse(QEvent::MouseButtonPress, p, Qt::LeftButton);
+                       mouse(QEvent::MouseButtonRelease, p, Qt::LeftButton);
+                   })
                 << gone(u"^Neue Notiz daraus \\(heute\\)$"_s)
                 << tapAt([centre, moreName] { return centre(moreName())(); }, u"the note's ⋯"_s)
                 << see(u"^Neue Notiz daraus \\(heute\\)$"_s) << see(u"^Nächste Stunde planen$"_s) << see(u"^Bearbeiten$"_s)
