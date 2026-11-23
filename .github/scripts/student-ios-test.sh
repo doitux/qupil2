@@ -3,6 +3,7 @@
 #   student-ios-test.sh <output folder>
 # - the app starts (welcome page), also with the hook for the start's links in place
 # - qupil-student:… starts the app and adds the teacher; the same while the app runs
+# - the button on the page qupil.de/u (student/web, in Safari) hands its link to the app
 # - "Open camera" (--scan) shows the scanner's sheet (the simulator has no camera: black,
 #   with the hint and Cancel), and the app goes on working behind it
 # The system asks "Open in “Qupil Practice”?" for a link from outside: idb taps "Open"
@@ -169,6 +170,56 @@ if [ "$HAVE_IDB" = 1 ]; then
         # A second link on top of an unanswered start says nothing
         say "- not checked: the app did not start with the first link"
     fi
+
+    say ""
+    say "## The button on the page qupil.de/u (Safari hands the link to the app)"
+    # What the camera does with the QR code as long as the https link does not open the app
+    # itself: Safari shows the page, its button carries qupil-student:… (23.11.2026 on an iPad:
+    # "Safari cannot open the page because the address is invalid"). The page comes from this
+    # repository (student/web), served here; the link behind # never leaves the simulator.
+    python3 -m http.server 8765 --bind 127.0.0.1 --directory student/web > /dev/null 2>&1 &
+    SERVER=$!
+    sleep 2
+    mark
+    xcrun simctl openurl "$UDID" "http://127.0.0.1:8765/u/#$(link TestTokenDDDD4444)"
+    sleep 15
+    tap_label '^(Continue|Weiter|Not Now|Jetzt nicht)$' 6 optional    # Safari's first start
+    PAGE_BUTTON='(Open in Qupil Practice|In Qupil Üben öffnen)'
+    xy=""
+    for ((i = 0; i < 60; i += 4)); do
+        idb ui describe-all --udid "$UDID" > "$OUT/now.json" 2> /dev/null
+        xy=$(python3 "$HERE/ios-ui.py" "$OUT/now.json" "$PAGE_BUTTON" 2> /dev/null) && break
+        xy=""
+        sleep 4
+    done
+    shot page
+    if [ -z "$xy" ]; then
+        # idb does not always see into a web page: the button is the only wide bar in the accent colour
+        python3 -c 'import PIL' 2> /dev/null || python3 -m pip install --quiet --break-system-packages pillow > /dev/null 2>&1 \
+            || python3 -m pip install --quiet --user pillow > /dev/null 2>&1
+        xcrun simctl io "$UDID" screenshot "$OUT/page.png" > /dev/null 2>&1
+        xy=$(python3 "$HERE/ios-find-colour.py" "$OUT/page.png" "$OUT/now.json" 6E3C5A 2> /dev/null) \
+            && say "- the button found by its colour (idb does not see into the page)"
+    fi
+    if [ -z "$xy" ]; then
+        say "- **the page's button is not on the screen**"
+        python3 "$HERE/ios-ui.py" "$OUT/now.json" --list 2> /dev/null | head -n 40
+        FAILED=1
+    else
+        idb ui tap --udid "$UDID" $xy
+        say "- tapped the page's button at $xy"
+        # Safari asks "Open in “Qupil Practice”?"
+        if ! wait_for_answering "link received, teacher added" 90; then
+            idb ui describe-all --udid "$UDID" > "$OUT/now.json" 2> /dev/null
+            if python3 "$HERE/ios-ui.py" "$OUT/now.json" '(invalid|ungültig)' > /dev/null 2>&1; then
+                say "- **Safari: the address is invalid (no app answers to qupil-student:)**"
+            fi
+            python3 "$HERE/ios-ui.py" "$OUT/now.json" --list 2> /dev/null | head -n 40
+        fi
+    fi
+    sleep 3
+    shot page-button
+    kill $SERVER 2> /dev/null
 else
     say ""
     say "## Links: not checked (no idb on this runner to answer the system's question)"
