@@ -130,17 +130,20 @@
     "tests/tst_tasks.cpp",
     "tools/i18n/catalog.py"
   ],
-  "result": "started",
+  "result": "uploaded",
   "build": {
     "number": 60,
     "run_id": 45448672175,
     "sha": "8e04cd1cb6cc1a46edf6a67a860fef454ca62cab",
     "url": "https://github.com/doitux/qupil2/actions/runs/45448672175",
     "created": "2026-11-24T17:26:53Z",
-    "status": "queued",
-    "conclusion": null,
-    "attempt": 1
+    "status": "completed",
+    "conclusion": "success",
+    "attempt": 1,
+    "rerun": false,
+    "upload": "success",
+    "whats_new": "success"
   },
-  "written": "2026-11-24T18:27:04+01:00",
-  "headline": "Build 60 gestartet"
+  "written": "2026-11-24T18:47:15+01:00",
+  "headline": "Build 60 hochgeladen"
 }
