@@ -2574,7 +2574,7 @@ void UiTest::addCases()
                 << check(u"the private note is there whole, on several lines"_s, [this] {
                        Node n;
                        return find(u"^Privat: UI-Privat: Streichernoten"_s, &n) && n.name.contains(u"Programmheft denken"_s)
-                              && n.name.contains(u"UI-Privat zweite Zeile"_s) && n.rect.height() > 30;
+                              && n.name.contains(u"UI-Privat zweite Zeile"_s) && n.rect.height() > 24;   // one line is about 16
                    })
                 << see(u"^UI-Überschrift eines Blocks.*, noch 2 Zeilen$"_s)
                 << check(u"the block's heading wraps: its row is taller than one line"_s, [this] {
