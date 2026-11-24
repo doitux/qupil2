@@ -177,7 +177,9 @@ QtObject {
         }
         s.extra = draft.extra.map(e => e.text)
         const due = draft.tasks.filter(d => d.due).map(d => d.id)
-        s.prepared = due.length > 0 || s.extra.length > 0 ? { date: s.today, due: due } : null
+        // A student without tasks is prepared with a free note; the lesson starts from it
+        const note = (draft.note || "").trim()
+        s.prepared = due.length > 0 || s.extra.length > 0 || note !== "" ? { date: s.today, due: due, note: note } : null
         revision++
     }
 

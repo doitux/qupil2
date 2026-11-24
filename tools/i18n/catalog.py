@@ -2689,6 +2689,16 @@ E("idea.prepare.hint", en="What is due? In the lesson the same list opens. With 
   de="Was soll dran sein? In der Stunde öffnet sich dieselbe Liste. Mit Schloss: nur für mich.",
   fr="Qu’est-ce qui est prévu ? La même liste s’ouvre pendant le cours. Avec le cadenas : seulement pour moi.",
   es="¿Qué toca? En la clase se abre la misma lista. Con el candado: solo para mí.")
+E("idea.prepare.hint_note", en="A few notes for the lesson. In the lesson they are in the note field, and you turn them into the note of the lesson.",
+  de="Ein paar Notizen für die Stunde. In der Stunde stehen sie im Notizfeld, und du machst daraus die Notiz der Stunde.",
+  fr="Quelques notes pour le cours. Pendant le cours elles sont dans le champ de note, et vous en faites la note du cours.",
+  es="Unas notas para la clase. En la clase están en el campo de nota y las conviertes en la nota de la clase.")
+E("idea.prepare.note", en="Preparation", de="Vorbereitung", fr="Préparation", es="Preparación",
+  c="Label of the note field when a lesson is prepared for a student without tasks")
+E("idea.lesson.hint_prepared", en="The note is what you prepared. Change it to what the lesson was.",
+  de="Im Notizfeld steht deine Vorbereitung. Ändere sie zu dem, was in der Stunde war.",
+  fr="La note contient votre préparation. Modifiez-la selon ce qui s’est passé pendant le cours.",
+  es="En la nota está tu preparación. Cámbiala por lo que hubo en la clase.")
 E("idea.prepared.for", en="Prepared for %1", de="Vorbereitet für %1", fr="Préparé pour %1", es="Preparado para %1")
 E("idea.lesson", en="Lesson", de="Stunde", fr="Cours", es="Clase", c="Button: write down a lesson (plus sign before it)")
 E("idea.lesson.title", en="Lesson", de="Stunde", fr="Cours", es="Clase")
