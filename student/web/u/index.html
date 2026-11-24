@@ -24,6 +24,7 @@
             font:inherit; font-weight:700; text-decoration:none; cursor:pointer; margin-top:10px; }
   .primary { background:var(--accent); color:#fff; }
   .secondary { background:transparent; color:var(--text); border:1px solid var(--border); }
+  .lime { background:var(--lime); color:#1D1A22; }
   .note { font-size:13px; }
   .done { color:var(--accent); font-weight:700; min-height:1.4em; }
   [hidden] { display:none !important; }
@@ -37,27 +38,33 @@
   <p data-de="Deine Lehrerin oder dein Lehrer hat dir deine Aufgaben aus Qupil geschickt."
      data-en="Your teacher has sent you your tasks from Qupil.">Deine Lehrerin oder dein Lehrer hat dir deine Aufgaben aus Qupil geschickt.</p>
 
+  <div class="card">
+    <h2 data-de="Noch keine App?" data-en="No app yet?">Noch keine App?</h2>
+    <p id="stores" data-de="Die App „Qupil – Musik üben“ ist noch in der Testphase und kommt bald in den App Store und zu Google Play."
+       data-en="The app “Qupil – Music Practice” is still being tested and is coming soon to the App Store and Google Play.">Die App „Qupil – Musik üben“ ist noch in der Testphase und kommt bald in den App Store und zu Google Play.</p>
+    <div id="testflightBox" hidden>
+      <p data-de="Auf iPhone und iPad bekommst du sie schon jetzt über TestFlight, Apples App für Testversionen. Danach diesen QR-Code oder Link noch einmal öffnen."
+         data-en="On iPhone and iPad you can get it now through TestFlight, Apple’s app for test versions. Then open this QR code or link once more.">Auf iPhone und iPad bekommst du sie schon jetzt über TestFlight, Apples App für Testversionen. Danach diesen QR-Code oder Link noch einmal öffnen.</p>
+      <a class="button lime" id="testflight" href="#" data-de="Über TestFlight installieren" data-en="Install through TestFlight">Über TestFlight installieren</a>
+    </div>
+    <p id="fromTeacher" data-de="Bis dahin bekommst du sie über deine Lehrkraft." data-en="Until then, your teacher can get it to you.">Bis dahin bekommst du sie über deine Lehrkraft.</p>
+    <a class="button secondary" id="appStore" hidden href="#">App Store</a>
+    <a class="button secondary" id="playStore" hidden href="#">Google Play</a>
+  </div>
+
   <div class="card" id="withLink" hidden>
     <h2 data-de="App schon installiert?" data-en="Got the app already?">App schon installiert?</h2>
     <p data-de="Dann öffnet dieser Knopf deine Aufgaben darin." data-en="Then this button opens your tasks in it.">Dann öffnet dieser Knopf deine Aufgaben darin.</p>
     <a class="button primary" id="open" href="#" data-de="In Qupil Üben öffnen" data-en="Open in Qupil Practice">In Qupil Üben öffnen</a>
     <button class="button secondary" id="copy" type="button" data-de="Link kopieren" data-en="Copy link">Link kopieren</button>
     <p class="note done" id="copied" aria-live="polite"></p>
-    <p class="note" data-de="Klappt der Knopf nicht: Link kopieren, die App öffnen und dort „Einfügen“ tippen."
-       data-en="If the button does nothing: copy the link, open the app and tap “Paste” there.">Klappt der Knopf nicht: Link kopieren, die App öffnen und dort „Einfügen“ tippen.</p>
+    <p class="note" data-de="Meldet Safari „Adresse ungültig“, ist die App noch nicht installiert. Klappt der Knopf sonst nicht: Link kopieren, die App öffnen und dort „Einfügen“ tippen."
+       data-en="If Safari says “the address is invalid”, the app is not installed yet. If the button does nothing otherwise: copy the link, open the app and tap “Paste” there.">Meldet Safari „Adresse ungültig“, ist die App noch nicht installiert. Klappt der Knopf sonst nicht: Link kopieren, die App öffnen und dort „Einfügen“ tippen.</p>
   </div>
 
   <div class="card" id="noLink" hidden>
     <p data-de="Dieser Link ist unvollständig. Bitte deine Lehrkraft um einen neuen QR-Code oder Link."
        data-en="This link is incomplete. Ask your teacher for a new QR code or link.">Dieser Link ist unvollständig. Bitte deine Lehrkraft um einen neuen QR-Code oder Link.</p>
-  </div>
-
-  <div class="card">
-    <h2 data-de="Noch keine App?" data-en="No app yet?">Noch keine App?</h2>
-    <p id="stores" data-de="Die App „Qupil – Musik üben“ gibt es bald im App Store und bei Google Play. Bis dahin bekommst du sie über deine Lehrkraft."
-       data-en="The app “Qupil – Music Practice” is coming soon to the App Store and Google Play. Until then, your teacher can get it to you.">Die App „Qupil – Musik üben“ gibt es bald im App Store und bei Google Play. Bis dahin bekommst du sie über deine Lehrkraft.</p>
-    <a class="button secondary" id="appStore" hidden href="#">App Store</a>
-    <a class="button secondary" id="playStore" hidden href="#">Google Play</a>
   </div>
 
   <p class="note" data-de="Was nach dem # in diesem Link steht, bleibt auf deinem Gerät: Browser schicken es nie an eine Website. Diese Seite speichert nichts und zählt nichts."
@@ -67,6 +74,8 @@
   // Store addresses, once the app is there (empty: not shown)
   const APP_STORE = "";
   const PLAY_STORE = "";
+  // The test phase: TestFlight's public link, shown on iPhone and iPad until the App Store has the app
+  const TESTFLIGHT = "https://testflight.apple.com/join/HcyMhvp1";
 
   const lang = (navigator.language || "de").toLowerCase().startsWith("de") ? "de" : "en";
   document.documentElement.lang = lang;
@@ -87,6 +96,13 @@
         window.prompt(lang === "de" ? "Link zum Kopieren:" : "Link to copy:", link);
       }
     });
+  }
+  // An iPad calls itself a Mac; the touch screen tells
+  const apple = /iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  if (TESTFLIGHT && apple && !APP_STORE) {
+    document.getElementById("testflight").href = TESTFLIGHT;
+    document.getElementById("testflightBox").hidden = false;
+    document.getElementById("fromTeacher").hidden = true;
   }
   if (APP_STORE) { const a = document.getElementById("appStore"); a.href = APP_STORE; a.hidden = false; }
   if (PLAY_STORE) { const a = document.getElementById("playStore"); a.href = PLAY_STORE; a.hidden = false; }
