@@ -2042,6 +2042,7 @@ void UiTest::addCases()
     addTextTouchCases();
     addDialogCases();
     addNoteMenuCases();
+    addIdeaCases();
 
     // Students: search, open one, back
     {

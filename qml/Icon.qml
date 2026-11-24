@@ -43,6 +43,9 @@ Item {
         warning: "M12 4l9 16h-18z M12 10v4.5 M12 17.5v0.01",
         database: "M4 6c0 -1.7 3.6 -3 8 -3s8 1.3 8 3s-3.6 3 -8 3s-8 -1.3 -8 -3z M4 6v12c0 1.7 3.6 3 8 3s8 -1.3 8 -3v-12 M4 12c0 1.7 3.6 3 8 3s8 -1.3 8 -3",
         chevron: "M9 6l6 6l-6 6",
+        // A task rests for a while, and is taken up again (the trial of the new idea)
+        pause: "M8.5 5v14 M15.5 5v14",
+        play: "M8 5l11 7l-11 7z",
         chevronDown: "M6 9l6 6l6 -6",
         lines: "M4 7h16 M4 12h16 M4 17h10",
         globe: "M3 12a9 9 0 1 0 18 0a9 9 0 1 0 -18 0 M3.6 9h16.8 M3.6 15h16.8 M11.5 3a17 17 0 0 0 0 18 M12.5 3a17 17 0 0 1 0 18",

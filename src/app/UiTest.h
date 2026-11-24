@@ -129,6 +129,8 @@ private:
     void addDialogCases();
     //! The menu of a note and of a lesson's tasks (UiTestNoteMenu.cpp)
     void addNoteMenuCases();
+    //! The trial of the new idea (UiTestIdea.cpp)
+    void addIdeaCases();
     void traceSelection();
     Case &add(const QString &name, const QString &title);
 

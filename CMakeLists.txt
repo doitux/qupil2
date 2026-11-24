@@ -86,7 +86,8 @@ target_link_libraries(qupilcore PUBLIC Qt6::Core Qt6::Sql)
 # ---------------------------------------------------------------------------- app
 
 qt_add_executable(qupil src/main.cpp src/app/ScreenshotTour.h src/app/ScreenshotTour.cpp
-    src/app/UiTest.h src/app/UiTest.cpp src/app/UiTestDialogs.cpp src/app/UiTestNoteMenu.cpp)
+    src/app/UiTest.h src/app/UiTest.cpp src/app/UiTestDialogs.cpp src/app/UiTestNoteMenu.cpp
+    src/app/UiTestIdea.cpp)
 
 target_compile_definitions(qupil PRIVATE QUPIL_VERSION="${PROJECT_VERSION}")
 # The editor sheets (qml/editors, root "Sheet {"): the UI test has to cover each of them
@@ -377,6 +378,17 @@ set(QUPIL_QML_FILES
     qml/pages/InstrumentsPage.qml
     qml/pages/EnsembleCandidatesPage.qml
     qml/pages/AboutPage.qml
+    qml/idea/IdeaModel.qml
+    qml/idea/IdeaPage.qml
+    qml/idea/IdeaStudentPage.qml
+    qml/idea/IdeaLessonSheet.qml
+    qml/idea/IdeaPupilSheet.qml
+    qml/idea/IdeaTask.qml
+    qml/idea/IdeaTaskEdit.qml
+    qml/idea/IdeaPoint.qml
+    qml/idea/IdeaEntry.qml
+    qml/idea/IdeaLink.qml
+    qml/idea/IdeaFold.qml
     qml/pages/ArchivePage.qml
     qml/pages/LicensePage.qml
     qml/pages/ArchiveEntryPage.qml

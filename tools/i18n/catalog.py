@@ -2585,3 +2585,135 @@ E("about.translation_help", old="__HTML_TRANSLATION__",
   es="Si desea ayudar a traducir Qupil, póngase en contacto con el autor en %1.",
   c="%1 = contact e-mail address",
   note="Aus dem HTML-Text extrahiert, E-Mail als Platzhalter; die Liste der Übersetzer erzeugt Qupil 2 selbst")
+
+# --- "Try the new idea": a trial of the proposal "tasks, lesson, history" for the test team
+# (Settings; invented students, nothing is stored). The texts go once the idea is decided.
+E("idea.settings.section", en="For the test team", de="Für das Testteam", fr="Pour l’équipe de test", es="Para el equipo de prueba")
+E("idea.title", en="Try the new idea", de="Neue Idee ausprobieren", fr="Essayer la nouvelle idée", es="Probar la nueva idea")
+E("idea.intro.head", en="A trial, not the real thing", de="Ein Probierstand, nicht das echte Qupil",
+  fr="Un essai, pas le vrai Qupil", es="Una prueba, no el Qupil real")
+E("idea.intro.text",
+  en="Tasks, lesson, history: this is how notes, plan and tasks could work together. The students here are invented. Nothing is stored, nothing reaches your real data, and everything starts afresh when you leave this page.",
+  de="Aufgaben, Stunde, Verlauf: So könnten Notiz, Planung und Aufgaben zusammenspielen. Die Schüler hier sind erfunden. Nichts wird gespeichert, nichts berührt deine echten Daten, und alles beginnt von vorn, wenn du diese Seite verlässt.",
+  fr="Devoirs, cours, historique : voici comment notes, préparation et devoirs pourraient fonctionner ensemble. Les élèves sont inventés. Rien n’est enregistré, rien ne touche à vos vraies données, et tout recommence quand vous quittez cette page.",
+  es="Tareas, clase, historial: así podrían funcionar juntas las notas, la planificación y las tareas. Los alumnos son inventados. No se guarda nada, nada toca sus datos reales y todo empieza de nuevo al salir de esta página.")
+E("idea.students", en="Invented students", de="Erfundene Schüler", fr="Élèves inventés", es="Alumnos inventados")
+E("idea.student.jonas", en="15 years · large pieces over weeks · reads along in the app",
+  de="15 Jahre · große Stücke über Wochen · liest in der App mit",
+  fr="15 ans · grandes pièces sur des semaines · suit dans l’application",
+  es="15 años · obras grandes durante semanas · sigue en la aplicación")
+E("idea.student.mia", en="7 years · many small tasks · reads along in the app",
+  de="7 Jahre · viele kleine Aufgaben · liest in der App mit",
+  fr="7 ans · beaucoup de petits devoirs · suit dans l’application",
+  es="7 años · muchas tareas pequeñas · sigue en la aplicación")
+E("idea.student.paul", en="11 years · notes only, as today", de="11 Jahre · nur Notizen, wie heute",
+  fr="11 ans · seulement des notes, comme aujourd’hui", es="11 años · solo notas, como hoy")
+E("idea.setting", en="Setting", de="Einstellung", fr="Réglage", es="Ajuste")
+E("idea.use_tasks", en="Use tasks", de="Aufgaben verwenden", fr="Utiliser les devoirs", es="Usar tareas")
+E("idea.use_tasks.hint",
+  en="Off: a lesson is just its note, as today. Students who already have tasks or read along in the app keep them.",
+  de="Aus: Eine Stunde ist nur ihre Notiz, wie heute. Schüler, die schon Aufgaben haben oder in der App mitlesen, behalten sie.",
+  fr="Désactivé : un cours n’est que sa note, comme aujourd’hui. Les élèves qui ont déjà des devoirs ou suivent dans l’application les gardent.",
+  es="Desactivado: una clase es solo su nota, como hoy. Los alumnos que ya tienen tareas o siguen en la aplicación las conservan.")
+E("idea.reset", en="Start afresh", de="Von vorn beginnen", fr="Recommencer", es="Empezar de nuevo")
+E("idea.today", en="today", de="heute", fr="aujourd’hui", es="hoy")
+E("idea.new", en="new", de="neu", fr="nouveau", es="nuevo", c="Small badge at a new task or point")
+E("idea.done", en="done", de="geschafft", fr="réussi", es="logrado", c="A whole task is done (ticked in the lesson)")
+E("idea.practised", en="practised", de="geübt", fr="travaillé", es="practicado",
+  c="Before the small bars of the last weeks (how much was practised)")
+E("idea.points_open", src="%n point(s) open", en=["%n point open", "%n points open"], de=["%n Punkt offen", "%n Punkte offen"],
+  fr=["%n point ouvert", "%n points ouverts"], es=["%n punto abierto", "%n puntos abiertos"])
+E("idea.points_new", src="%n new point(s)", en=["%n new point", "%n new points"], de=["%n neuer Punkt", "%n neue Punkte"],
+  fr=["%n nouveau point", "%n nouveaux points"], es=["%n punto nuevo", "%n puntos nuevos"])
+E("idea.points.done", en="done (%1)", de="erledigt (%1)", fr="terminés (%1)", es="hechos (%1)",
+  c="Folded: the points of a task that are done; %1 = how many")
+E("idea.fb.little", en="hardly practised", de="kaum geübt", fr="peu travaillé", es="poco practicado")
+E("idea.fb.some", en="practised some", de="etwas geübt", fr="un peu travaillé", es="algo practicado")
+E("idea.fb.much", en="practised a lot", de="viel geübt", fr="beaucoup travaillé", es="muy practicado")
+E("idea.fb.not_yet", en="not yet", de="noch nicht", fr="pas encore", es="todavía no")
+E("idea.fb.so_so", en="so-so", de="geht so", fr="ça va", es="regular")
+E("idea.fb.well", en="works well", de="klappt gut", fr="ça marche", es="sale bien")
+E("idea.fb.none", en="no answer yet", de="noch keine Rückmeldung", fr="pas encore de réponse", es="aún sin respuesta")
+E("idea.fb.of", en="%1 this week: %2", de="%1 diese Woche: %2", fr="%1 cette semaine : %2", es="%1 esta semana: %2",
+  c="%1 = the student's first name, %2 = their answer (practised some, so-so)")
+E("idea.tasks.heading", en="Tasks", de="Aufgaben", fr="Devoirs", es="Tareas")
+E("idea.tasks.running", src="%n running", en=["%n running", "%n running"], de=["%n läuft", "%n laufen"],
+  fr=["%n en cours", "%n en cours"], es=["%n en curso", "%n en curso"])
+E("idea.tasks.count", src="%n task(s)", en=["%n task", "%n tasks"], de=["%n Aufgabe", "%n Aufgaben"],
+  fr=["%n devoir", "%n devoirs"], es=["%n tarea", "%n tareas"])
+E("idea.tasks.none", en="No running tasks.", de="Keine laufenden Aufgaben.", fr="Aucun devoir en cours.", es="Ninguna tarea en curso.")
+E("idea.paused.count", en="Paused (%1)", de="Pausiert (%1)", fr="En pause (%1)", es="En pausa (%1)")
+E("idea.done.count", en="Done (%1)", de="Geschafft (%1)", fr="Réussis (%1)", es="Logradas (%1)")
+E("idea.until", en="until about %1", de="bis etwa %1", fr="jusqu’à environ %1", es="hasta aprox. %1", c="%1 = date")
+E("idea.resume", en="Take up again", de="Wieder aufnehmen", fr="Reprendre", es="Retomar")
+E("idea.resume.name", en="Take up again: %1", de="Wieder aufnehmen: %1", fr="Reprendre : %1", es="Retomar: %1")
+E("idea.pause", en="Pause", de="Pausieren", fr="Mettre en pause", es="Pausar")
+E("idea.pause.name", en="Pause: %1", de="Pausieren: %1", fr="Mettre en pause : %1", es="Pausar: %1")
+E("idea.pause.until", en="Until about (optional)", de="Bis etwa (freiwillig)", fr="Jusqu’à environ (facultatif)",
+  es="Hasta aprox. (opcional)")
+E("idea.pause.over", en="The pause is over: %1", de="Pause vorbei: %1", fr="La pause est terminée : %1", es="La pausa terminó: %1")
+E("idea.remove", en="Remove", de="Entfernen", fr="Retirer", es="Quitar")
+E("idea.history", en="History", de="Verlauf", fr="Historique", es="Historial")
+E("idea.next", en="Next lesson: %1", de="Nächste Stunde: %1", fr="Prochain cours : %1", es="Próxima clase: %1", c="%1 = date with weekday")
+E("idea.week_passed", en="A week has passed.", de="Eine Woche ist vergangen.", fr="Une semaine a passé.", es="Ha pasado una semana.")
+E("idea.week_passed.answered", en="A week has passed, %1 has practised and answered.",
+  de="Eine Woche ist vergangen, %1 hat geübt und geantwortet.", fr="Une semaine a passé, %1 a travaillé et répondu.",
+  es="Ha pasado una semana, %1 ha practicado y respondido.", c="%1 = the student's first name")
+E("idea.log.new", en="New", de="Neu", fr="Nouveau", es="Nuevo", c="History of a lesson: this task is new (a colon and the task follow)")
+E("idea.log.done", en="Done", de="Geschafft", fr="Réussi", es="Logrado")
+E("idea.log.on", en="Goes on", de="Weiter", fr="Continue", es="Sigue")
+E("idea.log.paused", en="Paused", de="Pausiert", fr="En pause", es="En pausa")
+E("idea.log.resumed", en="Taken up again", de="Wieder aufgenommen", fr="Repris", es="Retomado")
+E("idea.log.unchanged", en="no change", de="ohne Änderung", fr="sans changement", es="sin cambios")
+E("idea.prepare", en="Prepare", de="Vorbereiten", fr="Préparer", es="Preparar")
+E("idea.prepare.hint", en="What is due? In the lesson the same list opens. With the lock: only for me.",
+  de="Was soll dran sein? In der Stunde öffnet sich dieselbe Liste. Mit Schloss: nur für mich.",
+  fr="Qu’est-ce qui est prévu ? La même liste s’ouvre pendant le cours. Avec le cadenas : seulement pour moi.",
+  es="¿Qué toca? En la clase se abre la misma lista. Con el candado: solo para mí.")
+E("idea.prepared.for", en="Prepared for %1", de="Vorbereitet für %1", fr="Préparé pour %1", es="Preparado para %1")
+E("idea.lesson", en="Lesson", de="Stunde", fr="Cours", es="Clase", c="Button: write down a lesson (plus sign before it)")
+E("idea.lesson.title", en="Lesson", de="Stunde", fr="Cours", es="Clase")
+E("idea.lesson.hint", en="What is ticked is done. Everything else goes on.",
+  de="Was abgehakt ist, ist geschafft. Alles andere läuft weiter.",
+  fr="Ce qui est coché est réussi. Tout le reste continue.", es="Lo marcado está logrado. Todo lo demás sigue.")
+E("idea.lesson.hint_note", en="Just the note, as today.", de="Nur die Notiz, wie heute.",
+  fr="Seulement la note, comme aujourd’hui.", es="Solo la nota, como hoy.")
+E("idea.section.prepared", en="Prepared", de="Vorbereitet", fr="Préparé", es="Preparado")
+E("idea.section.also", en="Also open", de="Auch noch offen", fr="Aussi en cours", es="También en curso")
+E("idea.section.running", en="Running tasks", de="Laufende Aufgaben", fr="Devoirs en cours", es="Tareas en curso")
+E("idea.section.new", en="New tasks", de="Neue Aufgaben", fr="Nouveaux devoirs", es="Tareas nuevas")
+E("idea.section.paused", en="Paused", de="Pausiert", fr="En pause", es="En pausa")
+E("idea.section.extra", en="Besides · only for me", de="Außerdem · nur für mich", fr="En plus · seulement pour moi",
+  es="Además · solo para mí")
+E("idea.tick.done", en="Done: %1", de="Geschafft: %1", fr="Réussi : %1", es="Logrado: %1",
+  c="Tick box of a whole task; %1 = its title")
+E("idea.tick.all", en="Tick all", de="Alle abhaken", fr="Tout cocher", es="Marcar todas")
+E("idea.tick.none", en="Untick all", de="Alle Haken weg", fr="Tout décocher", es="Desmarcar todas")
+E("idea.due", en="due", de="dran", fr="prévu", es="toca", c="Preparation: this task is due in the lesson")
+E("idea.due.name", en="Due: %1", de="Dran: %1", fr="Prévu : %1", es="Toca: %1")
+E("idea.point.add", en="Add a point", de="Punkt hinzufügen", fr="Ajouter un point", es="Añadir un punto")
+E("idea.point.add_private", en="Add a point, only for me", de="Punkt hinzufügen, nur für mich",
+  fr="Ajouter un point, seulement pour moi", es="Añadir un punto, solo para mí")
+E("idea.point.private", en="Only for me", de="Nur für mich", fr="Seulement pour moi", es="Solo para mí")
+E("idea.point.add_button", en="Add the point", de="Punkt übernehmen", fr="Ajouter le point", es="Añadir el punto")
+E("idea.task.add", en="New task", de="Neue Aufgabe", fr="Nouveau devoir", es="Tarea nueva")
+E("idea.task.another", en="Another task", de="Weitere Aufgabe", fr="Autre devoir", es="Otra tarea")
+E("idea.task.add_button", en="Add the task", de="Aufgabe übernehmen", fr="Ajouter le devoir", es="Añadir la tarea")
+E("idea.extra.add", en="Another point, e.g. talk about new strings", de="Weiterer Punkt, z. B. neue Saiten ansprechen",
+  fr="Autre point, p. ex. parler de nouvelles cordes", es="Otro punto, p. ej. hablar de cuerdas nuevas")
+E("idea.extra.add_button", en="Add the point for me", de="Punkt für mich übernehmen", fr="Ajouter le point pour moi",
+  es="Añadir el punto para mí")
+E("idea.note.label", en="Note of the lesson · only for me", de="Notiz zur Stunde · nur für mich",
+  fr="Note du cours · seulement pour moi", es="Nota de la clase · solo para mí")
+E("idea.pupil.open", en="How %1 sees it in the app", de="So sieht es %1 in der App", fr="Ce que %1 voit dans l’application",
+  es="Así lo ve %1 en la aplicación", c="%1 = the student's first name")
+E("idea.pupil.hint", en="This is what %1 would see. An answer tapped here arrives on your side.",
+  de="Das sähe %1. Eine Antwort, die du hier antippst, kommt bei dir an.",
+  fr="Voici ce que %1 verrait. Une réponse choisie ici arrive chez vous.",
+  es="Esto vería %1. Una respuesta elegida aquí llega a usted.")
+E("idea.pupil.running", en="In progress", de="Das läuft", fr="En cours", es="En curso")
+E("idea.pupil.question", en="How did it go this week?", de="Wie lief es diese Woche?", fr="Comment ça s’est passé cette semaine ?",
+  es="¿Cómo fue esta semana?")
+E("idea.pupil.paused_hint", en="On pause for now: no question about them.", de="Liegt gerade: dazu wird nicht gefragt.",
+  fr="En pause pour l’instant : pas de question à leur sujet.", es="En pausa por ahora: no se pregunta por ellas.")
+E("idea.pupil.done", en="Done", de="Geschafft", fr="Réussi", es="Logrado")
