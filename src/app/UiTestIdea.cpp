@@ -63,16 +63,11 @@ void UiTest::addIdeaCases()
             // (saving takes the line that is still being typed along)
             << tap(u"^Speichern$"_s) << see(u"^Vorbereitet für "_s) << see(u"^UI-Vorhaben$"_s)
             // In the lesson it is at the top, to be ticked
-            // (Android: the keyboard of the preparation is still going down and the page moving
-            // with it, a tap on the button can miss. And "UI-Vorhaben" also stands on the page,
-            // in the card of what is prepared: the big tick is only in the lesson's window.)
-            << wait(900) << tap(u"^Stunde$"_s) << wait(700)
-            << act(u"once more, if the window did not open"_s, [this, lessonOpen] {
-                   Node button;
-                   if (!find(lessonOpen) && find(u"^Stunde$"_s, &button))
-                       click(button.rect.center());
-               })
-            << see(lessonOpen) << tap(u"^UI-Vorhaben$"_s, u"what I planned is done"_s)
+            // (asked at once, while the window of the preparation is still on its way out: it
+            // opens as soon as that is gone. The page shows "UI-Vorhaben" too, in the card of
+            // what is prepared – only in the lesson's window it is a box to tick)
+            << tap(u"^Stunde$"_s) << see(lessonOpen) << see(u"checkbox:^UI-Vorhaben$"_s)
+            << tap(u"checkbox:^UI-Vorhaben$"_s, u"what I planned is done"_s)
             << snap(u"idea-lesson-prepared"_s)
             << tap(u"^Speichern$"_s) << gone(u"^Vorbereitet für "_s)
 

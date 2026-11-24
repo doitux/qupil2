@@ -44,7 +44,23 @@ Sheet {
     readonly property int pausedCount: count(t => t.phase === "pause")
     readonly property bool allTicked: count(t => t.phase === "run" && !t.isNew && !t.ticked) === 0
 
+    //! Asked to open while still closing (saved a moment ago): 0 lesson, 1 preparation
+    property int queued: -1
+    onClosed: {
+        if (queued >= 0) {
+            const again = queued === 1
+            queued = -1
+            Qt.callLater(() => sheet.start(again))
+        }
+    }
+
     function start(asPrepare) {
+        // Still on the screen, on its way out: opening it now would change what it shows
+        // and then close with it. It opens as soon as it is gone
+        if (visible) {
+            queued = asPrepare ? 1 : 0
+            return
+        }
         prepare = asPrepare
         s = demo.student(studentId)
         tasksShown = demo.showsTasks(s)
