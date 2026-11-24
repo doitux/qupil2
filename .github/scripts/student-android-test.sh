@@ -141,7 +141,7 @@ adb shell settings put secure show_ime_with_hard_keyboard 1 > /dev/null
 LINK_FIELD='qupil\.de/u#'
 mark
 if tap "$LINK_FIELD"; then
-    if wait_for "keyboard: [1-9][0-9]* px" 25; then
+    if wait_for "keyboard: [1-9][0-9]* px" 40; then
         sleep 3
         shot keyboard
         px=$(since | grep -o 'keyboard: [0-9]* px' | tail -n 1 | grep -o '[0-9]*')
@@ -164,6 +164,11 @@ if tap "$LINK_FIELD"; then
         wait_for "keyboard: 0 px" 20
         sleep 2
         shot keyboard-gone
+    else
+        # Did the emulator show a keyboard at all?
+        shot no-keyboard
+        say "- input method: \`$(adb shell dumpsys input_method | grep -E 'mInputShown|mShowRequested|mCurMethodId|mImeWindowVis' | tr -d '\r' | tr -s ' ' | tr '\n' ';' | cut -c1-300)\`"
+        say "- focus: \`$(adb shell dumpsys window | grep -E 'mCurrentFocus|mInputMethodTarget|imeLayeringTarget' | tr -d '\r' | tr -s ' ' | tr '\n' ';' | cut -c1-300)\`"
     fi
 fi
 
