@@ -14,13 +14,17 @@ namespace Qupil::Booklet {
     What came back from the student app(s) in a student's folder (the teacher's side).
 
     Every upload of a device holds that device's whole current feedback, so only the
-    newest file per device counts; the older ones can go. Between devices (phone and
+    newest file per device counts; the older ones can go. A device sends its first file
+    when it takes the booklet ("since") and a last one when the booklet is removed from
+    it ("left"): the teacher sees how many devices have it, never whose they are. Between devices (phone and
     tablet) and against what the teacher already has, the newer answer per task wins.
 */
 struct Inbox
 {
     QJsonObject feedback;       // task id -> {practiced, works, done, at}
     QJsonArray questions;       // {id, text, task, at}, each once, oldest first
+    QJsonArray devices;         // {device, at, since?, left?}: one per device that sent anything,
+                                // by device; since/left (ms): when it took the booklet / removed it
     QStringList superseded;     // older files of a device: can be deleted
     QStringList unreadable;     // not ours, or another key: left alone
     bool changed = false;       // anything new compared with \a known

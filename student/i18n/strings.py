@@ -156,24 +156,28 @@ E("s.settings.demo", "Example", "Beispiel", "Exemple", "Ejemplo")
 E("s.settings.remove", "Remove", "Entfernen", "Retirer", "Quitar")
 E("s.settings.remove_confirm", "Really remove", "Wirklich entfernen", "Vraiment retirer", "Quitar de verdad")
 E("s.settings.remove_hint",
-  "This removes the connection to this teacher from this phone only. Your teacher can give you a new code at any time.",
-  "Das entfernt die Verbindung zu dieser Lehrkraft nur von diesem Handy. Deine Lehrkraft kann dir jederzeit einen neuen Code geben.",
-  "La connexion à ce professeur n'est retirée que de ce téléphone. Ton professeur peut te donner un nouveau code à tout moment.",
-  "Solo se quita la conexión con este profesor de este móvil. Tu profesor puede darte un código nuevo cuando quieras.")
+  "This removes the connection to this teacher from this phone only. Your teacher is told that it was removed from one device, and can give you a new code at any time.",
+  "Das entfernt die Verbindung zu dieser Lehrkraft nur von diesem Handy. Deine Lehrkraft erfährt, dass sie auf einem Gerät entfernt wurde, und kann dir jederzeit einen neuen Code geben.",
+  "La connexion à ce professeur n'est retirée que de ce téléphone. Ton professeur apprend qu'elle a été retirée d'un appareil et peut te donner un nouveau code à tout moment.",
+  "Solo se quita la conexión con este profesor de este móvil. Tu profesor se entera de que se quitó de un dispositivo y puede darte un código nuevo cuando quieras.")
 E("s.settings.add", "Add another teacher", "Weitere Lehrkraft hinzufügen", "Ajouter un autre professeur", "Añadir otro profesor")
 E("s.settings.privacy", "Privacy", "Datenschutz", "Confidentialité", "Privacidad")
 E("s.settings.privacy_text",
   "Your tasks lie encrypted in your teacher's cloud. Only this app and your teacher's Qupil can read them. "
-  "What you send back (practised, works, questions) goes encrypted to your teacher only. The app has no account, "
+  "What you send back (practised, works, questions) goes encrypted to your teacher only. "
+  "Your teacher also sees on how many devices the tasks are set up – not which ones, and not when you use the app. The app has no account, "
   "no advertising and no tracking.",
   "Deine Aufgaben liegen verschlüsselt in der Cloud deiner Lehrkraft. Lesen können sie nur diese App und das Qupil deiner Lehrkraft. "
-  "Was du zurückschickst (geübt, klappt, Fragen), geht verschlüsselt nur an deine Lehrkraft. Die App hat kein Konto, "
+  "Was du zurückschickst (geübt, klappt, Fragen), geht verschlüsselt nur an deine Lehrkraft. "
+  "Deine Lehrkraft sieht außerdem, auf wie vielen Geräten ihre Aufgaben eingerichtet sind – nicht, auf welchen, und nicht, wann du die App benutzt. Die App hat kein Konto, "
   "keine Werbung und kein Tracking.",
   "Tes devoirs sont stockés chiffrés dans le cloud de ton professeur. Seuls cette application et le Qupil de ton professeur peuvent les lire. "
-  "Ce que tu renvoies (travaillé, ça marche, questions) va, chiffré, uniquement à ton professeur. L'application n'a ni compte, "
+  "Ce que tu renvoies (travaillé, ça marche, questions) va, chiffré, uniquement à ton professeur. "
+  "Ton professeur voit aussi sur combien d'appareils les devoirs sont installés – pas lesquels, ni quand tu utilises l'application. L'application n'a ni compte, "
   "ni publicité, ni pistage.",
   "Tus tareas están cifradas en la nube de tu profesor. Solo esta aplicación y el Qupil de tu profesor pueden leerlas. "
-  "Lo que envías (practicado, sale, preguntas) llega cifrado solo a tu profesor. La aplicación no tiene cuenta, "
+  "Lo que envías (practicado, sale, preguntas) llega cifrado solo a tu profesor. "
+  "Tu profesor también ve en cuántos dispositivos están las tareas, no en cuáles ni cuándo usas la aplicación. La aplicación no tiene cuenta, "
   "ni publicidad, ni rastreo.")
 
 if __name__ == "__main__":

@@ -85,6 +85,8 @@ public:
 
     //! The text of the clipboard, if it is a coupling link (for "Paste link")
     Q_INVOKABLE QString clipboardLink() const;
+    //! Goodbyes not sent yet (removed here, the teacher not told; for the tests)
+    int pendingGoodbyes() const { return int(m_leaving.size()); }
 
     //! Called by the system for https://qupil.de/u#… and qupil-student:…
     Q_INVOKABLE void openUrl(const QUrl &url);
@@ -112,6 +114,10 @@ private:
         qint64 changedAt = 0;      // last local change of feedback or questions
         qint64 sentAt = 0;         // last successful upload (the state of changedAt then)
         qint64 sentState = 0;
+        qint64 since = 0;          // when this device took the booklet (0: before the app said so)
+        bool said = false;         // the teacher was told that this device has the booklet
+        qint64 left = 0;           // removed from this device: only the goodbye is still to send
+        bool sending = false;      // the goodbye is on its way (not kept)
     };
 
     void load();
@@ -123,6 +129,7 @@ private:
     void upload(Teacher &teacher);
     void scheduleUpload();
     void sendPending();
+    bool canUpload(const Teacher &teacher) const;
     void touch(Teacher &teacher);
     void setBusy(bool on);
     void setScanError(const QString &error);
@@ -131,6 +138,7 @@ private:
     static QJsonObject demoBooklet();
 
     QList<Teacher> m_teachers;
+    QList<Teacher> m_leaving;  // removed here, the teacher not told yet (kept for a month at most)
     int m_current = 0;
     int m_busy = 0;
     QString m_scanError;

@@ -256,8 +256,20 @@ QVariantMap BookletService::qrCode(const QString &studentId) const
 void BookletService::publishAll()
 {
     m_soon.stop();
+    publish({});
+}
+
+void BookletService::lookFor(const QString &studentId)
+{
+    if (!studentId.isEmpty())
+        publish(studentId);
+}
+
+void BookletService::publish(const QString &onlyStudentId)
+{
     if (!available() || m_running.contains(u"publish"_s))
         return;
+    const bool write = onlyStudentId.isEmpty();
     // Everything from the database in the GUI thread; only the network in the worker
     struct Student
     {
@@ -271,6 +283,8 @@ void BookletService::publishAll()
         if (!l.isValid() || c.value(u"folder"_s).toString().isEmpty())
             continue;
         const QString studentId = c.value(u"student_id"_s).toString();
+        if (!write && studentId != onlyStudentId)
+            continue;
         const QJsonObject content = m_data->bookletContent(studentId);
         if (content.isEmpty())
             continue;
@@ -287,20 +301,24 @@ void BookletService::publishAll()
         QByteArray key;
         QHash<QString, QByteArray> files;
         bool ok = false;
+        bool listed = false;   // the folder could be read: no files means no device
     };
-    inWorker<QList<Answers>>(this, [account, students] {
+    inWorker<QList<Answers>>(this, [account, students, write] {
         WebDavFolder dav(account.server, account.loginName, account.userId, account.appPassword);
         QList<Answers> out;
         for (const Student &s : students) {
-            Answers a { s.id, s.key, {}, false };
-            a.ok = dav.write(s.folder + u'/' + QString::fromLatin1(Booklet::BookletFile), s.sealed);
+            Answers a { s.id, s.key, {}, false, false };
+            a.ok = !write || dav.write(s.folder + u'/' + QString::fromLatin1(Booklet::BookletFile), s.sealed);
             if (const auto names = dav.list(s.folder)) {
+                a.listed = true;
                 for (const QString &name : *names) {
                     const QString file = name.section(u'/', -1);
                     if (!Booklet::isFeedbackFileName(file))
                         continue;
                     if (const auto data = dav.read(s.folder + u'/' + file))
                         a.files.insert(file, *data);
+                    else
+                        a.listed = false;   // a device's file is missing: say nothing about the devices
                 }
             }
             out << a;
@@ -311,8 +329,11 @@ void BookletService::publishAll()
         QStringList toDelete;
         m_publishing = true;   // the answers change data: no new round for that
         for (const Answers &a : all) {
-            if (a.files.isEmpty())
+            if (a.files.isEmpty()) {
+                if (a.listed)
+                    m_data->setCouplingDevices(a.studentId, {});
                 continue;
+            }
             // What this teacher's Qupil has so far, so only newer answers count
             QJsonObject known;
             QJsonObject feedback;
@@ -324,6 +345,8 @@ void BookletService::publishAll()
             known.insert(u"feedback"_s, feedback);
             known.insert(u"questions"_s, QJsonDocument::fromJson(m_data->coupling(a.studentId).value(u"questions"_s).toString().toUtf8()).array());
             const Booklet::Inbox inbox = Booklet::collect(a.key, a.files, known);
+            if (a.listed)
+                m_data->setCouplingDevices(a.studentId, inbox.devices.toVariantList());
             if (inbox.changed && m_data->applyFeedback(a.studentId, inbox.feedback.toVariantMap(), inbox.questions.toVariantList()))
                 arrived << a.studentId;
             const QString folder = [&] {

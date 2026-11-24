@@ -57,7 +57,7 @@ share API), `src/shared/QrCode` (teacher: the QR code, `3rdparty/qrcodegen`),
 {
   "format": 1, "written": "2026-11-20T13:00:00Z",
   "teacher": "Ms Rau", "student": "Jonas", "instrument": "Viola",
-  "allow": {"feedback": true, "questions": true},
+  "uploads": true, "allow": {"feedback": true, "questions": true},
   "next": [{"date": "2026-11-24", "start": "15:30", "end": "16:30", "place": "Room 6",
             "changed": "Room 6 instead of room 4", "cancelled": false, "reason": ""}],
   "tasks": [{"id": "…", "date": "2026-11-17", "title": "Bourrée bars 17–24 slowly",
@@ -76,6 +76,35 @@ share API), `src/shared/QrCode` (teacher: the QR code, `3rdparty/qrcodegen`),
   ("ask for a new code"); an ended link shows "ended by your teacher", the last state
   stays readable.
 - Only what the teacher marked for the student goes in; private notes never do.
+- `uploads` (since 11/2026): the teacher's Nextcloud takes uploads by link at all. Without
+  the field the app goes by `allow` (both are off without uploads).
+
+## What comes back, and which devices have the booklet
+
+A device uploads `fb-<device>-<ms>.qupil` (sealed with the booklet's key, purpose
+"feedback"): `{"device", "written", "feedback", "questions", "since"?, "left"?}`. Every file
+holds the device's whole state, so the teacher's Qupil reads the newest file per device and
+deletes the older ones (`Booklet::collect`, `src/shared/BookletInbox`).
+
+- **"This device has the booklet":** after the first successful fetch the app uploads once
+  (`since`: when the booklet was taken; empty feedback). Nothing of it shows as "sent" to
+  the student. An app from before this says it with its next start.
+- **"Removed here":** removing a teacher in the app uploads a last file with `left` (and
+  everything sent so far). Without a connection the goodbye waits in `student.json`
+  (`leaving`, without the tasks) and is tried again for 30 days; a link that is gone
+  (ended by the teacher) needs no goodbye. Taking the booklet again on the same device:
+  a newer file without `left`.
+- **The teacher's side:** `DataService::couplingDevices()` gives counts and days for the
+  coupling sheet ("1 Gerät verbunden (seit …)", "auf 1 Gerät entfernt am …", "Auf allen
+  Geräten entfernt …", "Letzte Rückmeldung: …"). Kept in the local `meta` table per
+  coupling, not in the coupling record: every device of the teacher reads it from the
+  folder, nothing new syncs, the schema stays. While the sheet shows the QR code and no
+  device has it yet, it looks into that one folder every 8 s (`Booklet.lookFor`), so the
+  teacher sees in the lesson that scanning worked.
+- **Limits, on purpose:** the teacher sees how many devices, never whose, and not when the
+  app is used (no "last opened"). A deleted app says nothing: it stays "connected". One
+  device cannot be shut out (all share link and key): ending the coupling is the way, and
+  it is never done automatically. Whoever has the link could upload a false "left".
 
 ## Getting the code into the app
 
@@ -118,8 +147,9 @@ since a review cannot scan a teacher's code.
 | Test | What it checks |
 |---|---|
 | `tst_booklet` | link round trip and forms, invalid links, sealing (wrong key, wrong purpose, tampered), file names, URLs |
-| `tst_teacherside` | links via OCS (read + create; read only; enforced expiry and renewal; wrong login), the QR code (size, quiet zone; `QUPIL_QR_OUT=x.png` saves it for a check with a real reader), the inbox (newest per device, newer answer wins, values cleaned) |
-| `tst_studentapp` | the app against a fake Nextcloud: coupling, feedback upload and its content, echo from the teacher, wrong key, newer format, ended link, wrong password, old Nextcloud, state kept; the interface by tap: example, hints, feedback, to-do, closing the example, removing a teacher (asks first); a link through the system and from another thread; the scanner (another code, camera refused, closed, the teacher's code); fields in view with the keyboard; texts without "an <name>" |
+| `tst_tasks` `couplingDevices` (the teacher's app) | counts and days of the devices, kept beside the coupling record; the booklet's `uploads` |
+| `tst_teacherside` | links via OCS (read + create; read only; enforced expiry and renewal; wrong login), the QR code (size, quiet zone; `QUPIL_QR_OUT=x.png` saves it for a check with a real reader), the inbox (newest per device, newer answer wins, values cleaned; the devices with `since` and `left`) |
+| `tst_studentapp` | the app against a fake Nextcloud: coupling, feedback upload and its content, echo from the teacher, wrong key, newer format, ended link, wrong password, old Nextcloud, state kept; the interface by tap: example, hints, feedback, to-do, closing the example, removing a teacher (asks first); a link through the system and from another thread; the scanner (another code, camera refused, closed, the teacher's code); fields in view with the keyboard; texts without "an <name>"; "this device has the booklet" once and never as "sent", the goodbye on removing (also later, when the cloud was down; not for a link that is gone; not without uploads) |
 | `.github/scripts/student-android-test.sh` (emulator, job "Android emulator") | a link starts the app and adds the teacher; links while the app is running (https, `qupil-student:`, from the background); "Open camera" opens the scanner, "back" closes it |
 | `.github/scripts/student-ios-test.sh` (simulator, job "iOS simulator") | the app starts; `qupil-student:` starts the app and adds the teacher, also while it runs; the button on the page `qupil.de/u` (served from `student/web`, in Safari) hands its link to the app, and without the app Safari says "the address is invalid" (the control: that is what a device without the app shows); the scanner's sheet opens and closes. Safari's page and alerts are not in idb's view: found in screenshots (`ios-find-colour.py`, `ios-find-alert.py`). A crash report goes to the results (`crash/`, with `ios-crash-summary.py`). Universal links: on a device only |
 

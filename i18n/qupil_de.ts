@@ -1201,6 +1201,38 @@ Bitte ändern Sie die Schüleranzahl um zu speichern!</translation>
         <source>Your Nextcloud does not allow uploads by link: the student sees the tasks but cannot send anything back.</source>
         <translation>Ihre Nextcloud erlaubt kein Hochladen per Link: Der Schüler sieht die Aufgaben, kann aber nichts zurückschicken.</translation>
     </message>
+    <message id="booklet.devices.none">
+        <source>No device connected yet.</source>
+        <translation>Noch kein Gerät verbunden.</translation>
+    </message>
+    <message id="booklet.devices.one">
+        <source>1 device connected</source>
+        <translation>1 Gerät verbunden</translation>
+    </message>
+    <message id="booklet.devices.one_since">
+        <source>1 device connected (since %1)</source>
+        <translation>1 Gerät verbunden (seit %1)</translation>
+    </message>
+    <message id="booklet.devices.many">
+        <source>%1 devices connected</source>
+        <translation>%1 Geräte verbunden</translation>
+    </message>
+    <message id="booklet.devices.left_one">
+        <source>removed from 1 device on %1</source>
+        <translation>auf 1 Gerät entfernt am %1</translation>
+    </message>
+    <message id="booklet.devices.left_many">
+        <source>removed from %1 devices, last on %2</source>
+        <translation>auf %1 Geräten entfernt, zuletzt am %2</translation>
+    </message>
+    <message id="booklet.devices.left_all">
+        <source>Removed from every device (%1). You can end the coupling below.</source>
+        <translation>Auf allen Geräten entfernt (%1). Sie können die Kopplung unten beenden.</translation>
+    </message>
+    <message id="booklet.devices.last_answer">
+        <source>Last feedback: %1</source>
+        <translation>Letzte Rückmeldung: %1</translation>
+    </message>
     <message id="booklet.allow_feedback">
         <source>Feedback on tasks</source>
         <translation>Rückmeldung zu Aufgaben</translation>

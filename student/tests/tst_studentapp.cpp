@@ -6,6 +6,7 @@
 // Invented data only.
 
 #include "Booklet.h"
+#include "BookletInbox.h"
 #include "Crypto.h"
 #include "FakeNextcloud.h"
 #include "IncomingLinks.h"
@@ -14,7 +15,10 @@
 #include "Translator.h"
 
 #include <QDesktopServices>
+#include <QFile>
 #include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QQmlApplicationEngine>
 #include <QQuickItem>
 #include <QQuickWindow>
@@ -127,6 +131,12 @@ private slots:
     void init()
     {
         removeAll();
+        // Removing says goodbye to the teacher: let that pass before the next case counts
+        m_cloud->shareGone = false;
+        m_cloud->down = false;
+        m_app->refresh();
+        QTRY_COMPARE_WITH_TIMEOUT(m_app->pendingGoodbyes(), 0, 8000);
+        m_cloud->puts = 0;
         m_cloud->files().clear();
         m_cloud->files().insert(u"heft.qupil"_s, Booklet::seal(m_link.key, Booklet::Purpose::Booklet, exampleBooklet()));
         m_cloud->legacyOnly = false;
@@ -474,6 +484,104 @@ private slots:
         const QString all = texts.join(u'\n');
         QVERIFY2(all.contains(u"Deine Frage · Herr Test"_s, Qt::CaseInsensitive), qPrintable(all));
         QVERIFY2(!all.contains(u"an Herr Test"_s, Qt::CaseInsensitive), qPrintable(all));
+    }
+
+private:
+    // What the teacher's Qupil makes of the folder (the files a device sent)
+    Booklet::Inbox teachersView() const
+    {
+        QHash<QString, QByteArray> sent;
+        for (auto it = m_cloud->files().constBegin(); it != m_cloud->files().constEnd(); ++it)
+            if (Booklet::isFeedbackFileName(it.key()))
+                sent.insert(it.key(), it.value());
+        return Booklet::collect(m_link.key, sent);
+    }
+
+private slots:
+    // The teacher sees how many devices have the booklet: a device says so once it has it,
+    // and says when the booklet is removed from it. Nothing of that shows as "sent".
+    void deviceSaysHereAndGone()
+    {
+        const qint64 before = QDateTime::currentMSecsSinceEpoch();
+        QCOMPARE(m_app->addLink(Booklet::encodeLink(m_link)), QString());
+        QTRY_VERIFY(!task(u"t1"_s).isEmpty());
+        QTRY_COMPARE_WITH_TIMEOUT(m_cloud->puts, 1, 8000);
+        QCOMPARE(m_app->current().value(u"sendState"_s).toString(), u"none"_s);
+        Booklet::Inbox view = teachersView();
+        QCOMPARE(view.devices.size(), 1);
+        QVERIFY(view.devices.first().toObject().value(u"since"_s).toDouble() >= double(before));
+        QVERIFY(!view.devices.first().toObject().contains(u"left"_s));
+        QVERIFY(view.feedback.isEmpty());
+
+        // Said once: not again with every refresh
+        m_app->refresh();
+        QTest::qWait(3500);
+        QCOMPARE(m_cloud->puts, 1);
+
+        // Feedback, then the booklet is removed here: the goodbye carries what was sent
+        // (only the newest file of a device counts)
+        m_app->setPracticed(u"t1"_s, 2);
+        QTRY_COMPARE_WITH_TIMEOUT(m_app->current().value(u"sendState"_s).toString(), u"sent"_s, 8000);
+        m_app->removeTeacher(m_app->teachers().constFirst().toMap().value(u"id"_s).toString());
+        QVERIFY(m_app->teachers().isEmpty());
+        QTRY_COMPARE_WITH_TIMEOUT(m_app->pendingGoodbyes(), 0, 8000);
+        view = teachersView();
+        QCOMPARE(view.devices.size(), 1);
+        QVERIFY(view.devices.first().toObject().value(u"left"_s).toDouble() >= double(before));
+        QCOMPARE(view.feedback.value(u"t1"_s).toObject().value(u"practiced"_s).toInt(), 2);
+
+        // Taken again on the same device: there again
+        QTest::qWait(5);
+        QCOMPARE(m_app->addLink(Booklet::encodeLink(m_link)), QString());
+        const int puts = m_cloud->puts;
+        QTRY_VERIFY_WITH_TIMEOUT(m_cloud->puts > puts, 8000);
+        view = teachersView();
+        QCOMPARE(view.devices.size(), 1);
+        QVERIFY(!view.devices.first().toObject().contains(u"left"_s));
+    }
+
+    void goodbyeWaitsForTheCloud()
+    {
+        QCOMPARE(m_app->addLink(Booklet::encodeLink(m_link)), QString());
+        QTRY_COMPARE_WITH_TIMEOUT(m_cloud->puts, 1, 8000);
+        // Removed without a connection: gone here at once, the teacher hears of it later
+        m_cloud->down = true;
+        m_app->removeTeacher(m_app->teachers().constFirst().toMap().value(u"id"_s).toString());
+        QVERIFY(m_app->teachers().isEmpty());
+        QTest::qWait(1500);
+        QCOMPARE(m_app->pendingGoodbyes(), 1);
+        QVERIFY(!teachersView().devices.first().toObject().contains(u"left"_s));
+        // (kept on disk for the next start of the app, without the tasks)
+        QFile state(m_dir.path() + u"/student.json"_s);
+        QVERIFY(state.open(QIODevice::ReadOnly));
+        const QJsonObject root = QJsonDocument::fromJson(state.readAll()).object();
+        QCOMPARE(root.value(u"leaving"_s).toArray().size(), 1);
+        QVERIFY(!root.value(u"leaving"_s).toArray().first().toObject().contains(u"booklet"_s));
+        m_cloud->down = false;
+        m_app->refresh();
+        QTRY_COMPARE_WITH_TIMEOUT(m_app->pendingGoodbyes(), 0, 8000);
+        QVERIFY(teachersView().devices.first().toObject().contains(u"left"_s));
+
+        // The teacher ended the coupling meanwhile: nothing to say, nothing kept
+        QCOMPARE(m_app->addLink(Booklet::encodeLink(m_link)), QString());
+        QTRY_VERIFY(!task(u"t1"_s).isEmpty());
+        m_cloud->shareGone = true;
+        m_app->removeTeacher(m_app->teachers().constFirst().toMap().value(u"id"_s).toString());
+        QTRY_COMPARE_WITH_TIMEOUT(m_app->pendingGoodbyes(), 0, 8000);
+    }
+
+    void noUploadsNoHello()
+    {
+        // The teacher's Nextcloud takes no uploads by link: the app does not try
+        QJsonObject booklet = exampleBooklet();
+        booklet.insert(u"uploads"_s, false);
+        m_cloud->files().insert(u"heft.qupil"_s, Booklet::seal(m_link.key, Booklet::Purpose::Booklet, booklet));
+        QCOMPARE(m_app->addLink(Booklet::encodeLink(m_link)), QString());
+        QTRY_VERIFY(!task(u"t1"_s).isEmpty());
+        QTest::qWait(3500);
+        QCOMPARE(m_cloud->puts, 0);
+        m_app->removeTeacher(m_app->teachers().constFirst().toMap().value(u"id"_s).toString());
+        QCOMPARE(m_app->pendingGoodbyes(), 0);
     }
 };
 
