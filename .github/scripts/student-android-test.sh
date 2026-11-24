@@ -4,6 +4,8 @@
 # - a coupling link opens the app and adds the teacher: at the app's start, and while the
 #   app is running (that one opened the app and did nothing), https and qupil-student:
 # - "Open camera" opens the QR code scanner, "back" closes it
+# - the on-screen keyboard: the app measures it (the window keeps its size) and the field
+#   with the cursor is above it
 # Invented links only (a server that does not exist).
 set -u
 APK=$1
@@ -129,6 +131,46 @@ if tap '^(Open camera|Kamera öffnen)$'; then
     wait_for "scanner closed, no code" 20
     sleep 2
     shot after-scanner
+fi
+
+say ""
+say "## The on-screen keyboard"
+# The window keeps its size (adjustNothing): StudentActivity measures the keyboard and the
+# page makes room. The emulator shows the keyboard only when told to.
+adb shell settings put secure show_ime_with_hard_keyboard 1 > /dev/null
+say "- keyboards of the emulator: \`$(adb shell ime list -s | tr -d '\r' | tr '\n' ' ')\`"
+LINK_FIELD='qupil\.de/u#'
+mark
+if tap "$LINK_FIELD"; then
+    if wait_for "keyboard: [1-9][0-9]* px" 40; then
+        sleep 3
+        shot keyboard
+        px=$(since | grep -o 'keyboard: [0-9]* px' | tail -n 1 | grep -o '[0-9]*')
+        height=$(adb shell wm size | tr -d '\r' | tail -n 1 | sed 's/.*x//')
+        adb shell uiautomator dump /sdcard/ui.xml > /dev/null 2>&1 && adb pull /sdcard/ui.xml "$OUT/ui/keyboard.xml" > /dev/null 2>&1
+        if xy=$(python3 -I "$HERE/android-ui.py" "$OUT/ui/keyboard.xml" "$LINK_FIELD"); then
+            y=${xy#* }
+            if [ "$y" -lt $((height - px)) ]; then
+                say "- the field (y $y) is above the keyboard ($px px of $height)"
+            else
+                say "- **the field (y $y) is under the keyboard ($px px of $height)**"
+                FAILED=1
+            fi
+        else
+            say "- **the field is not on the screen with the keyboard open**"
+            FAILED=1
+        fi
+        mark
+        adb shell input keyevent KEYCODE_BACK
+        wait_for "keyboard: 0 px" 20
+        sleep 2
+        shot keyboard-gone
+    else
+        # Did the emulator show a keyboard at all?
+        shot no-keyboard
+        say "- input method: \`$(adb shell dumpsys input_method | grep -E 'mInputShown|mShowRequested|mCurMethodId|mImeWindowVis' | tr -d '\r' | tr -s ' ' | tr '\n' ';' | cut -c1-300)\`"
+        say "- focus: \`$(adb shell dumpsys window | grep -E 'mCurrentFocus|mInputMethodTarget|imeLayeringTarget' | tr -d '\r' | tr -s ' ' | tr '\n' ';' | cut -c1-300)\`"
+    fi
 fi
 
 kill $LOGCAT 2> /dev/null

@@ -130,6 +130,7 @@ private slots:
 
     void init()
     {
+        m_app->setKeyboardHeight(0);
         removeAll();
         // Removing says goodbye to the teacher: let that pass before the next case counts
         m_cloud->shareGone = false;
@@ -458,6 +459,65 @@ private slots:
         // A tap beside the field puts the keyboard away
         QVERIFY(tap(w, u"task-demo-1"_s) || true);
         w->resize(390, 844);
+    }
+
+    void uiMakesRoomForTheKeyboardItself()
+    {
+        // Android: the window keeps its size, the app is told the keyboard's height and
+        // the page gets lower by it (the system resizing the window let the page jump).
+        // The field with the cursor and "send" stay above the keyboard all the way; with
+        // the keyboard gone the page is not left scrolled past its end.
+        QQmlApplicationEngine engine;
+        engine.addImportPath(u"qrc:/qt/qml"_s);
+        engine.load(QUrl(u"qrc:/qt/qml/QupilStudent/qml/Main.qml"_s));
+        auto *w = qobject_cast<QQuickWindow *>(engine.rootObjects().value(0));
+        QVERIFY(w);
+        w->resize(390, 844);
+        QVERIFY(QTest::qWaitForWindowExposed(w));
+        QVERIFY(tap(w, u"demoButton"_s));
+        QTRY_VERIFY(findItem(w->contentItem(), u"task-demo-1"_s));
+        QQuickItem *field = nullptr;
+        QTRY_VERIFY((field = findItem(w->contentItem(), u"questionField"_s)));
+        QQuickItem *send = findItem(w->contentItem(), u"sendQuestion"_s);
+        QVERIFY(send);
+        QQuickItem *page = field->parentItem();
+        while (page && !page->inherits("QQuickFlickable"))
+            page = page->parentItem();
+        QVERIFY(page);
+        const qreal keyboard = 336;
+        const qreal pageHeight = page->height();   // (the window less the page's header)
+        auto above = [w](QQuickItem *item, qreal inset) {
+            const QRectF r = item->mapRectToScene(QRectF(0, 0, item->width(), item->height()));
+            return r.top() >= 0 && r.bottom() <= w->height() - inset;
+        };
+
+        field->forceActiveFocus();
+        QTRY_VERIFY(field->hasActiveFocus());
+        m_app->setKeyboardHeight(keyboard);
+        // While the room grows (250 ms), the field never is under what is taken so far
+        bool always = true;
+        qreal last = 0;
+        for (int i = 0; i < 40; ++i) {
+            QTest::qWait(10);
+            const qreal inset = w->property("keyboardInset").toReal();
+            QVERIFY2(inset >= last, "the room only grows");
+            last = inset;
+            always = always && above(field, inset) && above(send, inset);
+        }
+        QVERIFY2(always, "field and send stay above the room made for the keyboard while it grows");
+        QTRY_COMPARE(w->property("keyboardInset").toReal(), keyboard);
+        QCOMPARE(w->height(), 844);   // the window itself keeps its size
+        QVERIFY(above(field, keyboard));
+        QVERIFY(above(send, keyboard));
+        QCOMPARE(page->height(), pageHeight - keyboard);
+
+        // The keyboard goes: the page is as high as before and ends at its end
+        m_app->setKeyboardHeight(0);
+        QTRY_COMPARE(w->property("keyboardInset").toReal(), 0.0);
+        QTRY_COMPARE(page->height(), pageHeight);
+        const qreal end = std::max<qreal>(0, page->property("contentHeight").toReal() - page->height());
+        QTRY_VERIFY(page->property("contentY").toReal() <= end + 0.5);
+        QVERIFY(page->property("contentY").toReal() >= 0);
     }
 
     void uiTextsWithoutDeclension()

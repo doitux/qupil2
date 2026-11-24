@@ -2,8 +2,9 @@
 // SPDX-License-Identifier: GPL-3.0-or-later WITH LicenseRef-Qupil-AppStore-exception
 //
 // A page that scrolls and looks after the keyboard: the text field with the cursor, and
-// what belongs to it below (its buttons), stays in view when the page gets lower (Android
-// makes the window smaller for the keyboard; iOS moves the view itself so the cursor shows).
+// what belongs to it below (its buttons), stays in view when the page gets lower (Android:
+// the page makes room for the keyboard, Main.qml; iOS moves the view itself so the cursor
+// shows). When the page gets higher again it does not stay scrolled past its end.
 // A tap beside the fields puts the keyboard away.
 
 import QtQuick
@@ -16,6 +17,14 @@ Flickable {
     property real revealBelow: 72
 
     function reveal() {
+        // Never past the ends (the keyboard went: the page is higher again)
+        if (!flick.dragging && !flick.flicking) {
+            const end = Math.max(0, flick.contentHeight - flick.height)
+            if (flick.contentY > end)
+                flick.contentY = end
+            else if (flick.contentY < 0)
+                flick.contentY = 0
+        }
         const item = Window.activeFocusItem
         if (!item || item.cursorRectangle === undefined)
             return
@@ -34,7 +43,8 @@ Flickable {
             flick.contentY = Math.max(0, top - 12)
     }
 
-    onHeightChanged: Qt.callLater(reveal)
+    // (at once, not a frame later: the page glides with the keyboard)
+    onHeightChanged: reveal()
     Window.onActiveFocusItemChanged: Qt.callLater(reveal)
 
     MouseArea {

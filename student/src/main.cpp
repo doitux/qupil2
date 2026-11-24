@@ -14,6 +14,7 @@
 //   --pretend-scan <text> the scanner counts as there and reads this text (screenshots, tests)
 
 #include "IncomingLinks.h"
+#include "KeyboardHeight.h"
 #include "QrScanner.h"
 #include "StudentApp.h"
 #include "Translator.h"
@@ -79,6 +80,8 @@ int main(int argc, char *argv[])
 
     // Links from the camera (QR code) and from messages: https://qupil.de/u#… and qupil-student:…
     IncomingLinks::watch(studentApp, [studentApp](const QUrl &url) { studentApp->openUrl(url); });
+    // Android: the on-screen keyboard's height (the window keeps its size, the pages make room)
+    KeyboardHeight::watch([studentApp](qreal height) { studentApp->setKeyboardHeight(height); });
     // Opened with a link on the desktop (handy for trying it out)
     for (const QString &argument : parser.positionalArguments())
         studentApp->openUrl(QUrl(argument));

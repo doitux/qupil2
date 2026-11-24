@@ -43,6 +43,9 @@ class StudentApp : public QObject
     //! Why the last scan added nothing: "" (fine, or closed), "invalid" (not a Qupil code),
     //! "denied" (the camera is not allowed)
     Q_PROPERTY(QString scanError READ scanError NOTIFY scanErrorChanged)
+    //! The on-screen keyboard's height over the window (Android: measured, the window keeps
+    //! its size; elsewhere 0). The pages make room for it (Main.qml).
+    Q_PROPERTY(qreal keyboardHeight READ keyboardHeight NOTIFY keyboardHeightChanged)
 
 public:
     ~StudentApp() override;
@@ -66,6 +69,8 @@ public:
     QString version() const;
     bool canScan() const;
     QString scanError() const { return m_scanError; }
+    qreal keyboardHeight() const { return m_keyboardHeight; }
+    void setKeyboardHeight(qreal height);
 
     //! A coupling link from the QR code, a message or the clipboard.
     //! Returns "" (added or already there), "invalid" or "demo-only".
@@ -95,6 +100,7 @@ signals:
     void changed();
     void busyChanged();
     void scanErrorChanged();
+    void keyboardHeightChanged();
     //! A short message for the user (e.g. "coupled with …", "could not update")
     void notice(const QString &text);
 
@@ -142,6 +148,7 @@ private:
     int m_current = 0;
     int m_busy = 0;
     QString m_scanError;
+    qreal m_keyboardHeight = 0;
     QUrl m_lastUrl;            // a link may be handed over twice (IncomingLinks)
     QElapsedTimer m_lastUrlAt;
     QString m_deviceId;
