@@ -395,6 +395,8 @@ Sheet {
                         leftPadding: 4
                         background: null
                         Accessible.name: qsTrId("task.title")
+                        // A long title: shows its start, a finger wipes it sideways
+                        LineScroll { target: titleField }
                         onTextEdited: tasks.setProperty(taskCard.index, "title", text)
                         onActiveFocusChanged: if (activeFocus) editor.currentTask = taskCard.index
                         // Enter: to the first hint (a new one if there is none)
@@ -467,6 +469,7 @@ Sheet {
                                 Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: 1; color: hintField.activeFocus ? Theme.accent : Theme.divider }
                             }
                             Accessible.name: qsTrId("task.hint")
+                            LineScroll { target: hintField }
                             onTextEdited: taskCard.hints.setProperty(hintRow.index, "text", text)
                             onActiveFocusChanged: if (activeFocus) editor.currentTask = taskCard.index
                             // Enter: the next hint; in an empty hint: a new task

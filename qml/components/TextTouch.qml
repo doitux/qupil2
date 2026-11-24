@@ -18,7 +18,8 @@ import Qupil
     - double tap: the word, at once on the second touch; triple tap: the paragraph
     - long press (0.45 s): the word, while the finger is still down; stays when it lifts
     - handles: drag to change the selection
-    - wiping scrolls (the Flickable takes the touch over), it never selects
+    - wiping scrolls (the Flickable takes the touch over), it never selects; in a one-line
+      field wiping sideways moves a text that is longer than the field (the cursor stays)
     Typing, autocorrection and dictation stay with the system. A mouse or trackpad goes to
     the field as usual; only its double and triple click use the same word and paragraph.
 */
@@ -99,8 +100,10 @@ Item {
     }
     function placeCursor(point) {
         commitComposing()
+        // Where the finger is now: taking the focus may move the text of a one-line field
+        const p = positionAt(point)
         focusField()
-        target.cursorPosition = positionAt(point)
+        target.cursorPosition = p
     }
     function selectRange(range) {
         commitComposing()
@@ -247,6 +250,15 @@ Item {
         }
     }
 
+    // ---------------------------------------------------------------- wiping a single line
+    //! Counts the moves of the text, for what has to follow it (the handles)
+    property int shifted: 0
+    LineScroll {
+        target: touch.target
+        onStarted: touch.hideMenu()
+        onMoved: ++touch.shifted
+    }
+
     // ---------------------------------------------------------------- handles
     readonly property bool handlesShown: active && touchMode && hasSelection && target.activeFocus
     readonly property real handleSize: 14
@@ -258,10 +270,11 @@ Item {
                                                : Math.min(touch.target.selectionStart, touch.target.selectionEnd)
         readonly property rect line: {
             // re-evaluated when the text or the selection changes
-            touch.target.length; touch.target.width; touch.target.contentHeight
+            touch.target.length; touch.target.width; touch.target.contentHeight; touch.shifted
             return touch.target.positionToRectangle(position)
         }
-        visible: touch.handlesShown
+        // (a one-line text can be wiped until the end of the selection is outside the field)
+        visible: touch.handlesShown && line.x >= -1 && line.x <= touch.target.width + 1
         // A big area for the finger around the knob
         width: 44
         height: line.height + touch.handleSize + 22

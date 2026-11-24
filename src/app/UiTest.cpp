@@ -1785,6 +1785,51 @@ void UiTest::addTextTouchCases()
                 << backIfThere(u"^Schüler$"_s);
     }
     {
+        // A text longer than its one-line field (a long hint on a phone): a finger wiping
+        // sideways moves the text, the cursor stays; without the focus the field shows the
+        // start of the text, not its end
+        const QString longTitle = u"Konzert für zwei Violinen und Orchester in d-Moll, zweiter Satz, mit allen Wiederholungen, "
+                                  "der langen Kadenz und den Fingersätzen der Ausgabe von 1962 – bis zum Vorspiel im Dezember"_s;
+        const auto rectOf = [this](int pos) {
+            QRectF r(-1000, 0, 0, 0);
+            if (QQuickItem *t = textItem())
+                QMetaObject::invokeMethod(t, "positionToRectangle", Q_RETURN_ARG(QRectF, r), Q_ARG(int, pos));
+            return r;
+        };
+        const auto startShown = [this, rectOf] { return textItem() && rectOf(0).x() >= 0; };
+        const auto endShown = [this, rectOf] {
+            QQuickItem *t = textItem();
+            return t && rectOf(t->property("length").toInt()).x() <= t->width();
+        };
+        const auto at = [this](qreal part) {
+            QQuickItem *t = textItem();
+            return t ? t->mapToScene(QPointF(t->width() * part, t->height() / 2)) : QPointF();
+        };
+        const auto cursor = [this] { QQuickItem *t = textItem(); return t ? t->property("cursorPosition").toInt() : -1; };
+        Case &c = add(u"text-field-wipe"_s, u"finger: wiping sideways moves a long text in a one-line field; without focus it shows its start"_s);
+        c.steps << act(u"the title field"_s, [this] { m_textField = u"edit:^Titel$"_s; })
+                << openStudent(u"Lena Muster"_s) << tap(u"^Werke$"_s) << tap(u"^Werk$"_s)
+                << tap(u"edit:^Titel$"_s) << type(longTitle) << wait(400)
+                << check(u"while typing the end is shown, the start is not"_s, [startShown, endShown] { return endShown() && !startShown(); });
+        for (int i = 0; i < 5; ++i)
+            c.steps << fingerDrag([at] { return at(0.15); }, [at] { return at(0.9); }, 250) << fingerDone() << wait(150);
+        c.steps << check(u"wiped to the right: the start is shown, the cursor is still at the end, nothing is selected"_s,
+                         [this, startShown, endShown, cursor, longTitle] {
+                             return startShown() && !endShown() && cursor() == longTitle.size() && textSelection().isEmpty();
+                         })
+                << snap(u"text-field-wiped"_s)
+                << fingerTaps(u"Konzert"_s, 1) << fingerDone()
+                << check(u"a tap puts the cursor into the first word"_s, [cursor] { return cursor() >= 0 && cursor() <= 7; });
+        for (int i = 0; i < 5; ++i)
+            c.steps << fingerDrag([at] { return at(0.9); }, [at] { return at(0.15); }, 250) << fingerDone() << wait(150);
+        c.steps << check(u"wiped to the left: the end is shown again"_s, [startShown, endShown] { return endShown() && !startShown(); })
+                << tap(u"edit:^Komponist"_s) << wait(300)
+                << check(u"without the focus the field shows the start of its text"_s, [startShown] { return startShown(); })
+                << tap(u"^Abbrechen$"_s) << gone(u"edit:^Titel$"_s)
+                << act(u"back to the note field"_s, [this] { m_textField = u"edit:^Notiz$"_s; })
+                << backIfThere(u"^Schüler$"_s);
+    }
+    {
         // A mouse: the field selects by itself; double and triple click with the same rules
         Case &c = add(u"text-mouse"_s, u"mouse: double click at the start of a paragraph takes the word; B, B again; triple click"_s);
         c.steps << open(html)
@@ -2404,6 +2449,65 @@ void UiTest::addCases()
                        for (const QVariant &v : m_data->tasksOn(m_membership, m_data->today()))
                            m_data->deleteTask(v.toMap().value(u"id"_s).toString(), false);
                        m_data->remove(u"coupling"_s, m_text);
+                   });
+    }
+    // Practice book: a hint longer than its line (a phone). Without the focus the line shows
+    // the start of the hint; a finger wiping sideways moves the text and leaves the cursor
+    {
+        const QString longHint = u"Takt 17 bis 24 erst ganz langsam mit dem Metronom auf 60, dann jeden Tag zwei Striche schneller, "
+                                 "auf die Bogeneinteilung im zweiten Takt achten und die Wiederholung leiser spielen"_s;
+        const auto rectOf = [this](int pos) {
+            QRectF r(-1000, 0, 0, 0);
+            if (QQuickItem *t = textItem())
+                QMetaObject::invokeMethod(t, "positionToRectangle", Q_RETURN_ARG(QRectF, r), Q_ARG(int, pos));
+            return r;
+        };
+        const auto startShown = [this, rectOf] { return textItem() && rectOf(0).x() >= 0; };
+        const auto endShown = [this, rectOf] {
+            QQuickItem *t = textItem();
+            return t && rectOf(t->property("length").toInt()).x() <= t->width();
+        };
+        const auto at = [this](qreal part) {
+            QQuickItem *t = textItem();
+            return t ? t->mapToScene(QPointF(t->width() * part, t->height() / 2)) : QPointF();
+        };
+        Case &c = add(u"tasks-hint-wipe"_s, u"tasks: a hint longer than its line shows its start, a finger wipes it sideways"_s);
+        c.steps << act(u"couple the student of the running lesson"_s, [this] {
+                       m_membership = runningMembership();
+                       const QString student = m_data->get(u"membership"_s, m_membership).value(u"student_id"_s).toString();
+                       m_text = m_data->create(u"coupling"_s, { { u"student_id"_s, student },
+                                                                { u"created"_s, m_data->today() } });
+                       m_textField = u"edit:^Hinweis$"_s;
+                   })
+                << tab(u"Stundenplan"_s)
+                << tap(u"^Aufgaben$"_s, u"the running lesson offers tasks instead of a note"_s)
+                << see(u"^Weitere Aufgabe$"_s)
+                << type(u"UI-Bourrée"_s) << key(Qt::Key_Return, u"Enter: to the first hint"_s)
+                << type(longHint) << wait(400)
+                << check(u"while typing the end is shown, the start is not"_s, [startShown, endShown] { return endShown() && !startShown(); });
+        for (int i = 0; i < 6; ++i)
+            c.steps << fingerDrag([at] { return at(0.15); }, [at] { return at(0.9); }, 250) << fingerDone() << wait(150);
+        c.steps << check(u"wiped to the right: the start is shown, the cursor is still at the end"_s, [this, startShown, endShown, longHint] {
+                       QQuickItem *t = textItem();
+                       return t && startShown() && !endShown() && t->property("cursorPosition").toInt() == longHint.size()
+                              && t->property("selectedText").toString().isEmpty();
+                   })
+                << snap(u"tasks-hint-wiped"_s);
+        for (int i = 0; i < 6; ++i)
+            c.steps << fingerDrag([at] { return at(0.9); }, [at] { return at(0.15); }, 250) << fingerDone() << wait(150);
+        c.steps << check(u"wiped to the left: the end is shown again"_s, [startShown, endShown] { return endShown() && !startShown(); })
+                << tap(u"edit:^Aufgabe$"_s, u"the focus goes to the title"_s) << wait(300)
+                << check(u"without the focus the hint shows its start"_s, [startShown] { return startShown(); })
+                << tap(u"^Speichern$"_s) << gone(u"^Weitere Aufgabe$"_s)
+                << check(u"the hint is stored whole"_s, [this, longHint] {
+                       const QVariantList list = m_data->tasksOn(m_membership, m_data->today());
+                       return list.size() == 1 && list.at(0).toMap().value(u"hints"_s).toStringList() == QStringList { longHint };
+                   })
+                << act(u"remove the task and the coupling again"_s, [this] {
+                       for (const QVariant &v : m_data->tasksOn(m_membership, m_data->today()))
+                           m_data->deleteTask(v.toMap().value(u"id"_s).toString(), false);
+                       m_data->remove(u"coupling"_s, m_text);
+                       m_textField = u"edit:^Notiz$"_s;
                    });
     }
     // Practice book: the student's sheet. Not coupled: the Nextcloud of the sync is needed
