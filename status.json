@@ -1,9 +1,111 @@
 {
-  "mode": "schedule",
-  "started_at": "2026-11-24T22:59:17+01:00",
-  "slot": "2026-11-24 13:05",
-  "result": "weekday_skip",
-  "note": "Montag bis Donnerstag kein Mittags-Build; die Änderungen kommen um 22:05.",
-  "written": "2026-11-24T22:59:17+01:00",
-  "headline": "Mittags Mo–Do kein Build"
+  "mode": "now",
+  "started_at": "2026-11-25T00:55:08+01:00",
+  "slot": "2026-11-25 00:55 (von Hand, now)",
+  "since": "8e04cd1cb6cc1a46edf6a67a860fef454ca62cab",
+  "since_build": 60,
+  "main": "8afbfc1ca63277da3d2d949c772241f4dc52cedd",
+  "commits": [
+    {
+      "sha": "2647a7e",
+      "subject": "No look into the clipboard when a text field is made; the tick at the end of a student's question"
+    },
+    {
+      "sha": "414e8ca",
+      "subject": "Merge main into fix/clipboard-ask"
+    },
+    {
+      "sha": "21ffee4",
+      "subject": "Student app CI: no false alarm about Associated Domains after an upload"
+    },
+    {
+      "sha": "f007fa2",
+      "subject": "Merge main into fix/clipboard-ask"
+    },
+    {
+      "sha": "b4eb04f",
+      "subject": "Merge fix/clipboard-ask: no look into the clipboard when a text field is made (no iOS paste prompt); the tick at the end of a student's question"
+    },
+    {
+      "sha": "d3e451d",
+      "subject": "Long hints wrap in their field; the points of the trial too"
+    },
+    {
+      "sha": "5effe2f",
+      "subject": "Student app, iOS: the page's colour to the screen's edges, no black strips"
+    },
+    {
+      "sha": "407c213",
+      "subject": "Student page: the private note of a lesson with tasks and a long block heading wrap instead of being cut"
+    },
+    {
+      "sha": "5f599bc",
+      "subject": "Student app: the commit of the build beside the version, as in Qupil"
+    },
+    {
+      "sha": "b608137",
+      "subject": "Student app, iOS simulator test: the edge check has its picture library from the start"
+    },
+    {
+      "sha": "8ea0845",
+      "subject": "Merge fix/student-ios-edges: the student app paints to the screen's edges on iOS (no black strips); the commit of the build beside the version"
+    },
+    {
+      "sha": "2ef171f",
+      "subject": "Test card-long-texts: two lines of the private note are 30 px high on Windows, not more"
+    },
+    {
+      "sha": "e29da17",
+      "subject": "Merge main into feature/hint-wrap"
+    },
+    {
+      "sha": "8afbfc1",
+      "subject": "Merge feature/hint-wrap: long hints wrap in their field; the private note and long block headings on a student's cards are shown whole"
+    }
+  ],
+  "relevant_files": [
+    ".github/scripts/android-test.sh",
+    ".github/scripts/ios-edges.py",
+    ".github/scripts/student-ios-test.sh",
+    ".github/workflows/student.yml",
+    "qml/components/InputField.qml",
+    "qml/components/TaskLessonCard.qml",
+    "qml/components/TextTouch.qml",
+    "qml/editors/TaskEditor.qml",
+    "qml/idea/IdeaEntrySheet.qml",
+    "qml/idea/IdeaLessonSheet.qml",
+    "qml/idea/IdeaTaskEdit.qml",
+    "qml/idea/IdeaTaskSheet.qml",
+    "qml/pages/StudentDetail.qml",
+    "src/app/DataService.cpp",
+    "src/app/DataService.h",
+    "src/app/DataServiceTasks.cpp",
+    "src/app/UiTest.cpp",
+    "src/app/UiTestIdea.cpp",
+    "student/CMakeLists.txt",
+    "student/i18n/strings.json",
+    "student/i18n/strings.py",
+    "student/qml/Main.qml",
+    "student/qml/SettingsPage.qml",
+    "student/src/SafeArea.h",
+    "student/src/SafeArea_ios.mm",
+    "student/src/SafeArea_none.cpp",
+    "student/src/StudentApp.cpp",
+    "student/src/StudentApp.h",
+    "student/src/main.cpp",
+    "student/tests/tst_studentapp.cpp"
+  ],
+  "result": "started",
+  "build": {
+    "number": 61,
+    "run_id": 45513939348,
+    "sha": "8afbfc1ca63277da3d2d949c772241f4dc52cedd",
+    "url": "https://github.com/doitux/qupil2/actions/runs/45513939348",
+    "created": "2026-11-24T23:55:14Z",
+    "status": "queued",
+    "conclusion": null,
+    "attempt": 1
+  },
+  "written": "2026-11-25T00:55:25+01:00",
+  "headline": "Build 61 gestartet"
 }
