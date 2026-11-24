@@ -25,7 +25,8 @@ Control {
     //! The page shows its menu for this lesson at x, y of \a item (alignRight: the menu's
     //! right edge at x)
     signal menuRequested(Item item, real x, real y, bool alignRight)
-    signal questionsRead()
+    //! The tick at the end of a question: this one is read
+    signal questionRead(string id)
     function openMenu(x, y) {
         if (x === undefined)
             menuRequested(more, more.width, more.height, true)
@@ -203,7 +204,8 @@ Control {
         }
 
         // The student's questions, until they are marked as read (they stay in the sheet
-        // "Qupil Practice" of the student)
+        // "Qupil Practice" of the student). The tick is at the end of the question, as at a
+        // reminder on this page – no line of its own below
         Repeater {
             model: card.questions
             delegate: Rectangle {
@@ -212,7 +214,7 @@ Control {
                 readonly property string label: qsTrId("task.question_from").arg(Data.formatDate(modelData.date || "", true))
                 Layout.fillWidth: true
                 Layout.topMargin: 2
-                implicitHeight: questionColumn.implicitHeight + 16
+                implicitHeight: Math.max(questionColumn.implicitHeight + 16, readButton.height + 12)
                 radius: Theme.radiusSmall + 2
                 color: Theme.accentSoft
                 Accessible.role: Accessible.StaticText
@@ -220,8 +222,8 @@ Control {
                 Column {
                     id: questionColumn
                     x: 12
-                    y: 8
-                    width: parent.width - 24
+                    y: Math.max(8, (parent.height - height) / 2)
+                    width: parent.width - 24 - readButton.width - 6
                     spacing: 2
                     Text {
                         width: parent.width
@@ -240,17 +242,19 @@ Control {
                         font.pixelSize: 15
                     }
                 }
+                IconButton {
+                    id: readButton
+                    objectName: "questionsRead"
+                    anchors.right: parent.right
+                    anchors.rightMargin: 8
+                    anchors.verticalCenter: parent.verticalCenter
+                    iconName: "check"
+                    text: qsTrId("task.questions_read")
+                    tint: Theme.accentText
+                    fill: Theme.dark ? Qt.lighter(Theme.accentSoft, 1.35) : Qt.darker(Theme.accentSoft, 1.06)
+                    onClicked: card.questionRead(questionBox.modelData.id || "")
+                }
             }
-        }
-        ActionButton {
-            objectName: "questionsRead"
-            visible: card.questions.length > 0
-            Layout.alignment: Qt.AlignRight
-            implicitHeight: 40
-            kind: "quiet"
-            iconName: "check"
-            text: qsTrId("task.questions_read")
-            onClicked: card.questionsRead()
         }
 
         // The private note: only its first line here

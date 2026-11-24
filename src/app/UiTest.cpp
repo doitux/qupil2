@@ -1700,6 +1700,25 @@ void UiTest::addTextTouchCases()
                 << close;
     }
     {
+        // The menu does not look into the clipboard (on iPad and iPhone that look makes the
+        // system ask "Qupil möchte von … einsetzen", for every field that is made): "Einsetzen"
+        // is there with an empty clipboard too, and then changes nothing
+        auto before = std::make_shared<QString>();
+        Case &c = add(u"text-menu-paste-unasked"_s, u"finger: Einsetzen is offered without reading the clipboard; empty, it changes nothing"_s);
+        c.steps << open(html)
+                << act(u"an empty clipboard"_s, [this, before] {
+                       QGuiApplication::clipboard()->clear();
+                       *before = textPlain();
+                   })
+                << wait(600) << fingerTaps(QString(), 1, 3) << fingerDone()
+                << wait(600) << fingerTaps(QString(), 1, 3) << fingerDone()
+                << check(u"a tap on the cursor at the end: Einsetzen, although the clipboard is empty"_s,
+                         [this] { return menuItems().contains(u"Einsetzen"_s); })
+                << tap(u"^Einsetzen$"_s)
+                << check(u"nothing pasted, menu gone"_s, [this, before] { return textPlain() == *before && !menuShown(); })
+                << close;
+    }
+    {
         // A phone: four entries are wider than the screen ("Alles auswählen" was cut off).
         // The menu stays inside the window, a finger wipes the bar to the rest
         const auto menuInside = [this] {
@@ -2512,6 +2531,9 @@ void UiTest::addCases()
                        }
                    })
                 << wait(300)
+                // The tick at the end of a question takes this question away, not the other one
+                << tap(u"^Gelesen$"_s) << wait(400)
+                << check(u"one question read, the other still open"_s, [this] { return m_data->openQuestions(m_other).size() == 1; })
                 << tap(u"^Gelesen$"_s) << gone(u"^Frage vom .*: UI-Frage zwei$"_s)
                 << wait(400)
                 << check(u"all read, nothing lost, and the tap did not open the lesson's tasks"_s, [this] {

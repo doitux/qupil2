@@ -229,7 +229,7 @@ QVariantList DataService::openQuestions(const QString &studentId) const
     return out;
 }
 
-bool DataService::markQuestionsRead(const QString &studentId)
+bool DataService::markQuestionsRead(const QString &studentId, const QString &questionId)
 {
     const QVariantMap c = coupling(studentId);
     if (c.isEmpty())
@@ -239,6 +239,8 @@ bool DataService::markQuestionsRead(const QString &studentId)
     for (qsizetype i = 0; i < stored.size(); ++i) {
         QJsonObject o = stored.at(i).toObject();
         if (o.value(u"read"_s).toBool())
+            continue;
+        if (!questionId.isEmpty() && o.value(u"id"_s).toString() != questionId)
             continue;
         o.insert(u"read"_s, true);
         stored.replace(i, o);
