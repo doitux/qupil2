@@ -185,28 +185,27 @@ if [ "$HAVE_IDB" = 1 ]; then
     xcrun simctl openurl "$UDID" "http://127.0.0.1:8765/u/#$(link TestTokenDDDD4444)"
     sleep 15
     tap_label '^(Continue|Weiter|Not Now|Jetzt nicht)$' 6 optional    # Safari's first start
-    # Safari's hint about its menu (first start) lies over the lower part of the page, where
-    # the button is since "No app yet?" comes first: a tap on the page's heading closes it
-    idb ui tap --udid "$UDID" 195 200
-    sleep 3
     PAGE_BUTTON='(Open in Qupil Practice|In Qupil Üben öffnen)'
     # idb does not see into Safari's page nor its alerts: both are found in screenshots
     python3 -c 'import PIL' 2> /dev/null || python3 -m pip install --quiet --break-system-packages pillow > /dev/null 2>&1 \
         || python3 -m pip install --quiet --user pillow > /dev/null 2>&1
     xy=""
-    for ((i = 0; i < 60; i += 4)); do
+    for ((i = 0; i < 60; i += 6)); do
         idb ui describe-all --udid "$UDID" > "$OUT/now.json" 2> /dev/null
         xy=$(python3 "$HERE/ios-ui.py" "$OUT/now.json" "$PAGE_BUTTON" 2> /dev/null) && break
+        # The button is the only wide bar in the accent colour
+        xcrun simctl io "$UDID" screenshot "$OUT/page.png" > /dev/null 2>&1
+        if xy=$(python3 "$HERE/ios-find-colour.py" "$OUT/page.png" "$OUT/now.json" 6E3C5A 2> /dev/null); then
+            say "- the button found by its colour (idb does not see into the page)"
+            break
+        fi
         xy=""
+        # Safari's hint about its menu (first start, it comes when it likes) lies over the lower
+        # part of the page, where the button is: a tap on the page's heading closes it
+        idb ui tap --udid "$UDID" 195 200
         sleep 4
     done
     shot page
-    if [ -z "$xy" ]; then
-        # idb does not always see into a web page: the button is the only wide bar in the accent colour
-        xcrun simctl io "$UDID" screenshot "$OUT/page.png" > /dev/null 2>&1
-        xy=$(python3 "$HERE/ios-find-colour.py" "$OUT/page.png" "$OUT/now.json" 6E3C5A 2> /dev/null) \
-            && say "- the button found by its colour (idb does not see into the page)"
-    fi
     if [ -z "$xy" ]; then
         say "- **the page's button is not on the screen**"
         python3 "$HERE/ios-ui.py" "$OUT/now.json" --list 2> /dev/null | head -n 40
