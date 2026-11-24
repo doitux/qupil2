@@ -1,71 +1,91 @@
 {
   "mode": "now",
-  "started_at": "2026-11-24T09:24:09+01:00",
-  "slot": "2026-11-24 09:24 (von Hand, now)",
-  "since": "2cb393ab8fcc90d4e11b469b05053ffc976f51f5",
-  "since_build": 57,
-  "main": "2f3a0d4a0c60bfb2bf2cb8a531296353ea1a02c4",
+  "started_at": "2026-11-24T13:04:19+01:00",
+  "slot": "2026-11-24 13:04 (von Hand, now)",
+  "since": "2f3a0d4a0c60bfb2bf2cb8a531296353ea1a02c4",
+  "since_build": 58,
+  "main": "00c7c0c06d0e9995e68468fb1463ac08a2b67d86",
   "commits": [
     {
-      "sha": "4260ca9",
-      "subject": "UI test idea-demo: the lesson's window must really be open before the planned point is ticked"
+      "sha": "b8db77f",
+      "subject": "Coupling page qupil.de/u: \"No app yet?\" first, with TestFlight for the test phase"
     },
     {
-      "sha": "1db7d70",
-      "subject": "Trial of the new idea: the lesson's window opens only once it is fully gone"
+      "sha": "28491d5",
+      "subject": "Coupling page qupil.de/u: on Android a button to the test version"
     },
     {
-      "sha": "3ecd60a",
-      "subject": "Trial of the new idea: a tap that reaches the page behind the lesson's window opens nothing"
+      "sha": "41a111a",
+      "subject": "Practice book: the teacher sees how many devices have the booklet"
     },
     {
-      "sha": "6551b53",
-      "subject": "Merge fix/idea-demo-test: the trial's lesson window opens reliably on Android"
+      "sha": "dd1fb56",
+      "subject": "Student app, iOS simulator test: Safari's hint is closed before the page's button is looked for"
     },
     {
-      "sha": "581f94b",
-      "subject": "Trial of the new idea: change tasks in between, put the history right afterwards"
+      "sha": "cd0a729",
+      "subject": "Merge fix/student-web-testflight: the coupling page starts with how to get the app (TestFlight, Android test version)"
     },
     {
-      "sha": "535f2ee",
-      "subject": "TestFlight: the test text also in English (U.S.), the app's primary language"
+      "sha": "c71091d",
+      "subject": "Merge feature/practice-devices: the teacher sees how many devices have the booklet; the app says when it takes and when it removes one"
     },
     {
-      "sha": "2f3a0d4",
-      "subject": "Merge feature/idea-edit: change tasks in between and correct the history in the trial; test text in English too"
+      "sha": "5222e11",
+      "subject": "Student app: \"this device has the booklet\" is not sent twice while the first one is on its way"
+    },
+    {
+      "sha": "4d67061",
+      "subject": "Student app, iOS simulator test: Safari's hint is closed as often as it takes"
+    },
+    {
+      "sha": "490f929",
+      "subject": "TestFlight text: new since build 53 (the build the external testers have)"
+    },
+    {
+      "sha": "00c7c0c",
+      "subject": "Merge fix/student-hello-once: \"this device has the booklet\" once; the simulator test closes Safari's hint"
     }
   ],
   "relevant_files": [
-    ".github/scripts/asc-whats-new.py",
-    "CMakeLists.txt",
+    ".github/scripts/publish-nightly.sh",
+    ".github/scripts/student-ios-test.sh",
+    ".github/workflows/student.yml",
     "i18n/qupil_de.ts",
     "i18n/qupil_en.ts",
     "i18n/qupil_es.ts",
     "i18n/qupil_fr.ts",
-    "qml/idea/IdeaEntry.qml",
-    "qml/idea/IdeaEntrySheet.qml",
-    "qml/idea/IdeaLessonSheet.qml",
-    "qml/idea/IdeaModel.qml",
-    "qml/idea/IdeaStudentPage.qml",
-    "qml/idea/IdeaTask.qml",
-    "qml/idea/IdeaTaskSheet.qml",
-    "src/app/UiTestIdea.cpp",
+    "qml/editors/BookletSheet.qml",
+    "src/app/BookletService.cpp",
+    "src/app/BookletService.h",
+    "src/app/DataService.h",
+    "src/app/DataServiceTasks.cpp",
+    "src/app/UiTest.cpp",
+    "src/shared/BookletInbox.cpp",
+    "src/shared/BookletInbox.h",
+    "student/i18n/strings.json",
+    "student/i18n/strings.py",
+    "student/src/StudentApp.cpp",
+    "student/src/StudentApp.h",
+    "student/tests/FakeNextcloud.cpp",
+    "student/tests/FakeNextcloud.h",
+    "student/tests/tst_studentapp.cpp",
+    "student/tests/tst_teacherside.cpp",
+    "student/web/u/index.html",
+    "tests/tst_tasks.cpp",
     "tools/i18n/catalog.py"
   ],
-  "result": "uploaded",
+  "result": "started",
   "build": {
-    "number": 58,
-    "run_id": 45355803145,
-    "sha": "2f3a0d4a0c60bfb2bf2cb8a531296353ea1a02c4",
-    "url": "https://github.com/doitux/qupil2/actions/runs/45355803145",
-    "created": "2026-11-24T08:24:14Z",
-    "status": "completed",
-    "conclusion": "success",
-    "attempt": 1,
-    "rerun": false,
-    "upload": "success",
-    "whats_new": "success"
+    "number": 59,
+    "run_id": 45390001853,
+    "sha": "00c7c0c06d0e9995e68468fb1463ac08a2b67d86",
+    "url": "https://github.com/doitux/qupil2/actions/runs/45390001853",
+    "created": "2026-11-24T12:04:24Z",
+    "status": "queued",
+    "conclusion": null,
+    "attempt": 1
   },
-  "written": "2026-11-24T09:32:34+01:00",
-  "headline": "Build 58 hochgeladen"
+  "written": "2026-11-24T13:04:35+01:00",
+  "headline": "Build 59 gestartet"
 }

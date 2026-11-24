@@ -1,33 +1,47 @@
-# TestFlight-Sammellauf 2026-11-24 09:24 (von Hand, now)
+# TestFlight-Sammellauf 2026-11-24 13:04 (von Hand, now)
 
-**Build 58 hochgeladen**
+**Build 59 gestartet**
 
-- Build 58 (Commit 2f3a0d4): success, Upload: success, Testtext: success
-- https://github.com/doitux/qupil2/actions/runs/45355803145
-- Seit Build 57 (Commit 2cb393a)
+- Build 59 (Commit 00c7c0c): queued, Upload: -, Testtext: -
+- https://github.com/doitux/qupil2/actions/runs/45390001853
+- Seit Build 58 (Commit 2f3a0d4)
 
 Commits:
-- 4260ca9 UI test idea-demo: the lesson's window must really be open before the planned point is ticked
-- 1db7d70 Trial of the new idea: the lesson's window opens only once it is fully gone
-- 3ecd60a Trial of the new idea: a tap that reaches the page behind the lesson's window opens nothing
-- 6551b53 Merge fix/idea-demo-test: the trial's lesson window opens reliably on Android
-- 581f94b Trial of the new idea: change tasks in between, put the history right afterwards
-- 535f2ee TestFlight: the test text also in English (U.S.), the app's primary language
-- 2f3a0d4 Merge feature/idea-edit: change tasks in between and correct the history in the trial; test text in English too
+- b8db77f Coupling page qupil.de/u: "No app yet?" first, with TestFlight for the test phase
+- 28491d5 Coupling page qupil.de/u: on Android a button to the test version
+- 41a111a Practice book: the teacher sees how many devices have the booklet
+- dd1fb56 Student app, iOS simulator test: Safari's hint is closed before the page's button is looked for
+- cd0a729 Merge fix/student-web-testflight: the coupling page starts with how to get the app (TestFlight, Android test version)
+- c71091d Merge feature/practice-devices: the teacher sees how many devices have the booklet; the app says when it takes and when it removes one
+- 5222e11 Student app: "this device has the booklet" is not sent twice while the first one is on its way
+- 4d67061 Student app, iOS simulator test: Safari's hint is closed as often as it takes
+- 490f929 TestFlight text: new since build 53 (the build the external testers have)
+- 00c7c0c Merge fix/student-hello-once: "this device has the booklet" once; the simulator test closes Safari's hint
 
 Für iOS relevante Dateien:
-- .github/scripts/asc-whats-new.py
-- CMakeLists.txt
+- .github/scripts/publish-nightly.sh
+- .github/scripts/student-ios-test.sh
+- .github/workflows/student.yml
 - i18n/qupil_de.ts
 - i18n/qupil_en.ts
 - i18n/qupil_es.ts
 - i18n/qupil_fr.ts
-- qml/idea/IdeaEntry.qml
-- qml/idea/IdeaEntrySheet.qml
-- qml/idea/IdeaLessonSheet.qml
-- qml/idea/IdeaModel.qml
-- qml/idea/IdeaStudentPage.qml
-- qml/idea/IdeaTask.qml
-- qml/idea/IdeaTaskSheet.qml
-- src/app/UiTestIdea.cpp
+- qml/editors/BookletSheet.qml
+- src/app/BookletService.cpp
+- src/app/BookletService.h
+- src/app/DataService.h
+- src/app/DataServiceTasks.cpp
+- src/app/UiTest.cpp
+- src/shared/BookletInbox.cpp
+- src/shared/BookletInbox.h
+- student/i18n/strings.json
+- student/i18n/strings.py
+- student/src/StudentApp.cpp
+- student/src/StudentApp.h
+- student/tests/FakeNextcloud.cpp
+- student/tests/FakeNextcloud.h
+- student/tests/tst_studentapp.cpp
+- student/tests/tst_teacherside.cpp
+- student/web/u/index.html
+- tests/tst_tasks.cpp
 - tools/i18n/catalog.py
