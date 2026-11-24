@@ -4739,6 +4739,19 @@ Autor: %2</translation>
         <source>What is due? In the lesson the same list opens. With the lock: only for me.</source>
         <translation>¿Qué toca? En la clase se abre la misma lista. Con el candado: solo para mí.</translation>
     </message>
+    <message id="idea.prepare.hint_note">
+        <source>A few notes for the lesson. In the lesson they are in the note field, and you turn them into the note of the lesson.</source>
+        <translation>Unas notas para la clase. En la clase están en el campo de nota y las conviertes en la nota de la clase.</translation>
+    </message>
+    <message id="idea.prepare.note">
+        <source>Preparation</source>
+        <extracomment>Label of the note field when a lesson is prepared for a student without tasks</extracomment>
+        <translation>Preparación</translation>
+    </message>
+    <message id="idea.lesson.hint_prepared">
+        <source>The note is what you prepared. Change it to what the lesson was.</source>
+        <translation>En la nota está tu preparación. Cámbiala por lo que hubo en la clase.</translation>
+    </message>
     <message id="idea.prepared.for">
         <source>Prepared for %1</source>
         <translation>Preparado para %1</translation>

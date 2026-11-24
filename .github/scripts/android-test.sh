@@ -164,9 +164,9 @@ adb shell rm -rf "$uidir"
 PARTS="1:pages,today,note-save,note-cancel,keyboard-smooth,note-touch-select,student-search,student-new
 2:event-open,metronome,appearance,language,reminders,test-mode
 4:text-tap,text-double-tap,text-triple-tap,text-long-press,text-handles,text-tap-selection
-5:text-menu,text-menu-paste-unasked,text-wipe,text-field,text-mouse
+5:text-menu,text-menu-paste-unasked,text-wipe,text-field,text-field-wipe,text-mouse
 6:dialogs-all,dialogs-prepare,dialogs-note,dialogs-plan,dialogs-tasks,dialogs-plan-finish,dialogs-plan-from-note,dialogs-booklet,dialogs-piece,dialogs-student,dialogs-lesson,dialogs-activity,dialogs-reminder,dialogs-event,dialogs-external,dialogs-ready-pieces,dialogs-library,dialogs-pairing,dialogs-day-overview,dialogs-csv-import,dialogs-cleanup
-3:plan-save,plan-finish-lines,plan-from-note-lines,plan-icon-coming,lesson-plan-for-all,note-menu,tasks-menu,idea-demo,note-share,piece-new,lesson-new,together,together-new,reminder-new,lesson-reminder,loan-return,lesson-times,more-pages,alert-volume,restart-prepare
+3:plan-save,plan-finish-lines,plan-from-note-lines,plan-icon-coming,lesson-plan-for-all,note-menu,tasks-menu,tasks-hint-wipe,idea-demo,note-share,piece-new,lesson-new,together,together-new,reminder-new,lesson-reminder,loan-return,lesson-times,more-pages,alert-volume,restart-prepare
 restart:
 reset:"
 while IFS= read -r part <&3; do

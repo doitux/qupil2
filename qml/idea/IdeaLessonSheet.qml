@@ -23,6 +23,11 @@ Sheet {
     property var s: null
     property bool tasksShown: true
     property string note
+    //! Preparing a student without tasks: a free note instead of points (it is what the
+    //! lesson's note starts from). Also when such a note is there and tasks are shown again
+    property bool noteOnly: false
+    //! The lesson's note starts from what was prepared
+    property bool fromPrepared: false
     property string newTitle
     property string newExtra
     //! Counts up when tasks come, go or change their group
@@ -72,7 +77,9 @@ Sheet {
         tasksM.clear()
         pointsM.clear()
         extraM.clear()
-        note = ""
+        note = s.prepared && s.prepared.note ? s.prepared.note : ""
+        noteOnly = asPrepare && (!tasksShown || note !== "")
+        fromPrepared = !asPrepare && note !== ""
         newTitle = ""
         newExtra = ""
         const dueIds = s.prepared ? s.prepared.due : []
@@ -174,7 +181,8 @@ Sheet {
         Layout.fillWidth: true
         wrapMode: Text.WordWrap
         text: sheet.s ? sheet.s.name + " · " + Data.formatDate(sheet.s.today, true) + "\n"
-                        + (sheet.prepare ? qsTrId("idea.prepare.hint")
+                        + (sheet.prepare ? (sheet.tasksShown ? qsTrId("idea.prepare.hint") : qsTrId("idea.prepare.hint_note"))
+                                         : sheet.fromPrepared ? qsTrId("idea.lesson.hint_prepared")
                                          : sheet.tasksShown ? qsTrId("idea.lesson.hint") : qsTrId("idea.lesson.hint_note")) : ""
         color: Theme.textMuted
         font.family: Theme.fontFamily
@@ -316,7 +324,7 @@ Sheet {
 
     // Points of my own that belong to no task
     SectionLabel {
-        visible: sheet.prepare || extraM.count > 0
+        visible: (sheet.prepare && sheet.tasksShown) || extraM.count > 0
         text: qsTrId("idea.section.extra")
     }
     Card {
@@ -338,7 +346,7 @@ Sheet {
         }
     }
     RowLayout {
-        visible: sheet.prepare
+        visible: sheet.prepare && sheet.tasksShown
         Layout.fillWidth: true
         spacing: 6
         InputField {
@@ -363,13 +371,15 @@ Sheet {
     // the last word.)
     Loader {
         id: noteLoader
-        visible: !sheet.prepare
+        visible: !sheet.prepare || sheet.noteOnly
         Layout.fillWidth: true
         active: sheet.visible
         sourceComponent: InputField {
             width: noteLoader.width
-            label: sheet.tasksShown ? qsTrId("idea.note.label") : qsTrId("common.note")
+            label: sheet.prepare ? qsTrId("idea.prepare.note") : sheet.tasksShown ? qsTrId("idea.note.label") : qsTrId("common.note")
             multiline: true
+            // (set before the window opens: what was prepared)
+            text: sheet.note
             onEdited: value => sheet.note = value
         }
     }
