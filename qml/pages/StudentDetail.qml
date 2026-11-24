@@ -1689,7 +1689,8 @@ Item {
                     id: blockHead
                     visible: block.hasMore
                     width: parent.width
-                    height: 30
+                    // (a long heading wraps, it was cut)
+                    height: Math.max(30, blockHeading.implicitHeight + 10)
                     focusPolicy: Qt.StrongFocus
                     Accessible.role: Accessible.Button
                     Accessible.name: block.modelData.heading + ", " + qsTrId("block.more_lines", block.modelData.more)
@@ -1706,17 +1707,18 @@ Item {
                     }
                     contentItem: Item {
                         Rectangle {
-                            anchors.verticalCenter: parent.verticalCenter
+                            y: 11       // at the first line
                             width: 8
                             height: 8
                             radius: 4
                             color: Theme.accentText
                         }
                         Text {
+                            id: blockHeading
                             x: 18
                             anchors.verticalCenter: parent.verticalCenter
                             width: parent.width - x - moreBadge.width - 14
-                            elide: Text.ElideRight
+                            wrapMode: Text.Wrap
                             text: block.modelData.heading
                             color: Theme.text
                             font.family: Theme.fontFamily

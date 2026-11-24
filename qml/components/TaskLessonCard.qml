@@ -257,7 +257,7 @@ Control {
             }
         }
 
-        // The private note: only its first line here
+        // The private note
         RowLayout {
             visible: !!card.lesson.note
             Layout.fillWidth: true
@@ -265,13 +265,18 @@ Control {
             Icon {
                 Layout.preferredWidth: 15
                 Layout.preferredHeight: 15
+                Layout.alignment: Qt.AlignTop
+                Layout.topMargin: 1
                 name: "lock"
                 color: Theme.textMuted
             }
+            // The whole note with its lines, wrapped (it was one line cut after 80 letters)
             Text {
                 Layout.fillWidth: true
-                elide: Text.ElideRight
-                text: qsTrId("task.private") + ": " + (card.lesson.note ? Data.plainText(card.lesson.note.content || "", 80) : "")
+                wrapMode: Text.Wrap
+                text: qsTrId("task.private") + ": " + (card.lesson.note ? Data.plainLines(card.lesson.note.content || "") : "")
+                Accessible.role: Accessible.StaticText
+                Accessible.name: text
                 color: Theme.textMuted
                 font.family: Theme.fontFamily
                 font.pixelSize: 13

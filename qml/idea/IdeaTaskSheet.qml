@@ -111,6 +111,7 @@ Sheet {
                 }
             }
             InputField {
+                wrap: true
                 placeholder: qsTrId("idea.task.point")
                 text: pointRow.model.text
                 onEdited: value => pointsM.setProperty(pointRow.index, "text", value)
@@ -138,6 +139,7 @@ Sheet {
         Layout.fillWidth: true
         spacing: 4
         InputField {
+            wrap: true
             placeholder: sheet.pendingPriv ? qsTrId("idea.point.add_private") : qsTrId("idea.point.add")
             text: sheet.pending
             onEdited: value => sheet.pending = value

@@ -350,6 +350,7 @@ Sheet {
         Layout.fillWidth: true
         spacing: 6
         InputField {
+            wrap: true
             placeholder: qsTrId("idea.extra.add")
             text: sheet.newExtra
             onEdited: value => sheet.newExtra = value

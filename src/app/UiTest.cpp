@@ -2470,9 +2470,11 @@ void UiTest::addCases()
                        m_data->remove(u"coupling"_s, m_text);
                    });
     }
-    // Practice book: a hint longer than its line (a phone). Without the focus the line shows
-    // the start of the hint; a finger wiping sideways moves the text and leaves the cursor
+    // Practice book: long texts on a phone. A hint longer than its line wraps and the field
+    // grows (it stays one hint, Enter goes on); a title stays one line: without the focus it
+    // shows its start, and a finger wiping sideways moves the text and leaves the cursor
     {
+        const QString longTitle = u"UI-Konzert für zwei Violinen in d-Moll, zweiter Satz, mit allen Wiederholungen und der langen Kadenz der Ausgabe von 1962"_s;
         const QString longHint = u"Takt 17 bis 24 erst ganz langsam mit dem Metronom auf 60, dann jeden Tag zwei Striche schneller, "
                                  "auf die Bogeneinteilung im zweiten Takt achten und die Wiederholung leiser spielen"_s;
         const auto rectOf = [this](int pos) {
@@ -2490,37 +2492,54 @@ void UiTest::addCases()
             QQuickItem *t = textItem();
             return t ? t->mapToScene(QPointF(t->width() * part, t->height() / 2)) : QPointF();
         };
-        Case &c = add(u"tasks-hint-wipe"_s, u"tasks: a hint longer than its line shows its start, a finger wipes it sideways"_s);
+        Case &c = add(u"tasks-long-texts"_s, u"tasks: a long hint wraps in its field, a long title is wiped sideways and shows its start"_s);
         c.steps << act(u"couple the student of the running lesson"_s, [this] {
                        m_membership = runningMembership();
                        const QString student = m_data->get(u"membership"_s, m_membership).value(u"student_id"_s).toString();
                        m_text = m_data->create(u"coupling"_s, { { u"student_id"_s, student },
                                                                 { u"created"_s, m_data->today() } });
-                       m_textField = u"edit:^Hinweis$"_s;
+                       m_textField = u"edit:^Aufgabe$"_s;
                    })
                 << tab(u"Stundenplan"_s)
                 << tap(u"^Aufgaben$"_s, u"the running lesson offers tasks instead of a note"_s)
                 << see(u"^Weitere Aufgabe$"_s)
-                << type(u"UI-Bourrée"_s) << key(Qt::Key_Return, u"Enter: to the first hint"_s)
-                << type(longHint) << wait(400)
-                << check(u"while typing the end is shown, the start is not"_s, [startShown, endShown] { return endShown() && !startShown(); });
+                << type(longTitle) << wait(400)
+                << check(u"the title stays one line: while typing its end is shown, its start is not"_s,
+                         [startShown, endShown] { return endShown() && !startShown(); });
         for (int i = 0; i < 6; ++i)
             c.steps << fingerDrag([at] { return at(0.15); }, [at] { return at(0.9); }, 250) << fingerDone() << wait(150);
-        c.steps << check(u"wiped to the right: the start is shown, the cursor is still at the end"_s, [this, startShown, endShown, longHint] {
+        c.steps << check(u"wiped to the right: the start is shown, the cursor is still at the end"_s, [this, startShown, endShown, longTitle] {
                        QQuickItem *t = textItem();
-                       return t && startShown() && !endShown() && t->property("cursorPosition").toInt() == longHint.size()
+                       return t && startShown() && !endShown() && t->property("cursorPosition").toInt() == longTitle.size()
                               && t->property("selectedText").toString().isEmpty();
-                   })
-                << snap(u"tasks-hint-wiped"_s);
+                   });
         for (int i = 0; i < 6; ++i)
             c.steps << fingerDrag([at] { return at(0.9); }, [at] { return at(0.15); }, 250) << fingerDone() << wait(150);
         c.steps << check(u"wiped to the left: the end is shown again"_s, [startShown, endShown] { return endShown() && !startShown(); })
+                << key(Qt::Key_Return, u"Enter: to the first hint"_s)
+                << act(u"the hint field"_s, [this] { m_textField = u"edit:^Hinweis$"_s; })
+                << type(longHint) << wait(400)
+                << check(u"the hint wraps: several lines in a taller field, start and end both in it"_s, [this, rectOf, longHint] {
+                       QQuickItem *t = textItem();
+                       if (!t)
+                           return false;
+                       const QRectF first = rectOf(0);
+                       const QRectF last = rectOf(longHint.size());
+                       return t->height() > 2.5 * first.height() && last.y() > first.y() + first.height() / 2
+                              && first.x() >= 0 && last.x() <= t->width() && last.y() + last.height() <= t->height() + 1;
+                   })
+                << snap(u"tasks-hint-wrapped"_s)
+                << key(Qt::Key_Return, u"Enter in a hint that wraps: the next hint, no line break"_s)
+                << type(u"UI-zweiter Hinweis"_s)
+                << act(u"the title field"_s, [this] { m_textField = u"edit:^Aufgabe$"_s; })
                 << tap(u"edit:^Aufgabe$"_s, u"the focus goes to the title"_s) << wait(300)
-                << check(u"without the focus the hint shows its start"_s, [startShown] { return startShown(); })
+                << tap(u"edit:^Hinweis$"_s, u"and away again"_s) << wait(300)
+                << check(u"without the focus the title shows its start"_s, [startShown] { return startShown(); })
                 << tap(u"^Speichern$"_s) << gone(u"^Weitere Aufgabe$"_s)
-                << check(u"the hint is stored whole"_s, [this, longHint] {
+                << check(u"title and both hints are stored whole"_s, [this, longTitle, longHint] {
                        const QVariantList list = m_data->tasksOn(m_membership, m_data->today());
-                       return list.size() == 1 && list.at(0).toMap().value(u"hints"_s).toStringList() == QStringList { longHint };
+                       return list.size() == 1 && list.at(0).toMap().value(u"title"_s).toString() == longTitle
+                              && list.at(0).toMap().value(u"hints"_s).toStringList() == QStringList { longHint, u"UI-zweiter Hinweis"_s };
                    })
                 << act(u"remove the task and the coupling again"_s, [this] {
                        for (const QVariant &v : m_data->tasksOn(m_membership, m_data->today()))
@@ -2529,6 +2548,50 @@ void UiTest::addCases()
                        m_textField = u"edit:^Notiz$"_s;
                    });
     }
+
+    // Long texts on the cards of a student are shown whole: the private note of a lesson with
+    // tasks (it was one line, cut), and the heading of a note's block (it was cut too)
+    {
+        const QString privateNote = u"UI-Privat: Streichernoten mitbringen, vor allem die Stellen mit den Achteln, und an das Programmheft denken\nUI-Privat zweite Zeile"_s;
+        const QString heading = u"UI-Überschrift eines Blocks, die so lang ist, dass sie auch auf einem Tablet nicht in eine einzige Zeile passt, "
+                                "weil sie einfach immer weitergeht und noch ein paar Wörter mehr hat als nötig"_s;
+        auto ids = std::make_shared<QStringList>();
+        Case &c = add(u"card-long-texts"_s, u"student page: a long private note and a long block heading wrap instead of being cut"_s);
+        c.steps << act(u"coupled, tasks and a private note today, a note with blocks a week ago"_s, [this, ids, privateNote, heading] {
+                       m_membership = runningMembership();
+                       const QString student = m_data->get(u"membership"_s, m_membership).value(u"student_id"_s).toString();
+                       m_text = m_data->create(u"coupling"_s, { { u"student_id"_s, student }, { u"created"_s, m_data->today() } });
+                       m_data->saveTasks(m_membership, m_data->today(),
+                                         { QVariantMap { { u"title"_s, u"UI-Lange Texte"_s } } }, false);
+                       ids->clear();
+                       *ids << m_data->addNote(m_membership, m_data->today(), privateNote, false);
+                       const QString before = QDate::fromString(m_data->today(), Qt::ISODate).addDays(-7).toString(Qt::ISODate);
+                       *ids << m_data->addNote(m_membership, before,
+                                               heading + u"\nUI-Zeile zwei\nUI-Zeile drei\n\nUI-Block zwei\nUI-noch eine Zeile"_s, false);
+                   })
+                << openStudent(u"Lena Muster"_s)
+                << see(u"^Privat: UI-Privat: Streichernoten"_s)
+                << check(u"the private note is there whole, on several lines"_s, [this] {
+                       Node n;
+                       return find(u"^Privat: UI-Privat: Streichernoten"_s, &n) && n.name.contains(u"Programmheft denken"_s)
+                              && n.name.contains(u"UI-Privat zweite Zeile"_s) && n.rect.height() > 24;   // one line is about 16
+                   })
+                << see(u"^UI-Überschrift eines Blocks.*, noch 2 Zeilen$"_s)
+                << check(u"the block's heading wraps: its row is taller than one line"_s, [this] {
+                       Node n;
+                       return find(u"^UI-Überschrift eines Blocks.*, noch 2 Zeilen$"_s, &n) && n.full.height() > 44;
+                   })
+                << snap(u"card-long-texts"_s)
+                << act(u"remove everything again"_s, [this, ids] {
+                       for (const QVariant &v : m_data->tasksOn(m_membership, m_data->today()))
+                           m_data->deleteTask(v.toMap().value(u"id"_s).toString(), false);
+                       for (const QString &id : *ids)
+                           m_data->deleteNote(id, false);
+                       m_data->remove(u"coupling"_s, m_text);
+                   })
+                << backIfThere(u"^Schüler$"_s);
+    }
+
     // Practice book: the student's sheet. Not coupled: the Nextcloud of the sync is needed
     // (none in the test). Coupled: the QR code, the link, the switches; ending asks first
     {

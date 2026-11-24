@@ -16,6 +16,9 @@ ColumnLayout {
     property int inputMethodHints: Qt.ImhNone
     property int echoMode: TextInput.Normal
     property bool multiline: false
+    //! One line of text that wraps when it is longer than the field; the field grows (a
+    //! point of a task). Enter still accepts, there is no line break in the text
+    property bool wrap: false
     property var completions: []          // suggestions while typing (e.g. composers)
     //! Marked as needing attention (red frame); the editor says why below the field
     property bool invalid: false
@@ -49,7 +52,9 @@ ColumnLayout {
         id: input
         visible: !field.multiline
         Layout.fillWidth: true
-        Layout.preferredHeight: 48
+        Layout.preferredHeight: field.wrap ? Math.max(48, contentHeight + 26) : 48
+        wrapMode: field.wrap ? TextInput.Wrap : TextInput.NoWrap
+        verticalAlignment: TextInput.AlignVCenter
         leftPadding: 14
         rightPadding: 14
         text: field.text

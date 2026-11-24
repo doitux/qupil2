@@ -328,6 +328,8 @@ public:
     Q_INVOKABLE QString noteHtml(const QString &note, const QString &markColor = {}) const;
     //! A lesson note without formatting, shortened with "…" to maxLength
     Q_INVOKABLE QString plainText(const QString &note, int maxLength = 0) const;
+    //! The note as plain text with its lines kept (no markup, no empty lines at the ends)
+    Q_INVOKABLE QString plainLines(const QString &note) const;
     //! A note as a message for the student ("Homework of Tue, 17.11.2026" and the text,
     //! lines and empty lines kept, without mark-up): shared through the system's menu
     Q_INVOKABLE QString homeworkText(const QString &note, const QString &date) const;
