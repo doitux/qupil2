@@ -385,6 +385,15 @@ void StudentApp::removeTeacher(const QString &id)
     }
 }
 
+void StudentApp::setKeyboardHeight(qreal height)
+{
+    height = std::max<qreal>(0, height);
+    if (qFuzzyCompare(height + 1, m_keyboardHeight + 1))
+        return;
+    m_keyboardHeight = height;
+    emit keyboardHeightChanged();
+}
+
 bool StudentApp::canUpload(const Teacher &teacher) const
 {
     if (teacher.demo)
