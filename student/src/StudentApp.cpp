@@ -371,6 +371,7 @@ void StudentApp::removeTeacher(const QString &id)
                 Teacher gone = m_teachers[i];
                 gone.left = nowMs();
                 gone.booklet = {};
+                gone.sending = false;   // (an upload on its way belongs to the entry that is removed)
                 m_leaving.append(gone);
             }
             m_teachers.removeAt(i);
@@ -538,8 +539,8 @@ void StudentApp::sendPending()
 {
     m_uploadTimer.stop();
     for (Teacher &t : m_teachers)
-        if (!t.demo && (t.changedAt > t.sentState || (!t.said && !t.booklet.isEmpty() && canUpload(t))))
-            upload(t);
+        if (!t.demo && (t.changedAt > t.sentState || (!t.said && !t.sending && !t.booklet.isEmpty() && canUpload(t))))
+            upload(t);   // ("I have the booklet" not twice while the first one is on its way)
     for (Teacher &t : m_leaving) {
         if (t.sending)
             continue;
@@ -569,6 +570,7 @@ void StudentApp::upload(Teacher &teacher)
     request.setHeader(QNetworkRequest::ContentTypeHeader, u"application/octet-stream"_s);
     request.setTransferTimeout(20000);
     const QString id = teacher.id;
+    teacher.sending = true;
     setBusy(true);
     QNetworkReply *reply = m_net->put(request, Booklet::seal(teacher.link.key, Booklet::Purpose::Feedback, content));
     connect(reply, &QNetworkReply::finished, this, [this, reply, id, state, left] {
@@ -589,6 +591,7 @@ void StudentApp::upload(Teacher &teacher)
         Teacher *t = find(id);
         if (!t)
             return;
+        t->sending = false;
         if (reply->error() == QNetworkReply::NoError) {
             t->said = true;
             if (state > t->sentState) {   // feedback or questions went, not only "I am here"

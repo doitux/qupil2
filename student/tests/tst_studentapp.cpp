@@ -513,7 +513,8 @@ private slots:
         QVERIFY(!view.devices.first().toObject().contains(u"left"_s));
         QVERIFY(view.feedback.isEmpty());
 
-        // Said once: not again with every refresh
+        // Said once: not again with every refresh (also not while the first one is still
+        // on its way: the cloud has the file before the app has the answer)
         m_app->refresh();
         QTest::qWait(3500);
         QCOMPARE(m_cloud->puts, 1);
