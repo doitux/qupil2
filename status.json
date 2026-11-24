@@ -1,36 +1,68 @@
 {
-  "mode": "schedule",
-  "started_at": "2026-11-24T06:14:47+01:00",
-  "slot": "2026-11-23 22:05",
-  "tests": {
-    "android-test.yml": {
-      "name": "Android",
-      "since": "2cb393a",
-      "last": "failure",
-      "result": "no_change"
-    },
-    "ui-test.yml": {
-      "name": "Desktop",
-      "since": "9aaaaf9",
-      "last": "failure",
-      "files": 34,
-      "result": "started"
-    },
-    "ios-test.yml": {
-      "name": "iOS",
-      "since": "9aaaaf9",
-      "last": "failure",
-      "files": 34,
-      "result": "started"
-    }
-  },
+  "mode": "now",
+  "started_at": "2026-11-24T09:24:09+01:00",
+  "slot": "2026-11-24 09:24 (von Hand, now)",
   "since": "2cb393ab8fcc90d4e11b469b05053ffc976f51f5",
   "since_build": 57,
-  "main": "2cb393ab8fcc90d4e11b469b05053ffc976f51f5",
-  "commits": [],
-  "relevant_files": [],
-  "result": "no_change",
-  "note": "Seit dem letzten Upload nichts Neues.",
-  "written": "2026-11-24T06:14:57+01:00",
-  "headline": "Kein Build nötig"
+  "main": "2f3a0d4a0c60bfb2bf2cb8a531296353ea1a02c4",
+  "commits": [
+    {
+      "sha": "4260ca9",
+      "subject": "UI test idea-demo: the lesson's window must really be open before the planned point is ticked"
+    },
+    {
+      "sha": "1db7d70",
+      "subject": "Trial of the new idea: the lesson's window opens only once it is fully gone"
+    },
+    {
+      "sha": "3ecd60a",
+      "subject": "Trial of the new idea: a tap that reaches the page behind the lesson's window opens nothing"
+    },
+    {
+      "sha": "6551b53",
+      "subject": "Merge fix/idea-demo-test: the trial's lesson window opens reliably on Android"
+    },
+    {
+      "sha": "581f94b",
+      "subject": "Trial of the new idea: change tasks in between, put the history right afterwards"
+    },
+    {
+      "sha": "535f2ee",
+      "subject": "TestFlight: the test text also in English (U.S.), the app's primary language"
+    },
+    {
+      "sha": "2f3a0d4",
+      "subject": "Merge feature/idea-edit: change tasks in between and correct the history in the trial; test text in English too"
+    }
+  ],
+  "relevant_files": [
+    ".github/scripts/asc-whats-new.py",
+    "CMakeLists.txt",
+    "i18n/qupil_de.ts",
+    "i18n/qupil_en.ts",
+    "i18n/qupil_es.ts",
+    "i18n/qupil_fr.ts",
+    "qml/idea/IdeaEntry.qml",
+    "qml/idea/IdeaEntrySheet.qml",
+    "qml/idea/IdeaLessonSheet.qml",
+    "qml/idea/IdeaModel.qml",
+    "qml/idea/IdeaStudentPage.qml",
+    "qml/idea/IdeaTask.qml",
+    "qml/idea/IdeaTaskSheet.qml",
+    "src/app/UiTestIdea.cpp",
+    "tools/i18n/catalog.py"
+  ],
+  "result": "started",
+  "build": {
+    "number": 58,
+    "run_id": 45355803145,
+    "sha": "2f3a0d4a0c60bfb2bf2cb8a531296353ea1a02c4",
+    "url": "https://github.com/doitux/qupil2/actions/runs/45355803145",
+    "created": "2026-11-24T08:24:14Z",
+    "status": "in_progress",
+    "conclusion": null,
+    "attempt": 1
+  },
+  "written": "2026-11-24T09:24:26+01:00",
+  "headline": "Build 58 gestartet"
 }
