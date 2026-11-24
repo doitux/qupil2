@@ -383,6 +383,8 @@ set(QUPIL_QML_FILES
     qml/idea/IdeaStudentPage.qml
     qml/idea/IdeaLessonSheet.qml
     qml/idea/IdeaPupilSheet.qml
+    qml/idea/IdeaTaskSheet.qml
+    qml/idea/IdeaEntrySheet.qml
     qml/idea/IdeaTask.qml
     qml/idea/IdeaTaskEdit.qml
     qml/idea/IdeaPoint.qml

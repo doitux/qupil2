@@ -16,10 +16,16 @@ Card {
     property var entry: ({})
     property bool open: false
     property string ago
+    //! The trial's data and the student, for the words of tasks and points as they are now
+    property var demo
+    property var student
+    function titleOf(line) { return demo ? demo.lineTitle(student, line) : line.title }
     readonly property var lines: entry.lines || []
     readonly property bool onlyNote: lines.length === 0 && (entry.did || []).length === 0
 
     signal toggled()
+    //! Put the entry right (a typing error, a wrong task or point)
+    signal edit()
 
     function label(kind) {
         return kind === "new" ? qsTrId("idea.log.new") : kind === "done" ? qsTrId("idea.log.done")
@@ -39,7 +45,7 @@ Card {
                 continue
             out.push("<b>" + label(kind) + ":</b> " + of.map(l => {
                 const added = l.changes.filter(c => c.kind === "+").length
-                return brief(l.title, of.length > 1) + (kind === "on" && added > 0 ? " (" + qsTrId("idea.points_new", added) + ")" : "")
+                return brief(titleOf(l), of.length > 1) + (kind === "on" && added > 0 ? " (" + qsTrId("idea.points_new", added) + ")" : "")
             }).join(", "))
         }
         return out.join("<br>")
@@ -67,6 +73,16 @@ Card {
             color: Theme.textMuted
             font.family: Theme.fontFamily
             font.pixelSize: 12
+        }
+        IconButton {
+            Layout.topMargin: -10
+            Layout.bottomMargin: -10
+            Layout.rightMargin: -6
+            focusPolicy: Qt.TabFocus
+            size: 36
+            iconName: "edit"
+            text: qsTrId("idea.entry.edit.name").arg(Data.formatDate(card.entry.date || "", true))
+            onClicked: card.edit()
         }
         Icon {
             visible: !card.onlyNote
@@ -103,7 +119,7 @@ Card {
                     Layout.fillWidth: true
                     wrapMode: Text.WordWrap
                     textFormat: Text.StyledText
-                    text: "<b>" + card.label(line.modelData.kind) + ":</b> " + line.modelData.title
+                    text: "<b>" + card.label(line.modelData.kind) + ":</b> " + card.titleOf(line.modelData)
                           + (line.modelData.kind === "paused" && (line.modelData.until || "") !== ""
                              ? " (" + qsTrId("idea.until").arg(Data.formatDate(line.modelData.until)) + ")" : "")
                     color: Theme.text
@@ -115,7 +131,7 @@ Card {
                     IdeaPoint {
                         required property var modelData
                         Layout.leftMargin: 14
-                        text: modelData.text
+                        text: card.demo ? card.demo.changeText(card.student, line.modelData, modelData) : modelData.text
                         mark: modelData.kind === "lock" ? "✓" : modelData.kind
                         priv: modelData.kind === "lock"
                     }

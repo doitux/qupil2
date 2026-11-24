@@ -20,8 +20,11 @@ ColumnLayout {
     property string badge
     property bool open: false
     readonly property bool foldable: points.length > 0
+    //! A pencil at the right: change the task in between, without a lesson
+    property bool editable: false
 
     signal toggled()
+    signal edit()
 
     Layout.fillWidth: true
     spacing: 7
@@ -112,6 +115,17 @@ ColumnLayout {
                         }
                     }
                 }
+            }
+            IconButton {
+                visible: block.editable
+                Layout.alignment: Qt.AlignTop
+                Layout.topMargin: -8
+                Layout.bottomMargin: -8
+                Layout.rightMargin: -6
+                size: 36
+                iconName: "edit"
+                text: qsTrId("idea.task.edit.name").arg(block.title)
+                onClicked: block.edit()
             }
             Icon {
                 visible: block.foldable

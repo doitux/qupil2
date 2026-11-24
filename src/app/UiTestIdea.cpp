@@ -55,6 +55,19 @@ void UiTest::addIdeaCases()
             << see(u"^UI-Kadenz ab T\\. 180$"_s) << see(u"^Triller in T\\. 38 von oben$"_s)
             << snap(u"idea-history"_s)
 
+            // The history is put right afterwards: a point that was wrong goes, also at the task
+            << tap(u"^Eintrag ändern: "_s + today().mid(1), u"the pencil of the lesson's entry"_s)
+            << see(u"^Entfernen: UI-Kadenz ab T\\. 180$"_s) << snap(u"idea-entry-edit"_s)
+            << tap(u"^Entfernen: UI-Kadenz ab T\\. 180$"_s) << gone(u"^Entfernen: UI-Kadenz ab T\\. 180$"_s)
+            << tap(u"^Speichern$"_s) << gone(u"^UI-Kadenz ab T\\. 180$"_s)
+            // A task is changed in between, without a lesson: its title, a point more
+            << tap(u"^Ändern: UI-Vibrato$"_s) << see(u"edit:^Aufgabe$"_s)
+            << tap(u"edit:^Aufgabe$"_s) << type(u" neu"_s)
+            << tap(u"edit:^Punkt hinzufügen$"_s) << type(u"UI-Direktpunkt"_s) << key(Qt::Key_Return, u"Enter adds the point"_s)
+            << see(u"^Entfernen: UI-Direktpunkt$"_s) << snap(u"idea-task-edit"_s)
+            << tap(u"^Speichern$"_s) << see(u"^UI-Vibrato neu$"_s)
+            << tap(u"^UI-Vibrato neu$"_s, u"unfold the task"_s) << see(u"^UI-Direktpunkt$"_s)
+
             // Preparing the next lesson: due, and a point only for me
             << tap(u"^Vorbereiten$"_s) << tap(u"^Dran: Mozart: Violinkonzert G-Dur, 1\\. Satz$"_s)
             << tap(u"^Mozart: Violinkonzert G-Dur, 1\\. Satz$"_s, u"unfold the Mozart"_s)

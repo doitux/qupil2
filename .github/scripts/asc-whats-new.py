@@ -7,7 +7,8 @@
 
 Environment: ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_FILE (the .p8 file), ASC_APP_ID.
 Waits until Apple lists the build (it appears while it is being processed), then
-writes the text into every localization of the build, German (de-DE) at least.
+writes the text into every localization of the build, German (de-DE) and English (en-US)
+at least, and completes the English test information of the app from the German one.
 Only the standard library and the openssl command: no packages to install.
 """
 import base64
@@ -74,6 +75,31 @@ class Api:
             raise RuntimeError(f"{method} {path}: HTTP {error.code} {error.read().decode()[:600]}") from None
 
 
+def mirror_test_information(api: "Api", app: str) -> None:
+    """The app's test information (description for testers, address for feedback) in English
+    (U.S.) is taken from the German one where it is empty: without it App Store Connect asks
+    for it again when a build is given to the external testers. Nothing of it is printed."""
+    found = api.call("GET", f"/apps/{app}/betaAppLocalizations").get("data", [])
+    by_locale = {item["attributes"]["locale"]: item for item in found}
+    german = by_locale.get("de-DE")
+    if german is None:
+        return
+    fields = ("description", "feedbackEmail", "marketingUrl", "privacyPolicyUrl", "tvOsPrivacyPolicy")
+    source = {key: german["attributes"].get(key) for key in fields if german["attributes"].get(key)}
+    english = by_locale.get("en-US")
+    if english is None:
+        api.call("POST", "/betaAppLocalizations",
+                 {"data": {"type": "betaAppLocalizations", "attributes": dict(source, locale="en-US"),
+                           "relationships": {"app": {"data": {"type": "apps", "id": app}}}}})
+        print("Test information: English (U.S.) added from the German one.")
+        return
+    missing = {key: value for key, value in source.items() if not english["attributes"].get(key)}
+    if missing:
+        api.call("PATCH", f"/betaAppLocalizations/{english['id']}",
+                 {"data": {"type": "betaAppLocalizations", "id": english["id"], "attributes": missing}})
+        print("Test information: English (U.S.) completed from the German one (" + ", ".join(sorted(missing)) + ").")
+
+
 def main() -> int:
     build_number, text_file = sys.argv[1], sys.argv[2]
     text = open(text_file, encoding="utf-8").read().strip()
@@ -104,18 +130,42 @@ def main() -> int:
     build_id = build["id"]
     print(f"Build {build_number}: {build_id} ({build['attributes'].get('processingState')})")
 
-    localizations = api.call("GET", f"/builds/{build_id}/betaBuildLocalizations").get("data", [])
-    locales = {item["attributes"]["locale"]: item["id"] for item in localizations}
-    for locale, loc_id in locales.items():
+    # Every language the build has, and German and English (U.S.) in any case: the testers
+    # read German, App Store Connect shows the app's primary language first (English since
+    # the app is offered worldwide) – with that one empty, the text looks as if it was missing
+    def build_locales():
+        found = api.call("GET", f"/builds/{build_id}/betaBuildLocalizations").get("data", [])
+        return {item["attributes"]["locale"]: item["id"] for item in found}
+
+    def patch(locale, loc_id):
         api.call("PATCH", f"/betaBuildLocalizations/{loc_id}",
                  {"data": {"type": "betaBuildLocalizations", "id": loc_id, "attributes": {"whatsNew": text}}})
         print(f"What to Test set ({locale}).")
-    if "de-DE" not in locales:
-        api.call("POST", "/betaBuildLocalizations",
-                 {"data": {"type": "betaBuildLocalizations",
-                           "attributes": {"locale": "de-DE", "whatsNew": text},
-                           "relationships": {"build": {"data": {"type": "builds", "id": build_id}}}}})
-        print("What to Test set (de-DE, new).")
+
+    locales = build_locales()
+    for locale, loc_id in locales.items():
+        patch(locale, loc_id)
+    for locale in ("de-DE", "en-US"):
+        if locale in locales:
+            continue
+        try:
+            api.call("POST", "/betaBuildLocalizations",
+                     {"data": {"type": "betaBuildLocalizations",
+                               "attributes": {"locale": locale, "whatsNew": text},
+                               "relationships": {"build": {"data": {"type": "builds", "id": build_id}}}}})
+            print(f"What to Test set ({locale}, new).")
+        except RuntimeError as error:
+            # Apple may have added the language in between
+            again = build_locales()
+            if locale in again:
+                patch(locale, again[locale])
+            else:
+                print(f"::warning::What to Test not set for {locale}: {str(error)[:200]}")
+
+    try:
+        mirror_test_information(api, app)
+    except (RuntimeError, KeyError) as error:
+        print(f"::warning::Test information not copied to English: {str(error)[:200]}")
     return 0
 
 
