@@ -4740,6 +4740,19 @@ Autor: %2</translation>
         <source>What is due? In the lesson the same list opens. With the lock: only for me.</source>
         <translation>Was soll dran sein? In der Stunde öffnet sich dieselbe Liste. Mit Schloss: nur für mich.</translation>
     </message>
+    <message id="idea.prepare.hint_note">
+        <source>A few notes for the lesson. In the lesson they are in the note field, and you turn them into the note of the lesson.</source>
+        <translation>Ein paar Notizen für die Stunde. In der Stunde stehen sie im Notizfeld, und du machst daraus die Notiz der Stunde.</translation>
+    </message>
+    <message id="idea.prepare.note">
+        <source>Preparation</source>
+        <extracomment>Label of the note field when a lesson is prepared for a student without tasks</extracomment>
+        <translation>Vorbereitung</translation>
+    </message>
+    <message id="idea.lesson.hint_prepared">
+        <source>The note is what you prepared. Change it to what the lesson was.</source>
+        <translation>Im Notizfeld steht deine Vorbereitung. Ändere sie zu dem, was in der Stunde war.</translation>
+    </message>
     <message id="idea.prepared.for">
         <source>Prepared for %1</source>
         <translation>Vorbereitet für %1</translation>

@@ -21,7 +21,9 @@ Card {
     property var student
     function titleOf(line) { return demo ? demo.lineTitle(student, line) : line.title }
     readonly property var lines: entry.lines || []
-    readonly property bool onlyNote: lines.length === 0 && (entry.did || []).length === 0
+    //! No task in the lesson: nothing to unfold, the note is the entry (points of my own that
+    //! were done stand above it)
+    readonly property bool onlyNote: lines.length === 0
 
     signal toggled()
     //! Put the entry right (a typing error, a wrong task or point)
@@ -156,6 +158,15 @@ Card {
             }
         }
     }
+    Repeater {
+        model: card.onlyNote ? (card.entry.did || []) : []
+        IdeaPoint {
+            required property string modelData
+            text: modelData
+            mark: "✓"
+            priv: true
+        }
+    }
     RowLayout {
         visible: (card.entry.note || "") !== ""
         Layout.fillWidth: true
@@ -173,6 +184,8 @@ Card {
             Layout.fillWidth: true
             wrapMode: Text.WordWrap
             text: card.entry.note || ""
+            Accessible.role: Accessible.StaticText
+            Accessible.name: text
             color: card.onlyNote ? Theme.text : Theme.textMuted
             font.family: Theme.fontFamily
             font.pixelSize: card.onlyNote ? 15 : 13

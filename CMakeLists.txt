@@ -332,6 +332,7 @@ set(QUPIL_QML_FILES
     qml/components/LessonPicker.qml
     qml/components/LessonBadge.qml
     qml/components/TaskLessonCard.qml
+    qml/components/LineScroll.qml
     qml/components/TextTouch.qml
     qml/components/SwitchRow.qml
     qml/components/SyncCard.qml
