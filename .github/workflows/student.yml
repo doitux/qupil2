@@ -524,12 +524,17 @@ jobs:
             echo '```'
             grep -E "Upload succeeded|EXPORT (SUCCEEDED|FAILED)|^error|ITMS-" "$RUNNER_TEMP/export.log" | tail -n 20
             echo '```'
-            # What the uploaded app was signed with
+            # What the uploaded app was signed with, if the export says so. With an upload it
+            # wrote no summary for build 39, and this step then claimed the capability was
+            # missing: it was not (24.11.2026, iPad: the link from the camera opened the app).
             summary="$RUNNER_TEMP/export/DistributionSummary.plist"
-            if [ -f "$summary" ] && grep -q 'applinks:qupil.de' "$summary"; then
+            if [ ! -f "$summary" ]; then
+              echo "The export wrote no summary (files: $(ls "$RUNNER_TEMP/export" 2>/dev/null | tr '\n' ' ')): whether"
+              echo "Associated Domains is in the uploaded app shows on a device (a link from the camera opens the app)."
+            elif plutil -convert xml1 -o - "$summary" | grep -q 'applinks:qupil.de'; then
               echo "Associated Domains (applinks:qupil.de) is in the uploaded app."
             else
-              echo "**Associated Domains is NOT in the uploaded app** (links open qupil.de/u first)."
+              echo "**The export's summary does not name Associated Domains** (links would open qupil.de/u first)."
             fi
           } | tee -a "$GITHUB_STEP_SUMMARY"
           exit $status
