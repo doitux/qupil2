@@ -425,7 +425,14 @@ Item {
                     const list = []
                     const all = touch.target.length > 0
                                 && Math.abs(touch.target.selectionEnd - touch.target.selectionStart) < touch.target.length
-                    const paste = !touch.readOnly && touch.target.canPaste === true
+                    // "Einsetzen" is offered wherever text can be written, without asking
+                    // what the clipboard holds: reading the field's canPaste makes Qt read the
+                    // clipboard's text, and iPad and iPhone then ask "Qupil möchte von … einsetzen"
+                    // – for every field as soon as it is made, because this is a binding (seen
+                    // 24.11.2026: opening the reminder sheet after copying in another app).
+                    // Android shows "… hat aus der Zwischenablage eingefügt" for the same read.
+                    // The clipboard is read when the user taps "Einsetzen", not before
+                    const paste = touch.active && !touch.readOnly
                     if (touch.hasSelection) {
                         if (!touch.readOnly)
                             list.push("cut")

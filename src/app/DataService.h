@@ -246,8 +246,9 @@ public:
     Q_INVOKABLE QVariantList questions(const QString &studentId) const;
     //! Those not marked as read yet, oldest first
     Q_INVOKABLE QVariantList openQuestions(const QString &studentId) const;
-    //! Marks all questions of the student as read (they stay in the practice book sheet)
-    Q_INVOKABLE bool markQuestionsRead(const QString &studentId);
+    //! Marks the question with this id as read, without an id all questions of the student
+    //! (they stay in the practice book sheet)
+    Q_INVOKABLE bool markQuestionsRead(const QString &studentId, const QString &questionId = {});
     //! The devices that have this student's booklet, as far as they said so:
     //! { connected, left (counts), since, leftDate, lastAnswer (ISO dates, "" unknown) }.
     //! Kept on this device only (each of the teacher's devices reads it from the folder).

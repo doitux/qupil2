@@ -965,7 +965,7 @@ Item {
                     unfolded: detail.unfolded
                     onFoldToggled: key => detail.toggleFold(key, taskCard)
                     onMenuRequested: (item, x, y, alignRight) => taskMenu.show(modelData, item, alignRight ? x - taskMenu.width : x, y)
-                    onQuestionsRead: Data.markQuestionsRead(detail.studentId)
+                    onQuestionRead: id => Data.markQuestionsRead(detail.studentId, id)
                 }
             }
             EmptyHint {
