@@ -108,6 +108,27 @@ QString StudentApp::version() const
     return QCoreApplication::applicationVersion();
 }
 
+QString StudentApp::build() const
+{
+#ifdef QUPIL_STUDENT_BUILD
+    return QStringLiteral(QUPIL_STUDENT_BUILD);
+#else
+    return u"dev"_s;
+#endif
+}
+
+QString StudentApp::versionText() const
+{
+    return version() + u" ("_s + build() + u')';
+}
+
+void StudentApp::copyVersion() const
+{
+    // The English name: the same in every language, for a report to the developers
+    if (QClipboard *clipboard = QGuiApplication::clipboard())
+        clipboard->setText(u"Qupil Practice "_s + versionText());
+}
+
 // ---------------------------------------------------------------------------- state on disk
 
 void StudentApp::load()

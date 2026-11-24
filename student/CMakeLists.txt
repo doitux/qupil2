@@ -113,6 +113,14 @@ qt_add_resources(qupilstudentui "student_fonts"
         ${QUPIL_ROOT}/assets/fonts/Figtree-ExtraBold.ttf)
 target_include_directories(qupilstudentui PUBLIC src)
 target_compile_definitions(qupilstudentui PUBLIC QUPIL_STUDENT_VERSION="${PROJECT_VERSION}")
+# Which build this is (shown beside the version in the settings, as in Qupil): the commit
+# on CI, "dev" otherwise
+if(DEFINED ENV{GITHUB_SHA})
+    string(SUBSTRING "$ENV{GITHUB_SHA}" 0 7 QUPIL_STUDENT_BUILD)
+else()
+    set(QUPIL_STUDENT_BUILD "dev")
+endif()
+target_compile_definitions(qupilstudentui PRIVATE QUPIL_STUDENT_BUILD="${QUPIL_STUDENT_BUILD}")
 target_link_libraries(qupilstudentui PUBLIC qupilbooklet
     Qt6::Core Qt6::Gui Qt6::Qml Qt6::Quick Qt6::QuickControls2 Qt6::Network)
 # The QR code scanner: the phone's camera (iOS: AVFoundation; Android: StudentActivity

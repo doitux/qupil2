@@ -166,6 +166,15 @@ indicator, in the light and in the dark look.
   (`res/values/student.xml`, `values-night`); the insets stay 0.
 - Qt 6.9 and later bring `SafeArea` for QML; `SafeArea.h` can go then.
 
+## Which build
+
+At the end of the settings: the app's name, the version and the commit the build was made
+from, "Qupil – Musik üben 1.0.0 (abc1234)" ("dev" for a local build), as in Qupil's
+"About". A tap copies "Qupil Practice 1.0.0 (abc1234)" for a report of what does not work.
+`QUPIL_STUDENT_BUILD` comes from `GITHUB_SHA` (`student/CMakeLists.txt`). The build number
+in TestFlight is the run number of the workflow; the release notes of the nightly build
+name the commit.
+
 ## The example
 
 `--demo` or "See an example" on the welcome page: an invented booklet (Ms Rau, Jonas,
@@ -179,7 +188,7 @@ since a review cannot scan a teacher's code.
 | `tst_booklet` | link round trip and forms, invalid links, sealing (wrong key, wrong purpose, tampered), file names, URLs |
 | `tst_tasks` `couplingDevices` (the teacher's app) | counts and days of the devices, kept beside the coupling record; the booklet's `uploads` |
 | `tst_teacherside` | links via OCS (read + create; read only; enforced expiry and renewal; wrong login), the QR code (size, quiet zone; `QUPIL_QR_OUT=x.png` saves it for a check with a real reader), the inbox (newest per device, newer answer wins, values cleaned; the devices with `since` and `left`) |
-| `tst_studentapp` | the app against a fake Nextcloud: coupling, feedback upload and its content, echo from the teacher, wrong key, newer format, ended link, wrong password, old Nextcloud, state kept; the interface by tap: example, hints, feedback, to-do, closing the example, removing a teacher (asks first); a link through the system and from another thread; the scanner (another code, camera refused, closed, the teacher's code); fields in view with the keyboard; texts without "an <name>"; the app makes room for the keyboard itself (the window keeps its size, field and "send" stay above the room all the way, the page ends at its end afterwards); the pages keep clear of the room the status bar and the home indicator take (iOS), with the page's colour behind the status bar; "this device has the booklet" once and never as "sent", the goodbye on removing (also later, when the cloud was down; not for a link that is gone; not without uploads) |
+| `tst_studentapp` | the app against a fake Nextcloud: coupling, feedback upload and its content, echo from the teacher, wrong key, newer format, ended link, wrong password, old Nextcloud, state kept; the interface by tap: example, hints, feedback, to-do, closing the example, removing a teacher (asks first); a link through the system and from another thread; the scanner (another code, camera refused, closed, the teacher's code); fields in view with the keyboard; texts without "an <name>"; the app makes room for the keyboard itself (the window keeps its size, field and "send" stay above the room all the way, the page ends at its end afterwards); the commit of the build beside the version in the settings, a tap copies both; the pages keep clear of the room the status bar and the home indicator take (iOS), with the page's colour behind the status bar; "this device has the booklet" once and never as "sent", the goodbye on removing (also later, when the cloud was down; not for a link that is gone; not without uploads) |
 | `.github/scripts/student-android-test.sh` (emulator, job "Android emulator") | a link starts the app and adds the teacher; links while the app is running (https, `qupil-student:`, from the background); "Open camera" opens the scanner, "back" closes it; the on-screen keyboard is measured (the emulator is told to show it), the field is above it, "back" takes it away |
 | `.github/scripts/student-ios-test.sh` (simulator, job "iOS simulator") | the app starts; `qupil-student:` starts the app and adds the teacher, also while it runs; the button on the page `qupil.de/u` (served from `student/web`, in Safari) hands its link to the app, and without the app Safari says "the address is invalid" (the control: that is what a device without the app shows); the scanner's sheet opens and closes; the app is told the safe area, and the top and the bottom edge of the screenshots have the page's colour, no black strips (`ios-edges.py`). Safari's page and alerts are not in idb's view: found in screenshots (`ios-find-colour.py`, `ios-find-alert.py`). A crash report goes to the results (`crash/`, with `ios-crash-summary.py`). Universal links: on a device only |
 

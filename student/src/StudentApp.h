@@ -38,6 +38,10 @@ class StudentApp : public QObject
     Q_PROPERTY(QVariantMap current READ current NOTIFY changed)
     Q_PROPERTY(bool busy READ busy NOTIFY busyChanged)
     Q_PROPERTY(QString version READ version CONSTANT)
+    // The commit this build was made from ("dev" for local builds), and both together:
+    // "1.0.0 (abc1234)", as in Qupil
+    Q_PROPERTY(QString build READ build CONSTANT)
+    Q_PROPERTY(QString versionText READ versionText CONSTANT)
     //! The phone's QR code scanner can be opened (scan())
     Q_PROPERTY(bool canScan READ canScan CONSTANT)
     //! Why the last scan added nothing: "" (fine, or closed), "invalid" (not a Qupil code),
@@ -70,6 +74,10 @@ public:
     QVariantMap current() const;
     bool busy() const { return m_busy > 0; }
     QString version() const;
+    QString build() const;
+    QString versionText() const;
+    //! Puts the app's name with version and commit on the clipboard (for bug reports)
+    Q_INVOKABLE void copyVersion() const;
     bool canScan() const;
     QString scanError() const { return m_scanError; }
     qreal keyboardHeight() const { return m_keyboardHeight; }

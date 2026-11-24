@@ -19,6 +19,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QClipboard>
 #include <QQmlApplicationEngine>
 #include <QQuickItem>
 #include <QQuickWindow>
@@ -580,6 +581,38 @@ private slots:
         m_app->setSafeArea(0, 0);
         QTRY_VERIFY(top(back) < 59);
         QCOMPARE(room->height(), 0.0);
+    }
+
+    void uiShowsTheBuildBesideTheVersion()
+    {
+        // As in Qupil: the commit of the build beside the version ("1.0.0 (abc1234)", "dev"
+        // for a local build), at the end of the settings; a tap copies both
+        QVERIFY(!m_app->build().isEmpty());
+        QCOMPARE(m_app->versionText(), m_app->version() + u" ("_s + m_app->build() + u')');
+        QQmlApplicationEngine engine;
+        engine.addImportPath(u"qrc:/qt/qml"_s);
+        engine.load(QUrl(u"qrc:/qt/qml/QupilStudent/qml/Main.qml"_s));
+        auto *w = qobject_cast<QQuickWindow *>(engine.rootObjects().value(0));
+        QVERIFY(w);
+        w->resize(390, 844);
+        QVERIFY(QTest::qWaitForWindowExposed(w));
+        QVERIFY(tap(w, u"demoButton"_s));
+        QTRY_VERIFY(findItem(w->contentItem(), u"settingsButton"_s));
+        QVERIFY(tap(w, u"settingsButton"_s));
+        QQuickItem *line = nullptr;
+        QTRY_VERIFY((line = findItem(w->contentItem(), u"versionLine"_s)));
+        QVERIFY2(line->property("text").toString().endsWith(u' ' + m_app->versionText()),
+                 qPrintable(line->property("text").toString()));
+
+        // The line is the page's last: scroll there, tap
+        QQuickItem *page = line->parentItem();
+        while (page && !page->inherits("QQuickFlickable"))
+            page = page->parentItem();
+        QVERIFY(page);
+        page->setProperty("contentY", std::max<qreal>(0, page->property("contentHeight").toReal() - page->height()));
+        QGuiApplication::clipboard()->setText(u"something else"_s);
+        QVERIFY(tap(w, u"versionLine"_s));
+        QTRY_COMPARE(QGuiApplication::clipboard()->text(), u"Qupil Practice "_s + m_app->versionText());
     }
 
     void uiTextsWithoutDeclension()
