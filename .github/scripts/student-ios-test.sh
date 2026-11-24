@@ -49,11 +49,15 @@ shot() {
 # the window reaches behind the status bar and the home indicator, no black strips
 # (24.11.2026 on an iPad: black above and below the light page)
 edges() {
-    local line ok=1
+    local line good=0
     while IFS= read -r line; do
-        case "$line" in *NOT*) ok=0; say "- **$line**" ;; *) say "- $line" ;; esac
+        case "$line" in
+            *"edge: the page's colour"*) good=$((good + 1)); say "- $line" ;;
+            *) say "- **$line**" ;;
+        esac
     done < <(python3 "$HERE/ios-edges.py" "$LAST_SHOT" F4F3F6 2>&1)
-    [ "$ok" = 1 ] || FAILED=1
+    # Both edges, said in so many words: a check that could not look is a failed check
+    [ "$good" = 2 ] || FAILED=1
 }
 link() {
     python3 -c "
@@ -64,6 +68,9 @@ print(base64.urlsafe_b64encode(j.encode()).decode().rstrip('='))" "$1"
 }
 running() { xcrun simctl spawn "$UDID" launchctl list 2> /dev/null | grep -q "$BUNDLE"; }
 HERE=$(cd "$(dirname "$0")" && pwd)
+# The checks in screenshots (ios-edges.py, ios-find-colour.py, ios-find-alert.py) read pictures
+python3 -c 'import PIL' 2> /dev/null || python3 -m pip install --quiet --break-system-packages pillow > /dev/null 2>&1 \
+    || python3 -m pip install --quiet --user pillow > /dev/null 2>&1
 HAVE_IDB=0
 command -v idb > /dev/null 2>&1 && HAVE_IDB=1
 # tap_label <pattern> <seconds> [optional]: taps what the system's accessibility shows under
@@ -205,8 +212,6 @@ if [ "$HAVE_IDB" = 1 ]; then
     tap_label '^(Continue|Weiter|Not Now|Jetzt nicht)$' 6 optional    # Safari's first start
     PAGE_BUTTON='(Open in Qupil Practice|In Qupil Üben öffnen)'
     # idb does not see into Safari's page nor its alerts: both are found in screenshots
-    python3 -c 'import PIL' 2> /dev/null || python3 -m pip install --quiet --break-system-packages pillow > /dev/null 2>&1 \
-        || python3 -m pip install --quiet --user pillow > /dev/null 2>&1
     xy=""
     for ((i = 0; i < 60; i += 6)); do
         idb ui describe-all --udid "$UDID" > "$OUT/now.json" 2> /dev/null
