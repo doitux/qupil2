@@ -42,7 +42,22 @@ shot() {
     local name
     name=$(printf '%02d-%s' "$N" "$1")
     xcrun simctl io "$UDID" screenshot "$OUT/shots/$name.png" > /dev/null 2>&1
+    LAST_SHOT="$OUT/shots/$name.png"
     say "- screenshot \`shots/$name.png\`"
+}
+# edges: the last screenshot's top and bottom edge have the page's colour (light look):
+# the window reaches behind the status bar and the home indicator, no black strips
+# (24.11.2026 on an iPad: black above and below the light page)
+edges() {
+    local line good=0
+    while IFS= read -r line; do
+        case "$line" in
+            *"edge: the page's colour"*) good=$((good + 1)); say "- $line" ;;
+            *) say "- **$line**" ;;
+        esac
+    done < <(python3 "$HERE/ios-edges.py" "$LAST_SHOT" F4F3F6 2>&1)
+    # Both edges, said in so many words: a check that could not look is a failed check
+    [ "$good" = 2 ] || FAILED=1
 }
 link() {
     python3 -c "
@@ -53,6 +68,9 @@ print(base64.urlsafe_b64encode(j.encode()).decode().rstrip('='))" "$1"
 }
 running() { xcrun simctl spawn "$UDID" launchctl list 2> /dev/null | grep -q "$BUNDLE"; }
 HERE=$(cd "$(dirname "$0")" && pwd)
+# The checks in screenshots (ios-edges.py, ios-find-colour.py, ios-find-alert.py) read pictures
+python3 -c 'import PIL' 2> /dev/null || python3 -m pip install --quiet --break-system-packages pillow > /dev/null 2>&1 \
+    || python3 -m pip install --quiet --user pillow > /dev/null 2>&1
 HAVE_IDB=0
 command -v idb > /dev/null 2>&1 && HAVE_IDB=1
 # tap_label <pattern> <seconds> [optional]: taps what the system's accessibility shows under
@@ -147,6 +165,12 @@ if running; then say "- the app is running"; else say "- **the app is not runnin
 shot welcome
 [ "$HAVE_IDB" = 1 ] && idb connect "$UDID" > /dev/null 2>&1
 
+say ""
+say "## The screen's edges"
+# The app is told the room the status bar and the home indicator take, and paints behind it
+wait_for "safe area: top [1-9][0-9]* bottom [1-9]" 5
+edges
+
 if [ "$HAVE_IDB" = 1 ]; then
     say ""
     say "## A link starts the app (qupil-student:)"
@@ -159,6 +183,7 @@ if [ "$HAVE_IDB" = 1 ]; then
     wait_for_answering "link received, teacher added" 300 && STARTED_BY_LINK=1
     sleep 10
     shot link-at-start
+    edges
 
     say ""
     say "## A link while the app is running"
@@ -187,8 +212,6 @@ if [ "$HAVE_IDB" = 1 ]; then
     tap_label '^(Continue|Weiter|Not Now|Jetzt nicht)$' 6 optional    # Safari's first start
     PAGE_BUTTON='(Open in Qupil Practice|In Qupil Üben öffnen)'
     # idb does not see into Safari's page nor its alerts: both are found in screenshots
-    python3 -c 'import PIL' 2> /dev/null || python3 -m pip install --quiet --break-system-packages pillow > /dev/null 2>&1 \
-        || python3 -m pip install --quiet --user pillow > /dev/null 2>&1
     xy=""
     for ((i = 0; i < 60; i += 6)); do
         idb ui describe-all --udid "$UDID" > "$OUT/now.json" 2> /dev/null

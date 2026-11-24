@@ -108,6 +108,27 @@ QString StudentApp::version() const
     return QCoreApplication::applicationVersion();
 }
 
+QString StudentApp::build() const
+{
+#ifdef QUPIL_STUDENT_BUILD
+    return QStringLiteral(QUPIL_STUDENT_BUILD);
+#else
+    return u"dev"_s;
+#endif
+}
+
+QString StudentApp::versionText() const
+{
+    return version() + u" ("_s + build() + u')';
+}
+
+void StudentApp::copyVersion() const
+{
+    // The English name: the same in every language, for a report to the developers
+    if (QClipboard *clipboard = QGuiApplication::clipboard())
+        clipboard->setText(u"Qupil Practice "_s + versionText());
+}
+
 // ---------------------------------------------------------------------------- state on disk
 
 void StudentApp::load()
@@ -392,6 +413,17 @@ void StudentApp::setKeyboardHeight(qreal height)
         return;
     m_keyboardHeight = height;
     emit keyboardHeightChanged();
+}
+
+void StudentApp::setSafeArea(qreal top, qreal bottom)
+{
+    top = std::max<qreal>(0, top);
+    bottom = std::max<qreal>(0, bottom);
+    if (qFuzzyCompare(top + 1, m_safeTop + 1) && qFuzzyCompare(bottom + 1, m_safeBottom + 1))
+        return;
+    m_safeTop = top;
+    m_safeBottom = bottom;
+    emit safeAreaChanged();
 }
 
 bool StudentApp::canUpload(const Teacher &teacher) const

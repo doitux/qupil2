@@ -407,6 +407,12 @@
   "es": "Profesor",
   "fr": "Professeur"
  },
+ "s.settings.version_copied": {
+  "de": "Kopiert: %1",
+  "en": "Copied: %1",
+  "es": "Copiado: %1",
+  "fr": "Copié : %1"
+ },
  "s.task.hints": {
   "de": "%1 Hinweise",
   "en": "%1 tips",

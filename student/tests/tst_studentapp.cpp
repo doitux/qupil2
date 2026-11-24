@@ -19,6 +19,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QClipboard>
 #include <QQmlApplicationEngine>
 #include <QQuickItem>
 #include <QQuickWindow>
@@ -131,6 +132,7 @@ private slots:
     void init()
     {
         m_app->setKeyboardHeight(0);
+        m_app->setSafeArea(0, 0);
         removeAll();
         // Removing says goodbye to the teacher: let that pass before the next case counts
         m_cloud->shareGone = false;
@@ -518,6 +520,99 @@ private slots:
         const qreal end = std::max<qreal>(0, page->property("contentHeight").toReal() - page->height());
         QTRY_VERIFY(page->property("contentY").toReal() <= end + 0.5);
         QVERIFY(page->property("contentY").toReal() >= 0);
+    }
+
+    void uiKeepsClearOfTheSystemBars()
+    {
+        // iOS: the window reaches behind the status bar and the home indicator (no black
+        // strips there), the app is told the room they take. The pages start below the
+        // status bar, the room behind it has the page's colour, and the page can be
+        // scrolled until its end is above the home indicator.
+        QQmlApplicationEngine engine;
+        engine.addImportPath(u"qrc:/qt/qml"_s);
+        engine.load(QUrl(u"qrc:/qt/qml/QupilStudent/qml/Main.qml"_s));
+        auto *w = qobject_cast<QQuickWindow *>(engine.rootObjects().value(0));
+        QVERIFY(w);
+        w->resize(390, 844);
+        QVERIFY(QTest::qWaitForWindowExposed(w));
+        auto top = [](QQuickItem *item) { return item->mapToScene(QPointF(0, 0)).y(); };
+        QQuickItem *room = findItem(w->contentItem(), u"statusBarRoom"_s);
+        QVERIFY(room);
+        QCOMPARE(room->height(), 0.0);
+
+        // The welcome page (no bar of its own)
+        QQuickItem *logo = nullptr;
+        QTRY_VERIFY((logo = findItem(w->contentItem(), u"logo"_s)));
+        const qreal logoTop = top(logo);
+        m_app->setSafeArea(59, 34);
+        QTRY_COMPARE(top(logo), logoTop + 59);
+        QCOMPARE(room->height(), 59.0);
+        QCOMPARE(room->width(), 390.0);
+        QCOMPARE(room->property("color").value<QColor>(), w->color());
+        m_app->setSafeArea(0, 0);
+        QTRY_COMPARE(top(logo), logoTop);
+
+        // The booklet
+        QVERIFY(tap(w, u"demoButton"_s));
+        QQuickItem *settings = nullptr;
+        QTRY_VERIFY((settings = findItem(w->contentItem(), u"settingsButton"_s)));
+        QQuickItem *field = nullptr;
+        QTRY_VERIFY((field = findItem(w->contentItem(), u"questionField"_s)));
+        QQuickItem *page = field->parentItem();
+        while (page && !page->inherits("QQuickFlickable"))
+            page = page->parentItem();
+        QVERIFY(page);
+        const qreal settingsTop = top(settings);
+        const qreal pageTop = top(page);
+        const qreal content = page->property("contentHeight").toReal();
+        m_app->setSafeArea(59, 34);
+        QTRY_COMPARE(top(settings), settingsTop + 59);
+        QCOMPARE(top(page), pageTop + 59);
+        QCOMPARE(page->property("contentHeight").toReal(), content + 34);
+        QCOMPARE(w->height(), 844);
+        // Nothing of the page's bar is behind the status bar
+        QVERIFY(top(settings) >= room->height());
+
+        // Settings
+        QVERIFY(tap(w, u"settingsButton"_s));
+        QQuickItem *back = nullptr;
+        QTRY_VERIFY((back = findItem(w->contentItem(), u"backButton"_s)));
+        QTRY_VERIFY(top(back) >= 59);
+        m_app->setSafeArea(0, 0);
+        QTRY_VERIFY(top(back) < 59);
+        QCOMPARE(room->height(), 0.0);
+    }
+
+    void uiShowsTheBuildBesideTheVersion()
+    {
+        // As in Qupil: the commit of the build beside the version ("1.0.0 (abc1234)", "dev"
+        // for a local build), at the end of the settings; a tap copies both
+        QVERIFY(!m_app->build().isEmpty());
+        QCOMPARE(m_app->versionText(), m_app->version() + u" ("_s + m_app->build() + u')');
+        QQmlApplicationEngine engine;
+        engine.addImportPath(u"qrc:/qt/qml"_s);
+        engine.load(QUrl(u"qrc:/qt/qml/QupilStudent/qml/Main.qml"_s));
+        auto *w = qobject_cast<QQuickWindow *>(engine.rootObjects().value(0));
+        QVERIFY(w);
+        w->resize(390, 844);
+        QVERIFY(QTest::qWaitForWindowExposed(w));
+        QVERIFY(tap(w, u"demoButton"_s));
+        QTRY_VERIFY(findItem(w->contentItem(), u"settingsButton"_s));
+        QVERIFY(tap(w, u"settingsButton"_s));
+        QQuickItem *line = nullptr;
+        QTRY_VERIFY((line = findItem(w->contentItem(), u"versionLine"_s)));
+        QVERIFY2(line->property("text").toString().endsWith(u' ' + m_app->versionText()),
+                 qPrintable(line->property("text").toString()));
+
+        // The line is the page's last: scroll there, tap
+        QQuickItem *page = line->parentItem();
+        while (page && !page->inherits("QQuickFlickable"))
+            page = page->parentItem();
+        QVERIFY(page);
+        page->setProperty("contentY", std::max<qreal>(0, page->property("contentHeight").toReal() - page->height()));
+        QGuiApplication::clipboard()->setText(u"something else"_s);
+        QVERIFY(tap(w, u"versionLine"_s));
+        QTRY_COMPARE(QGuiApplication::clipboard()->text(), u"Qupil Practice "_s + m_app->versionText());
     }
 
     void uiTextsWithoutDeclension()

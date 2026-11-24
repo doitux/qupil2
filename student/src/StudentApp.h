@@ -38,6 +38,10 @@ class StudentApp : public QObject
     Q_PROPERTY(QVariantMap current READ current NOTIFY changed)
     Q_PROPERTY(bool busy READ busy NOTIFY busyChanged)
     Q_PROPERTY(QString version READ version CONSTANT)
+    // The commit this build was made from ("dev" for local builds), and both together:
+    // "1.0.0 (abc1234)", as in Qupil
+    Q_PROPERTY(QString build READ build CONSTANT)
+    Q_PROPERTY(QString versionText READ versionText CONSTANT)
     //! The phone's QR code scanner can be opened (scan())
     Q_PROPERTY(bool canScan READ canScan CONSTANT)
     //! Why the last scan added nothing: "" (fine, or closed), "invalid" (not a Qupil code),
@@ -46,6 +50,9 @@ class StudentApp : public QObject
     //! The on-screen keyboard's height over the window (Android: measured, the window keeps
     //! its size; elsewhere 0). The pages make room for it (Main.qml).
     Q_PROPERTY(qreal keyboardHeight READ keyboardHeight NOTIFY keyboardHeightChanged)
+    // Room the status bar and the home indicator take of the window (iOS; SafeArea.h)
+    Q_PROPERTY(qreal safeTop READ safeTop NOTIFY safeAreaChanged)
+    Q_PROPERTY(qreal safeBottom READ safeBottom NOTIFY safeAreaChanged)
 
 public:
     ~StudentApp() override;
@@ -67,10 +74,17 @@ public:
     QVariantMap current() const;
     bool busy() const { return m_busy > 0; }
     QString version() const;
+    QString build() const;
+    QString versionText() const;
+    //! Puts the app's name with version and commit on the clipboard (for bug reports)
+    Q_INVOKABLE void copyVersion() const;
     bool canScan() const;
     QString scanError() const { return m_scanError; }
     qreal keyboardHeight() const { return m_keyboardHeight; }
     void setKeyboardHeight(qreal height);
+    qreal safeTop() const { return m_safeTop; }
+    qreal safeBottom() const { return m_safeBottom; }
+    void setSafeArea(qreal top, qreal bottom);
 
     //! A coupling link from the QR code, a message or the clipboard.
     //! Returns "" (added or already there), "invalid" or "demo-only".
@@ -101,6 +115,7 @@ signals:
     void busyChanged();
     void scanErrorChanged();
     void keyboardHeightChanged();
+    void safeAreaChanged();
     //! A short message for the user (e.g. "coupled with …", "could not update")
     void notice(const QString &text);
 
@@ -149,6 +164,8 @@ private:
     int m_busy = 0;
     QString m_scanError;
     qreal m_keyboardHeight = 0;
+    qreal m_safeTop = 0;
+    qreal m_safeBottom = 0;
     QUrl m_lastUrl;            // a link may be handed over twice (IncomingLinks)
     QElapsedTimer m_lastUrlAt;
     QString m_deviceId;
