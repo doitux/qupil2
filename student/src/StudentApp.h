@@ -117,7 +117,7 @@ private:
         qint64 since = 0;          // when this device took the booklet (0: before the app said so)
         bool said = false;         // the teacher was told that this device has the booklet
         qint64 left = 0;           // removed from this device: only the goodbye is still to send
-        bool sending = false;      // the goodbye is on its way (not kept)
+        bool sending = false;      // an upload is on its way (not kept)
     };
 
     void load();
