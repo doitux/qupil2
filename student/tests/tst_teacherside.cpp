@@ -166,6 +166,47 @@ private slots:
         QCOMPARE(again.questions.size(), 1);
     }
 
+    void inboxDevices()
+    {
+        // Which devices have the booklet: the newest file of each says since when, and
+        // whether the booklet was removed there. A file of an app before that still counts
+        // as a device (it sent feedback); someone else's file does not.
+        const QByteArray key = Crypto::randomBytes(Crypto::KeySize);
+        const auto file = [&key](double since, double left) {
+            QJsonObject content{{u"device"_s, u"x"_s}, {u"feedback"_s, QJsonObject{}}, {u"questions"_s, QJsonArray{}}};
+            if (since > 0)
+                content.insert(u"since"_s, since);
+            if (left > 0)
+                content.insert(u"left"_s, left);
+            return Booklet::seal(key, Booklet::Purpose::Feedback, content);
+        };
+        QHash<QString, QByteArray> files;
+        files.insert(u"fb-phone-1000.qupil"_s, file(900, 0));
+        files.insert(u"fb-tablet-1500.qupil"_s, file(1400, 0));
+        files.insert(u"fb-tablet-2600.qupil"_s, file(1400, 2600));    // removed from the tablet
+        files.insert(u"fb-old-1200.qupil"_s, feedbackFile(key, {{u"t1"_s, entry(1, 1, 1200)}}));
+        files.insert(u"fb-other-3000.qupil"_s, feedbackFile(Crypto::randomBytes(Crypto::KeySize), {}));
+        Booklet::Inbox inbox = Booklet::collect(key, files);
+        QCOMPARE(inbox.devices.size(), 3);
+        const auto device = [&inbox](const QString &name) {
+            for (const QJsonValue &v : std::as_const(inbox.devices))
+                if (v.toObject().value(u"device"_s).toString() == name)
+                    return v.toObject();
+            return QJsonObject();
+        };
+        QCOMPARE(device(u"phone"_s).value(u"since"_s).toDouble(), 900.0);
+        QVERIFY(!device(u"phone"_s).contains(u"left"_s));
+        QCOMPARE(device(u"tablet"_s).value(u"left"_s).toDouble(), 2600.0);
+        QCOMPARE(device(u"tablet"_s).value(u"at"_s).toDouble(), 2600.0);
+        QVERIFY(!device(u"old"_s).contains(u"since"_s) && !device(u"old"_s).contains(u"left"_s));
+        QVERIFY(device(u"other"_s).isEmpty());
+        // Taken again on the tablet: the newest file has no "left"
+        files.insert(u"fb-tablet-3000.qupil"_s, file(3000, 0));
+        inbox = Booklet::collect(key, files);
+        QVERIFY(!device(u"tablet"_s).contains(u"left"_s));
+        QCOMPARE(device(u"tablet"_s).value(u"since"_s).toDouble(), 3000.0);
+    }
+
     void qrCode()
     {
         Booklet::Link link{u"https://cloud.musikschule.example.org"_s, u"AbCdEfGhIjKlMnO"_s,

@@ -312,8 +312,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
+          # The same file once more under a name that stays: the page qupil.de/u links to it
+          # in the test phase (student/web/u/index.html, ANDROID_TEST)
           bash .github/scripts/publish-nightly.sh \
-            'artifacts/student-android-arm64-test/*.apk=Qupil-Practice-Android-arm64-nightly-*.apk'
+            'artifacts/student-android-arm64-test/*.apk=Qupil-Practice-Android-arm64-nightly-*.apk' \
+            'artifacts/student-android-arm64-test/*.apk=Qupil-Practice-Android-arm64.apk'
 
   ios-simulator:
     name: iOS simulator (start, links, scanner sheet)

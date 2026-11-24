@@ -2650,6 +2650,56 @@ void UiTest::addCases()
                        m_data->remove(u"coupling"_s, m_text);
                    });
     }
+    // Practice book: which devices have the booklet. A device says so with its first upload
+    // and says when the booklet is removed from it; the sheet shows how many and since when,
+    // never whose (here the teacher sees in the lesson that scanning the code worked)
+    {
+        Case &c = add(u"booklet-devices"_s, u"practice book sheet: how many devices have the booklet, where it was removed, the last feedback"_s);
+        const auto devices = [this](const QVariantList &list) {
+            return [this, list] { m_data->setCouplingDevices(m_other, list); };
+        };
+        const qint64 now = Qupil::Clock::now().toMSecsSinceEpoch();
+        const qint64 day = 24LL * 3600 * 1000;
+        const QVariantMap phone { { u"device"_s, u"uitestphone"_s }, { u"at"_s, double(now - 2 * day) }, { u"since"_s, double(now - 2 * day) } };
+        const QVariantMap tablet { { u"device"_s, u"uitesttablet"_s }, { u"at"_s, double(now - day) }, { u"since"_s, double(now - day) } };
+        QVariantMap tabletGone = tablet, phoneGone = phone;
+        tabletGone.insert(u"left"_s, double(now));
+        phoneGone.insert(u"left"_s, double(now));
+        c.steps << act(u"coupled, no device has said anything yet"_s, [this] {
+                       m_membership = runningMembership();
+                       m_other = m_data->get(u"membership"_s, m_membership).value(u"student_id"_s).toString();
+                       m_text = m_data->create(u"coupling"_s, {
+                           { u"student_id"_s, m_other }, { u"server"_s, u"https://cloud.example.org"_s },
+                           { u"folder"_s, u"Qupil Üben/uitest-d"_s }, { u"share_id"_s, u"4"_s },
+                           { u"token"_s, u"UiTestToken456"_s }, { u"password"_s, u"Qp-7UiTestPassword"_s },
+                           { u"key"_s, QString::fromLatin1(QByteArray(32, '\x09').toBase64()) },
+                           { u"created"_s, m_data->today() } });
+                       QMetaObject::invokeMethod(m_nav, "showBooklet", Q_ARG(QString, m_other));
+                   })
+                << see(u"^Noch kein Gerät verbunden\\.$"_s)
+                << snap(u"booklet-devices-none"_s)
+                << act(u"a phone took the code two days ago"_s, devices({ phone }))
+                << see(u"^1 Gerät verbunden \\(seit .+\\)$"_s)
+                << snap(u"booklet-devices-one"_s)
+                << act(u"a tablet too, and a question came yesterday"_s, [this, phone, tablet, now, day] {
+                       const QJsonArray questions { QJsonObject { { u"id"_s, u"uid1"_s }, { u"text"_s, u"UI-Frage vom Tablet"_s },
+                                                                  { u"at"_s, double(now - day) } } };
+                       m_data->update(u"coupling"_s, m_text,
+                                      { { u"questions"_s, QString::fromUtf8(QJsonDocument(questions).toJson(QJsonDocument::Compact)) } });
+                       m_data->setCouplingDevices(m_other, { phone, tablet });
+                   })
+                << see(u"^2 Geräte verbunden\\sLetzte Rückmeldung: .+$"_s)
+                << snap(u"booklet-devices-two"_s)
+                << act(u"the booklet is removed from the tablet"_s, devices({ phone, tabletGone }))
+                << see(u"^1 Gerät verbunden \\(seit .+\\), auf 1 Gerät entfernt am .+\\sLetzte Rückmeldung: .+$"_s)
+                << snap(u"booklet-devices-one-left"_s)
+                << act(u"and from the phone"_s, devices({ phoneGone, tabletGone }))
+                << see(u"^Auf allen Geräten entfernt \\(.+\\)\\. Sie können die Kopplung unten beenden\\.\\sLetzte Rückmeldung: .+$"_s)
+                << check(u"the coupling stays until the teacher ends it"_s, [this] { return m_data->isCoupled(m_other); })
+                << snap(u"booklet-devices-all-left"_s)
+                << tap(u"^Schließen$"_s) << gone(u"^Kopplung beenden$"_s)
+                << act(u"remove the coupling again"_s, [this] { m_data->remove(u"coupling"_s, m_text); });
+    }
     // Practice book, plans of a coupled student: written as tasks (the tasks editor), saved as
     // plan blocks. After the lesson the covered blocks become tasks; a block marked private
     // goes into the note of the lesson instead, never to the student

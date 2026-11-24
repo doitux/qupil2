@@ -19,6 +19,8 @@
 #include <QThread>
 #include <QUuid>
 
+#include <optional>
+
 using namespace Qt::StringLiterals;
 namespace Booklet = Qupil::Booklet;
 
@@ -26,6 +28,9 @@ namespace {
 
 QString s_dataDir;
 QDate s_today;
+
+// A goodbye that cannot be sent (no network, the app closed) is tried again this long
+constexpr int kGoodbyeDays = 30;
 
 QString dataDir()
 {
@@ -115,14 +120,14 @@ void StudentApp::load()
     if (m_deviceId.isEmpty())
         m_deviceId = newId().left(16);
     m_current = root.value(u"current"_s).toInt();
-    for (const QJsonValue &v : root.value(u"teachers"_s).toArray()) {
+    const auto read = [](const QJsonValue &v) -> std::optional<Teacher> {
         const QJsonObject o = v.toObject();
         Teacher t;
         t.demo = o.value(u"demo"_s).toBool();
         if (!t.demo) {
             const auto link = Booklet::decodeLink(o.value(u"link"_s).toString());
             if (!link)
-                continue;
+                return std::nullopt;
             t.link = *link;
             t.id = link->id();
         } else {
@@ -135,30 +140,54 @@ void StudentApp::load()
         t.changedAt = qint64(o.value(u"changedAt"_s).toDouble());
         t.sentAt = qint64(o.value(u"sentAt"_s).toDouble());
         t.sentState = qint64(o.value(u"sentState"_s).toDouble());
-        m_teachers.append(t);
-    }
+        t.since = qint64(o.value(u"since"_s).toDouble());
+        t.said = o.value(u"said"_s).toBool();
+        t.left = qint64(o.value(u"left"_s).toDouble());
+        t.legacy = o.value(u"legacy"_s).toBool();
+        return t;
+    };
+    for (const QJsonValue &v : root.value(u"teachers"_s).toArray())
+        if (const auto t = read(v))
+            m_teachers.append(*t);
+    // A goodbye that could not be sent: tried again for a month, then dropped
+    for (const QJsonValue &v : root.value(u"leaving"_s).toArray())
+        if (const auto t = read(v); t && !t->demo && t->left > nowMs() - kGoodbyeDays * 24LL * 3600 * 1000)
+            m_leaving.append(*t);
     if (m_current >= m_teachers.size())
         m_current = 0;
 }
 
 void StudentApp::save() const
 {
-    QJsonArray teachers;
-    for (const Teacher &t : m_teachers) {
+    const auto write = [](const Teacher &t) {
         QJsonObject o{{u"demo"_s, t.demo},
                       {u"fetched"_s, t.fetched.toString(Qt::ISODate)},
                       {u"feedback"_s, t.feedback},
                       {u"questions"_s, t.questions},
                       {u"changedAt"_s, double(t.changedAt)},
                       {u"sentAt"_s, double(t.sentAt)},
-                      {u"sentState"_s, double(t.sentState)}};
+                      {u"sentState"_s, double(t.sentState)},
+                      {u"since"_s, double(t.since)},
+                      {u"said"_s, t.said}};
         if (!t.demo) {
             o.insert(u"link"_s, Booklet::encodeLink(t.link));
             o.insert(u"booklet"_s, t.booklet);
         }
-        teachers.append(o);
-    }
-    const QJsonObject root{{u"device"_s, m_deviceId}, {u"current"_s, m_current}, {u"teachers"_s, teachers}};
+        if (t.left > 0) {
+            o.insert(u"left"_s, double(t.left));
+            o.insert(u"legacy"_s, t.legacy);
+            o.remove(u"booklet"_s);   // the tasks are gone from this device
+        }
+        return o;
+    };
+    QJsonArray teachers, leaving;
+    for (const Teacher &t : m_teachers)
+        teachers.append(write(t));
+    for (const Teacher &t : m_leaving)
+        leaving.append(write(t));
+    QJsonObject root{{u"device"_s, m_deviceId}, {u"current"_s, m_current}, {u"teachers"_s, teachers}};
+    if (!leaving.isEmpty())
+        root.insert(u"leaving"_s, leaving);
     QDir().mkpath(dataDir());
     QSaveFile file(stateFile());
     if (file.open(QIODevice::WriteOnly)) {
@@ -292,10 +321,13 @@ QString StudentApp::addLink(const QString &text)
     for (int i = 0; i < m_teachers.size(); ++i)
         if (m_teachers[i].id == id)
             index = i;
+    // Back again before the goodbye went out: nothing to say goodbye for
+    m_leaving.removeIf([&id](const Teacher &t) { return t.id == id; });
     if (index < 0) {
         Teacher t;
         t.id = id;
         t.link = *link;
+        t.since = nowMs();
         m_teachers.append(t);
         index = int(m_teachers.size()) - 1;
     } else {
@@ -332,14 +364,37 @@ void StudentApp::removeTeacher(const QString &id)
 {
     for (int i = 0; i < m_teachers.size(); ++i) {
         if (m_teachers[i].id == id) {
+            // The teacher's Qupil shows how many devices have the booklet: this one says
+            // that it is gone here (with what it sent so far, the newest file of a device
+            // is the one that counts). Without a connection it is said later.
+            if (canUpload(m_teachers[i])) {
+                Teacher gone = m_teachers[i];
+                gone.left = nowMs();
+                gone.booklet = {};
+                gone.sending = false;   // (an upload on its way belongs to the entry that is removed)
+                m_leaving.append(gone);
+            }
             m_teachers.removeAt(i);
             if (m_current >= m_teachers.size())
                 m_current = std::max(0, int(m_teachers.size()) - 1);
             save();
             emit changed();
+            sendPending();
             return;
         }
     }
+}
+
+bool StudentApp::canUpload(const Teacher &teacher) const
+{
+    if (teacher.demo)
+        return false;
+    // A teacher's Qupil since 11/2026 says whether its Nextcloud takes uploads by link;
+    // before that the two switches told (both are off without uploads)
+    if (teacher.booklet.contains(u"uploads"_s))
+        return teacher.booklet.value(u"uploads"_s).toBool();
+    const QJsonObject allow = teacher.booklet.value(u"allow"_s).toObject();
+    return allow.value(u"feedback"_s).toBool() || allow.value(u"questions"_s).toBool();
 }
 
 void StudentApp::openUrl(const QUrl &url)
@@ -455,6 +510,11 @@ void StudentApp::fetch(Teacher &teacher, bool legacy)
                 t->legacy = legacy;
                 t->fetched = QDateTime::currentDateTime();
                 t->error.clear();
+                // Not said yet: tell the teacher that this device has the booklet ("1 device
+                // connected"; also for a booklet taken before the app did this). What the
+                // student sees as "sent" is only about feedback and questions.
+                if (!t->said && canUpload(*t))
+                    scheduleUpload();
             }
         }
         save();
@@ -479,17 +539,29 @@ void StudentApp::sendPending()
 {
     m_uploadTimer.stop();
     for (Teacher &t : m_teachers)
-        if (!t.demo && t.changedAt > t.sentState)
-            upload(t);
+        if (!t.demo && (t.changedAt > t.sentState || (!t.said && !t.sending && !t.booklet.isEmpty() && canUpload(t))))
+            upload(t);   // ("I have the booklet" not twice while the first one is on its way)
+    for (Teacher &t : m_leaving) {
+        if (t.sending)
+            continue;
+        t.sending = true;
+        upload(t);
+    }
 }
 
 void StudentApp::upload(Teacher &teacher)
 {
     const qint64 state = teacher.changedAt;
-    const QJsonObject content{{u"device"_s, m_deviceId},
-                              {u"written"_s, QDateTime::currentDateTimeUtc().toString(Qt::ISODate)},
-                              {u"feedback"_s, teacher.feedback},
-                              {u"questions"_s, teacher.questions}};
+    QJsonObject content{{u"device"_s, m_deviceId},
+                        {u"written"_s, QDateTime::currentDateTimeUtc().toString(Qt::ISODate)},
+                        {u"feedback"_s, teacher.feedback},
+                        {u"questions"_s, teacher.questions}};
+    // For the teacher's count of devices: since when the booklet is here, and that it is gone
+    if (teacher.since > 0)
+        content.insert(u"since"_s, double(teacher.since));
+    const qint64 left = teacher.left;
+    if (left > 0)
+        content.insert(u"left"_s, double(left));
     const QString name = Booklet::feedbackFileName(m_deviceId, nowMs());
     QNetworkRequest request(teacher.legacy ? Booklet::legacyFileUrl(teacher.link, name) : Booklet::fileUrl(teacher.link, name));
     request.setRawHeader("Authorization", teacher.legacy ? Booklet::legacyAuthorization(teacher.link)
@@ -498,17 +570,34 @@ void StudentApp::upload(Teacher &teacher)
     request.setHeader(QNetworkRequest::ContentTypeHeader, u"application/octet-stream"_s);
     request.setTransferTimeout(20000);
     const QString id = teacher.id;
+    teacher.sending = true;
     setBusy(true);
     QNetworkReply *reply = m_net->put(request, Booklet::seal(teacher.link.key, Booklet::Purpose::Feedback, content));
-    connect(reply, &QNetworkReply::finished, this, [this, reply, id, state] {
+    connect(reply, &QNetworkReply::finished, this, [this, reply, id, state, left] {
         reply->deleteLater();
         setBusy(false);
+        if (left > 0) {
+            // The goodbye: said once, or the link is gone anyway (the teacher ended it)
+            const int status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+            if (reply->error() == QNetworkReply::NoError || status == 401 || status == 403 || status == 404) {
+                if (m_leaving.removeIf([&](const Teacher &t) { return t.id == id && t.left == left; }) > 0)
+                    save();
+            }
+            for (Teacher &t : m_leaving)
+                if (t.id == id && t.left == left)
+                    t.sending = false;   // later again
+            return;
+        }
         Teacher *t = find(id);
         if (!t)
             return;
+        t->sending = false;
         if (reply->error() == QNetworkReply::NoError) {
-            t->sentState = std::max(t->sentState, state);
-            t->sentAt = nowMs();
+            t->said = true;
+            if (state > t->sentState) {   // feedback or questions went, not only "I am here"
+                t->sentState = state;
+                t->sentAt = nowMs();
+            }
             save();
             emit changed();
         }

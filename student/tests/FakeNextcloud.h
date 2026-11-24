@@ -38,6 +38,7 @@ public:
     // Behaviour
     bool legacyOnly = false;        // Nextcloud before 29
     bool shareGone = false;         // every link answers 404
+    bool down = false;              // the cloud is not reachable right now: 503
     bool uploadAllowed = true;      // "Allow public uploads"
     bool expiryEnforced = false;
     int expiryDays = 7;

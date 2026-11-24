@@ -1201,6 +1201,38 @@ Bitte ändern Sie die Schüleranzahl um zu speichern!</translation>
         <source>Your Nextcloud does not allow uploads by link: the student sees the tasks but cannot send anything back.</source>
         <translation>Ihre Nextcloud erlaubt kein Hochladen per Link: Der Schüler sieht die Aufgaben, kann aber nichts zurückschicken.</translation>
     </message>
+    <message id="booklet.devices.none">
+        <source>No device connected yet.</source>
+        <translation>Noch kein Gerät verbunden.</translation>
+    </message>
+    <message id="booklet.devices.one">
+        <source>1 device connected</source>
+        <translation>1 Gerät verbunden</translation>
+    </message>
+    <message id="booklet.devices.one_since">
+        <source>1 device connected (since %1)</source>
+        <translation>1 Gerät verbunden (seit %1)</translation>
+    </message>
+    <message id="booklet.devices.many">
+        <source>%1 devices connected</source>
+        <translation>%1 Geräte verbunden</translation>
+    </message>
+    <message id="booklet.devices.left_one">
+        <source>removed from 1 device on %1</source>
+        <translation>auf 1 Gerät entfernt am %1</translation>
+    </message>
+    <message id="booklet.devices.left_many">
+        <source>removed from %1 devices, last on %2</source>
+        <translation>auf %1 Geräten entfernt, zuletzt am %2</translation>
+    </message>
+    <message id="booklet.devices.left_all">
+        <source>Removed from every device (%1). You can end the coupling below.</source>
+        <translation>Auf allen Geräten entfernt (%1). Sie können die Kopplung unten beenden.</translation>
+    </message>
+    <message id="booklet.devices.last_answer">
+        <source>Last feedback: %1</source>
+        <translation>Letzte Rückmeldung: %1</translation>
+    </message>
     <message id="booklet.allow_feedback">
         <source>Feedback on tasks</source>
         <translation>Rückmeldung zu Aufgaben</translation>
@@ -4707,6 +4739,19 @@ Autor: %2</translation>
     <message id="idea.prepare.hint">
         <source>What is due? In the lesson the same list opens. With the lock: only for me.</source>
         <translation>Was soll dran sein? In der Stunde öffnet sich dieselbe Liste. Mit Schloss: nur für mich.</translation>
+    </message>
+    <message id="idea.prepare.hint_note">
+        <source>A few notes for the lesson. In the lesson they are in the note field, and you turn them into the note of the lesson.</source>
+        <translation>Ein paar Notizen für die Stunde. In der Stunde stehen sie im Notizfeld, und du machst daraus die Notiz der Stunde.</translation>
+    </message>
+    <message id="idea.prepare.note">
+        <source>Preparation</source>
+        <extracomment>Label of the note field when a lesson is prepared for a student without tasks</extracomment>
+        <translation>Vorbereitung</translation>
+    </message>
+    <message id="idea.lesson.hint_prepared">
+        <source>The note is what you prepared. Change it to what the lesson was.</source>
+        <translation>Im Notizfeld steht deine Vorbereitung. Ändere sie zu dem, was in der Stunde war.</translation>
     </message>
     <message id="idea.prepared.for">
         <source>Prepared for %1</source>

@@ -21,8 +21,42 @@ Sheet {
     readonly property var qr: coupled ? Booklet.qrCode(studentId) : ({})
     //! Newest first: { text, date, read }
     readonly property var questions: { if (Data.revision < 0) return undefined; return coupled ? Data.questions(studentId) : [] }
+    // The devices that have the booklet, as far as they said so (counts and days, never whose)
+    readonly property var devices: { if (Data.revision < 0) return undefined; return coupled ? Data.couplingDevices(studentId) : ({}) }
+    readonly property bool receives: (coupling.receives || 0) !== 0
+    readonly property string devicesText: {
+        const d = devices || ({}), here = d.connected || 0, gone = d.left || 0
+        const lines = []
+        if (here === 0 && gone === 0) {
+            lines.push(qsTrId("booklet.devices.none"))
+        } else if (here === 0) {
+            lines.push(qsTrId("booklet.devices.left_all").arg(Data.formatDate(d.leftDate || "")))
+        } else {
+            let line = here === 1 ? (d.since ? qsTrId("booklet.devices.one_since").arg(Data.formatDate(d.since))
+                                             : qsTrId("booklet.devices.one"))
+                                  : qsTrId("booklet.devices.many").arg(here)
+            if (gone === 1)
+                line += ", " + qsTrId("booklet.devices.left_one").arg(Data.formatDate(d.leftDate || ""))
+            else if (gone > 1)
+                line += ", " + qsTrId("booklet.devices.left_many").arg(gone).arg(Data.formatDate(d.leftDate || ""))
+            lines.push(line)
+        }
+        if (d.lastAnswer)
+            lines.push(qsTrId("booklet.devices.last_answer").arg(Data.formatDate(d.lastAnswer)))
+        return lines.join("\n")
+    }
     property string error
     property bool confirmEnd: false
+    property int looked: 0
+
+    // While the code is shown and no device has it yet: look into the folder now and then,
+    // so "1 device connected" appears in the lesson and not only after the next sync
+    Timer {
+        interval: 8000
+        repeat: true
+        running: sheet.opened && sheet.coupled && sheet.receives && (sheet.devices.connected || 0) === 0 && sheet.looked < 40
+        onTriggered: { sheet.looked++; Booklet.lookFor(sheet.studentId) }
+    }
 
     function show(id) {
         studentId = id
@@ -96,6 +130,14 @@ Sheet {
         Layout.fillWidth: true
         spacing: 12
 
+        InfoBox {
+            objectName: "bookletDevices"
+            visible: sheet.receives
+            Layout.fillWidth: true
+            text: sheet.devicesText
+            Accessible.role: Accessible.StaticText
+            Accessible.name: text
+        }
         Rectangle {
             objectName: "bookletQr"
             Layout.alignment: Qt.AlignHCenter
@@ -144,7 +186,7 @@ Sheet {
             }
         }
         InfoBox {
-            visible: (sheet.coupling.receives || 0) === 0
+            visible: !sheet.receives
             Layout.fillWidth: true
             text: qsTrId("booklet.read_only")
         }

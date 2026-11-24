@@ -152,6 +152,17 @@ Item {
                     priv: true
                 }
             }
+            Text {
+                visible: text !== ""
+                Layout.fillWidth: true
+                wrapMode: Text.WordWrap
+                text: preparedCard.prepared && preparedCard.prepared.note ? preparedCard.prepared.note : ""
+                Accessible.role: Accessible.StaticText
+                Accessible.name: text
+                color: Theme.text
+                font.family: Theme.fontFamily
+                font.pixelSize: 15
+            }
             TapHandler { onTapped: lessonSheet.start(true) }
         }
 
