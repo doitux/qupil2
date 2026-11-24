@@ -219,6 +219,17 @@ QString DataService::plainText(const QString &note, int maxLength) const
     return text;
 }
 
+QString DataService::plainLines(const QString &note) const
+{
+    QStringList lines = NoteFormat::toPlainText(note).split(u'\n');
+    for (QString &line : lines)
+        line = line.trimmed();
+    QString body = lines.join(u'\n').trimmed();
+    while (body.contains(u"\n\n\n"_s))
+        body.replace(u"\n\n\n"_s, u"\n\n"_s);
+    return body;
+}
+
 QString DataService::homeworkText(const QString &note, const QString &date) const
 {
     QStringList lines = NoteFormat::toPlainText(note).split(u'\n');

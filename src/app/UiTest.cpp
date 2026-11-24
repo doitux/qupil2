@@ -2549,6 +2549,49 @@ void UiTest::addCases()
                    });
     }
 
+    // Long texts on the cards of a student are shown whole: the private note of a lesson with
+    // tasks (it was one line, cut), and the heading of a note's block (it was cut too)
+    {
+        const QString privateNote = u"UI-Privat: Streichernoten mitbringen, vor allem die Stellen mit den Achteln, und an das Programmheft denken\nUI-Privat zweite Zeile"_s;
+        const QString heading = u"UI-Überschrift eines Blocks, die so lang ist, dass sie auch auf einem Tablet nicht in eine einzige Zeile passt, "
+                                "weil sie einfach immer weitergeht und noch ein paar Wörter mehr hat als nötig"_s;
+        auto ids = std::make_shared<QStringList>();
+        Case &c = add(u"card-long-texts"_s, u"student page: a long private note and a long block heading wrap instead of being cut"_s);
+        c.steps << act(u"coupled, tasks and a private note today, a note with blocks a week ago"_s, [this, ids, privateNote, heading] {
+                       m_membership = runningMembership();
+                       const QString student = m_data->get(u"membership"_s, m_membership).value(u"student_id"_s).toString();
+                       m_text = m_data->create(u"coupling"_s, { { u"student_id"_s, student }, { u"created"_s, m_data->today() } });
+                       m_data->saveTasks(m_membership, m_data->today(),
+                                         { QVariantMap { { u"title"_s, u"UI-Lange Texte"_s } } }, false);
+                       ids->clear();
+                       *ids << m_data->addNote(m_membership, m_data->today(), privateNote, false);
+                       const QString before = QDate::fromString(m_data->today(), Qt::ISODate).addDays(-7).toString(Qt::ISODate);
+                       *ids << m_data->addNote(m_membership, before,
+                                               heading + u"\nUI-Zeile zwei\nUI-Zeile drei\n\nUI-Block zwei\nUI-noch eine Zeile"_s, false);
+                   })
+                << openStudent(u"Lena Muster"_s)
+                << see(u"^Privat: UI-Privat: Streichernoten"_s)
+                << check(u"the private note is there whole, on several lines"_s, [this] {
+                       Node n;
+                       return find(u"^Privat: UI-Privat: Streichernoten"_s, &n) && n.name.contains(u"Programmheft denken"_s)
+                              && n.name.contains(u"UI-Privat zweite Zeile"_s) && n.rect.height() > 30;
+                   })
+                << see(u"^UI-Überschrift eines Blocks.*, noch 2 Zeilen$"_s)
+                << check(u"the block's heading wraps: its row is taller than one line"_s, [this] {
+                       Node n;
+                       return find(u"^UI-Überschrift eines Blocks.*, noch 2 Zeilen$"_s, &n) && n.full.height() > 44;
+                   })
+                << snap(u"card-long-texts"_s)
+                << act(u"remove everything again"_s, [this, ids] {
+                       for (const QVariant &v : m_data->tasksOn(m_membership, m_data->today()))
+                           m_data->deleteTask(v.toMap().value(u"id"_s).toString(), false);
+                       for (const QString &id : *ids)
+                           m_data->deleteNote(id, false);
+                       m_data->remove(u"coupling"_s, m_text);
+                   })
+                << backIfThere(u"^Schüler$"_s);
+    }
+
     // Practice book: the student's sheet. Not coupled: the Nextcloud of the sync is needed
     // (none in the test). Coupled: the QR code, the link, the switches; ending asks first
     {
