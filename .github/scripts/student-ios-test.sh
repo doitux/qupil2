@@ -42,7 +42,18 @@ shot() {
     local name
     name=$(printf '%02d-%s' "$N" "$1")
     xcrun simctl io "$UDID" screenshot "$OUT/shots/$name.png" > /dev/null 2>&1
+    LAST_SHOT="$OUT/shots/$name.png"
     say "- screenshot \`shots/$name.png\`"
+}
+# edges: the last screenshot's top and bottom edge have the page's colour (light look):
+# the window reaches behind the status bar and the home indicator, no black strips
+# (24.11.2026 on an iPad: black above and below the light page)
+edges() {
+    local line ok=1
+    while IFS= read -r line; do
+        case "$line" in *NOT*) ok=0; say "- **$line**" ;; *) say "- $line" ;; esac
+    done < <(python3 "$HERE/ios-edges.py" "$LAST_SHOT" F4F3F6 2>&1)
+    [ "$ok" = 1 ] || FAILED=1
 }
 link() {
     python3 -c "
@@ -147,6 +158,12 @@ if running; then say "- the app is running"; else say "- **the app is not runnin
 shot welcome
 [ "$HAVE_IDB" = 1 ] && idb connect "$UDID" > /dev/null 2>&1
 
+say ""
+say "## The screen's edges"
+# The app is told the room the status bar and the home indicator take, and paints behind it
+wait_for "safe area: top [1-9][0-9]* bottom [1-9]" 5
+edges
+
 if [ "$HAVE_IDB" = 1 ]; then
     say ""
     say "## A link starts the app (qupil-student:)"
@@ -159,6 +176,7 @@ if [ "$HAVE_IDB" = 1 ]; then
     wait_for_answering "link received, teacher added" 300 && STARTED_BY_LINK=1
     sleep 10
     shot link-at-start
+    edges
 
     say ""
     say "## A link while the app is running"

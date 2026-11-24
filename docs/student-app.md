@@ -147,6 +147,25 @@ keyboard itself, in one place, and the system neither resizes nor moves the wind
   scrolled past its end; a tap beside the fields puts the keyboard away. "Send" sits
   beside the question field, so both are in view together.
 
+## The screen's edges
+
+The page's colour goes to the edges of the screen, behind the status bar and the home
+indicator, in the light and in the dark look.
+
+- **iOS:** `Main.qml` asks for a window over the whole screen
+  (`Qt::MaximizeUsingFullscreenGeometryHint`). Without it Qt 6.8 keeps the window inside
+  the safe area: the strips above and below are black and the status bar is white on
+  black, also in the light look (seen on an iPad on 24.11.2026). With it the status bar
+  follows the system's look (dark writing in the light look). `SafeArea_ios.mm` reads the
+  room the bars take from the UIWindow (asked again when the window shows, changes its
+  size or the app comes back) → `StudentApp.safeTop` / `safeBottom` → `Main.qml`
+  `topInset` / `bottomInset`: the pages' bars start below the status bar, the pages can be
+  scrolled until their end is above the home indicator, and a strip in the page's colour
+  (`statusBarRoom`) lies behind the status bar, over what scrolls up there.
+- **Android:** the window ends at the system's bars, which have the page's colour
+  (`res/values/student.xml`, `values-night`); the insets stay 0.
+- Qt 6.9 and later bring `SafeArea` for QML; `SafeArea.h` can go then.
+
 ## The example
 
 `--demo` or "See an example" on the welcome page: an invented booklet (Ms Rau, Jonas,
@@ -160,9 +179,9 @@ since a review cannot scan a teacher's code.
 | `tst_booklet` | link round trip and forms, invalid links, sealing (wrong key, wrong purpose, tampered), file names, URLs |
 | `tst_tasks` `couplingDevices` (the teacher's app) | counts and days of the devices, kept beside the coupling record; the booklet's `uploads` |
 | `tst_teacherside` | links via OCS (read + create; read only; enforced expiry and renewal; wrong login), the QR code (size, quiet zone; `QUPIL_QR_OUT=x.png` saves it for a check with a real reader), the inbox (newest per device, newer answer wins, values cleaned; the devices with `since` and `left`) |
-| `tst_studentapp` | the app against a fake Nextcloud: coupling, feedback upload and its content, echo from the teacher, wrong key, newer format, ended link, wrong password, old Nextcloud, state kept; the interface by tap: example, hints, feedback, to-do, closing the example, removing a teacher (asks first); a link through the system and from another thread; the scanner (another code, camera refused, closed, the teacher's code); fields in view with the keyboard; texts without "an <name>"; the app makes room for the keyboard itself (the window keeps its size, field and "send" stay above the room all the way, the page ends at its end afterwards); "this device has the booklet" once and never as "sent", the goodbye on removing (also later, when the cloud was down; not for a link that is gone; not without uploads) |
+| `tst_studentapp` | the app against a fake Nextcloud: coupling, feedback upload and its content, echo from the teacher, wrong key, newer format, ended link, wrong password, old Nextcloud, state kept; the interface by tap: example, hints, feedback, to-do, closing the example, removing a teacher (asks first); a link through the system and from another thread; the scanner (another code, camera refused, closed, the teacher's code); fields in view with the keyboard; texts without "an <name>"; the app makes room for the keyboard itself (the window keeps its size, field and "send" stay above the room all the way, the page ends at its end afterwards); the pages keep clear of the room the status bar and the home indicator take (iOS), with the page's colour behind the status bar; "this device has the booklet" once and never as "sent", the goodbye on removing (also later, when the cloud was down; not for a link that is gone; not without uploads) |
 | `.github/scripts/student-android-test.sh` (emulator, job "Android emulator") | a link starts the app and adds the teacher; links while the app is running (https, `qupil-student:`, from the background); "Open camera" opens the scanner, "back" closes it; the on-screen keyboard is measured (the emulator is told to show it), the field is above it, "back" takes it away |
-| `.github/scripts/student-ios-test.sh` (simulator, job "iOS simulator") | the app starts; `qupil-student:` starts the app and adds the teacher, also while it runs; the button on the page `qupil.de/u` (served from `student/web`, in Safari) hands its link to the app, and without the app Safari says "the address is invalid" (the control: that is what a device without the app shows); the scanner's sheet opens and closes. Safari's page and alerts are not in idb's view: found in screenshots (`ios-find-colour.py`, `ios-find-alert.py`). A crash report goes to the results (`crash/`, with `ios-crash-summary.py`). Universal links: on a device only |
+| `.github/scripts/student-ios-test.sh` (simulator, job "iOS simulator") | the app starts; `qupil-student:` starts the app and adds the teacher, also while it runs; the button on the page `qupil.de/u` (served from `student/web`, in Safari) hands its link to the app, and without the app Safari says "the address is invalid" (the control: that is what a device without the app shows); the scanner's sheet opens and closes; the app is told the safe area, and the top and the bottom edge of the screenshots have the page's colour, no black strips (`ios-edges.py`). Safari's page and alerts are not in idb's view: found in screenshots (`ios-find-colour.py`, `ios-find-alert.py`). A crash report goes to the results (`crash/`, with `ios-crash-summary.py`). Universal links: on a device only |
 
 `student/tests/FakeNextcloud` is the stand-in for Nextcloud (public links with
 permissions, OCS share API, capabilities).

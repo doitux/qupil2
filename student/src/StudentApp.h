@@ -46,6 +46,9 @@ class StudentApp : public QObject
     //! The on-screen keyboard's height over the window (Android: measured, the window keeps
     //! its size; elsewhere 0). The pages make room for it (Main.qml).
     Q_PROPERTY(qreal keyboardHeight READ keyboardHeight NOTIFY keyboardHeightChanged)
+    // Room the status bar and the home indicator take of the window (iOS; SafeArea.h)
+    Q_PROPERTY(qreal safeTop READ safeTop NOTIFY safeAreaChanged)
+    Q_PROPERTY(qreal safeBottom READ safeBottom NOTIFY safeAreaChanged)
 
 public:
     ~StudentApp() override;
@@ -71,6 +74,9 @@ public:
     QString scanError() const { return m_scanError; }
     qreal keyboardHeight() const { return m_keyboardHeight; }
     void setKeyboardHeight(qreal height);
+    qreal safeTop() const { return m_safeTop; }
+    qreal safeBottom() const { return m_safeBottom; }
+    void setSafeArea(qreal top, qreal bottom);
 
     //! A coupling link from the QR code, a message or the clipboard.
     //! Returns "" (added or already there), "invalid" or "demo-only".
@@ -101,6 +107,7 @@ signals:
     void busyChanged();
     void scanErrorChanged();
     void keyboardHeightChanged();
+    void safeAreaChanged();
     //! A short message for the user (e.g. "coupled with …", "could not update")
     void notice(const QString &text);
 
@@ -149,6 +156,8 @@ private:
     int m_busy = 0;
     QString m_scanError;
     qreal m_keyboardHeight = 0;
+    qreal m_safeTop = 0;
+    qreal m_safeBottom = 0;
     QUrl m_lastUrl;            // a link may be handed over twice (IncomingLinks)
     QElapsedTimer m_lastUrlAt;
     QString m_deviceId;

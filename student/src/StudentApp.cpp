@@ -394,6 +394,17 @@ void StudentApp::setKeyboardHeight(qreal height)
     emit keyboardHeightChanged();
 }
 
+void StudentApp::setSafeArea(qreal top, qreal bottom)
+{
+    top = std::max<qreal>(0, top);
+    bottom = std::max<qreal>(0, bottom);
+    if (qFuzzyCompare(top + 1, m_safeTop + 1) && qFuzzyCompare(bottom + 1, m_safeBottom + 1))
+        return;
+    m_safeTop = top;
+    m_safeBottom = bottom;
+    emit safeAreaChanged();
+}
+
 bool StudentApp::canUpload(const Teacher &teacher) const
 {
     if (teacher.demo)

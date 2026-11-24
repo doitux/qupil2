@@ -118,16 +118,19 @@ target_link_libraries(qupilstudentui PUBLIC qupilbooklet
 # The QR code scanner: the phone's camera (iOS: AVFoundation; Android: StudentActivity
 # with zxing-android-embedded, see platform/android/build.gradle); none on the desktop
 if(IOS)
-    target_sources(qupilstudentui PRIVATE src/QrScanner_ios.mm src/IncomingLinks_ios.mm src/KeyboardHeight_none.cpp)
-    set_source_files_properties(src/QrScanner_ios.mm src/IncomingLinks_ios.mm PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
+    target_sources(qupilstudentui PRIVATE src/QrScanner_ios.mm src/IncomingLinks_ios.mm src/KeyboardHeight_none.cpp
+        src/SafeArea_ios.mm)
+    set_source_files_properties(src/QrScanner_ios.mm src/IncomingLinks_ios.mm src/SafeArea_ios.mm
+        PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
     target_link_libraries(qupilstudentui PUBLIC "-framework AVFoundation" "-framework UIKit")
 elseif(ANDROID)
     # The links that open the app come through StudentActivity as well (IncomingLinks.h)
     # ... and the height of the on-screen keyboard (KeyboardHeight.h)
     target_sources(qupilstudentui PRIVATE src/QrScanner_android.cpp src/IncomingLinks_android.cpp
-        src/KeyboardHeight_android.cpp)
+        src/KeyboardHeight_android.cpp src/SafeArea_none.cpp)
 else()
-    target_sources(qupilstudentui PRIVATE src/QrScanner_none.cpp src/IncomingLinks_qt.cpp src/KeyboardHeight_none.cpp)
+    target_sources(qupilstudentui PRIVATE src/QrScanner_none.cpp src/IncomingLinks_qt.cpp src/KeyboardHeight_none.cpp
+        src/SafeArea_none.cpp)
 endif()
 
 # ---- the app
