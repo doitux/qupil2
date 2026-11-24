@@ -47,6 +47,11 @@
          data-en="On iPhone and iPad you can get it now through TestFlight, Apple’s app for test versions. Then open this QR code or link once more.">Auf iPhone und iPad bekommst du sie schon jetzt über TestFlight, Apples App für Testversionen. Danach diesen QR-Code oder Link noch einmal öffnen.</p>
       <a class="button lime" id="testflight" href="#" data-de="Über TestFlight installieren" data-en="Install through TestFlight">Über TestFlight installieren</a>
     </div>
+    <div id="androidBox" hidden>
+      <p data-de="Für Android gibt es eine Testversion zum Herunterladen. Beim Installieren fragt dein Handy, ob der Browser Apps installieren darf. Danach diesen QR-Code oder Link noch einmal öffnen."
+         data-en="For Android there is a test version to download. While installing, your phone asks whether the browser may install apps. Then open this QR code or link once more.">Für Android gibt es eine Testversion zum Herunterladen. Beim Installieren fragt dein Handy, ob der Browser Apps installieren darf. Danach diesen QR-Code oder Link noch einmal öffnen.</p>
+      <a class="button lime" id="androidTest" href="#" data-de="Testversion für Android laden" data-en="Download the test version for Android">Testversion für Android laden</a>
+    </div>
     <p id="fromTeacher" data-de="Bis dahin bekommst du sie über deine Lehrkraft." data-en="Until then, your teacher can get it to you.">Bis dahin bekommst du sie über deine Lehrkraft.</p>
     <a class="button secondary" id="appStore" hidden href="#">App Store</a>
     <a class="button secondary" id="playStore" hidden href="#">Google Play</a>
@@ -76,6 +81,9 @@
   const PLAY_STORE = "";
   // The test phase: TestFlight's public link, shown on iPhone and iPad until the App Store has the app
   const TESTFLIGHT = "https://testflight.apple.com/join/HcyMhvp1";
+  // The same for Android until Google Play has the app: the newest test build (the
+  // "Student app" workflow keeps this file name on the nightly release)
+  const ANDROID_TEST = "https://github.com/doitux/qupil2/releases/download/nightly/Qupil-Practice-Android-arm64.apk";
 
   const lang = (navigator.language || "de").toLowerCase().startsWith("de") ? "de" : "en";
   document.documentElement.lang = lang;
@@ -102,6 +110,11 @@
   if (TESTFLIGHT && apple && !APP_STORE) {
     document.getElementById("testflight").href = TESTFLIGHT;
     document.getElementById("testflightBox").hidden = false;
+    document.getElementById("fromTeacher").hidden = true;
+  }
+  if (ANDROID_TEST && /Android/.test(navigator.userAgent) && !PLAY_STORE) {
+    document.getElementById("androidTest").href = ANDROID_TEST;
+    document.getElementById("androidBox").hidden = false;
     document.getElementById("fromTeacher").hidden = true;
   }
   if (APP_STORE) { const a = document.getElementById("appStore"); a.href = APP_STORE; a.hidden = false; }
