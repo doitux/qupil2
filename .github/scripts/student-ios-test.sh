@@ -185,6 +185,10 @@ if [ "$HAVE_IDB" = 1 ]; then
     xcrun simctl openurl "$UDID" "http://127.0.0.1:8765/u/#$(link TestTokenDDDD4444)"
     sleep 15
     tap_label '^(Continue|Weiter|Not Now|Jetzt nicht)$' 6 optional    # Safari's first start
+    # Safari's hint about its menu (first start) lies over the lower part of the page, where
+    # the button is since "No app yet?" comes first: a tap on the page's heading closes it
+    idb ui tap --udid "$UDID" 195 200
+    sleep 3
     PAGE_BUTTON='(Open in Qupil Practice|In Qupil Üben öffnen)'
     # idb does not see into Safari's page nor its alerts: both are found in screenshots
     python3 -c 'import PIL' 2> /dev/null || python3 -m pip install --quiet --break-system-packages pillow > /dev/null 2>&1 \
