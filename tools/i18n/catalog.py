@@ -653,6 +653,25 @@ E("booklet.read_only", en="Your Nextcloud does not allow uploads by link: the st
   de="Ihre Nextcloud erlaubt kein Hochladen per Link: Der Schüler sieht die Aufgaben, kann aber nichts zurückschicken.",
   fr="Votre Nextcloud n’autorise pas l’envoi par lien : l’élève voit les devoirs mais ne peut rien renvoyer.",
   es="Su Nextcloud no permite subir por enlace: el alumno ve las tareas pero no puede enviar nada.")
+E("booklet.devices.none", en="No device connected yet.", de="Noch kein Gerät verbunden.",
+  fr="Aucun appareil connecté pour l’instant.", es="Aún no hay ningún dispositivo conectado.")
+E("booklet.devices.one", en="1 device connected", de="1 Gerät verbunden", fr="1 appareil connecté",
+  es="1 dispositivo conectado")
+E("booklet.devices.one_since", en="1 device connected (since %1)", de="1 Gerät verbunden (seit %1)",
+  fr="1 appareil connecté (depuis le %1)", es="1 dispositivo conectado (desde el %1)")
+E("booklet.devices.many", en="%1 devices connected", de="%1 Geräte verbunden", fr="%1 appareils connectés",
+  es="%1 dispositivos conectados")
+E("booklet.devices.left_one", en="removed from 1 device on %1", de="auf 1 Gerät entfernt am %1",
+  fr="retiré d’un appareil le %1", es="eliminado de 1 dispositivo el %1")
+E("booklet.devices.left_many", en="removed from %1 devices, last on %2", de="auf %1 Geräten entfernt, zuletzt am %2",
+  fr="retiré de %1 appareils, dernièrement le %2", es="eliminado de %1 dispositivos, la última vez el %2")
+E("booklet.devices.left_all",
+  en="Removed from every device (%1). You can end the coupling below.",
+  de="Auf allen Geräten entfernt (%1). Sie können die Kopplung unten beenden.",
+  fr="Retiré de tous les appareils (%1). Vous pouvez terminer la liaison ci-dessous.",
+  es="Eliminado de todos los dispositivos (%1). Puede terminar el vínculo abajo.")
+E("booklet.devices.last_answer", en="Last feedback: %1", de="Letzte Rückmeldung: %1", fr="Dernier retour : %1",
+  es="Última respuesta: %1")
 E("booklet.allow_feedback", en="Feedback on tasks", de="Rückmeldung zu Aufgaben", fr="Retour sur les devoirs",
   es="Respuesta a las tareas")
 E("booklet.allow_feedback_hint", en="Practised: a lot, some, hardly · Works: well, so-so, not yet",

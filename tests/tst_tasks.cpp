@@ -220,6 +220,68 @@ private slots:
         QVERIFY(!m_data->markQuestionsRead(u"nobody"_s));
     }
 
+    void couplingDevices()
+    {
+        // Which devices have the booklet (counts and days for the coupling sheet), kept on
+        // this device only: the coupling record and with it the sync stay as they are
+        const QString coupling = m_store->create(u"coupling"_s, { { u"student_id"_s, m_student }, { u"created"_s, u"2026-11-01"_s } });
+        QVERIFY(!coupling.isEmpty());
+        const QVariantMap before = m_store->get(u"coupling"_s, coupling);
+        QVariantMap d = m_data->couplingDevices(m_student);
+        QCOMPARE(d.value(u"connected"_s).toInt(), 0);
+        QCOMPARE(d.value(u"left"_s).toInt(), 0);
+        QCOMPARE(d.value(u"lastAnswer"_s).toString(), QString());
+
+        const QDateTime monday(QDate(2026, 11, 16), QTime(15, 0));
+        const double ms = double(monday.toMSecsSinceEpoch());
+        const double day = 24.0 * 3600 * 1000;
+        const QVariantMap phone { { u"device"_s, u"a"_s }, { u"at"_s, ms }, { u"since"_s, ms } };
+        const QVariantMap tablet { { u"device"_s, u"b"_s }, { u"at"_s, ms + day }, { u"since"_s, ms + day } };
+        const QVariantMap old { { u"device"_s, u"c"_s }, { u"at"_s, ms + day } };   // an app before "since"
+        const int revision = m_data->revision();
+        QVERIFY(m_data->setCouplingDevices(m_student, { phone }));
+        QVERIFY(m_data->revision() > revision);   // the sheet updates
+        d = m_data->couplingDevices(m_student);
+        QCOMPARE(d.value(u"connected"_s).toInt(), 1);
+        QCOMPARE(d.value(u"since"_s).toString(), u"2026-11-16"_s);
+        // The same again: nothing changes
+        const int same = m_data->revision();
+        QVERIFY(m_data->setCouplingDevices(m_student, { phone }));
+        QCOMPARE(m_data->revision(), same);
+
+        QVERIFY(m_data->setCouplingDevices(m_student, { phone, tablet, old }));
+        d = m_data->couplingDevices(m_student);
+        QCOMPARE(d.value(u"connected"_s).toInt(), 3);
+        QCOMPARE(d.value(u"since"_s).toString(), u"2026-11-16"_s);   // the first of them
+
+        QVariantMap tabletGone = tablet, phoneGone = phone;
+        tabletGone.insert(u"left"_s, ms + 2 * day);
+        phoneGone.insert(u"left"_s, ms + 3 * day);
+        QVERIFY(m_data->setCouplingDevices(m_student, { phone, tabletGone }));
+        d = m_data->couplingDevices(m_student);
+        QCOMPARE(d.value(u"connected"_s).toInt(), 1);
+        QCOMPARE(d.value(u"left"_s).toInt(), 1);
+        QCOMPARE(d.value(u"leftDate"_s).toString(), u"2026-11-18"_s);
+        QVERIFY(m_data->setCouplingDevices(m_student, { phoneGone, tabletGone }));
+        d = m_data->couplingDevices(m_student);
+        QCOMPARE(d.value(u"connected"_s).toInt(), 0);
+        QCOMPARE(d.value(u"left"_s).toInt(), 2);
+        QCOMPARE(d.value(u"leftDate"_s).toString(), u"2026-11-19"_s);   // the last one
+        QVERIFY(m_data->isCoupled(m_student));   // ending stays the teacher's decision
+
+        // The coupling record has no trace of the devices (nothing new syncs)
+        QCOMPARE(m_store->get(u"coupling"_s, coupling), before);
+
+        // The last answer: what is here anyway (a question)
+        QVERIFY(m_data->applyFeedback(m_student, {}, { QVariantMap { { u"id"_s, u"q"_s }, { u"text"_s, u"?"_s }, { u"at"_s, ms + day } } }));
+        QCOMPARE(m_data->couplingDevices(m_student).value(u"lastAnswer"_s).toString(), u"2026-11-17"_s);
+        // The booklet says whether uploads work at all (the app's "here" and "gone" need them)
+        QCOMPARE(m_data->bookletContent(m_student).value(u"uploads"_s).toBool(), true);
+        // Not coupled: nothing
+        QVERIFY(m_data->couplingDevices(u"nobody"_s).isEmpty());
+        QVERIFY(!m_data->setCouplingDevices(u"nobody"_s, { phone }));
+    }
+
     void planToTasks()
     {
         const QString plan = m_data->savePlan(m_membership, QString(), u"2026-11-17"_s,

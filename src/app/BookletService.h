@@ -25,7 +25,8 @@ class QQmlEngine;
 
     After each sync and shortly after changes, every coupled student's booklet is written
     again (heft.qupil, sealed) and the student's answers are collected (fb-*.qupil): into
-    the tasks and the coupling, older answer files deleted.
+    the tasks and the coupling, older answer files deleted. The newest file of each
+    device also says whether the device still has the booklet (DataService::couplingDevices).
 */
 class BookletService : public QObject
 {
@@ -57,6 +58,9 @@ public:
     Q_INVOKABLE QVariantMap qrCode(const QString &studentId) const;
     //! Writes the booklets and collects the answers now (otherwise after each sync)
     Q_INVOKABLE void publishAll();
+    //! Looks into this student's folder only, without writing the booklet: has a device
+    //! taken the code meanwhile? (the coupling sheet asks while it shows the QR code)
+    Q_INVOKABLE void lookFor(const QString &studentId);
 
 signals:
     void availableChanged();
@@ -68,6 +72,7 @@ signals:
 
 private:
     void setRunning(const QString &job, bool running);
+    void publish(const QString &onlyStudentId);
 
     AppController *m_app;
     DataService *m_data;

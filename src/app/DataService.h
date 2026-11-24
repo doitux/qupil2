@@ -248,6 +248,11 @@ public:
     Q_INVOKABLE QVariantList openQuestions(const QString &studentId) const;
     //! Marks all questions of the student as read (they stay in the practice book sheet)
     Q_INVOKABLE bool markQuestionsRead(const QString &studentId);
+    //! The devices that have this student's booklet, as far as they said so:
+    //! { connected, left (counts), since, leftDate, lastAnswer (ISO dates, "" unknown) }.
+    //! Kept on this device only (each of the teacher's devices reads it from the folder).
+    Q_INVOKABLE QVariantMap couplingDevices(const QString &studentId) const;
+    bool setCouplingDevices(const QString &studentId, const QVariantList &devices);
     //! The student's answers from the practice book: feedback per task id ({practiced,
     //! works, done, at}, the newer one wins) and questions (they replace the stored ones;
     //! what is marked as read here stays so)

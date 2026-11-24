@@ -123,6 +123,8 @@ void FakeNextcloud::handle(QTcpSocket *socket)
     } else {
         return reply(socket, 404);
     }
+    if (down)
+        return reply(socket, 503);
     if (shareGone || !links.contains(token))
         return reply(socket, 404);
     const Link link = links.value(token);

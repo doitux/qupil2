@@ -1200,6 +1200,38 @@
         <source>Your Nextcloud does not allow uploads by link: the student sees the tasks but cannot send anything back.</source>
         <translation>Votre Nextcloud n’autorise pas l’envoi par lien : l’élève voit les devoirs mais ne peut rien renvoyer.</translation>
     </message>
+    <message id="booklet.devices.none">
+        <source>No device connected yet.</source>
+        <translation>Aucun appareil connecté pour l’instant.</translation>
+    </message>
+    <message id="booklet.devices.one">
+        <source>1 device connected</source>
+        <translation>1 appareil connecté</translation>
+    </message>
+    <message id="booklet.devices.one_since">
+        <source>1 device connected (since %1)</source>
+        <translation>1 appareil connecté (depuis le %1)</translation>
+    </message>
+    <message id="booklet.devices.many">
+        <source>%1 devices connected</source>
+        <translation>%1 appareils connectés</translation>
+    </message>
+    <message id="booklet.devices.left_one">
+        <source>removed from 1 device on %1</source>
+        <translation>retiré d’un appareil le %1</translation>
+    </message>
+    <message id="booklet.devices.left_many">
+        <source>removed from %1 devices, last on %2</source>
+        <translation>retiré de %1 appareils, dernièrement le %2</translation>
+    </message>
+    <message id="booklet.devices.left_all">
+        <source>Removed from every device (%1). You can end the coupling below.</source>
+        <translation>Retiré de tous les appareils (%1). Vous pouvez terminer la liaison ci-dessous.</translation>
+    </message>
+    <message id="booklet.devices.last_answer">
+        <source>Last feedback: %1</source>
+        <translation>Dernier retour : %1</translation>
+    </message>
     <message id="booklet.allow_feedback">
         <source>Feedback on tasks</source>
         <translation>Retour sur les devoirs</translation>

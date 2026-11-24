@@ -10,7 +10,12 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+#include <QDateTime>
+
+#include <algorithm>
+
 #include "Clock.h"
+#include "Database.h"
 #include "Ids.h"
 #include "NoteFormat.h"
 #include "Store.h"
@@ -245,6 +250,61 @@ bool DataService::markQuestionsRead(const QString &studentId)
                            { { u"questions"_s, QString::fromUtf8(QJsonDocument(stored).toJson(QJsonDocument::Compact)) } });
 }
 
+namespace {
+QString devicesKey(const QVariantMap &coupling)
+{
+    return u"booklet_devices_"_s + coupling.value(u"id"_s).toString();
+}
+QString isoDay(double ms)
+{
+    return ms > 0 ? QDateTime::fromMSecsSinceEpoch(qint64(ms)).date().toString(Qt::ISODate) : QString();
+}
+} // namespace
+
+QVariantMap DataService::couplingDevices(const QString &studentId) const
+{
+    const QVariantMap c = coupling(studentId);
+    if (c.isEmpty())
+        return {};
+    int connected = 0, left = 0;
+    double since = 0, leftAt = 0;
+    const QJsonArray stored = QJsonDocument::fromJson(m_store->database()->meta(devicesKey(c)).toUtf8()).array();
+    for (const QJsonValue &v : stored) {
+        const QJsonObject d = v.toObject();
+        if (d.value(u"left"_s).toDouble() > 0) {
+            ++left;
+            leftAt = std::max(leftAt, d.value(u"left"_s).toDouble());
+        } else {
+            ++connected;
+            const double s = d.value(u"since"_s).toDouble();
+            if (s > 0 && (since == 0 || s < since))
+                since = s;
+        }
+    }
+    // The last answer: what is here anyway (feedback on tasks, questions)
+    double answer = 0;
+    for (const QVariant &v : studentTasks(studentId))
+        answer = std::max(answer, v.toMap().value(u"feedback"_s).toMap().value(u"at"_s).toDouble());
+    for (const QVariant &v : questions(studentId))
+        answer = std::max(answer, v.toMap().value(u"at"_s).toDouble());
+    return { { u"connected"_s, connected }, { u"left"_s, left }, { u"since"_s, isoDay(since) },
+             { u"leftDate"_s, isoDay(leftAt) }, { u"lastAnswer"_s, isoDay(answer) } };
+}
+
+bool DataService::setCouplingDevices(const QString &studentId, const QVariantList &devices)
+{
+    const QVariantMap c = coupling(studentId);
+    if (c.isEmpty())
+        return false;
+    const QString json = QString::fromUtf8(QJsonDocument(QJsonArray::fromVariantList(devices)).toJson(QJsonDocument::Compact));
+    if (m_store->database()->meta(devicesKey(c)) == json)
+        return true;
+    if (!m_store->database()->setMeta(devicesKey(c), json))
+        return false;
+    bump();
+    return true;
+}
+
 bool DataService::applyFeedback(const QString &studentId, const QVariantMap &feedback, const QVariantList &questions)
 {
     const QVariantMap c = coupling(studentId);
@@ -310,6 +370,9 @@ QJsonObject DataService::bookletContent(const QString &studentId) const
     booklet.insert(u"student"_s, student.value(u"forename"_s).toString());
     booklet.insert(u"instrument"_s, student.value(u"instrument"_s).toString());
     const bool receives = c.value(u"receives"_s, 1).toInt() != 0;
+    // Whether the folder takes uploads by link at all: the app says "this device has the
+    // booklet" and "removed here" also when the two switches below are off
+    booklet.insert(u"uploads"_s, receives);
     booklet.insert(u"allow"_s, QJsonObject { { u"feedback"_s, receives && c.value(u"allow_feedback"_s, 1).toInt() != 0 },
                                              { u"questions"_s, receives && c.value(u"allow_questions"_s, 1).toInt() != 0 } });
 

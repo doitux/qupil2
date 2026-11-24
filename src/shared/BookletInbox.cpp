@@ -65,6 +65,12 @@ Inbox collect(const QByteArray &key, const QHash<QString, QByteArray> &files, co
             inbox.unreadable.append(file);
             continue;
         }
+        QJsonObject device{{u"device"_s, parse(file).device.left(32)}, {u"at"_s, double(parse(file).ms)}};
+        if (const double since = content->value(u"since"_s).toDouble(); since > 0)
+            device.insert(u"since"_s, since);
+        if (const double left = content->value(u"left"_s).toDouble(); left > 0)
+            device.insert(u"left"_s, left);
+        inbox.devices.append(device);
         const QJsonObject feedback = content->value(u"feedback"_s).toObject();
         for (auto it = feedback.constBegin(); it != feedback.constEnd(); ++it) {
             const QJsonObject theirs = it.value().toObject();
