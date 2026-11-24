@@ -3,8 +3,15 @@
 package de.qupil.student;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.PopupWindow;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 
@@ -23,6 +30,13 @@ import org.qtproject.qt.android.bindings.QtActivity;
     the camera permission itself and reads the code on the phone). The result goes to
     Qupil's native part through scanResult(): the text of the code, "" when the scanner
     was closed without one, and whether the camera was refused.
+
+    The on-screen keyboard is measured, as in Qupil (QupilActivity). The window keeps its
+    size when the keyboard comes (adjustNothing in the manifest): when Android made it
+    smaller and larger again, the page jumped and was empty for a moment each time. An
+    invisible, zero-width popup window does resize with the keyboard; its visible height
+    gives the keyboard's height, which goes to the app (keyboardHeightChanged,
+    KeyboardHeight_android.cpp), and the page makes room itself.
 */
 public class StudentActivity extends QtActivity
 {
@@ -34,6 +48,13 @@ public class StudentActivity extends QtActivity
 
     private static String s_pendingLink = null;
     private static boolean s_nativeReady = false;
+
+    private static native void keyboardHeightChanged(int px);
+    private static volatile int s_keyboardPx = 0;
+    private static volatile boolean s_keyboardWatched = false;
+    private PopupWindow m_keyboardProbe;
+    //! Bottom of the visible area without a keyboard
+    private int m_probeBottom = 0;
 
     private static synchronized void offer(Intent intent)
     {
@@ -69,6 +90,75 @@ public class StudentActivity extends QtActivity
         // Not when Android rebuilds the activity: that intent was handled already
         if (savedInstanceState == null)
             offer(getIntent());
+        startKeyboardProbe();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig)
+    {
+        super.onConfigurationChanged(newConfig);
+        m_probeBottom = 0;   // turned: measured anew
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        if (m_keyboardProbe != null) {
+            m_keyboardProbe.dismiss();
+            m_keyboardProbe = null;
+        }
+        super.onDestroy();
+    }
+
+    //! Called by the app's native part once it listens (KeyboardHeight_android.cpp, any thread)
+    public static void keyboardWatched()
+    {
+        s_keyboardWatched = true;
+        if (s_keyboardPx > 0)
+            report(s_keyboardPx);
+    }
+
+    private static void report(int px)
+    {
+        try {
+            keyboardHeightChanged(px);
+        } catch (UnsatisfiedLinkError e) {
+            // The native part is not there yet: it asks again (keyboardWatched)
+        }
+    }
+
+    private void startKeyboardProbe()
+    {
+        try {
+            final View decor = getWindow().getDecorView();
+            final View probe = new View(this);
+            m_keyboardProbe = new PopupWindow(probe, 0, WindowManager.LayoutParams.MATCH_PARENT);
+            m_keyboardProbe.setBackgroundDrawable(new ColorDrawable(0));
+            m_keyboardProbe.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+                                             | WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            m_keyboardProbe.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
+            m_keyboardProbe.setFocusable(false);
+            m_keyboardProbe.setTouchable(false);
+            probe.getViewTreeObserver().addOnGlobalLayoutListener(() -> {
+                final Rect visible = new Rect();
+                probe.getWindowVisibleDisplayFrame(visible);
+                if (visible.bottom > m_probeBottom)
+                    m_probeBottom = visible.bottom;
+                final int px = Math.max(0, m_probeBottom - visible.bottom);
+                if (px == s_keyboardPx)
+                    return;
+                s_keyboardPx = px;
+                Log.i(TAG, "keyboard: " + px + " px");
+                if (s_keyboardWatched)
+                    report(px);
+            });
+            decor.post(() -> {
+                if (m_keyboardProbe != null && !isFinishing() && decor.getWindowToken() != null)
+                    m_keyboardProbe.showAtLocation(decor, Gravity.NO_GRAVITY, 0, 0);
+            });
+        } catch (RuntimeException e) {
+            m_keyboardProbe = null;   // without it the keyboard covers the bottom (as a fallback)
+        }
     }
 
     @Override

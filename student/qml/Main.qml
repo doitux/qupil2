@@ -25,6 +25,14 @@ ApplicationWindow {
     readonly property real topInset: 0
     readonly property real bottomInset: 0
 
+    // Room for the on-screen keyboard. Android: the window keeps its size (the system
+    // making it smaller let the page jump and go empty for a moment); the app measures the
+    // keyboard (StudentApp.keyboardHeight) and the pages get lower by it, gliding with the
+    // keyboard. The page keeps the field with the cursor in view (PageFlickable).
+    // Elsewhere the height is 0: iOS moves the view itself.
+    property real keyboardInset: StudentApp.keyboardHeight
+    Behavior on keyboardInset { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
+
     function showNotice(text) {
         toast.text = text
         toast.opacity = 1
@@ -34,6 +42,7 @@ ApplicationWindow {
     StackView {
         id: stack
         anchors.fill: parent
+        anchors.bottomMargin: window.keyboardInset
         initialItem: window.coupled ? homePage : welcomePage
     }
 
@@ -62,7 +71,7 @@ ApplicationWindow {
         property alias text: toastText.text
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: window.bottomInset + 24
+        anchors.bottomMargin: window.bottomInset + window.keyboardInset + 24
         width: Math.min(parent.width - 40, toastText.implicitWidth + 32)
         height: toastText.implicitHeight + 22
         radius: 14
