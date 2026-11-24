@@ -22,6 +22,7 @@ void UiTest::addIdeaCases()
         return u"^"_s + QRegularExpression::escape(m_data->formatDate(m_data->today(), true)) + u"$"_s;
     };
 
+    const QString lessonOpen = u"^Geschafft: Mozart: Violinkonzert G-Dur, 1\\. Satz$"_s;
     Case &c = add(u"idea-demo"_s, u"The trial of the new idea: a lesson, the history, preparing, pausing; nothing is stored"_s);
     c.steps << act(u"remember the state of the real data"_s, [this, before] { *before = m_data->property("revision").toInt(); })
             << tab(u"Mehr"_s) << tap(u"^Einstellungen$"_s) << tap(u"^Neue Idee ausprobieren$"_s)
@@ -62,7 +63,11 @@ void UiTest::addIdeaCases()
             // (saving takes the line that is still being typed along)
             << tap(u"^Speichern$"_s) << see(u"^Vorbereitet für "_s) << see(u"^UI-Vorhaben$"_s)
             // In the lesson it is at the top, to be ticked
-            << tap(u"^Stunde$"_s) << see(u"^UI-Vorhaben$"_s) << tap(u"^UI-Vorhaben$"_s, u"what I planned is done"_s)
+            // (asked at once, while the window of the preparation is still on its way out: it
+            // opens as soon as that is gone. The page shows "UI-Vorhaben" too, in the card of
+            // what is prepared – only in the lesson's window it is a box to tick)
+            << tap(u"^Stunde$"_s) << see(lessonOpen) << see(u"checkbox:^UI-Vorhaben$"_s)
+            << tap(u"checkbox:^UI-Vorhaben$"_s, u"what I planned is done"_s)
             << snap(u"idea-lesson-prepared"_s)
             << tap(u"^Speichern$"_s) << gone(u"^Vorbereitet für "_s)
 

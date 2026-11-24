@@ -44,7 +44,28 @@ Sheet {
     readonly property int pausedCount: count(t => t.phase === "pause")
     readonly property bool allTicked: count(t => t.phase === "run" && !t.isNew && !t.ticked) === 0
 
+    //! Asked to open while on its way out (saved a moment ago): 0 lesson, 1 preparation
+    property int queued: -1
+    onClosed: if (queued >= 0) reopen.restart()
+    Timer {
+        id: reopen
+        interval: 120
+        onTriggered: {
+            const again = sheet.queued === 1
+            sheet.queued = -1
+            sheet.start(again)
+        }
+    }
+
     function start(asPrepare) {
+        if (visible) {
+            // On its way out: opening it now would change what it shows and then close with
+            // it – it opens as soon as it is gone. Fully there: a tap that reached a button
+            // of the page behind it (seen on Android) must not open it a second time
+            if (closing || leaving)
+                queued = asPrepare ? 1 : 0
+            return
+        }
         prepare = asPrepare
         s = demo.student(studentId)
         tasksShown = demo.showsTasks(s)
