@@ -4839,5 +4839,69 @@ Auteur : %2</translation>
         <source>Done</source>
         <translation>Réussi</translation>
     </message>
+    <message id="idea.task.edit">
+        <source>Change the task</source>
+        <translation>Modifier le devoir</translation>
+    </message>
+    <message id="idea.task.edit.name">
+        <source>Change: %1</source>
+        <extracomment>Pencil at a task; %1 = its title</extracomment>
+        <translation>Modifier : %1</translation>
+    </message>
+    <message id="idea.task.edit.hint">
+        <source>In between, without a lesson. What is new stands in the entry of the next lesson.</source>
+        <translation>Entre deux cours. Ce qui est nouveau figure dans l’entrée du prochain cours.</translation>
+    </message>
+    <message id="idea.task.title">
+        <source>Task</source>
+        <translation>Devoir</translation>
+    </message>
+    <message id="idea.task.points">
+        <source>Points</source>
+        <translation>Points</translation>
+    </message>
+    <message id="idea.task.point">
+        <source>Point</source>
+        <translation>Point</translation>
+    </message>
+    <message id="idea.point.done.name">
+        <source>Done: %1</source>
+        <extracomment>Tick box of one point; %1 = its text</extracomment>
+        <translation>Terminé : %1</translation>
+    </message>
+    <message id="idea.point.private.name">
+        <source>Only for me: %1</source>
+        <translation>Seulement pour moi : %1</translation>
+    </message>
+    <message id="idea.remove.name">
+        <source>Remove: %1</source>
+        <translation>Retirer : %1</translation>
+    </message>
+    <message id="idea.task.delete">
+        <source>Delete the task</source>
+        <translation>Supprimer le devoir</translation>
+    </message>
+    <message id="idea.task.delete.sure">
+        <source>Really delete? Tap again</source>
+        <translation>Vraiment supprimer ? Touchez encore</translation>
+    </message>
+    <message id="idea.entry.edit">
+        <source>Change the entry</source>
+        <translation>Modifier l’entrée</translation>
+    </message>
+    <message id="idea.entry.edit.name">
+        <source>Change the entry: %1</source>
+        <extracomment>Pencil at a lesson of the history; %1 = its date</extracomment>
+        <translation>Modifier l’entrée : %1</translation>
+    </message>
+    <message id="idea.entry.edit.hint">
+        <source>A changed text is changed at the task too. What you remove is undone there.</source>
+        <translation>Un texte modifié l’est aussi dans le devoir. Ce que vous retirez y est annulé.</translation>
+    </message>
+    <message id="idea.entry.undo.name">
+        <source>Remove: %1 %2</source>
+        <extracomment>%1 = New / Done / Paused, %2 = the task&apos;s title</extracomment>
+        <translation>Retirer : %1 %2</translation>
+    </message>
 </context>
 </TS>

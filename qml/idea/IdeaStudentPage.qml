@@ -191,11 +191,19 @@ Item {
                                ? qsTrId("idea.new") : ""
                         open: !!root.unfolded[runRow.modelData.id]
                         onToggled: root.flip(runRow.modelData.id)
+                        editable: true
+                        onEdit: taskSheet.start(runRow.modelData.id)
                     }
                 }
             }
+            // A task in between, without a lesson
+            IdeaLink {
+                iconName: "plus"
+                text: qsTrId("idea.task.add")
+                onClicked: taskSheet.start("")
+            }
             Rectangle {
-                visible: root.paused.length + root.done.length > 0 && root.running.length > 0
+                visible: root.paused.length + root.done.length > 0
                 Layout.fillWidth: true
                 implicitHeight: 1
                 color: Theme.divider
@@ -231,10 +239,19 @@ Item {
                         font.family: Theme.fontFamily
                         font.pixelSize: 13
                     }
-                    IdeaLink {
-                        iconName: "play"
-                        text: qsTrId("idea.resume")
-                        onClicked: root.demo.resume(root.studentId, pausedRow.modelData.id)
+                    RowLayout {
+                        spacing: 18
+                        IdeaLink {
+                            iconName: "play"
+                            text: qsTrId("idea.resume")
+                            onClicked: root.demo.resume(root.studentId, pausedRow.modelData.id)
+                        }
+                        IdeaLink {
+                            iconName: "edit"
+                            text: qsTrId("common.edit")
+                            Accessible.name: qsTrId("idea.task.edit.name").arg(pausedRow.modelData.title)
+                            onClicked: taskSheet.start(pausedRow.modelData.id)
+                        }
                     }
                 }
             }
@@ -278,9 +295,12 @@ Item {
             IdeaEntry {
                 required property var modelData
                 entry: modelData
+                demo: root.demo
+                student: root.s
+                onEdit: entrySheet.start(modelData.id)
                 ago: root.ago(modelData.date)
-                open: !!root.unfolded[modelData.date]
-                onToggled: root.flip(modelData.date)
+                open: !!root.unfolded[modelData.id]
+                onToggled: root.flip(modelData.id)
             }
         }
         // Room for the buttons
@@ -309,6 +329,16 @@ Item {
 
     IdeaLessonSheet {
         id: lessonSheet
+        demo: root.demo
+        studentId: root.studentId
+    }
+    IdeaTaskSheet {
+        id: taskSheet
+        demo: root.demo
+        studentId: root.studentId
+    }
+    IdeaEntrySheet {
+        id: entrySheet
         demo: root.demo
         studentId: root.studentId
     }

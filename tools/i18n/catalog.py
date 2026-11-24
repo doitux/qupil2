@@ -2717,3 +2717,28 @@ E("idea.pupil.question", en="How did it go this week?", de="Wie lief es diese Wo
 E("idea.pupil.paused_hint", en="On pause for now: no question about them.", de="Liegt gerade: dazu wird nicht gefragt.",
   fr="En pause pour l’instant : pas de question à leur sujet.", es="En pausa por ahora: no se pregunta por ellas.")
 E("idea.pupil.done", en="Done", de="Geschafft", fr="Réussi", es="Logrado")
+# Changing tasks in between and putting the history right (the trial)
+E("idea.task.edit", en="Change the task", de="Aufgabe ändern", fr="Modifier le devoir", es="Cambiar la tarea")
+E("idea.task.edit.name", en="Change: %1", de="Ändern: %1", fr="Modifier : %1", es="Cambiar: %1", c="Pencil at a task; %1 = its title")
+E("idea.task.edit.hint", en="In between, without a lesson. What is new stands in the entry of the next lesson.",
+  de="Zwischendurch, ohne Stunde. Was neu dazukommt, steht im Eintrag der nächsten Stunde.",
+  fr="Entre deux cours. Ce qui est nouveau figure dans l’entrée du prochain cours.",
+  es="Entre clases. Lo nuevo aparece en la entrada de la próxima clase.")
+E("idea.task.title", en="Task", de="Aufgabe", fr="Devoir", es="Tarea")
+E("idea.task.points", en="Points", de="Punkte", fr="Points", es="Puntos")
+E("idea.task.point", en="Point", de="Punkt", fr="Point", es="Punto")
+E("idea.point.done.name", en="Done: %1", de="Erledigt: %1", fr="Terminé : %1", es="Hecho: %1", c="Tick box of one point; %1 = its text")
+E("idea.point.private.name", en="Only for me: %1", de="Nur für mich: %1", fr="Seulement pour moi : %1", es="Solo para mí: %1")
+E("idea.remove.name", en="Remove: %1", de="Entfernen: %1", fr="Retirer : %1", es="Quitar: %1")
+E("idea.task.delete", en="Delete the task", de="Aufgabe löschen", fr="Supprimer le devoir", es="Eliminar la tarea")
+E("idea.task.delete.sure", en="Really delete? Tap again", de="Wirklich löschen? Noch einmal tippen",
+  fr="Vraiment supprimer ? Touchez encore", es="¿Eliminar de verdad? Toque otra vez")
+E("idea.entry.edit", en="Change the entry", de="Eintrag ändern", fr="Modifier l’entrée", es="Cambiar la entrada")
+E("idea.entry.edit.name", en="Change the entry: %1", de="Eintrag ändern: %1", fr="Modifier l’entrée : %1", es="Cambiar la entrada: %1",
+  c="Pencil at a lesson of the history; %1 = its date")
+E("idea.entry.edit.hint", en="A changed text is changed at the task too. What you remove is undone there.",
+  de="Ein geänderter Text ändert sich auch bei der Aufgabe. Was du entfernst, wird dort rückgängig gemacht.",
+  fr="Un texte modifié l’est aussi dans le devoir. Ce que vous retirez y est annulé.",
+  es="Un texto cambiado cambia también en la tarea. Lo que quite se deshace allí.")
+E("idea.entry.undo.name", en="Remove: %1 %2", de="Entfernen: %1 %2", fr="Retirer : %1 %2", es="Quitar: %1 %2",
+  c="%1 = New / Done / Paused, %2 = the task's title")
