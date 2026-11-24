@@ -108,17 +108,20 @@
     "src/app/UiTestNoteMenu.cpp",
     "tools/i18n/catalog.py"
   ],
-  "result": "started",
+  "result": "uploaded",
   "build": {
     "number": 57,
     "run_id": 45308838843,
     "sha": "2cb393ab8fcc90d4e11b469b05053ffc976f51f5",
     "url": "https://github.com/doitux/qupil2/actions/runs/45308838843",
     "created": "2026-11-24T01:57:38Z",
-    "status": "in_progress",
-    "conclusion": null,
-    "attempt": 1
+    "status": "completed",
+    "conclusion": "success",
+    "attempt": 1,
+    "rerun": false,
+    "upload": "success",
+    "whats_new": "success"
   },
-  "written": "2026-11-24T02:57:49+01:00",
-  "headline": "Build 57 gestartet"
+  "written": "2026-11-24T03:18:00+01:00",
+  "headline": "Build 57 hochgeladen"
 }
