@@ -52,17 +52,20 @@
     "src/app/UiTestIdea.cpp",
     "tools/i18n/catalog.py"
   ],
-  "result": "started",
+  "result": "uploaded",
   "build": {
     "number": 58,
     "run_id": 45355803145,
     "sha": "2f3a0d4a0c60bfb2bf2cb8a531296353ea1a02c4",
     "url": "https://github.com/doitux/qupil2/actions/runs/45355803145",
     "created": "2026-11-24T08:24:14Z",
-    "status": "in_progress",
-    "conclusion": null,
-    "attempt": 1
+    "status": "completed",
+    "conclusion": "success",
+    "attempt": 1,
+    "rerun": false,
+    "upload": "success",
+    "whats_new": "success"
   },
-  "written": "2026-11-24T09:24:26+01:00",
-  "headline": "Build 58 gestartet"
+  "written": "2026-11-24T09:32:34+01:00",
+  "headline": "Build 58 hochgeladen"
 }

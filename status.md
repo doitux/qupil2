@@ -1,8 +1,8 @@
 # TestFlight-Sammellauf 2026-11-24 09:24 (von Hand, now)
 
-**Build 58 gestartet**
+**Build 58 hochgeladen**
 
-- Build 58 (Commit 2f3a0d4): in_progress, Upload: -, Testtext: -
+- Build 58 (Commit 2f3a0d4): success, Upload: success, Testtext: success
 - https://github.com/doitux/qupil2/actions/runs/45355803145
 - Seit Build 57 (Commit 2cb393a)
 
