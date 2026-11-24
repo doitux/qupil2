@@ -452,7 +452,13 @@ Sheet {
                         function focusField() { hintField.forceActiveFocus() }
                         Layout.fillWidth: true
                         spacing: 8
-                        Rectangle { implicitWidth: 6; implicitHeight: 6; radius: 3; color: Theme.accentText; Layout.leftMargin: 6 }
+                        // (at the first line of a hint that wraps)
+                        Rectangle {
+                            implicitWidth: 6; implicitHeight: 6; radius: 3; color: Theme.accentText
+                            Layout.leftMargin: 6
+                            Layout.alignment: Qt.AlignTop
+                            Layout.topMargin: hintField.topPadding + 7
+                        }
                         TextField {
                             id: hintField
                             objectName: "taskHint" + taskCard.index + "_" + hintRow.index
@@ -468,8 +474,10 @@ Sheet {
                                 color: "transparent"
                                 Rectangle { anchors.bottom: parent.bottom; width: parent.width; height: 1; color: hintField.activeFocus ? Theme.accent : Theme.divider }
                             }
+                            // A long hint wraps and the field grows; it stays one hint, and
+                            // Enter still goes on to the next one
+                            wrapMode: TextInput.Wrap
                             Accessible.name: qsTrId("task.hint")
-                            LineScroll { target: hintField }
                             onTextEdited: taskCard.hints.setProperty(hintRow.index, "text", text)
                             onActiveFocusChanged: if (activeFocus) editor.currentTask = taskCard.index
                             // Enter: the next hint; in an empty hint: a new task

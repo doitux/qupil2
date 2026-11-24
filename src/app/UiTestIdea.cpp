@@ -113,4 +113,33 @@ void UiTest::addIdeaCases()
             << tap(u"^Einstellungen$"_s, u"back to the settings"_s)
             << check(u"the real data is untouched"_s, [this, before] { return m_data->property("revision").toInt() == *before; })
             << backIfThere(u"^Mehr$"_s);
+
+    {
+        // A point of a task longer than its line (a phone): the field wraps and grows
+        const QString longPoint = u"UI-Kadenz ab T. 180: erst nur die Griffe ohne Bogen, dann langsam mit Metronom 60, die Doppelgriffe einzeln stimmen"_s;
+        Case &w = add(u"idea-point-wrap"_s, u"trial: a long point wraps in its field while it is written"_s);
+        w.steps << act(u"the field for a new point"_s, [this] { m_textField = u"edit:^Punkt hinzufügen$"_s; })
+                << tab(u"Mehr"_s) << tap(u"^Einstellungen$"_s) << tap(u"^Neue Idee ausprobieren$"_s) << tap(u"^Jonas Beispiel$"_s)
+                << tap(u"^Ändern: Tonleiter A-Dur, drei Oktaven$"_s) << see(u"edit:^Aufgabe$"_s)
+                << tap(u"edit:^Punkt hinzufügen$"_s) << type(longPoint) << wait(400)
+                << check(u"the point wraps: several lines in a taller field, start and end both in it"_s, [this, longPoint] {
+                       QQuickItem *t = textItem();
+                       if (!t)
+                           return false;
+                       QRectF first, last;
+                       QMetaObject::invokeMethod(t, "positionToRectangle", Q_RETURN_ARG(QRectF, first), Q_ARG(int, 0));
+                       QMetaObject::invokeMethod(t, "positionToRectangle", Q_RETURN_ARG(QRectF, last), Q_ARG(int, int(longPoint.size())));
+                       return t->height() > 60 && last.y() > first.y() + first.height() / 2 && first.x() >= 0
+                              && last.x() <= t->width() && first.y() >= 0 && last.y() + last.height() <= t->height() + 1;
+                   })
+                << snap(u"idea-point-wrapped"_s)
+                << key(Qt::Key_Return, u"Enter adds the point, no line break"_s) << wait(300)
+                << check(u"the point is added, the field is empty and one line again"_s, [this] {
+                       QQuickItem *t = textItem();
+                       return t && textPlain().isEmpty() && t->height() <= 60;
+                   })
+                << tap(u"^Abbrechen$"_s) << gone(u"edit:^Aufgabe$"_s)
+                << act(u"back to the note field"_s, [this] { m_textField = u"edit:^Notiz$"_s; })
+                << tap(u"^Neue Idee ausprobieren$"_s, u"back"_s) << tap(u"^Einstellungen$"_s, u"back"_s) << backIfThere(u"^Mehr$"_s);
+    }
 }

@@ -187,6 +187,7 @@ ColumnLayout {
             Layout.fillWidth: true
             spacing: 6
             InputField {
+                wrap: true
                 placeholder: task.pendingPriv ? qsTrId("idea.point.add_private") : qsTrId("idea.point.add")
                 text: task.pending
                 onEdited: value => task.win.setTask(task.index, "pending", value)

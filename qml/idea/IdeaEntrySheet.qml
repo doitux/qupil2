@@ -119,6 +119,7 @@ Sheet {
                         font.weight: Font.Bold
                     }
                     InputField {
+                        wrap: true
                         placeholder: qsTrId("idea.task.point")
                         text: changeRow.model.text
                         onEdited: value => changesM.setProperty(changeRow.index, "text", value)
