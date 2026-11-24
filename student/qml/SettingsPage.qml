@@ -131,13 +131,30 @@ Page {
                 T { width: parent.width; text: qsTrId("s.settings.privacy_text"); color: Theme.textSecondary; font.pixelSize: 14 }
             }
 
+            // Version and the commit of this build, as in Qupil; a tap copies both (for a
+            // report of what does not work)
             T {
+                id: versionLine
+                objectName: "versionLine"
                 width: parent.width
                 topPadding: 10
+                bottomPadding: 10
                 horizontalAlignment: Text.AlignHCenter
-                text: qsTrId("s.app.name") + " " + StudentApp.version
+                text: qsTrId("s.app.name") + " " + StudentApp.versionText
                 color: Theme.textMuted
                 font.pixelSize: 12
+                Accessible.role: Accessible.Button
+                Accessible.name: text
+                Accessible.onPressAction: versionTap.copy()
+                MouseArea {
+                    id: versionTap
+                    anchors.fill: parent
+                    function copy() {
+                        StudentApp.copyVersion()
+                        window.showNotice(qsTrId("s.settings.version_copied").arg("Qupil Practice " + StudentApp.versionText))
+                    }
+                    onClicked: copy()
+                }
             }
         }
     }

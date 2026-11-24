@@ -16,6 +16,7 @@
 #include "IncomingLinks.h"
 #include "KeyboardHeight.h"
 #include "QrScanner.h"
+#include "SafeArea.h"
 #include "StudentApp.h"
 #include "Translator.h"
 
@@ -95,6 +96,16 @@ int main(int argc, char *argv[])
         IncomingLinks::unwatch();
         return 1;
     }
+
+    // iOS: the window reaches behind the status bar and the home indicator; the pages
+    // keep clear of them
+    SafeArea::watch(qobject_cast<QQuickWindow *>(engine.rootObjects().constFirst()),
+                    [studentApp](qreal top, qreal bottom) {
+                        if (!qFuzzyCompare(top + 1, studentApp->safeTop() + 1)
+                            || !qFuzzyCompare(bottom + 1, studentApp->safeBottom() + 1))
+                            qInfo("safe area: top %d bottom %d", int(top), int(bottom));
+                        studentApp->setSafeArea(top, bottom);
+                    });
 
     // For the tests on devices and simulators: the interface is loaded
     qInfo("Qupil student: started (%d teacher(s))", int(studentApp->teachers().size()));

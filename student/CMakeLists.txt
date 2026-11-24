@@ -113,21 +113,32 @@ qt_add_resources(qupilstudentui "student_fonts"
         ${QUPIL_ROOT}/assets/fonts/Figtree-ExtraBold.ttf)
 target_include_directories(qupilstudentui PUBLIC src)
 target_compile_definitions(qupilstudentui PUBLIC QUPIL_STUDENT_VERSION="${PROJECT_VERSION}")
+# Which build this is (shown beside the version in the settings, as in Qupil): the commit
+# on CI, "dev" otherwise
+if(DEFINED ENV{GITHUB_SHA})
+    string(SUBSTRING "$ENV{GITHUB_SHA}" 0 7 QUPIL_STUDENT_BUILD)
+else()
+    set(QUPIL_STUDENT_BUILD "dev")
+endif()
+target_compile_definitions(qupilstudentui PRIVATE QUPIL_STUDENT_BUILD="${QUPIL_STUDENT_BUILD}")
 target_link_libraries(qupilstudentui PUBLIC qupilbooklet
     Qt6::Core Qt6::Gui Qt6::Qml Qt6::Quick Qt6::QuickControls2 Qt6::Network)
 # The QR code scanner: the phone's camera (iOS: AVFoundation; Android: StudentActivity
 # with zxing-android-embedded, see platform/android/build.gradle); none on the desktop
 if(IOS)
-    target_sources(qupilstudentui PRIVATE src/QrScanner_ios.mm src/IncomingLinks_ios.mm src/KeyboardHeight_none.cpp)
-    set_source_files_properties(src/QrScanner_ios.mm src/IncomingLinks_ios.mm PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
+    target_sources(qupilstudentui PRIVATE src/QrScanner_ios.mm src/IncomingLinks_ios.mm src/KeyboardHeight_none.cpp
+        src/SafeArea_ios.mm)
+    set_source_files_properties(src/QrScanner_ios.mm src/IncomingLinks_ios.mm src/SafeArea_ios.mm
+        PROPERTIES COMPILE_OPTIONS "-fobjc-arc")
     target_link_libraries(qupilstudentui PUBLIC "-framework AVFoundation" "-framework UIKit")
 elseif(ANDROID)
     # The links that open the app come through StudentActivity as well (IncomingLinks.h)
     # ... and the height of the on-screen keyboard (KeyboardHeight.h)
     target_sources(qupilstudentui PRIVATE src/QrScanner_android.cpp src/IncomingLinks_android.cpp
-        src/KeyboardHeight_android.cpp)
+        src/KeyboardHeight_android.cpp src/SafeArea_none.cpp)
 else()
-    target_sources(qupilstudentui PRIVATE src/QrScanner_none.cpp src/IncomingLinks_qt.cpp src/KeyboardHeight_none.cpp)
+    target_sources(qupilstudentui PRIVATE src/QrScanner_none.cpp src/IncomingLinks_qt.cpp src/KeyboardHeight_none.cpp
+        src/SafeArea_none.cpp)
 endif()
 
 # ---- the app

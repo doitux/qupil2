@@ -162,6 +162,7 @@ E("s.settings.remove_hint",
   "Solo se quita la conexión con este profesor de este móvil. Tu profesor se entera de que se quitó de un dispositivo y puede darte un código nuevo cuando quieras.")
 E("s.settings.add", "Add another teacher", "Weitere Lehrkraft hinzufügen", "Ajouter un autre professeur", "Añadir otro profesor")
 E("s.settings.privacy", "Privacy", "Datenschutz", "Confidentialité", "Privacidad")
+E("s.settings.version_copied", "Copied: %1", "Kopiert: %1", "Copié : %1", "Copiado: %1")
 E("s.settings.privacy_text",
   "Your tasks lie encrypted in your teacher's cloud. Only this app and your teacher's Qupil can read them. "
   "What you send back (practised, works, questions) goes encrypted to your teacher only. "

@@ -19,11 +19,18 @@ ApplicationWindow {
     color: Theme.bg
     font.family: Theme.fontFamily
 
+    // iOS: the window covers the whole screen, behind the status bar and the home indicator.
+    // Kept inside the safe area (Qt's way without this), the strips above and below are
+    // black with a white status bar, also in the light look. Android colours its bars
+    // itself (res/values/student.xml) and the window ends at them.
+    flags: Qt.platform.os === "ios" ? Qt.Window | Qt.MaximizeUsingFullscreenGeometryHint : Qt.Window
+
     readonly property bool coupled: StudentApp.teachers.length > 0
-    // Room for notch and home indicator: Qt keeps the window inside the safe area (as in
-    // Qupil); only if the window ever reaches below the status bar these come into play
-    readonly property real topInset: 0
-    readonly property real bottomInset: 0
+    // Room the status bar (or notch) and the home indicator take of the window: the pages
+    // start below and end above it, their background goes behind it (SafeArea.h). 0
+    // wherever the window ends at the system's bars.
+    readonly property real topInset: StudentApp.safeTop
+    readonly property real bottomInset: StudentApp.safeBottom
 
     // Room for the on-screen keyboard. Android: the window keeps its size (the system
     // making it smaller let the page jump and go empty for a moment); the app measures the
@@ -44,6 +51,16 @@ ApplicationWindow {
         anchors.fill: parent
         anchors.bottomMargin: window.keyboardInset
         initialItem: window.coupled ? homePage : welcomePage
+    }
+
+    // Behind the status bar: the page's colour, also over what scrolls up there (the
+    // welcome page has no bar of its own)
+    Rectangle {
+        objectName: "statusBarRoom"
+        z: 3
+        width: parent.width
+        height: window.topInset
+        color: Theme.bg
     }
 
     Component { id: welcomePage; WelcomePage {} }
