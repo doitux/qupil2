@@ -337,11 +337,19 @@ Sheet {
         }
     }
 
-    InputField {
+    // The note: a field of its own for every time the window opens. (Emptying the field of
+    // the time before from here ended in a binding loop on iOS, whose keyboard still held
+    // the last word.)
+    Loader {
+        id: noteLoader
         visible: !sheet.prepare
-        label: sheet.tasksShown ? qsTrId("idea.note.label") : qsTrId("common.note")
-        multiline: true
-        text: sheet.note
-        onEdited: value => sheet.note = value
+        Layout.fillWidth: true
+        active: sheet.visible
+        sourceComponent: InputField {
+            width: noteLoader.width
+            label: sheet.tasksShown ? qsTrId("idea.note.label") : qsTrId("common.note")
+            multiline: true
+            onEdited: value => sheet.note = value
+        }
     }
 }
