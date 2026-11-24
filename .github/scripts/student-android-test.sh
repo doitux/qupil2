@@ -138,6 +138,7 @@ say "## The on-screen keyboard"
 # The window keeps its size (adjustNothing): StudentActivity measures the keyboard and the
 # page makes room. The emulator shows the keyboard only when told to.
 adb shell settings put secure show_ime_with_hard_keyboard 1 > /dev/null
+say "- keyboards of the emulator: \`$(adb shell ime list -s | tr -d '\r' | tr '\n' ' ')\`"
 LINK_FIELD='qupil\.de/u#'
 mark
 if tap "$LINK_FIELD"; then
