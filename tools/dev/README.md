@@ -8,8 +8,9 @@ tested without a screen, while the device tests run on GitHub.
 |---|---|
 | `qt64build.sh` | Copies the working tree, adapts the Qt 6.5+ APIs to Qt 6.4 and builds. Exits with the build's exit code. |
 | `local-test.sh` | Builds (stops when the build fails), runs the given UI test cases, prints only the failures. |
+| `student-test.sh` | The student app (`student/`): builds it and runs its three tests, prints only the failures. About two minutes. |
 | `ci-start.sh` | Starts the desktop, Android and iOS UI test runs for a branch; never a second iOS test while one runs. |
-| `ci-status.sh` | One look at a branch's runs and at the results of the device tests. |
+| `ci-status.sh` | One look at a branch's runs and at the results of the device tests, the student app's included. |
 
 `QUPIL_WORK` is the scratch folder (default `/home/claude/work`); build tree and results live there,
 nothing is written into the repository.

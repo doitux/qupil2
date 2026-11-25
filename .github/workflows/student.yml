@@ -413,7 +413,7 @@ jobs:
           git push -q -f "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" student-test-ios
 
   ios:
-    name: iOS archive (→ TestFlight by hand)
+    name: iOS archive (→ TestFlight with upload)
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v7
