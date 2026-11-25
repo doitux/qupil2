@@ -1,0 +1,92 @@
+11-25 07:56:23.285   554  2330 I ActivityManager: Force stopping de.qupil.student appid=10126 user=0: from pid 2338
+11-25 07:56:23.288   983   983 D CarrierSvcBindHelper: onHandleForceStop: [de.qupil.student]
+11-25 07:56:23.330   554  2330 I ActivityTaskManager: START u0 {act=android.intent.action.VIEW cat=[android.intent.category.BROWSABLE] dat=https://qupil.de/... flg=0x10000000 cmp=de.qupil.student/.StudentActivity} from uid 2000
+11-25 07:56:23.347   554   585 I ActivityManager: Start proc 2347:de.qupil.student/u0a126 for next-top-activity {de.qupil.student/de.qupil.student.StudentActivity}
+11-25 07:56:23.370   554  1575 D CoreBackPreview: Window{35abb11 u0 Splash Screen de.qupil.student}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@b5d0a77, mPriority=0}
+11-25 07:56:23.381  2347  2347 W ziparchive: Unable to open '/data/app/~~3AqgSOSB2S8b-efHiWQvRQ==/de.qupil.student-JO34SxeJktW-lZTH8mnv3w==/base.dm': No such file or directory
+11-25 07:56:23.381  2347  2347 W ziparchive: Unable to open '/data/app/~~3AqgSOSB2S8b-efHiWQvRQ==/de.qupil.student-JO34SxeJktW-lZTH8mnv3w==/base.dm': No such file or directory
+11-25 07:56:23.516  2347  2347 V GraphicsEnvironment: ANGLE Developer option for 'de.qupil.student' set to: 'default'
+11-25 07:56:23.516  2347  2347 V GraphicsEnvironment: ANGLE GameManagerService for de.qupil.student: false
+11-25 07:56:23.560  2347  2347 W ziparchive: Unable to open '/data/app/~~3AqgSOSB2S8b-efHiWQvRQ==/de.qupil.student-JO34SxeJktW-lZTH8mnv3w==/base.dm': No such file or directory
+11-25 07:56:23.560  2347  2347 W ziparchive: Unable to open '/data/app/~~3AqgSOSB2S8b-efHiWQvRQ==/de.qupil.student-JO34SxeJktW-lZTH8mnv3w==/base.dm': No such file or directory
+11-25 07:56:23.637  2347  2347 I QupilStudent: a link came in (kept until the app is ready)
+11-25 07:56:23.641   554   917 D CoreBackPreview: Window{f117775 u0 de.qupil.student/de.qupil.student.StudentActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@5ec777b, mPriority=0}
+11-25 07:56:23.809   554   573 W ziparchive: Unable to open '/data/app/~~3AqgSOSB2S8b-efHiWQvRQ==/de.qupil.student-JO34SxeJktW-lZTH8mnv3w==/base.dm': No such file or directory
+11-25 07:56:23.821   554   573 I ActivityTaskManager: Displayed de.qupil.student/.StudentActivity: +478ms
+11-25 07:56:23.838   554   917 D CoreBackPreview: Window{35abb11 u0 Splash Screen de.qupil.student EXITING}: Setting back callback null
+11-25 07:56:23.838   554  2330 W InputManager-JNI: Input channel object '35abb11 Splash Screen de.qupil.student (client)' was disposed without first being removed with the input manager!
+11-25 07:56:23.913  2347  2366 I default : Qupil student: link received, teacher added
+11-25 07:56:24.599  2347  2366 I default : Qupil student: started (1 teacher(s))
+11-25 07:56:28.190   554  2387 I ActivityTaskManager: START u0 {act=android.intent.action.VIEW cat=[android.intent.category.BROWSABLE] dat=https://qupil.de/... flg=0x10000000 cmp=de.qupil.student/.StudentActivity} from uid 2000
+11-25 07:56:28.198  2347  2347 I QupilStudent: a link came in
+11-25 07:56:28.301  2347  2366 I default : Qupil student: link received, teacher added
+11-25 07:56:29.257   554  2387 I ActivityTaskManager: START u0 {act=android.intent.action.VIEW cat=[android.intent.category.BROWSABLE] dat=qupil-student: flg=0x10000000 cmp=de.qupil.student/.StudentActivity} from uid 2000
+11-25 07:56:29.259  2347  2347 I QupilStudent: a link came in
+11-25 07:56:29.362  2347  2366 I default : Qupil student: link received, teacher added
+11-25 07:56:29.453  2347  2426 D ProfileInstaller: Installing profile for de.qupil.student
+11-25 07:56:32.351   554  2387 I ActivityTaskManager: START u0 {act=android.intent.action.VIEW cat=[android.intent.category.BROWSABLE] dat=https://qupil.de/... flg=0x10000000 cmp=de.qupil.student/.StudentActivity} from uid 2000
+11-25 07:56:32.355  2347  2347 I QupilStudent: a link came in
+11-25 07:56:32.359  2347  2366 I default : Qupil student: link received, teacher added
+11-25 07:56:32.514   554   573 W ziparchive: Unable to open '/data/app/~~3AqgSOSB2S8b-efHiWQvRQ==/de.qupil.student-JO34SxeJktW-lZTH8mnv3w==/base.dm': No such file or directory
+11-25 07:56:34.761   554  2387 I ActivityManager: Force stopping de.qupil.student appid=10126 user=0: from pid 2465
+11-25 07:56:34.765   554  2387 I ActivityManager: Killing 2347:de.qupil.student/u0a126 (adj 0): stop de.qupil.student due to from pid 2465
+11-25 07:56:34.766   554  2387 W ActivityTaskManager: Force removing ActivityRecord{1dc9eee u0 de.qupil.student/.StudentActivity} t9 f}}: app died, no saved state
+11-25 07:56:34.773   554  2387 W InputManager-JNI: Input channel object 'f117775 de.qupil.student/de.qupil.student.StudentActivity (client)' was disposed without first being removed with the input manager!
+11-25 07:56:34.792   554   571 V ActivityManager: Got obituary of 2347:de.qupil.student
+11-25 07:56:34.800   983   983 D CarrierSvcBindHelper: onHandleForceStop: [de.qupil.student]
+11-25 07:56:34.844   554  1220 I ActivityManager: Force stopping de.qupil.student appid=10126 user=0: clear data
+11-25 07:56:34.858   554   584 I ActivityManager: Force stopping de.qupil.student appid=10126 user=-1: clearApplicationUserData
+11-25 07:56:34.869  1381  2323 I MediaProvider: Invalidating LocalCallingIdentity cache for package de.qupil.student. Reason: op android:read_external_storage
+11-25 07:56:34.871  1381  2323 I MediaProvider: Invalidating LocalCallingIdentity cache for package de.qupil.student. Reason: op android:read_external_storage
+11-25 07:56:34.922   983   983 D CarrierSvcBindHelper: onHandleForceStop: [de.qupil.student]
+11-25 07:56:34.960  1381  1739 D MediaProvider: Deleted 0 Android/media items belonging to de.qupil.student on /data/user/0/com.android.providers.media.module/databases/external.db
+11-25 07:56:34.976   554  1220 I ActivityTaskManager: START u0 {flg=0x10000000 cmp=de.qupil.student/.StudentActivity} from uid 2000
+11-25 07:56:35.008   554  2468 D CoreBackPreview: Window{8183d78 u0 Splash Screen de.qupil.student}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@b77cb6, mPriority=0}
+11-25 07:56:35.087   554   585 I ActivityManager: Start proc 2493:de.qupil.student/u0a126 for next-top-activity {de.qupil.student/de.qupil.student.StudentActivity}
+11-25 07:56:35.139  2493  2493 W ziparchive: Unable to open '/data/app/~~3AqgSOSB2S8b-efHiWQvRQ==/de.qupil.student-JO34SxeJktW-lZTH8mnv3w==/base.dm': No such file or directory
+11-25 07:56:35.139  2493  2493 W ziparchive: Unable to open '/data/app/~~3AqgSOSB2S8b-efHiWQvRQ==/de.qupil.student-JO34SxeJktW-lZTH8mnv3w==/base.dm': No such file or directory
+11-25 07:56:35.159  2493  2493 V GraphicsEnvironment: ANGLE Developer option for 'de.qupil.student' set to: 'default'
+11-25 07:56:35.160  2493  2493 V GraphicsEnvironment: ANGLE GameManagerService for de.qupil.student: false
+11-25 07:56:35.192  2493  2493 W ziparchive: Unable to open '/data/app/~~3AqgSOSB2S8b-efHiWQvRQ==/de.qupil.student-JO34SxeJktW-lZTH8mnv3w==/base.dm': No such file or directory
+11-25 07:56:35.192  2493  2493 W ziparchive: Unable to open '/data/app/~~3AqgSOSB2S8b-efHiWQvRQ==/de.qupil.student-JO34SxeJktW-lZTH8mnv3w==/base.dm': No such file or directory
+11-25 07:56:35.274   554  2468 D CoreBackPreview: Window{13418ec u0 de.qupil.student/de.qupil.student.StudentActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@690474a, mPriority=0}
+11-25 07:56:35.382   554   573 W ziparchive: Unable to open '/data/app/~~3AqgSOSB2S8b-efHiWQvRQ==/de.qupil.student-JO34SxeJktW-lZTH8mnv3w==/base.dm': No such file or directory
+11-25 07:56:35.386   554   573 I ActivityTaskManager: Displayed de.qupil.student/.StudentActivity: +404ms
+11-25 07:56:35.423   554  1220 D CoreBackPreview: Window{8183d78 u0 Splash Screen de.qupil.student EXITING}: Setting back callback null
+11-25 07:56:35.423   554  1623 W InputManager-JNI: Input channel object '8183d78 Splash Screen de.qupil.student (client)' was disposed without first being removed with the input manager!
+11-25 07:56:35.909  2493  2512 I default : Qupil student: started (0 teacher(s))
+11-25 07:56:40.855  2493  2520 D ProfileInstaller: Installing profile for de.qupil.student
+11-25 07:56:45.862   554   862 I ActivityTaskManager: START u0 {act=com.google.zxing.client.android.SCAN flg=0x4080000 cmp=de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity (has extras)} from uid 10126
+11-25 07:56:45.871  2493  2493 I QupilStudent: scanner opened
+11-25 07:56:45.916   492  2076 I CameraService: CameraService::connect call (PID -1 "de.qupil.student", camera ID 1) and Camera API version 1
+11-25 07:56:45.919   554  1220 D CoreBackPreview: Window{2dce5b u0 de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity}: Setting back callback OnBackInvokedCallbackInfo{mCallback=android.window.IOnBackInvokedCallback$Stub$Proxy@5e77d1, mPriority=0}
+11-25 07:56:45.922   492  2076 I Camera2ClientBase: Camera 1: Opened. Client: de.qupil.student (PID 2493, UID 10126)
+11-25 07:56:46.128   554   573 I ActivityTaskManager: Displayed de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity: +264ms
+11-25 07:56:46.794   436   436 D CompositionEngine: Layer: de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity#191 had an out of bounds transparent region
+11-25 07:56:46.844   436   436 D CompositionEngine: Layer: de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity#191 had an out of bounds transparent region
+11-25 07:56:46.878   436   436 D CompositionEngine: Layer: de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity#191 had an out of bounds transparent region
+11-25 07:56:47.460   436   436 D CompositionEngine: Layer: de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity#191 had an out of bounds transparent region
+11-25 07:56:47.494   436   436 D CompositionEngine: Layer: de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity#191 had an out of bounds transparent region
+11-25 07:56:51.543   436   436 D CompositionEngine: Layer: de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity#191 had an out of bounds transparent region
+11-25 07:56:51.930   554   576 W ActivityTaskManager: Activity pause timeout for ActivityRecord{f115be0 u0 de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity} t10 f}}
+11-25 07:56:51.944   436   436 D CompositionEngine: Layer: de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity#191 had an out of bounds transparent region
+11-25 07:56:51.958   492   636 I Camera2ClientBase: Closed Camera 1. Client was: de.qupil.student (PID 2493, UID 10126)
+11-25 07:56:51.963  2493  2493 I QupilStudent: scanner closed: no code
+11-25 07:56:51.965  2493  2512 I default : Qupil student: scanner closed, no code
+11-25 07:56:51.988   436   436 D CompositionEngine: Layer: de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity#191 had an out of bounds transparent region
+11-25 07:56:52.029   436   436 D CompositionEngine: Layer: de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity#191 had an out of bounds transparent region
+11-25 07:56:52.077   436   436 D CompositionEngine: Layer: de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity#191 had an out of bounds transparent region
+11-25 07:56:52.127   436   436 D CompositionEngine: Layer: de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity#191 had an out of bounds transparent region
+11-25 07:56:52.161   436   436 D CompositionEngine: Layer: de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity#191 had an out of bounds transparent region
+11-25 07:56:52.228   436   436 D CompositionEngine: Layer: de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity#191 had an out of bounds transparent region
+11-25 07:56:52.279   436   436 D CompositionEngine: Layer: de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity#191 had an out of bounds transparent region
+11-25 07:56:52.360   436   436 D CompositionEngine: Layer: de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity#191 had an out of bounds transparent region
+11-25 07:56:52.444   436   436 D CompositionEngine: Layer: de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity#191 had an out of bounds transparent region
+11-25 07:56:52.467   554   789 D CoreBackPreview: Window{2dce5b u0 de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity}: Setting back callback null
+11-25 07:56:52.467   554  1220 W InputManager-JNI: Input channel object '2dce5b de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity (client)' was disposed without first being removed with the input manager!
+11-25 07:56:52.469   554   789 W InputManager-JNI: Input channel object 'Letterbox_left_ActivityRecord{f115be0 u0 de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity} t10} (client)' was disposed without first being removed with the input manager!
+11-25 07:56:52.469   554   789 W InputManager-JNI: Input channel object 'Letterbox_top_ActivityRecord{f115be0 u0 de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity} t10} (client)' was disposed without first being removed with the input manager!
+11-25 07:56:52.469   554   789 W InputManager-JNI: Input channel object 'Letterbox_right_ActivityRecord{f115be0 u0 de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity} t10} (client)' was disposed without first being removed with the input manager!
+11-25 07:56:52.469   554   789 W InputManager-JNI: Input channel object 'Letterbox_bottom_ActivityRecord{f115be0 u0 de.qupil.student/com.journeyapps.barcodescanner.CaptureActivity} t10} (client)' was disposed without first being removed with the input manager!
+11-25 07:56:57.263  2493  2493 I QupilStudent: keyboard: 775 px
+11-25 07:57:03.328  2493  2493 I QupilStudent: keyboard: 0 px
