@@ -75,20 +75,24 @@ void UiTest::addIdeaCases()
             << tap(u"^Vorbereiten$"_s) << tap(u"^Dran: Mozart: Violinkonzert G-Dur, 1\\. Satz$"_s)
             << tap(u"^Mozart: Violinkonzert G-Dur, 1\\. Satz$"_s, u"unfold the Mozart"_s)
             << tap(u"edit:^Punkt hinzufügen, nur für mich$"_s) << type(u"UI-Vorhaben"_s)
+            // A paused task taken up again and due: it runs and is prepared after saving
+            << tap(u"^Wieder aufnehmen: Kreutzer: Etüde Nr\\. 2$"_s) << tap(u"^Dran: Kreutzer: Etüde Nr\\. 2$"_s)
             << snap(u"idea-prepare"_s)
             // (saving takes the line that is still being typed along)
             << tap(u"^Speichern$"_s) << see(u"^Vorbereitet für "_s) << see(u"^UI-Vorhaben$"_s)
+            << see(u"^Pausiert \\(1\\)$"_s)
             // In the lesson it is at the top, to be ticked
             // (asked at once, while the window of the preparation is still on its way out: it
             // opens as soon as that is gone. The page shows "UI-Vorhaben" too, in the card of
             // what is prepared – only in the lesson's window it is a box to tick)
             << tap(u"^Stunde$"_s) << see(lessonOpen) << see(u"checkbox:^UI-Vorhaben$"_s)
+            << see(u"^Geschafft: Kreutzer: Etüde Nr\\. 2$"_s)
             << tap(u"checkbox:^UI-Vorhaben$"_s, u"what I planned is done"_s)
             << snap(u"idea-lesson-prepared"_s)
             << tap(u"^Speichern$"_s) << gone(u"^Vorbereitet für "_s)
 
             // A paused task is taken up again; the student's app
-            << tap(u"^Pausiert \\(2\\)$"_s) << tap(u"^Wieder aufnehmen$"_s) << see(u"^Pausiert \\(1\\)$"_s)
+            << tap(u"^Pausiert \\(1\\)$"_s) << tap(u"^Wieder aufnehmen$"_s) << gone(u"^Pausiert \\(\\d\\)$"_s)
             << tap(u"^So sieht es Jonas in der App$"_s)
             << tap(u"^Mozart: Violinkonzert G-Dur, 1\\. Satz: viel geübt$"_s)
             << snap(u"idea-pupil"_s)
