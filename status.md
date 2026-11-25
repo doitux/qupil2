@@ -1,8 +1,8 @@
 # TestFlight-Sammellauf 2026-11-25 00:55 (von Hand, now)
 
-**Build 61 gestartet**
+**Build 61 hochgeladen**
 
-- Build 61 (Commit 8afbfc1): queued, Upload: -, Testtext: -
+- Build 61 (Commit 8afbfc1): success, Upload: success, Testtext: success
 - https://github.com/doitux/qupil2/actions/runs/45513939348
 - Seit Build 60 (Commit 8e04cd1)
 

@@ -95,17 +95,20 @@
     "student/src/main.cpp",
     "student/tests/tst_studentapp.cpp"
   ],
-  "result": "started",
+  "result": "uploaded",
   "build": {
     "number": 61,
     "run_id": 45513939348,
     "sha": "8afbfc1ca63277da3d2d949c772241f4dc52cedd",
     "url": "https://github.com/doitux/qupil2/actions/runs/45513939348",
     "created": "2026-11-24T23:55:14Z",
-    "status": "queued",
-    "conclusion": null,
-    "attempt": 1
+    "status": "completed",
+    "conclusion": "success",
+    "attempt": 1,
+    "rerun": false,
+    "upload": "success",
+    "whats_new": "success"
   },
-  "written": "2026-11-25T00:55:25+01:00",
-  "headline": "Build 61 gestartet"
+  "written": "2026-11-25T01:17:37+01:00",
+  "headline": "Build 61 hochgeladen"
 }
