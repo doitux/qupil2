@@ -201,7 +201,12 @@ permissions, OCS share API, capabilities).
 tests and screenshots of the example in four languages (Linux), an Android test APK
 (signed with the public test key; on main it goes to the "nightly" release as
 `Qupil-Practice-Android-arm64-nightly-<commit>.apk`), the emulator run, the iOS archive.
-Upload to TestFlight (`de.qupil.student`) only when started by hand with "upload".
+Upload to TestFlight (`de.qupil.student`) when the workflow is started with "upload": by the
+collect run of the TestFlight builds (at its slots, when something for the student's iOS app
+changed since its last upload; `.github/scripts/testflight-collect.py`), by hand only when a
+build is wanted right away. After the upload the workflow sets the testers' text ("What to
+Test", German and English) from `.github/testflight/student-whats-new.txt`; see
+`.github/testflight/README.md`.
 The archive is built unsigned; before the export it gets an ad-hoc signature with the
 Associated Domains entitlement, which the export's signing keeps.
 

@@ -1,0 +1,9 @@
+Neu seit Build 50
+
+Noch nichts, was man in der App sieht.
+
+Schon in Build 50 (bitte am Gerät prüfen, falls noch nicht geschehen):
+
+• iPad und iPhone, heller Modus: Die Streifen oben (Statusleiste) und unten sind nicht mehr schwarz, die Seite reicht bis an den Rand. Bitte prüfen: Aufgaben, Einstellungen und Willkommensseite, auf dem iPad hoch und quer und nach dem Drehen. Die Uhr oben muss lesbar sein, nichts darf unter der Statusleiste oder dem Balken unten liegen. Bitte auch einmal ins Fragefeld tippen (Tastatur).
+
+• Einstellungen, ganz unten: Neben der Versionsnummer steht die Build-Kennung, z. B. „1.0.0 (8ea0845)“. Antippen kopiert sie für Fehlermeldungen. Bitte prüfen.

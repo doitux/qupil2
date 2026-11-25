@@ -3,6 +3,8 @@
 # Testers are not notified for every small change; pushes can happen at any time.
 # At 22:05 it also starts the platform tests (android-test, ui-test, ios-test) – each only when
 # something it tests changed since its last run.
+# The student app (Qupil Practice, student.yml) is collected the same way at the same slots:
+# a build with upload when something for its iOS app changed since its last upload.
 # The result goes to the branch "testflight-status" (status.json, status.md).
 # By hand: Actions › TestFlight (collect) › Run workflow – "dry-run" only checks,
 # "now" builds right away when something changed.
@@ -26,7 +28,7 @@ on:
         default: dry-run
 
 permissions:
-  actions: write     # start and re-run the TestFlight workflow
+  actions: write     # start and re-run the TestFlight workflow and the student app's
   contents: write    # write the branch testflight-status
   checks: read       # annotations ("not acquired by Runner")
 
