@@ -136,14 +136,24 @@ ColumnLayout {
             Accessible.name: qsTrId("idea.due.name").arg(task.title)
             onClicked: task.win.setTask(task.index, "due", !task.due)
         }
-        Icon {
+        // The arrow unfolds too (it was only a picture: a tap on it did nothing). The title
+        // beside it is what a screen reader gets
+        Item {
+            objectName: "ideaTaskFold"
             Layout.alignment: Qt.AlignTop
-            Layout.topMargin: 5
-            Layout.preferredWidth: 16
-            Layout.preferredHeight: 16
-            name: "chevronDown"
-            color: Theme.icon
-            rotation: task.open ? 180 : 0
+            Layout.preferredWidth: 32
+            Layout.preferredHeight: 32
+            Layout.topMargin: -3
+            Layout.rightMargin: -8
+            Icon {
+                anchors.centerIn: parent
+                width: 16
+                height: 16
+                name: "chevronDown"
+                color: Theme.icon
+                rotation: task.open ? 180 : 0
+            }
+            TapHandler { onTapped: task.win.setTask(task.index, "open", !task.open) }
         }
     }
 
