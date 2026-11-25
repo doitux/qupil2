@@ -12,7 +12,9 @@ b=${1:?usage: ci-status.sh <branch>}
 cd "$(git -C "$(dirname "$0")" rev-parse --show-toplevel)" || exit 1
 gh() { ( unset GH_TOKEN; command gh "$@" ); }     # a token set in the environment may be stale
 
-git fetch -q origin main ios-test android-test "$b" || exit 1
+git fetch -q origin main ios-test android-test "$b" \
+    '+refs/heads/student-test-ios:refs/remotes/origin/student-test-ios' \
+    '+refs/heads/student-test-android:refs/remotes/origin/student-test-android' || exit 1
 echo "branch $(git rev-parse --short "origin/$b"), main $(git rev-parse --short origin/main)," \
      "commits of main missing in the branch: $(git rev-list --count "origin/$b..origin/main")"
 gh api "repos/doitux/qupil2/actions/runs?branch=$b&per_page=12" \
@@ -24,3 +26,9 @@ for d in iphone ipad; do
 done
 echo "--- Android test: $(git log -1 --format='%h %ci %s' origin/android-test)"
 echo "android failed lines: $(git show origin/android-test:summary.md 2>/dev/null | grep -c '❌')"
+# The student app's device tests (workflow "Student app", on every push that touches it) write to
+# their own branches; their last line says whether all was fine
+for t in student-test-ios student-test-android; do
+    echo "--- $t: $(git log -1 --format='%h %ci %s' "origin/$t")"
+    git show "origin/$t:summary.md" 2>/dev/null | grep -E '^\*\*(All fine|Something failed)|^- \*\*' | cut -c1-200 | head -8
+done
