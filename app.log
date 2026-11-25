@@ -1,0 +1,938 @@
+getpwuid_r did not find a match for uid 501
+Filtering the log data using "process == "QupilStudent""
+Timestamp               Ty Process[PID:TID]
+2026-11-25 07:59:46.341 Df QupilStudent[11517:901f] [com.apple.xpc:connection] [0x7fb7ba705db0] activating connection: mach=true listener=false peer=false name=com.apple.cfprefsd.daemon
+2026-11-25 07:59:46.832 A  QupilStudent[11517:9397] (CoreFoundation) Loading Preferences From User Session CFPrefsD
+2026-11-25 07:59:46.879 Df QupilStudent[11517:901f] [com.apple.securityd:SecWarning] SecTaskLoadEntitlements failed error=22 cs_flags=200, pid=11517 task=QupilStudent[11517]/0#-1 LF=22
+2026-11-25 07:59:46.950 Df QupilStudent[11517:901f] (libMobileGestalt.dylib) No persisted cache on this platform.
+2026-11-25 07:59:46.950 Df QupilStudent[11517:9368] [com.apple.UIKit:BackgroundTask] Creating new assertion because there is no existing background assertion.
+2026-11-25 07:59:46.961 Df QupilStudent[11517:9368] [com.apple.UIKit:BackgroundTask] Creating new background assertion
+2026-11-25 07:59:46.975 Df QupilStudent[11517:9368] [com.apple.UIKit:BackgroundTask] Created new background assertion <BKSProcessAssertion: 0x600000576ad0>
+2026-11-25 07:59:46.978 Df QupilStudent[11517:9368] [com.apple.runningboard:connection] Initializing connection
+2026-11-25 07:59:46.983 Df QupilStudent[11517:9368] [com.apple.runningboard:process] Removing all cached process handles
+2026-11-25 07:59:46.985 Df QupilStudent[11517:9398] [com.apple.runningboard:connection] Sending handshake request attempt #1 to server
+2026-11-25 07:59:47.006 I  QupilStudent[11517:9368] [com.apple.runningboard:assertion] Acquiring assertion: <RBSAssertionDescriptor| "Shared Background Assertion 0 for de.qupil.student" ID:(null) target:11517>
+2026-11-25 07:59:47.036 Df QupilStudent[11517:9398] [com.apple.runningboard:connection] Creating connection to com.apple.runningboard
+2026-11-25 07:59:47.040 Df QupilStudent[11517:9398] [com.apple.xpc:connection] [0x7fb7bb2059d0] activating connection: mach=true listener=false peer=false name=com.apple.runningboard
+2026-11-25 07:59:47.120 Df QupilStudent[11517:9398] [com.apple.runningboard:connection] Handshake succeeded
+2026-11-25 07:59:47.122 Df QupilStudent[11517:9398] [com.apple.runningboard:connection] Identity resolved as app<de.qupil.student((null))>
+2026-11-25 07:59:47.122 Df QupilStudent[11517:9397] [com.apple.BoardServices:XPCErrors] [C:1] Alloc com.apple.frontboard.systemappservices
+2026-11-25 07:59:47.134 A  QupilStudent[11517:93a7] (RunningBoardServices) didChangeInheritances
+2026-11-25 07:59:47.136 Df QupilStudent[11517:9397] [com.apple.xpc:connection] [0x7fb7bb207090] activating connection: mach=false listener=false peer=false name=(anonymous)
+2026-11-25 07:59:47.136 Df QupilStudent[11517:9368] [com.apple.UIKit:BackgroundTask] Incrementing reference count for background assertion <BKSProcessAssertion: 0x600000576ad0>
+2026-11-25 07:59:47.150 Df QupilStudent[11517:9368] [com.apple.UIKit:BackgroundTask] Created background task <_UIBackgroundTaskInfo: 0x60000337a880>: taskID = 1, taskName = Launch Background Task for Coalescing, creationTime = 573 (elapsed = 0).
+2026-11-25 07:59:47.175 Df QupilStudent[11517:9368] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UIApplicationSceneKeyboardSettings on FBSSceneSettings
+2026-11-25 07:59:47.224 Df QupilStudent[11517:9368] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneOcclusionSettings> on FBSSceneSettings
+2026-11-25 07:59:47.226 Df QupilStudent[11517:9368] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneInterfaceProtectionSettings> on FBSSceneSettings
+2026-11-25 07:59:47.230 Df QupilStudent[11517:9368] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneLayoutPreferencesHostSettingsExtension on FBSSceneSettings
+2026-11-25 07:59:47.233 Df QupilStudent[11517:9368] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneSafeAreaSettingsExtension on FBSSceneSettings
+2026-11-25 07:59:47.241 Df QupilStudent[11517:9368] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneLayoutPreferenceClientSettingsExtension on FBSSceneClientSettings
+2026-11-25 07:59:47.245 Df QupilStudent[11517:9368] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UIHomeAffordanceHostSceneSettings> on FBSSceneSettings
+2026-11-25 07:59:47.250 Df QupilStudent[11517:9368] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISystemShellSceneHostingEnvironmentSettings on FBSSceneSettings
+2026-11-25 07:59:47.255 Df QupilStudent[11517:901f] [com.apple.UIKit:Application] Deactivation reason added: 10; deactivation reasons: 0 -> 1024; animating application lifecycle event: 0
+2026-11-25 07:59:47.255 Df QupilStudent[11517:9368] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneRenderingEnvironmentSettings on FBSSceneSettings
+2026-11-25 07:59:47.259 Df QupilStudent[11517:9368] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneRenderingEnvironmentClientSettings> on FBSSceneClientSettings
+2026-11-25 07:59:47.261 Df QupilStudent[11517:9368] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneTransitioningHostSettings> on FBSSceneSettings
+2026-11-25 07:59:47.262 Df QupilStudent[11517:9368] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneFocusSystemSettings> on FBSSceneSettings
+2026-11-25 07:59:47.263 Df QupilStudent[11517:901f] [com.apple.BoardServices:Injection] activating monitor for service com.apple.frontboard.open
+2026-11-25 07:59:47.264 Df QupilStudent[11517:9368] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneOrientationSettingsExtension on FBSSceneSettings
+2026-11-25 07:59:47.265 Df QupilStudent[11517:9368] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneOrientationClientSettingsExtension on FBSSceneClientSettings
+2026-11-25 07:59:47.272 Df QupilStudent[11517:9368] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneWindowingControlClientSettings on FBSSceneClientSettings
+2026-11-25 07:59:47.277 Df QupilStudent[11517:901f] [com.apple.BoardServices:Injection] activating monitor for service com.apple.frontboard.workspace-service
+2026-11-25 07:59:47.281 Df QupilStudent[11517:9368] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneHostingContentSizePreferenceClientSettings> on FBSSceneClientSettings
+2026-11-25 07:59:47.284 Df QupilStudent[11517:9368] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneHostingTraitCollectionPropagationSettings on FBSSceneSettings
+2026-11-25 07:59:47.298 Df QupilStudent[11517:9368] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneHostingSheetPresentationSettings> on FBSSceneSettings
+2026-11-25 07:59:47.300 Df QupilStudent[11517:901f] [com.apple.FrontBoard:Common] FBSWorkspace registering source: com.apple.frontboard.systemappservices
+2026-11-25 07:59:47.301 Df QupilStudent[11517:9368] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneHostingSheetPresentationClientSettings> on FBSSceneClientSettings
+2026-11-25 07:59:47.303 Df QupilStudent[11517:9368] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneHostingEventDeferringSettings> on FBSSceneSettings
+2026-11-25 07:59:47.316 Df QupilStudent[11517:9368] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <UIKit__UITypedKeyValueSceneSettings> on FBSSceneSettings
+2026-11-25 07:59:47.317 Df QupilStudent[11517:9368] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <UIKit__UITypedKeyValueSceneSettings> on FBSSceneClientSettings
+2026-11-25 07:59:47.320 Df QupilStudent[11517:9368] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneHostingViewControllerPreferencePropagationClientSettings> on FBSSceneClientSettings
+2026-11-25 07:59:47.321 Df QupilStudent[11517:901f] [com.apple.FrontBoard:Common] FBSWorkspace connected to endpoint : <BSServiceConnectionEndpoint: 0x600002668480; target: com.apple.frontboard.systemappservices; service: com.apple.frontboard.workspace-service>
+2026-11-25 07:59:47.321 Df QupilStudent[11517:9368] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneZoomTransitionSettings> on FBSSceneSettings
+2026-11-25 07:59:47.323 Df QupilStudent[11517:901f] [com.apple.FrontBoard:Common] <FBSWorkspaceScenesClient:0x600001478480 com.apple.frontboard.systemappservices> attempting immediate handshake from activate
+2026-11-25 07:59:47.323 Df QupilStudent[11517:901f] [com.apple.FrontBoard:Common] <FBSWorkspaceScenesClient:0x600001478480 com.apple.frontboard.systemappservices> sent handshake
+2026-11-25 07:59:47.335 Df QupilStudent[11517:901f] [com.apple.runningboard:general] Added observer for process assertions expiration warning: <_RBSExpirationWarningClient: 0x60000266e8a0>
+2026-11-25 07:59:47.359 Df QupilStudent[11517:9398] [com.apple.FrontBoard:SceneExtension] Realizing settings extension FBSSceneSettingsCore on FBSSceneSettings
+2026-11-25 07:59:47.366 Df QupilStudent[11517:9398] [com.apple.FrontBoard:SceneExtension] Realizing settings extension FBSSceneClientSettingsCore on FBSSceneClientSettings
+2026-11-25 07:59:47.421 Df QupilStudent[11517:901f] [com.apple.UIKit:UIScreen] Evaluated capturing state as 0 on <UIScreen: 0x7fb7bb208af0> for initial
+2026-11-25 07:59:47.447 Df QupilStudent[11517:901f] [com.apple.UIKit:UIScreen] Evaluated capturing state as 0 on <UIScreen: 0x7fb7bb208af0> for CADisplay KVO
+2026-11-25 07:59:47.499 Df QupilStudent[11517:9398] [com.apple.FrontBoard:SceneExtension] UIMutableApplicationSceneSettings setting counterpart class: UIApplicationSceneSettings
+2026-11-25 07:59:47.506 Df QupilStudent[11517:901f] [com.apple.Accessibility:AXSupportCommon] Read CategoryName: per-app = 1, category name = (null)
+2026-11-25 07:59:47.509 Df QupilStudent[11517:901f] [com.apple.Accessibility:AXSupportCommon] Read CategoryName: per-app = 0, category name = (null)
+2026-11-25 07:59:47.512 Df QupilStudent[11517:9398] [com.apple.FrontBoard:SceneExtension] UIMutableApplicationSceneClientSettings setting counterpart class: UIApplicationSceneClientSettings
+2026-11-25 07:59:47.516 Df QupilStudent[11517:9398] [com.apple.FrontBoard:SceneExtension] Realizing settings extension FBSSceneTransitionContextCore on FBSSceneTransitionContext
+2026-11-25 07:59:47.536 I  QupilStudent[11517:9398] [com.apple.FrontBoard:Common] [FBSScene] [(FBSceneManager):sceneID:de.qupil.student-default] Created client agent: <UIApplicationSceneClientAgent: 0x600002470890>
+2026-11-25 07:59:47.620 Df QupilStudent[11517:901f] [com.apple.dt.xctest:Default] Registering for test daemon availability notify post.
+2026-11-25 07:59:47.620 Df QupilStudent[11517:901f] [com.apple.dt.xctest:Default] notify_get_state check indicated test daemon not ready.
+2026-11-25 07:59:47.621 Df QupilStudent[11517:901f] [com.apple.dt.xctest:Default] notify_get_state check indicated test daemon not ready.
+2026-11-25 07:59:47.621 Df QupilStudent[11517:901f] [com.apple.dt.xctest:Default] notify_get_state check indicated test daemon not ready.
+2026-11-25 07:59:47.624 Df QupilStudent[11517:901f] [com.apple.UIKit:Application] Deactivation reason added: 11; deactivation reasons: 1024 -> 3072; animating application lifecycle event: 0
+2026-11-25 07:59:47.676 I  QupilStudent[11517:901f] [com.apple.Pasteboard:Pasteboard] Began listening to global pasteboard change notifications.
+2026-11-25 07:59:47.696 Df QupilStudent[11517:901f] [com.apple.xpc:connection] [0x7fb7bb20cf10] activating connection: mach=true listener=false peer=false name=com.apple.pasteboard.pasted
+2026-11-25 07:59:47.696 Df QupilStudent[11517:901f] [com.apple.Pasteboard:Pasteboard] Retrieving pasteboard named com.apple.UIKit.pboard.general, create if needed: NO
+2026-11-25 07:59:47.749 Df QupilStudent[11517:901f] [com.apple.Pasteboard:Pasteboard] ...retrieving pasteboard named com.apple.UIKit.pboard.general completed successfully.
+2026-11-25 07:59:47.951 Df QupilStudent[11517:9397] [com.apple.xpc:connection] [0x7fb7bb30bd80] activating connection: mach=true listener=false peer=false name=com.apple.fontservicesd
+2026-11-25 07:59:47.957 Df QupilStudent[11517:93aa] [com.apple.securityd:SecWarning] SecTaskLoadEntitlements failed error=22 cs_flags=200, pid=11517 task=QupilStudent[11517]/0#-1 LF=22
+2026-11-25 07:59:48.173 Df QupilStudent[11517:93aa] [com.apple.UIKit:BackgroundTask] Ending background task with UIBackgroundTaskIdentifier: 1
+2026-11-25 07:59:48.173 Df QupilStudent[11517:93aa] [com.apple.UIKit:BackgroundTask] Ending task with identifier 1 and description: <_UIBackgroundTaskInfo: 0x60000337a880>: taskID = 1, taskName = Launch Background Task for Coalescing, creationTime = 573 (elapsed = 1), _expireHandler: (null)
+2026-11-25 07:59:48.181 Df QupilStudent[11517:93aa] [com.apple.UIKit:BackgroundTask] Decrementing reference count for assertion <BKSProcessAssertion: 0x600000576ad0> (used by background task with identifier 1: <_UIBackgroundTaskInfo: 0x60000337a880>: taskID = 1, taskName = Launch Background Task for Coalescing, creationTime = 573 (elapsed = 1))
+2026-11-25 07:59:48.182 Df QupilStudent[11517:93aa] [com.apple.UIKit:BackgroundTask] Will invalidate assertion: <BKSProcessAssertion: 0x600000576ad0> for task identifier: 1
+2026-11-25 07:59:48.479 A  QupilStudent[11517:93aa] (RunningBoardServices) didChangeInheritances
+2026-11-25 07:59:48.835 Df QupilStudent[11517:901f] [com.apple.xpc:connection] [0x7fb7ba711120] activating connection: mach=true listener=false peer=false name=com.apple.metal.simulator
+2026-11-25 07:59:48.840 Df QupilStudent[11517:901f] [com.apple.xpc:connection] [0x7fb7bb225ff0] activating connection: mach=true listener=false peer=false name=com.apple.metal.simulator
+2026-11-25 07:59:48.841 Df QupilStudent[11517:901f] [com.apple.xpc:connection] [0x7fb7bb20aa50] activating connection: mach=true listener=false peer=false name=com.apple.metal.simulator
+2026-11-25 07:59:49.441 I  QupilStudent[11517:901f] Qupil student: started (0 teacher(s))
+2026-11-25 07:59:49.441 I  QupilStudent[11517:901f] Qupil student: started (0 teacher(s))
+2026-11-25 07:59:49.445 Df QupilStudent[11517:901f] [com.apple.UIKit:Application] Deactivation reason removed: 10; deactivation reasons: 3072 -> 2048; animating application lifecycle event: 0
+2026-11-25 07:59:49.499 Df QupilStudent[11517:901f] [com.apple.UIKit:EventBus] Event Timing Profile for Touch: not found, path="/System/Library/EventTimingProfiles/Sim.Touch.plist"
+2026-11-25 07:59:49.501 Df QupilStudent[11517:901f] [com.apple.UIKit:EventBus] Event Timing Profile for Pencil: not found, path="/System/Library/EventTimingProfiles/Sim.Pencil.plist"
+2026-11-25 07:59:49.505 Df QupilStudent[11517:901f] [com.apple.UIKit:UpdateScheduler] Selected display: name=LCD (PurpleMain), id=1
+2026-11-25 07:59:49.577 Df QupilStudent[11517:901f] [com.apple.UIKit:BackgroundTask] Will add backgroundTask with taskName: Persistent SceneSession Map Update, expirationHandler: <__NSGlobalBlock__: 0x159849830>
+2026-11-25 07:59:49.577 Df QupilStudent[11517:901f] [com.apple.UIKit:BackgroundTask] Creating new assertion because there is no existing background assertion.
+2026-11-25 07:59:49.577 Df QupilStudent[11517:901f] [com.apple.UIKit:BackgroundTask] Creating new background assertion
+2026-11-25 07:59:49.578 Df QupilStudent[11517:901f] [com.apple.UIKit:BackgroundTask] Created new background assertion <BKSProcessAssertion: 0x60000055bc00>
+2026-11-25 07:59:49.578 I  QupilStudent[11517:901f] [com.apple.runningboard:assertion] Acquiring assertion: <RBSAssertionDescriptor| "Shared Background Assertion 1 for de.qupil.student" ID:(null) target:11517>
+2026-11-25 07:59:49.579 Df QupilStudent[11517:901f] [com.apple.UIKit:BackgroundTask] Incrementing reference count for background assertion <BKSProcessAssertion: 0x60000055bc00>
+2026-11-25 07:59:49.580 Df QupilStudent[11517:901f] [com.apple.UIKit:BackgroundTask] Created background task <_UIBackgroundTaskInfo: 0x60000330e000>: taskID = 2, taskName = Persistent SceneSession Map Update, creationTime = 576 (elapsed = 0).
+2026-11-25 07:59:49.587 Df QupilStudent[11517:901f] [com.apple.UIKit:Application] Deactivation reason added: 5; deactivation reasons: 2048 -> 2080; animating application lifecycle event: 1
+2026-11-25 07:59:49.595 Df QupilStudent[11517:901f] [com.apple.UIKit:InterfaceStyle] Should send trait collection or coordinate space update, interface style 1 -> 1, <UIWindowScene: 0x7fb7bb34a8e0> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 07:59:49.620 Df QupilStudent[11517:901f] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7fb7bb34a8e0> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 07:59:49.626 Df QupilStudent[11517:901f] [com.apple.UIKit:HomeAffordanceObservation] Initializing: <_UIHomeAffordanceSceneNotifier: 0x600000d59f80>; with scene: <UIWindowScene: 0x7fb7bb34a8e0>
+2026-11-25 07:59:49.628 Df QupilStudent[11517:901f] [com.apple.BacklightServices:scenes] 0x60000282dd40 setDelegate:<0x60000282dda0 _UIBacklightEnvironment> hasDelegate:YES for environment:sceneID:de.qupil.student-default
+2026-11-25 07:59:49.630 Df QupilStudent[11517:901f] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7fb7bb34a8e0> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 07:59:49.632 Df QupilStudent[11517:901f] [com.apple.UIKit:EventDeferring] [0x600000d5cd90] Initialized with scene: <UIWindowScene: 0x7fb7bb34a8e0>; behavior: <_UIEventDeferringBehavior_iOS: 0x60000260b280>; availableForProcess: 1, systemShellManagesKeyboardFocus: 1
+2026-11-25 07:59:49.636 Df QupilStudent[11517:901f] [com.apple.BoardServices:XPCErrors] [C:2] Alloc com.apple.backboard.hid-services.xpc
+2026-11-25 07:59:49.637 Df QupilStudent[11517:901f] [com.apple.xpc:connection] [0x7fb7ba70b1b0] activating connection: mach=false listener=false peer=false name=(anonymous)
+2026-11-25 07:59:49.648 Df QupilStudent[11517:9368] [com.apple.BackBoard:EventDelivery] BKSHIDEventObserver - connection activation
+2026-11-25 07:59:49.652 Df QupilStudent[11517:901f] [com.apple.BackBoard:EventDelivery] policyStatus:<BKSHIDEventDeliveryPolicyObserver: 0x600000261980; process scope; status: target> was:none
+2026-11-25 07:59:49.655 Df QupilStudent[11517:901f] [com.apple.UIKit:KeyWindow] Setting default evaluation strategy for UIUserInterfaceIdiomPhone to LastOneWins
+2026-11-25 07:59:49.656 Df QupilStudent[11517:901f] [com.apple.UIKit:KeyWindow] Scene target of keyboard event deferring environment did change: 1; scene: UIWindowScene: 0x7fb7bb34a8e0; scene identity: com.apple.frontboard.systemappservices/FBSceneManager:sceneID%3Ade.qupil.student-default
+2026-11-25 07:59:49.658 Df QupilStudent[11517:901f] [com.apple.UIKit:EventDeferring] [0x600000d5cd90] Scene target of event deferring environments did update: scene: 0x7fb7bb34a8e0; current systemShellManagesKeyboardFocus: 1; systemShellManagesKeyboardFocusForScene: 1; eligibleForRecordRemoval: 1;
+2026-11-25 07:59:49.658 Df QupilStudent[11517:901f] [com.apple.UIKit:KeyWindow] Scene became target of keyboard event deferring environment: UIWindowScene: 0x7fb7bb34a8e0; scene identity: com.apple.frontboard.systemappservices/FBSceneManager:sceneID%3Ade.qupil.student-default
+2026-11-25 07:59:49.659 Df QupilStudent[11517:901f] [com.apple.UIKit:KeyWindow] Stack[KeyWindow] 0x60000280d1d0: Taking no further action for migration from LastOneWins -> SystemShellManaged as there are no scenes
+2026-11-25 07:59:49.659 Df QupilStudent[11517:901f] [com.apple.UIKit:KeyWindow] Setting default evaluation strategy for UIUserInterfaceIdiomPhone to SystemShellManaged
+2026-11-25 07:59:49.660 Df QupilStudent[11517:901f] [com.apple.UIKit:KeyWindow] Key window needs update: 0; currentKeyWindowScene: 0x0; evaluatedKeyWindowScene: 0x7fb7bb34a8e0; currentApplicationKeyWindow: 0x0; evaluatedApplicationKeyWindow: 0x0; reason: UIWindowScene: 0x7fb7bb34a8e0: Window scene became target of keyboard environment
+2026-11-25 07:59:49.665 Df QupilStudent[11517:901f] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7fb7bb34a8e0> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 07:59:49.669 Df QupilStudent[11517:901f] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7fb7bb34a8e0> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 07:59:49.686 Df QupilStudent[11517:901f] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7fb7bb34a8e0> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 07:59:49.794 Df QupilStudent[11517:901f] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7fb7bb34a8e0> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 07:59:49.807 Df QupilStudent[11517:901f] [com.apple.UIKit:AppLifecycle] sceneOfRecord: sceneID: sceneID:de.qupil.student-default  persistentID: A6F619D2-3A9B-4D0A-965E-4020C04CC69E
+2026-11-25 07:59:49.810 Df QupilStudent[11517:901f] [com.apple.UIKit:Application] Ignoring already applied deactivation reason: 5; deactivation reasons: 2080
+2026-11-25 07:59:49.811 Df QupilStudent[11517:901f] [com.apple.UIKit:Application] Deactivation reason added: 12; deactivation reasons: 2080 -> 6176; animating application lifecycle event: 1
+2026-11-25 07:59:49.984 E  QupilStudent[11517:94fb] (libCoreFSCache.dylib) fopen failed for data file: errno = 2 (No such file or directory)
+2026-11-25 07:59:49.984 E  QupilStudent[11517:94fb] (libCoreFSCache.dylib) Errors found! Invalidating cache...
+2026-11-25 07:59:49.992 Df QupilStudent[11517:94fb] [com.apple.xpc:connection] [0x7fb7bb225970] activating connection: mach=false listener=false peer=false name=com.apple.MTLCompilerService
+2026-11-25 07:59:50.029 Df QupilStudent[11517:94fb] [com.apple.xpc:connection] [0x7fb7bb3572d0] activating connection: mach=false listener=false peer=false name=com.apple.MTLCompilerService
+2026-11-25 07:59:50.031 A  QupilStudent[11517:9398] (Metal) Metal Compiling Shader
+2026-11-25 07:59:50.107 Df QupilStudent[11517:93aa] [com.apple.UIKit:BackgroundTask] Ending background task with UIBackgroundTaskIdentifier: 2
+2026-11-25 07:59:50.107 Df QupilStudent[11517:93aa] [com.apple.UIKit:BackgroundTask] Ending task with identifier 2 and description: <_UIBackgroundTaskInfo: 0x60000330e000>: taskID = 2, taskName = Persistent SceneSession Map Update, creationTime = 576 (elapsed = 0), _expireHandler: <__NSGlobalBlock__: 0x159849830>
+2026-11-25 07:59:50.107 Df QupilStudent[11517:93aa] [com.apple.UIKit:BackgroundTask] Decrementing reference count for assertion <BKSProcessAssertion: 0x60000055bc00> (used by background task with identifier 2: <_UIBackgroundTaskInfo: 0x60000330e000>: taskID = 2, taskName = Persistent SceneSession Map Update, creationTime = 576 (elapsed = 0))
+2026-11-25 07:59:50.107 Df QupilStudent[11517:93aa] [com.apple.UIKit:BackgroundTask] Will invalidate assertion: <BKSProcessAssertion: 0x60000055bc00> for task identifier: 2
+2026-11-25 07:59:51.308 A  QupilStudent[11517:9368] (Metal) Metal Compiling Shader
+2026-11-25 07:59:51.341 E  QupilStudent[11517:94fb] (libCoreFSCache.dylib) fopen failed for data file: errno = 2 (No such file or directory)
+2026-11-25 07:59:51.342 E  QupilStudent[11517:94fb] (libCoreFSCache.dylib) Errors found! Invalidating cache...
+2026-11-25 07:59:51.347 A  QupilStudent[11517:93aa] (Metal) Metal Compiling Shader
+2026-11-25 07:59:51.384 A  QupilStudent[11517:9398] (Metal) Metal Compiling Shader
+2026-11-25 07:59:51.427 A  QupilStudent[11517:9368] (Metal) Metal Compiling Shader
+2026-11-25 07:59:51.445 A  QupilStudent[11517:9398] (Metal) Metal Compiling Shader
+2026-11-25 07:59:51.483 A  QupilStudent[11517:9368] (Metal) Metal Compiling Shader
+2026-11-25 07:59:51.492 A  QupilStudent[11517:93aa] (Metal) Metal Compiling Shader
+2026-11-25 07:59:51.528 A  QupilStudent[11517:9368] (Metal) Metal Compiling Shader
+2026-11-25 07:59:51.544 A  QupilStudent[11517:9398] (Metal) Metal Compiling Shader
+2026-11-25 07:59:51.565 A  QupilStudent[11517:9368] (Metal) Metal Compiling Shader
+2026-11-25 07:59:51.583 A  QupilStudent[11517:9398] (Metal) Metal Compiling Shader
+2026-11-25 07:59:51.586 A  QupilStudent[11517:93aa] (Metal) Metal Compiling Shader
+2026-11-25 07:59:51.601 A  QupilStudent[11517:9368] (Metal) Metal Compiling Shader
+2026-11-25 07:59:51.617 A  QupilStudent[11517:93aa] (Metal) Metal Compiling Shader
+2026-11-25 07:59:51.665 A  QupilStudent[11517:9398] (Metal) Metal Compiling Shader
+2026-11-25 07:59:51.671 A  QupilStudent[11517:93aa] (Metal) Metal Compiling Shader
+2026-11-25 07:59:51.718 Df QupilStudent[11517:94fb] [com.apple.xpc:connection] [0x7fb7bb361350] activating connection: mach=true listener=false peer=false name=com.apple.IOSurface.Remote
+2026-11-25 07:59:52.059 Df QupilStudent[11517:901f] [com.apple.UIKit:KeyWindow] Key window API is scene-level: YES
+2026-11-25 07:59:52.061 Df QupilStudent[11517:901f] stale focus object 0x0 , doing manual update
+2026-11-25 07:59:52.062 Df QupilStudent[11517:901f] stale focus object 0x0 , doing manual update
+2026-11-25 07:59:52.094 Df QupilStudent[11517:901f] [com.apple.UIKit:Orientation] <UIWindowScene: 0x7fb7bb34a8e0> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E) Scene updated orientation preferences: none -> ( Pu )
+2026-11-25 07:59:52.099 I  QupilStudent[11517:901f] safe area: top 59 bottom 34
+2026-11-25 07:59:52.099 I  QupilStudent[11517:901f] safe area: top 59 bottom 34
+2026-11-25 07:59:52.105 Df QupilStudent[11517:901f] [com.apple.UIKit:Application] Deactivation reason removed: 11; deactivation reasons: 6176 -> 4128; animating application lifecycle event: 1
+2026-11-25 07:59:52.109 Df QupilStudent[11517:901f] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneIntelligenceSupportSettings> on FBSSceneSettings
+2026-11-25 07:59:52.141 Df QupilStudent[11517:93aa] [com.apple.UIIntelligenceSupport:xpc] establishing connection to agent
+2026-11-25 07:59:52.155 Df QupilStudent[11517:93aa] [com.apple.xpc:session] [0x600000557c50] Session created.
+2026-11-25 07:59:52.155 Df QupilStudent[11517:93aa] [com.apple.xpc:session] [0x600000557c50] Session created from connection [0x7fb7ba7648a0]
+2026-11-25 07:59:52.159 Df QupilStudent[11517:93aa] [com.apple.xpc:connection] [0x7fb7ba7648a0] activating connection: mach=true listener=false peer=false name=com.apple.uiintelligencesupport.agent
+2026-11-25 07:59:52.159 Df QupilStudent[11517:93aa] [com.apple.xpc:session] [0x600000557c50] Session activated
+2026-11-25 07:59:52.160 Df QupilStudent[11517:901f] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7fb7bb34a8e0> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 07:59:52.341 A  QupilStudent[11517:93ac] (RunningBoardServices) didChangeInheritances
+2026-11-25 07:59:52.408 Df QupilStudent[11517:901f] [com.apple.xpc:connection] [0x7fb7bb2404e0] activating connection: mach=true listener=false peer=false name=com.apple.lsd.mapdb
+2026-11-25 07:59:52.429 I  QupilStudent[11517:901f] [com.apple.launchservices:db] LaunchServices database schema version: 20971542
+2026-11-25 07:59:52.443 I  QupilStudent[11517:901f] [com.apple.launchservices:datasep] application record search init. Node: <FSNode 0x6000026fef80> { isDir = y, path = '/Users/runner/Library/Developer/CoreSimulator/Devices/3AF28461-937F-429D-A836-35990CD2CD3D/data/Containers/Bundle/Application/042A17BA-FE32-4EFF-9F6F-7BDEC9CF2B03/QupilStudent.app' } bundleID: (null) itemID: 0
+2026-11-25 07:59:52.604 Df QupilStudent[11517:93aa] [com.apple.BackBoard:EventDelivery] BKSHIDEventDeliveryManager - connection activation
+2026-11-25 07:59:52.642 Df QupilStudent[11517:901f] [com.apple.network:activity] Create activity from XPC object <nw_activity 50:1 [465F16AF-92B2-4046-9814-1685C12EDEA8] (reporting strategy default)>
+2026-11-25 07:59:52.648 Df QupilStudent[11517:901f] [com.apple.network:activity] Create activity from XPC object <nw_activity 50:2 [5DBF75ED-54D6-4174-9C4C-0498FF04584C] (reporting strategy default)>
+2026-11-25 07:59:52.648 Df QupilStudent[11517:901f] [com.apple.network:activity] Set activity <nw_activity 50:1 [465F16AF-92B2-4046-9814-1685C12EDEA8] (reporting strategy default)> as the global parent
+2026-11-25 07:59:52.653 Df QupilStudent[11517:901f] [com.apple.UIKit:UpdateScheduler] Target list changed: <CADisplay:LCD PurpleMain>
+2026-11-25 07:59:52.658 Df QupilStudent[11517:901f] [com.apple.UIKit:AppLifecycle] sceneOfRecord: sceneID: sceneID:de.qupil.student-default  persistentID: A6F619D2-3A9B-4D0A-965E-4020C04CC69E
+2026-11-25 07:59:52.661 Df QupilStudent[11517:901f] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7fb7bb34a8e0> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 07:59:52.662 Df QupilStudent[11517:901f] [com.apple.Accessibility:AXCommon] Read Per-App on Init: Smart invert = (null)
+2026-11-25 07:59:52.675 Df QupilStudent[11517:901f] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7fb7bb34a8e0> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 07:59:52.678 Df QupilStudent[11517:901f] [com.apple.UIKit:AppLifecycle] sceneOfRecord: sceneID: sceneID:de.qupil.student-default  persistentID: A6F619D2-3A9B-4D0A-965E-4020C04CC69E
+2026-11-25 07:59:52.679 Df QupilStudent[11517:901f] [com.apple.UIKit:Application] Deactivation reason removed: 12; deactivation reasons: 4128 -> 32; animating application lifecycle event: 1
+2026-11-25 07:59:52.679 Df QupilStudent[11517:901f] [com.apple.KeyboardArbiter:Client] Send setDeactivating: N (-DeactivationReason:SuspendedEventsOnly)
+2026-11-25 07:59:52.684 Df QupilStudent[11517:901f] [com.apple.UIKit:Application] Deactivation reason removed: 5; deactivation reasons: 32 -> 0; animating application lifecycle event: 0
+2026-11-25 07:59:52.703 Df QupilStudent[11517:901f] [com.apple.KeyboardArbiter:Client] startConnection
+2026-11-25 07:59:52.712 Df QupilStudent[11517:901f] [com.apple.xpc:connection] [0x7fb7ba74a250] activating connection: mach=true listener=false peer=false name=com.apple.UIKit.KeyboardManagement.hosted
+2026-11-25 07:59:52.741 Df QupilStudent[11517:901f] [com.apple.KeyboardArbiter:Client] handleKeyboardChange: set currentKeyboard:N (wasKeyboard:N)
+2026-11-25 07:59:52.774 Df QupilStudent[11517:901f] [com.apple.UIKit:KeyboardArbiterClientLog] isWritingToolsHandlingKeyboardTracking:Y (WT ready:Y, Arbiter ready:Y)
+2026-11-25 07:59:52.840 Df QupilStudent[11517:901f] [com.apple.network:activity] <nw_activity 50:1 [465F16AF-92B2-4046-9814-1685C12EDEA8] (global parent) (reporting strategy default) complete (reason success)> complete with reason 2 (success), duration 565899ms
+2026-11-25 07:59:52.842 Df QupilStudent[11517:901f] [com.apple.network:activity] <nw_activity 50:2 [5DBF75ED-54D6-4174-9C4C-0498FF04584C] (reporting strategy default) complete (reason success)> complete with reason 2 (success), duration 565902ms
+2026-11-25 07:59:52.842 Df QupilStudent[11517:901f] [com.apple.network:activity] Unsetting the global parent activity <nw_activity 50:1 [465F16AF-92B2-4046-9814-1685C12EDEA8] (global parent) (reporting strategy default) complete (reason success)>
+2026-11-25 07:59:52.842 Df QupilStudent[11517:901f] [com.apple.network:activity] Unset the global parent activity
+2026-11-25 08:00:44.845 Df QupilStudent[13829:a849] [com.apple.xpc:connection] [0x7f8b97a04e60] activating connection: mach=true listener=false peer=false name=com.apple.cfprefsd.daemon
+2026-11-25 08:00:45.374 A  QupilStudent[13829:ab7e] (CoreFoundation) Loading Preferences From User Session CFPrefsD
+2026-11-25 08:00:45.423 Df QupilStudent[13829:a849] [com.apple.securityd:SecWarning] SecTaskLoadEntitlements failed error=22 cs_flags=200, pid=13829 task=QupilStudent[13829]/0#-1 LF=22
+2026-11-25 08:00:45.509 Df QupilStudent[13829:a849] (libMobileGestalt.dylib) No persisted cache on this platform.
+2026-11-25 08:00:45.540 Df QupilStudent[13829:ab77] [com.apple.UIKit:BackgroundTask] Creating new assertion because there is no existing background assertion.
+2026-11-25 08:00:45.543 Df QupilStudent[13829:ab77] [com.apple.UIKit:BackgroundTask] Creating new background assertion
+2026-11-25 08:00:45.575 Df QupilStudent[13829:ab77] [com.apple.UIKit:BackgroundTask] Created new background assertion <BKSProcessAssertion: 0x6000005df340>
+2026-11-25 08:00:45.607 Df QupilStudent[13829:ab77] [com.apple.runningboard:connection] Initializing connection
+2026-11-25 08:00:45.612 Df QupilStudent[13829:ab77] [com.apple.runningboard:process] Removing all cached process handles
+2026-11-25 08:00:45.626 I  QupilStudent[13829:ab77] [com.apple.runningboard:assertion] Acquiring assertion: <RBSAssertionDescriptor| "Shared Background Assertion 0 for de.qupil.student" ID:(null) target:13829>
+2026-11-25 08:00:45.650 Df QupilStudent[13829:ab77] [com.apple.runningboard:connection] Creating connection to com.apple.runningboard
+2026-11-25 08:00:45.651 Df QupilStudent[13829:ab77] [com.apple.xpc:connection] [0x7f8b96f05840] activating connection: mach=true listener=false peer=false name=com.apple.runningboard
+2026-11-25 08:00:45.653 Df QupilStudent[13829:ab7e] [com.apple.runningboard:connection] Sending handshake request attempt #1 to server
+2026-11-25 08:00:45.680 Df QupilStudent[13829:ab7f] [com.apple.BoardServices:XPCErrors] [C:1] Alloc com.apple.frontboard.systemappservices
+2026-11-25 08:00:45.690 Df QupilStudent[13829:ab7f] [com.apple.xpc:connection] [0x7f8b96f06c40] activating connection: mach=false listener=false peer=false name=(anonymous)
+2026-11-25 08:00:45.690 A  QupilStudent[13829:ab80] (RunningBoardServices) didChangeInheritances
+2026-11-25 08:00:45.698 Df QupilStudent[13829:ab7e] [com.apple.runningboard:connection] Handshake succeeded
+2026-11-25 08:00:45.699 Df QupilStudent[13829:ab7e] [com.apple.runningboard:connection] Identity resolved as app<de.qupil.student((null))>
+2026-11-25 08:00:45.708 Df QupilStudent[13829:ab77] [com.apple.UIKit:BackgroundTask] Incrementing reference count for background assertion <BKSProcessAssertion: 0x6000005df340>
+2026-11-25 08:00:45.720 Df QupilStudent[13829:ab77] [com.apple.UIKit:BackgroundTask] Created background task <_UIBackgroundTaskInfo: 0x6000033d7e80>: taskID = 1, taskName = Launch Background Task for Coalescing, creationTime = 632 (elapsed = 0).
+2026-11-25 08:00:45.730 Df QupilStudent[13829:ab77] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UIApplicationSceneKeyboardSettings on FBSSceneSettings
+2026-11-25 08:00:45.770 Df QupilStudent[13829:a849] [com.apple.UIKit:Application] Deactivation reason added: 10; deactivation reasons: 0 -> 1024; animating application lifecycle event: 0
+2026-11-25 08:00:45.776 Df QupilStudent[13829:a849] [com.apple.BoardServices:Injection] activating monitor for service com.apple.frontboard.open
+2026-11-25 08:00:45.780 Df QupilStudent[13829:a849] [com.apple.BoardServices:Injection] activating monitor for service com.apple.frontboard.workspace-service
+2026-11-25 08:00:45.792 Df QupilStudent[13829:a849] [com.apple.FrontBoard:Common] FBSWorkspace registering source: com.apple.frontboard.systemappservices
+2026-11-25 08:00:45.801 Df QupilStudent[13829:a849] [com.apple.FrontBoard:Common] FBSWorkspace connected to endpoint : <BSServiceConnectionEndpoint: 0x6000026dfe20; target: com.apple.frontboard.systemappservices; service: com.apple.frontboard.workspace-service>
+2026-11-25 08:00:45.801 Df QupilStudent[13829:a849] [com.apple.FrontBoard:Common] <FBSWorkspaceScenesClient:0x6000014d43f0 com.apple.frontboard.systemappservices> attempting immediate handshake from activate
+2026-11-25 08:00:45.801 Df QupilStudent[13829:a849] [com.apple.FrontBoard:Common] <FBSWorkspaceScenesClient:0x6000014d43f0 com.apple.frontboard.systemappservices> sent handshake
+2026-11-25 08:00:45.805 Df QupilStudent[13829:a849] [com.apple.runningboard:general] Added observer for process assertions expiration warning: <_RBSExpirationWarningClient: 0x6000026dffc0>
+2026-11-25 08:00:45.850 Df QupilStudent[13829:a849] [com.apple.UIKit:UIScreen] Evaluated capturing state as 0 on <UIScreen: 0x7f8b96f07a10> for initial
+2026-11-25 08:00:45.862 Df QupilStudent[13829:a849] [com.apple.UIKit:UIScreen] Evaluated capturing state as 0 on <UIScreen: 0x7f8b96f07a10> for CADisplay KVO
+2026-11-25 08:00:45.896 Df QupilStudent[13829:a849] [com.apple.Accessibility:AXSupportCommon] Read CategoryName: per-app = 1, category name = (null)
+2026-11-25 08:00:45.897 Df QupilStudent[13829:a849] [com.apple.Accessibility:AXSupportCommon] Read CategoryName: per-app = 0, category name = (null)
+2026-11-25 08:00:46.762 Df QupilStudent[13829:ab7f] [com.apple.UIKit:BackgroundTask] Ending background task with UIBackgroundTaskIdentifier: 1
+2026-11-25 08:00:47.083 Df QupilStudent[13829:ab7f] [com.apple.UIKit:BackgroundTask] Ending task with identifier 1 and description: <_UIBackgroundTaskInfo: 0x6000033d7e80>: taskID = 1, taskName = Launch Background Task for Coalescing, creationTime = 632 (elapsed = 1), _expireHandler: (null)
+2026-11-25 08:00:47.083 A  QupilStudent[13829:ab80] (RunningBoardServices) didChangeInheritances
+2026-11-25 08:00:47.092 Df QupilStudent[13829:ab7f] [com.apple.UIKit:BackgroundTask] Decrementing reference count for assertion <BKSProcessAssertion: 0x6000005df340> (used by background task with identifier 1: <_UIBackgroundTaskInfo: 0x6000033d7e80>: taskID = 1, taskName = Launch Background Task for Coalescing, creationTime = 632 (elapsed = 1))
+2026-11-25 08:00:47.099 Df QupilStudent[13829:ab7f] [com.apple.UIKit:BackgroundTask] Will invalidate assertion: <BKSProcessAssertion: 0x6000005df340> for task identifier: 1
+2026-11-25 08:00:49.069 Df QupilStudent[13829:ab77] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneOcclusionSettings> on FBSSceneSettings
+2026-11-25 08:00:49.083 Df QupilStudent[13829:ab77] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneInterfaceProtectionSettings> on FBSSceneSettings
+2026-11-25 08:00:49.091 Df QupilStudent[13829:ab77] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneLayoutPreferencesHostSettingsExtension on FBSSceneSettings
+2026-11-25 08:00:49.095 Df QupilStudent[13829:ab77] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneSafeAreaSettingsExtension on FBSSceneSettings
+2026-11-25 08:00:49.108 Df QupilStudent[13829:ab77] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneLayoutPreferenceClientSettingsExtension on FBSSceneClientSettings
+2026-11-25 08:00:49.119 Df QupilStudent[13829:ab77] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UIHomeAffordanceHostSceneSettings> on FBSSceneSettings
+2026-11-25 08:00:49.127 Df QupilStudent[13829:ab77] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISystemShellSceneHostingEnvironmentSettings on FBSSceneSettings
+2026-11-25 08:00:49.133 Df QupilStudent[13829:ab77] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneRenderingEnvironmentSettings on FBSSceneSettings
+2026-11-25 08:00:49.138 Df QupilStudent[13829:ab77] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneRenderingEnvironmentClientSettings> on FBSSceneClientSettings
+2026-11-25 08:00:49.141 Df QupilStudent[13829:ab77] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneTransitioningHostSettings> on FBSSceneSettings
+2026-11-25 08:00:49.145 Df QupilStudent[13829:ab77] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneFocusSystemSettings> on FBSSceneSettings
+2026-11-25 08:00:49.146 Df QupilStudent[13829:ab77] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneOrientationSettingsExtension on FBSSceneSettings
+2026-11-25 08:00:49.149 Df QupilStudent[13829:ab77] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneOrientationClientSettingsExtension on FBSSceneClientSettings
+2026-11-25 08:00:49.161 Df QupilStudent[13829:ab77] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneWindowingControlClientSettings on FBSSceneClientSettings
+2026-11-25 08:00:49.175 Df QupilStudent[13829:ab77] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneHostingContentSizePreferenceClientSettings> on FBSSceneClientSettings
+2026-11-25 08:00:49.176 Df QupilStudent[13829:ab77] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneHostingTraitCollectionPropagationSettings on FBSSceneSettings
+2026-11-25 08:00:49.184 Df QupilStudent[13829:ab77] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneHostingSheetPresentationSettings> on FBSSceneSettings
+2026-11-25 08:00:49.189 Df QupilStudent[13829:ab77] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneHostingSheetPresentationClientSettings> on FBSSceneClientSettings
+2026-11-25 08:00:49.190 Df QupilStudent[13829:ab77] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneHostingEventDeferringSettings> on FBSSceneSettings
+2026-11-25 08:00:49.203 Df QupilStudent[13829:ab77] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <UIKit__UITypedKeyValueSceneSettings> on FBSSceneSettings
+2026-11-25 08:00:49.205 Df QupilStudent[13829:ab77] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <UIKit__UITypedKeyValueSceneSettings> on FBSSceneClientSettings
+2026-11-25 08:00:49.209 Df QupilStudent[13829:ab77] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneHostingViewControllerPreferencePropagationClientSettings> on FBSSceneClientSettings
+2026-11-25 08:00:49.219 Df QupilStudent[13829:ab77] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneZoomTransitionSettings> on FBSSceneSettings
+2026-11-25 08:00:49.229 Df QupilStudent[13829:ab7e] [com.apple.FrontBoard:SceneExtension] Realizing settings extension FBSSceneSettingsCore on FBSSceneSettings
+2026-11-25 08:00:49.235 Df QupilStudent[13829:ab7e] [com.apple.FrontBoard:SceneExtension] Realizing settings extension FBSSceneClientSettingsCore on FBSSceneClientSettings
+2026-11-25 08:00:49.439 Df QupilStudent[13829:ab7e] [com.apple.FrontBoard:SceneExtension] UIMutableApplicationSceneSettings setting counterpart class: UIApplicationSceneSettings
+2026-11-25 08:00:49.448 Df QupilStudent[13829:ab7e] [com.apple.FrontBoard:SceneExtension] UIMutableApplicationSceneClientSettings setting counterpart class: UIApplicationSceneClientSettings
+2026-11-25 08:00:49.449 Df QupilStudent[13829:ab7e] [com.apple.FrontBoard:SceneExtension] Realizing settings extension FBSSceneTransitionContextCore on FBSSceneTransitionContext
+2026-11-25 08:00:49.488 I  QupilStudent[13829:ab7e] [com.apple.FrontBoard:Common] [FBSScene] [(FBSceneManager):sceneID:de.qupil.student-default] Created client agent: <UIApplicationSceneClientAgent: 0x6000024d4dd0>
+2026-11-25 08:00:59.368 I  QupilStudent[13829:a849] [com.apple.Accessibility:AXCommon] AX Start server
+2026-11-25 08:00:59.371 I  QupilStudent[13829:a849] [com.apple.Accessibility:AXCommon] AX Begin loading server
+2026-11-25 08:00:59.756 A  QupilStudent[13829:ab80] (CoreFoundation) Updating Key-Value Observers Of Preferences
+2026-11-25 08:01:00.027 I  QupilStudent[13829:a849] [com.apple.Accessibility:AXAppAccessibility] Started AXRuntime server. SystemApp=0
+2026-11-25 08:01:00.037 Df QupilStudent[13829:a849] [com.apple.dt.xctest:Default] Registering for test daemon availability notify post.
+2026-11-25 08:01:00.041 Df QupilStudent[13829:a849] [com.apple.dt.xctest:Default] notify_get_state check indicated test daemon not ready.
+2026-11-25 08:01:00.044 Df QupilStudent[13829:a849] [com.apple.dt.xctest:Default] notify_get_state check indicated test daemon not ready.
+2026-11-25 08:01:00.044 Df QupilStudent[13829:a849] [com.apple.dt.xctest:Default] notify_get_state check indicated test daemon not ready.
+2026-11-25 08:01:00.082 Df QupilStudent[13829:a849] [com.apple.UIKit:Application] Deactivation reason added: 11; deactivation reasons: 1024 -> 3072; animating application lifecycle event: 0
+2026-11-25 08:01:00.368 I  QupilStudent[13829:a849] [com.apple.Pasteboard:Pasteboard] Began listening to global pasteboard change notifications.
+2026-11-25 08:01:00.399 Df QupilStudent[13829:a849] [com.apple.xpc:connection] [0x7f8b97b24690] activating connection: mach=true listener=false peer=false name=com.apple.pasteboard.pasted
+2026-11-25 08:01:00.400 Df QupilStudent[13829:a849] [com.apple.Pasteboard:Pasteboard] Retrieving pasteboard named com.apple.UIKit.pboard.general, create if needed: NO
+2026-11-25 08:01:00.466 Df QupilStudent[13829:a849] [com.apple.Pasteboard:Pasteboard] ...retrieving pasteboard named com.apple.UIKit.pboard.general completed successfully.
+2026-11-25 08:01:00.810 Df QupilStudent[13829:ab77] [com.apple.xpc:connection] [0x7f8b96f38f90] activating connection: mach=true listener=false peer=false name=com.apple.fontservicesd
+2026-11-25 08:01:00.830 Df QupilStudent[13829:ab77] [com.apple.securityd:SecWarning] SecTaskLoadEntitlements failed error=22 cs_flags=200, pid=13829 task=QupilStudent[13829]/0#-1 LF=22
+2026-11-25 08:01:01.794 Df QupilStudent[13829:a849] [com.apple.xpc:connection] [0x7f8b96f54db0] activating connection: mach=true listener=false peer=false name=com.apple.metal.simulator
+2026-11-25 08:01:01.805 Df QupilStudent[13829:a849] [com.apple.xpc:connection] [0x7f8b97a6f7c0] activating connection: mach=true listener=false peer=false name=com.apple.metal.simulator
+2026-11-25 08:01:01.807 Df QupilStudent[13829:a849] [com.apple.xpc:connection] [0x7f8b97a811c0] activating connection: mach=true listener=false peer=false name=com.apple.metal.simulator
+2026-11-25 08:01:02.429 I  QupilStudent[13829:a849] Qupil student: started (0 teacher(s))
+2026-11-25 08:01:02.429 I  QupilStudent[13829:a849] Qupil student: started (0 teacher(s))
+2026-11-25 08:01:02.435 Df QupilStudent[13829:a849] [com.apple.UIKit:Application] Deactivation reason removed: 10; deactivation reasons: 3072 -> 2048; animating application lifecycle event: 0
+2026-11-25 08:01:02.510 Df QupilStudent[13829:a849] [com.apple.UIKit:EventBus] Event Timing Profile for Touch: not found, path="/System/Library/EventTimingProfiles/Sim.Touch.plist"
+2026-11-25 08:01:02.514 Df QupilStudent[13829:a849] [com.apple.UIKit:EventBus] Event Timing Profile for Pencil: not found, path="/System/Library/EventTimingProfiles/Sim.Pencil.plist"
+2026-11-25 08:01:02.518 Df QupilStudent[13829:a849] [com.apple.UIKit:UpdateScheduler] Selected display: name=LCD (PurpleMain), id=1
+2026-11-25 08:01:02.546 Df QupilStudent[13829:a849] [com.apple.FrontBoard:SceneClient] [(FBSceneManager):sceneID:de.qupil.student-default] Received action(s) in scene-create: UIOpenURLAction
+2026-11-25 08:01:02.635 Df QupilStudent[13829:a849] [com.apple.UIKit:Application] Deactivation reason added: 5; deactivation reasons: 2048 -> 2080; animating application lifecycle event: 1
+2026-11-25 08:01:02.644 Df QupilStudent[13829:a849] [com.apple.UIKit:InterfaceStyle] Should send trait collection or coordinate space update, interface style 1 -> 1, <UIWindowScene: 0x7f8b97a29f60> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:01:02.667 Df QupilStudent[13829:a849] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7f8b97a29f60> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:01:02.677 Df QupilStudent[13829:a849] [com.apple.UIKit:HomeAffordanceObservation] Initializing: <_UIHomeAffordanceSceneNotifier: 0x600000de1c70>; with scene: <UIWindowScene: 0x7f8b97a29f60>
+2026-11-25 08:01:02.682 Df QupilStudent[13829:a849] [com.apple.BacklightServices:scenes] 0x6000028b3120 setDelegate:<0x6000028a1bf0 _UIBacklightEnvironment> hasDelegate:YES for environment:sceneID:de.qupil.student-default
+2026-11-25 08:01:02.684 Df QupilStudent[13829:a849] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7f8b97a29f60> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:01:02.695 Df QupilStudent[13829:a849] [com.apple.UIKit:EventDeferring] [0x600000df8f50] Initialized with scene: <UIWindowScene: 0x7f8b97a29f60>; behavior: <_UIEventDeferringBehavior_iOS: 0x600002652fc0>; availableForProcess: 1, systemShellManagesKeyboardFocus: 1
+2026-11-25 08:01:02.701 Df QupilStudent[13829:a849] [com.apple.BoardServices:XPCErrors] [C:2] Alloc com.apple.backboard.hid-services.xpc
+2026-11-25 08:01:02.702 Df QupilStudent[13829:a849] [com.apple.xpc:connection] [0x7f8b97b06040] activating connection: mach=false listener=false peer=false name=(anonymous)
+2026-11-25 08:01:02.718 Df QupilStudent[13829:ab8a] [com.apple.BackBoard:EventDelivery] BKSHIDEventObserver - connection activation
+2026-11-25 08:01:02.722 Df QupilStudent[13829:a849] [com.apple.BackBoard:EventDelivery] policyStatus:<BKSHIDEventDeliveryPolicyObserver: 0x6000002fc120; process scope; status: target> was:none
+2026-11-25 08:01:02.725 Df QupilStudent[13829:a849] [com.apple.UIKit:KeyWindow] Setting default evaluation strategy for UIUserInterfaceIdiomPhone to LastOneWins
+2026-11-25 08:01:02.726 Df QupilStudent[13829:a849] [com.apple.UIKit:KeyWindow] Scene target of keyboard event deferring environment did change: 1; scene: UIWindowScene: 0x7f8b97a29f60; scene identity: com.apple.frontboard.systemappservices/FBSceneManager:sceneID%3Ade.qupil.student-default
+2026-11-25 08:01:02.727 Df QupilStudent[13829:a849] [com.apple.UIKit:EventDeferring] [0x600000df8f50] Scene target of event deferring environments did update: scene: 0x7f8b97a29f60; current systemShellManagesKeyboardFocus: 1; systemShellManagesKeyboardFocusForScene: 1; eligibleForRecordRemoval: 1;
+2026-11-25 08:01:02.727 Df QupilStudent[13829:a849] [com.apple.UIKit:KeyWindow] Scene became target of keyboard event deferring environment: UIWindowScene: 0x7f8b97a29f60; scene identity: com.apple.frontboard.systemappservices/FBSceneManager:sceneID%3Ade.qupil.student-default
+2026-11-25 08:01:02.728 Df QupilStudent[13829:a849] [com.apple.UIKit:KeyWindow] Stack[KeyWindow] 0x6000028b31e0: Taking no further action for migration from LastOneWins -> SystemShellManaged as there are no scenes
+2026-11-25 08:01:02.728 Df QupilStudent[13829:a849] [com.apple.UIKit:KeyWindow] Setting default evaluation strategy for UIUserInterfaceIdiomPhone to SystemShellManaged
+2026-11-25 08:01:02.729 Df QupilStudent[13829:a849] [com.apple.UIKit:KeyWindow] Key window needs update: 0; currentKeyWindowScene: 0x0; evaluatedKeyWindowScene: 0x7f8b97a29f60; currentApplicationKeyWindow: 0x0; evaluatedApplicationKeyWindow: 0x0; reason: UIWindowScene: 0x7f8b97a29f60: Window scene became target of keyboard environment
+2026-11-25 08:01:02.740 Df QupilStudent[13829:a849] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7f8b97a29f60> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:01:02.750 Df QupilStudent[13829:a849] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7f8b97a29f60> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:01:02.768 Df QupilStudent[13829:a849] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7f8b97a29f60> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:01:03.302 I  QupilStudent[13829:a849] Qupil student: link received, teacher added
+2026-11-25 08:01:03.302 I  QupilStudent[13829:a849] Qupil student: link received, teacher added
+2026-11-25 08:01:03.309 Df QupilStudent[13829:a849] Qupil student: 1 link(s) with the start
+2026-11-25 08:01:03.333 Df QupilStudent[13829:a849] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7f8b97a29f60> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:01:03.371 Df QupilStudent[13829:a849] [com.apple.UIKit:AppLifecycle] sceneOfRecord: sceneID: sceneID:de.qupil.student-default  persistentID: A6F619D2-3A9B-4D0A-965E-4020C04CC69E
+2026-11-25 08:01:03.375 Df QupilStudent[13829:a849] [com.apple.UIKit:Application] Ignoring already applied deactivation reason: 5; deactivation reasons: 2080
+2026-11-25 08:01:03.377 Df QupilStudent[13829:a849] [com.apple.UIKit:Application] Deactivation reason added: 12; deactivation reasons: 2080 -> 6176; animating application lifecycle event: 1
+2026-11-25 08:01:03.520 Df QupilStudent[13829:b18f] [com.apple.network:] networkd_settings_read_from_file initialized networkd settings by reading plist directly
+2026-11-25 08:01:03.531 Df QupilStudent[13829:b18f] [com.apple.network:] networkd_settings_read_from_file initialized networkd settings by reading plist directly
+2026-11-25 08:01:03.793 Df QupilStudent[13829:b18f] [com.apple.network:path] nw_path_libinfo_path_check [14215B21-094E-477C-BC4D-356E7577039F Hostname#95a33bf4:0 tcp, legacy-socket, attribution: developer]
+	libinfo check path: satisfied (Path is satisfied), interface: en0
+2026-11-25 08:01:04.121 Df QupilStudent[13829:b18c] [com.apple.xpc:connection] [0x7f8b97b9a1e0] activating connection: mach=false listener=false peer=false name=com.apple.MTLCompilerService
+2026-11-25 08:01:04.403 Df QupilStudent[13829:b18c] [com.apple.xpc:connection] [0x7f8b96fb2c90] activating connection: mach=false listener=false peer=false name=com.apple.MTLCompilerService
+2026-11-25 08:01:04.410 A  QupilStudent[13829:ab80] (Metal) Metal Compiling Shader
+2026-11-25 08:01:06.828 A  QupilStudent[13829:ab77] (Metal) Metal Compiling Shader
+2026-11-25 08:01:07.456 A  QupilStudent[13829:ab80] (Metal) Metal Compiling Shader
+2026-11-25 08:01:07.539 A  QupilStudent[13829:ab77] (Metal) Metal Compiling Shader
+2026-11-25 08:01:07.592 Df QupilStudent[13829:b18c] [com.apple.xpc:connection] [0x7f8b96fb3090] activating connection: mach=true listener=false peer=false name=com.apple.IOSurface.Remote
+2026-11-25 08:01:08.020 I  QupilStudent[13829:a849] [com.apple.Accessibility:AXAppAccessibility] Presentation controller doesn't modalize: <_UIRootPresentationController: 0x7f8b97a8caf0>
+2026-11-25 08:01:08.361 Df QupilStudent[13829:a849] [com.apple.UIKit:KeyWindow] Key window API is scene-level: YES
+2026-11-25 08:01:08.370 Df QupilStudent[13829:a849] stale focus object 0x0 , doing manual update
+2026-11-25 08:01:08.370 Df QupilStudent[13829:a849] stale focus object 0x0 , doing manual update
+2026-11-25 08:01:08.465 Df QupilStudent[13829:a849] [com.apple.UIKit:Orientation] <UIWindowScene: 0x7f8b97a29f60> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E) Scene updated orientation preferences: none -> ( Pu )
+2026-11-25 08:01:08.475 I  QupilStudent[13829:a849] safe area: top 59 bottom 34
+2026-11-25 08:01:08.475 I  QupilStudent[13829:a849] safe area: top 59 bottom 34
+2026-11-25 08:01:08.487 Df QupilStudent[13829:a849] [com.apple.UIKit:Application] Deactivation reason removed: 11; deactivation reasons: 6176 -> 4128; animating application lifecycle event: 1
+2026-11-25 08:01:08.498 Df QupilStudent[13829:a849] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneIntelligenceSupportSettings> on FBSSceneSettings
+2026-11-25 08:01:08.558 Df QupilStudent[13829:ab80] [com.apple.UIIntelligenceSupport:xpc] establishing connection to agent
+2026-11-25 08:01:08.566 Df QupilStudent[13829:ab80] [com.apple.xpc:session] [0x6000005983c0] Session created.
+2026-11-25 08:01:08.567 Df QupilStudent[13829:ab80] [com.apple.xpc:session] [0x6000005983c0] Session created from connection [0x7f8b97b9f460]
+2026-11-25 08:01:08.597 Df QupilStudent[13829:ab80] [com.apple.xpc:connection] [0x7f8b97b9f460] activating connection: mach=true listener=false peer=false name=com.apple.uiintelligencesupport.agent
+2026-11-25 08:01:08.597 Df QupilStudent[13829:ab80] [com.apple.xpc:session] [0x6000005983c0] Session activated
+2026-11-25 08:01:08.618 Df QupilStudent[13829:a849] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7f8b97a29f60> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:01:09.010 Df QupilStudent[13829:a849] [com.apple.xpc:connection] [0x7f8b96f0af40] activating connection: mach=true listener=false peer=false name=com.apple.lsd.mapdb
+2026-11-25 08:01:09.076 A  QupilStudent[13829:ab7f] (RunningBoardServices) didChangeInheritances
+2026-11-25 08:01:09.075 I  QupilStudent[13829:a849] [com.apple.launchservices:db] LaunchServices database schema version: 20971542
+2026-11-25 08:01:09.093 I  QupilStudent[13829:a849] [com.apple.launchservices:datasep] application record search init. Node: <FSNode 0x600002672d80> { isDir = y, path = '/Users/runner/Library/Developer/CoreSimulator/Devices/3AF28461-937F-429D-A836-35990CD2CD3D/data/Containers/Bundle/Application/042A17BA-FE32-4EFF-9F6F-7BDEC9CF2B03/QupilStudent.app' } bundleID: (null) itemID: 0
+2026-11-25 08:01:09.162 A  QupilStudent[13829:ab77] (RunningBoardServices) didChangeInheritances
+2026-11-25 08:01:09.267 A  QupilStudent[13829:ab77] (RunningBoardServices) didChangeInheritances
+2026-11-25 08:01:09.388 Df QupilStudent[13829:ab7f] [com.apple.BackBoard:EventDelivery] BKSHIDEventDeliveryManager - connection activation
+2026-11-25 08:01:09.440 Df QupilStudent[13829:a849] [com.apple.network:activity] Create activity from XPC object <nw_activity 50:1 [819AB5EC-195C-4A5C-B270-C5178C0E0E55] (reporting strategy default)>
+2026-11-25 08:01:09.445 Df QupilStudent[13829:a849] [com.apple.network:activity] Create activity from XPC object <nw_activity 50:2 [E60B2376-7EF9-4E1F-9ABA-CAED715E4C05] (reporting strategy default)>
+2026-11-25 08:01:09.445 Df QupilStudent[13829:a849] [com.apple.network:activity] Set activity <nw_activity 50:1 [819AB5EC-195C-4A5C-B270-C5178C0E0E55] (reporting strategy default)> as the global parent
+2026-11-25 08:01:09.451 Df QupilStudent[13829:a849] [com.apple.UIKit:UpdateScheduler] Target list changed: <CADisplay:LCD PurpleMain>
+2026-11-25 08:01:09.458 Df QupilStudent[13829:a849] [com.apple.UIKit:AppLifecycle] sceneOfRecord: sceneID: sceneID:de.qupil.student-default  persistentID: A6F619D2-3A9B-4D0A-965E-4020C04CC69E
+2026-11-25 08:01:09.460 Df QupilStudent[13829:a849] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7f8b97a29f60> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:01:09.471 Df QupilStudent[13829:a849] [com.apple.Accessibility:AXCommon] Read Per-App on Init: Smart invert = (null)
+2026-11-25 08:01:09.480 I  QupilStudent[13829:a849] [com.apple.Accessibility:AXAppAccessibility] Loading settings loader: (system: 0)
+2026-11-25 08:01:10.062 I  QupilStudent[13829:a849] [com.apple.Accessibility:AXRuntimeNotifications] Attempting to send notification:  (1018) <private>
+2026-11-25 08:01:10.070 I  QupilStudent[13829:a849] [com.apple.Accessibility:AXRuntimeNotifications] consuming associated object for notification: <QUIMetalView: 0x7f8b96f7d200> 1018
+2026-11-25 08:01:10.089 Df QupilStudent[13829:a849] [com.apple.FrontBoard:SceneExtension] Realizing settings extension SBUISecureRenderingSettingsExtension on FBSSceneSettings
+2026-11-25 08:01:10.102 Df QupilStudent[13829:a849] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7f8b97a29f60> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:01:10.104 Df QupilStudent[13829:a849] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7f8b97a29f60> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:01:10.106 Df QupilStudent[13829:a849] [com.apple.UIKit:AppLifecycle] sceneOfRecord: sceneID: sceneID:de.qupil.student-default  persistentID: A6F619D2-3A9B-4D0A-965E-4020C04CC69E
+2026-11-25 08:01:10.106 Df QupilStudent[13829:a849] [com.apple.UIKit:Application] Deactivation reason removed: 12; deactivation reasons: 4128 -> 32; animating application lifecycle event: 1
+2026-11-25 08:01:10.106 Df QupilStudent[13829:a849] [com.apple.KeyboardArbiter:Client] Send setDeactivating: N (-DeactivationReason:SuspendedEventsOnly)
+2026-11-25 08:01:10.111 Df QupilStudent[13829:a849] [com.apple.UIKit:Application] Deactivation reason removed: 5; deactivation reasons: 32 -> 0; animating application lifecycle event: 0
+2026-11-25 08:01:10.165 Df QupilStudent[13829:b18f] [com.apple.network:path] nw_path_libinfo_path_check [59A310AD-9B69-4EB2-88B5-FB08B9B3E64F Hostname#95a33bf4:0 tcp, legacy-socket, attribution: developer]
+	libinfo check path: satisfied (Path is satisfied), interface: en0
+2026-11-25 08:01:10.184 I  QupilStudent[13829:a849] [com.apple.Accessibility:AXRuntimeNotifications] Attempting to send notification:  (1001) <private>
+2026-11-25 08:01:10.185 I  QupilStudent[13829:a849] [com.apple.Accessibility:AXRuntimeNotifications] Attempting to send notification:  (1001) <private>
+2026-11-25 08:01:10.186 I  QupilStudent[13829:a849] [com.apple.Accessibility:AXRuntimeNotifications] Attempting to send notification:  (1001) <private>
+2026-11-25 08:01:10.281 Df QupilStudent[13829:a849] (Foundation) void * _Nullable NSMapGet(NSMapTable * _Nonnull, const void * _Nullable): map table argument is NULL
+2026-11-25 08:01:10.310 Df QupilStudent[13829:a849] [com.apple.BackBoard:Display] [FBSDisplaySource 1-1] silently connecting raw configuration: <FBSDisplayConfiguration: 0x600001997c00; Main; mode: "393x852@3x 60Hz p3 SDR">
+2026-11-25 08:01:10.321 I  QupilStudent[13829:a849] [com.apple.Accessibility:AXRuntimeNotifications] Did post notification. notification:  (1018) error:0 data:<private>
+2026-11-25 08:01:10.334 Df QupilStudent[13829:a849] [com.apple.KeyboardArbiter:Client] startConnection
+2026-11-25 08:01:10.352 Df QupilStudent[13829:a849] [com.apple.xpc:connection] [0x7f8b97ba0de0] activating connection: mach=true listener=false peer=false name=com.apple.UIKit.KeyboardManagement.hosted
+2026-11-25 08:01:10.361 I  QupilStudent[13829:a849] [com.apple.Accessibility:AXRuntimeNotifications] Did post notification. notification:  (1001) error:0 data:<private>
+2026-11-25 08:01:10.449 Df QupilStudent[13829:a849] [com.apple.KeyboardArbiter:Client] handleKeyboardChange: set currentKeyboard:N (wasKeyboard:N)
+2026-11-25 08:01:10.490 Df QupilStudent[13829:a849] [com.apple.UIKit:KeyboardArbiterClientLog] isWritingToolsHandlingKeyboardTracking:Y (WT ready:Y, Arbiter ready:Y)
+2026-11-25 08:01:10.872 Df QupilStudent[13829:a849] [com.apple.network:activity] <nw_activity 50:1 [819AB5EC-195C-4A5C-B270-C5178C0E0E55] (global parent) (reporting strategy default) complete (reason success)> complete with reason 2 (success), duration 642563ms
+2026-11-25 08:01:10.873 Df QupilStudent[13829:a849] [com.apple.network:activity] <nw_activity 50:2 [E60B2376-7EF9-4E1F-9ABA-CAED715E4C05] (reporting strategy default) complete (reason success)> complete with reason 2 (success), duration 642567ms
+2026-11-25 08:01:10.873 Df QupilStudent[13829:a849] [com.apple.network:activity] Unsetting the global parent activity <nw_activity 50:1 [819AB5EC-195C-4A5C-B270-C5178C0E0E55] (global parent) (reporting strategy default) complete (reason success)>
+2026-11-25 08:01:10.873 Df QupilStudent[13829:a849] [com.apple.network:activity] Unset the global parent activity
+2026-11-25 08:01:17.606 I  QupilStudent[13829:ab7f] [com.apple.Accessibility:AXLoading] Initial load did occur QupilStudent
+2026-11-25 08:01:17.610 I  QupilStudent[13829:a849] [com.apple.Accessibility:AXLoading] UIApp ax initialize
+2026-11-25 08:01:17.611 I  QupilStudent[13829:a849] [com.apple.Accessibility:AXLoading] Load system app 0
+2026-11-25 08:01:17.619 I  QupilStudent[13829:a849] [com.apple.Accessibility:AXRuntimeNotifications] Attempting to send notification:  (3031) <private>
+2026-11-25 08:01:17.622 I  QupilStudent[13829:a849] [com.apple.Accessibility:AXRuntimeNotifications] Did post notification. notification:  (3031) error:0 data:<private>
+2026-11-25 08:01:18.517 I  QupilStudent[13829:a849] [com.apple.Accessibility:AXAppAccessibility] Presentation controller doesn't modalize: <_UIRootPresentationController: 0x7f8b97a8caf0>
+2026-11-25 08:01:25.718 Df QupilStudent[13829:a849] [com.apple.FrontBoard:SceneClient] [(FBSceneManager):sceneID:de.qupil.student-default] Received action(s) in scene-update: UIOpenURLAction
+2026-11-25 08:01:25.781 I  QupilStudent[13829:a849] Qupil student: link received, teacher added
+2026-11-25 08:01:25.782 I  QupilStudent[13829:a849] Qupil student: link received, teacher added
+2026-11-25 08:01:25.788 Df QupilStudent[13829:b18f] [com.apple.network:path] nw_path_libinfo_path_check [27D662F2-651D-4836-82E0-6F9FB0F6FBAF Hostname#95a33bf4:0 tcp, legacy-socket, attribution: developer]
+	libinfo check path: satisfied (Path is satisfied), interface: en0
+2026-11-25 08:01:25.788 Df QupilStudent[13829:a849] [com.apple.UIKit:AppLifecycle] sceneOfRecord: sceneID: sceneID:de.qupil.student-default  persistentID: A6F619D2-3A9B-4D0A-965E-4020C04CC69E
+2026-11-25 08:01:55.466 Df QupilStudent[13829:a849] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7f8b97a29f60> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:01:55.525 Df QupilStudent[13829:a849] [com.apple.UIKit:AppLifecycle] sceneOfRecord: sceneID: sceneID:de.qupil.student-default  persistentID: A6F619D2-3A9B-4D0A-965E-4020C04CC69E
+2026-11-25 08:01:55.526 Df QupilStudent[13829:a849] [com.apple.UIKit:Application] Deactivation reason added: 5; deactivation reasons: 0 -> 32; animating application lifecycle event: 1
+2026-11-25 08:01:55.569 Df QupilStudent[13829:a849] [com.apple.UIKit:Application] Deactivation reason added: 12; deactivation reasons: 32 -> 4128; animating application lifecycle event: 1
+2026-11-25 08:01:55.742 Df QupilStudent[13829:c71c] [com.apple.BackBoard:EventDelivery] policyStatus:<BKSHIDEventDeliveryPolicyObserver: 0x6000002fc120; token: com.apple.frontboard.systemappservices/FBSceneManager:sceneID%3Ade.qupil.student-default; status: none> was:target
+2026-11-25 08:01:55.753 Df QupilStudent[13829:a849] [com.apple.UIKit:KeyWindow] Scene target of keyboard event deferring environment did change: 0; scene: UIWindowScene: 0x7f8b97a29f60; scene identity: com.apple.frontboard.systemappservices/FBSceneManager:sceneID%3Ade.qupil.student-default
+2026-11-25 08:02:03.555 Df QupilStudent[13829:a849] [com.apple.UIKit:AppLifecycle] sceneOfRecord: sceneID: sceneID:de.qupil.student-default  persistentID: A6F619D2-3A9B-4D0A-965E-4020C04CC69E
+2026-11-25 08:02:07.699 I  QupilStudent[13829:c71c] [com.apple.BaseBoard:BSAction] Decode <FBSceneSnapshotAction: 0x24db000e>
+2026-11-25 08:02:07.884 A  QupilStudent[13829:c9f5] (RunningBoardServices) didChangeInheritances
+2026-11-25 08:02:08.084 Df QupilStudent[13829:a849] [com.apple.FrontBoard:SceneClient] [(FBSceneManager):sceneID:de.qupil.student-default] Received action(s) in scene-update: <FBSceneSnapshotAction: 0x24db000e>
+2026-11-25 08:02:08.686 Df QupilStudent[13829:a849] [com.apple.UIKit:AppLifecycle] sceneOfRecord: sceneID: sceneID:de.qupil.student-default  persistentID: A6F619D2-3A9B-4D0A-965E-4020C04CC69E
+2026-11-25 08:02:08.709 Df QupilStudent[13829:c9f5] [com.apple.xpc:connection] [0x7f8b97b9f460] invalidated because the current process cancelled the connection by calling xpc_connection_cancel()
+2026-11-25 08:02:08.709 Df QupilStudent[13829:c9f5] [com.apple.xpc:session] [0x6000005983c0] Session canceled.
+2026-11-25 08:02:08.739 Df QupilStudent[13829:c71c] [com.apple.UIIntelligenceSupport:xpc] agent connection cancelled (details: Session manually canceled)
+2026-11-25 08:02:08.740 Df QupilStudent[13829:c71c] [com.apple.xpc:session] [0x6000005983c0] Disposing of session
+2026-11-25 08:02:10.724 Df QupilStudent[13829:a849] [com.apple.UIKit:Application] Deactivation reason added: 11; deactivation reasons: 4128 -> 6176; animating application lifecycle event: 0
+2026-11-25 08:02:10.795 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Will add backgroundTask with taskName: _UIRemoteKeyboard XPC disconnection, expirationHandler: (null)
+2026-11-25 08:02:10.802 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Creating new assertion because there is no existing background assertion.
+2026-11-25 08:02:10.802 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Creating new background assertion
+2026-11-25 08:02:10.809 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Created new background assertion <BKSProcessAssertion: 0x6000005befd0>
+2026-11-25 08:02:10.814 I  QupilStudent[13829:a849] [com.apple.runningboard:assertion] Acquiring assertion: <RBSAssertionDescriptor| "Shared Background Assertion 1 for de.qupil.student" ID:(null) target:13829>
+2026-11-25 08:02:10.826 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Incrementing reference count for background assertion <BKSProcessAssertion: 0x6000005befd0>
+2026-11-25 08:02:10.831 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Created background task <_UIBackgroundTaskInfo: 0x600003cde640>: taskID = 2, taskName = _UIRemoteKeyboard XPC disconnection, creationTime = 717 (elapsed = 0).
+2026-11-25 08:02:10.832 Df QupilStudent[13829:a849] [com.apple.KeyboardArbiter:Client] de.qupil.student(13829) invalidateConnection (appDidSuspend)
+2026-11-25 08:02:10.834 Df QupilStudent[13829:a849] [com.apple.xpc:connection] [0x7f8b97ba0de0] invalidated because the current process cancelled the connection by calling xpc_connection_cancel()
+2026-11-25 08:02:10.915 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Will add backgroundTask with taskName: com.apple.asset_manager.cache_resource_cleanup, expirationHandler: <__NSMallocBlock__: 0x60000283cff0>
+2026-11-25 08:02:10.916 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Reusing background assertion <BKSProcessAssertion: 0x6000005befd0>
+2026-11-25 08:02:10.916 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Incrementing reference count for background assertion <BKSProcessAssertion: 0x6000005befd0>
+2026-11-25 08:02:10.919 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Created background task <_UIBackgroundTaskInfo: 0x600003368100>: taskID = 3, taskName = com.apple.asset_manager.cache_resource_cleanup, creationTime = 717 (elapsed = 0).
+2026-11-25 08:02:10.928 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Ending background task with UIBackgroundTaskIdentifier: 3
+2026-11-25 08:02:10.928 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Ending task with identifier 3 and description: <_UIBackgroundTaskInfo: 0x600003368100>: taskID = 3, taskName = com.apple.asset_manager.cache_resource_cleanup, creationTime = 717 (elapsed = 0), _expireHandler: <__NSMallocBlock__: 0x60000283d350>
+2026-11-25 08:02:10.928 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Decrementing reference count for assertion <BKSProcessAssertion: 0x6000005befd0> (used by background task with identifier 3: <_UIBackgroundTaskInfo: 0x600003368100>: taskID = 3, taskName = com.apple.asset_manager.cache_resource_cleanup, creationTime = 717 (elapsed = 0))
+2026-11-25 08:02:10.931 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Will add backgroundTask with taskName: com.apple.asset_manager.cache_resource_cleanup, expirationHandler: <__NSMallocBlock__: 0x600002838180>
+2026-11-25 08:02:10.931 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Reusing background assertion <BKSProcessAssertion: 0x6000005befd0>
+2026-11-25 08:02:10.931 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Incrementing reference count for background assertion <BKSProcessAssertion: 0x6000005befd0>
+2026-11-25 08:02:10.931 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Created background task <_UIBackgroundTaskInfo: 0x600003330040>: taskID = 4, taskName = com.apple.asset_manager.cache_resource_cleanup, creationTime = 717 (elapsed = 0).
+2026-11-25 08:02:10.933 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Ending background task with UIBackgroundTaskIdentifier: 4
+2026-11-25 08:02:10.933 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Ending task with identifier 4 and description: <_UIBackgroundTaskInfo: 0x600003330040>: taskID = 4, taskName = com.apple.asset_manager.cache_resource_cleanup, creationTime = 717 (elapsed = 0), _expireHandler: <__NSMallocBlock__: 0x6000028380c0>
+2026-11-25 08:02:10.933 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Decrementing reference count for assertion <BKSProcessAssertion: 0x6000005befd0> (used by background task with identifier 4: <_UIBackgroundTaskInfo: 0x600003330040>: taskID = 4, taskName = com.apple.asset_manager.cache_resource_cleanup, creationTime = 717 (elapsed = 0))
+2026-11-25 08:02:10.933 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Will add backgroundTask with taskName: com.apple.asset_manager.cache_resource_cleanup, expirationHandler: <__NSMallocBlock__: 0x600002800f30>
+2026-11-25 08:02:10.933 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Reusing background assertion <BKSProcessAssertion: 0x6000005befd0>
+2026-11-25 08:02:10.933 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Incrementing reference count for background assertion <BKSProcessAssertion: 0x6000005befd0>
+2026-11-25 08:02:10.933 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Created background task <_UIBackgroundTaskInfo: 0x600003cdda80>: taskID = 5, taskName = com.apple.asset_manager.cache_resource_cleanup, creationTime = 717 (elapsed = 0).
+2026-11-25 08:02:10.933 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Ending background task with UIBackgroundTaskIdentifier: 5
+2026-11-25 08:02:10.933 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Ending task with identifier 5 and description: <_UIBackgroundTaskInfo: 0x600003cdda80>: taskID = 5, taskName = com.apple.asset_manager.cache_resource_cleanup, creationTime = 717 (elapsed = 0), _expireHandler: <__NSMallocBlock__: 0x600002800d80>
+2026-11-25 08:02:10.933 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Decrementing reference count for assertion <BKSProcessAssertion: 0x6000005befd0> (used by background task with identifier 5: <_UIBackgroundTaskInfo: 0x600003cdda80>: taskID = 5, taskName = com.apple.asset_manager.cache_resource_cleanup, creationTime = 717 (elapsed = 0))
+2026-11-25 08:02:10.944 Df QupilStudent[13829:a849] [com.apple.UIKit:Application] Deactivation reason removed: 5; deactivation reasons: 6176 -> 6144; animating application lifecycle event: 0
+2026-11-25 08:02:10.959 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Will add backgroundTask with taskName: com.apple.uikit.applicationSnapshot, expirationHandler: <__NSMallocBlock__: 0x600002800d80>
+2026-11-25 08:02:10.959 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Reusing background assertion <BKSProcessAssertion: 0x6000005befd0>
+2026-11-25 08:02:10.959 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Incrementing reference count for background assertion <BKSProcessAssertion: 0x6000005befd0>
+2026-11-25 08:02:10.959 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Created background task <_UIBackgroundTaskInfo: 0x600003cdd9c0>: taskID = 6, taskName = com.apple.uikit.applicationSnapshot, creationTime = 717 (elapsed = 0).
+2026-11-25 08:02:11.000 Df QupilStudent[13829:a849] [com.apple.UIKit:InterfaceStyle] Push traits update to screen for new style 1, <UIWindowScene: 0x7f8b97a29f60> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:02:11.044 Df QupilStudent[13829:a849] [com.apple.UIKit:InterfaceStyle] Should not send trait collection or coordinate space update, interface style 1 -> 1, <UIWindowScene: 0x7f8b97a29f60> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:02:11.066 Df QupilStudent[13829:a849] [com.apple.FrontBoard:Common] Performing snapshot request 0x600002801890 (type 1)
+2026-11-25 08:02:11.077 Df QupilStudent[13829:a849] [com.apple.FrontBoard:SceneClient] [(FBSceneManager):sceneID:de.qupil.student-default] Sending action(s): <FBSSceneSnapshotRequestAction: 0x36050000>
+2026-11-25 08:02:11.152 I  QupilStudent[13829:a849] [com.apple.BaseBoard:BSAction] Encode <FBSSceneSnapshotRequestAction: 0x36050000>
+2026-11-25 08:02:11.226 I  QupilStudent[13829:c9f5] [com.apple.BaseBoard:BSAction] Response <FBSSceneSnapshotRequestAction: 0x36050000>
+2026-11-25 08:02:11.226 Df QupilStudent[13829:c9f5] [com.apple.FrontBoard:Common] Snapshot request 0x600002801890 complete
+2026-11-25 08:02:11.228 Df QupilStudent[13829:a849] [com.apple.UIKit:InterfaceStyle] Push traits update to screen for new style 1, <UIWindowScene: 0x7f8b97a29f60> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:02:11.335 Df QupilStudent[13829:a849] [com.apple.UIKit:InterfaceStyle] Should not send trait collection or coordinate space update, interface style 2 -> 2, <UIWindowScene: 0x7f8b97a29f60> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:02:11.341 Df QupilStudent[13829:a849] [com.apple.FrontBoard:Common] Performing snapshot request 0x600002801890 (type 1)
+2026-11-25 08:02:11.343 Df QupilStudent[13829:a849] [com.apple.FrontBoard:SceneClient] [(FBSceneManager):sceneID:de.qupil.student-default] Sending action(s): <FBSSceneSnapshotRequestAction: 0x36050001>
+2026-11-25 08:02:11.351 I  QupilStudent[13829:a849] [com.apple.BaseBoard:BSAction] Encode <FBSSceneSnapshotRequestAction: 0x36050001>
+2026-11-25 08:02:11.399 I  QupilStudent[13829:c71c] [com.apple.BaseBoard:BSAction] Response <FBSSceneSnapshotRequestAction: 0x36050001>
+2026-11-25 08:02:11.399 Df QupilStudent[13829:c71c] [com.apple.FrontBoard:Common] Snapshot request 0x600002801890 complete
+2026-11-25 08:02:11.404 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Ending background task with UIBackgroundTaskIdentifier: 6
+2026-11-25 08:02:11.404 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Ending task with identifier 6 and description: <_UIBackgroundTaskInfo: 0x600003cdd9c0>: taskID = 6, taskName = com.apple.uikit.applicationSnapshot, creationTime = 717 (elapsed = 0), _expireHandler: <__NSMallocBlock__: 0x600002800f60>
+2026-11-25 08:02:11.404 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Decrementing reference count for assertion <BKSProcessAssertion: 0x6000005befd0> (used by background task with identifier 6: <_UIBackgroundTaskInfo: 0x600003cdd9c0>: taskID = 6, taskName = com.apple.uikit.applicationSnapshot, creationTime = 717 (elapsed = 0))
+2026-11-25 08:02:11.410 I  QupilStudent[13829:a849] [com.apple.BaseBoard:BSAction] Reply <FBSceneSnapshotAction: 0x24db000e>
+2026-11-25 08:02:11.429 Df QupilStudent[13829:a849] [com.apple.UIKit:InterfaceStyle] Push traits update to screen for new style 1, <UIWindowScene: 0x7f8b97a29f60> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:02:11.431 Df QupilStudent[13829:a849] [com.apple.UIKit:InterfaceStyle] Should not send trait collection or coordinate space update, interface style 1 -> 1, <UIWindowScene: 0x7f8b97a29f60> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:02:11.463 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Will add backgroundTask with taskName: com.apple.UIKit.CABackingStoreCollect, expirationHandler: (null)
+2026-11-25 08:02:11.464 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Reusing background assertion <BKSProcessAssertion: 0x6000005befd0>
+2026-11-25 08:02:11.464 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Incrementing reference count for background assertion <BKSProcessAssertion: 0x6000005befd0>
+2026-11-25 08:02:11.464 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Created background task <_UIBackgroundTaskInfo: 0x60000333e340>: taskID = 7, taskName = com.apple.UIKit.CABackingStoreCollect, creationTime = 718 (elapsed = 0).
+2026-11-25 08:02:11.466 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Ending background task with UIBackgroundTaskIdentifier: 7
+2026-11-25 08:02:11.466 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Ending task with identifier 7 and description: <_UIBackgroundTaskInfo: 0x60000333e340>: taskID = 7, taskName = com.apple.UIKit.CABackingStoreCollect, creationTime = 718 (elapsed = 0), _expireHandler: (null)
+2026-11-25 08:02:11.466 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Decrementing reference count for assertion <BKSProcessAssertion: 0x6000005befd0> (used by background task with identifier 7: <_UIBackgroundTaskInfo: 0x60000333e340>: taskID = 7, taskName = com.apple.UIKit.CABackingStoreCollect, creationTime = 718 (elapsed = 0))
+2026-11-25 08:02:11.486 Df QupilStudent[13829:a849] [com.apple.UIKit:AppLifecycle] sceneOfRecord: sceneID: sceneID:de.qupil.student-default  persistentID: A6F619D2-3A9B-4D0A-965E-4020C04CC69E
+2026-11-25 08:02:11.498 Df QupilStudent[13829:a849] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7f8b97a29f60> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:02:11.499 Df QupilStudent[13829:a849] [com.apple.UIKit:UpdateScheduler] Target list changed:
+2026-11-25 08:02:11.514 Df QupilStudent[13829:a849] [com.apple.KeyboardArbiter:Client] RX sceneBecameFocused:(null)
+2026-11-25 08:02:11.521 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Ending background task with UIBackgroundTaskIdentifier: 2
+2026-11-25 08:02:11.521 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Ending task with identifier 2 and description: <_UIBackgroundTaskInfo: 0x600003cde640>: taskID = 2, taskName = _UIRemoteKeyboard XPC disconnection, creationTime = 717 (elapsed = 1), _expireHandler: (null)
+2026-11-25 08:02:11.522 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Decrementing reference count for assertion <BKSProcessAssertion: 0x6000005befd0> (used by background task with identifier 2: <_UIBackgroundTaskInfo: 0x600003cde640>: taskID = 2, taskName = _UIRemoteKeyboard XPC disconnection, creationTime = 717 (elapsed = 1))
+2026-11-25 08:02:11.522 Df QupilStudent[13829:a849] [com.apple.UIKit:BackgroundTask] Will invalidate assertion: <BKSProcessAssertion: 0x6000005befd0> for task identifier: 2
+2026-11-25 08:03:47.837 A  QupilStudent[13829:cb97] (RunningBoardServices) didChangeInheritances
+2026-11-25 08:03:49.123 Df QupilStudent[13829:a849] [com.apple.FrontBoard:SceneClient] [(FBSceneManager):sceneID:de.qupil.student-default] Received action(s) in scene-update: UIOpenURLAction
+2026-11-25 08:03:49.401 I  QupilStudent[13829:a849] Qupil student: link received, teacher added
+2026-11-25 08:03:49.401 I  QupilStudent[13829:a849] Qupil student: link received, teacher added
+2026-11-25 08:03:49.429 Df QupilStudent[13829:a849] [com.apple.UIKit:AppLifecycle] sceneOfRecord: sceneID: sceneID:de.qupil.student-default  persistentID: A6F619D2-3A9B-4D0A-965E-4020C04CC69E
+2026-11-25 08:03:49.459 Df QupilStudent[13829:a849] [com.apple.UIKit:Application] Deactivation reason added: 5; deactivation reasons: 6144 -> 6176; animating application lifecycle event: 1
+2026-11-25 08:03:49.479 Df QupilStudent[13829:a849] [com.apple.UIKit:Application] Ignoring already applied deactivation reason: 12; deactivation reasons: 6176
+2026-11-25 08:03:49.481 Df QupilStudent[13829:e510] [com.apple.network:path] nw_path_libinfo_path_check [A022A4EE-C7CA-4A0C-87A3-DE3AA0A575CA Hostname#95a33bf4:0 tcp, legacy-socket, attribution: developer]
+	libinfo check path: satisfied (Path is satisfied), interface: en0
+2026-11-25 08:03:49.720 Df QupilStudent[13829:a849] [com.apple.UIKit:Application] Deactivation reason removed: 11; deactivation reasons: 6176 -> 4128; animating application lifecycle event: 1
+2026-11-25 08:03:49.751 Df QupilStudent[13829:c71c] [com.apple.UIIntelligenceSupport:xpc] establishing connection to agent
+2026-11-25 08:03:49.753 Df QupilStudent[13829:c71c] [com.apple.xpc:session] [0x6000005b0b90] Session created.
+2026-11-25 08:03:49.753 Df QupilStudent[13829:c71c] [com.apple.xpc:session] [0x6000005b0b90] Session created from connection [0x7f8b97b5e910]
+2026-11-25 08:03:49.907 Df QupilStudent[13829:c71c] [com.apple.xpc:connection] [0x7f8b97b5e910] activating connection: mach=true listener=false peer=false name=com.apple.uiintelligencesupport.agent
+2026-11-25 08:03:49.908 Df QupilStudent[13829:c71c] [com.apple.xpc:session] [0x6000005b0b90] Session activated
+2026-11-25 08:03:50.412 Df QupilStudent[13829:a849] [com.apple.UIKit:AppLifecycle] sceneOfRecord: sceneID: sceneID:de.qupil.student-default  persistentID: A6F619D2-3A9B-4D0A-965E-4020C04CC69E
+2026-11-25 08:03:50.415 A  QupilStudent[13829:e4c0] (RunningBoardServices) didChangeInheritances
+2026-11-25 08:03:50.436 A  QupilStudent[13829:e4c0] (RunningBoardServices) didChangeInheritances
+2026-11-25 08:03:50.442 Df QupilStudent[13829:a849] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7f8b97a29f60> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:03:50.477 Df QupilStudent[13829:a849] [com.apple.UIKit:UpdateScheduler] Target list changed: <CADisplay:LCD PurpleMain>
+2026-11-25 08:03:50.564 Df QupilStudent[13829:a849] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7f8b97a29f60> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:03:50.568 Df QupilStudent[13829:a849] [com.apple.UIKit:AppLifecycle] sceneOfRecord: sceneID: sceneID:de.qupil.student-default  persistentID: A6F619D2-3A9B-4D0A-965E-4020C04CC69E
+2026-11-25 08:03:50.568 Df QupilStudent[13829:a849] [com.apple.UIKit:Application] Deactivation reason removed: 12; deactivation reasons: 4128 -> 32; animating application lifecycle event: 1
+2026-11-25 08:03:50.568 Df QupilStudent[13829:a849] [com.apple.KeyboardArbiter:Client] Send setDeactivating: N (-DeactivationReason:SuspendedEventsOnly)
+2026-11-25 08:03:50.611 Df QupilStudent[13829:a849] [com.apple.UIKit:Application] Deactivation reason removed: 5; deactivation reasons: 32 -> 0; animating application lifecycle event: 0
+2026-11-25 08:03:50.646 Df QupilStudent[13829:e510] [com.apple.network:path] nw_path_libinfo_path_check [8E5F656E-150D-4F01-A3F4-BB64C1CD997B Hostname#95a33bf4:0 tcp, legacy-socket, attribution: developer]
+	libinfo check path: satisfied (Path is satisfied), interface: en0
+2026-11-25 08:03:50.723 Df QupilStudent[13829:a849] [com.apple.KeyboardArbiter:Client] startConnection
+2026-11-25 08:03:50.750 A  QupilStudent[13829:e4c0] (RunningBoardServices) didChangeInheritances
+2026-11-25 08:03:50.961 Df QupilStudent[13829:a849] [com.apple.xpc:connection] [0x7f8b97b8d690] activating connection: mach=true listener=false peer=false name=com.apple.UIKit.KeyboardManagement.hosted
+2026-11-25 08:03:51.047 Df QupilStudent[13829:e4c3] [com.apple.BackBoard:EventDelivery] policyStatus:<BKSHIDEventDeliveryPolicyObserver: 0x6000002fc120; token: com.apple.frontboard.systemappservices/FBSceneManager:sceneID%3Ade.qupil.student-default; status: target> was:none
+2026-11-25 08:03:51.047 Df QupilStudent[13829:a849] [com.apple.UIKit:KeyWindow] Scene target of keyboard event deferring environment did change: 1; scene: UIWindowScene: 0x7f8b97a29f60; scene identity: com.apple.frontboard.systemappservices/FBSceneManager:sceneID%3Ade.qupil.student-default
+2026-11-25 08:03:51.048 Df QupilStudent[13829:a849] [com.apple.UIKit:EventDeferring] [0x600000df8f50] Scene target of event deferring environments did update: scene: 0x7f8b97a29f60; current systemShellManagesKeyboardFocus: 1; systemShellManagesKeyboardFocusForScene: 1; eligibleForRecordRemoval: 1;
+2026-11-25 08:03:51.050 Df QupilStudent[13829:a849] [com.apple.UIKit:KeyWindow] Scene became target of keyboard event deferring environment: UIWindowScene: 0x7f8b97a29f60; scene identity: com.apple.frontboard.systemappservices/FBSceneManager:sceneID%3Ade.qupil.student-default
+2026-11-25 08:03:51.058 Df QupilStudent[13829:a849] [com.apple.UIKit:AppLifecycle] sceneOfRecord: sceneID: sceneID:de.qupil.student-default  persistentID: A6F619D2-3A9B-4D0A-965E-4020C04CC69E
+2026-11-25 08:03:51.061 Df QupilStudent[13829:a849] [com.apple.KeyboardArbiter:Client] handleKeyboardChange: set currentKeyboard:N (wasKeyboard:N)
+2026-11-25 08:04:50.290 Df QupilStudent[21585:f494] [com.apple.xpc:connection] [0x7f8fc5705140] activating connection: mach=true listener=false peer=false name=com.apple.cfprefsd.daemon
+2026-11-25 08:04:51.058 A  QupilStudent[21585:fe64] (CoreFoundation) Loading Preferences From User Session CFPrefsD
+2026-11-25 08:04:51.132 Df QupilStudent[21585:f494] [com.apple.securityd:SecWarning] SecTaskLoadEntitlements failed error=22 cs_flags=200, pid=21585 task=QupilStudent[21585]/0#-1 LF=22
+2026-11-25 08:04:51.208 Df QupilStudent[21585:f494] (libMobileGestalt.dylib) No persisted cache on this platform.
+2026-11-25 08:04:51.208 Df QupilStudent[21585:fe26] [com.apple.UIKit:BackgroundTask] Creating new assertion because there is no existing background assertion.
+2026-11-25 08:04:51.211 Df QupilStudent[21585:fe26] [com.apple.UIKit:BackgroundTask] Creating new background assertion
+2026-11-25 08:04:51.228 Df QupilStudent[21585:fe26] [com.apple.UIKit:BackgroundTask] Created new background assertion <BKSProcessAssertion: 0x600001930c80>
+2026-11-25 08:04:51.243 Df QupilStudent[21585:fe26] [com.apple.runningboard:connection] Initializing connection
+2026-11-25 08:04:51.253 Df QupilStudent[21585:fe26] [com.apple.runningboard:process] Removing all cached process handles
+2026-11-25 08:04:51.264 Df QupilStudent[21585:fe65] [com.apple.runningboard:connection] Sending handshake request attempt #1 to server
+2026-11-25 08:04:51.284 I  QupilStudent[21585:fe26] [com.apple.runningboard:assertion] Acquiring assertion: <RBSAssertionDescriptor| "Shared Background Assertion 0 for de.qupil.student" ID:(null) target:21585>
+2026-11-25 08:04:51.311 Df QupilStudent[21585:fe65] [com.apple.runningboard:connection] Creating connection to com.apple.runningboard
+2026-11-25 08:04:51.312 Df QupilStudent[21585:fe65] [com.apple.xpc:connection] [0x7f8fc6306040] activating connection: mach=true listener=false peer=false name=com.apple.runningboard
+2026-11-25 08:04:51.366 Df QupilStudent[21585:fe65] [com.apple.runningboard:connection] Handshake succeeded
+2026-11-25 08:04:51.367 Df QupilStudent[21585:fe65] [com.apple.runningboard:connection] Identity resolved as app<de.qupil.student((null))>
+2026-11-25 08:04:51.368 Df QupilStudent[21585:fe64] [com.apple.BoardServices:XPCErrors] [C:1] Alloc com.apple.frontboard.systemappservices
+2026-11-25 08:04:51.368 A  QupilStudent[21585:fe79] (RunningBoardServices) didChangeInheritances
+2026-11-25 08:04:51.379 Df QupilStudent[21585:fe26] [com.apple.UIKit:BackgroundTask] Incrementing reference count for background assertion <BKSProcessAssertion: 0x600001930c80>
+2026-11-25 08:04:51.381 Df QupilStudent[21585:fe64] [com.apple.xpc:connection] [0x7f8fc5706d00] activating connection: mach=false listener=false peer=false name=(anonymous)
+2026-11-25 08:04:51.399 Df QupilStudent[21585:fe26] [com.apple.UIKit:BackgroundTask] Created background task <_UIBackgroundTaskInfo: 0x600002f3a5c0>: taskID = 1, taskName = Launch Background Task for Coalescing, creationTime = 877 (elapsed = 0).
+2026-11-25 08:04:51.425 Df QupilStudent[21585:fe26] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UIApplicationSceneKeyboardSettings on FBSSceneSettings
+2026-11-25 08:04:51.502 Df QupilStudent[21585:fe26] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneOcclusionSettings> on FBSSceneSettings
+2026-11-25 08:04:51.504 Df QupilStudent[21585:fe26] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneInterfaceProtectionSettings> on FBSSceneSettings
+2026-11-25 08:04:51.511 Df QupilStudent[21585:fe26] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneLayoutPreferencesHostSettingsExtension on FBSSceneSettings
+2026-11-25 08:04:51.511 Df QupilStudent[21585:fe26] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneSafeAreaSettingsExtension on FBSSceneSettings
+2026-11-25 08:04:51.534 Df QupilStudent[21585:fe26] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneLayoutPreferenceClientSettingsExtension on FBSSceneClientSettings
+2026-11-25 08:04:51.533 Df QupilStudent[21585:f494] [com.apple.UIKit:Application] Deactivation reason added: 10; deactivation reasons: 0 -> 1024; animating application lifecycle event: 0
+2026-11-25 08:04:51.551 Df QupilStudent[21585:fe26] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UIHomeAffordanceHostSceneSettings> on FBSSceneSettings
+2026-11-25 08:04:51.553 Df QupilStudent[21585:f494] [com.apple.BoardServices:Injection] activating monitor for service com.apple.frontboard.open
+2026-11-25 08:04:51.555 Df QupilStudent[21585:fe26] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISystemShellSceneHostingEnvironmentSettings on FBSSceneSettings
+2026-11-25 08:04:51.564 Df QupilStudent[21585:fe26] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneRenderingEnvironmentSettings on FBSSceneSettings
+2026-11-25 08:04:51.573 Df QupilStudent[21585:fe26] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneRenderingEnvironmentClientSettings> on FBSSceneClientSettings
+2026-11-25 08:04:51.578 Df QupilStudent[21585:fe26] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneTransitioningHostSettings> on FBSSceneSettings
+2026-11-25 08:04:51.583 Df QupilStudent[21585:fe26] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneFocusSystemSettings> on FBSSceneSettings
+2026-11-25 08:04:51.585 Df QupilStudent[21585:fe26] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneOrientationSettingsExtension on FBSSceneSettings
+2026-11-25 08:04:51.586 Df QupilStudent[21585:f494] [com.apple.BoardServices:Injection] activating monitor for service com.apple.frontboard.workspace-service
+2026-11-25 08:04:51.586 Df QupilStudent[21585:fe26] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneOrientationClientSettingsExtension on FBSSceneClientSettings
+2026-11-25 08:04:51.595 Df QupilStudent[21585:fe26] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneWindowingControlClientSettings on FBSSceneClientSettings
+2026-11-25 08:04:51.619 Df QupilStudent[21585:fe26] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneHostingContentSizePreferenceClientSettings> on FBSSceneClientSettings
+2026-11-25 08:04:51.621 Df QupilStudent[21585:fe26] [com.apple.FrontBoard:SceneExtension] Realizing settings extension _UISceneHostingTraitCollectionPropagationSettings on FBSSceneSettings
+2026-11-25 08:04:51.629 Df QupilStudent[21585:f494] [com.apple.FrontBoard:Common] FBSWorkspace registering source: com.apple.frontboard.systemappservices
+2026-11-25 08:04:51.634 Df QupilStudent[21585:fe26] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneHostingSheetPresentationSettings> on FBSSceneSettings
+2026-11-25 08:04:51.636 Df QupilStudent[21585:fe26] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneHostingSheetPresentationClientSettings> on FBSSceneClientSettings
+2026-11-25 08:04:51.637 Df QupilStudent[21585:fe26] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneHostingEventDeferringSettings> on FBSSceneSettings
+2026-11-25 08:04:51.638 Df QupilStudent[21585:f494] [com.apple.FrontBoard:Common] FBSWorkspace connected to endpoint : <BSServiceConnectionEndpoint: 0x600003a21c40; target: com.apple.frontboard.systemappservices; service: com.apple.frontboard.workspace-service>
+2026-11-25 08:04:51.644 Df QupilStudent[21585:f494] [com.apple.FrontBoard:Common] <FBSWorkspaceScenesClient:0x6000008305a0 com.apple.frontboard.systemappservices> attempting immediate handshake from activate
+2026-11-25 08:04:51.649 Df QupilStudent[21585:fe26] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <UIKit__UITypedKeyValueSceneSettings> on FBSSceneSettings
+2026-11-25 08:04:51.650 Df QupilStudent[21585:f494] [com.apple.FrontBoard:Common] <FBSWorkspaceScenesClient:0x6000008305a0 com.apple.frontboard.systemappservices> sent handshake
+2026-11-25 08:04:51.651 Df QupilStudent[21585:fe26] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <UIKit__UITypedKeyValueSceneSettings> on FBSSceneClientSettings
+2026-11-25 08:04:51.658 Df QupilStudent[21585:fe26] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneHostingViewControllerPreferencePropagationClientSettings> on FBSSceneClientSettings
+2026-11-25 08:04:51.659 Df QupilStudent[21585:f494] [com.apple.runningboard:general] Added observer for process assertions expiration warning: <_RBSExpirationWarningClient: 0x600003a24c20>
+2026-11-25 08:04:51.665 Df QupilStudent[21585:fe26] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneZoomTransitionSettings> on FBSSceneSettings
+2026-11-25 08:04:51.684 Df QupilStudent[21585:fe64] [com.apple.FrontBoard:SceneExtension] Realizing settings extension FBSSceneSettingsCore on FBSSceneSettings
+2026-11-25 08:04:51.691 Df QupilStudent[21585:fe64] [com.apple.FrontBoard:SceneExtension] Realizing settings extension FBSSceneClientSettingsCore on FBSSceneClientSettings
+2026-11-25 08:04:51.761 Df QupilStudent[21585:f494] [com.apple.UIKit:UIScreen] Evaluated capturing state as 0 on <UIScreen: 0x7f8fc620a450> for initial
+2026-11-25 08:04:51.789 Df QupilStudent[21585:f494] [com.apple.UIKit:UIScreen] Evaluated capturing state as 0 on <UIScreen: 0x7f8fc620a450> for CADisplay KVO
+2026-11-25 08:04:51.853 Df QupilStudent[21585:f494] [com.apple.Accessibility:AXSupportCommon] Read CategoryName: per-app = 1, category name = (null)
+2026-11-25 08:04:51.858 Df QupilStudent[21585:fe64] [com.apple.FrontBoard:SceneExtension] UIMutableApplicationSceneSettings setting counterpart class: UIApplicationSceneSettings
+2026-11-25 08:04:51.858 Df QupilStudent[21585:f494] [com.apple.Accessibility:AXSupportCommon] Read CategoryName: per-app = 0, category name = (null)
+2026-11-25 08:04:51.877 Df QupilStudent[21585:fe64] [com.apple.FrontBoard:SceneExtension] UIMutableApplicationSceneClientSettings setting counterpart class: UIApplicationSceneClientSettings
+2026-11-25 08:04:51.894 Df QupilStudent[21585:fe64] [com.apple.FrontBoard:SceneExtension] Realizing settings extension FBSSceneTransitionContextCore on FBSSceneTransitionContext
+2026-11-25 08:04:51.909 I  QupilStudent[21585:fe64] [com.apple.FrontBoard:Common] [FBSScene] [(FBSceneManager):sceneID:de.qupil.student-default] Created client agent: <UIApplicationSceneClientAgent: 0x6000038342e0>
+2026-11-25 08:04:52.438 Df QupilStudent[21585:fe84] [com.apple.UIKit:BackgroundTask] Ending background task with UIBackgroundTaskIdentifier: 1
+2026-11-25 08:04:52.439 Df QupilStudent[21585:fe84] [com.apple.UIKit:BackgroundTask] Ending task with identifier 1 and description: <_UIBackgroundTaskInfo: 0x600002f3a5c0>: taskID = 1, taskName = Launch Background Task for Coalescing, creationTime = 877 (elapsed = 2), _expireHandler: (null)
+2026-11-25 08:04:52.441 Df QupilStudent[21585:fe84] [com.apple.UIKit:BackgroundTask] Decrementing reference count for assertion <BKSProcessAssertion: 0x600001930c80> (used by background task with identifier 1: <_UIBackgroundTaskInfo: 0x600002f3a5c0>: taskID = 1, taskName = Launch Background Task for Coalescing, creationTime = 877 (elapsed = 2))
+2026-11-25 08:04:52.442 Df QupilStudent[21585:fe84] [com.apple.UIKit:BackgroundTask] Will invalidate assertion: <BKSProcessAssertion: 0x600001930c80> for task identifier: 1
+2026-11-25 08:04:54.982 A  QupilStudent[21585:fe84] (RunningBoardServices) didChangeInheritances
+2026-11-25 08:05:04.525 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXCommon] AX Start server
+2026-11-25 08:05:04.530 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXCommon] AX Begin loading server
+2026-11-25 08:05:05.259 A  QupilStudent[21585:fe65] (CoreFoundation) Updating Key-Value Observers Of Preferences
+2026-11-25 08:05:05.473 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXAppAccessibility] Started AXRuntime server. SystemApp=0
+2026-11-25 08:05:05.476 Df QupilStudent[21585:f494] [com.apple.dt.xctest:Default] Registering for test daemon availability notify post.
+2026-11-25 08:05:05.477 Df QupilStudent[21585:f494] [com.apple.dt.xctest:Default] notify_get_state check indicated test daemon not ready.
+2026-11-25 08:05:05.477 Df QupilStudent[21585:f494] [com.apple.dt.xctest:Default] notify_get_state check indicated test daemon not ready.
+2026-11-25 08:05:05.478 Df QupilStudent[21585:f494] [com.apple.dt.xctest:Default] notify_get_state check indicated test daemon not ready.
+2026-11-25 08:05:05.496 Df QupilStudent[21585:f494] [com.apple.UIKit:Application] Deactivation reason added: 11; deactivation reasons: 1024 -> 3072; animating application lifecycle event: 0
+2026-11-25 08:05:05.585 I  QupilStudent[21585:f494] [com.apple.Pasteboard:Pasteboard] Began listening to global pasteboard change notifications.
+2026-11-25 08:05:05.624 Df QupilStudent[21585:f494] [com.apple.xpc:connection] [0x7f8fc620ba70] activating connection: mach=true listener=false peer=false name=com.apple.pasteboard.pasted
+2026-11-25 08:05:05.625 Df QupilStudent[21585:f494] [com.apple.Pasteboard:Pasteboard] Retrieving pasteboard named com.apple.UIKit.pboard.general, create if needed: NO
+2026-11-25 08:05:05.669 Df QupilStudent[21585:f494] [com.apple.Pasteboard:Pasteboard] ...retrieving pasteboard named com.apple.UIKit.pboard.general completed successfully.
+2026-11-25 08:05:05.907 Df QupilStudent[21585:fe84] [com.apple.xpc:connection] [0x7f8fc63324a0] activating connection: mach=true listener=false peer=false name=com.apple.fontservicesd
+2026-11-25 08:05:05.914 Df QupilStudent[21585:fe64] [com.apple.securityd:SecWarning] SecTaskLoadEntitlements failed error=22 cs_flags=200, pid=21585 task=QupilStudent[21585]/0#-1 LF=22
+2026-11-25 08:05:06.702 Df QupilStudent[21585:f494] [com.apple.xpc:connection] [0x7f8fc6362f90] activating connection: mach=true listener=false peer=false name=com.apple.metal.simulator
+2026-11-25 08:05:06.708 Df QupilStudent[21585:f494] [com.apple.xpc:connection] [0x7f8fc6253f20] activating connection: mach=true listener=false peer=false name=com.apple.metal.simulator
+2026-11-25 08:05:06.709 Df QupilStudent[21585:f494] [com.apple.xpc:connection] [0x7f8fc63600e0] activating connection: mach=true listener=false peer=false name=com.apple.metal.simulator
+2026-11-25 08:05:07.348 I  QupilStudent[21585:f494] Qupil student: started (0 teacher(s))
+2026-11-25 08:05:07.348 I  QupilStudent[21585:f494] Qupil student: started (0 teacher(s))
+2026-11-25 08:05:07.354 Df QupilStudent[21585:f494] [com.apple.UIKit:Application] Deactivation reason removed: 10; deactivation reasons: 3072 -> 2048; animating application lifecycle event: 0
+2026-11-25 08:05:07.431 Df QupilStudent[21585:f494] [com.apple.UIKit:EventBus] Event Timing Profile for Touch: not found, path="/System/Library/EventTimingProfiles/Sim.Touch.plist"
+2026-11-25 08:05:07.434 Df QupilStudent[21585:f494] [com.apple.UIKit:EventBus] Event Timing Profile for Pencil: not found, path="/System/Library/EventTimingProfiles/Sim.Pencil.plist"
+2026-11-25 08:05:07.438 Df QupilStudent[21585:f494] [com.apple.UIKit:UpdateScheduler] Selected display: name=LCD (PurpleMain), id=1
+2026-11-25 08:05:07.545 Df QupilStudent[21585:f494] [com.apple.UIKit:BackgroundTask] Will add backgroundTask with taskName: Persistent SceneSession Map Update, expirationHandler: <__NSGlobalBlock__: 0x159e9e830>
+2026-11-25 08:05:07.545 Df QupilStudent[21585:f494] [com.apple.UIKit:BackgroundTask] Creating new assertion because there is no existing background assertion.
+2026-11-25 08:05:07.545 Df QupilStudent[21585:f494] [com.apple.UIKit:BackgroundTask] Creating new background assertion
+2026-11-25 08:05:07.545 Df QupilStudent[21585:f494] [com.apple.UIKit:BackgroundTask] Created new background assertion <BKSProcessAssertion: 0x60000190b020>
+2026-11-25 08:05:07.545 I  QupilStudent[21585:f494] [com.apple.runningboard:assertion] Acquiring assertion: <RBSAssertionDescriptor| "Shared Background Assertion 1 for de.qupil.student" ID:(null) target:21585>
+2026-11-25 08:05:07.549 Df QupilStudent[21585:f494] [com.apple.UIKit:BackgroundTask] Incrementing reference count for background assertion <BKSProcessAssertion: 0x60000190b020>
+2026-11-25 08:05:07.550 Df QupilStudent[21585:f494] [com.apple.UIKit:BackgroundTask] Created background task <_UIBackgroundTaskInfo: 0x600002f8f040>: taskID = 2, taskName = Persistent SceneSession Map Update, creationTime = 894 (elapsed = 0).
+2026-11-25 08:05:07.563 Df QupilStudent[21585:f494] [com.apple.UIKit:Application] Deactivation reason added: 5; deactivation reasons: 2048 -> 2080; animating application lifecycle event: 1
+2026-11-25 08:05:07.577 Df QupilStudent[21585:f494] [com.apple.UIKit:InterfaceStyle] Should send trait collection or coordinate space update, interface style 1 -> 1, <UIWindowScene: 0x7f8fc62a61f0> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:05:07.609 Df QupilStudent[21585:f494] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7f8fc62a61f0> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:05:07.617 Df QupilStudent[21585:f494] [com.apple.UIKit:HomeAffordanceObservation] Initializing: <_UIHomeAffordanceSceneNotifier: 0x600001115dc0>; with scene: <UIWindowScene: 0x7f8fc62a61f0>
+2026-11-25 08:05:07.620 Df QupilStudent[21585:f494] [com.apple.BacklightServices:scenes] 0x6000034a2370 setDelegate:<0x6000034a0ba0 _UIBacklightEnvironment> hasDelegate:YES for environment:sceneID:de.qupil.student-default
+2026-11-25 08:05:07.622 Df QupilStudent[21585:f494] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7f8fc62a61f0> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:05:07.626 Df QupilStudent[21585:f494] [com.apple.UIKit:EventDeferring] [0x600001109c70] Initialized with scene: <UIWindowScene: 0x7f8fc62a61f0>; behavior: <_UIEventDeferringBehavior_iOS: 0x600003aa7160>; availableForProcess: 1, systemShellManagesKeyboardFocus: 1
+2026-11-25 08:05:07.634 Df QupilStudent[21585:f494] [com.apple.BoardServices:XPCErrors] [C:2] Alloc com.apple.backboard.hid-services.xpc
+2026-11-25 08:05:07.635 Df QupilStudent[21585:f494] [com.apple.xpc:connection] [0x7f8fc632c720] activating connection: mach=false listener=false peer=false name=(anonymous)
+2026-11-25 08:05:07.651 Df QupilStudent[21585:fe65] [com.apple.BackBoard:EventDelivery] BKSHIDEventObserver - connection activation
+2026-11-25 08:05:07.656 Df QupilStudent[21585:f494] [com.apple.BackBoard:EventDelivery] policyStatus:<BKSHIDEventDeliveryPolicyObserver: 0x600001e10300; process scope; status: none> was:none
+2026-11-25 08:05:07.661 Df QupilStudent[21585:f494] [com.apple.UIKit:KeyWindow] Setting default evaluation strategy for UIUserInterfaceIdiomPhone to LastOneWins
+2026-11-25 08:05:07.676 Df QupilStudent[21585:f494] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7f8fc62a61f0> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:05:07.689 Df QupilStudent[21585:f494] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7f8fc62a61f0> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:05:07.706 Df QupilStudent[21585:f494] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7f8fc62a61f0> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:05:08.008 Df QupilStudent[21585:f494] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7f8fc62a61f0> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:05:08.026 Df QupilStudent[21585:f494] [com.apple.UIKit:AppLifecycle] sceneOfRecord: sceneID: sceneID:de.qupil.student-default  persistentID: A6F619D2-3A9B-4D0A-965E-4020C04CC69E
+2026-11-25 08:05:08.030 Df QupilStudent[21585:f494] [com.apple.UIKit:Application] Ignoring already applied deactivation reason: 5; deactivation reasons: 2080
+2026-11-25 08:05:08.030 Df QupilStudent[21585:f494] [com.apple.UIKit:Application] Deactivation reason added: 12; deactivation reasons: 2080 -> 6176; animating application lifecycle event: 1
+2026-11-25 08:05:08.103 Df QupilStudent[21585:fe84] [com.apple.UIKit:BackgroundTask] Ending background task with UIBackgroundTaskIdentifier: 2
+2026-11-25 08:05:08.103 Df QupilStudent[21585:fe84] [com.apple.UIKit:BackgroundTask] Ending task with identifier 2 and description: <_UIBackgroundTaskInfo: 0x600002f8f040>: taskID = 2, taskName = Persistent SceneSession Map Update, creationTime = 894 (elapsed = 0), _expireHandler: <__NSGlobalBlock__: 0x159e9e830>
+2026-11-25 08:05:08.104 Df QupilStudent[21585:fe84] [com.apple.UIKit:BackgroundTask] Decrementing reference count for assertion <BKSProcessAssertion: 0x60000190b020> (used by background task with identifier 2: <_UIBackgroundTaskInfo: 0x600002f8f040>: taskID = 2, taskName = Persistent SceneSession Map Update, creationTime = 894 (elapsed = 0))
+2026-11-25 08:05:08.104 Df QupilStudent[21585:fe84] [com.apple.UIKit:BackgroundTask] Will invalidate assertion: <BKSProcessAssertion: 0x60000190b020> for task identifier: 2
+2026-11-25 08:05:08.272 E  QupilStudent[21585:1078e] (libCoreFSCache.dylib) fopen failed for data file: errno = 2 (No such file or directory)
+2026-11-25 08:05:08.272 E  QupilStudent[21585:1078e] (libCoreFSCache.dylib) Errors found! Invalidating cache...
+2026-11-25 08:05:08.275 Df QupilStudent[21585:1078e] [com.apple.xpc:connection] [0x7f8fc57718a0] activating connection: mach=false listener=false peer=false name=com.apple.MTLCompilerService
+2026-11-25 08:05:08.480 Df QupilStudent[21585:1078e] [com.apple.xpc:connection] [0x7f8fc63106e0] activating connection: mach=false listener=false peer=false name=com.apple.MTLCompilerService
+2026-11-25 08:05:08.484 A  QupilStudent[21585:fe84] (Metal) Metal Compiling Shader
+2026-11-25 08:05:10.593 A  QupilStudent[21585:fe84] (Metal) Metal Compiling Shader
+2026-11-25 08:05:10.623 E  QupilStudent[21585:1078e] (libCoreFSCache.dylib) fopen failed for data file: errno = 2 (No such file or directory)
+2026-11-25 08:05:10.623 E  QupilStudent[21585:1078e] (libCoreFSCache.dylib) Errors found! Invalidating cache...
+2026-11-25 08:05:10.626 A  QupilStudent[21585:fe84] (Metal) Metal Compiling Shader
+2026-11-25 08:05:10.670 A  QupilStudent[21585:fe84] (Metal) Metal Compiling Shader
+2026-11-25 08:05:10.716 A  QupilStudent[21585:fe84] (Metal) Metal Compiling Shader
+2026-11-25 08:05:10.734 A  QupilStudent[21585:fe65] (Metal) Metal Compiling Shader
+2026-11-25 08:05:10.751 A  QupilStudent[21585:fe65] (Metal) Metal Compiling Shader
+2026-11-25 08:05:10.756 A  QupilStudent[21585:fe65] (Metal) Metal Compiling Shader
+2026-11-25 08:05:10.814 A  QupilStudent[21585:fe65] (Metal) Metal Compiling Shader
+2026-11-25 08:05:10.844 A  QupilStudent[21585:fe65] (Metal) Metal Compiling Shader
+2026-11-25 08:05:10.870 A  QupilStudent[21585:fe84] (Metal) Metal Compiling Shader
+2026-11-25 08:05:10.892 A  QupilStudent[21585:fe65] (Metal) Metal Compiling Shader
+2026-11-25 08:05:10.895 A  QupilStudent[21585:fe84] (Metal) Metal Compiling Shader
+2026-11-25 08:05:10.921 A  QupilStudent[21585:fe84] (Metal) Metal Compiling Shader
+2026-11-25 08:05:10.956 A  QupilStudent[21585:fe65] (Metal) Metal Compiling Shader
+2026-11-25 08:05:10.995 A  QupilStudent[21585:fe65] (Metal) Metal Compiling Shader
+2026-11-25 08:05:11.000 A  QupilStudent[21585:fe84] (Metal) Metal Compiling Shader
+2026-11-25 08:05:11.039 Df QupilStudent[21585:1078e] [com.apple.xpc:connection] [0x7f8fc5777590] activating connection: mach=true listener=false peer=false name=com.apple.IOSurface.Remote
+2026-11-25 08:05:11.302 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXAppAccessibility] Presentation controller doesn't modalize: <_UIRootPresentationController: 0x7f8fc576def0>
+2026-11-25 08:05:11.610 Df QupilStudent[21585:f494] [com.apple.UIKit:KeyWindow] Key window API is scene-level: YES
+2026-11-25 08:05:11.613 Df QupilStudent[21585:f494] stale focus object 0x0 , doing manual update
+2026-11-25 08:05:11.613 Df QupilStudent[21585:f494] stale focus object 0x0 , doing manual update
+2026-11-25 08:05:11.666 Df QupilStudent[21585:f494] [com.apple.UIKit:Orientation] <UIWindowScene: 0x7f8fc62a61f0> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E) Scene updated orientation preferences: none -> ( Pu )
+2026-11-25 08:05:11.670 I  QupilStudent[21585:f494] safe area: top 59 bottom 34
+2026-11-25 08:05:11.671 I  QupilStudent[21585:f494] safe area: top 59 bottom 34
+2026-11-25 08:05:11.688 Df QupilStudent[21585:f494] [com.apple.UIKit:Application] Deactivation reason removed: 11; deactivation reasons: 6176 -> 4128; animating application lifecycle event: 1
+2026-11-25 08:05:11.694 Df QupilStudent[21585:f494] [com.apple.FrontBoard:SceneExtension] Realizing settings extension <_UISceneIntelligenceSupportSettings> on FBSSceneSettings
+2026-11-25 08:05:11.738 Df QupilStudent[21585:fe65] [com.apple.UIIntelligenceSupport:xpc] establishing connection to agent
+2026-11-25 08:05:11.743 Df QupilStudent[21585:fe65] [com.apple.xpc:session] [0x600001907f70] Session created.
+2026-11-25 08:05:11.743 Df QupilStudent[21585:fe65] [com.apple.xpc:session] [0x600001907f70] Session created from connection [0x7f8fc631cd20]
+2026-11-25 08:05:11.749 Df QupilStudent[21585:fe65] [com.apple.xpc:connection] [0x7f8fc631cd20] activating connection: mach=true listener=false peer=false name=com.apple.uiintelligencesupport.agent
+2026-11-25 08:05:11.749 Df QupilStudent[21585:fe65] [com.apple.xpc:session] [0x600001907f70] Session activated
+2026-11-25 08:05:11.770 Df QupilStudent[21585:f494] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7f8fc62a61f0> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:05:12.020 Df QupilStudent[21585:f494] [com.apple.xpc:connection] [0x7f8fc62b7620] activating connection: mach=true listener=false peer=false name=com.apple.lsd.mapdb
+2026-11-25 08:05:12.065 I  QupilStudent[21585:f494] [com.apple.launchservices:db] LaunchServices database schema version: 20971542
+2026-11-25 08:05:12.080 I  QupilStudent[21585:f494] [com.apple.launchservices:datasep] application record search init. Node: <FSNode 0x600003a98480> { isDir = y, path = '/Users/runner/Library/Developer/CoreSimulator/Devices/3AF28461-937F-429D-A836-35990CD2CD3D/data/Containers/Bundle/Application/EC249DF3-E0F3-4359-A3D4-805280E1636F/QupilStudent.app' } bundleID: (null) itemID: 0
+2026-11-25 08:05:12.084 A  QupilStudent[21585:fe64] (RunningBoardServices) didChangeInheritances
+2026-11-25 08:05:12.161 A  QupilStudent[21585:fe65] (RunningBoardServices) didChangeInheritances
+2026-11-25 08:05:12.357 A  QupilStudent[21585:fe64] (RunningBoardServices) didChangeInheritances
+2026-11-25 08:05:12.469 Df QupilStudent[21585:fe64] [com.apple.BackBoard:EventDelivery] BKSHIDEventDeliveryManager - connection activation
+2026-11-25 08:05:12.535 Df QupilStudent[21585:f494] [com.apple.network:activity] Create activity from XPC object <nw_activity 50:1 [C229E651-6C1A-4B31-BEBC-2758CDDB0FA6] (reporting strategy default)>
+2026-11-25 08:05:12.537 Df QupilStudent[21585:f494] [com.apple.network:activity] Create activity from XPC object <nw_activity 50:2 [61333A72-AC45-4168-9E50-CC01F1B59566] (reporting strategy default)>
+2026-11-25 08:05:12.538 Df QupilStudent[21585:f494] [com.apple.network:activity] Set activity <nw_activity 50:1 [C229E651-6C1A-4B31-BEBC-2758CDDB0FA6] (reporting strategy default)> as the global parent
+2026-11-25 08:05:12.712 A  QupilStudent[21585:f494] (TCC) tcc_send_request_authorization() IPC
+2026-11-25 08:05:12.713 Df QupilStudent[21585:f494] [com.apple.xpc:connection] [0x7f8fc638ac10] activating connection: mach=true listener=false peer=false name=com.apple.tccd
+2026-11-25 08:05:12.714 I  QupilStudent[21585:f494] [com.apple.TCC:access] SEND: 0/7 synchronous to com.apple.tccd: request: msgID=21585.1, function=TCCAccessRequest, service=kTCCServiceCamera,
+2026-11-25 08:05:12.743 I  QupilStudent[21585:f494] [com.apple.TCC:access] RECV: synchronous reply <dictionary: 0x600001e2ed00> { count = 6, transaction: 0, voucher = 0x0, contents =
+	"prompt_type" => <uint64: 0xf789c8f82dd31e61>: 1
+	"auth_value" => <uint64: 0xf789c8f82dd31e62>: 2
+	"extension" => <string: 0x6000034a8de0> { string cache = 0x0, length = 10, contents = "<redacted>" }
+	"result" => <bool: 0x11a3b1050>: true
+	"auth_reason" => <uint64: 0xf789c8f82dd31e64>: 4
+	"auth_version" => <uint64: 0xf789c8f82dd31e61>: 1
+}
+2026-11-25 08:05:12.744 I  QupilStudent[21585:f494] [com.apple.TCC:cache] SET: (kTCCServiceCamera, <Credential (0x600001134c40) | Requestor>) -> <Authorization Record (0x600000d235a0) | Service: kTCCServiceCamera, AuthRight: Allowed, Reason: System Set, Version: 1, >
+2026-11-25 08:05:12.747 Df QupilStudent[21585:f494] [com.apple.xpc:connection] [0x7f8fc638ac10] invalidated after the last release of the connection object
+2026-11-25 08:05:12.763 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXRuntimeNotifications] Attempting to send notification:  (1055) <private>
+2026-11-25 08:05:12.785 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureSession >>>> -[AVCaptureSession init]: (0x600003810940) called
+2026-11-25 08:05:12.786 Df QupilStudent[21585:f494] [com.apple.securityd:SecWarning] SecTaskLoadEntitlements failed error=22 cs_flags=200, pid=21585 task=QupilStudent[21585]/0#-1 LF=22
+2026-11-25 08:05:12.809 Df QupilStudent[21585:f494] [com.apple.securityd:SecWarning] SecTaskLoadEntitlements failed error=22 cs_flags=200, pid=21585 task=QupilStudent[21585]/0#-1 LF=22
+2026-11-25 08:05:12.809 I  QupilStudent[21585:f494] [com.apple.launchservices:datasep] application record search init. Node: <FSNode 0x600003a9e000> { isDir = y, path = '/Users/runner/Library/Developer/CoreSimulator/Devices/3AF28461-937F-429D-A836-35990CD2CD3D/data/Containers/Bundle/Application/EC249DF3-E0F3-4359-A3D4-805280E1636F/QupilStudent.app' } bundleID: (null) itemID: 0
+2026-11-25 08:05:12.846 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureSession >>>> -[AVCaptureSession _initWithMediaEnvironment:]: (0x600003810940) finished
+2026-11-25 08:05:12.851 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _setUpCameraHistoryOnce]_block_invoke_2: camera-history/unknown/preferred-camera-history changed... newDownplayUserPreferredCameraOverrideHistory = F (based on camera-history/unknown/preferred-camera-history), new user preferred camera history (null)
+2026-11-25 08:05:12.852 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _setUpCameraHistoryOnce]_block_invoke: dispatching async to preferred camera property refresh queue
+2026-11-25 08:05:12.852 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _cameraHistoryDispatchQueue]_block_invoke: using main queue for refreshing camera properties
+2026-11-25 08:05:12.852 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _setUpCameraHistoryOnce]_block_invoke: async dispatch to preferred camera property refresh queue returned
+2026-11-25 08:05:12.852 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _setUpCameraHistoryOnce]_block_invoke: change handler for camera-history/unknown/preferred-camera-history returning
+2026-11-25 08:05:12.852 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _setUpCameraHistoryOnce]_block_invoke: camera-history/override/preferred-camera-history changed... newDownplayUserPreferredCameraOverrideHistory = F (based on camera-history/unknown/preferred-camera-history), new user preferred camera override history (null)
+2026-11-25 08:05:12.852 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _setUpCameraHistoryOnce]_block_invoke: dispatching async to preferred camera property refresh queue
+2026-11-25 08:05:12.852 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _setUpCameraHistoryOnce]_block_invoke: async dispatch to preferred camera property refresh queue returned
+2026-11-25 08:05:12.852 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _setUpCameraHistoryOnce]_block_invoke: change handler for camera-history/override/preferred-camera-history returning
+2026-11-25 08:05:12.852 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _setUpCameraHistoryOnce]_block_invoke: camera-history/system-wide/streaming-camera-history changed... new streaming camera history (null)
+2026-11-25 08:05:12.852 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _setUpCameraHistoryOnce]_block_invoke: dispatching async to preferred camera property refresh queue
+2026-11-25 08:05:12.853 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _setUpCameraHistoryOnce]_block_invoke: async dispatch to preferred camera property refresh queue returned
+2026-11-25 08:05:12.853 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _setUpCameraHistoryOnce]_block_invoke: change handler for camera-history/system-wide/streaming-camera-history returning
+2026-11-25 08:05:12.853 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _setUpCameraHistoryOnce]_block_invoke: doing deferred dispatch async to preferred camera property refresh queue
+2026-11-25 08:05:12.853 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _setUpCameraHistoryOnce]_block_invoke_2: deferred async dispatch to preferred camera property refresh queue returned
+2026-11-25 08:05:12.854 I  QupilStudent[21585:f494] [com.apple.launchservices:datasep] application record search init. Node: (null) bundleID: unknown itemID: 0
+2026-11-25 08:05:12.863 I  QupilStudent[21585:f494] [com.apple.launchservices:datasep] application record search init. Node: (null) bundleID: unknown itemID: 0
+2026-11-25 08:05:12.867 I  QupilStudent[21585:f494] [com.apple.launchservices:datasep] application record search init. Node: <FSNode 0x600003a9e220> { isDir = y, path = '/Users/runner/Library/Developer/CoreSimulator/Devices/3AF28461-937F-429D-A836-35990CD2CD3D/data/Containers/Bundle/Application/EC249DF3-E0F3-4359-A3D4-805280E1636F/QupilStudent.app' } bundleID: (null) itemID: 0
+2026-11-25 08:05:12.868 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureDevice >>>> +[AVCaptureDevice _listEligibleEffects]_block_invoke: App with preferencesDomain 'unknown' bundle 'de.qupil.student' is NOT eligible for NSCameraBackgroundReplacementEnabled effects
+2026-11-25 08:05:12.869 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureDevice >>>> +[AVCaptureDevice _listEligibleEffects]_block_invoke: App with preferencesDomain 'unknown' bundle 'de.qupil.student' is NOT eligible for NSCameraPortraitEffectEnabled effects
+2026-11-25 08:05:12.869 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureDevice >>>> +[AVCaptureDevice _listEligibleEffects]_block_invoke: App with preferencesDomain 'unknown' bundle 'de.qupil.student' is NOT eligible for NSCameraStudioLightEnabled effects
+2026-11-25 08:05:12.869 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureDevice >>>> +[AVCaptureDevice _listEligibleEffects]_block_invoke: App with preferencesDomain 'unknown' bundle 'de.qupil.student' is NOT eligible for NSCameraReactionEffectsEnabled effects
+2026-11-25 08:05:12.869 I  QupilStudent[21585:f494] [com.apple.launchservices:datasep] application record search init. Node: <FSNode 0x600003a9e220> { isDir = y, path = '/Users/runner/Library/Developer/CoreSimulator/Devices/3AF28461-937F-429D-A836-35990CD2CD3D/data/Containers/Bundle/Application/EC249DF3-E0F3-4359-A3D4-805280E1636F/QupilStudent.app' } bundleID: (null) itemID: 0
+2026-11-25 08:05:12.870 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureDevice >>>> +[AVCaptureDevice reactionEffectGesturesEnabledDefault]_block_invoke: Using default from system 0
+2026-11-25 08:05:12.870 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureDevice >>>> +[AVCaptureDevice setUpReactionEffectsStateOnce]_block_invoke: Suppressed gestures 1 : enabled 0 have shown 0
+2026-11-25 08:05:12.873 E  QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< FigCaptureSourceSimulator >>>> signalled err=-12784 at <>:259
+2026-11-25 08:05:12.877 E  QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< FigCaptureSourceSimulator >>>> signalled err=-12784 at <>:259
+2026-11-25 08:05:12.879 E  QupilStudent[21585:f494] [com.apple.coremedia:] <<<< FormatDescription >>>> signalled err=-12710 at <>:988
+2026-11-25 08:05:12.879 E  QupilStudent[21585:f494] [com.apple.coremedia:] (Fig) signalled err=-12710 at <>:601
+2026-11-25 08:05:12.879 E  QupilStudent[21585:f494] [com.apple.coremedia:] <<<< FormatDescription >>>> signalled err=-12710 at <>:988
+2026-11-25 08:05:12.879 E  QupilStudent[21585:f494] [com.apple.coremedia:] (Fig) signalled err=-12710 at <>:601
+2026-11-25 08:05:12.880 E  QupilStudent[21585:f494] [com.apple.coremedia:] <<<< FormatDescription >>>> signalled err=-12710 at <>:988
+2026-11-25 08:05:12.880 E  QupilStudent[21585:f494] [com.apple.coremedia:] (Fig) signalled err=-12710 at <>:601
+2026-11-25 08:05:12.880 E  QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< FigCaptureSourceSimulator >>>> signalled err=-12784 at <>:259
+2026-11-25 08:05:12.880 E  QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< FigCaptureSourceSimulator >>>> signalled err=-12784 at <>:259
+2026-11-25 08:05:12.910 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureDevice >>>> _registerVideoDevicesOnce: Did not find front wide camera. registeredVideoDevices: (
+    "<AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>"
+)
+2026-11-25 08:05:12.918 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureSession >>>> -[AVCaptureSession _addVideoPreviewLayer:exceptionReason:]: (0x600003810940) <AVCaptureVideoPreviewLayer: 0x600002ff9580>
+2026-11-25 08:05:12.918 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureSession >>>> -[AVCaptureSession beginConfiguration]: (0x600003810940)
+2026-11-25 08:05:12.918 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureSession >>>> -[AVCaptureSession _beginConfiguration]: (0x600003810940) updated beginConfigRefCount 1
+2026-11-25 08:05:12.921 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureSession >>>> -[AVCaptureSession commitConfiguration]: (0x600003810940)
+2026-11-25 08:05:12.922 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureSession >>>> -[AVCaptureSession _commitConfiguration]: (0x600003810940) updated beginConfigRefCount 0
+2026-11-25 08:05:12.922 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureSession >>>> -[AVCaptureSession _buildAndRunGraph:]: (0x600003810940) called. skipConfig: 0
+2026-11-25 08:05:12.924 I  QupilStudent[21585:f494] [com.apple.launchservices:datasep] application record search init. Node: <FSNode 0x600003a99f00> { isDir = y, path = '/Users/runner/Library/Developer/CoreSimulator/Devices/3AF28461-937F-429D-A836-35990CD2CD3D/data/Containers/Bundle/Application/EC249DF3-E0F3-4359-A3D4-805280E1636F/QupilStudent.app' } bundleID: (null) itemID: 0
+2026-11-25 08:05:12.925 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureSession >>>> -[AVCaptureSession _buildAndRunGraph:]: (0x600003810940) New fcs config(1)
+2026-11-25 08:05:12.933 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureSession >>>> -[AVCaptureSession _buildAndRunGraph:]: (0x600003810940) Setting fcs config(1) FigCaptureSessionConfiguration 0x600001e14f00: ID 1, sdk 7320548417732615, AVCaptureSessionPresetHigh multiCam: 0, appAudio: 1, autoConfig: 1, mixesWithOthers: 0, hqBluetooth: 0, runWhileMultitasking: 0, checkIfFileAlreadyExistForMFO: 1 autoRunDeferredStart: 1
+2026-11-25 08:05:12.934 E  QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< FigCaptureSessionSimulator >>>> signalled err=-12782 at <>:297
+2026-11-25 08:05:13.170 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXRuntimeNotifications] Attempting to send notification:  (1055) <private>
+2026-11-25 08:05:13.200 Df QupilStudent[21585:f494] [com.apple.coremedia:] <<<< AVError >>>> AVLocalizedErrorWithUnderlyingOSStatus: Returning error (AVFoundationErrorDomain / -11800) status (-12782)
+2026-11-25 08:05:13.213 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureSession >>>> -[AVCaptureSession _postRuntimeError:]: (0x600003810940) posting AVCaptureSessionRuntimeErrorNotification with Error Domain=AVFoundationErrorDomain Code=-11800 "The operation could not be completed" UserInfo={NSLocalizedFailureReason=An unknown error occurred (-12782), NSLocalizedDescription=The operation could not be completed, NSUnderlyingError=0x6000034ac0f0 {Error Domain=NSOSStatusErrorDomain Code=-12782 "(null)"}}
+2026-11-25 08:05:13.217 Df QupilStudent[21585:f494] [com.apple.UIKit:UpdateScheduler] Target list changed: <CADisplay:LCD PurpleMain>
+2026-11-25 08:05:13.240 Df QupilStudent[21585:f494] [com.apple.UIKit:AppLifecycle] sceneOfRecord: sceneID: sceneID:de.qupil.student-default  persistentID: A6F619D2-3A9B-4D0A-965E-4020C04CC69E
+2026-11-25 08:05:13.242 Df QupilStudent[21585:f494] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7f8fc62a61f0> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:05:13.248 Df QupilStudent[21585:f494] [com.apple.Accessibility:AXCommon] Read Per-App on Init: Smart invert = (null)
+2026-11-25 08:05:13.263 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXAppAccessibility] Loading settings loader: (system: 0)
+2026-11-25 08:05:13.697 Df QupilStudent[21585:fe65] [com.apple.BackBoard:EventDelivery] policyStatus:<BKSHIDEventDeliveryPolicyObserver: 0x600001e10300; token: com.apple.frontboard.systemappservices/FBSceneManager:sceneID%3Ade.qupil.student-default; status: target> was:none
+2026-11-25 08:05:13.758 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXRuntimeNotifications] Attempting to send notification:  (1018) <private>
+2026-11-25 08:05:13.758 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXRuntimeNotifications] consuming associated object for notification: <QUIMetalView: 0x7f8fc62a5030> 1018
+2026-11-25 08:05:13.775 Df QupilStudent[21585:f494] [com.apple.BackBoard:Display] [FBSDisplaySource 1-1] silently connecting raw configuration: <FBSDisplayConfiguration: 0x600000505770; Main; mode: "393x852@3x 60Hz p3 SDR">
+2026-11-25 08:05:13.780 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXRuntimeNotifications] Did post notification. notification:  (1055) error:0 data:<private>
+2026-11-25 08:05:13.781 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _refreshPreferredCameraProperties:]: getting current value for userPreferredCamera (allowsSuspendedPreferredCameras = F)
+2026-11-25 08:05:13.782 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: current list of devices:
+2026-11-25 08:05:13.782 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>
+2026-11-25 08:05:13.783 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: -------------
+2026-11-25 08:05:13.784 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: devices with media types (
+    vide,
+    muxx
+):
+2026-11-25 08:05:13.785 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>
+2026-11-25 08:05:13.785 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: -------------
+2026-11-25 08:05:13.786 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: 6. fallback code first device in list (if any)
+2026-11-25 08:05:13.786 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _refreshPreferredCameraProperties:]: getting current value for systemPreferredCamera (allowsSuspendedPreferredCameras = F)
+2026-11-25 08:05:13.787 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: current list of devices:
+2026-11-25 08:05:13.787 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>
+2026-11-25 08:05:13.787 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: -------------
+2026-11-25 08:05:13.787 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: devices with media types (
+    vide,
+    muxx
+):
+2026-11-25 08:05:13.788 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>
+2026-11-25 08:05:13.788 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: -------------
+2026-11-25 08:05:13.789 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: 6. fallback code first device in list (if any)
+2026-11-25 08:05:13.790 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _refreshPreferredCameraProperties:]: userPreferredCameraChanged T, resolved userPreferredCamera = <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>, current sUserPreferredCamera = (null)
+2026-11-25 08:05:13.790 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _refreshPreferredCameraProperties:]: systemPreferredCameraChanged T, resolved systemPreferredCamera = <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>, current sSystemPreferredCamera = (null)
+2026-11-25 08:05:13.790 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _refreshPreferredCameraProperties:]: changing sUserPreferredCamera from (null) to <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>
+2026-11-25 08:05:13.791 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _refreshPreferredCameraProperties:]: changing sSystemPreferredCamera from (null) to <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>
+2026-11-25 08:05:13.791 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _refreshPreferredCameraProperties:]: getting current value for userPreferredCamera (allowsSuspendedPreferredCameras = F)
+2026-11-25 08:05:13.791 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: current list of devices:
+2026-11-25 08:05:13.792 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>
+2026-11-25 08:05:13.792 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: -------------
+2026-11-25 08:05:13.792 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: devices with media types (
+    vide,
+    muxx
+):
+2026-11-25 08:05:13.793 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>
+2026-11-25 08:05:13.793 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: -------------
+2026-11-25 08:05:13.793 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: 6. fallback code first device in list (if any)
+2026-11-25 08:05:13.793 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _refreshPreferredCameraProperties:]: getting current value for systemPreferredCamera (allowsSuspendedPreferredCameras = F)
+2026-11-25 08:05:13.794 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: current list of devices:
+2026-11-25 08:05:13.794 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>
+2026-11-25 08:05:13.794 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: -------------
+2026-11-25 08:05:13.794 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: devices with media types (
+    vide,
+    muxx
+):
+2026-11-25 08:05:13.795 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>
+2026-11-25 08:05:13.795 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: -------------
+2026-11-25 08:05:13.795 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: 6. fallback code first device in list (if any)
+2026-11-25 08:05:13.796 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _refreshPreferredCameraProperties:]: userPreferredCameraChanged F, resolved userPreferredCamera = <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>, current sUserPreferredCamera = <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>
+2026-11-25 08:05:13.796 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _refreshPreferredCameraProperties:]: systemPreferredCameraChanged F, resolved systemPreferredCamera = <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>, current sSystemPreferredCamera = <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>
+2026-11-25 08:05:13.796 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _refreshPreferredCameraProperties:]: getting current value for userPreferredCamera (allowsSuspendedPreferredCameras = F)
+2026-11-25 08:05:13.796 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: current list of devices:
+2026-11-25 08:05:13.796 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>
+2026-11-25 08:05:13.796 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: -------------
+2026-11-25 08:05:13.797 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: devices with media types (
+    vide,
+    muxx
+):
+2026-11-25 08:05:13.797 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>
+2026-11-25 08:05:13.797 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: -------------
+2026-11-25 08:05:13.797 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: 6. fallback code first device in list (if any)
+2026-11-25 08:05:13.798 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _refreshPreferredCameraProperties:]: getting current value for systemPreferredCamera (allowsSuspendedPreferredCameras = F)
+2026-11-25 08:05:13.798 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: current list of devices:
+2026-11-25 08:05:13.798 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>
+2026-11-25 08:05:13.799 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: -------------
+2026-11-25 08:05:13.799 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: devices with media types (
+    vide,
+    muxx
+):
+2026-11-25 08:05:13.799 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>
+2026-11-25 08:05:13.799 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: -------------
+2026-11-25 08:05:13.800 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: 6. fallback code first device in list (if any)
+2026-11-25 08:05:13.800 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _refreshPreferredCameraProperties:]: userPreferredCameraChanged F, resolved userPreferredCamera = <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>, current sUserPreferredCamera = <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>
+2026-11-25 08:05:13.800 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _refreshPreferredCameraProperties:]: systemPreferredCameraChanged F, resolved systemPreferredCamera = <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>, current sSystemPreferredCamera = <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>
+2026-11-25 08:05:13.801 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _refreshPreferredCameraProperties:]: getting current value for userPreferredCamera (allowsSuspendedPreferredCameras = F)
+2026-11-25 08:05:13.801 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: current list of devices:
+2026-11-25 08:05:13.801 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>
+2026-11-25 08:05:13.802 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: -------------
+2026-11-25 08:05:13.802 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: devices with media types (
+    vide,
+    muxx
+):
+2026-11-25 08:05:13.803 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>
+2026-11-25 08:05:13.804 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: -------------
+2026-11-25 08:05:13.804 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: 6. fallback code first device in list (if any)
+2026-11-25 08:05:13.804 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _refreshPreferredCameraProperties:]: getting current value for systemPreferredCamera (allowsSuspendedPreferredCameras = F)
+2026-11-25 08:05:13.805 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: current list of devices:
+2026-11-25 08:05:13.805 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>
+2026-11-25 08:05:13.805 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: -------------
+2026-11-25 08:05:13.805 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: devices with media types (
+    vide,
+    muxx
+):
+2026-11-25 08:05:13.805 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>
+2026-11-25 08:05:13.805 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: -------------
+2026-11-25 08:05:13.806 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _defaultDeviceWithDeviceType:mediaTypes:position:cameraOverrideHistoryAllowed:cameraOverrideHistorySuspendedAllowed:wombatsMustBeMagic:userPreferredCameraHistorySuspendedAllowed:invalidSpecialDeviceTypes:]: 6. fallback code first device in list (if any)
+2026-11-25 08:05:13.806 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _refreshPreferredCameraProperties:]: userPreferredCameraChanged F, resolved userPreferredCamera = <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>, current sUserPreferredCamera = <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>
+2026-11-25 08:05:13.807 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureFigVideoDevice >>>> +[AVCaptureFigVideoDevice _refreshPreferredCameraProperties:]: systemPreferredCameraChanged F, resolved systemPreferredCamera = <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>, current sSystemPreferredCamera = <AVCaptureFigVideoDevice: 0x7f8fc6850600 [(null)][(null)]>
+2026-11-25 08:05:13.820 Df QupilStudent[21585:f494] [com.apple.FrontBoard:SceneExtension] Realizing settings extension SBUISecureRenderingSettingsExtension on FBSSceneSettings
+2026-11-25 08:05:13.832 Df QupilStudent[21585:f494] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7f8fc62a61f0> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:05:13.835 Df QupilStudent[21585:f494] [com.apple.UIKit:InterfaceStyle] Not push traits update to screen for new style 1, <UIWindowScene: 0x7f8fc62a61f0> (A6F619D2-3A9B-4D0A-965E-4020C04CC69E)
+2026-11-25 08:05:13.839 Df QupilStudent[21585:f494] [com.apple.UIKit:AppLifecycle] sceneOfRecord: sceneID: sceneID:de.qupil.student-default  persistentID: A6F619D2-3A9B-4D0A-965E-4020C04CC69E
+2026-11-25 08:05:13.840 Df QupilStudent[21585:f494] [com.apple.UIKit:Application] Deactivation reason removed: 12; deactivation reasons: 4128 -> 32; animating application lifecycle event: 1
+2026-11-25 08:05:13.841 Df QupilStudent[21585:f494] [com.apple.KeyboardArbiter:Client] Send setDeactivating: N (-DeactivationReason:SuspendedEventsOnly)
+2026-11-25 08:05:13.849 Df QupilStudent[21585:f494] [com.apple.UIKit:Application] Deactivation reason removed: 5; deactivation reasons: 32 -> 0; animating application lifecycle event: 0
+2026-11-25 08:05:13.888 Df QupilStudent[21585:fe64] [com.apple.cameracapture:] <<<< AVCaptureSession >>>> -[AVCaptureSession startRunning]: (0x600003810940) (pthread:0x30b4ac000)
+2026-11-25 08:05:13.889 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureVideoPreviewLayer >>>> -[AVCaptureVideoPreviewLayer layerDidBecomeVisible:]: <AVCaptureVideoPreviewLayer: 0x600002ff9580>: Posting AVCaptureVideoPreviewLayerDidBecomeVisibleNotification
+2026-11-25 08:05:13.891 Df QupilStudent[21585:fe64] [com.apple.cameracapture:] <<<< AVCaptureSession >>>> -[AVCaptureSession _buildAndRunGraph:]: (0x600003810940) called. skipConfig: 0
+2026-11-25 08:05:13.897 I  QupilStudent[21585:fe64] [com.apple.launchservices:datasep] application record search init. Node: <FSNode 0x600003a82fc0> { isDir = y, path = '/Users/runner/Library/Developer/CoreSimulator/Devices/3AF28461-937F-429D-A836-35990CD2CD3D/data/Containers/Bundle/Application/EC249DF3-E0F3-4359-A3D4-805280E1636F/QupilStudent.app' } bundleID: (null) itemID: 0
+2026-11-25 08:05:13.897 Df QupilStudent[21585:fe64] [com.apple.cameracapture:] <<<< AVCaptureSession >>>> -[AVCaptureSession _buildAndRunGraph:]: (0x600003810940) New fcs config(2)
+2026-11-25 08:05:14.099 Df QupilStudent[21585:f494] [PrototypeTools:domain] Not observing PTDefaults on customer install.
+2026-11-25 08:05:14.255 Df QupilStudent[21585:f494] [com.apple.UIKit:KeyWindow] Scene target of keyboard event deferring environment did change: 1; scene: UIWindowScene: 0x7f8fc62a61f0; scene identity: com.apple.frontboard.systemappservices/FBSceneManager:sceneID%3Ade.qupil.student-default
+2026-11-25 08:05:14.256 Df QupilStudent[21585:f494] [com.apple.UIKit:EventDeferring] [0x600001109c70] Scene target of event deferring environments did update: scene: 0x7f8fc62a61f0; current systemShellManagesKeyboardFocus: 1; systemShellManagesKeyboardFocusForScene: 1; eligibleForRecordRemoval: 1;
+2026-11-25 08:05:14.256 Df QupilStudent[21585:f494] [com.apple.UIKit:KeyWindow] Scene became target of keyboard event deferring environment: UIWindowScene: 0x7f8fc62a61f0; scene identity: com.apple.frontboard.systemappservices/FBSceneManager:sceneID%3Ade.qupil.student-default
+2026-11-25 08:05:14.257 Df QupilStudent[21585:f494] [com.apple.UIKit:KeyWindow] Stack[KeyWindow] 0x6000034a2ca0: Taking no further action for migration from LastOneWins -> SystemShellManaged as there are no scenes
+2026-11-25 08:05:14.257 Df QupilStudent[21585:f494] [com.apple.UIKit:KeyWindow] Setting default evaluation strategy for UIUserInterfaceIdiomPhone to SystemShellManaged
+2026-11-25 08:05:14.259 Df QupilStudent[21585:f494] [com.apple.UIKit:KeyWindow] Key window needs update: 0; currentKeyWindowScene: 0x0; evaluatedKeyWindowScene: 0x7f8fc62a61f0; currentApplicationKeyWindow: 0x0; evaluatedApplicationKeyWindow: 0x0; reason: UIWindowScene: 0x7f8fc62a61f0: Window scene became target of keyboard environment
+2026-11-25 08:05:14.262 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXRuntimeNotifications] Attempting to send notification:  (1001) <private>
+2026-11-25 08:05:14.263 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXRuntimeNotifications] Attempting to send notification:  (1001) <private>
+2026-11-25 08:05:14.264 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXRuntimeNotifications] Attempting to send notification:  (1001) <private>
+2026-11-25 08:05:14.273 Df QupilStudent[21585:f494] (Foundation) void * _Nullable NSMapGet(NSMapTable * _Nonnull, const void * _Nullable): map table argument is NULL
+2026-11-25 08:05:14.274 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXRuntimeNotifications] Did post notification. notification:  (1018) error:0 data:<private>
+2026-11-25 08:05:14.291 Df QupilStudent[21585:f494] [com.apple.KeyboardArbiter:Client] startConnection
+2026-11-25 08:05:14.304 Df QupilStudent[21585:f494] [com.apple.xpc:connection] [0x7f8fc62c5260] activating connection: mach=true listener=false peer=false name=com.apple.UIKit.KeyboardManagement.hosted
+2026-11-25 08:05:14.308 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXRuntimeNotifications] Did post notification. notification:  (1001) error:0 data:<private>
+2026-11-25 08:05:14.332 Df QupilStudent[21585:f494] [com.apple.KeyboardArbiter:Client] handleKeyboardChange: set currentKeyboard:N (wasKeyboard:N)
+2026-11-25 08:05:14.380 Df QupilStudent[21585:f494] [com.apple.UIKit:KeyboardArbiterClientLog] isWritingToolsHandlingKeyboardTracking:Y (WT ready:Y, Arbiter ready:Y)
+2026-11-25 08:05:14.781 Df QupilStudent[21585:f494] (UIKitCore) Unbalanced calls to begin/end appearance transitions for <QIOSViewController: 0x7f8fc7046600>.
+2026-11-25 08:05:14.783 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXRuntimeNotifications] Attempting to send notification:  (1000) <private>
+2026-11-25 08:05:14.783 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXRuntimeNotifications] Attempting to send notification:  (1000) <private>
+2026-11-25 08:05:14.785 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXRuntimeNotifications] Did post notification. notification:  (1000) error:0 data:<private>
+2026-11-25 08:05:14.847 Df QupilStudent[21585:f494] [com.apple.network:activity] <nw_activity 50:1 [C229E651-6C1A-4B31-BEBC-2758CDDB0FA6] (global parent) (reporting strategy default) complete (reason success)> complete with reason 2 (success), duration 880697ms
+2026-11-25 08:05:14.849 Df QupilStudent[21585:f494] [com.apple.network:activity] <nw_activity 50:2 [61333A72-AC45-4168-9E50-CC01F1B59566] (reporting strategy default) complete (reason success)> complete with reason 2 (success), duration 880702ms
+2026-11-25 08:05:14.849 Df QupilStudent[21585:f494] [com.apple.network:activity] Unsetting the global parent activity <nw_activity 50:1 [C229E651-6C1A-4B31-BEBC-2758CDDB0FA6] (global parent) (reporting strategy default) complete (reason success)>
+2026-11-25 08:05:14.850 Df QupilStudent[21585:f494] [com.apple.network:activity] Unset the global parent activity
+2026-11-25 08:05:19.212 I  QupilStudent[21585:fe84] [com.apple.Accessibility:AXLoading] Initial load did occur QupilStudent
+2026-11-25 08:05:19.213 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXLoading] UIApp ax initialize
+2026-11-25 08:05:19.214 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXLoading] Load system app 0
+2026-11-25 08:05:19.217 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXRuntimeNotifications] Attempting to send notification:  (3031) <private>
+2026-11-25 08:05:19.218 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXRuntimeNotifications] Did post notification. notification:  (3031) error:0 data:<private>
+2026-11-25 08:05:19.861 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXAppAccessibility] Presentation controller doesn't modalize: <_UIRootPresentationController: 0x7f8fc576def0>
+2026-11-25 08:05:22.910 Df QupilStudent[21585:fe64] [com.apple.coremedia:] <<<< AVRunLoopCondition >>>> -[AVRunLoopCondition _waitInMode:untilDate:]: reached timeout
+2026-11-25 08:05:22.912 Df QupilStudent[21585:fe64] [com.apple.cameracapture:] <<<< AVCaptureSession >>>> -[AVCaptureSession _buildAndRunGraph:]: (0x600003810940) Timed out waiting for session to start
+2026-11-25 08:05:22.913 Df QupilStudent[21585:fe64] [com.apple.cameracapture:] <<<< AVCaptureSession >>>> -[AVCaptureSession _setRunning:]: (0x600003810940) posting AVCaptureSessionDidStartRunningNotification
+2026-11-25 08:05:28.093 Df QupilStudent[21585:f494] [com.apple.KeyboardArbiter:Client] TX focusApplication (peekAppEvent) stealKB:Y scene:de.qupil.student-default
+2026-11-25 08:05:28.097 Df QupilStudent[21585:f494] [com.apple.UIKit:KeyWindow] UIWindowScene: 0x7f8fc62a61f0: Window became key in scene: QUIWindow: 0x7f8fc62a7290; contextId: 0xC0EAB5C9: reason: UIWindowScene: 0x7f8fc62a61f0: Window requested to become key in scene: 0x7f8fc62a7290
+2026-11-25 08:05:28.098 Df QupilStudent[21585:f494] [com.apple.UIKit:KeyWindow] Key window needs update: 1; currentKeyWindowScene: 0x0; evaluatedKeyWindowScene: 0x7f8fc62a61f0; currentApplicationKeyWindow: 0x0; evaluatedApplicationKeyWindow: 0x7f8fc62a7290; reason: UIWindowScene: 0x7f8fc62a61f0: Window requested to become key in scene: 0x7f8fc62a7290
+2026-11-25 08:05:28.098 Df QupilStudent[21585:f494] [com.apple.UIKit:KeyWindow] Window did become application key: QUIWindow: 0x7f8fc62a7290; contextId: 0xC0EAB5C9; scene identity: com.apple.frontboard.systemappservices/FBSceneManager:sceneID%3Ade.qupil.student-default
+2026-11-25 08:05:28.099 Df QupilStudent[21585:f494] [com.apple.UIKit:EventDeferring] [0x600001109c70] Begin local event deferring requested for token: 0x600001e12dc0; environments: 1; reason: UIWindowScene: 0x7f8fc62a61f0: Begin event deferring in keyboardFocus for window: 0x7f8fc62a7290
+2026-11-25 08:05:28.117 Df QupilStudent[21585:f494] [com.apple.UIKit:EventDispatch] Evaluating dispatch of UIEvent: 0x600000505c20; type: 0; subtype: 0; backing type: 11; shouldSend: 1; ignoreInteractionEvents: 0, systemGestureStateChange: 0
+2026-11-25 08:05:28.122 Df QupilStudent[21585:f494] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 0; subtype: 0; to windows: 1
+2026-11-25 08:05:28.123 Df QupilStudent[21585:f494] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 0; subtype: 0; to window: <QUIWindow: 0x7f8fc62a7290>; contextId: 0xC0EAB5C9
+2026-11-25 08:05:28.126 Df QupilStudent[21585:10907] [com.apple.BackBoard:EventDelivery] policyStatus:<BKSHIDEventDeliveryPolicyObserver: 0x600001e10300; token: com.apple.frontboard.systemappservices/FBSceneManager:sceneID%3Ade.qupil.student-default; status: ancestor> was:target
+2026-11-25 08:05:28.176 A  QupilStudent[21585:f494] (UIKitCore) send control actions
+2026-11-25 08:05:28.199 Df QupilStudent[21585:f494] [com.apple.UIKit:EventDeferring] [0x600001109c70] Scene target of event deferring environments did update: scene: 0x7f8fc62a61f0; current systemShellManagesKeyboardFocus: 1; systemShellManagesKeyboardFocusForScene: 1; eligibleForRecordRemoval: 1;
+2026-11-25 08:05:28.199 Df QupilStudent[21585:f494] [com.apple.UIKit:KeyWindow] Scene became target of keyboard event deferring environment: UIWindowScene: 0x7f8fc62a61f0; scene identity: com.apple.frontboard.systemappservices/FBSceneManager:sceneID%3Ade.qupil.student-default
+2026-11-25 08:05:28.223 Df QupilStudent[21585:f494] [com.apple.UIKit:EventDispatch] Evaluating dispatch of UIEvent: 0x600000505c20; type: 0; subtype: 0; backing type: 11; shouldSend: 1; ignoreInteractionEvents: 0, systemGestureStateChange: 0
+2026-11-25 08:05:28.223 Df QupilStudent[21585:f494] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 0; subtype: 0; to windows: 1
+2026-11-25 08:05:28.223 Df QupilStudent[21585:f494] [com.apple.UIKit:EventDispatch] Sending UIEvent type: 0; subtype: 0; to window: <QUIWindow: 0x7f8fc62a7290>; contextId: 0xC0EAB5C9
+2026-11-25 08:05:28.225 A  QupilStudent[21585:f494] (UIKitCore) send control actions
+2026-11-25 08:05:28.231 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXRuntimeNotifications] Attempting to send notification:  (1055) <private>
+2026-11-25 08:05:28.248 A  QupilStudent[21585:f494] (UIKitCore) send control actions
+2026-11-25 08:05:28.250 Df QupilStudent[21585:f494] [com.apple.UIKit:EventDispatch] Evaluating dispatch of UIEvent: 0x600000505c20; type: 0; subtype: 0; backing type: 11; shouldSend: 0; ignoreInteractionEvents: 1, systemGestureStateChange: 1
+2026-11-25 08:05:28.282 I  QupilStudent[21585:f494] Qupil student: scanner closed, no code
+2026-11-25 08:05:28.282 I  QupilStudent[21585:f494] Qupil student: scanner closed, no code
+2026-11-25 08:05:28.283 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXRuntimeNotifications] Did post notification. notification:  (1055) error:0 data:<private>
+2026-11-25 08:05:28.796 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXRuntimeNotifications] Attempting to send notification:  (1000) <private>
+2026-11-25 08:05:28.797 Df QupilStudent[21585:10907] [com.apple.cameracapture:] <<<< AVCaptureSession >>>> -[AVCaptureSession stopRunning]: (0x600003810940) (pthread:0x30c058000)
+2026-11-25 08:05:28.802 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXRuntimeNotifications] Attempting to send notification:  (1000) <private>
+2026-11-25 08:05:28.818 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureSession >>>> -[AVCaptureSession beginConfiguration]: (0x600003810940)
+2026-11-25 08:05:28.819 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureSession >>>> -[AVCaptureSession _beginConfiguration]: (0x600003810940) updated beginConfigRefCount 1
+2026-11-25 08:05:28.819 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureSession >>>> -[AVCaptureSession commitConfiguration]: (0x600003810940)
+2026-11-25 08:05:28.819 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureSession >>>> -[AVCaptureSession _commitConfiguration]: (0x600003810940) updated beginConfigRefCount 0
+2026-11-25 08:05:28.819 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureSession >>>> -[AVCaptureSession _buildAndRunGraph:]: (0x600003810940) called. skipConfig: 0
+2026-11-25 08:05:28.825 I  QupilStudent[21585:f494] [com.apple.launchservices:datasep] application record search init. Node: <FSNode 0x600003acab80> { isDir = y, path = '/Users/runner/Library/Developer/CoreSimulator/Devices/3AF28461-937F-429D-A836-35990CD2CD3D/data/Containers/Bundle/Application/EC249DF3-E0F3-4359-A3D4-805280E1636F/QupilStudent.app' } bundleID: (null) itemID: 0
+2026-11-25 08:05:28.834 Df QupilStudent[21585:f494] [com.apple.cameracapture:] <<<< AVCaptureSession >>>> -[AVCaptureSession _buildAndRunGraph:]: (0x600003810940) New fcs config(3)
+2026-11-25 08:05:28.835 I  QupilStudent[21585:f494] [com.apple.Accessibility:AXRuntimeNotifications] Did post notification. notification:  (1000) error:0 data:<private>
+Child process terminated with signal 15: Terminated
