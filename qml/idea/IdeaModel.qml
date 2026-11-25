@@ -76,11 +76,26 @@ QtObject {
 
     function resume(studentId, taskId) {
         const s = student(studentId)
-        const t = s.tasks.find(x => x.id === taskId)
-        t.state = "run"
-        t.until = ""
-        s.resumed.push(t.id)
+        setState(s, s.tasks.find(x => x.id === taskId), "run", "")
         revision++
+    }
+    /*!
+        Pauses a task or takes it up again in between (on the page, in its window, while
+        preparing): the entry of the next lesson says so. Undone again before the lesson:
+        nothing to say.
+    */
+    function setState(s, t, state, until) {
+        if (!t || t.state === "done" || (state !== "run" && state !== "pause"))
+            return
+        if (state !== t.state) {
+            const undone = (state === "run" ? s.paused : s.resumed).indexOf(t.id) >= 0
+            s.paused = s.paused.filter(x => x !== t.id)
+            s.resumed = s.resumed.filter(x => x !== t.id)
+            if (!undone)
+                (state === "run" ? s.resumed : s.paused).push(t.id)
+        }
+        t.state = state
+        t.until = state === "pause" ? until : ""
     }
     //! The student's answer of this week (the look into their app)
     function answer(studentId, taskId, amount, how) {
@@ -100,7 +115,9 @@ QtObject {
         const lines = []
         const line = (kind, t, changes, until) => ({ kind: kind, taskId: t.id, title: t.title, until: until || "", changes: changes })
         const resumed = s.resumed
+        const paused = s.paused
         s.resumed = []
+        s.paused = []
         for (const d of draft.tasks) {
             let t = taskOf(s, d.id)
             const changes = []
@@ -138,12 +155,13 @@ QtObject {
             } else if (d.state === "pause") {
                 t.state = "pause"
                 t.until = d.until
-                if (was !== "pause")
+                if (was !== "pause" || paused.indexOf(t.id) >= 0)
                     lines.push(line("paused", t, changes, d.until))
             } else {
                 t.state = "run"
                 t.until = ""
-                lines.push(line(fresh ? "new" : was === "pause" || resumed.indexOf(t.id) >= 0 ? "resumed" : "on", t, changes))
+                lines.push(line(fresh ? "new" : (was === "pause" && paused.indexOf(t.id) < 0) || resumed.indexOf(t.id) >= 0
+                                                ? "resumed" : "on", t, changes))
             }
         }
         const did = draft.extra.filter(e => e.done).map(e => e.text)
@@ -171,12 +189,14 @@ QtObject {
             const t = taskOf(s, d.id)
             if (!t)
                 continue
+            // Taken up again (or paused) while preparing: so it stays
+            setState(s, t, d.state, d.until)
             for (const dp of d.points)
                 if (!t.points.find(x => x.id === dp.id))
                     t.points.push({ id: dp.id, text: dp.text, done: false, priv: dp.priv, fresh: !dp.priv })
         }
         s.extra = draft.extra.map(e => e.text)
-        const due = draft.tasks.filter(d => d.due).map(d => d.id)
+        const due = draft.tasks.filter(d => d.due && d.state === "run").map(d => d.id)
         // A student without tasks is prepared with a free note; the lesson starts from it
         const note = (draft.note || "").trim()
         s.prepared = due.length > 0 || s.extra.length > 0 || note !== "" ? { date: s.today, due: due, note: note } : null
@@ -201,12 +221,7 @@ QtObject {
         }
         if (title !== "")
             t.title = title
-        if (t.state !== "done") {
-            if (draft.state === "run" && t.state === "pause")
-                s.resumed.push(t.id)
-            t.state = draft.state
-            t.until = draft.state === "pause" ? draft.until : ""
-        }
+        setState(s, t, draft.state, draft.until)
         const points = []
         for (const dp of draft.points) {
             const text = dp.text.trim()
@@ -240,6 +255,7 @@ QtObject {
                 }
         s.tasks = s.tasks.filter(x => x.id !== taskId)
         s.resumed = s.resumed.filter(x => x !== taskId)
+        s.paused = s.paused.filter(x => x !== taskId)
         if (s.prepared)
             s.prepared.due = s.prepared.due.filter(x => x !== taskId)
         revision++
@@ -352,7 +368,7 @@ QtObject {
 
         students = [
             { id: "jonas", name: "Jonas Beispiel", sub: qsTrId("idea.student.jonas"), coupled: true, today: today,
-              resumed: [], extra: [], prepared: null,
+              resumed: [], paused: [], extra: [], prepared: null,
               tasks: [mozart, scaleA, kreutzer, doubleC, scaleG, bourree, shifts],
               log: [
                   entry(7, "Kam gut vorbereitet. Sehr schöner Ton!", [
@@ -370,7 +386,7 @@ QtObject {
                             line("on", mozart, [["+", mozart.points[1]]])])
               ] },
             { id: "mia", name: "Mia Muster", sub: qsTrId("idea.student.mia"), coupled: true, today: today,
-              resumed: [], extra: [], prepared: null,
+              resumed: [], paused: [], extra: [], prepared: null,
               tasks: [song12, song13, strings, song14, song10, song11, song9],
               log: [
                   entry(7, "", [line("new", song12), line("new", song13), line("new", song14),
@@ -378,7 +394,7 @@ QtObject {
                   entry(14, "Bogenhaltung: kleiner Finger rund.", [line("new", strings), line("done", song9)])
               ] },
             { id: "paul", name: "Paul Probe", sub: qsTrId("idea.student.paul"), coupled: false, today: today,
-              resumed: [], extra: [], prepared: null, tasks: [],
+              resumed: [], paused: [], extra: [], prepared: null, tasks: [],
               log: [
                   entry(7, "Menuett neu angefangen, Fingersatz eingetragen. Tonleiter D-Dur, eine Oktave."),
                   entry(14, "Vorspiel war sehr schön! Neues Stück ausgesucht: Menuett."),
