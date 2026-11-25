@@ -1,6 +1,9 @@
 # The student app (student/): tests and screenshots on Linux, an installable Android test
 # APK, and the iOS archive. Upload to TestFlight (app de.qupil.student) only when started
-# by hand with "upload" ticked; the teacher app's workflows are not touched by this one.
+# with "upload" ticked: by the collect run (testflight-collect.yml, at its slots, when
+# something for the student's iOS app changed since its last upload) or by hand when the
+# developer asks for a build right away. The upload sets the testers' text itself, from
+# .github/testflight/student-whats-new.txt.
 name: Student app
 
 on:
@@ -538,3 +541,28 @@ jobs:
             fi
           } | tee -a "$GITHUB_STEP_SUMMARY"
           exit $status
+
+      # The text the testers see in TestFlight, from .github/testflight/student-whats-new.txt
+      # as it is in this commit (German and English (U.S.) get the same text). The build
+      # need not be processed yet. The same step as in the teacher app's testflight.yml;
+      # the collect run reads its result by this name.
+      - name: Set "What to Test"
+        if: github.event_name == 'workflow_dispatch' && inputs.upload
+        continue-on-error: true
+        timeout-minutes: 55
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+          ASC_BUNDLE_ID: de.qupil.student
+        run: |
+          if [ -z "$ASC_KEY_ID" ] || [ -z "$ASC_ISSUER_ID" ] || [ -z "$ASC_KEY_P8" ]; then
+            echo "::notice::What to Test not set: the App Store Connect secrets are missing."
+            exit 0
+          fi
+          keydir="$RUNNER_TEMP/asc-notes"
+          mkdir -p "$keydir"
+          trap 'rm -rf "$keydir"' EXIT
+          printf '%s\n' "$ASC_KEY_P8" > "$keydir/key.p8"
+          ASC_KEY_FILE="$keydir/key.p8" python3 .github/scripts/asc-whats-new.py "$GITHUB_RUN_NUMBER" .github/testflight/student-whats-new.txt
+          echo "What to Test set for student build $GITHUB_RUN_NUMBER." >> "$GITHUB_STEP_SUMMARY"

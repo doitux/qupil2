@@ -1,0 +1,54 @@
+# Student app (Qupil Practice): sets or checks "What to Test" of a build that is already at
+# TestFlight, without building. The text is .github/testflight/student-whats-new.txt of main.
+# An upload sets the text itself (student.yml); this one is for a text corrected afterwards
+# and for checking that App Store Connect can be reached ("dry run": looks everything up,
+# says how long the texts are, writes nothing).
+# By hand: Actions › Student app: TestFlight text › Run workflow
+name: 'Student app: TestFlight text'
+
+on:
+  workflow_dispatch:
+    inputs:
+      build:
+        description: 'Build number (as in TestFlight, e.g. 50)'
+        type: string
+        required: true
+      dry_run:
+        description: 'Dry run: only look, write nothing'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  text:
+    if: github.repository == 'doitux/qupil2'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          sparse-checkout: |
+            .github
+      - name: Set "What to Test"
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+          ASC_BUNDLE_ID: de.qupil.student
+          ASC_DRY_RUN: ${{ inputs.dry_run && '1' || '0' }}
+          BUILD: ${{ inputs.build }}
+        run: |
+          case "$BUILD" in ''|*[!0-9]*) echo "::error::The build number is a number"; exit 1 ;; esac
+          if [ -z "$ASC_KEY_ID" ] || [ -z "$ASC_ISSUER_ID" ] || [ -z "$ASC_KEY_P8" ]; then
+            echo "::error::App Store Connect secrets are not set"; exit 1
+          fi
+          keydir="$RUNNER_TEMP/asc-notes"
+          mkdir -p "$keydir"
+          trap 'rm -rf "$keydir"' EXIT
+          printf '%s\n' "$ASC_KEY_P8" > "$keydir/key.p8"
+          ASC_KEY_FILE="$keydir/key.p8" python3 -I .github/scripts/asc-whats-new.py "$BUILD" .github/testflight/student-whats-new.txt \
+            | tee -a "$GITHUB_STEP_SUMMARY"
+          exit "${PIPESTATUS[0]}"

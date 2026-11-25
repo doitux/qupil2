@@ -5,7 +5,9 @@
 
     asc-whats-new.py <build number> <text file>
 
-Environment: ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_FILE (the .p8 file), ASC_APP_ID.
+Environment: ASC_KEY_ID, ASC_ISSUER_ID, ASC_KEY_FILE (the .p8 file), and the app: ASC_APP_ID
+(its number in App Store Connect) or ASC_BUNDLE_ID (e.g. de.qupil.student; the number is
+looked up). ASC_DRY_RUN=1: looks everything up and says what it would write, writes nothing.
 Waits until Apple lists the build (it appears while it is being processed), then
 writes the text into every localization of the build, German (de-DE) and English (en-US)
 at least, and completes the English test information of the app from the German one.
@@ -75,6 +77,21 @@ class Api:
             raise RuntimeError(f"{method} {path}: HTTP {error.code} {error.read().decode()[:600]}") from None
 
 
+def app_id(api: "Api") -> str:
+    """The app's number: given, or looked up by its bundle identifier."""
+    given = os.environ.get("ASC_APP_ID", "").strip()
+    if given:
+        return given
+    bundle = os.environ["ASC_BUNDLE_ID"].strip()
+    query = urllib.parse.urlencode({"filter[bundleId]": bundle, "limit": 20})
+    found = api.call("GET", "/apps?" + query).get("data", [])
+    # The filter also finds identifiers that only start like this one
+    exact = [item for item in found if item["attributes"].get("bundleId") == bundle]
+    if len(exact) != 1:
+        raise RuntimeError(f"{len(exact)} apps with the bundle identifier {bundle} in App Store Connect")
+    return exact[0]["id"]
+
+
 def mirror_test_information(api: "Api", app: str) -> None:
     """The app's test information (description for testers, address for feedback) in English
     (U.S.) is taken from the German one where it is empty: without it App Store Connect asks
@@ -109,13 +126,20 @@ def main() -> int:
     if len(text) > 4000:
         print(f"::warning::What to Test is limited to 4000 characters, the text has {len(text)}; it is cut.")
         text = text[:4000]
+    dry = os.environ.get("ASC_DRY_RUN") == "1"
     api = Api()
-    app = os.environ["ASC_APP_ID"]
+    app = app_id(api)
     query = urllib.parse.urlencode({"filter[app]": app, "filter[version]": build_number, "limit": 5})
 
     # The build shows up a few minutes after the upload, while Apple processes it
     build = None
-    deadline = time.time() + 50 * 60
+    deadline = time.time() + (0 if dry else 50 * 60)
+    if dry:
+        found = api.call("GET", "/builds?" + query).get("data", [])
+        if not found:
+            print(f"Dry run: build {build_number} is not listed in App Store Connect.")
+            return 1
+        build = found[0]
     while time.time() < deadline:
         found = api.call("GET", "/builds?" + query).get("data", [])
         if found:
@@ -143,6 +167,17 @@ def main() -> int:
         print(f"What to Test set ({locale}).")
 
     locales = build_locales()
+    if dry:
+        # Says which languages there are and whether they have a text, never the text itself
+        found = api.call("GET", f"/builds/{build_id}/betaBuildLocalizations").get("data", [])
+        for item in found:
+            has = len(item["attributes"].get("whatsNew") or "")
+            print(f"Dry run: {item['attributes']['locale']} has {has} characters now, would get {len(text)}.")
+        for locale in ("de-DE", "en-US"):
+            if locale not in locales:
+                print(f"Dry run: {locale} would be added with {len(text)} characters.")
+        print("Dry run: nothing written.")
+        return 0
     for locale, loc_id in locales.items():
         patch(locale, loc_id)
     for locale in ("de-DE", "en-US"):

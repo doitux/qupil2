@@ -17,6 +17,13 @@ then wait for that run (re-run once if no macOS runner was free) and write the r
 branch "testflight-status" (status.json, status.md). That branch can be read with a plain
 git clone, without signing in.
 
+The student app (Qupil Practice, student/, workflow student.yml) is collected at the same
+slots and by the same rules, on its own: a build with upload is started when something that
+ends up in its iOS app changed since its last upload. Its test text is
+.github/testflight/student-whats-new.txt, which its workflow reads itself. A change of the
+student app alone starts no build of the teacher app, and the other way round. The student
+app's part never stops the teacher app's: what goes wrong there is written to the status.
+
 Only the Python standard library. Environment: GITHUB_TOKEN, GITHUB_REPOSITORY,
 COLLECT_MODE (schedule | dry-run | now), CRON (the schedule that fired), WHATS_NEW_FILE.
 Locally:  COLLECT_MODE=dry-run NO_STATUS=1 python3 .github/scripts/testflight-collect.py
@@ -70,10 +77,40 @@ IGNORE = [re.compile(p) for p in (
     r"^\.github/workflows/(desktop|mobile|translations|testflight-collect)\.yml$",
     r"^\.github/scripts/testflight-collect\.py$",
     r"^\.github/testflight/",
+    # The student app is an app of its own (see STUDENT_FILES)
+    r"^student/",
+    r"^\.github/workflows/student(-testflight-text)?\.yml$",
+    r"^\.github/scripts/(student-[^/]*|ios-edges\.py|ios-find-(colour|alert)\.py|ios-crash-summary\.py)$",
     r"^\.github/dependabot\.yml$",
     r"^docs/",
     r"\.md$",
 )]
+
+# ---- the student app (Qupil Practice)
+STUDENT_WORKFLOW = "student.yml"
+STUDENT_WHATS_NEW_FILE = ".github/testflight/student-whats-new.txt"
+# What ends up in its iOS app: its own folder and what it takes from the teacher app
+# (student/CMakeLists.txt: booklet format, encryption, QR code, fonts, privacy manifest) …
+STUDENT_FILES = [re.compile(p) for p in (
+    r"^student/",
+    r"^src/shared/",
+    r"^src/core/Crypto\.",
+    r"^3rdparty/(monocypher|qrcodegen)/",
+    r"^assets/fonts/Figtree-",
+    r"^platform/ios/PrivacyInfo\.xcprivacy$",
+)]
+# … without its tests, the page for qupil.de and what is for Android only
+STUDENT_IGNORE = [re.compile(p) for p in (
+    r"^student/(tests|web)/",
+    r"^student/platform/android/",
+    r"_android\.(cpp|h|java)$",
+    r"\.md$",
+)]
+# What the student app's part found and did; written into every status
+STUDENT = {}
+# The collect job ends after 150 minutes: both waits together stay below that
+STARTED = time.time()
+TOTAL_MINUTES = 135
 
 
 def log(*args):
@@ -193,10 +230,10 @@ def describe(run):
     }
 
 
-def wait_for(run_id, rerun_allowed=True):
+def wait_for(run_id, rerun_allowed=True, minutes=WAIT_MINUTES):
     """Wait until the run is done; re-run once if no runner was free. Returns (run, rerun)."""
     rerun = False
-    end = time.time() + WAIT_MINUTES * 60
+    end = time.time() + minutes * 60
     while time.time() < end:
         run = api("GET", f"/repos/{REPO}/actions/runs/{run_id}")
         if run["status"] == "completed":
@@ -226,6 +263,107 @@ def changes_since(base):
     return cmp, relevant, commits
 
 
+# --------------------------------------------------------------------------- student app
+
+
+def student_runs():
+    runs = api("GET", f"/repos/{REPO}/actions/workflows/{STUDENT_WORKFLOW}/runs"
+                      f"?event=workflow_dispatch&per_page=30")["workflow_runs"]
+    return sorted(runs, key=lambda r: r["run_number"], reverse=True)
+
+
+def student_relevant(files):
+    return [f for f in files
+            if any(p.search(f) for p in STUDENT_FILES) and not any(p.search(f) for p in STUDENT_IGNORE)]
+
+
+def collect_student():
+    """The student app's part of a slot: starts its build with upload when something for its
+    iOS app changed since its last upload. Fills STUDENT; never raises."""
+    STUDENT.clear()
+    try:
+        runs = student_runs()
+        active = [r for r in runs if r["status"] != "completed"]
+        if active:
+            STUDENT.update(result="running", build=describe(active[0]))
+            return
+        # The last run whose upload step succeeded, whatever came after it in the run (a
+        # failed test after the upload does not take the build back from TestFlight)
+        base = next((r for r in runs if step(r["id"], UPLOAD_STEP) == "success"), None)
+        if base is None:
+            STUDENT.update(result="error", note="no upload of the student app found to compare with")
+            return
+        cmp = api("GET", f"/repos/{REPO}/compare/{base['head_sha']}...main")
+        files = [f["filename"] for f in cmp.get("files") or []]
+        relevant = student_relevant(files)
+        if len(files) >= 300:
+            relevant = relevant or files
+        if cmp.get("status") != "ahead" or not cmp.get("commits"):
+            relevant = []
+        STUDENT.update(since=base["head_sha"], since_build=base["run_number"], relevant_files=relevant[:50])
+        if not relevant:
+            STUDENT["result"] = "no_change"
+            return
+        if MODE == "dry-run":
+            STUDENT["result"] = "would_build"
+            return
+        try:
+            with open(STUDENT_WHATS_NEW_FILE, encoding="utf-8") as f:
+                n = len(f.read().strip())
+            if n > WHATS_NEW_MAX:
+                STUDENT["note"] = f"Testtext zu lang ({n} von {WHATS_NEW_MAX} Zeichen): Apple schneidet das Ende ab."
+            elif n == 0:
+                STUDENT["note"] = "Testtext ist leer."
+        except OSError:
+            STUDENT["note"] = f"Testtext fehlt ({STUDENT_WHATS_NEW_FILE})."
+        started = dt.datetime.now(dt.timezone.utc) - dt.timedelta(seconds=5)
+        api("POST", f"/repos/{REPO}/actions/workflows/{STUDENT_WORKFLOW}/dispatches",
+            {"ref": "main", "inputs": {"upload": "true"}})
+        run = None
+        for _ in range(30):
+            time.sleep(10)
+            run = next((r for r in student_runs()
+                        if dt.datetime.fromisoformat(r["created_at"].replace("Z", "+00:00")) >= started), None)
+            if run:
+                break
+        if run is None:
+            STUDENT.update(result="error", note="the student app's run was dispatched but did not show up")
+            return
+        log(f"Student app: started build {run['run_number']} ({run['html_url']})")
+        STUDENT.update(result="started", build=describe(run))
+    except Exception as e:
+        STUDENT.update(result="error", note=str(e)[:300])
+    finally:
+        log(f"Student app: {STUDENT}")
+
+
+def finish_student():
+    """Waits for the student app's build started in this run and writes the status again.
+    Returns the exit code (1: its upload failed)."""
+    if STUDENT.get("result") != "started" or LAST_STATUS is None:
+        # Could not even look or start: the run is red, so that it is noticed
+        return 1 if STUDENT.get("result") == "error" else 0
+    try:
+        run_id = STUDENT["build"]["run_id"]
+        left = TOTAL_MINUTES - (time.time() - STARTED) / 60
+        run, rerun = wait_for(run_id, minutes=max(1, min(WAIT_MINUTES, left)))
+        b = describe(run)
+        b["rerun"] = rerun
+        b["upload"] = step(run_id, UPLOAD_STEP)
+        b["whats_new"] = step(run_id, WHATS_NEW_STEP)
+        STUDENT["build"] = b
+        if b["upload"] == "success":
+            STUDENT["result"] = "uploaded"
+        elif run["status"] != "completed":
+            STUDENT["result"] = "not_finished"
+        else:
+            STUDENT["result"] = "upload_failed"
+    except Exception as e:
+        STUDENT.update(result="error", note=str(e)[:300])
+    write_status(LAST_STATUS)
+    return 1 if STUDENT["result"] in ("upload_failed", "error") else 0
+
+
 # --------------------------------------------------------------------------- nightly tests
 
 # The platform tests started from the evening slot, with what does not concern them
@@ -234,6 +372,9 @@ TEST_COMMON_IGNORE = (
     r"^\.github/scripts/(testflight-collect|asc-whats-new)\.py$", r"^\.github/scripts/ios-check-archive\.sh$",
     r"^\.github/scripts/publish-nightly\.sh$",
     r"^\.github/workflows/(testflight|testflight-collect|translations|desktop|mobile)\.yml$",
+    # The student app has its tests in its own workflow (student.yml, on every push)
+    r"^student/", r"^\.github/workflows/student(-testflight-text)?\.yml$",
+    r"^\.github/scripts/(student-[^/]*|ios-edges\.py|ios-find-(colour|alert)\.py|ios-crash-summary\.py)$",
 )
 TESTS = {
     "android-test.yml": {"name": "Android", "inputs": {}, "ignore": (
@@ -318,11 +459,22 @@ RESULT_DE = {
 }
 
 
+LAST_STATUS = None
+
+
 def write_status(status):
+    global LAST_STATUS
+    LAST_STATUS = status
     status["written"] = now().isoformat(timespec="seconds")
     n = (status.get("build") or {}).get("number", "?")
     headline = RESULT_DE[status["result"]].format(n=n, w=WAIT_MINUTES)
     status["headline"] = headline
+    student_line = None
+    if STUDENT:
+        status["student"] = dict(STUDENT)
+        sn = (STUDENT.get("build") or {}).get("number", "?")
+        student_line = RESULT_DE.get(STUDENT.get("result"), STUDENT.get("result") or "?").format(n=sn, w=WAIT_MINUTES)
+        status["student"]["headline"] = student_line
     md = [f"# TestFlight-Sammellauf {status.get('slot', '')}", "", f"**{headline}**", ""]
     if status.get("note"):
         md += [status["note"], ""]
@@ -338,6 +490,20 @@ def write_status(status):
         md += ["", "Commits:"] + [f"- {c['sha']} {c['subject']}" for c in status["commits"]]
     if status.get("relevant_files"):
         md += ["", "Für iOS relevante Dateien:"] + [f"- {f}" for f in status["relevant_files"]]
+    if STUDENT:
+        md += ["", f"Schüler-App (Qupil Üben): **{student_line}**"]
+        if STUDENT.get("note"):
+            md.append(f"- {STUDENT['note']}")
+        sb = STUDENT.get("build")
+        if sb:
+            md += [f"- Build {sb['number']} (Commit {sb['sha'][:7]}): {sb.get('conclusion') or sb['status']}"
+                   f", Upload: {sb.get('upload') or '-'}, Testtext: {sb.get('whats_new') or '-'}"
+                   + (", per Re-run neu gestartet" if sb.get("rerun") else ""),
+                   f"- {sb['url']}"]
+        if STUDENT.get("since"):
+            md.append(f"- Seit Build {STUDENT.get('since_build')} (Commit {STUDENT['since'][:7]})")
+        if STUDENT.get("relevant_files"):
+            md += ["- Für die Schüler-App relevante Dateien:"] + [f"  - {f}" for f in STUDENT["relevant_files"]]
     tests = status.get("tests")
     if tests:
         md += ["", "Nächtliche Tests:"]
@@ -364,7 +530,9 @@ def write_status(status):
                     {"content": base64.b64encode(c.encode()).decode(), "encoding": "base64"})["sha"]}
         for p, c in files.items()]})
     commit = api("POST", f"/repos/{REPO}/git/commits", {
-        "message": f"{status.get('slot', '')}: {headline} [skip ci]",
+        "message": f"{status.get('slot', '')}: {headline}"
+                   + (f"; Schüler-App: {student_line}" if student_line and STUDENT.get("build") else "")
+                   + " [skip ci]",
         "tree": tree["sha"], "parents": [parent] if parent else []})
     if parent:
         api("PATCH", f"/repos/{REPO}/git/refs/heads/{STATUS_BRANCH}", {"sha": commit["sha"], "force": True})
@@ -413,6 +581,9 @@ def main():
         status["slot"] = f"{t:%Y-%m-%d %H:%M} (von Hand, {MODE})"
         if MODE == "dry-run":
             status["tests"] = start_tests()   # only shows what would start
+
+    # The student app, by the same slots; its run is waited for at the very end
+    collect_student()
 
     runs = dispatch_runs()
     active = [r for r in runs if r["status"] != "completed"]
@@ -502,13 +673,22 @@ if __name__ == "__main__":
     if sys.argv[1:] == ["--check-text"]:
         check_text()
         sys.exit(0)
+    code = 0
     try:
         main()
+    except SystemExit as e:  # the teacher app's upload failed: the student app's is still waited for
+        code = e.code if isinstance(e.code, int) else 1
     except Exception as e:  # report the failure on the status branch too
         log(f"Error: {e}")
+        code = 1
         try:
             write_status({"mode": MODE, "slot": f"{now():%Y-%m-%d %H:%M}", "result": "error",
                           "note": str(e)[:500]})
         except Exception as e2:
             log(f"Could not write the status: {e2}")
-        sys.exit(1)
+    try:
+        code = finish_student() or code
+    except Exception as e:
+        log(f"Student app: could not write the status: {e}")
+        code = 1
+    sys.exit(code)
