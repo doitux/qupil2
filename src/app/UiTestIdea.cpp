@@ -9,6 +9,9 @@
 
 #include "UiTest.h"
 
+#include <QQuickItem>
+#include <QQuickWindow>
+
 #include "DataService.h"
 
 #include <QRegularExpression>
@@ -140,6 +143,30 @@ void UiTest::addIdeaCases()
                    })
                 << tap(u"^Abbrechen$"_s) << gone(u"edit:^Aufgabe$"_s)
                 << act(u"back to the note field"_s, [this] { m_textField = u"edit:^Notiz$"_s; })
+                << tap(u"^Neue Idee ausprobieren$"_s, u"back"_s) << tap(u"^Einstellungen$"_s, u"back"_s) << backIfThere(u"^Mehr$"_s);
+    }
+
+    {
+        // The arrow at the end of a task's line in the window of a lesson unfolds the task, as
+        // a tap on its title does (it was only a picture)
+        const auto arrow = [this] {
+            QQuickItem *found = nullptr;
+            std::function<void(QQuickItem *)> walk = [&](QQuickItem *i) {
+                if (!found && i->objectName() == u"ideaTaskFold"_s && i->isVisible())
+                    found = i;
+                for (QQuickItem *c : i->childItems())
+                    walk(c);
+            };
+            walk(m_window->contentItem());
+            return found ? found->mapToScene(QPointF(found->width() / 2, found->height() / 2)) : QPointF();
+        };
+        Case &f = add(u"idea-fold-arrow"_s, u"trial: the arrow of a task unfolds it in the window of a lesson"_s);
+        f.steps << tab(u"Mehr"_s) << tap(u"^Einstellungen$"_s) << tap(u"^Neue Idee ausprobieren$"_s) << tap(u"^Jonas Beispiel$"_s)
+                << tap(u"^Vorbereiten$"_s) << see(u"^Dran: Mozart: Violinkonzert G-Dur, 1\\. Satz$"_s)
+                << gone(u"edit:^Punkt hinzufügen, nur für mich$"_s)
+                << tapAt(arrow, u"the arrow of the first task"_s) << see(u"edit:^Punkt hinzufügen, nur für mich$"_s)
+                << tapAt(arrow, u"the arrow again"_s) << gone(u"edit:^Punkt hinzufügen, nur für mich$"_s)
+                << tap(u"^Abbrechen$"_s) << gone(u"^Dran: Mozart: Violinkonzert G-Dur, 1\\. Satz$"_s)
                 << tap(u"^Neue Idee ausprobieren$"_s, u"back"_s) << tap(u"^Einstellungen$"_s, u"back"_s) << backIfThere(u"^Mehr$"_s);
     }
 }
