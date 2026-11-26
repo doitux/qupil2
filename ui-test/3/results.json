@@ -1,0 +1,258 @@
+{
+    "cases": [
+        {
+            "failure": "",
+            "ms": 4656,
+            "name": "start",
+            "note": "",
+            "passed": true,
+            "title": "close the reminders shown at the start",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 17456,
+            "name": "note-menu",
+            "note": "",
+            "passed": true,
+            "title": "a note: a tap only shows a block, the menu has new note, plan, edit, share, delete",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 14068,
+            "name": "tasks-menu",
+            "note": "",
+            "passed": true,
+            "title": "tasks of a coupled student: a tap shows the hints, the menu plans, edits and deletes",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 64376,
+            "name": "idea-demo",
+            "note": "",
+            "passed": true,
+            "title": "The trial of the new idea: a lesson, the history, preparing, pausing; nothing is stored",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 11835,
+            "name": "idea-point-wrap",
+            "note": "",
+            "passed": true,
+            "title": "trial: a long point wraps in its field while it is written",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6473,
+            "name": "idea-fold-arrow",
+            "note": "",
+            "passed": true,
+            "title": "trial: the arrow of a task unfolds it in the window of a lesson",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 10771,
+            "name": "plan-save",
+            "note": "",
+            "passed": true,
+            "title": "plan the next lesson of a student",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 11034,
+            "name": "plan-finish-lines",
+            "note": "",
+            "passed": true,
+            "title": "what was covered: single lines of a block into the note, the rest planned",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 8686,
+            "name": "plan-from-note-lines",
+            "note": "",
+            "passed": true,
+            "title": "plan the next lesson from a note: one line of a block",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 8087,
+            "name": "note-share",
+            "note": "",
+            "passed": true,
+            "title": "share a note as a message (homework for a student without the app)",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 30984,
+            "name": "tasks-long-texts",
+            "note": "",
+            "passed": true,
+            "title": "tasks: a long hint wraps in its field, a long title is wiped sideways and shows its start",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7734,
+            "name": "card-long-texts",
+            "note": "",
+            "passed": true,
+            "title": "student page: a long private note and a long block heading wrap instead of being cut",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 3394,
+            "name": "plan-icon-coming",
+            "note": "",
+            "passed": true,
+            "title": "a plan for next week shows in the schedule of this week, next to a birthday too",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 14664,
+            "name": "piece-new",
+            "note": "",
+            "passed": true,
+            "title": "add a piece for a student",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 3608,
+            "name": "lesson-new",
+            "note": "",
+            "passed": true,
+            "title": "add a lesson from the schedule",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6406,
+            "name": "lesson-times",
+            "note": "",
+            "passed": true,
+            "title": "a lesson of 11 minutes, times typed and saved at once",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 11289,
+            "name": "together",
+            "note": "",
+            "passed": true,
+            "title": "two individual lessons of a student kept together",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9097,
+            "name": "together-new",
+            "note": "",
+            "passed": true,
+            "title": "new lesson for a student who has one: kept together",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6968,
+            "name": "reminder-new",
+            "note": "",
+            "passed": true,
+            "title": "add a reminder",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9936,
+            "name": "lesson-plan-for-all",
+            "note": "",
+            "passed": true,
+            "title": "plan for a whole ensemble from the lesson view",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 26212,
+            "name": "lesson-reminder",
+            "note": "",
+            "passed": true,
+            "title": "reminders for one lesson",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 8836,
+            "name": "loan-return",
+            "note": "",
+            "passed": true,
+            "title": "return sheet music from the student's page",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 3124,
+            "name": "more-pages",
+            "note": "",
+            "passed": true,
+            "title": "birthdays and data pages open",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 2830,
+            "name": "alert-volume",
+            "note": "",
+            "passed": true,
+            "title": "volume of alert sounds (iOS: hint to the system setting)",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 5236,
+            "name": "restart-prepare",
+            "note": "",
+            "passed": true,
+            "title": "an unsaved note when Qupil quits",
+            "warnings": [
+            ]
+        }
+    ],
+    "failed": 0,
+    "platform": "Android 13 (13.0)",
+    "qpa": "android",
+    "qt": "6.8.3"
+}
