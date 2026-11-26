@@ -1,0 +1,20 @@
+button      133    32    44    44  Neuer Schüler
+edit         20    92   350    48  Schüler suchen
+button        0   181   390    64  Jonas Becker
+button        0   245   390    64  Alma Berger
+button        0   309   390    64  David Böhm
+button        0   373   390    64  Jakob Braun
+button        0   437   390    64  Thea Braun
+button        0   501   390    64  Merle Busch
+button        0   594   390    64  Erik Frank
+button        0   658   390    27  Andreas Franke
+button        0   722   390    64  Ida Franke  (scrolled out of sight)
+button        0   786   390    64  Mila Friedrich  (scrolled out of sight)
+button        0   850   390    64  Ole Friedrich  (scrolled out of sight)
+button        0   914   390    64  Lina Fuchs  (scrolled out of sight)
+button        0  1007   390    64  Ronja Graf  (scrolled out of sight)
+tab           4   689    76    60  Stundenplan
+tab          80   689    77    60  Schüler
+tab         157   689    76    60  Veranstaltungen
+tab         233   689    77    60  Metronom
+tab         310   689    76    60  Mehr

@@ -1,0 +1,798 @@
+{
+    "cases": [
+        {
+            "failure": "",
+            "ms": 10420,
+            "name": "start",
+            "note": "",
+            "passed": true,
+            "title": "close the reminders shown at the start",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 10211,
+            "name": "pages",
+            "note": "",
+            "passed": true,
+            "title": "every page opens",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 2936,
+            "name": "today",
+            "note": "",
+            "passed": true,
+            "title": "today with the running lesson, switching days",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 4744,
+            "name": "note-save",
+            "note": "",
+            "passed": true,
+            "title": "write and save a note for the running lesson",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 3404,
+            "name": "note-cancel",
+            "note": "",
+            "passed": true,
+            "title": "cancel a note: nothing saved, no draft",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 8426,
+            "name": "note-touch-select",
+            "note": "",
+            "passed": true,
+            "title": "double tap with a finger selects a word, B makes it bold",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 12115,
+            "name": "text-tap",
+            "note": "",
+            "passed": true,
+            "title": "finger: a tap places the cursor; a tap on the cursor shows and hides the menu",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7010,
+            "name": "text-double-tap",
+            "note": "",
+            "passed": true,
+            "title": "finger: a double tap selects the word at the second touch; B and B again",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 5763,
+            "name": "text-triple-tap",
+            "note": "",
+            "passed": true,
+            "title": "finger: a triple tap selects the paragraph (without its end); B, B again",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 13264,
+            "name": "text-long-press",
+            "note": "",
+            "passed": true,
+            "title": "finger: a long press selects the word while the finger is down",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 8140,
+            "name": "text-handles",
+            "note": "",
+            "passed": true,
+            "title": "finger: the handles make the selection longer at either end",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 12895,
+            "name": "text-tap-selection",
+            "note": "",
+            "passed": true,
+            "title": "finger: a tap into the selection hides/shows the menu, outside ends it",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 10808,
+            "name": "text-menu",
+            "note": "",
+            "passed": true,
+            "title": "finger: Kopieren, Einsetzen, Alles auswählen, Ausschneiden",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7580,
+            "name": "text-menu-paste-unasked",
+            "note": "",
+            "passed": true,
+            "title": "finger: Einsetzen is offered without reading the clipboard; empty, it changes nothing",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 8883,
+            "name": "text-menu-narrow",
+            "note": "",
+            "passed": true,
+            "title": "finger: the menu fits the window, wiping the bar shows the rest",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 5904,
+            "name": "text-wipe",
+            "note": "",
+            "passed": true,
+            "title": "finger: wiping over the text scrolls and selects nothing",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9036,
+            "name": "text-field",
+            "note": "",
+            "passed": true,
+            "title": "finger: the same in a one-line field (title of a piece)",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 20119,
+            "name": "text-field-wipe",
+            "note": "",
+            "passed": true,
+            "title": "finger: wiping sideways moves a long text in a one-line field; without focus it shows its start",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6603,
+            "name": "text-mouse",
+            "note": "",
+            "passed": true,
+            "title": "mouse: double click at the start of a paragraph takes the word; B, B again; triple click",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 1296,
+            "name": "dialogs-all",
+            "note": "",
+            "passed": true,
+            "title": "every editor sheet is in the keyboard test",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 1690,
+            "name": "dialogs-prepare",
+            "note": "",
+            "passed": true,
+            "title": "sample data for the editors",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9091,
+            "name": "dialogs-note",
+            "note": "",
+            "passed": true,
+            "title": "NoteEditor (edit) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9033,
+            "name": "dialogs-plan",
+            "note": "",
+            "passed": true,
+            "title": "NoteEditor (editPlan) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9965,
+            "name": "dialogs-tasks",
+            "note": "",
+            "passed": true,
+            "title": "TaskEditor (edit) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7318,
+            "name": "dialogs-plan-finish",
+            "note": "",
+            "passed": true,
+            "title": "PlanFinish (start) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7307,
+            "name": "dialogs-plan-from-note",
+            "note": "",
+            "passed": true,
+            "title": "PlanFinish (startFromNote) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9015,
+            "name": "dialogs-booklet",
+            "note": "",
+            "passed": true,
+            "title": "BookletSheet (show) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 10001,
+            "name": "dialogs-piece",
+            "note": "",
+            "passed": true,
+            "title": "PieceEditor (edit) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9907,
+            "name": "dialogs-student",
+            "note": "",
+            "passed": true,
+            "title": "NewStudent (start) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9917,
+            "name": "dialogs-lesson",
+            "note": "",
+            "passed": true,
+            "title": "LessonEditor (edit) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9033,
+            "name": "dialogs-activity",
+            "note": "",
+            "passed": true,
+            "title": "ActivityEditor (edit) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9082,
+            "name": "dialogs-reminder",
+            "note": "",
+            "passed": true,
+            "title": "ReminderEditor (edit) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9896,
+            "name": "dialogs-event",
+            "note": "",
+            "passed": true,
+            "title": "EventEditor (edit) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9978,
+            "name": "dialogs-external",
+            "note": "",
+            "passed": true,
+            "title": "ExternalEditor (start) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7366,
+            "name": "dialogs-ready-pieces",
+            "note": "",
+            "passed": true,
+            "title": "ReadyPiecesPicker (start) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9952,
+            "name": "dialogs-library",
+            "note": "",
+            "passed": true,
+            "title": "LibraryItemEditor (edit) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7470,
+            "name": "dialogs-pairing",
+            "note": "",
+            "passed": true,
+            "title": "PairingSheet (start) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7303,
+            "name": "dialogs-day-overview",
+            "note": "",
+            "passed": true,
+            "title": "DayOverviewSheet (start) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7336,
+            "name": "dialogs-csv-import",
+            "note": "",
+            "passed": true,
+            "title": "CsvImportSheet (picked) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 2021,
+            "name": "dialogs-cleanup",
+            "note": "",
+            "passed": true,
+            "title": "the editors' sample data goes again",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 15476,
+            "name": "note-menu",
+            "note": "",
+            "passed": true,
+            "title": "a note: a tap only shows a block, the menu has new note, plan, edit, share, delete",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 13141,
+            "name": "tasks-menu",
+            "note": "",
+            "passed": true,
+            "title": "tasks of a coupled student: a tap shows the hints, the menu plans, edits and deletes",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 47309,
+            "name": "idea-demo",
+            "note": "",
+            "passed": true,
+            "title": "The trial of the new idea: a lesson, the history, preparing, pausing; nothing is stored",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9782,
+            "name": "idea-point-wrap",
+            "note": "",
+            "passed": true,
+            "title": "trial: a long point wraps in its field while it is written",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7063,
+            "name": "idea-fold-arrow",
+            "note": "",
+            "passed": true,
+            "title": "trial: the arrow of a task unfolds it in the window of a lesson",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6758,
+            "name": "student-search",
+            "note": "",
+            "passed": true,
+            "title": "search a student, open and close the student page",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 5117,
+            "name": "student-new",
+            "note": "",
+            "passed": true,
+            "title": "add a student",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 4407,
+            "name": "event-open",
+            "note": "",
+            "passed": true,
+            "title": "open an event and go back",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 3088,
+            "name": "metronome",
+            "note": "no sound: Konnte die Soundkarte nicht initialisieren.",
+            "passed": true,
+            "title": "start and stop the metronome",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 4812,
+            "name": "appearance",
+            "note": "",
+            "passed": true,
+            "title": "switch to dark and back to light",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6470,
+            "name": "language",
+            "note": "",
+            "passed": true,
+            "title": "switch the language to English and back",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 4816,
+            "name": "reminders",
+            "note": "",
+            "passed": true,
+            "title": "open the reminders",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7113,
+            "name": "test-mode",
+            "note": "",
+            "passed": true,
+            "title": "switch the test mode on (7 taps on the version) and off",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6152,
+            "name": "plan-save",
+            "note": "",
+            "passed": true,
+            "title": "plan the next lesson of a student",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9271,
+            "name": "plan-finish-lines",
+            "note": "",
+            "passed": true,
+            "title": "what was covered: single lines of a block into the note, the rest planned",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6935,
+            "name": "plan-from-note-lines",
+            "note": "",
+            "passed": true,
+            "title": "plan the next lesson from a note: one line of a block",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6153,
+            "name": "note-share",
+            "note": "",
+            "passed": true,
+            "title": "share a note as a message (homework for a student without the app)",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 10680,
+            "name": "tasks-enter",
+            "note": "",
+            "passed": true,
+            "title": "tasks of a coupled student with the keyboard: title, hints, next task",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 22950,
+            "name": "tasks-long-texts",
+            "note": "",
+            "passed": true,
+            "title": "tasks: a long hint wraps in its field, a long title is wiped sideways and shows its start",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6168,
+            "name": "card-long-texts",
+            "note": "",
+            "passed": true,
+            "title": "student page: a long private note and a long block heading wrap instead of being cut",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7710,
+            "name": "booklet-sheet",
+            "note": "",
+            "passed": true,
+            "title": "practice book sheet: QR code of a coupled student, ending asks first",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 13864,
+            "name": "booklet-questions",
+            "note": "",
+            "passed": true,
+            "title": "practice book: the student's questions on the lesson's card, \"Gelesen\" takes them away; link copied is said",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 10662,
+            "name": "booklet-devices",
+            "note": "",
+            "passed": true,
+            "title": "practice book sheet: how many devices have the booklet, where it was removed, the last feedback",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 8148,
+            "name": "plan-tasks",
+            "note": "",
+            "passed": true,
+            "title": "coupled: plan as tasks, then tasks from it with one block kept private",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 3524,
+            "name": "plan-tasks-edit",
+            "note": "",
+            "passed": true,
+            "title": "coupled: covered blocks into the tasks editor before saving",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 4706,
+            "name": "plan-icon-coming",
+            "note": "",
+            "passed": true,
+            "title": "a plan for next week shows in the schedule of this week, next to a birthday too",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 5941,
+            "name": "piece-new",
+            "note": "",
+            "passed": true,
+            "title": "add a piece for a student",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6411,
+            "name": "date-calendar",
+            "note": "",
+            "passed": true,
+            "title": "the calendar of a date field is on the screen as a whole",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 4746,
+            "name": "lesson-new",
+            "note": "",
+            "passed": true,
+            "title": "add a lesson from the schedule",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 8287,
+            "name": "lesson-times",
+            "note": "",
+            "passed": true,
+            "title": "a lesson of 11 minutes, times typed and saved at once",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 11184,
+            "name": "together",
+            "note": "",
+            "passed": true,
+            "title": "two individual lessons of a student kept together",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7624,
+            "name": "together-new",
+            "note": "",
+            "passed": true,
+            "title": "new lesson for a student who has one: kept together",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 4280,
+            "name": "reminder-new",
+            "note": "",
+            "passed": true,
+            "title": "add a reminder",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 10239,
+            "name": "lesson-plan-for-all",
+            "note": "",
+            "passed": true,
+            "title": "plan for a whole ensemble from the lesson view",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 19711,
+            "name": "lesson-reminder",
+            "note": "",
+            "passed": true,
+            "title": "reminders for one lesson",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7592,
+            "name": "loan-return",
+            "note": "",
+            "passed": true,
+            "title": "return sheet music from the student's page",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 3917,
+            "name": "more-pages",
+            "note": "",
+            "passed": true,
+            "title": "birthdays and data pages open",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 4689,
+            "name": "alert-volume",
+            "note": "",
+            "passed": true,
+            "title": "volume of alert sounds (iOS: hint to the system setting)",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 2722,
+            "name": "restart-prepare",
+            "note": "",
+            "passed": true,
+            "title": "an unsaved note when Qupil quits",
+            "warnings": [
+            ]
+        }
+    ],
+    "failed": 0,
+    "platform": "Windows Server 2022 Version 21H2",
+    "qpa": "windows",
+    "qt": "6.8.3"
+}
