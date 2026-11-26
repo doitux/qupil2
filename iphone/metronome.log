@@ -1,0 +1,78 @@
+objc[60465]: Class LACUISecureTextField is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/LocalAuthenticationCoreUI.framework/LocalAuthenticationCoreUI (0x18bb8d638) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/Frameworks/LocalAuthenticationEmbeddedUI.framework/LocalAuthenticationEmbeddedUI (0x187c42738). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+objc[60465]: Class AKAlertImageURLProvider is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/AuthKit.framework/AuthKit (0x12a020c30) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/AuthKitUI.framework/AuthKitUI (0x18ba79090). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+objc[60465]: Class AKBiometricRatchetUtility is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/AuthKit.framework/AuthKit (0x12a022aa8) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/PrivateFrameworks/AuthKitUI.framework/AuthKitUI (0x18ba79108). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+stale focus object 0x0 , doing manual update
+Device id changed: the old one leaves the device list at the next sync
+ui test: start
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+2026-11-26 03:58:17.843 Qupil[60465:156139] void * _Nullable NSMapGet(NSMapTable * _Nonnull, const void * _Nullable): map table argument is NULL
+objc[60465]: Class UIAccessibilityLoaderWebShared is implemented in both /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebCore.axbundle/WebCore (0x1c44af328) and /Library/Developer/CoreSimulator/Volumes/iOS_23C54/Library/Developer/CoreSimulator/Profiles/Runtimes/iOS 26.2.simruntime/Contents/Resources/RuntimeRoot/System/Library/AccessibilityBundles/WebKit.axbundle/WebKit (0x1c3f50398). This may cause spurious casting failures and mysterious crashes. One of the duplicates must be removed or renamed.
+ui test: start passed
+ui test: metronome-prepare
+stale focus object 0x600003e942e0 , doing manual update
+ui test: metronome-prepare passed
+ui test: 2 of 2 cases passed (/Users/runner/Library/Developer/CoreSimulator/Devices/3AF28461-937F-429D-A836-35990CD2CD3D/data/Containers/Data/Application/40ED34F0-1D43-4427-B892-CA5BB1FA5268/Documents/metronome)
+metronome: beat 1 running 1 session playback
+metronome: beat 3 running 1 session playback
+metronome: beat 4 running 1 session playback
+metronome: beat 5 running 1 session playback
+metronome: beat 7 running 1 session playback
+metronome: beat 8 running 1 session playback
+metronome: beat 9 running 1 session playback
+metronome: beat 11 running 1 session playback
+metronome: beat 12 running 1 session playback
+metronome: beat 13 running 1 session playback
+metronome: beat 15 running 1 session playback
+metronome: beat 16 running 1 session playback
+metronome: beat 17 running 1 session playback
+metronome: beat 19 running 1 session playback
+metronome: beat 20 running 1 session playback
+metronome: beat 21 running 1 session playback
+metronome: beat 22 running 1 session playback
+metronome: beat 24 running 1 session playback
+metronome: beat 25 running 1 session playback
+metronome: beat 26 running 1 session playback
+metronome: beat 28 running 1 session playback
+metronome: beat 29 running 1 session playback
+metronome: beat 30 running 1 session playback
+metronome: beat 32 running 1 session playback
+metronome: beat 33 running 1 session playback
+metronome: beat 34 running 1 session playback
+metronome: beat 35 running 1 session playback
+metronome: beat 36 running 1 session playback
+metronome: beat 37 running 1 session playback
+metronome: beat 39 running 1 session playback
+metronome: beat 40 running 1 session playback
+metronome: beat 41 running 1 session playback
+metronome: beat 43 running 1 session playback
+metronome: beat 44 running 1 session playback
+metronome: beat 45 running 1 session playback
+metronome: beat 47 running 1 session playback
+metronome: beat 48 running 1 session playback
+metronome: beat 49 running 1 session playback
+metronome: beat 51 running 1 session playback
+metronome: beat 52 running 1 session playback
+metronome: beat 53 running 1 session playback
+metronome: beat 55 running 1 session playback
+metronome: beat 56 running 1 session playback
+metronome: beat 57 running 1 session playback
+metronome: beat 59 running 1 session playback
+metronome: beat 59 running 1 session playback
+metronome: beat 61 running 1 session playback
+metronome: beat 62 running 1 session playback
+metronome: beat 63 running 1 session playback
+metronome: beat 65 running 1 session playback
+metronome: beat 66 running 1 session playback
+metronome: beat 67 running 1 session playback
+metronome: beat 69 running 1 session playback
+metronome: beat 70 running 1 session playback
+metronome: beat 71 running 1 session playback
+metronome: beat 73 running 1 session playback
+metronome: beat 74 running 1 session playback
+metronome: beat 75 running 1 session playback
+metronome: beat 77 running 1 session playback
+metronome: beat 78 running 1 session playback
+de.qupil.app: 60465

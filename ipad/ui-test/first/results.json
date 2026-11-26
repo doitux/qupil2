@@ -1,0 +1,658 @@
+{
+    "cases": [
+        {
+            "failure": "",
+            "ms": 10941,
+            "name": "start",
+            "note": "",
+            "passed": true,
+            "title": "close the reminders shown at the start",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 10351,
+            "name": "pages",
+            "note": "",
+            "passed": true,
+            "title": "every page opens",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 3414,
+            "name": "today",
+            "note": "",
+            "passed": true,
+            "title": "today with the running lesson, switching days",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7760,
+            "name": "note-save",
+            "note": "",
+            "passed": true,
+            "title": "write and save a note for the running lesson",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6388,
+            "name": "note-cancel",
+            "note": "",
+            "passed": true,
+            "title": "cancel a note: nothing saved, no draft",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 16707,
+            "name": "keyboard-smooth",
+            "note": "No on-screen keyboard came: not measured. ",
+            "passed": true,
+            "title": "the keyboard comes in an open editor: the editor makes room smoothly",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 1289,
+            "name": "dialogs-all",
+            "note": "",
+            "passed": true,
+            "title": "every editor sheet is in the keyboard test",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 2071,
+            "name": "dialogs-prepare",
+            "note": "",
+            "passed": true,
+            "title": "sample data for the editors",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 8507,
+            "name": "dialogs-note",
+            "note": "",
+            "passed": true,
+            "title": "NoteEditor (edit) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 8558,
+            "name": "dialogs-plan",
+            "note": "",
+            "passed": true,
+            "title": "NoteEditor (editPlan) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9321,
+            "name": "dialogs-tasks",
+            "note": "",
+            "passed": true,
+            "title": "TaskEditor (edit) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7257,
+            "name": "dialogs-plan-finish",
+            "note": "",
+            "passed": true,
+            "title": "PlanFinish (start) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6806,
+            "name": "dialogs-plan-from-note",
+            "note": "",
+            "passed": true,
+            "title": "PlanFinish (startFromNote) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 8731,
+            "name": "dialogs-booklet",
+            "note": "",
+            "passed": true,
+            "title": "BookletSheet (show) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9661,
+            "name": "dialogs-piece",
+            "note": "",
+            "passed": true,
+            "title": "PieceEditor (edit) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9526,
+            "name": "dialogs-student",
+            "note": "",
+            "passed": true,
+            "title": "NewStudent (start) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9316,
+            "name": "dialogs-lesson",
+            "note": "",
+            "passed": true,
+            "title": "LessonEditor (edit) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 8223,
+            "name": "dialogs-activity",
+            "note": "",
+            "passed": true,
+            "title": "ActivityEditor (edit) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 8213,
+            "name": "dialogs-reminder",
+            "note": "",
+            "passed": true,
+            "title": "ReminderEditor (edit) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9502,
+            "name": "dialogs-event",
+            "note": "",
+            "passed": true,
+            "title": "EventEditor (edit) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9424,
+            "name": "dialogs-external",
+            "note": "",
+            "passed": true,
+            "title": "ExternalEditor (start) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7362,
+            "name": "dialogs-ready-pieces",
+            "note": "",
+            "passed": true,
+            "title": "ReadyPiecesPicker (start) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 9286,
+            "name": "dialogs-library",
+            "note": "",
+            "passed": true,
+            "title": "LibraryItemEditor (edit) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7145,
+            "name": "dialogs-pairing",
+            "note": "",
+            "passed": true,
+            "title": "PairingSheet (start) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6753,
+            "name": "dialogs-day-overview",
+            "note": "",
+            "passed": true,
+            "title": "DayOverviewSheet (start) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6833,
+            "name": "dialogs-csv-import",
+            "note": "",
+            "passed": true,
+            "title": "CsvImportSheet (picked) with the keyboard: Save and the cursor stay in view, no jumping",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 1898,
+            "name": "dialogs-cleanup",
+            "note": "",
+            "passed": true,
+            "title": "the editors' sample data goes again",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 21517,
+            "name": "note-menu",
+            "note": "2 taps needed for \"^Lena\\ Muster$\". ",
+            "passed": true,
+            "title": "a note: a tap only shows a block, the menu has new note, plan, edit, share, delete",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 19062,
+            "name": "tasks-menu",
+            "note": "2 taps needed for \"^Lena\\ Muster$\". ",
+            "passed": true,
+            "title": "tasks of a coupled student: a tap shows the hints, the menu plans, edits and deletes",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 68323,
+            "name": "idea-demo",
+            "note": "",
+            "passed": true,
+            "title": "The trial of the new idea: a lesson, the history, preparing, pausing; nothing is stored",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 11693,
+            "name": "idea-point-wrap",
+            "note": "",
+            "passed": true,
+            "title": "trial: a long point wraps in its field while it is written",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 5384,
+            "name": "idea-fold-arrow",
+            "note": "",
+            "passed": true,
+            "title": "trial: the arrow of a task unfolds it in the window of a lesson",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 10027,
+            "name": "student-search",
+            "note": "2 taps needed for \"^Lena Muster$\". ",
+            "passed": true,
+            "title": "search a student, open and close the student page",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 10642,
+            "name": "student-new",
+            "note": "",
+            "passed": true,
+            "title": "add a student",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 3000,
+            "name": "event-open",
+            "note": "",
+            "passed": true,
+            "title": "open an event and go back",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 10723,
+            "name": "metronome",
+            "note": "",
+            "passed": true,
+            "title": "start and stop the metronome",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 4451,
+            "name": "appearance",
+            "note": "",
+            "passed": true,
+            "title": "switch to dark and back to light",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 6409,
+            "name": "language",
+            "note": "",
+            "passed": true,
+            "title": "switch the language to English and back",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 3447,
+            "name": "reminders",
+            "note": "",
+            "passed": true,
+            "title": "open the reminders",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 14814,
+            "name": "test-mode",
+            "note": "",
+            "passed": true,
+            "title": "switch the test mode on (7 taps on the version) and off",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 16078,
+            "name": "plan-save",
+            "note": "2 taps needed for \"^Lena\\ Muster$\". ",
+            "passed": true,
+            "title": "plan the next lesson of a student",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 14772,
+            "name": "plan-finish-lines",
+            "note": "2 taps needed for \"^Lena\\ Muster$\". ",
+            "passed": true,
+            "title": "what was covered: single lines of a block into the note, the rest planned",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 11931,
+            "name": "plan-from-note-lines",
+            "note": "2 taps needed for \"^Lena\\ Muster$\". ",
+            "passed": true,
+            "title": "plan the next lesson from a note: one line of a block",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 12070,
+            "name": "note-share",
+            "note": "2 taps needed for \"^Lena\\ Muster$\". ",
+            "passed": true,
+            "title": "share a note as a message (homework for a student without the app)",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 28558,
+            "name": "tasks-enter",
+            "note": "2 taps needed for \"^Lena\\ Muster$\". ",
+            "passed": true,
+            "title": "tasks of a coupled student with the keyboard: title, hints, next task",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 32221,
+            "name": "tasks-long-texts",
+            "note": "",
+            "passed": true,
+            "title": "tasks: a long hint wraps in its field, a long title is wiped sideways and shows its start",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 11544,
+            "name": "card-long-texts",
+            "note": "2 taps needed for \"^Lena\\ Muster$\". ",
+            "passed": true,
+            "title": "student page: a long private note and a long block heading wrap instead of being cut",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7491,
+            "name": "booklet-sheet",
+            "note": "",
+            "passed": true,
+            "title": "practice book sheet: QR code of a coupled student, ending asks first",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 19634,
+            "name": "booklet-questions",
+            "note": "2 taps needed for \"^Lena\\ Muster$\". ",
+            "passed": true,
+            "title": "practice book: the student's questions on the lesson's card, \"Gelesen\" takes them away; link copied is said",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 10508,
+            "name": "booklet-devices",
+            "note": "",
+            "passed": true,
+            "title": "practice book sheet: how many devices have the booklet, where it was removed, the last feedback",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 11546,
+            "name": "plan-tasks",
+            "note": "",
+            "passed": true,
+            "title": "coupled: plan as tasks, then tasks from it with one block kept private",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 4224,
+            "name": "plan-tasks-edit",
+            "note": "",
+            "passed": true,
+            "title": "coupled: covered blocks into the tasks editor before saving",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 5293,
+            "name": "plan-icon-coming",
+            "note": "",
+            "passed": true,
+            "title": "a plan for next week shows in the schedule of this week, next to a birthday too",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 18075,
+            "name": "piece-new",
+            "note": "2 taps needed for \"^Lena\\ Muster$\". ",
+            "passed": true,
+            "title": "add a piece for a student",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 5075,
+            "name": "lesson-new",
+            "note": "",
+            "passed": true,
+            "title": "add a lesson from the schedule",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 8193,
+            "name": "lesson-times",
+            "note": "",
+            "passed": true,
+            "title": "a lesson of 11 minutes, times typed and saved at once",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 16975,
+            "name": "together",
+            "note": "2 taps needed for \"^Lena\\ Muster$\". ",
+            "passed": true,
+            "title": "two individual lessons of a student kept together",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 14201,
+            "name": "together-new",
+            "note": "2 taps needed for \"combobox:^Wochentag$\". 2 taps needed for \"^Muster, Lena\". ",
+            "passed": true,
+            "title": "new lesson for a student who has one: kept together",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 7748,
+            "name": "reminder-new",
+            "note": "",
+            "passed": true,
+            "title": "add a reminder",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 12560,
+            "name": "lesson-plan-for-all",
+            "note": "",
+            "passed": true,
+            "title": "plan for a whole ensemble from the lesson view",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 35799,
+            "name": "lesson-reminder",
+            "note": "2 taps needed for \"^Unterricht$\". 2 taps needed for \"^Streicherensemble · Di 17:00$\". 2 taps needed for \"^Lena\\ Muster$\". ",
+            "passed": true,
+            "title": "reminders for one lesson",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 12136,
+            "name": "loan-return",
+            "note": "2 taps needed for \"^Lena\\ Muster$\". ",
+            "passed": true,
+            "title": "return sheet music from the student's page",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 2813,
+            "name": "more-pages",
+            "note": "",
+            "passed": true,
+            "title": "birthdays and data pages open",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 3252,
+            "name": "alert-volume",
+            "note": "",
+            "passed": true,
+            "title": "volume of alert sounds (iOS: hint to the system setting)",
+            "warnings": [
+            ]
+        },
+        {
+            "failure": "",
+            "ms": 5317,
+            "name": "restart-prepare",
+            "note": "",
+            "passed": true,
+            "title": "an unsaved note when Qupil quits",
+            "warnings": [
+            ]
+        }
+    ],
+    "failed": 0,
+    "platform": "iOS 26.2",
+    "qpa": "ios",
+    "qt": "6.8.3"
+}

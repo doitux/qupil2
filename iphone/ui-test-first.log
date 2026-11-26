@@ -1,0 +1,2022 @@
+stale focus object 0x0 , doing manual update
+ui test: start
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+ui test: start passed
+ui test: pages
+ui test: pages passed
+ui test: today
+stale focus object 0x600002d28020 , doing manual update
+stale focus object 0x6000014f8380 , doing manual update
+ui test: today passed
+ui test: note-save
+stale focus object 0x6000014e5960 , doing manual update
+stale focus object 0x6000014fdc00 , doing manual update
+stale focus object 0x600002ceb700 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142ae60 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+ui test: note-save passed
+ui test: note-cancel
+QTextCursor::setPosition: Position '36' out of range
+QTextCursor::setPosition: Position '36' out of range
+QTextCursor::setPosition: Position '36' out of range
+QTextCursor::setPosition: Position '36' out of range
+stale focus object 0x6000014fdc00 , doing manual update
+stale focus object 0x60000142ae60 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+ui test: note-cancel passed
+ui test: keyboard-smooth
+QTextCursor::setPosition: Position '14' out of range
+QTextCursor::setPosition: Position '14' out of range
+QTextCursor::setPosition: Position '14' out of range
+QTextCursor::setPosition: Position '14' out of range
+stale focus object 0x6000014fdc00 , doing manual update
+keyboard-smooth: keyboard visible 0 rect 0 0 0 0 measured 0
+keyboard-smooth: keyboard visible 0 rect 0 0 0 0 measured 0
+keyboard-smooth: keyboard visible 0 rect 0 0 0 0 measured 0
+keyboard-smooth: keyboard visible 0 rect 0 0 0 0 measured 0
+keyboard-smooth: keyboard visible 0 rect 0 0 0 0 measured 0
+keyboard-smooth: keyboard visible 0 rect 0 0 0 0 measured 0
+stale focus object 0x60000142ae60 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+keyboard-smooth: 31 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 58 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 92 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 103 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 112 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 133 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 144 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 163 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 177 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 193 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 211 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 228 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 246 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 260 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 277 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 295 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 311 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 327 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 349 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 362 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 376 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 394 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 410 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 428 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 443 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 460 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 476 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 493 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 511 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 527 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 542 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 560 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 575 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 593 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 609 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 627 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 646 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 661 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 678 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 696 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 709 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 728 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 743 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 762 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 775 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 794 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 811 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 827 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 849 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 870 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 879 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 894 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 912 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 928 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 944 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 960 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 976 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 995 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1012 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1028 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1047 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1064 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1081 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1094 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1114 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1132 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1144 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1161 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1179 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1194 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1210 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1226 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1245 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1264 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1276 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1294 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1309 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1329 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1345 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1361 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1376 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1392 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1409 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1426 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1444 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1460 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1477 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1494 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1511 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1529 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1543 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1559 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1577 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1595 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1610 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1629 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1644 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1660 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1676 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1696 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1709 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1730 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1743 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1761 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1775 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1794 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1811 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1826 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1844 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1860 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1877 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1894 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1910 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1926 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1945 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1961 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1979 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 1998 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2011 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2026 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2043 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2062 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2076 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2093 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2110 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2126 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2142 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2159 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2179 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2194 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2211 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2226 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2246 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2260 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2276 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2294 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2311 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2326 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2342 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2361 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2376 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2394 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2409 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2428 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2444 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2461 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2476 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2494 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2511 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2527 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2544 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2563 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2576 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2592 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2609 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2626 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2645 ms top 24.0 bottom 759.0 view 0.0
+keyboard-smooth: 2661 ms top 24.0 bottom 759.0 view 0.0
+stale focus object 0x60000142ae60 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+ui test: keyboard-smooth passed
+ui test: dialogs-all
+dialogs-all: sheets ActivityEditor, BookletSheet, CsvImportSheet, DayOverviewSheet, EventEditor, ExternalEditor, LessonEditor, LibraryItemEditor, NewStudent, NoteEditor, PairingSheet, PieceEditor, PlanFinish, ReadyPiecesPicker, ReminderEditor, TaskEditor; missing 
+ui test: dialogs-all passed
+ui test: dialogs-prepare
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+ui test: dialogs-prepare passed
+ui test: dialogs-note
+stale focus object 0x6000014fdc00 , doing manual update
+stale focus object 0x600002c21f60 , doing manual update
+stale focus object 0x600001415260 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+ui test: dialogs-note passed
+ui test: dialogs-plan
+stale focus object 0x6000014fdc00 , doing manual update
+stale focus object 0x600002d6b000 , doing manual update
+stale focus object 0x60000141ce00 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+ui test: dialogs-plan passed
+ui test: dialogs-tasks
+stale focus object 0x6000014fdc00 , doing manual update
+stale focus object 0x600002d07800 , doing manual update
+stale focus object 0x6000013b89a0 , doing manual update
+stale focus object 0x600001454540 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+ui test: dialogs-tasks passed
+ui test: dialogs-plan-finish
+stale focus object 0x6000014fdc00 , doing manual update
+stale focus object 0x600002c0b420 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+ui test: dialogs-plan-finish passed
+ui test: dialogs-plan-from-note
+stale focus object 0x6000014fdc00 , doing manual update
+stale focus object 0x600002c02a80 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+ui test: dialogs-plan-from-note passed
+ui test: dialogs-booklet
+stale focus object 0x6000014fdc00 , doing manual update
+stale focus object 0x600002c7c720 , doing manual update
+stale focus object 0x6000013aa760 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+ui test: dialogs-booklet passed
+ui test: dialogs-piece
+stale focus object 0x6000014fdc00 , doing manual update
+stale focus object 0x600002c7ae40 , doing manual update
+stale focus object 0x6000013a78e0 , doing manual update
+stale focus object 0x6000013f6760 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+ui test: dialogs-piece passed
+ui test: dialogs-student
+stale focus object 0x6000014fdc00 , doing manual update
+stale focus object 0x600002c30080 , doing manual update
+stale focus object 0x600001382760 , doing manual update
+stale focus object 0x60000139f3a0 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+ui test: dialogs-student passed
+ui test: dialogs-lesson
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x6000014fdc00 , doing manual update
+stale focus object 0x600002c58600 , doing manual update
+stale focus object 0x6000013e79c0 , doing manual update
+stale focus object 0x6000013d6920 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+ui test: dialogs-lesson passed
+ui test: dialogs-activity
+stale focus object 0x6000014fdc00 , doing manual update
+stale focus object 0x600002c5dd80 , doing manual update
+stale focus object 0x6000013cca80 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+ui test: dialogs-activity passed
+ui test: dialogs-reminder
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x6000014fdc00 , doing manual update
+stale focus object 0x600002bb7260 , doing manual update
+stale focus object 0x60000132e840 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+ui test: dialogs-reminder passed
+ui test: dialogs-event
+stale focus object 0x6000014fdc00 , doing manual update
+stale focus object 0x600002b9ab20 , doing manual update
+stale focus object 0x60000131c460 , doing manual update
+stale focus object 0x6000013101c0 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+ui test: dialogs-event passed
+ui test: dialogs-external
+stale focus object 0x6000014fdc00 , doing manual update
+stale focus object 0x600002bfc980 , doing manual update
+stale focus object 0x60000130a140 , doing manual update
+stale focus object 0x60000137f640 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+ui test: dialogs-external passed
+ui test: dialogs-ready-pieces
+stale focus object 0x6000014fdc00 , doing manual update
+stale focus object 0x600002c4a600 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+ui test: dialogs-ready-pieces passed
+ui test: dialogs-library
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x6000014fdc00 , doing manual update
+stale focus object 0x600002c7a900 , doing manual update
+stale focus object 0x60000130d6c0 , doing manual update
+stale focus object 0x60000135ff00 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+ui test: dialogs-library passed
+ui test: dialogs-pairing
+stale focus object 0x6000014fdc00 , doing manual update
+stale focus object 0x600002bd8120 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+ui test: dialogs-pairing passed
+ui test: dialogs-day-overview
+stale focus object 0x6000014fdc00 , doing manual update
+stale focus object 0x600002bd1220 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+ui test: dialogs-day-overview passed
+ui test: dialogs-csv-import
+stale focus object 0x6000014fdc00 , doing manual update
+stale focus object 0x600002bd4b40 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+ui test: dialogs-csv-import passed
+ui test: dialogs-cleanup
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+ui test: dialogs-cleanup passed
+ui test: note-menu
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x6000014fdc00 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142ca80 , doing manual update
+stale focus object 0x6000054a7720 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x6000054a7720 , doing manual update
+stale focus object 0x6000054a01c0 , doing manual update
+stale focus object 0x60000549baa0 , doing manual update
+stale focus object 0x600005494a80 , doing manual update
+stale focus object 0x600002b85400 , doing manual update
+stale focus object 0x60000549baa0 , doing manual update
+stale focus object 0x600002b85400 , doing manual update
+stale focus object 0x60000549baa0 , doing manual update
+stale focus object 0x60000548c0e0 , doing manual update
+stale focus object 0x600002b85400 , doing manual update
+stale focus object 0x6000054a82a0 , doing manual update
+stale focus object 0x60000142ae60 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x60000548c0e0 , doing manual update
+stale focus object 0x6000054a8540 , doing manual update
+stale focus object 0x6000054abaa0 , doing manual update
+stale focus object 0x60000142ae60 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x60000548c0e0 , doing manual update
+stale focus object 0x6000054a8540 , doing manual update
+stale focus object 0x6000054abc60 , doing manual update
+stale focus object 0x600002bf3e20 , doing manual update
+stale focus object 0x6000054a8000 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000548c0e0 , doing manual update
+ui test: note-menu passed
+ui test: tasks-menu
+stale focus object 0x6000054a63e0 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142c380 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142ca80 , doing manual update
+stale focus object 0x6000054f6e60 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x6000054f6e60 , doing manual update
+stale focus object 0x6000054f4a80 , doing manual update
+stale focus object 0x600005494460 , doing manual update
+stale focus object 0x600002ba5e80 , doing manual update
+stale focus object 0x600005483560 , doing manual update
+stale focus object 0x600002b29ba0 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x6000054f87e0 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x600005494460 , doing manual update
+stale focus object 0x600005483aa0 , doing manual update
+stale focus object 0x600005490700 , doing manual update
+stale focus object 0x600002abe640 , doing manual update
+stale focus object 0x6000054ddf80 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x600005494460 , doing manual update
+stale focus object 0x600005483aa0 , doing manual update
+stale focus object 0x6000054908c0 , doing manual update
+stale focus object 0x600002bab4a0 , doing manual update
+stale focus object 0x6000054910a0 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x600005494460 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x6000054fee60 , doing manual update
+stale focus object 0x6000054f4e00 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+ui test: tasks-menu passed
+ui test: idea-demo
+stale focus object 0x60000142c380 , doing manual update
+stale focus object 0x6000014dd7a0 , doing manual update
+stale focus object 0x6000054e4c40 , doing manual update
+stale focus object 0x6000054e5260 , doing manual update
+stale focus object 0x6000054e40e0 , doing manual update
+stale focus object 0x6000054cd960 , doing manual update
+stale focus object 0x6000054cdc00 , doing manual update
+stale focus object 0x6000054d9b20 , doing manual update
+stale focus object 0x600002b838a0 , doing manual update
+stale focus object 0x60000542baa0 , doing manual update
+stale focus object 0x600005480380 , doing manual update
+stale focus object 0x60000539f9c0 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x6000054d9b20 , doing manual update
+stale focus object 0x600002b38a20 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x6000054d9b20 , doing manual update
+stale focus object 0x600005319ce0 , doing manual update
+stale focus object 0x600002bebb00 , doing manual update
+stale focus object 0x60000549b560 , doing manual update
+stale focus object 0x6000054bf560 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x6000014dd420 , doing manual update
+stale focus object 0x6000054daf40 , doing manual update
+stale focus object 0x60000549fe20 , doing manual update
+stale focus object 0x60000531c9a0 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x6000054daf40 , doing manual update
+stale focus object 0x6000054d9b20 , doing manual update
+stale focus object 0x600002b838a0 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x6000054d9b20 , doing manual update
+stale focus object 0x6000054db1e0 , doing manual update
+stale focus object 0x600002b34760 , doing manual update
+stale focus object 0x6000094e32c0 , doing manual update
+stale focus object 0x600002b34760 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x6000054db1e0 , doing manual update
+stale focus object 0x6000054cda40 , doing manual update
+stale focus object 0x6000054e40e0 , doing manual update
+stale focus object 0x6000054f5180 , doing manual update
+stale focus object 0x6000054ce5a0 , doing manual update
+stale focus object 0x600009494460 , doing manual update
+stale focus object 0x6000094973a0 , doing manual update
+stale focus object 0x600002af5da0 , doing manual update
+stale focus object 0x6000094d7560 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x6000094973a0 , doing manual update
+stale focus object 0x600009496e60 , doing manual update
+stale focus object 0x6000094a17a0 , doing manual update
+stale focus object 0x600009482680 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x600009496e60 , doing manual update
+stale focus object 0x6000094973a0 , doing manual update
+stale focus object 0x6000094a17a0 , doing manual update
+stale focus object 0x6000094db8e0 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x6000094973a0 , doing manual update
+stale focus object 0x600009494700 , doing manual update
+stale focus object 0x6000054e40e0 , doing manual update
+stale focus object 0x6000054e4e00 , doing manual update
+ui test: idea-demo passed
+ui test: idea-point-wrap
+stale focus object 0x6000054e4c40 , doing manual update
+stale focus object 0x6000014dd5e0 , doing manual update
+stale focus object 0x6000014dd7a0 , doing manual update
+stale focus object 0x6000094841c0 , doing manual update
+stale focus object 0x600009486bc0 , doing manual update
+stale focus object 0x600009487100 , doing manual update
+stale focus object 0x6000094807e0 , doing manual update
+stale focus object 0x6000094889a0 , doing manual update
+stale focus object 0x6000094f7640 , doing manual update
+stale focus object 0x600002b2cb60 , doing manual update
+stale focus object 0x6000094a3720 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x6000094f7640 , doing manual update
+stale focus object 0x600009489880 , doing manual update
+stale focus object 0x600009487100 , doing manual update
+stale focus object 0x600009486e60 , doing manual update
+ui test: idea-point-wrap passed
+ui test: idea-fold-arrow
+stale focus object 0x6000094841c0 , doing manual update
+stale focus object 0x6000014dd5e0 , doing manual update
+stale focus object 0x6000014dd7a0 , doing manual update
+stale focus object 0x60000947c1c0 , doing manual update
+stale focus object 0x60000947ebc0 , doing manual update
+stale focus object 0x600009403b80 , doing manual update
+stale focus object 0x600009405c00 , doing manual update
+stale focus object 0x6000093b81c0 , doing manual update
+stale focus object 0x6000093babc0 , doing manual update
+stale focus object 0x600002ac4fc0 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x6000093babc0 , doing manual update
+stale focus object 0x6000093b8460 , doing manual update
+stale focus object 0x600009403b80 , doing manual update
+stale focus object 0x6000094039c0 , doing manual update
+ui test: idea-fold-arrow passed
+ui test: student-search
+stale focus object 0x60000947c1c0 , doing manual update
+stale focus object 0x6000014dd5e0 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142ca80 , doing manual update
+stale focus object 0x6000094588c0 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x6000094588c0 , doing manual update
+stale focus object 0x6000094541c0 , doing manual update
+stale focus object 0x60000945a760 , doing manual update
+ui test: student-search passed
+ui test: student-new
+stale focus object 0x60000142c380 , doing manual update
+stale focus object 0x60000142c620 , doing manual update
+stale focus object 0x600002a957a0 , doing manual update
+stale focus object 0x600009472060 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x6000094032c0 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+ui test: student-new passed
+ui test: event-open
+stale focus object 0x60000940e5a0 , doing manual update
+stale focus object 0x60000142c380 , doing manual update
+stale focus object 0x6000014309a0 , doing manual update
+stale focus object 0x600009499420 , doing manual update
+stale focus object 0x6000094990a0 , doing manual update
+ui test: event-open passed
+ui test: metronome
+stale focus object 0x60000143bc60 , doing manual update
+ui test: metronome passed
+ui test: appearance
+stale focus object 0x6000014e3800 , doing manual update
+stale focus object 0x6000014dd7a0 , doing manual update
+stale focus object 0x6000094d8a80 , doing manual update
+stale focus object 0x6000094ddf80 , doing manual update
+stale focus object 0x6000094d9260 , doing manual update
+stale focus object 0x6000094f2920 , doing manual update
+ui test: appearance passed
+ui test: language
+stale focus object 0x6000094f25a0 , doing manual update
+stale focus object 0x6000094d8a80 , doing manual update
+stale focus object 0x6000014dd5e0 , doing manual update
+stale focus object 0x6000014dd7a0 , doing manual update
+stale focus object 0x6000094833a0 , doing manual update
+stale focus object 0x600009481b20 , doing manual update
+stale focus object 0x6000094ecd20 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+ui test: language passed
+ui test: reminders
+stale focus object 0x6000094eea00 , doing manual update
+stale focus object 0x6000094833a0 , doing manual update
+stale focus object 0x6000014dd5e0 , doing manual update
+stale focus object 0x6000014df800 , doing manual update
+stale focus object 0x6000094abf00 , doing manual update
+stale focus object 0x6000094ab800 , doing manual update
+ui test: reminders passed
+ui test: test-mode
+stale focus object 0x6000014dd5e0 , doing manual update
+stale focus object 0x6000014dd7a0 , doing manual update
+stale focus object 0x60000949a4c0 , doing manual update
+stale focus object 0x600009499f80 , doing manual update
+stale focus object 0x600009498ee0 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+ui test: test-mode passed
+ui test: plan-save
+stale focus object 0x600009498c40 , doing manual update
+stale focus object 0x60000949a4c0 , doing manual update
+stale focus object 0x6000014dd5e0 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142ca80 , doing manual update
+stale focus object 0x600009482760 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x600009482760 , doing manual update
+stale focus object 0x6000094d9960 , doing manual update
+stale focus object 0x6000094f9500 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142ae60 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+ui test: plan-save passed
+ui test: plan-finish-lines
+stale focus object 0x6000094f9500 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142c380 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142ca80 , doing manual update
+stale focus object 0x60000949dea0 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x60000949dea0 , doing manual update
+stale focus object 0x600009499f80 , doing manual update
+stale focus object 0x600002b29ba0 , doing manual update
+stale focus object 0x6000094e2a00 , doing manual update
+stale focus object 0x6000094e3f00 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x6000094e2a00 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x600009499f80 , doing manual update
+stale focus object 0x6000094980e0 , doing manual update
+ui test: plan-finish-lines passed
+ui test: plan-from-note-lines
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142c380 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142ca80 , doing manual update
+stale focus object 0x600009490b60 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x600009490b60 , doing manual update
+stale focus object 0x6000094381c0 , doing manual update
+stale focus object 0x600002b29ba0 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x600009494ee0 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x6000094381c0 , doing manual update
+stale focus object 0x600009438620 , doing manual update
+ui test: plan-from-note-lines passed
+ui test: note-share
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142c380 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142ca80 , doing manual update
+stale focus object 0x6000094aa760 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x6000094aa760 , doing manual update
+stale focus object 0x6000094a8380 , doing manual update
+stale focus object 0x600002c86a00 , doing manual update
+stale focus object 0x60000949a680 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x6000094a8380 , doing manual update
+stale focus object 0x6000094a9960 , doing manual update
+ui test: note-share passed
+ui test: tasks-enter
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142c380 , doing manual update
+stale focus object 0x6000014fdc00 , doing manual update
+stale focus object 0x600002abe640 , doing manual update
+stale focus object 0x6000094da680 , doing manual update
+stale focus object 0x6000094db020 , doing manual update
+stale focus object 0x6000094d7560 , doing manual update
+stale focus object 0x6000094db560 , doing manual update
+stale focus object 0x600002abe640 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x6000094eb800 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x6000014fdc00 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142ca80 , doing manual update
+stale focus object 0x6000094e2e60 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x6000094e2e60 , doing manual update
+stale focus object 0x600009498000 , doing manual update
+stale focus object 0x6000094987e0 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+ui test: tasks-enter passed
+ui test: tasks-long-texts
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142c380 , doing manual update
+stale focus object 0x6000014fdc00 , doing manual update
+stale focus object 0x600002abe640 , doing manual update
+stale focus object 0x6000094fcb60 , doing manual update
+stale focus object 0x6000094eebc0 , doing manual update
+stale focus object 0x6000094edea0 , doing manual update
+stale focus object 0x6000094fcb60 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x6000094edea0 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+ui test: tasks-long-texts passed
+ui test: card-long-texts
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x6000014fdc00 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142ca80 , doing manual update
+stale focus object 0x60000949c9a0 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x60000949c9a0 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x6000094801c0 , doing manual update
+stale focus object 0x600009480460 , doing manual update
+ui test: card-long-texts passed
+ui test: booklet-sheet
+stale focus object 0x60000142c380 , doing manual update
+stale focus object 0x600002a12140 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142c380 , doing manual update
+stale focus object 0x600002a12140 , doing manual update
+stale focus object 0x6000094d4ee0 , doing manual update
+stale focus object 0x6000094d6680 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x6000094d4ee0 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+ui test: booklet-sheet passed
+ui test: booklet-questions
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142c380 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142ca80 , doing manual update
+stale focus object 0x6000094b63e0 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x6000094b63e0 , doing manual update
+stale focus object 0x6000094b8ee0 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x6000094bf9c0 , doing manual update
+stale focus object 0x6000094b4c40 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x6000094ed960 , doing manual update
+stale focus object 0x6000094b4c40 , doing manual update
+stale focus object 0x6000094d4ee0 , doing manual update
+stale focus object 0x60000941cd20 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+ui test: booklet-questions passed
+ui test: booklet-devices
+stale focus object 0x6000094b4c40 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142c380 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000941cd20 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+ui test: booklet-devices passed
+ui test: plan-tasks
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142c380 , doing manual update
+stale focus object 0x600002abe640 , doing manual update
+stale focus object 0x60000949e3e0 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x6000094cf720 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x60000142c380 , doing manual update
+stale focus object 0x600002b29ba0 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x6000094bc000 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+ui test: plan-tasks passed
+ui test: plan-tasks-edit
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142c380 , doing manual update
+stale focus object 0x600002b29ba0 , doing manual update
+stale focus object 0x600005497aa0 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x600002abe640 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x6000094ac620 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+ui test: plan-tasks-edit passed
+ui test: plan-icon-coming
+plan-icon-coming: 01a215f1-d150-75af-841d-4a6cab79dfe8, birthday 0
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+ui test: plan-icon-coming passed
+ui test: piece-new
+stale focus object 0x60000142c380 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142ca80 , doing manual update
+stale focus object 0x6000094a3e20 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x6000094a3e20 , doing manual update
+stale focus object 0x6000094fdf80 , doing manual update
+stale focus object 0x6000094e2ae0 , doing manual update
+stale focus object 0x600009488d20 , doing manual update
+stale focus object 0x600002b61920 , doing manual update
+stale focus object 0x6000094f2bc0 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x6000094dddc0 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+ui test: piece-new passed
+ui test: lesson-new
+stale focus object 0x600009488d20 , doing manual update
+stale focus object 0x60000142c380 , doing manual update
+stale focus object 0x60000149b560 , doing manual update
+stale focus object 0x600002d02480 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000149bb80 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x600002b0e420 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+ui test: lesson-new passed
+ui test: lesson-times
+stale focus object 0x60000149b560 , doing manual update
+stale focus object 0x600001485260 , doing manual update
+stale focus object 0x60000149bb80 , doing manual update
+stale focus object 0x600002b0e420 , doing manual update
+stale focus object 0x60000944ee60 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000944f100 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+ui test: lesson-times passed
+ui test: together
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000149b560 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142ca80 , doing manual update
+stale focus object 0x6000094e9f80 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x6000094e9f80 , doing manual update
+stale focus object 0x60000948a920 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000948ce00 , doing manual update
+stale focus object 0x60000948aa00 , doing manual update
+stale focus object 0x600002ab8d20 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000948f480 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+ui test: together passed
+ui test: together-new
+stale focus object 0x60000948aa00 , doing manual update
+stale focus object 0x60000142c380 , doing manual update
+stale focus object 0x60000149b560 , doing manual update
+stale focus object 0x600001485260 , doing manual update
+stale focus object 0x60000149bb80 , doing manual update
+stale focus object 0x60000944f100 , doing manual update
+stale focus object 0x60000944ebc0 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x60000944ebc0 , doing manual update
+stale focus object 0x600009478a80 , doing manual update
+stale focus object 0x600002b175c0 , doing manual update
+stale focus object 0x60000947bf00 , doing manual update
+stale focus object 0x6000094eae60 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x6000094eae60 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x600009478a80 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+ui test: together-new passed
+ui test: reminder-new
+stale focus object 0x60000149b560 , doing manual update
+stale focus object 0x6000014df800 , doing manual update
+stale focus object 0x6000094533a0 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x600009453b80 , doing manual update
+stale focus object 0x600002b05a40 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000948a3e0 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+ui test: reminder-new passed
+ui test: lesson-plan-for-all
+stale focus object 0x600009453b80 , doing manual update
+stale focus object 0x6000014dd5e0 , doing manual update
+stale focus object 0x60000949ff00 , doing manual update
+stale focus object 0x600009426060 , doing manual update
+QTextCursor::setPosition: Position '37' out of range
+QTextCursor::setPosition: Position '37' out of range
+QTextCursor::setPosition: Position '37' out of range
+QTextCursor::setPosition: Position '37' out of range
+stale focus object 0x600009424380 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142ae60 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+ui test: lesson-plan-for-all passed
+ui test: lesson-reminder
+stale focus object 0x600009424380 , doing manual update
+stale focus object 0x60000149b100 , doing manual update
+stale focus object 0x60000949ff00 , doing manual update
+stale focus object 0x6000094be220 , doing manual update
+QTextCursor::setPosition: Position '18' out of range
+QTextCursor::setPosition: Position '18' out of range
+QTextCursor::setPosition: Position '18' out of range
+QTextCursor::setPosition: Position '18' out of range
+stale focus object 0x6000094bfe20 , doing manual update
+stale focus object 0x60000948a3e0 , doing manual update
+stale focus object 0x6000094ea3e0 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x6000094ea3e0 , doing manual update
+stale focus object 0x600002b286a0 , doing manual update
+stale focus object 0x6000094b1260 , doing manual update
+stale focus object 0x6000094f5b20 , doing manual update
+stale focus object 0x600009456f40 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x600009456f40 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x6000094ea3e0 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x6000094bfe20 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142ca80 , doing manual update
+stale focus object 0x60000949ce00 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x60000949ce00 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+ui test: lesson-reminder passed
+ui test: loan-return
+stale focus object 0x600009482ca0 , doing manual update
+stale focus object 0x60000142c380 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x60000142ca80 , doing manual update
+stale focus object 0x6000094a4b60 , doing manual update
+stale focus object 0x600002de7280 , doing manual update
+stale focus object 0x6000094a4b60 , doing manual update
+stale focus object 0x6000094a5420 , doing manual update
+stale focus object 0x6000094c5a40 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+stale focus object 0x600009493e20 , doing manual update
+stale focus object 0x6000094b2ae0 , doing manual update
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+Only the C and system collation locales are supported with the POSIX collation implementation
+Case insensitive sorting unsupported in the posix collation implementation
+ui test: loan-return passed
+ui test: more-pages
+stale focus object 0x6000014ba5a0 , doing manual update
+stale focus object 0x6000014df8e0 , doing manual update
+stale focus object 0x600009490620 , doing manual update
+stale focus object 0x600009490e00 , doing manual update
+stale focus object 0x6000014dd5e0 , doing manual update
+stale focus object 0x6000014dd7a0 , doing manual update
+stale focus object 0x6000094a90a0 , doing manual update
+stale focus object 0x600009455960 , doing manual update
+ui test: more-pages passed
+ui test: alert-volume
+stale focus object 0x6000094e5880 , doing manual update
+stale focus object 0x6000094a90a0 , doing manual update
+stale focus object 0x6000014dd5e0 , doing manual update
+stale focus object 0x6000014dd7a0 , doing manual update
+stale focus object 0x6000094b0d20 , doing manual update
+stale focus object 0x6000094b6ae0 , doing manual update
+ui test: alert-volume passed
+ui test: restart-prepare
+stale focus object 0x6000094baca0 , doing manual update
+stale focus object 0x6000094b0d20 , doing manual update
+stale focus object 0x6000014dd5e0 , doing manual update
+QTextCursor::setPosition: Position '32' out of range
+QTextCursor::setPosition: Position '32' out of range
+QTextCursor::setPosition: Position '32' out of range
+QTextCursor::setPosition: Position '32' out of range
+stale focus object 0x6000014fdc00 , doing manual update
+ui test: restart-prepare passed
+ui test: 65 of 65 cases passed (/Users/runner/Library/Developer/CoreSimulator/Devices/3AF28461-937F-429D-A836-35990CD2CD3D/data/Containers/Data/Application/40ED34F0-1D43-4427-B892-CA5BB1FA5268/Documents/ui-test/first)
+Draft note: kept, 230 characters
+de.qupil.app: 17495
