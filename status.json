@@ -86,19 +86,22 @@
     "tools/dev/qt64build.sh",
     "tools/dev/student-test.sh"
   ],
-  "result": "started",
+  "result": "uploaded",
   "build": {
     "number": 62,
     "run_id": 45749204795,
     "sha": "ea506c5378850c0ed3270154ca0732c90a93fa0c",
     "url": "https://github.com/doitux/qupil2/actions/runs/45749204795",
     "created": "2026-11-26T03:29:08Z",
-    "status": "in_progress",
-    "conclusion": null,
-    "attempt": 1
+    "status": "completed",
+    "conclusion": "success",
+    "attempt": 1,
+    "rerun": false,
+    "upload": "success",
+    "whats_new": "success"
   },
-  "written": "2026-11-26T04:29:19+01:00",
-  "headline": "Build 62 gestartet",
+  "written": "2026-11-26T04:41:26+01:00",
+  "headline": "Build 62 hochgeladen",
   "student": {
     "since": "8ea0845df218f43cd26712c70d9a1fd1c8f8553a",
     "since_build": 50,

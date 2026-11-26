@@ -1,8 +1,8 @@
 # TestFlight-Sammellauf 2026-11-25 22:05
 
-**Build 62 gestartet**
+**Build 62 hochgeladen**
 
-- Build 62 (Commit ea506c5): in_progress, Upload: -, Testtext: -
+- Build 62 (Commit ea506c5): success, Upload: success, Testtext: success
 - https://github.com/doitux/qupil2/actions/runs/45749204795
 - Seit Build 61 (Commit 8afbfc1)
 
