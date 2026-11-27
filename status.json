@@ -1,41 +1,9 @@
 {
   "mode": "schedule",
-  "started_at": "2026-11-27T04:35:22+01:00",
-  "slot": "2026-11-26 22:05",
-  "tests": {
-    "android-test.yml": {
-      "name": "Android",
-      "since": "ea506c5",
-      "last": "success",
-      "result": "no_change"
-    },
-    "ui-test.yml": {
-      "name": "Desktop",
-      "since": "ea506c5",
-      "last": "success",
-      "result": "no_change"
-    },
-    "ios-test.yml": {
-      "name": "iOS",
-      "since": "ea506c5",
-      "last": "success",
-      "result": "no_change"
-    }
-  },
-  "since": "ea506c5378850c0ed3270154ca0732c90a93fa0c",
-  "since_build": 62,
-  "main": "ea506c5378850c0ed3270154ca0732c90a93fa0c",
-  "commits": [],
-  "relevant_files": [],
-  "result": "no_change",
-  "note": "Seit dem letzten Upload nichts Neues.",
-  "written": "2026-11-27T04:35:31+01:00",
-  "headline": "Kein Build nötig",
-  "student": {
-    "since": "8ea0845df218f43cd26712c70d9a1fd1c8f8553a",
-    "since_build": 50,
-    "relevant_files": [],
-    "result": "no_change",
-    "headline": "Kein Build nötig"
-  }
+  "started_at": "2026-11-27T21:46:43+01:00",
+  "slot": "2026-11-27 13:05",
+  "result": "late",
+  "note": "GitHub hat den Lauf erst um 21:46 gestartet (geplant 13:05); die Änderungen kommen in den nächsten Sammel-Lauf.",
+  "written": "2026-11-27T21:46:43+01:00",
+  "headline": "Verspätet gestartet, kein Build"
 }
